@@ -9,6 +9,7 @@ from .limpieza import router as limpieza_router
 from .ventas import router as ventas_router
 from .debito import router as debito_router
 from .cliente_panel import router as cliente_router
+from .admin_panel import router as admin_router
 from .auth import router as auth_router
 
 # Directorio base de los archivos públicos
@@ -26,6 +27,7 @@ router.include_router(ventas_router)
 router.include_router(debito_router)
 # Rutas específicas del panel del cliente
 router.include_router(cliente_router)
+router.include_router(admin_router)
 router.include_router(auth_router)
 
 @router.get("/", response_class=HTMLResponse)
@@ -53,6 +55,13 @@ async def obtener_login_js():
 async def obtener_cliente_js():
     """Script del panel del cliente."""
     js_path = BASE_DIR / "cliente_panel.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
+@router.get("/admin_panel.js")
+async def obtener_admin_js():
+    """Script del panel administrativo."""
+    js_path = BASE_DIR / "admin_panel.js"
     return FileResponse(js_path, media_type="application/javascript")
 
 

@@ -7,25 +7,51 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Panel del Cliente</h1>
-    <p>Bienvenido. Aquí podrás ver tus datos y servicios.</p>
+    <h1 id="bienvenida">Panel del Cliente</h1>
 
-    <script>
-        const token = sessionStorage.getItem('token');
-        if (!token) {
-            window.location.href = '/login.html';
-        } else {
-            fetch('/verificar_token', {
-                method: 'POST',
-                body: new URLSearchParams({ token })
-            }).then(resp => {
-                if (!resp.ok) {
-                    window.location.href = '/login.html';
-                }
-            }).catch(() => {
-                window.location.href = '/login.html';
-            });
-        }
-    </script>
+    <section>
+        <h2>Alquileres</h2>
+        <table id="tablaAlquileres">
+            <thead>
+                <tr>
+                    <th>Tipo de baño</th>
+                    <th>Ubicación</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Pagos</h2>
+        <table id="tablaPagos">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Método</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Limpiezas</h2>
+        <table id="tablaLimpiezas">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Observaciones</th>
+                    <th>Remito</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <script src="cliente_panel.js"></script>
 </body>
 </html>

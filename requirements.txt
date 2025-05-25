@@ -1,6 +1,11 @@
 fastapi
 uvicorn
+fpdf==1.7.2
 jinja2
-pydantic
 python-multipart
-httpx
+pydantic
+# openai-whisper
+itsdangerous
+supabase==1.0.3
+python-dotenv
+requests

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Limpieza</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Registro de Limpieza</h1>
+    <form id="formLimpieza" enctype="multipart/form-data">
+        <label>Cliente
+            <input type="text" name="cliente_id" required>
+        </label>
+        <label>Baño atendido
+            <input type="text" name="bano_id" required>
+        </label>
+        <label>Empleado responsable
+            <input type="text" name="empleado" required>
+        </label>
+        <label>Fecha y hora
+            <input type="datetime-local" name="fecha_hora" id="fechaHora" readonly>
+        </label>
+        <label>Observaciones
+            <textarea name="observaciones"></textarea>
+        </label>
+        <label>Imagen del remito
+            <input type="file" name="remito" accept="image/*" required>
+        </label>
+        <button type="submit">Guardar limpieza</button>
+    </form>
+    <script>
+        const form = document.getElementById('formLimpieza');
+        const fechaHoraInput = document.getElementById('fechaHora');
+        fechaHoraInput.value = new Date().toISOString().slice(0,16);
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const datos = new FormData(form);
+            try {
+                const resp = await fetch('/registrar_limpieza', {
+                    method: 'POST',
+                    body: datos
+                });
+                const resultado = await resp.json();
+                if (resp.ok) {
+                    alert('Limpieza registrada con éxito');
+                    form.reset();
+                    fechaHoraInput.value = new Date().toISOString().slice(0,16);
+                } else {
+                    alert('Error: ' + (resultado.detail || 'No se pudo guardar'));
+                }
+            } catch (_) {
+                alert('Error de conexión');
+            }
+        });
+    </script>
+</body>
+</html>

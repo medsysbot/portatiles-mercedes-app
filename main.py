@@ -10,7 +10,7 @@ app = FastAPI()
 # Carpeta para servir imágenes de manera estática
 app.mount("/imagenes", StaticFiles(directory="public/imagenes"), name="imagenes")
 
-# Registrar las rutas definidas en el módulo router
+# Registrar las rutas definidas en el módulo router, incluido el formulario de limpieza
 app.include_router(router)
 
 if __name__ == "__main__":

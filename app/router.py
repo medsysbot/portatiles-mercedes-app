@@ -5,6 +5,7 @@ from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, FileResponse
 
 from .alquileres import router as alquileres_router
+from .limpieza import router as limpieza_router
 
 # Directorio base de los archivos públicos
 BASE_DIR = Path(__file__).resolve().parent.parent / "public"
@@ -13,6 +14,8 @@ router = APIRouter()
 
 # Incluir las rutas del módulo de alquileres
 router.include_router(alquileres_router)
+# Incluir las rutas del módulo de limpieza
+router.include_router(limpieza_router)
 
 @router.get("/", response_class=HTMLResponse)
 async def mostrar_index():
@@ -32,5 +35,13 @@ async def obtener_css():
 async def mostrar_formulario_alquiler():
     """Devuelve la página de registro de alquiler."""
     html_path = BASE_DIR / "alquiler.html"
+    html_contenido = html_path.read_text(encoding="utf-8")
+    return HTMLResponse(content=html_contenido)
+
+
+@router.get("/limpieza", response_class=HTMLResponse)
+async def mostrar_formulario_limpieza():
+    """Devuelve la página de registro de limpieza."""
+    html_path = BASE_DIR / "limpieza.html"
     html_contenido = html_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_contenido)

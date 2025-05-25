@@ -15,6 +15,26 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 router = APIRouter()
 
 
+@router.get("/info_cliente")
+async def info_cliente(dni: str = Query(...)):
+    """Devuelve nombre y fecha de nacimiento del cliente."""
+    try:
+        resp = (
+            supabase.table("clientes")
+            .select("nombre,fecha_nacimiento")
+            .eq("dni", dni)
+            .single()
+            .execute()
+        )
+        if resp.error:
+            raise HTTPException(status_code=400, detail=str(resp.error))
+        return resp.data
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
 @router.get("/alquileres_cliente")
 async def obtener_alquileres(dni: str = Query(...)):
     """Devuelve los alquileres asociados al cliente."""

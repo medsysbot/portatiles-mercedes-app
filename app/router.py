@@ -8,6 +8,7 @@ from .alquileres import router as alquileres_router
 from .limpieza import router as limpieza_router
 from .ventas import router as ventas_router
 from .debito import router as debito_router
+from .cliente_panel import router as cliente_router
 from .auth import router as auth_router
 
 # Directorio base de los archivos públicos
@@ -23,6 +24,8 @@ router.include_router(limpieza_router)
 router.include_router(ventas_router)
 # Incluir las rutas del módulo de débito automático
 router.include_router(debito_router)
+# Rutas específicas del panel del cliente
+router.include_router(cliente_router)
 router.include_router(auth_router)
 
 @router.get("/", response_class=HTMLResponse)
@@ -37,6 +40,20 @@ async def obtener_css():
     """Entrega la hoja de estilos."""
     css_path = BASE_DIR / "styles.css"
     return FileResponse(css_path, media_type="text/css")
+
+
+@router.get("/login.js")
+async def obtener_login_js():
+    """Script de la página de login."""
+    js_path = BASE_DIR / "login.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
+@router.get("/cliente_panel.js")
+async def obtener_cliente_js():
+    """Script del panel del cliente."""
+    js_path = BASE_DIR / "cliente_panel.js"
+    return FileResponse(js_path, media_type="application/javascript")
 
 
 @router.get("/alquiler", response_class=HTMLResponse)

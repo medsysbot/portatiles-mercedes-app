@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel del Cliente</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Panel del Cliente</h1>
+    <p>Bienvenido. Aquí podrás ver tus datos y servicios.</p>
+
+    <script>
+        const token = sessionStorage.getItem('token');
+        if (!token) {
+            window.location.href = '/login.html';
+        } else {
+            fetch('/verificar_token', {
+                method: 'POST',
+                body: new URLSearchParams({ token })
+            }).then(resp => {
+                if (!resp.ok) {
+                    window.location.href = '/login.html';
+                }
+            }).catch(() => {
+                window.location.href = '/login.html';
+            });
+        }
+    </script>
+</body>
+</html>

@@ -89,6 +89,14 @@ async def mostrar_formulario_ventas():
     return HTMLResponse(content=html_contenido)
 
 
+@router.get("/venta", response_class=HTMLResponse)
+async def mostrar_formulario_venta():
+    """Formulario de venta de baños químicos."""
+    html_path = BASE_DIR / "venta.html"
+    html_contenido = html_path.read_text(encoding="utf-8")
+    return HTMLResponse(content=html_contenido)
+
+
 @router.get("/debito", response_class=HTMLResponse)
 async def mostrar_formulario_debito():
     """Devuelve la página para activar débitos automáticos."""

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Alquiler</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Registro de Alquiler de Baño</h1>
+    <form id="formAlquiler">
+        <label>Nombre del cliente
+            <input type="text" name="cliente_nombre" required>
+        </label>
+        <label>Email
+            <input type="email" name="cliente_email" required>
+        </label>
+        <label>Tipo de baño
+            <select name="tipo_banio" required>
+                <option value="común">Común</option>
+                <option value="VIP">VIP</option>
+            </select>
+        </label>
+        <label>Ubicación
+            <input type="text" name="ubicacion" required>
+        </label>
+        <label>Fecha inicio
+            <input type="date" name="fecha_inicio" required>
+        </label>
+        <label>Fecha fin
+            <input type="date" name="fecha_fin" required>
+        </label>
+        <label>Observaciones
+            <textarea name="observaciones"></textarea>
+        </label>
+        <button type="submit">Guardar alquiler</button>
+    </form>
+
+    <script>
+    const form = document.getElementById('formAlquiler');
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const datos = Object.fromEntries(new FormData(form));
+        try {
+            const respuesta = await fetch('/registrar_alquiler', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(datos)
+            });
+            const resultado = await respuesta.json();
+            if (respuesta.ok) {
+                alert('Alquiler guardado con éxito');
+                form.reset();
+            } else {
+                alert('Error: ' + (resultado.detail || 'No se pudo guardar'));
+            }
+        } catch (err) {
+            alert('Error de conexión');
+        }
+    });
+    </script>
+</body>
+</html>

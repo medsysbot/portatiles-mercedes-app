@@ -54,3 +54,11 @@ input[readonly] {
 input[type="number"] {
     width: 100%;
 }
+
+.login-form {
+    max-width: 400px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

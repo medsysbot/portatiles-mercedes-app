@@ -14,9 +14,10 @@ form {
     padding: 1rem;
     border-radius: 4px;
     max-width: 500px;
+    margin: auto;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 label {

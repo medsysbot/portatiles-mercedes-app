@@ -5,7 +5,6 @@ from fastapi import APIRouter
 from fastapi.responses import HTMLResponse, FileResponse
 
 from .alquileres import router as alquileres_router
-from .limpieza import router as limpieza_router
 from .ventas import router as ventas_router
 from .debito import router as debito_router
 from .cliente_panel import router as cliente_router
@@ -19,8 +18,6 @@ router = APIRouter()
 
 # Incluir las rutas del módulo de alquileres
 router.include_router(alquileres_router)
-# Incluir las rutas del módulo de limpieza
-router.include_router(limpieza_router)
 # Incluir las rutas del módulo de ventas
 router.include_router(ventas_router)
 # Incluir las rutas del módulo de débito automático

@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 
 from app.router import router
 from app.ventas import router as ventas_router
+from app.limpieza import router as limpieza_router
 
 app = FastAPI()
 
@@ -16,6 +17,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 # Registrar las rutas definidas en el módulo router, incluido el formulario de limpieza
 app.include_router(router)
 app.include_router(ventas_router)
+app.include_router(limpieza_router)
 
 if __name__ == "__main__":
     import uvicorn

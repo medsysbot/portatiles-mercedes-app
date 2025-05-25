@@ -1,3 +1,4 @@
+<!-- Formulario de registro de alquiler de baños químicos -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -12,17 +13,17 @@
         <label>Nombre del cliente
             <input type="text" name="cliente_nombre" required>
         </label>
-        <label>Email
-            <input type="email" name="cliente_email" required>
+        <label>DNI
+            <input type="text" name="dni" required>
+        </label>
+        <label>Dirección de entrega
+            <input type="text" name="direccion_entrega" required>
         </label>
         <label>Tipo de baño
             <select name="tipo_banio" required>
                 <option value="común">Común</option>
                 <option value="VIP">VIP</option>
             </select>
-        </label>
-        <label>Ubicación
-            <input type="text" name="ubicacion" required>
         </label>
         <label>Fecha inicio
             <input type="date" name="fecha_inicio" required>
@@ -36,28 +37,6 @@
         <button type="submit">Guardar alquiler</button>
     </form>
 
-    <script>
-    const form = document.getElementById('formAlquiler');
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const datos = Object.fromEntries(new FormData(form));
-        try {
-            const respuesta = await fetch('/registrar_alquiler', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(datos)
-            });
-            const resultado = await respuesta.json();
-            if (respuesta.ok) {
-                alert('Alquiler guardado con éxito');
-                form.reset();
-            } else {
-                alert('Error: ' + (resultado.detail || 'No se pudo guardar'));
-            }
-        } catch (err) {
-            alert('Error de conexión');
-        }
-    });
-    </script>
+    <script src="/static/js/guardar_alquiler.js"></script>
 </body>
 </html>

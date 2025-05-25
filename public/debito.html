@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Débito Automático</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Activar Débito Automático</h1>
+    <form id="formDebito">
+        <label>DNI del cliente
+            <input type="text" name="dni" required>
+        </label>
+        <label>Monto mensual
+            <input type="number" name="monto" step="0.01" required>
+        </label>
+        <label>Frecuencia (días)
+            <input type="number" name="frecuencia_dias" min="1" required>
+        </label>
+        <button type="submit">Activar Débito Automático</button>
+    </form>
+    <script>
+        const form = document.getElementById('formDebito');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const datos = new FormData(form);
+            try {
+                const resp = await fetch('/activar_debito', {
+                    method: 'POST',
+                    body: datos
+                });
+                const resultado = await resp.json();
+                if (resp.ok) {
+                    alert(resultado.mensaje);
+                    form.reset();
+                } else {
+                    alert('Error: ' + (resultado.detail || 'No se pudo activar'));
+                }
+            } catch (_) {
+                alert('Error de conexión');
+            }
+        });
+    </script>
+</body>
+</html>

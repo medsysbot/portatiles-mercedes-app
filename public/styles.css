@@ -50,3 +50,7 @@ input[readonly] {
     background-color: #eee;
     cursor: not-allowed;
 }
+
+input[type="number"] {
+    width: 100%;
+}

@@ -17,7 +17,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 router = APIRouter()
 
 
-@router.post("/registrar_limpieza")
+@router.post("/registro_limpieza")
 async def registrar_limpieza(
     cliente_id: str = Form(...),
     bano_id: str = Form(...),

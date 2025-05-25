@@ -15,7 +15,7 @@
         <label>Baño atendido
             <input type="text" name="bano_id" required>
         </label>
-        <label>Empleado responsable
+        <label>Identificación del empleado
             <input type="text" name="empleado" required>
         </label>
         <label>Fecha y hora
@@ -37,7 +37,7 @@
             e.preventDefault();
             const datos = new FormData(form);
             try {
-                const resp = await fetch('/registrar_limpieza', {
+                const resp = await fetch('/registro_limpieza', {
                     method: 'POST',
                     body: datos
                 });

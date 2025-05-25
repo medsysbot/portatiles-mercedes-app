@@ -100,3 +100,25 @@ th, td {
     padding: 0.5rem 1rem;
     margin-bottom: 1rem;
 }
+
+.splash {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.splash-card {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    text-align: center;
+    max-width: 300px;
+}
+
+.splash-card button {
+    margin-top: 1rem;
+}

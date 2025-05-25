@@ -17,7 +17,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         const dni = info.user_id; // asumimos que user_id es el DNI
-        document.getElementById('bienvenida').textContent = `Bienvenido ${dni}`;
+        const datosCliRes = await fetch(`/info_cliente?dni=${encodeURIComponent(dni)}`);
+        let nombre = dni;
+        let cumple = null;
+        if (datosCliRes.ok) {
+            const datosCli = await datosCliRes.json();
+            nombre = datosCli.nombre || dni;
+            cumple = datosCli.fecha_nacimiento || null;
+        }
+        document.getElementById('bienvenida').textContent = `Bienvenido ${nombre}`;
+        mostrarSplash(nombre, cumple);
         cargarDatos(dni);
     } catch (err) {
         window.location.href = '/login.html';
@@ -85,4 +94,49 @@ function renderLimpiezas(lista) {
                        `<td>${remito}</td>`;
         tbody.appendChild(tr);
     });
+}
+
+function mostrarSplash(nombre, fechaNac) {
+    const splash = document.getElementById('splash');
+    const mensaje = document.getElementById('splashMensaje');
+    const btn = document.getElementById('splashCerrar');
+
+    const mensajes = [`¡Hola ${nombre}! Bienvenido nuevamente a Portátiles Mercedes.`];
+    const hoy = new Date();
+    const dia = hoy.getDate();
+    const mes = hoy.getMonth() + 1;
+
+    if (fechaNac) {
+        const partes = fechaNac.split('-');
+        if (partes.length === 3) {
+            const d = parseInt(partes[2]);
+            const m = parseInt(partes[1]);
+            if (d === dia && m === mes) {
+                mensajes.push(`¡Feliz cumpleaños, ${nombre}! Te deseamos un gran día. Gracias por confiar en nosotros.`);
+            }
+        }
+    }
+    if (dia === 25 && mes === 12) {
+        mensajes.push('¡Feliz Navidad! Que pases una jornada llena de paz y alegría.');
+    }
+    if (dia === 1 && mes === 1) {
+        mensajes.push('¡Feliz Año Nuevo! Que este nuevo año venga con grandes logros y buenos momentos.');
+    }
+    if (dia === 19 && mes === 3) {
+        mensajes.push('¡Feliz Día del Padre! Gracias por acompañarnos siempre.');
+    }
+    if (dia === 20 && mes === 7) {
+        mensajes.push('¡Feliz Día del Amigo! Gracias por ser parte de nuestra comunidad.');
+    }
+
+    mensaje.innerHTML = mensajes.join('<br>');
+    splash.style.display = 'flex';
+
+    btn.addEventListener('click', () => {
+        splash.style.display = 'none';
+    });
+
+    setTimeout(() => {
+        splash.style.display = 'none';
+    }, 5000);
 }

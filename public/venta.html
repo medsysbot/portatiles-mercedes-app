@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Venta</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Registro de Venta de Baño</h1>
+    <form id="formVenta">
+        <label>Nombre del cliente
+            <input type="text" name="cliente_nombre" required>
+        </label>
+        <label>DNI del cliente
+            <input type="text" name="dni" required>
+        </label>
+        <label>Tipo de baño vendido
+            <select name="tipo_banio" required>
+                <option value="común">Común</option>
+                <option value="VIP">VIP</option>
+            </select>
+        </label>
+        <label>Cantidad de unidades
+            <input type="number" name="cantidad" min="1" required>
+        </label>
+        <label>Dirección de entrega
+            <input type="text" name="direccion_entrega" required>
+        </label>
+        <label>Fecha de venta
+            <input type="date" name="fecha_venta" required>
+        </label>
+        <label>Observaciones
+            <textarea name="observaciones"></textarea>
+        </label>
+        <button type="submit">Confirmar venta</button>
+    </form>
+
+    <script src="/static/js/guardar_venta.js"></script>
+</body>
+</html>

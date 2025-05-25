@@ -3,29 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración</title>
+    <title>Panel Administrativo</title>
     <link rel="stylesheet" href="styles.css">
 </head>
-<body>
-    <h1>Panel de Administración</h1>
-    <p>Acceso completo para la empresa.</p>
+<body class="admin-panel">
+    <header>
+        <h1>Portátiles Mercedes</h1>
+        <button id="cerrarSesion">Cerrar sesión</button>
+    </header>
 
-    <script>
-        const token = sessionStorage.getItem('token');
-        if (!token) {
-            window.location.href = '/login.html';
-        } else {
-            fetch('/verificar_token', {
-                method: 'POST',
-                body: new URLSearchParams({ token })
-            }).then(resp => resp.json()).then(data => {
-                if (!data.valido || data.rol !== 'empresa') {
-                    window.location.href = '/login.html';
-                }
-            }).catch(() => {
-                window.location.href = '/login.html';
-            });
-        }
-    </script>
+    <section class="filtros">
+        <input type="text" id="filtroDni" placeholder="Filtrar por DNI">
+        <input type="date" id="filtroDesde">
+        <input type="date" id="filtroHasta">
+        <button id="aplicarFiltros">Aplicar filtros</button>
+        <button id="exportarCsv" class="button-export">Exportar CSV</button>
+    </section>
+
+    <section>
+        <h2>Clientes</h2>
+        <table class="admin-table" id="tablaClientes">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>DNI</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Alquileres</h2>
+        <table class="admin-table" id="tablaAlquileres">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Dirección</th>
+                    <th>Inicio</th>
+                    <th>Fin</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Ventas</h2>
+        <table class="admin-table" id="tablaVentas">
+            <thead>
+                <tr>
+                    <th>PDF</th>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Cliente</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Limpiezas</h2>
+        <table class="admin-table" id="tablaLimpiezas">
+            <thead>
+                <tr>
+                    <th>Remito</th>
+                    <th>Baño</th>
+                    <th>Fecha</th>
+                    <th>Empleado</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </section>
+
+    <section>
+        <h2>Reportes</h2>
+        <div id="resumen"></div>
+    </section>
+
+    <script src="admin_panel.js"></script>
 </body>
 </html>

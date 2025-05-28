@@ -104,3 +104,15 @@ portatiles-mercedes-app/
 ```bash
 git clone https://github.com/medsysbot/portatiles-mercedes-app.git
 cd portatiles-mercedes-app
+```
+2. Copiar el archivo `.env.example` a `.env` y completar los valores de Supabase y correo.
+3. Instalar dependencias con `pip install -r requirements.txt`.
+4. Ejecutar la aplicación con `python main.py`.
+
+### Variables necesarias en Railway
+Antes del despliegue en Railway configurá las siguientes variables de entorno:
+- `SUPABASE_URL`
+- `SERVICE_ROLE_KEY`
+- `SUPABASE_KEY`
+
+Sin estas variables la aplicación seguirá corriendo, pero no podrá conectarse a Supabase.

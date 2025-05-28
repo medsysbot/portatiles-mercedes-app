@@ -10,14 +10,16 @@ from supabase import create_client, Client
 
 # Configuración de Supabase
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+SERVICE_ROLE_KEY = os.getenv("SERVICE_ROLE_KEY")
 
 if not SUPABASE_URL or not SERVICE_ROLE_KEY:
-    raise RuntimeError(
-        "SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY deben estar configurados"
+    print(
+        "Advertencia: SUPABASE_URL y SERVICE_ROLE_KEY no estan configurados. "
+        "La conexión a Supabase estará deshabilitada."
     )
-
-supabase: Client = create_client(SUPABASE_URL, SERVICE_ROLE_KEY)
+    supabase = None
+else:
+    supabase: Client = create_client(SUPABASE_URL, SERVICE_ROLE_KEY)
 
 # Configuración para enviar correos
 EMAIL_ORIGIN = os.getenv("EMAIL_ORIGIN")
@@ -49,6 +51,8 @@ def enviar_correo(destinatario: str, asunto: str, mensaje: str) -> None:
 
 def alerta_cumpleanos() -> None:
     """Saluda a los clientes que cumplen años hoy."""
+    if not supabase:
+        raise RuntimeError("Supabase no configurado")
 
     hoy = date.today()
     resp = supabase.table("clientes").select("nombre,email,fecha_nacimiento").execute()
@@ -68,6 +72,8 @@ def alerta_cumpleanos() -> None:
 
 def alertas_proxima_limpieza() -> None:
     """Notifica cuando corresponde una limpieza según la última fecha registrada."""
+    if not supabase:
+        raise RuntimeError("Supabase no configurado")
 
     hoy = date.today()
     resp = supabase.table("alquileres").select(
@@ -94,6 +100,8 @@ def alertas_proxima_limpieza() -> None:
 
 def alertas_pagos_vencidos() -> None:
     """Envía recordatorios por pagos vencidos en ventas o alquileres."""
+    if not supabase:
+        raise RuntimeError("Supabase no configurado")
 
     hoy = date.today()
     ventas = supabase.table("ventas").select(
@@ -140,6 +148,8 @@ def alertas_pagos_vencidos() -> None:
 @router.post("/ejecutar_alertas")
 async def ejecutar_alertas():
     """Endpoint para lanzar manualmente todas las alertas."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
 
     try:
         alerta_cumpleanos()

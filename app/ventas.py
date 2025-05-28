@@ -10,14 +10,16 @@ from supabase import create_client, Client
 
 # Configurar la conexión con Supabase usando las variables de entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SERVICE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+SERVICE_ROLE_KEY = os.getenv("SERVICE_ROLE_KEY")
 
-if not SUPABASE_URL or not SERVICE_KEY:
-    raise RuntimeError(
-        "SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY deben estar configurados"
+if not SUPABASE_URL or not SERVICE_ROLE_KEY:
+    print(
+        "Advertencia: SUPABASE_URL y SERVICE_ROLE_KEY no estan configurados. "
+        "La conexión a Supabase estará deshabilitada."
     )
-
-supabase: Client = create_client(SUPABASE_URL, SERVICE_KEY)
+    supabase = None
+else:
+    supabase: Client = create_client(SUPABASE_URL, SERVICE_ROLE_KEY)
 
 router = APIRouter()
 
@@ -37,6 +39,8 @@ class Venta(BaseModel):
 @router.post("/registrar_venta")
 async def registrar_venta(venta: Venta):
     """Guarda la venta, genera el comprobante PDF y retorna su URL."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
         datos = venta.model_dump()
         datos["fecha_venta"] = venta.fecha_venta.isoformat()

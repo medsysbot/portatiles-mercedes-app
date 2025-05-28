@@ -9,14 +9,16 @@ from supabase import create_client, Client
 
 # Obtener configuración de Supabase desde variables de entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SERVICE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+SERVICE_ROLE_KEY = os.getenv("SERVICE_ROLE_KEY")
 
-if not SUPABASE_URL or not SERVICE_KEY:
-    raise RuntimeError(
-        "SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY deben estar configurados"
+if not SUPABASE_URL or not SERVICE_ROLE_KEY:
+    print(
+        "Advertencia: SUPABASE_URL y SERVICE_ROLE_KEY no estan configurados. "
+        "La conexión a Supabase estará deshabilitada."
     )
-
-supabase: Client = create_client(SUPABASE_URL, SERVICE_KEY)
+    supabase = None
+else:
+    supabase: Client = create_client(SUPABASE_URL, SERVICE_ROLE_KEY)
 
 router = APIRouter()
 
@@ -32,6 +34,8 @@ async def registrar_limpieza(
     remito: UploadFile = File(...),
 ):
     """Recibe datos de limpieza y almacena la imagen del remito."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     if not remito.filename:
         raise HTTPException(status_code=400, detail="Imagen del remito obligatoria")
 

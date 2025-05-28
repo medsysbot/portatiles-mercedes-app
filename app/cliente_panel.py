@@ -8,9 +8,13 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError("SUPABASE_URL y SUPABASE_KEY deben estar configurados")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    print(
+        "Advertencia: SUPABASE_URL y SUPABASE_KEY no estan configurados. "
+        "La conexión a Supabase estará deshabilitada."
+    )
+    supabase = None
+else:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 router = APIRouter()
 
@@ -18,6 +22,8 @@ router = APIRouter()
 @router.get("/info_cliente")
 async def info_cliente(dni: str = Query(...)):
     """Devuelve nombre y fecha de nacimiento del cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
         resp = (
             supabase.table("clientes")
@@ -38,6 +44,8 @@ async def info_cliente(dni: str = Query(...)):
 @router.get("/alquileres_cliente")
 async def obtener_alquileres(dni: str = Query(...)):
     """Devuelve los alquileres asociados al cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
         resp = (
             supabase.table("alquileres")
@@ -57,6 +65,8 @@ async def obtener_alquileres(dni: str = Query(...)):
 @router.get("/pagos_cliente")
 async def obtener_pagos(dni: str = Query(...)):
     """Devuelve los pagos realizados por el cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
         resp = (
             supabase.table("pagos")
@@ -76,6 +86,8 @@ async def obtener_pagos(dni: str = Query(...)):
 @router.get("/limpiezas_cliente")
 async def obtener_limpiezas(dni: str = Query(...)):
     """Devuelve las limpiezas realizadas para el cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
         resp = (
             supabase.table("limpiezas")

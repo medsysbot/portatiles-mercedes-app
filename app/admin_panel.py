@@ -13,9 +13,13 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError("SUPABASE_URL y SUPABASE_KEY deben estar configurados")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    print(
+        "Advertencia: SUPABASE_URL y SUPABASE_KEY no estan configurados. "
+        "La conexión a Supabase estará deshabilitada."
+    )
+    supabase = None
+else:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 router = APIRouter()
 
@@ -37,6 +41,8 @@ async def admin_clientes(
     dni: str | None = Query(None),
 ):
     """Lista de clientes con filtro opcional por DNI."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     verificar_admin(token)
     consulta = supabase.table("clientes").select("*")
     if dni:
@@ -55,6 +61,8 @@ async def admin_alquileres(
     dni: str | None = Query(None),
 ):
     """Alquileres con filtros por fecha y cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     verificar_admin(token)
     consulta = supabase.table("alquileres").select("*")
     if dni:
@@ -77,6 +85,8 @@ async def admin_ventas(
     cliente: str | None = Query(None),
 ):
     """Ventas realizadas con filtros por fecha y nombre de cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     verificar_admin(token)
     consulta = supabase.table("ventas").select("*")
     if cliente:
@@ -99,6 +109,8 @@ async def admin_limpiezas(
     dni: str | None = Query(None),
 ):
     """Limpiezas registradas con filtros por fecha y cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     verificar_admin(token)
     consulta = supabase.table("limpiezas").select("*")
     if dni:

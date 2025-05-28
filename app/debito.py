@@ -10,9 +10,13 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError("SUPABASE_URL y SUPABASE_KEY deben estar configurados")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    print(
+        "Advertencia: SUPABASE_URL y SUPABASE_KEY no estan configurados. "
+        "La conexión a Supabase estará deshabilitada."
+    )
+    supabase = None
+else:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 router = APIRouter()
 
@@ -24,6 +28,8 @@ async def activar_debito(
     frecuencia_dias: int = Form(...),
 ):
     """Registra un nuevo débito automático para el cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     hoy = datetime.utcnow().date()
     proximo_pago = hoy + timedelta(days=frecuencia_dias)
 

@@ -11,9 +11,13 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError("SUPABASE_URL y SUPABASE_KEY deben estar configurados")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    print(
+        "Advertencia: SUPABASE_URL y SUPABASE_KEY no estan configurados. "
+        "La conexión a Supabase estará deshabilitada."
+    )
+    supabase = None
+else:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Configurar el serializer para los tokens
 SECRET_KEY = os.getenv("SECRET_KEY", "portatiles-secret")
@@ -29,6 +33,8 @@ async def login(
     rol: str = Form(...),
 ):
     """Valida usuario y retorna un token de sesión."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
         resp = (
             supabase.table("usuarios")

@@ -9,13 +9,19 @@ SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
-    raise RuntimeError("SUPABASE_URL y SUPABASE_KEY deben estar configurados")
-
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    print(
+        "Advertencia: SUPABASE_URL y SUPABASE_KEY no estan configurados. "
+        "La conexión a Supabase estará deshabilitada."
+    )
+    supabase = None
+else:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 def procesar_debitos_vencidos() -> None:
     """Genera pagos por los débitos cuyo vencimiento llegó."""
+    if not supabase:
+        raise RuntimeError("Supabase no configurado")
     hoy = datetime.utcnow().date()
     resp = (
         supabase.table("debitos_programados")
@@ -50,6 +56,8 @@ def procesar_debitos_vencidos() -> None:
 
 def alertas_cumpleanos() -> None:
     """Crea alertas si hoy es el cumpleaños de un cliente."""
+    if not supabase:
+        raise RuntimeError("Supabase no configurado")
     hoy = datetime.utcnow().date()
     resp = supabase.table("clientes").select("dni, nombre, fecha_nacimiento").execute()
     for cli in resp.data or []:
@@ -70,6 +78,8 @@ def alertas_cumpleanos() -> None:
 
 def alertas_limpieza() -> None:
     """Detecta si un cliente lleva mucho tiempo sin limpieza y avisa."""
+    if not supabase:
+        raise RuntimeError("Supabase no configurado")
     hoy = datetime.utcnow()
     resp = supabase.table("limpiezas").select("cliente_id, fecha_hora").execute()
     ultimos: dict[str, datetime] = {}

@@ -65,3 +65,26 @@ async def verificar_token(token: str = Form(...)):
         raise HTTPException(status_code=401, detail="Token inválido")
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
+
+
+@router.post("/registrar_cliente")
+async def registrar_cliente(
+    email: str = Form(...),
+    password: str = Form(...),
+):
+    """Crea una cuenta de cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        resp = (
+            supabase.table("usuarios")
+            .insert({"email": email, "password": password, "rol": "cliente"})
+            .execute()
+        )
+        if resp.error:
+            raise HTTPException(status_code=400, detail=str(resp.error))
+        return {"mensaje": "Registro exitoso"}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))

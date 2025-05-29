@@ -62,6 +62,13 @@ async def obtener_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/registro_clientes.js")
+async def obtener_registro_js():
+    """Script del formulario de registro de clientes."""
+    js_path = BASE_DIR / "registro_clientes.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/alquiler", response_class=HTMLResponse)
 async def mostrar_formulario_alquiler():
     """Devuelve la página de registro de alquiler."""
@@ -98,6 +105,14 @@ async def mostrar_formulario_venta():
 async def mostrar_formulario_debito():
     """Devuelve la página para activar débitos automáticos."""
     html_path = BASE_DIR / "debito.html"
+    html_contenido = html_path.read_text(encoding="utf-8")
+    return HTMLResponse(content=html_contenido)
+
+
+@router.get("/servicios", response_class=HTMLResponse)
+async def mostrar_servicios():
+    """Página pública con la descripción de servicios."""
+    html_path = BASE_DIR / "servicios.html"
     html_contenido = html_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_contenido)
 

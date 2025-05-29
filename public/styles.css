@@ -133,11 +133,26 @@ nav ul {
 
 nav a {
     text-decoration: none;
-    color: #0066cc;
+    color: #e0e0e0;
+    background-color: rgba(50, 50, 50, 0.5);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
     font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
 }
 
 nav a:hover {
-    text-decoration: underline;
+    background-color: rgba(50, 50, 50, 0.8);
+    transform: scale(1.05);
+}
+
+.hero {
+    background: url('/static/imagenes/portada-index.png') center/cover no-repeat;
+    height: 50vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
 }
 

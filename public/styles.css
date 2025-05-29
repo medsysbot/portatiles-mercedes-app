@@ -199,8 +199,8 @@ nav a:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    width: 220px;
-    height: 60px;
+    width: 260px;
+    height: 48px;
     padding: 0 1rem;
     background-color: rgba(60, 60, 60, 0.9);
     border-radius: 4px;
@@ -215,8 +215,8 @@ nav a:hover {
 }
 
 .hero-nav img {
-    height: 48px;
-    width: 48px;
+    height: 40px;
+    width: 40px;
 }
 
 @media (max-width: 600px) {
@@ -234,13 +234,13 @@ nav a:hover {
     }
 
     .hero-nav a {
-        width: 80%;
-        height: 56px;
+        width: 90%;
+        height: 48px;
     }
 
     .hero-nav img {
-        height: 40px;
-        width: 40px;
+        height: 36px;
+        width: 36px;
     }
 
     .hero-logo {

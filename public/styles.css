@@ -177,14 +177,14 @@ nav a:hover {
     color: #C05B0B;
 }
 .hero-logo {
-    height: 64px;
+    height: 80px;
     width: auto;
 }
 
 .subtitulo {
     margin: 0.5rem 0 0;
     font-size: 1rem;
-    color: #d0d0d0;
+    color: #555;
 }
 
 .hero-nav {
@@ -220,6 +220,11 @@ nav a:hover {
 }
 
 @media (max-width: 600px) {
+    .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
     .hero-text {
         position: static;
         text-align: center;
@@ -244,7 +249,7 @@ nav a:hover {
     }
 
     .hero-logo {
-        height: 48px;
+        height: 60px;
     }
 
     nav ul {

@@ -28,15 +28,24 @@ SMTP_SERVER = os.getenv("SMTP_SERVER")
 SMTP_PORT = os.getenv("SMTP_PORT")
 
 if not all([EMAIL_ORIGIN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
-    raise RuntimeError(
-        "EMAIL_ORIGIN, EMAIL_PASSWORD, SMTP_SERVER y SMTP_PORT deben estar configurados"
+    print(
+        "Advertencia: variables de correo no configuradas. "
+        "Las notificaciones por email est\u00e1n deshabilitadas."
     )
+    EMAIL_ORIGIN = EMAIL_PASSWORD = SMTP_SERVER = SMTP_PORT = None
 
 router = APIRouter()
 
 
 def enviar_correo(destinatario: str, asunto: str, mensaje: str) -> None:
     """Envía un correo electrónico simple."""
+
+    if not all([EMAIL_ORIGIN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
+        print(
+            "Advertencia: no se pudo enviar correo porque las variables de "
+            "SMTP no est\u00e1n configuradas."
+        )
+        return
 
     msg = EmailMessage()
     msg["From"] = EMAIL_ORIGIN
@@ -52,7 +61,10 @@ def enviar_correo(destinatario: str, asunto: str, mensaje: str) -> None:
 def alerta_cumpleanos() -> None:
     """Saluda a los clientes que cumplen años hoy."""
     if not supabase:
-        raise RuntimeError("Supabase no configurado")
+        print(
+            "Advertencia: Supabase no configurado. No se enviar\u00e1n alertas de cumplea\u00f1os."
+        )
+        return
 
     hoy = date.today()
     resp = supabase.table("clientes").select("nombre,email,fecha_nacimiento").execute()
@@ -73,7 +85,10 @@ def alerta_cumpleanos() -> None:
 def alertas_proxima_limpieza() -> None:
     """Notifica cuando corresponde una limpieza según la última fecha registrada."""
     if not supabase:
-        raise RuntimeError("Supabase no configurado")
+        print(
+            "Advertencia: Supabase no configurado. No se verificar\u00e1n alertas de limpieza."
+        )
+        return
 
     hoy = date.today()
     resp = supabase.table("alquileres").select(
@@ -101,7 +116,10 @@ def alertas_proxima_limpieza() -> None:
 def alertas_pagos_vencidos() -> None:
     """Envía recordatorios por pagos vencidos en ventas o alquileres."""
     if not supabase:
-        raise RuntimeError("Supabase no configurado")
+        print(
+            "Advertencia: Supabase no configurado. No se revisar\u00e1n pagos vencidos."
+        )
+        return
 
     hoy = date.today()
     ventas = supabase.table("ventas").select(

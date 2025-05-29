@@ -21,7 +21,10 @@ else:
 def procesar_debitos_vencidos() -> None:
     """Genera pagos por los débitos cuyo vencimiento llegó."""
     if not supabase:
-        raise RuntimeError("Supabase no configurado")
+        print(
+            "Advertencia: Supabase no configurado. No se procesarán débitos vencidos."
+        )
+        return
     hoy = datetime.utcnow().date()
     resp = (
         supabase.table("debitos_programados")
@@ -57,7 +60,10 @@ def procesar_debitos_vencidos() -> None:
 def alertas_cumpleanos() -> None:
     """Crea alertas si hoy es el cumpleaños de un cliente."""
     if not supabase:
-        raise RuntimeError("Supabase no configurado")
+        print(
+            "Advertencia: Supabase no configurado. No se crear\u00e1n alertas de cumplea\u00f1os."
+        )
+        return
     hoy = datetime.utcnow().date()
     resp = supabase.table("clientes").select("dni, nombre, fecha_nacimiento").execute()
     for cli in resp.data or []:
@@ -79,7 +85,10 @@ def alertas_cumpleanos() -> None:
 def alertas_limpieza() -> None:
     """Detecta si un cliente lleva mucho tiempo sin limpieza y avisa."""
     if not supabase:
-        raise RuntimeError("Supabase no configurado")
+        print(
+            "Advertencia: Supabase no configurado. No se revisar\u00e1n alertas de limpieza."
+        )
+        return
     hoy = datetime.utcnow()
     resp = supabase.table("limpiezas").select("cliente_id, fecha_hora").execute()
     ultimos: dict[str, datetime] = {}

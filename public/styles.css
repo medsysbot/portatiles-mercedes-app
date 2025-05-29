@@ -170,21 +170,21 @@ nav a:hover {
 
 .hero-text h1 {
     margin: 0;
-    font-size: 3rem;
+    font-size: 3.5rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    color: #b45f4c;
+    color: #C05B0B;
 }
 .hero-logo {
-    height: 60px;
+    height: 64px;
     width: auto;
 }
 
 .subtitulo {
     margin: 0.5rem 0 0;
     font-size: 1rem;
-    color: #cccccc;
+    color: #d0d0d0;
 }
 
 .hero-nav {
@@ -199,10 +199,10 @@ nav a:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    width: 200px;
-    height: 48px;
+    width: 220px;
+    height: 60px;
     padding: 0 1rem;
-    background-color: rgba(50, 50, 50, 0.8);
+    background-color: rgba(60, 60, 60, 0.9);
     border-radius: 4px;
     font-weight: bold;
     box-sizing: border-box;
@@ -210,13 +210,13 @@ nav a:hover {
     transition: background-color 0.3s, transform 0.3s;
 }
 .hero-nav a:hover {
-    background-color: rgba(50, 50, 50, 1);
-    transform: scale(1.1);
+    background-color: rgba(60, 60, 60, 1);
+    transform: scale(1.05);
 }
 
 .hero-nav img {
-    height: 32px;
-    width: 32px;
+    height: 48px;
+    width: 48px;
 }
 
 @media (max-width: 600px) {
@@ -235,6 +235,16 @@ nav a:hover {
 
     .hero-nav a {
         width: 80%;
+        height: 56px;
+    }
+
+    .hero-nav img {
+        height: 40px;
+        width: 40px;
+    }
+
+    .hero-logo {
+        height: 48px;
     }
 
     nav ul {

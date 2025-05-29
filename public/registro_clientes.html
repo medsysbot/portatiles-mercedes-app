@@ -8,6 +8,17 @@
 </head>
 <body>
     <h1>Registro de Clientes</h1>
-    <p>Página en construcción. Próximamente podrás registrar nuevos clientes aquí.</p>
+    <form id="registroForm" class="login-form">
+        <label>E-mail
+            <input type="email" name="email" required>
+        </label>
+        <label>Contraseña
+            <input type="password" name="password" required>
+        </label>
+        <button type="submit">Registrarme</button>
+        <p id="msg"></p>
+    </form>
+
+    <script src="registro_clientes.js"></script>
 </body>
 </html>

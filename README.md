@@ -116,3 +116,7 @@ Antes del despliegue en Railway configurá las siguientes variables de entorno:
 - `SUPABASE_KEY`
 
 Sin estas variables la aplicación seguirá corriendo, pero no podrá conectarse a Supabase.
+
+Para las funciones de alertas por correo también podés definir `EMAIL_ORIGIN`,
+`EMAIL_PASSWORD`, `SMTP_SERVER` y `SMTP_PORT`. Si no las configurás, el sistema
+mostrará una advertencia y los correos no se enviarán.

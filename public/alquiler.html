@@ -1,42 +1,41 @@
-<!-- Formulario de registro de alquiler de baños químicos -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Alquiler</title>
+    <title>Alquiler de Baños</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body>
-    <h1>Registro de Alquiler de Baño</h1>
-    <form id="formAlquiler">
-        <label>Nombre del cliente
-            <input type="text" name="cliente_nombre" required>
-        </label>
-        <label>DNI
-            <input type="text" name="dni" required>
-        </label>
-        <label>Dirección de entrega
-            <input type="text" name="direccion_entrega" required>
-        </label>
-        <label>Tipo de baño
-            <select name="tipo_banio" required>
-                <option value="común">Común</option>
-                <option value="VIP">VIP</option>
-            </select>
-        </label>
-        <label>Fecha inicio
-            <input type="date" name="fecha_inicio" required>
-        </label>
-        <label>Fecha fin
-            <input type="date" name="fecha_fin" required>
-        </label>
-        <label>Observaciones
-            <textarea name="observaciones"></textarea>
-        </label>
-        <button type="submit">Guardar alquiler</button>
-    </form>
+    <div class="fondo-alquiler">
+        <a href="/" class="boton-inicio">Inicio</a>
+        <h1>Alquiler de Baños</h1>
+        <button id="toggleFormulario">Ver formulario</button>
+        <form id="formulario-alquiler">
+            <label>Nombre
+                <input type="text" name="nombre" required>
+            </label>
+            <label>Dirección
+                <input type="text" name="direccion" required>
+            </label>
+            <label>Tipo de baño
+                <select name="tipo_banio" required>
+                    <option value="comun">Común</option>
+                    <option value="vip">VIP</option>
+                </select>
+            </label>
+            <label>Fecha
+                <input type="date" name="fecha" required>
+            </label>
+        </form>
+        <div id="botones-formulario">
+            <button type="submit" form="formulario-alquiler">Enviar</button>
+            <button type="reset" form="formulario-alquiler">Borrar</button>
+        </div>
+    </div>
 
+    <script src="/static/js/alquiler_form.js"></script>
     <script src="/static/js/guardar_alquiler.js"></script>
 </body>
 </html>

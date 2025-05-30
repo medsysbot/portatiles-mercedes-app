@@ -166,7 +166,7 @@ nav a:hover {
 }
 
 .hero-text {
-    margin: 0;
+    margin-top: 30px;
 }
 
 .hero-text h1 {
@@ -184,10 +184,10 @@ nav a:hover {
 
 .subtitulo {
     margin: 0.5rem 0 0;
-    font-size: clamp(1.3rem, 3.5vw, 2rem);
+    font-size: clamp(1.1rem, 3.5vw, 1.3rem);
     color: #bfbfbf;
-    font-weight: 700;
-    text-shadow: 0 1px 4px #fff, 0 0 2px #fff;
+    font-weight: 600;
+    text-shadow: 0 1px 2px #fff;
 }
 
 .hero-nav {
@@ -231,7 +231,7 @@ nav a:hover {
     .hero-text {
         position: static;
         text-align: center;
-        margin-top: 2rem;
+        margin-top: 30px;
     }
 
     .hero-nav {
@@ -257,6 +257,12 @@ nav a:hover {
 
     nav ul {
         align-items: center;
+    }
+}
+
+@media (min-width: 768px) {
+    .hero-text {
+        margin-top: 50px;
     }
 }
 

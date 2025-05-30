@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portátiles Mercedes</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="/static/css/styles.css">
 </head>
 <body class="index-page">
     <div class="hero">
@@ -16,16 +17,14 @@
             </h1>
             <p class="subtitulo">Somos una empresa de alquiler y venta de baños químicos.</p>
         </div>
-        <nav class="hero-nav">
-            <ul>
-                <li><a href="/"><img src="/static/icons/inicio.png" alt="Inicio">Inicio</a></li>
-                <li><a href="/alquiler"><img src="/static/icons/alquiler.png" alt="Alquiler">Alquiler de baños</a></li>
-                <li><a href="/venta"><img src="/static/icons/venta.png" alt="Venta">Venta de baños</a></li>
-                <li><a href="/servicios"><img src="/static/icons/servicios-2.png" alt="Servicios">Servicios</a></li>
-                <li><a href="/registro_clientes"><img src="/static/icons/registro-clientes.png" alt="Registro">Registro de Clientes</a></li>
-                <li><a href="/login"><img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar">Ingresar al sistema</a></li>
-            </ul>
-        </nav>
+        <div class="container-menu">
+            <a href="/" class="menu-button"><img src="/static/icons/inicio.png" alt="Inicio"><span>Inicio</span></a>
+            <a href="/alquiler" class="menu-button"><img src="/static/icons/alquiler.png" alt="Alquiler"><span>Alquiler de baños</span></a>
+            <a href="/venta" class="menu-button"><img src="/static/icons/venta.png" alt="Venta"><span>Venta de baños</span></a>
+            <a href="/servicios" class="menu-button"><img src="/static/icons/servicios-2.png" alt="Servicios"><span>Servicios</span></a>
+            <a href="/registro_clientes" class="menu-button"><img src="/static/icons/registro-clientes.png" alt="Registro"><span>Registro de Clientes</span></a>
+            <a href="/login" class="menu-button"><img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar"><span>Ingresar al sistema</span></a>
+        </div>
     </div>
 </body>
 </html>

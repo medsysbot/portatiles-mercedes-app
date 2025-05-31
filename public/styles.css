@@ -165,22 +165,26 @@ nav a:hover {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-top: 20px;
     text-align: center;
     position: relative;
 }
 
 .hero-text {
-    margin-top: 30px;
+    margin-top: 0;
 }
 
 .hero-text h1 {
     margin: 0;
-    font-size: clamp(2rem, 7vw, 5rem);
+    font-size: clamp(2.4rem, 7vw, 6rem);
+    font-weight: 800;
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: #f2b845;
+    position: relative;
+    z-index: 10;
 }
 
 .titulo-modulo {
@@ -195,8 +199,8 @@ nav a:hover {
 
 .subtitulo {
     margin: 0.5rem 0 0;
-    font-size: clamp(1.1rem, 3.5vw, 1.3rem);
-    color: #bfbfbf;
+    font-size: 1.3rem;
+    color: #595959;
     font-weight: 600;
     text-shadow: 0 1px 2px #fff;
 }

@@ -6,6 +6,65 @@
     <title>Alquiler de Baños</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        .titulo-modulo {
+            margin-top: 2rem;
+            color: #f2b845;
+            text-align: center;
+        }
+
+        #formulario-alquiler {
+            display: none;
+            flex-direction: column;
+            gap: 1rem;
+            background: rgba(255, 255, 255, 0.92);
+            padding: 20px 28px;
+            border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+            max-width: 500px;
+            width: 90%;
+            box-sizing: border-box;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+        }
+
+        #formulario-alquiler label {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        #formulario-alquiler input,
+        #formulario-alquiler select,
+        #formulario-alquiler textarea {
+            padding: 8px;
+            margin-top: 4px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font: inherit;
+        }
+
+        #botones-formulario {
+            display: none;
+            margin-top: 16px;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        #botones-formulario button {
+            max-height: 40px;
+            padding: 8px 16px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body class="alquiler-page">
     <div class="fondo-alquiler">

@@ -1,7 +1,7 @@
 
 .container-botones {
     position: relative;
-    margin-top: 35px;
+    margin-top: 60px;
     margin-left: 16px;
     display: flex;
     flex-direction: column;
@@ -54,7 +54,7 @@ button.menu-item {
 
 @media screen and (max-width: 768px) {
     .container-botones {
-        margin-top: 35px;
+        margin-top: 60px;
         margin-left: 16px;
     }
     .menu-item {
@@ -72,7 +72,7 @@ button.menu-item {
 @media screen and (min-width: 768px) {
     .container-botones {
         position: absolute;
-        top: 25%;
+        top: 45%;
         left: 2rem;
         margin: 0;
     }

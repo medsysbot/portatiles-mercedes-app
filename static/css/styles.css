@@ -92,11 +92,6 @@ button.menu-item {
     position: relative;
 }
 
-#toggleFormulario {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
 
 #formulario-alquiler {
     display: none;

@@ -7,17 +7,25 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="/static/css/styles.css">
 </head>
-<body>
+<body class="alquiler-page">
     <div class="fondo-alquiler">
-        <a href="/" class="boton-inicio">Inicio</a>
-        <h1>Alquiler de Baños</h1>
-        <button id="toggleFormulario">Ver formulario</button>
+        <div class="container-botones">
+            <a href="/" class="menu-item"><img src="/static/icons/inicio.png" alt="Inicio"><span>Inicio</span></a>
+            <button id="toggleFormulario" type="button" class="menu-item"><img src="/static/icons/alquiler.png" alt="Formulario"><span>Ver formulario</span></button>
+        </div>
+        <h1 class="titulo-modulo">Alquiler de Baños</h1>
         <form id="formulario-alquiler">
-            <label>Nombre
+            <label>Nombre y apellido
                 <input type="text" name="nombre" required>
+            </label>
+            <label>Teléfono
+                <input type="tel" name="telefono" required>
             </label>
             <label>Dirección
                 <input type="text" name="direccion" required>
+            </label>
+            <label>Correo electrónico
+                <input type="email" name="correo" required>
             </label>
             <label>Tipo de baño
                 <select name="tipo_banio" required>
@@ -28,11 +36,11 @@
             <label>Fecha
                 <input type="date" name="fecha" required>
             </label>
+            <div id="botones-formulario">
+                <button type="submit">Enviar</button>
+                <button type="reset">Borrar</button>
+            </div>
         </form>
-        <div id="botones-formulario">
-            <button type="submit" form="formulario-alquiler">Enviar</button>
-            <button type="reset" form="formulario-alquiler">Borrar</button>
-        </div>
     </div>
 
     <script src="/static/js/alquiler_form.js"></script>

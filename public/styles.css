@@ -10,6 +10,11 @@ body.index-page {
     background-color: #000;
 }
 
+body.alquiler-page {
+    padding: 0;
+    background-color: #000;
+}
+
 h1 {
     color: #333;
 }
@@ -176,6 +181,12 @@ nav a:hover {
     align-items: center;
     gap: 0.5rem;
     color: #f2b845;
+}
+
+.titulo-modulo {
+    margin-top: 2rem;
+    color: #f2b845;
+    text-align: center;
 }
 .hero-logo {
     height: 80px;

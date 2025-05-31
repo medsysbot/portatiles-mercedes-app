@@ -47,6 +47,11 @@
     flex: 1;
 }
 
+button.menu-item {
+    border: none;
+    cursor: pointer;
+}
+
 @media screen and (max-width: 768px) {
     .container-botones {
         margin-top: 35px;
@@ -77,61 +82,44 @@
 .fondo-alquiler {
     background: url('/static/imagenes/fondo-alquiler.png') center/cover no-repeat;
     min-height: 100vh;
+    width: 100vw;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem 1rem;
+    justify-content: center;
+    padding: 0;
     box-sizing: border-box;
-}
-
-.boton-inicio {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    background-color: rgba(60, 60, 60, 0.9);
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    text-decoration: none;
-    font-weight: bold;
-    z-index: 100;
-    transition: background-color 0.3s;
-}
-
-.boton-inicio:hover {
-    background-color: rgba(60, 60, 60, 1);
+    position: relative;
 }
 
 #toggleFormulario {
-    margin-top: 4rem;
-    padding: 0.5rem 1rem;
-    background-color: #0066cc;
-    color: #fff;
+    background: none;
     border: none;
-    border-radius: 4px;
     cursor: pointer;
-}
-
-#toggleFormulario:hover {
-    background-color: #0055aa;
 }
 
 #formulario-alquiler {
     display: none;
     flex-direction: column;
     gap: 1rem;
-    background: rgba(255, 255, 255, 0.9);
-    padding: 1rem;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
     border-radius: 8px;
     max-width: 500px;
-    width: 100%;
+    width: 90%;
     box-sizing: border-box;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 50;
 }
 
 #botones-formulario {
     display: none;
     margin-top: 1rem;
     gap: 1rem;
+    justify-content: center;
 }
 
 #botones-formulario button {
@@ -150,10 +138,5 @@
 @media screen and (max-width: 600px) {
     #toggleFormulario {
         margin-top: 3rem;
-    }
-    .boton-inicio {
-        top: 0.5rem;
-        left: 0.5rem;
-        padding: 0.4rem 0.8rem;
     }
 }

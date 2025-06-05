@@ -1,31 +1,136 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portátiles Mercedes</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portátiles Mercedes</title>
+  <style>
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #faf9f6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .cabecera {
+      position: relative;
+      width: 100vw;
+      padding-top: 38px;
+      text-align: center;
+    }
+    .cabecera-logo {
+      position: absolute;
+      left: 50%; top: 18px;
+      transform: translateX(-50%);
+      opacity: 0.12;
+      width: 310px;
+      max-width: 85vw;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .cabecera-titulo {
+      position: relative;
+      color: #f2b845;
+      font-size: clamp(2.3rem, 6vw, 4.2rem);
+      font-weight: 900;
+      letter-spacing: 1px;
+      z-index: 2;
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
+    .cabecera-slogan {
+      position: relative;
+      color: #595959;
+      font-size: 1.08rem;
+      font-weight: 600;
+      text-shadow: 0 1px 2px #fff;
+      z-index: 2;
+      margin-bottom: 38px;
+      margin-top: 0;
+      max-width: 420px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .botonera {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 17px;
+      margin: 0 auto 30px 8vw;
+      width: 100%;
+      max-width: 370px;
+    }
+    .boton-index {
+      display: flex;
+      align-items: center;
+      background: rgba(0,0,0,0.52);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      padding: 0 22px 0 15px;
+      height: 44px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .13s;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.12);
+      min-width: 170px;
+      max-width: 240px;
+      white-space: nowrap;
+      gap: 12px;
+    }
+    .boton-index img {
+      width: 24px; height: 24px;
+      margin-right: 10px;
+      filter: drop-shadow(0 0 0 #000);
+    }
+    .boton-index:hover {
+      background: rgba(35,35,35,0.75);
+    }
+    @media (max-width: 650px) {
+      .cabecera-logo { width: 60vw; }
+      .cabecera-titulo { font-size: clamp(1.5rem,7vw,2.3rem); }
+      .cabecera-slogan { font-size: 0.98rem; }
+      .botonera { margin-left: 4vw; }
+      .boton-index { font-size: 0.99rem; min-width: 116px; max-width: 210px; height: 38px; }
+      .boton-index img { width: 20px; height: 20px; margin-right: 8px; }
+    }
+    @media (max-width: 420px) {
+      .botonera { margin-left: 0vw; }
+      .cabecera-slogan { font-size: 0.93rem; }
+    }
+  </style>
 </head>
-<body class="index-page">
-    <div class="hero">
-        <div class="hero-text">
-            <h1>
-                <span>Portátiles</span>
-                <img src="/static/icons/logo-institucional.png" alt="Logo" class="hero-logo">
-                <span>Mercedes</span>
-            </h1>
-            <p class="subtitulo">Somos una empresa de alquiler y venta de baños químicos.</p>
-        </div>
-        <nav class="hero-nav">
-            <ul>
-                <li><a href="/"><img src="/static/icons/inicio.png" alt="Inicio">Inicio</a></li>
-                <li><a href="/alquiler"><img src="/static/icons/alquiler.png" alt="Alquiler">Alquiler de baños</a></li>
-                <li><a href="/venta"><img src="/static/icons/venta.png" alt="Venta">Venta de baños</a></li>
-                <li><a href="/servicios"><img src="/static/icons/servicios-2.png" alt="Servicios">Servicios</a></li>
-                <li><a href="/registro_clientes"><img src="/static/icons/registro-clientes.png" alt="Registro">Registro de Clientes</a></li>
-                <li><a href="/login"><img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar">Ingresar al sistema</a></li>
-            </ul>
-        </nav>
+<body>
+  <div class="cabecera">
+    <!-- Logo de fondo (cambiar la ruta según tu logo real) -->
+    <img src="/AppPublico/static/icons/logo-portatiles.png" class="cabecera-logo" alt="Portátiles Mercedes logo">
+    <!-- Título principal -->
+    <h1 class="cabecera-titulo">Portátiles Mercedes</h1>
+    <!-- Slogan -->
+    <div class="cabecera-slogan">
+      Somos una empresa de alquiler y venta de baños químicos.<br>
+      Brindamos soluciones para eventos, obras y todo tipo de requerimientos,<br>
+      con atención personalizada, rapidez y mantenimiento integral.
     </div>
+  </div>
+
+  <!-- Botonera principal -->
+  <div class="botonera">
+    <button class="boton-index" onclick="window.location.href='/alquiler'">
+      <img src="/AppPublico/static/icons/alquiler.png" alt="Alquiler">
+      Alquiler de Baños
+    </button>
+    <button class="boton-index" onclick="window.location.href='/ventas'">
+      <img src="/AppPublico/static/icons/ventas.png" alt="Ventas">
+      Venta de Baños
+    </button>
+    <button class="boton-index" onclick="window.location.href='/galeria'">
+      <img src="/AppPublico/static/icons/galeria.png" alt="Galería">
+      Galería de Fotos
+    </button>
+  </div>
 </body>
 </html>

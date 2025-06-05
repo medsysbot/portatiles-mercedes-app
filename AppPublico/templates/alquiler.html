@@ -143,6 +143,48 @@
             <button id="toggleFormulario" type="button" class="menu-item"><img src="/static/icons/ver-formulario.png" alt="Formulario"><span>Ver formulario</span></button>
             <a href="/galeria" class="menu-item"><img src="/static/icons/galeria.svg" alt="Galería"><span>Galería</span></a>
         </div>
+<div class="mazo-fotos">
+  <img src="/static/imagenes/evento.PNG"   alt="Evento 1"   style="left: 0px;">
+  <img src="/static/imagenes/evento-2.PNG" alt="Evento 2"   style="left: 32px;">
+  <img src="/static/imagenes/evento-3.PNG" alt="Evento 3"   style="left: 64px;">
+  <img src="/static/imagenes/evento-4.PNG" alt="Evento 4"   style="left: 96px;">
+  <img src="/static/imagenes/obra.PNG"     alt="Obra 1"     style="left: 128px;">
+  <img src="/static/imagenes/obra2.jpg"    alt="Obra 2"     style="left: 160px;">
+</div>
+
+<style>
+.mazo-fotos {
+  position: relative;
+  height: 140px;
+  width: 340px;
+  margin: 28px auto 20px auto;
+}
+.mazo-fotos img {
+  position: absolute;
+  top: 0;
+  width: 120px;
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: transform 0.18s;
+  z-index: 2;
+}
+.mazo-fotos img:hover {
+  transform: scale(1.09) translateY(-8px);
+  z-index: 10;
+  cursor: pointer;
+}
+@media (max-width: 600px) {
+  .mazo-fotos {
+    width: 98vw;
+    height: 80px;
+  }
+  .mazo-fotos img {
+    width: 66px;
+    border-radius: 7px;
+  }
+}
+</style>
         <form id="formulario-alquiler">
             <label>Nombre y apellido
                 <input type="text" name="nombre" required>

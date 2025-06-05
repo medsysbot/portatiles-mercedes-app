@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galería de Fotos</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+        .galeria-contenedor {
+            padding: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+        }
+        .galeria-contenedor img {
+            max-width: 300px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align:center;">Galería de Fotos</h1>
+    <div class="galeria-contenedor">
+        <img src="/static/imagenes/portada-index.png" alt="Ejemplo 1">
+        <img src="/static/imagenes/fondo-alquiler.png" alt="Ejemplo 2">
+    </div>
+</body>
+</html>

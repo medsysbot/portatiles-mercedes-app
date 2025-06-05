@@ -121,6 +121,14 @@ async def mostrar_servicios():
     return HTMLResponse(content=html_contenido)
 
 
+@router.get("/galeria", response_class=HTMLResponse)
+async def mostrar_galeria():
+    """Galería simple de imágenes."""
+    html_path = TEMPLATES_DIR / "galeria.html"
+    html_contenido = html_path.read_text(encoding="utf-8")
+    return HTMLResponse(content=html_contenido)
+
+
 @router.get("/registro_clientes", response_class=HTMLResponse)
 async def mostrar_registro_clientes():
     """Página para registrar nuevos clientes."""

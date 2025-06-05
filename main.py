@@ -3,17 +3,21 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from app.router import router
-from app.ventas import router as ventas_router
-from app.limpieza import router as limpieza_router
-from app.alertas import router as alertas_router
+from routes.router import router
+from routes.ventas import router as ventas_router
+from routes.limpieza import router as limpieza_router
+from routes.alertas import router as alertas_router
 
 app = FastAPI()
 
 # Carpeta para servir imágenes de manera estática
-app.mount("/imagenes", StaticFiles(directory="public/imagenes"), name="imagenes")
+app.mount(
+    "/imagenes",
+    StaticFiles(directory="AppPublico/static/imagenes"),
+    name="imagenes",
+)
 # Carpeta para scripts y otros recursos estáticos
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="AppPublico/static"), name="static")
 
 # Registrar las rutas definidas en el módulo router, incluido el formulario de limpieza
 app.include_router(router)

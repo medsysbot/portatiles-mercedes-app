@@ -24,8 +24,9 @@ portatiles-mercedes-app/
 ├── main.py # App principal de FastAPI
 ├── requirements.txt # Dependencias necesarias
 ├── README.md # Este archivo
-├── public/ # Recursos públicos (HTML, imágenes)
-└── app/ # Módulos privados (login, alquiler, etc.)
+├── AppPublico/ # Recursos públicos (plantillas y estáticos)
+├── routes/ # Rutas internas y de la app pública
+└── utils/ # Helpers y tareas periódicas
 
 
 ---

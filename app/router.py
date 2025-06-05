@@ -10,6 +10,7 @@ from .debito import router as debito_router
 from .cliente_panel import router as cliente_router
 from .admin_panel import router as admin_router
 from .auth import router as auth_router
+from .archivos import router as archivos_router
 
 # Directorio base de los archivos públicos
 BASE_DIR = Path(__file__).resolve().parent.parent / "public"
@@ -26,6 +27,7 @@ router.include_router(debito_router)
 router.include_router(cliente_router)
 router.include_router(admin_router)
 router.include_router(auth_router)
+router.include_router(archivos_router)
 
 @router.get("/", response_class=HTMLResponse)
 async def mostrar_index():

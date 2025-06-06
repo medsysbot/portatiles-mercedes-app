@@ -4,7 +4,7 @@ from datetime import datetime, date
 import os
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, constr
+from pydantic import BaseModel
 from fpdf import FPDF
 from supabase import create_client, Client
 
@@ -27,11 +27,11 @@ router = APIRouter()
 class Venta(BaseModel):
     """Modelo de validación para el registro de una venta."""
 
-    cliente_nombre: constr(strip_whitespace=True, min_length=1)
-    dni: constr(strip_whitespace=True, min_length=1)
-    tipo_banio: constr(strip_whitespace=True, min_length=1)
+    cliente_nombre: str
+    dni: str
+    tipo_banio: str
     cantidad: int
-    direccion_entrega: constr(strip_whitespace=True, min_length=1)
+    direccion_entrega: str
     fecha_venta: date
     observaciones: str | None = None
 

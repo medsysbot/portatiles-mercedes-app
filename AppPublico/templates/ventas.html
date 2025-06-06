@@ -10,22 +10,22 @@
     <h1>Registro de Venta</h1>
     <form id="formVenta">
         <label>Nombre del cliente
-            <input type="text" name="cliente_nombre" required>
+            <input type="text" name="cliente_nombre">
         </label>
         <label>Tipo de baño
-            <select name="tipo_banio" required>
+            <select name="tipo_banio">
                 <option value="común">Común</option>
                 <option value="VIP">VIP</option>
             </select>
         </label>
         <label>Cantidad
-            <input type="number" name="cantidad" id="cantidad" min="1" required>
+            <input type="text" name="cantidad" id="cantidad">
         </label>
         <label>Precio unitario
-            <input type="number" name="precio_unitario" id="precioUnitario" min="0" step="0.01" required>
+            <input type="text" name="precio_unitario" id="precioUnitario">
         </label>
         <label>Total
-            <input type="number" name="total" id="total" readonly>
+            <input type="text" name="total" id="total">
         </label>
         <button type="submit">Generar comprobante PDF</button>
     </form>

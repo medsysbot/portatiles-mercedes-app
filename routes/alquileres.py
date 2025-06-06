@@ -4,7 +4,7 @@ from datetime import date
 import os
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, constr
+from pydantic import BaseModel
 from supabase import create_client, Client
 
 # Configurar la conexión con Supabase usando variables de entorno
@@ -26,10 +26,10 @@ router = APIRouter()
 class Alquiler(BaseModel):
     """Modelo de validación para registrar un alquiler de baño."""
 
-    cliente_nombre: constr(strip_whitespace=True, min_length=1)
-    dni: constr(strip_whitespace=True, min_length=1)
-    direccion_entrega: constr(strip_whitespace=True, min_length=1)
-    tipo_banio: constr(strip_whitespace=True, min_length=1)
+    cliente_nombre: str
+    dni: str
+    direccion_entrega: str
+    tipo_banio: str
     fecha_inicio: date
     fecha_fin: date
     observaciones: str | None = None

@@ -24,7 +24,8 @@ portatiles-mercedes-app/
 ├── main.py # App principal de FastAPI
 ├── requirements.txt # Dependencias necesarias
 ├── README.md # Este archivo
-├── AppPublico/ # Recursos públicos (plantillas y estáticos)
+├── AppPublico/ # Plantillas HTML
+├── static/ # Recursos estáticos (imágenes, íconos, JS, CSS)
 ├── routes/ # Rutas internas y de la app pública
 └── utils/ # Helpers y tareas periódicas
 
@@ -121,3 +122,5 @@ Sin estas variables la aplicación seguirá corriendo, pero no podrá conectarse
 Para las funciones de alertas por correo también podés definir `EMAIL_ORIGIN`,
 `EMAIL_PASSWORD`, `SMTP_SERVER` y `SMTP_PORT`. Si no las configurás, el sistema
 mostrará una advertencia y los correos no se enviarán.
+
+Para más detalles sobre las rutas estáticas consultá `documentacion_recursos.md`.

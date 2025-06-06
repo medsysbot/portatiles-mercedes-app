@@ -40,8 +40,9 @@ async def registrar_limpieza(
         raise HTTPException(status_code=400, detail="Imagen del remito obligatoria")
 
     extension = Path(remito.filename).suffix.lower()
-    if extension not in {".jpg", ".jpeg", ".png"}:
-        raise HTTPException(status_code=400, detail="Formato de imagen no permitido")
+    # Descartar extensiones que puedan representar scripts ejecutables
+    if extension in {".exe", ".sh", ".bat", ".py"}:
+        raise HTTPException(status_code=400, detail="Tipo de archivo no permitido")
 
     bucket_name = f"remitos-limpieza-{cliente_id}"
     fecha_archivo = datetime.utcnow().strftime("%Y%m%d%H%M%S")

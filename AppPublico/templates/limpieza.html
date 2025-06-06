@@ -10,26 +10,26 @@
     <h1>Registro de Limpieza de Baños</h1>
     <form id="formLimpieza" enctype="multipart/form-data">
         <label>Nombre del cliente
-            <input type="text" name="cliente_nombre" required>
+            <input type="text" name="cliente_nombre">
         </label>
         <label>ID del cliente
-            <input type="text" name="cliente_id" required>
+            <input type="text" name="cliente_id">
         </label>
         <label>ID del baño
-            <input type="text" name="bano_id" required>
+            <input type="text" name="bano_id">
         </label>
         <label>Identificación del empleado
-            <input type="text" name="empleado" required>
+            <input type="text" name="empleado">
         </label>
         <label>Fecha y hora
-            <input type="datetime-local" name="fecha_hora" id="fechaHora" readonly>
+            <input type="text" name="fecha_hora" id="fechaHora">
         </label>
         <label>Observaciones
             <textarea name="observaciones"></textarea>
         </label>
         <label>Imagen del remito firmado
-            <!-- Se permite cualquier formato de imagen estándar -->
-            <input type="file" name="remito" accept="image/*" required>
+            <!-- Se permite cualquier formato de imagen -->
+            <input type="file" name="remito">
         </label>
         <button type="submit">Guardar limpieza</button>
     </form>

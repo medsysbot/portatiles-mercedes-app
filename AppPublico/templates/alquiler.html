@@ -83,7 +83,7 @@
         }
 
         #formulario-alquiler {
-            display: none;
+            display: flex;
             flex-direction: column;
             gap: 1rem;
             background: rgba(255, 255, 255, 0.92);
@@ -118,7 +118,7 @@
         }
 
         #botones-formulario {
-            display: none;
+            display: flex;
             margin-top: 16px;
             gap: 1rem;
             justify-content: center;
@@ -189,25 +189,25 @@
 </style>
         <form id="formulario-alquiler">
             <label>Nombre y apellido
-                <input type="text" name="nombre" required>
+                <input type="text" name="nombre">
             </label>
             <label>Teléfono
-                <input type="tel" name="telefono" required>
+                <input type="text" name="telefono">
             </label>
             <label>Dirección
-                <input type="text" name="direccion" required>
+                <input type="text" name="direccion">
             </label>
             <label>Correo electrónico
-                <input type="email" name="correo" required>
+                <input type="text" name="correo">
             </label>
             <label>Tipo de baño
-                <select name="tipo_banio" required>
+                <select name="tipo_banio">
                     <option value="comun">Común</option>
                     <option value="vip">VIP</option>
                 </select>
             </label>
             <label>Fecha
-                <input type="date" name="fecha" required>
+                <input type="text" name="fecha">
             </label>
             <div id="botones-formulario">
                 <button type="submit">Enviar</button>

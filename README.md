@@ -28,3 +28,9 @@ Portátiles Mercedes es una solución SaaS diseñada para empresas de servicios 
 ## 🚀 Instalación y Puesta en Marcha
 
 1. **Cloná el repositorio:**
+
+## 📝 Buenas prácticas de archivos
+
+- Utilizá imagenes e íconos solo en formato `.png`.
+- Evitá espacios o caracteres especiales en los nombres.
+- No subas archivos de texto ni logs dentro de `static/icons`.

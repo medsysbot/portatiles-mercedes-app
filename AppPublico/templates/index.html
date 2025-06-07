@@ -34,15 +34,13 @@
     }
 
     .titulo-index {
+      font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
       font-size: 64px;
       color: #DEB460;
-      letter-spacing: 1.2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       text-align: center;
-      text-shadow: 0 1px 3px #fff, 0 0 2px #fff;
+      margin-bottom: 6px;
+      /* SIN text-shadow ni ribete */
     }
 
     .logo-portatiles {
@@ -52,13 +50,14 @@
     }
 
     .slogan-index {
+      font-family: 'Nunito', Arial, sans-serif;
       font-weight: 700;
       font-style: italic;
-      font-size: 36px;
+      font-size: 40px; /* más grande que antes */
       color: #878279;
       text-align: center;
-      text-shadow: 0 1px 3px #fff, 0 0 2px #fff;
-      margin-bottom: 24px;
+      margin-bottom: 28px;
+      text-shadow: 0 1.5px 2.5px #fff;
     }
 
     .contenedor-principal {
@@ -108,31 +107,29 @@
     }
 
     .contenedor-texto {
-      flex: 1;
-      display: flex;
-      align-items: flex-start;
-      justify-content: flex-start;
-      margin-left: 38px;
-      margin-top: 32px;
+      position: absolute;
+      left: 560px;  /* ajustar para alinear al borde del baño portátil azul */
+      top: 180px;
+      max-width: 700px;
     }
 
     .presentacion-portatiles {
+      font-family: 'Nunito', Arial, sans-serif;
       font-weight: 300;
-      font-size: 21px;
+      font-size: 24px; /* o 21-28px según espacio */
       color: #848280;
       text-align: left;
-      max-width: 700px;
-      line-height: 1.5;
-      text-shadow: 0 1px 3px #fff, 0 0 2px #fff;
+      line-height: 1.6;
+      text-shadow: 0 1.5px 2.5px #fff;
     }
 
     .contacto {
-      font-size: 1em;
-      font-weight: 700;
-      color: #DEB460;
       display: block;
-      margin-top: 16px;
-      text-shadow: 0 1px 3px #fff, 0 0 2px #fff;
+      color: #DEB460;
+      font-size: 1.15em;
+      font-weight: 700;
+      margin-top: 24px;
+      text-shadow: none; /* SIN ribete */
     }
 
     @media (max-width: 700px) {
@@ -188,7 +185,16 @@
 
       <div class="contenedor-texto">
         <div class="presentacion-portatiles">
-          Portátiles Mercedes es una empresa dedicada al alquiler, venta y mantenimiento de baños químicos portátiles. Brindamos soluciones sanitarias confiables y adaptadas a cada cliente, garantizando cumplimiento normativo, logística eficiente y atención personalizada en cada proyecto.
+          Portátiles Mercedes es líder en el alquiler, venta y mantenimiento de baños químicos portátiles para obras, eventos y situaciones especiales en toda la región.<br>
+          Ofrecemos unidades modernas, limpias y completamente equipadas, listas para responder a las exigencias de cada cliente.<br><br>
+
+          Nos ocupamos de todo el proceso: traslado, instalación, vaciado, limpieza y mantenimiento periódico, garantizando puntualidad y cumplimiento de todas las normas sanitarias y ambientales.<br><br>
+
+          Nuestra atención es personalizada, rápida y flexible. Asesoramos a empresas, instituciones y particulares, adaptándonos a cualquier tipo de requerimiento, desde grandes proyectos hasta necesidades puntuales.<br><br>
+
+          Contamos con modelos estándar y opciones accesibles, brindando siempre soluciones confiables, seguras y confortables. Elija Portátiles Mercedes: calidad, experiencia y la mejor respuesta en servicios sanitarios portátiles.
+
+          <br><br>
           <span class="contacto">
             portatilesmercedes@gmail.com<br>
             Tel. 2657-627996

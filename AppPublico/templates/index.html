@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portátiles Mercedes</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500&display=swap" rel="stylesheet">
   <style>
     /* Fondo de pantalla responsivo */
     body {
@@ -112,7 +113,14 @@
     <img src="/static/icons/logo-institucional.png" class="cabecera-logo" alt="Portátiles Mercedes logo">
     <h1 class="cabecera-titulo">Portátiles Mercedes</h1>
     <p class="slogan-portatiles">Lo tradicional, hecho inteligente.</p>
-      </div>
+  </div>
+  <div class="presentacion-portatiles">
+    <span class="marca-portatiles">Portátiles Mercedes</span> es una empresa líder en alquiler, venta y mantenimiento de baños químicos portátiles. Ofrecemos soluciones higiénicas, seguras y personalizadas para eventos, obras y cualquier entorno que requiera instalaciones sanitarias móviles.
+    <br><br>
+    Nuestro compromiso es brindar atención inmediata, servicio profesional y tecnología de última generación, adaptándonos a las necesidades de cada cliente. Con un equipo especializado y una flota moderna, garantizamos calidad, puntualidad y cumplimiento en cada proyecto.
+    <br><br>
+    Confíe en <span class="marca-portatiles">Portátiles Mercedes</span> para resolver sus requerimientos sanitarios, siempre con rapidez, seriedad y máxima eficiencia.
+  </div>
   <div class="botonera">
     <button class="boton-index" onclick="window.location.href='/alquiler'">
       <img src="/static/icons/alquiler.png" alt="Alquiler de baño">
@@ -135,5 +143,50 @@
       Ingresar al sistema
     </button>
   </div>
+  <style>
+  /* Fondo de pantalla para index */
+  body {
+    background-image: url('/static/imagenes/portada-index.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+  @media (max-width: 600px) {
+    body {
+      background-size: contain;         /* Zoom out en mobile */
+      background-position: center top;
+      background-attachment: fixed;
+    }
+  }
+
+  /* Presentación portada */
+  .presentacion-portatiles {
+    font-family: 'Nunito', Arial, sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    color: #A9A9A9; /* DarkGray */
+    text-align: center;
+    line-height: 1.6;
+    margin: 28px auto 28px auto;
+    max-width: 700px;
+    background: rgba(255,255,255,0.92);
+    border-radius: 16px;
+    padding: 28px 22px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+  }
+  .marca-portatiles {
+    font-weight: 500;
+    color: #C0C0C0; /* Silver */
+    letter-spacing: 0.5px;
+  }
+  @media (max-width: 600px) {
+    .presentacion-portatiles {
+      font-size: 17px;
+      padding: 16px 7px;
+      margin: 16px 0;
+    }
+  }
+  </style>
 </body>
 </html>

@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portátiles Mercedes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <style>
     html, body {
@@ -13,69 +13,84 @@
       width: 100%;
     }
     body {
-      height: 100vh;
+      min-height: 100vh;
+      min-width: 100vw;
       width: 100vw;
+      height: 100vh;
       background: url('/static/imagenes/portada-index.png') no-repeat center center fixed;
       background-size: cover;
-      overflow: hidden;
       position: relative;
+      overflow-x: hidden;
+    }
+    @media (max-width: 600px) {
+      body {
+        background-size: contain; /* Zoom out en mobile */
+        background-position: center top;
+      }
+    }
+    .header-index {
+      margin-top: 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
+      z-index: 10;
     }
     .titulo-index {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
-      font-size: 64px;
+      font-size: 42px;
       color: #C0C0C0;
-      text-align: center;
-      margin-top: 44px;
-      letter-spacing: 2px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 18px;
+      letter-spacing: 1.2px;
+      margin-bottom: 5px;
     }
     .logo-portatiles {
-      height: 48px;
+      height: 60px;  /* 70% más grande que el tamaño base */
       width: auto;
-      margin-left: 14px;
+      margin: 0 12px;
       vertical-align: middle;
+      display: inline-block;
     }
     .slogan-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 500;
-      font-size: 32px;
+      font-size: 22px;
       color: #C0C0C0;
       text-align: center;
-      margin-top: 10px;
       margin-bottom: 24px;
+      margin-top: 2px;
     }
     .presentacion-portatiles {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 300;
-      font-size: 24px;
-      color: #C0C0C0;
-      text-align: center;
-      margin: 0 auto 0 auto;
-      max-width: 700px;
+      font-size: 16px;
+      color: #A9A9A9;
+      text-align: left;
+      margin: 16px auto 28px auto;
+      max-width: 430px;
+      padding: 0 18px;
       background: transparent;
       border: none;
       box-shadow: none;
-      padding: 0 10px;
+      line-height: 1.5;
     }
     .botonera {
-      position: absolute;
-      left: 38px;
-      top: 180px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
-      z-index: 10;
+      align-items: flex-start;
+      margin: 20px 0 0 18px;
+      gap: 16px;
     }
     .boton-index {
       width: 230px;
       height: 44px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
-      font-size: 1.18rem;
+      font-size: 1.13rem;
       font-style: italic;
       background: rgba(0,0,0,0.58);
       color: #fff;
@@ -95,23 +110,28 @@
       height: 22px;
       display: inline-block;
     }
-    @media (max-width: 700px) {
-      .titulo-index { font-size: 34px; }
-      .logo-portatiles { height: 24px; }
-      .slogan-index { font-size: 18px; }
-      .presentacion-portatiles { font-size: 15px; max-width: 95vw; }
-      .botonera { left: 6px; top: 120px; }
-      .boton-index { width: 98vw; max-width: 230px; font-size: 1.01rem; }
+    @media (max-width: 400px) {
+      .titulo-index { font-size: 26px; }
+      .logo-portatiles { height: 36px; margin: 0 6px; }
+      .slogan-index { font-size: 14px; }
+      .presentacion-portatiles { font-size: 12px; max-width: 95vw; padding: 0 5px; }
+      .botonera { margin-left: 5px; }
     }
   </style>
 </head>
 <body>
-  <div class="titulo-index">
-    Portátiles Mercedes
-    <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+  <div class="header-index">
+    <div class="titulo-index">
+      Portátiles
+      <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+      Mercedes
+    </div>
+    <div class="slogan-index">
+      Lo tradicional, hecho inteligente.
+    </div>
   </div>
-  <div class="slogan-index">
-    Lo tradicional, hecho inteligente.
+  <div class="presentacion-portatiles">
+    Portátiles Mercedes es una empresa dedicada al alquiler, venta y mantenimiento de baños químicos portátiles. Brindamos soluciones sanitarias confiables y adaptadas a cada cliente, garantizando cumplimiento normativo, logística eficiente y atención personalizada en cada proyecto.
   </div>
   <div class="botonera">
     <button class="boton-index" onclick="window.location.href='#'">
@@ -138,9 +158,6 @@
       <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
       Ingresar al sistema
     </button>
-  </div>
-  <div class="presentacion-portatiles">
-    Soluciones sanitarias móviles, confiables y a medida para eventos, obras y emergencias.
   </div>
 </body>
 </html>

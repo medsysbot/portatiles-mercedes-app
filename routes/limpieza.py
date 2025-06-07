@@ -38,9 +38,12 @@ async def registrar_limpieza(
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
     extension = Path(remito.filename).suffix.lower()
-    # Descartar extensiones que puedan representar scripts ejecutables
-    if extension in {".exe", ".sh", ".bat", ".py"}:
-        raise HTTPException(status_code=400, detail="Tipo de archivo no permitido")
+    # Desactivar temporalmente la validación de extensiones para permitir
+    # subir imágenes con cualquier tipo de archivo. Recordar volver a
+    # habilitar esta verificación más adelante para evitar la carga de
+    # archivos ejecutables.
+    # if extension in {".exe", ".sh", ".bat", ".py"}:
+    #     raise HTTPException(status_code=400, detail="Tipo de archivo no permitido")
 
     bucket_name = f"remitos-limpieza-{cliente_id}"
     fecha_archivo = datetime.utcnow().strftime("%Y%m%d%H%M%S")

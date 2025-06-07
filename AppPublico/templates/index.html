@@ -143,52 +143,88 @@
         margin: 0;
       }
     }
+
+    .contenedor-principal {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90vw;
+      max-width: 1000px;
+      text-align: center;
+      z-index: 10;
+    }
+
+    .contenedor-titulo,
+    .contenedor-subtitulo,
+    .contenedor-texto,
+    .contenedor-botones {
+      margin-bottom: 20px;
+      background: transparent;
+    }
+
+    .contenedor-botones {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
   </style>
 </head>
 <body>
   <main class="contenedor-pagina">
-  <div class="header-index">
-    <div class="titulo-index">
-      Portátiles
-      <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
-      Mercedes
+    <div class="contenedor-principal">
+      <div class="header-index">
+        <div class="contenedor-titulo">
+          <div class="titulo-index">
+            Portátiles
+            <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+            Mercedes
+          </div>
+        </div>
+        <div class="contenedor-subtitulo">
+          <div class="slogan-index">
+            Lo tradicional, hecho inteligente.
+          </div>
+        </div>
+      </div>
+      <div class="contenedor-texto">
+        <div class="presentacion-portatiles">
+          Portátiles Mercedes es una empresa dedicada al alquiler, venta y mantenimiento de baños químicos portátiles. Brindamos soluciones sanitarias confiables y adaptadas a cada cliente, garantizando cumplimiento normativo, logística eficiente y atención personalizada en cada proyecto.
+          <br><br>
+          portatilesmercedes@gmail.com<br>
+          Tel. 2657-627996
+        </div>
+      </div>
+      <div class="contenedor-botones">
+        <div class="botonera">
+          <button class="boton-index" onclick="window.location.href='#'">
+            <img src="/static/icons/info-banos.png" alt="Info baños">
+            Información Baño
+          </button>
+          <button class="boton-index" onclick="window.location.href='/alquiler'">
+            <img src="/static/icons/alquiler.png" alt="Alquiler">
+            Alquiler de baño
+          </button>
+          <button class="boton-index" onclick="window.location.href='/venta'">
+            <img src="/static/icons/venta.png" alt="Venta">
+            Venta de baño
+          </button>
+          <button class="boton-index" onclick="window.location.href='/servicios'">
+            <img src="/static/icons/servicios-2.png" alt="Servicio">
+            Servicio
+          </button>
+          <button class="boton-index" onclick="window.location.href='/registro_clientes'">
+            <img src="/static/icons/registro-clientes.png" alt="Registro de cliente">
+            Registro de cliente
+          </button>
+          <button class="boton-index" onclick="window.location.href='/login'">
+            <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
+            Ingresar al sistema
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="slogan-index">
-      Lo tradicional, hecho inteligente.
-    </div>
-  </div>
-  <div class="presentacion-portatiles">
-    Portátiles Mercedes es una empresa dedicada al alquiler, venta y mantenimiento de baños químicos portátiles. Brindamos soluciones sanitarias confiables y adaptadas a cada cliente, garantizando cumplimiento normativo, logística eficiente y atención personalizada en cada proyecto.
-    <br><br>
-    portatilesmercedes@gmail.com<br>
-    Tel. 2657-627996
-  </div>
-  <div class="botonera">
-    <button class="boton-index" onclick="window.location.href='#'">
-      <img src="/static/icons/info-banos.png" alt="Info baños">
-      Información Baño
-    </button>
-    <button class="boton-index" onclick="window.location.href='/alquiler'">
-      <img src="/static/icons/alquiler.png" alt="Alquiler">
-      Alquiler de baño
-    </button>
-    <button class="boton-index" onclick="window.location.href='/venta'">
-      <img src="/static/icons/venta.png" alt="Venta">
-      Venta de baño
-    </button>
-    <button class="boton-index" onclick="window.location.href='/servicios'">
-      <img src="/static/icons/servicios-2.png" alt="Servicio">
-      Servicio
-    </button>
-    <button class="boton-index" onclick="window.location.href='/registro_clientes'">
-      <img src="/static/icons/registro-clientes.png" alt="Registro de cliente">
-      Registro de cliente
-    </button>
-    <button class="boton-index" onclick="window.location.href='/login'">
-      <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
-      Ingresar al sistema
-    </button>
-  </div>
   </main>
 </body>
 </html>

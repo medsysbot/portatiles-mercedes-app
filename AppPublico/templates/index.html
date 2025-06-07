@@ -47,10 +47,10 @@
       justify-content: center;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
-      font-size: 42px;
+      font-size: 96px;       /* Doble del tamaño original */
       color: #DEB460;
       letter-spacing: 1.2px;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
     .logo-portatiles {
       height: 60px;  /* 70% más grande que el tamaño base */
@@ -61,26 +61,36 @@
     }
     .slogan-index {
       font-family: 'Nunito', Arial, sans-serif;
-      font-weight: 500;
-      font-size: 22px;
+      font-weight: 700;
+      font-style: italic;
+      font-size: 36px;       /* 80% más grande */
       color: #878279;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 30px;
       margin-top: 2px;
     }
     .presentacion-portatiles {
-      position: absolute;
-      top: 160px;
-      left: 47vw;
-      max-width: 550px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 300;
-      font-size: 28px;
+      font-size: 30px;      /* Más grande, aprovechando el espacio */
       color: #848280;
       text-align: left;
+      margin: 0 0 0 56px;
+      max-width: 800px;
       background: transparent;
+      border: none;
+      box-shadow: none;
       line-height: 1.5;
-      z-index: 20;
+      padding: 0 10px;
+      z-index: 10;
+    }
+    .datos-contacto {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 400;
+      font-size: 28px;      /* Similar o apenas menor que el texto */
+      color: #DEB460;
+      margin-top: 24px;
+      display: block;
     }
     .botonera {
       display: flex;
@@ -119,7 +129,6 @@
       .logo-portatiles { height: 36px; margin: 0 6px; }
       .slogan-index { font-size: 14px; }
       .presentacion-portatiles {
-        position: static;
         margin: 18px auto 0 0;
         font-size: 17px;
         max-width: 95vw;
@@ -152,6 +161,10 @@
   </div>
   <div class="presentacion-portatiles">
     Portátiles Mercedes es una empresa dedicada al alquiler, venta y mantenimiento de baños químicos portátiles. Brindamos soluciones sanitarias confiables y adaptadas a cada cliente, garantizando cumplimiento normativo, logística eficiente y atención personalizada en cada proyecto.
+    <span class="datos-contacto">
+      portatilesmercedes@gmail.com<br>
+      Tel. 2657-627996
+    </span>
   </div>
   <div class="botonera">
     <button class="boton-index" onclick="window.location.href='#'">

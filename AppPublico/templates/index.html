@@ -5,53 +5,142 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portátiles Mercedes</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/LandingPage.css">
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+    body {
+      height: 100vh;
+      width: 100vw;
+      background: url('/static/imagenes/portada-index.png') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+      position: relative;
+    }
+    .titulo-index {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 800;
+      font-size: 64px;
+      color: #C0C0C0;
+      text-align: center;
+      margin-top: 44px;
+      letter-spacing: 2px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 18px;
+    }
+    .logo-portatiles {
+      height: 48px;
+      width: auto;
+      margin-left: 14px;
+      vertical-align: middle;
+    }
+    .slogan-index {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 500;
+      font-size: 32px;
+      color: #C0C0C0;
+      text-align: center;
+      margin-top: 10px;
+      margin-bottom: 24px;
+    }
+    .presentacion-portatiles {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 300;
+      font-size: 24px;
+      color: #C0C0C0;
+      text-align: center;
+      margin: 0 auto 0 auto;
+      max-width: 700px;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+      padding: 0 10px;
+    }
+    .botonera {
+      position: absolute;
+      left: 38px;
+      top: 180px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      z-index: 10;
+    }
+    .boton-index {
+      width: 230px;
+      height: 44px;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 400;
+      font-size: 1.18rem;
+      font-style: italic;
+      background: rgba(0,0,0,0.58);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      box-shadow: 0 2px 7px rgba(0,0,0,0.14);
+      transition: background .13s;
+      padding-left: 16px;
+    }
+    .boton-index img {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+    }
+    @media (max-width: 700px) {
+      .titulo-index { font-size: 34px; }
+      .logo-portatiles { height: 24px; }
+      .slogan-index { font-size: 18px; }
+      .presentacion-portatiles { font-size: 15px; max-width: 95vw; }
+      .botonera { left: 6px; top: 120px; }
+      .boton-index { width: 98vw; max-width: 230px; font-size: 1.01rem; }
+    }
+  </style>
 </head>
 <body>
-  <header class="landing-hero">
-    <div class="overlay">
-      <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
-      <h1 class="titulo-index">Portátiles Mercedes</h1>
-      <p class="slogan-index">Lo tradicional, hecho inteligente.</p>
-      <nav class="botonera">
-        <button class="boton-index" onclick="window.location.href='#'">
-          <img src="/static/icons/info-banos.png" alt="Info baños">
-          Información Baño
-        </button>
-        <button class="boton-index" onclick="window.location.href='/alquiler'">
-          <img src="/static/icons/alquiler.png" alt="Alquiler">
-          Alquiler de baño
-        </button>
-        <button class="boton-index" onclick="window.location.href='/venta'">
-          <img src="/static/icons/venta.png" alt="Venta">
-          Venta de baño
-        </button>
-        <button class="boton-index" onclick="window.location.href='/servicios'">
-          <img src="/static/icons/servicios-2.png" alt="Servicio">
-          Servicio
-        </button>
-        <button class="boton-index" onclick="window.location.href='/registro_clientes'">
-          <img src="/static/icons/registro-clientes.png" alt="Registro de cliente">
-          Registro de cliente
-        </button>
-        <button class="boton-index" onclick="window.location.href='/login'">
-          <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
-          Ingresar al sistema
-        </button>
-      </nav>
-    </div>
-  </header>
-
-  <section class="presentacion-box">
-    Portátiles Mercedes es la empresa líder en alquiler, venta y mantenimiento de baños químicos portátiles, con soluciones higiénicas, seguras y a medida para cada cliente y proyecto.
-    <br><br>
-    Desde el primer contacto, nuestro equipo se encarga de la logística integral: gestionamos la entrega, instalación y retiro de las unidades en tiempo y forma, adaptándonos a todo tipo de evento, obra o necesidad puntual.
-    <br><br>
-    La atención personalizada y la comunicación constante son el eje de nuestro servicio. Creemos que cada cliente merece un trato profesional, transparente y rápido ante cualquier consulta o requerimiento. Por eso, disponemos de soporte inmediato para resolver dudas y asistirlo en cada etapa del proceso.
-    <br><br>
-    En Portátiles Mercedes, la responsabilidad es un valor esencial. Cumplimos con todas las normativas ambientales y sanitarias, asegurando una disposición final de residuos respetuosa con el entorno y la comunidad. Nuestro compromiso es garantizar instalaciones limpias, mantenimiento periódico y materiales de calidad, priorizando siempre la seguridad y el bienestar de las personas.
-    <br><br>
-    Confíe en Portátiles Mercedes para asegurar el éxito y la tranquilidad en su próximo evento u obra, con soluciones sanitarias confiables, eficientes y al más alto nivel.
-  </section>
+  <div class="titulo-index">
+    Portátiles Mercedes
+    <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+  </div>
+  <div class="slogan-index">
+    Lo tradicional, hecho inteligente.
+  </div>
+  <div class="botonera">
+    <button class="boton-index" onclick="window.location.href='#'">
+      <img src="/static/icons/info-banos.png" alt="Info baños">
+      Información Baño
+    </button>
+    <button class="boton-index" onclick="window.location.href='/alquiler'">
+      <img src="/static/icons/alquiler.png" alt="Alquiler">
+      Alquiler de baño
+    </button>
+    <button class="boton-index" onclick="window.location.href='/venta'">
+      <img src="/static/icons/venta.png" alt="Venta">
+      Venta de baño
+    </button>
+    <button class="boton-index" onclick="window.location.href='/servicios'">
+      <img src="/static/icons/servicios-2.png" alt="Servicio">
+      Servicio
+    </button>
+    <button class="boton-index" onclick="window.location.href='/registro_clientes'">
+      <img src="/static/icons/registro-clientes.png" alt="Registro de cliente">
+      Registro de cliente
+    </button>
+    <button class="boton-index" onclick="window.location.href='/login'">
+      <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
+      Ingresar al sistema
+    </button>
+  </div>
+  <div class="presentacion-portatiles">
+    Soluciones sanitarias móviles, confiables y a medida para eventos, obras y emergencias.
+  </div>
 </body>
 </html>

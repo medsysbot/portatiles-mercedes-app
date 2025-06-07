@@ -25,9 +25,12 @@
     }
     @media (max-width: 600px) {
       body {
-        background-size: contain; /* Zoom out en mobile */
-        background-position: center top;
+        background-size: cover;
+        background-position: center center;
       }
+    }
+    .contenedor-pagina {
+      min-height: 100vh;
     }
     .header-index {
       margin-top: 22px;
@@ -130,6 +133,7 @@
   </style>
 </head>
 <body>
+  <main class="contenedor-pagina">
   <div class="header-index">
     <div class="titulo-index">
       Portátiles
@@ -169,5 +173,6 @@
       Ingresar al sistema
     </button>
   </div>
+  </main>
 </body>
 </html>

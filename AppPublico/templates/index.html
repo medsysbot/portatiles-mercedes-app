@@ -5,19 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portátiles Mercedes</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/css/LandingPage.css">
 </head>
 <body>
-  <div class="header-index">
-    <span class="titulo-index">
-      Portátiles Mercedes
+  <header class="landing-hero">
+    <div class="overlay">
       <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
-    </span>
-    <div class="slogan-index">
-      Lo tradicional, hecho inteligente.
+      <h1 class="titulo-index">Portátiles Mercedes</h1>
+      <p class="slogan-index">Lo tradicional, hecho inteligente.</p>
+      <nav class="botonera">
+        <button class="boton-index" onclick="window.location.href='#'">
+          <img src="/static/icons/info-banos.png" alt="Info baños">
+          Información Baño
+        </button>
+        <button class="boton-index" onclick="window.location.href='/alquiler'">
+          <img src="/static/icons/alquiler.png" alt="Alquiler">
+          Alquiler de baño
+        </button>
+        <button class="boton-index" onclick="window.location.href='/venta'">
+          <img src="/static/icons/venta.png" alt="Venta">
+          Venta de baño
+        </button>
+        <button class="boton-index" onclick="window.location.href='/servicios'">
+          <img src="/static/icons/servicios-2.png" alt="Servicio">
+          Servicio
+        </button>
+        <button class="boton-index" onclick="window.location.href='/registro_clientes'">
+          <img src="/static/icons/registro-clientes.png" alt="Registro de cliente">
+          Registro de cliente
+        </button>
+        <button class="boton-index" onclick="window.location.href='/login'">
+          <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
+          Ingresar al sistema
+        </button>
+      </nav>
     </div>
-  </div>
+  </header>
 
-  <div class="presentacion-portatiles">
+  <section class="presentacion-box">
     Portátiles Mercedes es la empresa líder en alquiler, venta y mantenimiento de baños químicos portátiles, con soluciones higiénicas, seguras y a medida para cada cliente y proyecto.
     <br><br>
     Desde el primer contacto, nuestro equipo se encarga de la logística integral: gestionamos la entrega, instalación y retiro de las unidades en tiempo y forma, adaptándonos a todo tipo de evento, obra o necesidad puntual.
@@ -27,148 +52,6 @@
     En Portátiles Mercedes, la responsabilidad es un valor esencial. Cumplimos con todas las normativas ambientales y sanitarias, asegurando una disposición final de residuos respetuosa con el entorno y la comunidad. Nuestro compromiso es garantizar instalaciones limpias, mantenimiento periódico y materiales de calidad, priorizando siempre la seguridad y el bienestar de las personas.
     <br><br>
     Confíe en Portátiles Mercedes para asegurar el éxito y la tranquilidad en su próximo evento u obra, con soluciones sanitarias confiables, eficientes y al más alto nivel.
-  </div>
-
-  <div class="botonera">
-    <button class="boton-index" onclick="window.location.href='#'">
-      <img src="/static/icons/info-banos.png" alt="Info baños">
-      Información Baño
-    </button>
-    <button class="boton-index" onclick="window.location.href='/alquiler'">
-      <img src="/static/icons/alquiler.png" alt="Alquiler">
-      Alquiler de baño
-    </button>
-    <button class="boton-index" onclick="window.location.href='/venta'">
-      <img src="/static/icons/venta.png" alt="Venta">
-      Venta de baño
-    </button>
-    <button class="boton-index" onclick="window.location.href='/servicios'">
-      <img src="/static/icons/servicios-2.png" alt="Servicio">
-      Servicio
-    </button>
-    <button class="boton-index" onclick="window.location.href='/registro_clientes'">
-      <img src="/static/icons/registro-clientes.png" alt="Registro de cliente">
-      Registro de cliente
-    </button>
-    <button class="boton-index" onclick="window.location.href='/login'">
-      <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
-      Ingresar al sistema
-    </button>
-  </div>
-
-  <style>
-  body {
-    background-image: url('/static/imagenes/portada-index.png');
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
-  }
-  @media (max-width: 600px) {
-    body {
-      background-size: contain;
-      background-position: center top;
-      background-attachment: fixed;
-    }
-  }
-  .header-index {
-    margin-left: 50px;
-    margin-top: 40px;
-    margin-bottom: 16px;
-    text-align: left;
-  }
-  .titulo-index {
-    font-family: 'Nunito', Arial, sans-serif;
-    font-weight: 800;
-    font-size: 64px;
-    color: #C0C0C0;
-    letter-spacing: 1.5px;
-    display: inline-flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .logo-portatiles {
-    height: 48px;
-    width: auto;
-    margin-left: 16px;
-    vertical-align: middle;
-  }
-  .slogan-index {
-    font-family: 'Nunito', Arial, sans-serif;
-    font-weight: 500;
-    font-size: 38px;
-    color: #C0C0C0;
-    margin-top: 12px;
-    margin-bottom: 24px;
-  }
-  .presentacion-portatiles {
-    font-family: 'Nunito', Arial, sans-serif;
-    font-weight: 300;
-    font-size: 26px;
-    color: #A9A9A9;
-    text-align: left;
-    margin-left: 50px;
-    margin-bottom: 34px;
-    max-width: 800px;
-    background: transparent;
-    padding: 0 0 0 0;
-    border: none;
-    box-shadow: none;
-  }
-  .botonera {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 50px;
-    gap: 16px;
-  }
-  .boton-index {
-    width: 230px;
-    height: 44px;
-    font-family: 'Nunito', Arial, sans-serif;
-    font-weight: 400;
-    font-size: 1.13rem;
-    font-style: italic;
-    background: rgba(0,0,0,0.52);
-    color: #fff;
-    border: none;
-    border-radius: 13px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 10px;
-    cursor: pointer;
-    box-shadow: 0 2px 7px rgba(0,0,0,0.12);
-    transition: background .13s;
-    padding-left: 16px;
-  }
-  .boton-index img {
-    width: 22px;
-    height: 22px;
-    display: inline-block;
-  }
-  @media (max-width: 600px) {
-    .header-index {
-      margin-left: 10px;
-    }
-    .titulo-index {
-      font-size: 34px;
-    }
-    .logo-portatiles {
-      height: 24px;
-      margin-left: 6px;
-    }
-    .slogan-index {
-      font-size: 18px;
-    }
-    .presentacion-portatiles {
-      font-size: 17px;
-      margin-left: 10px;
-      max-width: 97vw;
-    }
-    .botonera {
-      margin-left: 10px;
-    }
-  }
-  </style>
+  </section>
 </body>
 </html>

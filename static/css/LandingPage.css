@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    font-family: 'Nunito', Arial, sans-serif;
+}
+
+.landing-hero {
+    background: url('/static/imagenes/portada-index.png') center/cover no-repeat;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    color: #fff;
+}
+
+.overlay {
+    background: rgba(0, 0, 0, 0.45);
+    padding: 2rem;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+    max-width: 900px;
+    width: 100%;
+}
+
+.logo-portatiles {
+    width: 80px;
+    height: auto;
+}
+
+.titulo-index {
+    font-weight: 800;
+    font-size: 3rem;
+    letter-spacing: 1px;
+}
+
+.slogan-index {
+    font-weight: 500;
+    font-size: 1.5rem;
+}
+
+.botonera {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.boton-index {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.12);
+    transition: background-color 0.3s, transform 0.3s;
+    font-style: italic;
+    font-size: 1rem;
+}
+
+.boton-index:hover {
+    background: rgba(60, 60, 60, 0.9);
+    transform: scale(1.05);
+}
+
+.boton-index img {
+    width: 24px;
+    height: 24px;
+}
+
+.presentacion-box {
+    background: #fff;
+    color: #333;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 900px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    font-weight: 300;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .titulo-index {
+        font-size: 2rem;
+    }
+    .slogan-index {
+        font-size: 1.125rem;
+    }
+    .logo-portatiles {
+        width: 48px;
+    }
+    .boton-index {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+    .presentacion-box {
+        margin: 1rem;
+        padding: 1.5rem;
+        font-size: 0.95rem;
+    }
+}

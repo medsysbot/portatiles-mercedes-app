@@ -17,6 +17,7 @@
       min-width: 100vw;
       width: 100vw;
       height: 100vh;
+      font-family: 'Nunito', Arial, sans-serif;
       background: url('/static/imagenes/portada-index.png') no-repeat center center fixed;
       background-size: cover;
       position: relative;
@@ -44,7 +45,7 @@
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
       font-size: 42px;
-      color: #C0C0C0;
+      color: #DEB460;
       letter-spacing: 1.2px;
       margin-bottom: 5px;
     }
@@ -59,7 +60,7 @@
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 500;
       font-size: 22px;
-      color: #C0C0C0;
+      color: #878279;
       text-align: center;
       margin-bottom: 24px;
       margin-top: 2px;
@@ -67,8 +68,8 @@
     .presentacion-portatiles {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 300;
-      font-size: 16px;
-      color: #A9A9A9;
+      font-size: 19px;
+      color: #848280;
       text-align: left;
       margin: 16px auto 28px auto;
       max-width: 430px;
@@ -84,6 +85,7 @@
       align-items: flex-start;
       margin: 20px 0 0 18px;
       gap: 16px;
+      z-index: 10;
     }
     .boton-index {
       width: 230px;
@@ -101,7 +103,6 @@
       justify-content: flex-start;
       gap: 10px;
       cursor: pointer;
-      box-shadow: 0 2px 7px rgba(0,0,0,0.14);
       transition: background .13s;
       padding-left: 16px;
     }
@@ -114,8 +115,17 @@
       .titulo-index { font-size: 26px; }
       .logo-portatiles { height: 36px; margin: 0 6px; }
       .slogan-index { font-size: 14px; }
-      .presentacion-portatiles { font-size: 12px; max-width: 95vw; padding: 0 5px; }
+      .presentacion-portatiles { font-size: 16px; max-width: 95vw; padding: 0 5px; }
       .botonera { margin-left: 5px; }
+    }
+
+    @media (min-width: 768px) {
+      .botonera {
+        position: absolute;
+        top: 56%;
+        left: 2rem;
+        margin: 0;
+      }
     }
   </style>
 </head>

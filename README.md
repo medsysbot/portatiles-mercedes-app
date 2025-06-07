@@ -1,126 +1,30 @@
-# Portátiles Mercedes App
+# Portátiles Mercedes
 
-**Sistema web y aplicativo completo para la empresa Portátiles Mercedes**, dedicada al alquiler, venta y mantenimiento de baños químicos portátiles.
+Sistema integral para la gestión profesional de alquiler, venta y mantenimiento de baños químicos portátiles.
 
-Este proyecto integra dos grandes áreas:
-- Una **página pública institucional** accesible desde cualquier navegador.
-- Un **aplicativo privado** con login, para clientes y administradores de la empresa.
+## 🏢 Descripción General
 
----
+Portátiles Mercedes es una solución SaaS diseñada para empresas de servicios sanitarios móviles. Permite la administración centralizada de clientes, contratos, pagos, logística, inventario, servicios técnicos y reportes de gestión, garantizando control total, eficiencia operativa y experiencia de usuario premium.
 
-## Tecnologías
+## ⚙️ Funcionalidades Principales
 
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Backend**: FastAPI (Python)
-- **Base de datos y almacenamiento**: Supabase
-- **Despliegue**: Railway / Codex (entorno virtual)
+- **Gestión de Clientes:** Alta, edición, historial, seguimiento y segmentación de clientes.
+- **Contratos y Cobros:** Registro de contratos, renovaciones, vencimientos, pagos y facturación automática.
+- **Logística y Rutas:** Asignación de unidades, planificación y visualización de entregas, retiros y recorridos.
+- **Servicios Técnicos:** Gestión de órdenes de trabajo, mantenimiento preventivo y correctivo, registro de intervenciones y fotografías.
+- **Reportes y Estadísticas:** Dashboard analítico en tiempo real, exportación de informes, KPIs de gestión.
+- **Notificaciones y Alertas:** Recordatorios automáticos para pagos, mantenimientos, vencimientos y novedades.
+- **Portal de Clientes:** Acceso seguro para visualizar su situación contractual, pagos, solicitudes y documentación.
+- **Seguridad:** Roles y permisos granulares, trazabilidad de todas las acciones, encriptado de datos y backups programados.
 
----
+## 💻 Stack Tecnológico
 
-## Estructura general
+- **Frontend:** HTML5, CSS3, JavaScript, framework SPA (Vue.js, React o similar), diseño 100% responsivo.
+- **Backend:** Python 3, FastAPI, PostgreSQL, integración con Supabase.
+- **Almacenamiento:** Supabase Storage, buckets por entidad.
+- **Autenticación:** JWT, OAuth2, autenticación robusta para usuarios internos y clientes.
+- **Infraestructura:** Deploy escalable en cloud (Docker, CI/CD).
 
-portatiles-mercedes-app/
-│
-├── main.py # App principal de FastAPI
-├── requirements.txt # Dependencias necesarias
-├── README.md # Este archivo
-├── AppPublico/ # Plantillas HTML
-├── static/ # Recursos estáticos (imágenes, íconos, JS, CSS)
-├── routes/ # Rutas internas y de la app pública
-└── utils/ # Helpers y tareas periódicas
+## 🚀 Instalación y Puesta en Marcha
 
-
----
-
-## Funcionalidades
-
-### Parte pública (informativa)
-
-- Página institucional clara y profesional
-- Muestra los **servicios ofrecidos**:
-  - Alquiler de baños químicos
-  - Venta de baños comunes y VIP
-  - Servicio de limpieza
-- Galería de imágenes realistas (recitales, obras, parques)
-- Datos de contacto:
-  - **Email**: portatilesmercedes@gmail.com
-  - **Teléfono**: 2657-627996
-- Sección reservada para incluir más adelante:
-  - Explicación técnica sobre el funcionamiento de los baños químicos
-
----
-
-### Parte privada (aplicativo con login)
-
-#### Roles:
-- **Empresa (Administrador)**
-  - Gestiona todos los clientes
-  - Visualiza ventas, alquileres, pagos
-  - Accede a remitos con fotos
-  - Ve reportes por cliente, por baño y por fecha
-
-- **Cliente**
-  - Visualiza su historial de servicios
-  - Consulta remitos de limpieza
-  - Recibe alertas y recordatorios
-
----
-
-## Módulos internos
-
-- **Alquiler de baños**
-  - Registro de inicio y fin
-  - Datos del cliente, ubicación y tipo de baño
-
-- **Ventas**
-  - Integrado al stock
-  - Generación automática de PDF de factura
-
-- **Servicio de limpieza**
-  - Formulario HTML desde el celular
-  - Campos: cliente, baño, empleado, fecha/hora, observaciones, foto del remito
-  - La imagen se guarda en bucket Supabase exclusivo del cliente
-
-- **Alertas automáticas**
-  - Cumpleaños de clientes
-  - Pagos vencidos
-  - Próximas limpiezas programadas
-
-- **Débito automático**
-  - Activado por defecto
-  - Programa cobros mensuales para clientes fijos
-
----
-
-## Buckets en Supabase
-
-- `remitos-limpieza-[cliente_id]` — Remitos subidos por el personal de limpieza
-- `ventas-boletos` — Facturas en PDF generadas por el sistema
-- `imagenes-web` — Fotos institucionales que se muestran en la página
-
----
-
-## Instrucciones para correr localmente
-
-1. Clonar el repositorio:
-```bash
-git clone https://github.com/medsysbot/portatiles-mercedes-app.git
-cd portatiles-mercedes-app
-```
-2. Copiar el archivo `.env.example` a `.env` y completar los valores de Supabase y correo.
-3. Instalar dependencias con `pip install -r requirements.txt`.
-4. Ejecutar la aplicación con `python main.py`.
-
-### Variables necesarias en Railway
-Antes del despliegue en Railway configurá las siguientes variables de entorno:
-- `SUPABASE_URL`
-- `SERVICE_ROLE_KEY`
-- `SUPABASE_KEY`
-
-Sin estas variables la aplicación seguirá corriendo, pero no podrá conectarse a Supabase.
-
-Para las funciones de alertas por correo también podés definir `EMAIL_ORIGIN`,
-`EMAIL_PASSWORD`, `SMTP_SERVER` y `SMTP_PORT`. Si no las configurás, el sistema
-mostrará una advertencia y los correos no se enviarán.
-
-Para más detalles sobre las rutas estáticas consultá `documentacion_recursos.md`.
+1. **Cloná el repositorio:**

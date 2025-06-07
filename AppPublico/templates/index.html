@@ -7,15 +7,21 @@
   <title>Portátiles Mercedes</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
   <style>
+    /* Fondo de pantalla responsivo */
     body {
-      margin: 0; padding: 0;
+      background-image: url('/static/imagenes/fondo-portatiles.jpg');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center center;
+      margin: 0;
+      padding: 0;
       font-family: 'Inter', Arial, sans-serif;
       min-height: 100vh;
-      /* RUTA ABSOLUTA DEL FONDO */
-      background: url('/static/imagenes/portada-index.png') no-repeat center center fixed;
-      background-size: cover;
-      display: flex; flex-direction: column; align-items: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+
     .cabecera {
       position: relative;
       width: 100vw;
@@ -30,29 +36,7 @@
       width: 310px; max-width: 85vw;
       z-index: 0; pointer-events: none;
     }
-    body {
-      margin: 0; padding: 0;
-      font-family: 'Inter', Arial, sans-serif;  /* <-- Cambiá por esto */
-      min-height: 100vh;
-   }
-    
-    .cabecera-slogan {
-      position: relative;
-      color: #595959;
-      font-size: 1.08rem;
-      font-weight: 600;
-      text-shadow: 0 1px 2px #fff;
-      z-index: 2;
-      margin-bottom: 38px;
-      margin-top: 0;
-      max-width: 420px;
-      margin-left: auto;
-      margin-right: auto;
-      background: rgba(255,255,255,0.62);
-      border-radius: 12px;
-      padding: 9px 5px 5px 5px;
-      display: inline-block;
-    }
+
     .botonera {
       display: flex;
       flex-direction: column;
@@ -80,7 +64,7 @@
        box-shadow: 0 2px 7px rgba(0,0,0,0.12);
        white-space: nowrap;
        gap: 12px;
-}
+    }
     .boton-index img {
       width: 24px; height: 24px;
       margin-right: 10px;
@@ -89,17 +73,36 @@
     .boton-index:hover {
       background: rgba(35,35,35,0.75);
     }
+
+    @media (max-width: 600px) {
+      body {
+        background-size: contain;
+        background-position: center top;
+        background-attachment: fixed;
+      }
+    }
     @media (max-width: 650px) {
       .cabecera-logo { width: 60vw; }
       .cabecera-titulo { font-size: clamp(1.5rem,7vw,2.3rem); }
-      .cabecera-slogan { font-size: 0.98rem; }
       .botonera { margin-left: 4vw; }
       .boton-index { font-size: 0.99rem; min-width: 116px; max-width: 210px; height: 38px; }
       .boton-index img { width: 20px; height: 20px; margin-right: 8px; }
     }
     @media (max-width: 420px) {
       .botonera { margin-left: 0vw; }
-      .cabecera-slogan { font-size: 0.93rem; }
+    }
+
+    /* Slogan debajo del título */
+    .slogan-portatiles {
+      font-family: 'Inter', Arial, sans-serif;
+      font-weight: 400;
+      font-style: italic;
+      color: #a88318;
+      font-size: 1.15rem;
+      text-align: center;
+      margin-bottom: 24px;
+      margin-top: 6px;
+      letter-spacing: 0.5px;
     }
   </style>
 </head>
@@ -108,12 +111,8 @@
     <!-- Logo de fondo con ruta absoluta -->
     <img src="/static/icons/logo-institucional.png" class="cabecera-logo" alt="Portátiles Mercedes logo">
     <h1 class="cabecera-titulo">Portátiles Mercedes</h1>
-    <div class="cabecera-slogan">
-      Somos una empresa de alquiler y venta de baños químicos.<br>
-      Brindamos soluciones para eventos, obras y todo tipo de requerimientos,<br>
-      con atención personalizada, rapidez y mantenimiento integral.
-    </div>
-  </div>
+    <p class="slogan-portatiles">Lo tradicional, hecho inteligente.</p>
+      </div>
   <div class="botonera">
     <button class="boton-index" onclick="window.location.href='/alquiler'">
       <img src="/static/icons/alquiler.png" alt="Alquiler de baño">

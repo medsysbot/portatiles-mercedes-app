@@ -1,169 +1,45 @@
 <!DOCTYPE html>
-<!-- Archivo actualizado para asegurar rutas absolutas a recursos estáticos -->
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portátiles Mercedes</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,400;1,300;1,400&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500&display=swap" rel="stylesheet">
-  <style>
-    body {
-      background-image: url('/static/imagenes/portada-index.png');
-      background-size: cover;
-      background-repeat: no-repeat;
-      background-position: center center;
-      margin: 0;
-      padding: 0;
-      font-family: 'Inter', Arial, sans-serif;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .cabecera {
-      position: relative;
-      width: 100vw;
-      padding-top: 38px;
-      text-align: center;
-    }
-    .cabecera-logo {
-      position: absolute;
-      left: 50%; top: 18px;
-      transform: translateX(-50%);
-      opacity: 0.12;
-      width: 310px; max-width: 85vw;
-      z-index: 0; pointer-events: none;
-    }
-
-    .botonera {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 17px;
-      margin: 0 auto 30px 8vw;
-      width: 100%;
-      max-width: 370px;
-    }
-    .boton-index {
-       display: flex;
-       align-items: center;
-       justify-content: center;
-       background: rgba(0,0,0,0.52);
-       color: #fff;
-       border: none;
-       border-radius: 13px;
-       padding: 0 22px 0 15px;
-       height: 44px;
-       width: 230px;          /* <<--- Fijar ancho exacto */
-       font-size: 1.1rem;
-       font-weight: 500;
-       cursor: pointer;
-       transition: background .13s;
-       box-shadow: 0 2px 7px rgba(0,0,0,0.12);
-       white-space: nowrap;
-       gap: 12px;
-    }
-    .boton-index img {
-      width: 24px; height: 24px;
-      margin-right: 10px;
-      filter: drop-shadow(0 0 0 #000);
-    }
-    .boton-index:hover {
-      background: rgba(35,35,35,0.75);
-    }
-
-    @media (max-width: 600px) {
-      body {
-        background-size: contain;
-        background-position: center top;
-        background-attachment: fixed;
-      }
-    }
-    @media (max-width: 650px) {
-      .cabecera-logo { width: 60vw; }
-      .cabecera-titulo { font-size: clamp(1.5rem,7vw,2.3rem); }
-      .botonera { margin-left: 4vw; }
-      .boton-index { font-size: 0.99rem; min-width: 116px; max-width: 210px; height: 38px; }
-      .boton-index img { width: 20px; height: 20px; margin-right: 8px; }
-    }
-    @media (max-width: 420px) {
-      .botonera { margin-left: 0vw; }
-    }
-
-    /* Slogan debajo del título */
-    .slogan-portatiles {
-      font-family: 'Inter', Arial, sans-serif;
-      font-weight: 400;
-      font-style: italic;
-      color: #a88318;
-      font-size: 1.15rem;
-      text-align: center;
-      margin-bottom: 24px;
-      margin-top: 6px;
-      letter-spacing: 0.5px;
-    }
-
-    .presentacion-portatiles {
-      font-family: 'Nunito', Arial, sans-serif;
-      font-weight: 300;
-      font-size: 22px;
-      color: #A9A9A9;
-      text-align: center;
-      line-height: 1.6;
-      margin: 32px auto;
-      max-width: 700px;
-      padding: 0 22px;
-    }
-
-    .marca-portatiles {
-      font-weight: 500;
-      color: #C0C0C0;
-      letter-spacing: 0.5px;
-      font-family: 'Nunito', Arial, sans-serif;
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .logo-portatiles {
-      height: 28px;
-      margin-left: 6px;
-    }
-
-    @media (max-width: 600px) {
-      .logo-portatiles { height: 20px; }
-      .presentacion-portatiles { font-size: 19px; }
-    }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="cabecera">
-    <!-- Logo de fondo con ruta absoluta -->
-    <img src="/static/icons/logo-institucional.png" class="cabecera-logo" alt="Portátiles Mercedes logo">
-    <h1 class="cabecera-titulo">Portátiles Mercedes</h1>
-    <p class="slogan-portatiles">Lo tradicional, hecho inteligente.</p>
+  <div class="header-index">
+    <span class="titulo-index">
+      Portátiles Mercedes
+      <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+    </span>
+    <div class="slogan-index">
+      Lo tradicional, hecho inteligente.
+    </div>
   </div>
+
   <div class="presentacion-portatiles">
-    <span class="marca-portatiles">Portátiles Mercedes <img class="logo-portatiles" src="/static/icons/logo-portatiles.png" alt="Portátiles Mercedes"></span> lidera el sector de baños químicos portátiles con amplia experiencia.
+    Portátiles Mercedes es la empresa líder en alquiler, venta y mantenimiento de baños químicos portátiles, con soluciones higiénicas, seguras y a medida para cada cliente y proyecto.
     <br><br>
-    Nuestra logística integral y eficiente asegura entregas puntuales y mantenimiento continuo. Ofrecemos atención personalizada y soporte inmediato para cada cliente.
+    Desde el primer contacto, nuestro equipo se encarga de la logística integral: gestionamos la entrega, instalación y retiro de las unidades en tiempo y forma, adaptándonos a todo tipo de evento, obra o necesidad puntual.
     <br><br>
-    Trabajamos con responsabilidad ambiental y pleno cumplimiento normativo.
+    La atención personalizada y la comunicación constante son el eje de nuestro servicio. Creemos que cada cliente merece un trato profesional, transparente y rápido ante cualquier consulta o requerimiento. Por eso, disponemos de soporte inmediato para resolver dudas y asistirlo en cada etapa del proceso.
     <br><br>
-    Confíe en <span class="marca-portatiles">Portátiles Mercedes <img class="logo-portatiles" src="/static/icons/logo-portatiles.png" alt="Portátiles Mercedes"></span> para obtener soluciones higiénicas confiables.
+    En Portátiles Mercedes, la responsabilidad es un valor esencial. Cumplimos con todas las normativas ambientales y sanitarias, asegurando una disposición final de residuos respetuosa con el entorno y la comunidad. Nuestro compromiso es garantizar instalaciones limpias, mantenimiento periódico y materiales de calidad, priorizando siempre la seguridad y el bienestar de las personas.
+    <br><br>
+    Confíe en Portátiles Mercedes para asegurar el éxito y la tranquilidad en su próximo evento u obra, con soluciones sanitarias confiables, eficientes y al más alto nivel.
   </div>
+
   <div class="botonera">
     <button class="boton-index" onclick="window.location.href='#'">
-      <img src="/static/icons/info-banos.png" alt="Información Baño">
+      <img src="/static/icons/info-banos.png" alt="Info baños">
       Información Baño
     </button>
     <button class="boton-index" onclick="window.location.href='/alquiler'">
-      <img src="/static/icons/alquiler.png" alt="Alquiler de baño">
+      <img src="/static/icons/alquiler.png" alt="Alquiler">
       Alquiler de baño
     </button>
     <button class="boton-index" onclick="window.location.href='/venta'">
-      <img src="/static/icons/venta.png" alt="Venta de baño">
+      <img src="/static/icons/venta.png" alt="Venta">
       Venta de baño
     </button>
     <button class="boton-index" onclick="window.location.href='/servicios'">
@@ -179,5 +55,120 @@
       Ingresar al sistema
     </button>
   </div>
+
+  <style>
+  body {
+    background-image: url('/static/imagenes/portada-index.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+  @media (max-width: 600px) {
+    body {
+      background-size: contain;
+      background-position: center top;
+      background-attachment: fixed;
+    }
+  }
+  .header-index {
+    margin-left: 50px;
+    margin-top: 40px;
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  .titulo-index {
+    font-family: 'Nunito', Arial, sans-serif;
+    font-weight: 800;
+    font-size: 64px;
+    color: #C0C0C0;
+    letter-spacing: 1.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-portatiles {
+    height: 48px;
+    width: auto;
+    margin-left: 16px;
+    vertical-align: middle;
+  }
+  .slogan-index {
+    font-family: 'Nunito', Arial, sans-serif;
+    font-weight: 500;
+    font-size: 38px;
+    color: #C0C0C0;
+    margin-top: 12px;
+    margin-bottom: 24px;
+  }
+  .presentacion-portatiles {
+    font-family: 'Nunito', Arial, sans-serif;
+    font-weight: 300;
+    font-size: 26px;
+    color: #A9A9A9;
+    text-align: left;
+    margin-left: 50px;
+    margin-bottom: 34px;
+    max-width: 800px;
+    background: transparent;
+    padding: 0 0 0 0;
+    border: none;
+    box-shadow: none;
+  }
+  .botonera {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 50px;
+    gap: 16px;
+  }
+  .boton-index {
+    width: 230px;
+    height: 44px;
+    font-family: 'Nunito', Arial, sans-serif;
+    font-weight: 400;
+    font-size: 1.13rem;
+    font-style: italic;
+    background: rgba(0,0,0,0.52);
+    color: #fff;
+    border: none;
+    border-radius: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    box-shadow: 0 2px 7px rgba(0,0,0,0.12);
+    transition: background .13s;
+    padding-left: 16px;
+  }
+  .boton-index img {
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+  }
+  @media (max-width: 600px) {
+    .header-index {
+      margin-left: 10px;
+    }
+    .titulo-index {
+      font-size: 34px;
+    }
+    .logo-portatiles {
+      height: 24px;
+      margin-left: 6px;
+    }
+    .slogan-index {
+      font-size: 18px;
+    }
+    .presentacion-portatiles {
+      font-size: 17px;
+      margin-left: 10px;
+      max-width: 97vw;
+    }
+    .botonera {
+      margin-left: 10px;
+    }
+  }
+  </style>
 </body>
 </html>

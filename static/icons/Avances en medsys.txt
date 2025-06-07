@@ -1,0 +1,68 @@
+INFORME GENERAL – PROYECTO MEDSYS
+
+1. Objetivo del Proyecto
+Desarrollar una plataforma digital médica integral orientada a clínicas, centros de salud o consultorios, que gestione:
+
+- Login con roles diferenciados
+- Registro y seguimiento de pacientes
+- Historia clínica, recetas, estudios y turnos
+- Interfaz visual profesional y adaptable a dispositivos
+
+2. Aciertos destacados hasta la fecha
+Área                | Acierto
+--------------------|---------------------------------------------------------------
+Estructura Base     | FastAPI implementado con SQLite, rutas claras y extensibles
+Roles               | Login funcional por rol: director, médico y secretaria
+Visual Splash       | Splash inicial con gradiente profesional, logo animado
+Login               | Formulario visual con íconos personalizados, botón submit redondo
+Diseño UI           | Paleta institucional coherente, tipografía Poppins
+Consistencia UX     | Transiciones con narrativa visual unificada
+Optimización        | Archivos organizados (static/icons, templates/, main.py limpio)
+
+3. Errores superados
+Problema inicial                        | Solución aplicada
+----------------------------------------|--------------------------------------------------------
+Login no redirigía correctamente        | Se implementaron rutas /login GET/POST y validación SQLite
+Railway no mostraba splash              | Se conectó ruta raíz `/` y splash_screen.html
+Icono submit no aparecía                | Ruta corregida (Icon-submit.png)
+Tamaños y colores desajustados          | Fuentes, gradientes y escalas unificados
+Campos sin íconos                       | login.html rediseñado con íconos personalizados
+Logo desplazado                         | Reescalado y centrado correctamente
+
+4. Estado actual del sistema
+Componente         | Estado      | Detalles
+------------------|-------------|-------------------------------------------------------
+Rutas principales | Implementado| splash, login GET/POST, splash final, index
+Login visual      | Completo    | Íconos, tipografía clara, submit redondo funcional
+Base de datos     | Operativa   | Usuarios precargados, conexión `static/doc/medsys.db`
+Splash inicial    | Finalizado  | Gradiente azul, eslogan centrado
+Iconografía       | Activa      | Estilo institucional consistente
+Botón submit      | Mejorado    | Tamaño grande, ícono centrado blanco
+
+5. Tareas completadas
+- Configuración inicial FastAPI y rutas
+- Conexión a SQLite
+- Login con validación y redirección por rol
+- Splash y login responsive con estilo moderno
+- Corrección visual (íconos, tamaños, fuentes)
+- Estructura organizada en carpetas
+
+6. Próximos pasos
+Prioridad | Tarea                          | Detalle
+----------|--------------------------------|-----------------------------------------------
+Alta      | splash_final.html              | Transición elegante post-login
+Alta      | Pulido del index.html          | Íconos por rol, estructura limpia
+Media     | Ajustes visuales en recetas... | Colores, botones, alineación
+Media     | Evaluar versión APK o PWA      | Empaquetado multiplataforma
+Baja      | Validaciones visuales          | Campos vacíos, mensajes UX
+Baja      | Documentación interna          | Manual de rutas y mantenimiento
+
+7. Observaciones Finales
+El sistema MedSys está funcional y visualmente pulido.
+La estructura modular y la calidad de diseño lo hacen escalable.
+Listo para cerrar fase funcional y entrar en pulido total.
+
+8. Recomendación
+Completar visuales de splash final e index.
+Realizar test completo del recorrido.
+Dejar el sistema preparado para distribución estable.

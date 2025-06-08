@@ -70,20 +70,19 @@
       align-items: flex-start;
     }
 
-    .botonera {
+    .botonera-flotante {
+      position: fixed;
+      top: 18%;
+      left: 32px;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      margin-left: 32px;
       gap: 18px;
-      margin-top: 24px;
-      margin-bottom: 42px;
-      min-width: 220px;
+      z-index: 99;
     }
 
     .boton-index {
-      width: 210px;
-      height: 42px;
+      width: 170px;
+      height: 40px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
       font-size: 1.13rem;
@@ -137,7 +136,7 @@
       .titulo-index { font-size: 34px; }
       .logo-portatiles { height: 2.1em; margin: 0 10px; }
       .slogan-index { font-size: 22px; }
-      .botonera { margin-left: 5px; }
+      .botonera-flotante { left: 8px; top: 12%; }
       .contenedor-texto { margin-left: 20px; margin-right: 20px; }
       .presentacion-portatiles { font-size: 15px; }
     }
@@ -156,8 +155,7 @@
       </div>
     </div>
 
-    <div class="contenedor-principal">
-      <div class="botonera">
+    <div class="botonera-flotante">
         <button class="boton-index" onclick="window.location.href='#'">
           <img src="/static/icons/info-banos.png" alt="Info baños">
           Información Baño
@@ -184,6 +182,7 @@
         </button>
       </div>
 
+    <div class="contenedor-principal">
       <div class="contenedor-texto">
         <div class="presentacion-portatiles">
           Portátiles Mercedes es líder en el alquiler, venta y mantenimiento de baños químicos portátiles para obras, eventos y situaciones especiales en toda la región.<br>

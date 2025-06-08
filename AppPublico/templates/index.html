@@ -187,6 +187,27 @@
         text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
       }
     }
+
+    /* Diseño específico para móviles (9:16) */
+    @media (max-width: 500px) and (orientation: portrait) {
+      body {
+        background: url('/static/imagenes/imagen-referencia-portada-móvil.png') no-repeat center center fixed;
+        background-size: cover;
+      }
+      .contenedor-superior {
+        top: 32%;
+        left: 0;
+        width: 100%;
+        margin-top: 0;
+        transform: translateY(-50%);
+      }
+      .titulo-index {
+        font-size: 28px;
+      }
+      .slogan-index {
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 <body>

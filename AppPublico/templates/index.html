@@ -28,13 +28,17 @@
 
     .contenedor-superior {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
+      top: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 575px;
+      height: 130px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-top: 24px;
+      justify-content: center;
+      overflow: hidden;
     }
 
     .titulo-index {
@@ -44,6 +48,7 @@
       color: #DEB460;
       text-align: center;
       margin-bottom: 6px;
+      line-height: 1;
       /* SIN text-shadow ni ribete */
     }
 
@@ -192,15 +197,19 @@
     /* Diseño específico para móviles (9:16) */
     @media (max-width: 500px) and (orientation: portrait) {
       body {
-        background: url('/static/imagenes/imagen-referencia-portada-móvil.png') no-repeat center center fixed;
+        background: url('/static/imagenes/portada-index.png') no-repeat center center fixed;
         background-size: cover;
       }
       .contenedor-superior {
-        top: 32%;
-        left: 0;
-        width: 100%;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 575px;
+        height: 130px;
         margin-top: 0;
-        transform: translateY(-50%);
+        justify-content: center;
+        overflow: hidden;
       }
       .titulo-index {
         font-size: 28px;

@@ -36,7 +36,7 @@
     .titulo-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
-      font-size: 64px;
+      font-size: 56px;
       color: #DEB460;
       text-align: center;
       margin-bottom: 6px;
@@ -53,11 +53,11 @@
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 700;
       font-style: italic;
-      font-size: 40px; /* más grande que antes */
-      color: #878279;
+      font-size: 32px;
+      color: #545454;
       text-align: center;
-      margin-top: 0.15em; /* casi pegado al logo */
-      margin-bottom: 28px;
+      margin-top: 0.2em;
+      margin-bottom: 30px;
       text-shadow: 0 1.5px 2.5px #fff;
     }
 
@@ -72,20 +72,21 @@
 
     .botonera-flotante {
       position: fixed;
-      top: 18%;
-      left: 32px;
+      top: 120px;
+      left: calc(50% - 180px);
+      width: 180px;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 16px;
       z-index: 99;
     }
 
     .boton-index {
-      width: 170px;
+      width: 100%;
       height: 40px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
-      font-size: 1.13rem;
+      font-size: 21px;
       font-style: italic;
       background: rgba(0,0,0,0.58);
       color: #fff;
@@ -108,7 +109,7 @@
 
     .contenedor-texto {
       position: absolute;
-      left: 560px;  /* ajustar para alinear al borde del baño portátil azul */
+      left: 50%;
       top: 180px;
       max-width: 700px;
     }
@@ -116,11 +117,12 @@
     .presentacion-portatiles {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 300;
-      font-size: 24px; /* o 21-28px según espacio */
-      color: #848280;
+      font-size: 21px;
+      color: #fff;
       text-align: left;
       line-height: 1.6;
-      text-shadow: 0 1.5px 2.5px #fff;
+      text-shadow: none;
+      max-width: 550px;
     }
 
     .contacto {
@@ -133,11 +135,12 @@
     }
 
     @media (max-width: 700px) {
+      body { background-position: left center; }
       .titulo-index { font-size: 34px; }
       .logo-portatiles { height: 1.6em; margin: 0 10px; }
       .slogan-index { font-size: 22px; }
-      .botonera-flotante { left: 8px; top: 12%; }
-      .contenedor-texto { margin-left: 20px; margin-right: 20px; }
+      .botonera-flotante { left: 8px; top: 12%; width: 160px; }
+      .contenedor-texto { left: 50%; margin-left: 20px; margin-right: 20px; }
       .presentacion-portatiles { font-size: 15px; }
     }
   </style>

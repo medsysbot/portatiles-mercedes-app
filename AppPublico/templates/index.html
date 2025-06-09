@@ -6,13 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-    }
-
     body {
       min-height: 100vh;
       min-width: 100vw;
@@ -23,7 +16,7 @@
       background-size: 100% 100vh;
       position: relative;
       overflow-x: hidden;
-      overflow-y: hidden;
+      overflow-y: hidden; /* evita desplazamiento vertical */
     }
 
     .contenedor-superior {
@@ -31,51 +24,45 @@
       top: 40px;
       left: 50%;
       transform: translateX(-50%);
-      width: 95%;
-      max-width: 990px;
-      height: 210px; /* Crece para alojar los textos grandes */
+      width: 90%;
+      max-width: 575px;
+      height: 130px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
       overflow: hidden;
-      z-index: 10;
     }
 
     .titulo-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
-      font-size: 196px;  /* 56px * 3.5 ≈ 196px */
+      font-size: 4.5vw;
       color: #DEB460;
       text-align: center;
-      margin-bottom: 15px;
-      line-height: 1;
-      letter-spacing: 1.5px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-      word-break: keep-all;
+      margin-bottom: 6px;
+      line-height: 1.2;
+      white-space: nowrap;      /* para una sola línea */
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .logo-portatiles {
-      height: 7.35em; /* 2.1em * 3.5 ≈ 7.35em */
-      margin: 0 35px;
+      height: 2.1em; /* tamaño reducido */
+      margin: 0 18px;
       vertical-align: middle;
-      display: inline-block;
     }
 
     .slogan-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 700;
       font-style: italic;
-      font-size: 112px; /* 32px * 3.5 ≈ 112px */
+      font-size: 32px;
       color: #545454;
       text-align: center;
-      margin-top: 0.4em;
-      margin-bottom: 0;
+      margin-top: 0.2em;
+      margin-bottom: 30px;
       text-shadow: 0 1.5px 2.5px #fff;
-      line-height: 1.08;
     }
 
     .contenedor-principal {
@@ -85,7 +72,6 @@
       min-height: 60vh;
       justify-content: flex-start;
       align-items: flex-start;
-      position: relative;
     }
 
     .botonera-flotante {
@@ -99,12 +85,14 @@
       z-index: 99;
     }
 
-    .boton-index {
+    .boton-index,
+    .boton {
       width: 100%;
+      min-width: 160px;
       height: 48px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
-      font-size: 21px;
+      font-size: 18px;
       font-style: italic;
       background: rgba(0,0,0,0.58);
       color: #fff;
@@ -128,16 +116,15 @@
 
     .contenedor-texto {
       position: absolute;
-      left: calc(40px + 220px + 30px); /* borde izquierdo igual al de la botonera */
-      top: calc(40px + 210px + 60px);  /* 40px (top) + 210px (altura contenedor superior) + 60px (espacio debajo del subtítulo) */
+      left: calc(48px + 220px + 30px);
+      top: 180px;
       max-width: 700px;
-      z-index: 5;
     }
 
     .presentacion-portatiles {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 300;
-      font-size: 23px; /* Sube 2 puntos (de 21px a 23px) */
+      font-size: 21px;
       color: #fff;
       text-align: left;
       line-height: 1.6;
@@ -161,135 +148,119 @@
       text-align: center;
       font-size: 12px;
       color: #848280;
-      z-index: 15;
     }
 
-    /* Adaptación para mobile 9:16 */
     @media (max-width: 700px) {
-      .contenedor-superior {
-        top: 18px;
-        height: 68vw;
-        max-width: 99vw;
+      body {
+        background-position: top center;
+        background-size: 100% 100vh;
       }
       .titulo-index {
-        font-size: 7vw;
+        font-size: 4.5vw;
+        line-height: 1.2;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
       .logo-portatiles {
-        height: 2.4em;
-        margin: 0 5vw;
+        height: 1.6em;
+        margin: 0 10px;
       }
       .slogan-index {
-        font-size: 4.2vw;
-        margin-bottom: 0;
+        font-size: 22px;
       }
       .botonera-flotante {
-        width: 43vw;
-        left: 6vw;
+        position: fixed;
+        left: 40px;
         bottom: 60px;
+        width: 220px;
+        gap: 16px;
+      }
+      .boton-index,
+      .boton {
+        width: 100%;
+        min-width: 160px;
+        height: 44px;
+        font-size: 18px;
       }
       .contenedor-texto {
-        left: calc(6vw + 43vw + 8vw);
-        top: calc(18px + 68vw + 60px);
-        max-width: 70vw;
+        position: absolute;
+        left: calc(48px + 220px + 20px);
+        top: 180px;
+        margin: 0;
       }
       .presentacion-portatiles {
-        font-size: 4.2vw;
-        max-width: 75vw;
+        font-size: 17px;
+        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
       }
     }
 
     @media (max-width: 500px) and (orientation: portrait) {
+      body {
+        background: url('/static/imagenes/portada-index.png') no-repeat center center fixed;
+        background-size: cover;
+      }
       .contenedor-superior {
-        top: 8px;
-        height: 22vw;
-        max-width: 99vw;
-      }
-      .titulo-index {
-        font-size: 7vw;
-      }
-      .logo-portatiles {
-        height: 2.4em;
-        margin: 0 2vw;
-      }
-      .slogan-index {
-        font-size: 4.5vw;
-        margin-bottom: 0;
+        top: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90%;
+        max-width: 575px;
+        height: 130px;
+        margin-top: 0;
+        justify-content: center;
+        overflow: hidden;
       }
       .botonera-flotante {
-        width: 43vw;
-        left: 4vw;
+        left: 40px;
         bottom: 60px;
       }
-      .contenedor-texto {
-        left: calc(4vw + 43vw + 6vw);
-        top: calc(8px + 22vw + 60px);
-        max-width: 90vw;
+      .titulo-index {
+        font-size: 4.5vw;
+        line-height: 1.2;
+        white-space: normal;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
       }
-      .presentacion-portatiles {
-        font-size: 4.7vw;
-        max-width: 90vw;
+      .slogan-index {
+        font-size: 18px;
       }
     }
   </style>
 </head>
 <body>
-  <main class="contenedor-pagina">
-    <div class="contenedor-superior">
-      <div class="titulo-index">
-        Portátiles
-        <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
-        Mercedes
-      </div>
-      <div class="slogan-index">
-        Lo tradicional, hecho inteligente.
+
+  <div class="contenedor-principal">
+    <div class="contenedor-titulo">
+      <h1 class="titulo-index">Portátiles Mercedes</h1>
+    </div>
+
+    <div class="contenedor-subtitulo">
+      <h2 class="slogan-index">Lo tradicional, hecho inteligente.</h2>
+    </div>
+
+    <div class="contenedor-texto">
+      <div class="presentacion-portatiles">
+        Ofrecemos unidades modernas, limpias y completamente equipadas.<br>
+        Nos ocupamos de todo el proceso: traslado, instalación y retiro.<br>
+        Atención personalizada, rápida y flexible.<br>
+        <span class="contacto">
+          portatilesmercedes@gmail.com<br>
+          Tel. 2657-627996
+        </span>
       </div>
     </div>
 
-    <div class="botonera-flotante">
-      <button class="boton-index" onclick="window.location.href='#'">
-        <img src="/static/icons/info-banos.png" alt="Info baños">
-        Información Baño
-      </button>
-      <button class="boton-index" onclick="window.location.href='/alquiler'">
-        <img src="/static/icons/alquiler.png" alt="Alquiler">
-        Alquiler de baño
-      </button>
-      <button class="boton-index" onclick="window.location.href='/venta'">
-        <img src="/static/icons/venta.png" alt="Venta">
-        Venta de baño
-      </button>
-      <button class="boton-index" onclick="window.location.href='/servicios'">
-        <img src="/static/icons/servicios-2.png" alt="Servicio">
-        Servicio
-      </button>
-      <button class="boton-index" onclick="window.location.href='/registro_clientes'">
-        <img src="/static/icons/registro-clientes.png" alt="Registro de cliente">
-        Registro de cliente
-      </button>
-      <button class="boton-index" onclick="window.location.href='/login'">
-        <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
-        Ingresar al sistema
-      </button>
+    <div class="contenedor-botones">
+      <button class="boton">Información</button>
+      <button class="boton">Alquiler</button>
+      <button class="boton">Venta</button>
     </div>
+  </div>
 
-    <div class="contenedor-principal">
-      <div class="contenedor-texto">
-        <div class="presentacion-portatiles">
-          Portátiles Mercedes es líder en el alquiler, venta y mantenimiento de baños químicos portátiles para obras, eventos y situaciones especiales en toda la región.<br>
-          Ofrecemos unidades modernas, limpias y completamente equipadas, listas para responder a las exigencias de cada cliente.<br>
-          Nos ocupamos de todo el proceso: traslado, instalación, vaciado, limpieza y mantenimiento periódico, garantizando puntualidad y cumplimiento de todas las normas sanitarias y ambientales.<br>
-          Nuestra atención es personalizada, rápida y flexible. Asesoramos a empresas, instituciones y particulares, adaptándonos a cualquier tipo de requerimiento, desde grandes proyectos hasta necesidades puntuales.<br>
-          Contamos con modelos estándar y opciones accesibles, brindando siempre soluciones confiables, seguras y confortables. Elija Portátiles Mercedes: calidad, experiencia y la mejor respuesta en servicios sanitarios portátiles.<br>
-          <span class="contacto">
-            portatilesmercedes@gmail.com<br>
-            Tel. 2657-627996
-          </span>
-        </div>
-      </div>
-    </div>
-  </main>
   <footer class="pie-pagina">
-    Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
+    Portátiles Mercedes registrados. En muchos casos están limpios. En todos, listos para usar.
   </footer>
+
 </body>
 </html>

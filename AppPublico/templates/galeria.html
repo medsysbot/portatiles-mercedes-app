@@ -13,6 +13,7 @@
       padding: 0 !important;
       box-sizing: border-box;
       overflow-x: hidden;
+      overflow-y: hidden; /* Evita scroll general */
     }
     body {
       min-height: 100vh;
@@ -69,15 +70,15 @@
       text-shadow: 0 1.5px 2.5px #fff;
     }
     .botonera-flotante {
-      position: static;
+      position: fixed; /* Fija el botón en pantalla */
+      bottom: 40px;
+      left: 40px;
       min-width: 260px;
       width: 260px;
       display: flex;
       flex-direction: column;
       gap: 16px;
       z-index: 99;
-      margin-left: 40px;
-      margin-top: 10px;
     }
     .boton-index {
       width: 260px;
@@ -116,7 +117,7 @@
       justify-content: flex-start;
       align-items: center;
       width: 100vw;
-      max-height: 88vh;
+      height: calc(100vh - 224px); /* Espacio restante sin scroll general */
       overflow-y: auto;
       background: transparent !important;
       box-shadow: none !important;
@@ -159,10 +160,11 @@
       }
       .botonera-flotante {
         flex-direction: column;
-        width: 100%;
+        width: calc(100% - 20px);
         min-width: 0;
-        margin-left: 0;
-        margin-top: 0;
+        left: 10px;
+        bottom: 10px;
+        margin: 0;
         align-items: stretch;
       }
       .boton-index {
@@ -207,33 +209,9 @@
       </div>
     </div>
     <div class="botonera-flotante">
-      <button class="boton-index" id="boton-inicio" type="button">
-        <img src="/static/icons/inicio.png" alt="Inicio">
-        Inicio
-      </button>
-      <button class="boton-index" id="mostrar-formulario" type="button">
-        <img src="/static/icons/ver-formulario.png" alt="Formulario">
-        Ver formulario
-      </button>
-      <button class="boton-index" onclick="window.location.href='#'">
-        <img src="/static/icons/info-banos.png" alt="Info baños">
-        Información Baño
-      </button>
-      <button class="boton-index" onclick="window.location.href='/venta'">
-        <img src="/static/icons/venta.png" alt="Venta">
-        Venta de baño
-      </button>
-      <button class="boton-index" onclick="window.location.href='/servicios'">
-        <img src="/static/icons/servicios-2.png" alt="Servicio">
-        Servicio
-      </button>
-      <button class="boton-index" onclick="window.location.href='/registro_clientes'">
-        <img src="/static/icons/registro-clientes.png" alt="Registro de cliente">
-        Registro de cliente
-      </button>
-      <button class="boton-index" onclick="window.location.href='/login'">
-        <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
-        Ingresar al sistema
+      <button class="boton-index" id="cerrar-galeria" type="button">
+        <img src="/static/icons/cerrar-galeria.png" alt="Cerrar galería">
+        Cerrar Galería
       </button>
     </div>
     <div class="contenedor-fotos-galeria">
@@ -249,13 +227,8 @@
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
   <script>
-    // Botón Inicio
-    document.getElementById('boton-inicio').onclick = function() {
-      window.location.href = '/';
-    };
-    // Botón Ver formulario (puedes mostrar un formulario si lo tienes)
-    document.getElementById('mostrar-formulario').onclick = function() {
-      alert('Aquí puedes mostrar el formulario de contacto o alquiler.');
+    document.getElementById('cerrar-galeria').onclick = function() {
+      window.location.href = '/alquiler';
     };
   </script>
 </body>

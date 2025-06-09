@@ -3,13 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <title>Venta de Baños</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            font-family: 'Nunito', Arial, sans-serif;
+            background-image: url('static/imagenes/fondo-ventas.png');
+            background-size: cover;
+            background-position: center;
+        }
+        button {
+            font-family: inherit;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(0, 0, 0, 0.6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        button img {
+            height: 20px;
+            vertical-align: middle;
+        }
+    </style>
 </head>
 <body>
     <a href="index.html">
-        <button type="button">Inicio</button>
+        <button type="button">
+            <img src="static/icons/inicio.png" alt="Inicio" style="height: 20px; vertical-align: middle;">
+            Inicio
+        </button>
     </a>
     <a href="venta.html" target="_blank">
-        <button type="button">Ver formulario</button>
+        <button type="button">
+            <img src="static/icons/ver-formulario.png" alt="Ver Formulario" style="height: 20px; vertical-align: middle;">
+            Ver formulario
+        </button>
     </a>
 </body>
 </html>

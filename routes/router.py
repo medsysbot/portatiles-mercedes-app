@@ -167,3 +167,11 @@ async def mostrar_panel_admin():
     html_path = TEMPLATES_DIR / "admin_panel.html"
     html_contenido = html_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_contenido)
+
+
+@router.get("/informacion-banos.html", response_class=HTMLResponse)
+async def mostrar_informacion_banos():
+    """Información y funcionamiento de los baños químicos."""
+    html_path = TEMPLATES_DIR / "informacion-banos.html"
+    html_contenido = html_path.read_text(encoding="utf-8")
+    return HTMLResponse(content=html_contenido)

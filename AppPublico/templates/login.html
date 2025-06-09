@@ -7,34 +7,64 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <style>
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
       padding: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      width: 100vw;
       font-family: 'Nunito', Arial, sans-serif;
       background: url('/static/imagenes/fondo-login.png') no-repeat center center fixed;
       background-size: cover;
-      height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .contenedor-superior {
+      width: 100vw;
+      max-width: none;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-top: 32px;
+      padding-bottom: 12px;
+      background: transparent;
+    }
+    .titulo-index {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 800;
+      font-size: 4.5vw;
+      color: #DEB460;
+      text-align: center;
+      margin-bottom: 6px;
+      line-height: 1.1;
+      white-space: nowrap;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
     }
-    .form-login {
-      background: rgba(0,0,0,0.58);
-      padding: 30px 25px;
-      border-radius: 12px;
-      width: 90%;
-      max-width: 350px;
-      color: #fff;
+    .logo-portatiles {
+      height: 2.1em;
+      margin: 0 18px;
+      vertical-align: middle;
+    }
+    form {
       display: flex;
       flex-direction: column;
       gap: 20px;
+      width: 260px;
       box-sizing: border-box;
-    }
-    .form-login h2 {
-      text-align: center;
-      font-weight: 700;
-      color: #DEB460;
-      margin-bottom: 10px;
+      color: #fff;
+      margin-top: 40px;
     }
     .campo-login {
       display: flex;
@@ -58,7 +88,9 @@
       width: 100%;
     }
     .boton-index {
-      width: 100%;
+      width: 260px;
+      min-width: 260px;
+      max-width: 260px;
       height: 38px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
@@ -79,13 +111,65 @@
     .boton-index img {
       width: 22px;
       height: 22px;
+      display: inline-block;
+    }
+    .botonera-flotante {
+      position: absolute;
+      left: 40px;
+      bottom: 180px;
+      min-width: 260px;
+      width: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 99;
+    }
+    @media (max-width: 700px) {
+      .titulo-index {
+        font-size: 28px;
+        white-space: normal;
+      }
+      .botonera-flotante {
+        position: static;
+        flex-direction: column;
+        width: 100%;
+        min-width: 0;
+        margin-left: 0;
+        margin-top: 0;
+        align-items: stretch;
+      }
+      .boton-index {
+        min-width: 0;
+        font-size: 16px;
+        height: 32px;
+      }
+    }
+    @media (max-width: 500px) {
+      .contenedor-superior {
+        min-height: 120px;
+        padding-top: 16px;
+        padding-bottom: 6px;
+      }
+      .titulo-index {
+        font-size: 20px;
+      }
+      .logo-portatiles {
+        height: 1.2em;
+        margin: 0 6px;
+      }
     }
   </style>
 </head>
 <body>
-  <form class="form-login" method="post">
-    <h2>Ingreso al sistema</h2>
+  <div class="contenedor-superior">
+    <div class="titulo-index">
+      Ingreso
+      <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+      Sistema
+    </div>
+  </div>
 
+  <form method="post">
     <div class="campo-login">
       <img src="/static/icons/rol-port.png" alt="Rol">
       <select name="rol" required>
@@ -110,11 +194,13 @@
       <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar">
       <span>Ingresar al sistema</span>
     </button>
+  </form>
 
-    <a href="index.html" class="boton-index" style="text-decoration: none; margin-top: 10px;">
+  <div class="botonera-flotante">
+    <a href="index.html" class="boton-index">
       <img src="/static/icons/inicio.png" alt="Inicio">
       <span>Inicio</span>
     </a>
-  </form>
+  </div>
 </body>
 </html>

@@ -11,93 +11,88 @@
       margin: 0;
       padding: 0;
       width: 100%;
+      box-sizing: border-box;
     }
-
     body {
       min-height: 100vh;
-      min-width: 100vw;
       width: 100vw;
-      height: 100vh;
       font-family: 'Nunito', Arial, sans-serif;
       background: url('/static/imagenes/portada-index.png') no-repeat top center fixed;
-      background-size: 100% 100vh;
+      background-size: cover;
       position: relative;
       overflow-x: hidden;
-      overflow-y: hidden; /* evita desplazamiento vertical */
     }
-
     .contenedor-superior {
-      position: absolute;
-      top: 0px;                /* Subido 40px hacia el inicio de la página */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100vw;           /* Usar todo el ancho de la ventana */
-      max-width: none;        /* Sin límite de ancho */
-      height: 220px;          /* Más alto para que el logo entre bien */
+      width: 100vw;
+      max-width: none;
+      min-height: 180px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      overflow: hidden;
-      white-space: nowrap;    /* Forzar una sola línea */
+      justify-content: flex-end;
+      padding-top: 32px;
+      padding-bottom: 12px;
+      background: transparent;
     }
-
     .titulo-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
-      font-size: 56px;
+      font-size: 4.5vw;
       color: #DEB460;
       text-align: center;
       margin-bottom: 6px;
-      line-height: 1;
-      /* SIN text-shadow ni ribete */
+      line-height: 1.1;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
     }
-
     .logo-portatiles {
-      height: 2.1em; /* tamaño reducido */
+      height: 2.1em;
       margin: 0 18px;
       vertical-align: middle;
     }
-
     .slogan-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 700;
       font-style: italic;
-      font-size: 32px;
+      font-size: 2.2vw;
       color: #545454;
       text-align: center;
       margin-top: 0.2em;
       margin-bottom: 30px;
       text-shadow: 0 1.5px 2.5px #fff;
     }
-
-    .contenedor-principal {
+    .contenedor-main {
       display: flex;
       flex-direction: row;
       width: 100vw;
-      min-height: 60vh;
+      box-sizing: border-box;
       justify-content: flex-start;
       align-items: flex-start;
+      padding-bottom: 40px;
+      min-height: 60vh;
     }
-
     .botonera-flotante {
-      position: fixed;
-      left: 40px;
-      bottom: 135px; /* Bajada 45px respecto a la posición anterior */
-      width: 220px;
+      position: static;
+      min-width: 260px;
+      width: 260px;
       display: flex;
       flex-direction: column;
       gap: 16px;
       z-index: 99;
+      margin-left: 40px;
+      margin-top: 10px;
     }
-
     .boton-index {
-      width: 100%;
-      min-width: 260px;         /* Más largo para que el texto entre bien */
-      height: 26px;             /* 2px más que el icono (icono 22px + 2px arriba y abajo) */
+      width: 260px;           /* Fijo: igual que .botonera-flotante */
+      min-width: 260px;
+      max-width: 260px;
+      height: 38px;           /* Altura fija para todos */
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
-      font-size: 21px;
+      font-size: 18px;
       font-style: italic;
       background: rgba(0,0,0,0.58);
       color: #fff;
@@ -111,25 +106,23 @@
       transition: background .13s;
       padding-left: 16px;
       white-space: nowrap;
-      padding-top: 2px;
-      padding-bottom: 2px;
+      padding-top: 0;
+      padding-bottom: 0;
+      box-sizing: border-box;
     }
-
     .boton-index img {
       width: 22px;
       height: 22px;
       display: inline-block;
     }
-
     .contenedor-texto {
-      position: absolute;
-      left: calc(220px + 40px + 80px); /* botonera + separación + margen */
-      right: 80px; /* 80px antes del borde derecho */
-      top: 180px;
-      max-width: none;
-      width: auto;
+      flex: 1 1 0;
+      margin-left: 40px;
+      margin-right: 80px;
+      margin-top: 40px;
+      max-width: 900px;
+      min-width: 0;
     }
-
     .presentacion-portatiles {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 300;
@@ -138,98 +131,103 @@
       text-align: left;
       line-height: 1.6;
       text-shadow: none;
-      max-width: 550px;
+      margin-bottom: 24px;
+      max-width: 100%;
     }
-
     .contacto {
       display: block;
       color: #DEB460;
       font-size: 1.15em;
       font-weight: 700;
       margin-top: 24px;
-      text-shadow: none; /* SIN ribete */
+      text-shadow: none;
     }
-
     .pie-pagina {
-      position: absolute;
-      bottom: 6px;
       width: 100%;
       text-align: center;
       font-size: 12px;
       color: #848280;
+      margin-top: 40px;
+      margin-bottom: 10px;
     }
-
-    @media (max-width: 700px) {
-      body {
-        background-position: top center;
-        background-size: 100% 100vh;
-      }
-      .titulo-index {
-        font-size: 34px;
-      }
-      .logo-portatiles {
-        height: 1.6em;
-        margin: 0 10px;
-      }
-      .slogan-index {
-        font-size: 22px;
+    @media (max-width: 1100px) {
+      .contenedor-main {
+        flex-direction: column;
+        align-items: stretch;
       }
       .botonera-flotante {
-        position: fixed;
-        left: 40px;
-        bottom: 60px;
-        width: 220px;
-        gap: 16px;
-      }
-      .boton-index {
+        flex-direction: row;
+        flex-wrap: wrap;
         width: 100%;
-        height: 44px;
-        font-size: 18px;
-      }
-      .contenedor-texto {
-        position: absolute;
-        left: calc(48px + 220px + 20px);
-        top: 180px;
-        margin: 0;
-      }
-      .presentacion-portatiles {
-        font-size: 17px;
-        text-shadow: 0 1px 2px rgba(255, 255, 255, 0.9);
-      }
-    }
-
-    /* Diseño específico para móviles (9:16) */
-    @media (max-width: 500px) and (orientation: portrait) {
-      body {
-        background: url('/static/imagenes/portada-index.png') no-repeat center center fixed;
-        background-size: cover;
-      }
-      .contenedor-superior {
-        top: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 575px;
-        height: 130px;
+        min-width: 0;
+        margin-left: 0;
         margin-top: 0;
         justify-content: center;
-        overflow: hidden;
+        gap: 12px;
       }
-      .botonera-flotante {
-        left: 40px;
-        bottom: 60px;
+      .contenedor-texto {
+        margin-left: 20px;
+        margin-right: 20px;
+        margin-top: 30px;
+        max-width: 100%;
       }
+    }
+    @media (max-width: 700px) {
       .titulo-index {
         font-size: 28px;
+        white-space: normal;
       }
       .slogan-index {
-        font-size: 18px;
+        font-size: 16px;
+      }
+      .botonera-flotante {
+        flex-direction: column;
+        width: 100%;
+        min-width: 0;
+        margin-left: 0;
+        margin-top: 0;
+        align-items: stretch;
+      }
+      .boton-index {
+        min-width: 0;
+        font-size: 16px;
+        height: 32px;
+      }
+      .contenedor-texto {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 20px;
+        max-width: 100%;
+      }
+    }
+    @media (max-width: 500px) {
+      .contenedor-superior {
+        min-height: 120px;
+        padding-top: 16px;
+        padding-bottom: 6px;
+      }
+      .titulo-index {
+        font-size: 20px;
+      }
+      .logo-portatiles {
+        height: 1.2em;
+        margin: 0 6px;
+      }
+      .slogan-index {
+        font-size: 13px;
+        margin-bottom: 10px;
+      }
+      .presentacion-portatiles {
+        font-size: 15px;
+      }
+      .pie-pagina {
+        font-size: 10px;
       }
     }
   </style>
 </head>
 <body>
-  <main class="contenedor-pagina">
+  <main>
     <div class="contenedor-superior">
       <div class="titulo-index">
         Portátiles
@@ -240,8 +238,8 @@
         Lo tradicional, hecho inteligente.
       </div>
     </div>
-
-    <div class="botonera-flotante">
+    <div class="contenedor-main">
+      <div class="botonera-flotante">
         <button class="boton-index" onclick="window.location.href='#'">
           <img src="/static/icons/info-banos.png" alt="Info baños">
           Información Baño
@@ -267,10 +265,8 @@
           Ingresar al sistema
         </button>
       </div>
-
-    <div class="contenedor-principal" style="width: 100vw; max-width: none; display: flex; flex-direction: row; justify-content: flex-start;">
-      <div class="contenedor-texto" style="position: absolute; left: calc(220px + 40px + 80px); right: 80px; top: 300px; max-width: none; width: auto;">
-        <div class="presentacion-portatiles" style="margin-bottom: 24px; max-width: 100%; font-size: 21px;">
+      <div class="contenedor-texto">
+        <div class="presentacion-portatiles">
           Portátiles Mercedes es líder en el alquiler, venta y mantenimiento de baños químicos portátiles para obras, eventos y situaciones especiales en toda la región.<br>
           Ofrecemos unidades modernas, limpias y completamente equipadas, listas para responder a las exigencias de cada cliente.<br>
           Nos ocupamos de todo el proceso: traslado, instalación, vaciado, limpieza y mantenimiento periódico, garantizando puntualidad y cumplimiento de todas las normas sanitarias y ambientales.<br>
@@ -278,7 +274,7 @@
           Contamos con modelos estándar y opciones accesibles, brindando siempre soluciones confiables, seguras y confortables.<br>
           Elija Portátiles Mercedes: calidad, experiencia y la mejor respuesta en servicios sanitarios portátiles.
         </div>
-        <div class="contacto" style="margin-top: 12px; margin-bottom: 0;">
+        <div class="contacto">
           <strong>portatilesmercedes@gmail.com</strong><br>
           <strong>Tel. 2657-627996</strong>
         </div>

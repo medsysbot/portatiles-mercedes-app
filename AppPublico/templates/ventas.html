@@ -92,40 +92,6 @@
             padding-right: 16px;
         }
 
-        #formVenta {
-            display: none; /* oculto por defecto */
-            flex-direction: column;
-            gap: 1rem;
-            background: rgba(255, 255, 255, 0.92);
-            padding: 20px 28px;
-            border-radius: 14px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-            max-width: 500px;
-            width: 90%;
-            box-sizing: border-box;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 50;
-        }
-
-        #formVenta label {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-
-        #formVenta input,
-        #formVenta select,
-        #formVenta textarea {
-            padding: 8px;
-            margin-top: 4px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font: inherit;
-        }
 
         @media (max-width: 1100px) {
             .botonera-flotante {
@@ -165,87 +131,6 @@
         <a id="linkInicio" href="/" class="boton-index"><img src="/static/icons/inicio.png" alt="Inicio"><span>Inicio</span></a>
         <button id="toggleFormulario" type="button" class="boton-index"><img src="/static/icons/ver-formulario.png" alt="Formulario"><span>Ver Formulario</span></button>
     </div>
-    <form id="formVenta">
-        <label>Nombre del cliente
-            <input type="text" name="cliente_nombre">
-        </label>
-        <label>Tipo de baño
-            <select name="tipo_banio">
-                <option value="común">Común</option>
-                <option value="VIP">VIP</option>
-            </select>
-        </label>
-        <label>Cantidad
-            <input type="text" name="cantidad" id="cantidad">
-        </label>
-        <label>Precio unitario
-            <input type="text" name="precio_unitario" id="precioUnitario">
-        </label>
-        <label>Total
-            <input type="text" name="total" id="total">
-        </label>
-        <button type="submit">Generar comprobante PDF</button>
-    </form>
-    <script>
-        const form = document.getElementById('formVenta');
-        const cantidadInput = document.getElementById('cantidad');
-        const precioUnitarioInput = document.getElementById('precioUnitario');
-        const totalInput = document.getElementById('total');
-        const verFormularioBtn = document.getElementById('toggleFormulario');
-        const linkInicio = document.getElementById('linkInicio');
-
-        if (form) {
-            form.style.display = 'none';
-        }
-
-        if (verFormularioBtn) {
-            verFormularioBtn.addEventListener('click', () => {
-                if (form) {
-                    form.style.display = 'flex';
-                }
-            });
-        }
-
-        if (linkInicio) {
-            linkInicio.addEventListener('click', (e) => {
-                e.preventDefault();
-                if (form) {
-                    form.style.display = 'none';
-                }
-                window.location.href = '/';
-            });
-        }
-
-        function calcularTotal() {
-            const cantidad = parseFloat(cantidadInput.value) || 0;
-            const precio = parseFloat(precioUnitarioInput.value) || 0;
-            totalInput.value = (cantidad * precio).toFixed(2);
-        }
-
-        cantidadInput.addEventListener('input', calcularTotal);
-        precioUnitarioInput.addEventListener('input', calcularTotal);
-
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const datos = Object.fromEntries(new FormData(form));
-            try {
-                const resp = await fetch('/registrar_venta', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(datos)
-                });
-                const resultado = await resp.json();
-                if (resp.ok) {
-                    alert('Venta registrada. PDF generado en: ' + resultado.pdf_url);
-                    form.reset();
-                    totalInput.value = '';
-                } else {
-                    alert('Error: ' + (resultado.detail || 'No se pudo guardar'));
-                }
-            } catch (_) {
-                alert('Error de conexión');
-            }
-        });
-    </script>
+    <script src="/static/js/venta_form.js"></script>
 </body>
 </html>

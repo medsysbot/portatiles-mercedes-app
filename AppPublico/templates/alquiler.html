@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Alquiler de Baños</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
     <style>
         html, body {
             height: 100%;
@@ -16,7 +17,7 @@
             min-width: 100vw;
             width: 100vw;
             height: 100vh;
-            font-family: Arial, sans-serif;
+            font-family: 'Nunito', Arial, sans-serif;
             background: url('/static/imagenes/fondo-alquiler.png') no-repeat center center fixed;
             background-size: cover;
             position: relative;
@@ -43,42 +44,51 @@
         }
 
         .container-botones {
-            margin-top: 60px;
-            margin-left: 16px;
+            margin-top: 10px;
+            margin-left: 40px;
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            gap: 8px;
-            width: 100%;
+            gap: 16px;
+            width: 260px;
+            min-width: 260px;
             z-index: 10;
         }
 
         .menu-item {
+            width: 260px;
+            min-width: 260px;
+            max-width: 260px;
+            height: 38px;
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 400;
+            font-size: 18px;
+            font-style: italic;
+            background: rgba(0,0,0,0.58);
+            color: #fff;
+            border: none;
+            border-radius: 13px;
             display: flex;
             align-items: center;
+            justify-content: flex-start;
             gap: 10px;
-            width: 50%;
-            max-width: 180px;
-            height: 40px;
-            padding: 0 1rem;
-            background-color: rgba(0, 0, 0, 0.55);
-            border-radius: 12px;
-            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.13s;
+            padding-left: 16px;
+            white-space: nowrap;
+            padding-top: 0;
+            padding-bottom: 0;
             box-sizing: border-box;
-            color: #fff;
             text-decoration: none;
-            transition: background-color 0.3s, transform 0.3s;
         }
 
         .menu-item:hover {
             background-color: rgba(60, 60, 60, 1);
-            transform: scale(1.05);
         }
 
         .menu-item img {
-            height: 24px;
-            width: 24px;
-            margin-right: 10px;
+            width: 22px;
+            height: 22px;
+            display: inline-block;
         }
 
         .menu-item span {
@@ -91,7 +101,7 @@
         button.menu-item {
             border: none;
             cursor: pointer;
-            background-color: rgba(0, 0, 0, 0.55);
+            background: rgba(0,0,0,0.58);
         }
 
         #formulario-alquiler {
@@ -129,22 +139,6 @@
             font: inherit;
         }
 
-        #botones-formulario {
-            display: flex;
-            margin-top: 16px;
-            gap: 1rem;
-            justify-content: center;
-        }
-
-        #botones-formulario button {
-            max-height: 40px;
-            padding: 8px 16px;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body class="alquiler-page">
@@ -221,10 +215,6 @@
             <label>Fecha
                 <input type="text" name="fecha">
             </label>
-            <div id="botones-formulario">
-                <button type="submit">Enviar</button>
-                <button type="reset">Borrar</button>
-            </div>
         </form>
     </div>
 

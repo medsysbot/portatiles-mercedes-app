@@ -5,24 +5,21 @@ const form = document.getElementById('formulario-alquiler');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
-  // Obtener los valores como objeto
   const datos = Object.fromEntries(new FormData(form));
 
   try {
-    const respuesta = await fetch('/registrar_alquiler', {
+    await fetch('/registrar_alquiler', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(datos)
     });
-
-    const resultado = await respuesta.json();
-    if (respuesta.ok) {
-      alert('Alquiler guardado con éxito');
-      form.reset();
-    } else {
-      alert('Error: ' + (resultado.detail || 'No se pudo guardar'));
-    }
-  } catch (err) {
-    alert('Error de conexión');
+  } catch (_) {
+    // Ignorar errores, se cierra igualmente
   }
+
+  if (window.opener) {
+    window.opener.location.href = '/alquiler';
+    window.opener.focus();
+  }
+  window.close();
 });

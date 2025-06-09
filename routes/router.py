@@ -81,6 +81,14 @@ async def mostrar_formulario_alquiler():
     return HTMLResponse(content=html_contenido)
 
 
+@router.get("/alquiler_form", response_class=HTMLResponse)
+async def mostrar_alquiler_form():
+    """Formulario de alquiler en ventana separada."""
+    html_path = TEMPLATES_DIR / "alquiler_form.html"
+    html_contenido = html_path.read_text(encoding="utf-8")
+    return HTMLResponse(content=html_contenido)
+
+
 @router.get("/limpieza", response_class=HTMLResponse)
 async def mostrar_formulario_limpieza():
     """Devuelve la página de registro de limpieza."""

@@ -15,6 +15,62 @@
             position: relative;
         }
 
+        .contenedor-superior {
+            width: 100vw;
+            max-width: none;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-top: 32px;
+            padding-bottom: 12px;
+            background: transparent;
+        }
+
+        .titulo-index {
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 800;
+            font-size: 4.5vw;
+            color: #DEB460;
+            text-align: center;
+            margin-bottom: 6px;
+            line-height: 1.1;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .logo-portatiles {
+            height: 2.1em;
+            margin: 0 18px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 700px) {
+            .titulo-index {
+                font-size: 28px;
+                white-space: normal;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .contenedor-superior {
+                min-height: 120px;
+                padding-top: 16px;
+                padding-bottom: 6px;
+            }
+            .titulo-index {
+                font-size: 20px;
+            }
+            .logo-portatiles {
+                height: 1.2em;
+                margin: 0 6px;
+            }
+        }
+
         .botonera-flotante {
             position: absolute;
             left: 40px;
@@ -110,6 +166,13 @@
     </style>
 </head>
 <body>
+    <div class="contenedor-superior">
+        <div class="titulo-index">
+            Venta
+            <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+            Baños
+        </div>
+    </div>
     <div class="botonera-flotante">
         <a id="linkInicio" href="/" class="boton-index">
             <img src="static/icons/inicio.png" alt="Inicio">

@@ -103,15 +103,14 @@
         }
 
         .botonera-flotante {
-            position: static;
-            min-width: 260px;
+            position: fixed;
+            left: 40px;
+            bottom: 40px;
             width: 260px;
             display: flex;
             flex-direction: column;
             gap: 16px;
             z-index: 99;
-            margin-left: 40px;
-            margin-top: 10px;
         }
 
         .boton-index {
@@ -174,8 +173,6 @@
                 flex-wrap: wrap;
                 width: 100%;
                 min-width: 0;
-                margin-left: 0;
-                margin-top: 0;
                 justify-content: center;
                 gap: 12px;
             }
@@ -184,10 +181,10 @@
         @media (max-width: 700px) {
             .botonera-flotante {
                 flex-direction: column;
-                width: 100%;
+                width: calc(100% - 20px);
                 min-width: 0;
-                margin-left: 0;
-                margin-top: 0;
+                left: 10px;
+                bottom: 10px;
                 align-items: stretch;
             }
             .boton-index {
@@ -232,6 +229,44 @@
             font: inherit;
         }
 
+        .mazo-fotos {
+            position: relative;
+            height: 140px;
+            width: 340px;
+            margin: 20px 0 20px 40px;
+            align-self: flex-start;
+        }
+
+        .mazo-fotos img {
+            position: absolute;
+            top: 0;
+            width: 120px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+            transition: transform 0.18s;
+            z-index: 2;
+        }
+
+        .mazo-fotos img:hover {
+            transform: scale(1.09) translateY(-8px);
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        @media (max-width: 600px) {
+            .mazo-fotos {
+                width: 98vw;
+                height: 80px;
+                margin-left: 0;
+            }
+
+            .mazo-fotos img {
+                width: 66px;
+                border-radius: 7px;
+            }
+        }
+
     </style>
 </head>
 <body class="alquiler-page">
@@ -259,41 +294,6 @@
             </div>
         </div>
 
-<style>
-.mazo-fotos {
-  position: relative;
-  height: 140px;
-  width: 340px;
-  margin: 20px 0 20px 40px;
-  align-self: flex-start;
-}
-.mazo-fotos img {
-  position: absolute;
-  top: 0;
-  width: 120px;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
-  transition: transform 0.18s;
-  z-index: 2;
-}
-.mazo-fotos img:hover {
-  transform: scale(1.09) translateY(-8px);
-  z-index: 10;
-  cursor: pointer;
-}
-@media (max-width: 600px) {
-  .mazo-fotos {
-    width: 98vw;
-    height: 80px;
-    margin-left: 0;
-  }
-  .mazo-fotos img {
-    width: 66px;
-    border-radius: 7px;
-  }
-}
-</style>
         <form id="formulario-alquiler">
             <label>Nombre y apellido
                 <input type="text" name="nombre">

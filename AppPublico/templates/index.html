@@ -6,6 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+    }
+
     body {
       min-height: 100vh;
       min-width: 100vw;
@@ -37,14 +44,12 @@
     .titulo-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
-      font-size: 4.5vw;
+      font-size: 56px;
       color: #DEB460;
       text-align: center;
       margin-bottom: 6px;
-      line-height: 1.2;
-      white-space: nowrap;      /* para una sola línea */
-      overflow: hidden;
-      text-overflow: ellipsis;
+      line-height: 1;
+      /* SIN text-shadow ni ribete */
     }
 
     .logo-portatiles {
@@ -85,14 +90,12 @@
       z-index: 99;
     }
 
-    .boton-index,
-    .boton {
+    .boton-index {
       width: 100%;
-      min-width: 160px;
       height: 48px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
-      font-size: 18px;
+      font-size: 21px;
       font-style: italic;
       background: rgba(0,0,0,0.58);
       color: #fff;
@@ -138,7 +141,7 @@
       font-size: 1.15em;
       font-weight: 700;
       margin-top: 24px;
-      text-shadow: none;
+      text-shadow: none; /* SIN ribete */
     }
 
     .pie-pagina {
@@ -156,11 +159,7 @@
         background-size: 100% 100vh;
       }
       .titulo-index {
-        font-size: 4.5vw;
-        line-height: 1.2;
-        white-space: normal;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        font-size: 34px;
       }
       .logo-portatiles {
         height: 1.6em;
@@ -176,10 +175,8 @@
         width: 220px;
         gap: 16px;
       }
-      .boton-index,
-      .boton {
+      .boton-index {
         width: 100%;
-        min-width: 160px;
         height: 44px;
         font-size: 18px;
       }
@@ -195,6 +192,7 @@
       }
     }
 
+    /* Diseño específico para móviles (9:16) */
     @media (max-width: 500px) and (orientation: portrait) {
       body {
         background: url('/static/imagenes/portada-index.png') no-repeat center center fixed;
@@ -216,11 +214,7 @@
         bottom: 60px;
       }
       .titulo-index {
-        font-size: 4.5vw;
-        line-height: 1.2;
-        white-space: normal;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
+        font-size: 28px;
       }
       .slogan-index {
         font-size: 18px;
@@ -229,38 +223,63 @@
   </style>
 </head>
 <body>
-
-  <div class="contenedor-principal">
-    <div class="contenedor-titulo">
-      <h1 class="titulo-index">Portátiles Mercedes</h1>
-    </div>
-
-    <div class="contenedor-subtitulo">
-      <h2 class="slogan-index">Lo tradicional, hecho inteligente.</h2>
-    </div>
-
-    <div class="contenedor-texto">
-      <div class="presentacion-portatiles">
-        Ofrecemos unidades modernas, limpias y completamente equipadas.<br>
-        Nos ocupamos de todo el proceso: traslado, instalación y retiro.<br>
-        Atención personalizada, rápida y flexible.<br>
-        <span class="contacto">
-          portatilesmercedes@gmail.com<br>
-          Tel. 2657-627996
-        </span>
+  <main class="contenedor-pagina">
+    <div class="contenedor-superior">
+      <div class="titulo-index">
+        Portátiles
+        <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+        Mercedes
+      </div>
+      <div class="slogan-index">
+        Lo tradicional, hecho inteligente.
       </div>
     </div>
 
-    <div class="contenedor-botones">
-      <button class="boton">Información</button>
-      <button class="boton">Alquiler</button>
-      <button class="boton">Venta</button>
+    <div class="botonera-flotante">
+        <button class="boton-index" onclick="window.location.href='#'">
+          <img src="/static/icons/info-banos.png" alt="Info baños">
+          Información Baño
+        </button>
+        <button class="boton-index" onclick="window.location.href='/alquiler'">
+          <img src="/static/icons/alquiler.png" alt="Alquiler">
+          Alquiler de baño
+        </button>
+        <button class="boton-index" onclick="window.location.href='/venta'">
+          <img src="/static/icons/venta.png" alt="Venta">
+          Venta de baño
+        </button>
+        <button class="boton-index" onclick="window.location.href='/servicios'">
+          <img src="/static/icons/servicios-2.png" alt="Servicio">
+          Servicio
+        </button>
+        <button class="boton-index" onclick="window.location.href='/registro_clientes'">
+          <img src="/static/icons/registro-clientes.png" alt="Registro de cliente">
+          Registro de cliente
+        </button>
+        <button class="boton-index" onclick="window.location.href='/login'">
+          <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar al sistema">
+          Ingresar al sistema
+        </button>
+      </div>
+
+    <div class="contenedor-principal">
+      <div class="contenedor-texto">
+        <div class="presentacion-portatiles">
+          Portátiles Mercedes es líder en el alquiler, venta y mantenimiento de baños químicos portátiles para obras, eventos y situaciones especiales en toda la región.<br>
+          Ofrecemos unidades modernas, limpias y completamente equipadas, listas para responder a las exigencias de cada cliente.<br>
+          Nos ocupamos de todo el proceso: traslado, instalación, vaciado, limpieza y mantenimiento periódico, garantizando puntualidad y cumplimiento de todas las normas sanitarias y ambientales.<br>
+          Nuestra atención es personalizada, rápida y flexible. Asesoramos a empresas, instituciones y particulares, adaptándonos a cualquier tipo de requerimiento, desde grandes proyectos hasta necesidades puntuales.<br>
+          Contamos con modelos estándar y opciones accesibles, brindando siempre soluciones confiables, seguras y confortables. Elija Portátiles Mercedes: calidad, experiencia y la mejor respuesta en servicios sanitarios portátiles.<br>
+          <span class="contacto">
+            portatilesmercedes@gmail.com<br>
+            Tel. 2657-627996
+          </span>
+        </div>
+      </div>
     </div>
-  </div>
-
+  </main>
   <footer class="pie-pagina">
-    Portátiles Mercedes registrados. En muchos casos están limpios. En todos, listos para usar.
+    Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
-
 </body>
 </html>

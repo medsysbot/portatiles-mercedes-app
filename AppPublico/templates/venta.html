@@ -44,6 +44,17 @@
             box-sizing: border-box;
             text-decoration: none;
         }
+        .botonera-flotante {
+            position: absolute;
+            left: 40px;
+            bottom: 180px;
+            min-width: 260px;
+            width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 99;
+        }
         .boton-index:hover {
             background-color: rgba(60, 60, 60, 1);
         }
@@ -88,9 +99,43 @@
             border-radius: 6px;
             font: inherit;
         }
+        @media (max-width: 1100px) {
+            .botonera-flotante {
+                position: static;
+                flex-direction: row;
+                flex-wrap: wrap;
+                width: 100%;
+                min-width: 0;
+                margin-left: 0;
+                margin-top: 0;
+                justify-content: center;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .botonera-flotante {
+                position: static;
+                flex-direction: column;
+                width: 100%;
+                min-width: 0;
+                margin-left: 0;
+                margin-top: 0;
+                align-items: stretch;
+            }
+            .boton-index {
+                min-width: 0;
+                font-size: 16px;
+                height: 32px;
+            }
+        }
     </style>
 </head>
 <body>
+    <div class="botonera-flotante">
+        <a id="linkInicio" href="/" class="boton-index"><img src="/static/icons/inicio.png" alt="Inicio"><span>Inicio</span></a>
+        <button id="toggleFormulario" type="button" class="boton-index"><img src="/static/icons/ver-formulario.png" alt="Formulario"><span>Ver Formulario</span></button>
+    </div>
     <form id="formVenta">
         <label>Nombre del cliente
             <input type="text" name="cliente_nombre">
@@ -127,6 +172,7 @@
     </button>
 
     <script src="/static/js/guardar_venta.js"></script>
+    <script src="/static/js/venta_form.js"></script>
     <script>
         document.getElementById('cerrarFormulario').addEventListener('click', () => {
             if (window.opener) {

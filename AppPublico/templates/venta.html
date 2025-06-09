@@ -2,71 +2,15 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Venta</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
     <style>
-        html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-
+        html, body { height: 100%; margin: 0; padding: 0; width: 100%; }
         body {
             min-height: 100vh;
-            min-width: 100vw;
             font-family: 'Nunito', Arial, sans-serif;
             background: url('/static/imagenes/fondo-ventas.png') no-repeat center center fixed;
             background-size: cover;
-            position: relative;
-        }
-        .boton-index {
-            width: 260px;
-            min-width: 260px;
-            height: 38px;
-            font-family: 'Nunito', Arial, sans-serif;
-            font-weight: 400;
-            font-size: 18px;
-            font-style: italic;
-            background: rgba(0,0,0,0.58);
-            color: #fff;
-            border: none;
-            border-radius: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 10px;
-            cursor: pointer;
-            transition: background 0.13s;
-            padding-left: 16px;
-            white-space: nowrap;
-            box-sizing: border-box;
-            text-decoration: none;
-        }
-        .botonera-flotante {
-            position: absolute;
-            left: 40px;
-            bottom: 180px;
-            min-width: 260px;
-            width: 260px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-            z-index: 99;
-        }
-        .boton-index:hover {
-            background-color: rgba(60, 60, 60, 1);
-        }
-        .boton-index img {
-            width: 22px;
-            height: 22px;
-            display: inline-block;
-        }
-        #cerrarFormulario {
-            position: fixed;
-            left: 40px;
-            bottom: 40px;
         }
         #formVenta {
             display: flex;
@@ -75,7 +19,6 @@
             background: rgba(255, 255, 255, 0.92);
             padding: 20px 28px;
             border-radius: 14px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
             max-width: 500px;
             width: 90%;
             box-sizing: border-box;
@@ -90,105 +33,46 @@
             margin-bottom: 12px;
             font-weight: 600;
         }
-        #formVenta input,
-        #formVenta select,
-        #formVenta textarea {
+        #formVenta input, #formVenta select, #formVenta textarea {
             padding: 8px;
             margin-top: 4px;
             border: 1px solid #ccc;
             border-radius: 6px;
             font: inherit;
         }
-        @media (max-width: 1100px) {
-            .botonera-flotante {
-                position: static;
-                flex-direction: row;
-                flex-wrap: wrap;
-                width: 100%;
-                min-width: 0;
-                margin-left: 0;
-                margin-top: 0;
-                justify-content: center;
-                gap: 12px;
-            }
-        }
-
-        @media (max-width: 700px) {
-            .botonera-flotante {
-                position: static;
-                flex-direction: column;
-                width: 100%;
-                min-width: 0;
-                margin-left: 0;
-                margin-top: 0;
-                align-items: stretch;
-            }
-            .boton-index {
-                min-width: 0;
-                font-size: 16px;
-                height: 32px;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="botonera-flotante">
-        <a id="linkInicio" href="/" class="boton-index"><img src="/static/icons/inicio.png" alt="Inicio"><span>Inicio</span></a>
-        <button id="toggleFormulario" type="button" class="boton-index"><img src="/static/icons/ver-formulario.png" alt="Formulario"><span>Ver Formulario</span></button>
-    </div>
     <form id="formVenta">
         <label>Nombre del cliente
             <input type="text" name="cliente_nombre">
         </label>
-        <label>DNI del cliente
+        <label>DNI
             <input type="text" name="dni">
         </label>
-        <label>Tipo de baño vendido
+        <label>Tipo de baño
             <select name="tipo_banio">
-                <option value="común">Común</option>
+                <option value="comun">Común</option>
                 <option value="VIP">VIP</option>
             </select>
         </label>
-        <label>Cantidad de unidades
-            <input type="text" name="cantidad">
+        <label>Cantidad
+            <input type="number" name="cantidad">
         </label>
         <label>Dirección de entrega
             <input type="text" name="direccion_entrega">
         </label>
         <label>Fecha de venta
-            <input type="text" name="fecha_venta">
+            <input type="date" name="fecha_venta">
         </label>
         <label>Observaciones
             <textarea name="observaciones"></textarea>
         </label>
-        <button type="submit" class="boton-index">
-            <img src="/static/icons/ver-formulario.png" alt="Enviar">
-            <span>Confirmar venta</span>
-        </button>
+        <button type="submit">Enviar venta</button>
     </form>
-    <a href="ventas.html"><button type="button" class="boton-index">Volver a compras</button></a>
-    <button id="cerrarFormulario" class="boton-index" type="button">
-        <img src="/static/icons/cerrar-galeria.png" alt="Cerrar">
-        <span>Cerrar Formulario</span>
-    </button>
-
+    <a href="ventas.html">
+        <button type="button">Cerrar formulario</button>
+    </a>
     <script src="/static/js/guardar_venta.js"></script>
-    <script src="/static/js/venta_form.js"></script>
-    <script>
-        document.getElementById('cerrarFormulario').addEventListener('click', () => {
-            if (window.opener) {
-                window.opener.focus();
-            }
-            window.close();
-        });
-
-        document.getElementById('formVenta').addEventListener('submit', () => {
-            if (window.opener) {
-                window.opener.location.href = '/ventas';
-                window.opener.focus();
-            }
-            setTimeout(() => window.close(), 100);
-        });
-    </script>
 </body>
 </html>

@@ -133,7 +133,57 @@
             background: rgba(0,0,0,0.58);
         }
 
+        #toggleFormulario {
+            padding-right: 16px;
+        }
+
+        .contenedor-main {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            width: 100vw;
+            box-sizing: border-box;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding-bottom: 40px;
+            min-height: 60vh;
+        }
+
+        .contenedor-texto {
+            flex: 1 1 0;
+            margin-left: 320px;
+            margin-right: 80px;
+            margin-top: 40px;
+            max-width: 900px;
+            min-width: 0;
+        }
+
+        .presentacion-portatiles {
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 300;
+            font-size: 21px;
+            color: #fff;
+            text-align: left;
+            line-height: 1.6;
+            text-shadow: none;
+            margin-bottom: 24px;
+            max-width: 100%;
+        }
+
+        .contacto {
+            display: block;
+            color: #DEB460;
+            font-size: 1.15em;
+            font-weight: 700;
+            margin-top: 24px;
+            text-shadow: none;
+        }
+
         @media (max-width: 1100px) {
+            .contenedor-main {
+                flex-direction: column;
+                align-items: stretch;
+            }
             .botonera-flotante {
                 position: static;
                 flex-direction: row;
@@ -145,66 +195,36 @@
                 justify-content: center;
                 gap: 12px;
             }
+            .contenedor-texto {
+                margin-left: 20px;
+                margin-right: 20px;
+                margin-top: 30px;
+                max-width: 100%;
+            }
         }
 
-    @media (max-width: 700px) {
-        .botonera-flotante {
-            position: static;
-            flex-direction: column;
-            width: 100%;
-            min-width: 0;
-            margin-left: 0;
-            margin-top: 0;
-            align-items: stretch;
+        @media (max-width: 700px) {
+            .botonera-flotante {
+                position: static;
+                flex-direction: column;
+                width: 100%;
+                min-width: 0;
+                margin-left: 0;
+                margin-top: 0;
+                align-items: stretch;
+            }
+            .boton-index {
+                min-width: 0;
+                font-size: 16px;
+                height: 32px;
+            }
+            .contenedor-texto {
+                margin-left: 10px;
+                margin-right: 10px;
+                margin-top: 20px;
+                max-width: 100%;
+            }
         }
-        .boton-index {
-            min-width: 0;
-            font-size: 16px;
-            height: 32px;
-        }
-    }
-    </style>
-    <style>
-      .info-bloque {
-        max-width: 900px;
-        margin: 40px auto;
-        padding: 25px;
-        border-radius: 10px;
-        font-family: Arial, sans-serif;
-        font-size: 1rem;
-        line-height: 1.6;
-        background-color: #f9f9f9;
-        box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      }
-
-      .info-bloque h2 {
-        text-align: center;
-        font-size: 1.6rem;
-        margin-bottom: 20px;
-        color: #1a1a1a;
-      }
-
-      .info-bloque p {
-        margin-bottom: 15px;
-      }
-
-      .info-final {
-        text-align: center;
-        font-weight: bold;
-        font-size: 1.2rem;
-        margin-top: 25px;
-      }
-
-      @media (max-width: 600px) {
-        .info-bloque {
-          padding: 15px;
-          font-size: 0.95rem;
-        }
-
-        .info-bloque h2 {
-          font-size: 1.3rem;
-        }
-      }
     </style>
 </head>
 <body>
@@ -215,34 +235,31 @@
             Baños
         </div>
     </div>
-    <div class="botonera-flotante">
-        <a id="linkInicio" href="/" class="boton-index">
-            <img src="static/icons/inicio.png" alt="Inicio">
-            <span>Inicio</span>
-        </a>
-        <button id="toggleFormulario" type="button" class="boton-index">
-            <img src="static/icons/ver-formulario.png" alt="Ver Formulario">
-            <span>Ver formulario</span>
-        </button>
+    <div class="contenedor-main">
+        <div class="botonera-flotante">
+            <a id="linkInicio" href="/" class="boton-index">
+                <img src="static/icons/inicio.png" alt="Inicio">
+                <span>Inicio</span>
+            </a>
+            <button id="toggleFormulario" type="button" class="boton-index">
+                <img src="static/icons/ver-formulario.png" alt="Ver Formulario">
+                <span>Ver formulario</span>
+            </button>
+        </div>
+        <div class="contenedor-texto">
+            <div class="presentacion-portatiles">
+                En <strong>Portátiles Mercedes</strong> ofrecemos la venta de baños químicos portátiles con modelos que se adaptan a todo tipo de necesidad: estándar, confort o VIP.<br><br>
+                Podés consultarnos para conocer la disponibilidad actual y recibir asesoramiento personalizado según tu caso.<br><br>
+                Nos encargamos del traslado del baño al destino que nos indiques, sin complicaciones.<br><br>
+                Además, ofrecemos servicios posteriores como <strong>mantenimiento, limpieza y reparación</strong> para que tu baño portátil esté siempre en las mejores condiciones.<br><br>
+                Completá el formulario y un representante se pondrá en contacto con vos.
+            </div>
+            <span class="contacto">
+                portatilesmercedes@gmail.com<br>
+                Tel. 2657-627996
+            </span>
+        </div>
     </div>
-    <section class="info-bloque">
-      <h2>¿Estás pensando en comprar un baño químico?</h2>
-      <p>
-        En <strong>Portátiles Mercedes</strong> te ofrecemos una amplia variedad de modelos de baños químicos para venta, pensados para cubrir distintas necesidades: desde modelos estándar hasta opciones VIP con mayor confort y prestaciones.
-      </p>
-      <p>
-        Si estás interesado, <strong>contactanos para conocer qué modelos tenemos disponibles en el momento</strong>. Nuestro equipo estará encantado de asesorarte y ayudarte a elegir la mejor opción según tus necesidades.
-      </p>
-      <p>
-        Además, <strong>nos encargamos del traslado</strong> del baño químico hasta el lugar que vos nos indiques. Vos solo tenés que elegir el modelo, y nosotros nos ocupamos del resto.
-      </p>
-      <p>
-        Y una vez que tengas tu baño, también podés contar con nosotros para el <strong>servicio de mantenimiento, reparación y limpieza</strong>, asegurando así que tu unidad esté siempre en óptimas condiciones.
-      </p>
-      <p class="info-final">
-        ¡Elegí con confianza, comprá con respaldo!
-      </p>
-    </section>
     <script src="/static/js/venta_form.js"></script>
 </body>
 </html>

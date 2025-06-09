@@ -2,15 +2,23 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulario de Venta</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
     <style>
-        html, body { height: 100%; margin: 0; padding: 0; width: 100%; }
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
         body {
             min-height: 100vh;
             font-family: 'Nunito', Arial, sans-serif;
-            background: url('/static/imagenes/fondo-ventas.png') no-repeat center center fixed;
+            background-image: url('static/imagenes/fondo-ventas.png');
             background-size: cover;
+            background-position: center;
+            position: relative;
         }
         #formVenta {
             display: flex;
@@ -19,6 +27,7 @@
             background: rgba(255, 255, 255, 0.92);
             padding: 20px 28px;
             border-radius: 14px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
             max-width: 500px;
             width: 90%;
             box-sizing: border-box;
@@ -33,12 +42,34 @@
             margin-bottom: 12px;
             font-weight: 600;
         }
-        #formVenta input, #formVenta select, #formVenta textarea {
+        #formVenta input,
+        #formVenta select,
+        #formVenta textarea {
             padding: 8px;
             margin-top: 4px;
             border: 1px solid #ccc;
             border-radius: 6px;
             font: inherit;
+        }
+        .boton-cerrar {
+            position: fixed;
+            left: 40px;
+            bottom: 40px;
+            font-family: inherit;
+            font-size: 16px;
+            padding: 8px 16px;
+            border-radius: 10px;
+            border: none;
+            background: rgba(0,0,0,0.6);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        .boton-cerrar img {
+            height: 20px;
+            vertical-align: middle;
         }
     </style>
 </head>
@@ -71,7 +102,10 @@
         <button type="submit">Enviar venta</button>
     </form>
     <a href="ventas.html">
-        <button type="button">Cerrar formulario</button>
+        <button type="button" class="boton-cerrar">
+            <img src="static/icons/cerrar-formulario.png" alt="Cerrar" style="height: 20px; vertical-align: middle;">
+            Cerrar formulario
+        </button>
     </a>
     <script src="/static/js/guardar_venta.js"></script>
 </body>

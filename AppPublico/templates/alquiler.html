@@ -91,18 +91,30 @@
             }
         }
 
-        .container-botones {
-            margin-top: 10px;
-            margin-left: 40px;
+        .contenedor-main {
+            display: flex;
+            flex-direction: row;
+            width: 100vw;
+            box-sizing: border-box;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding-bottom: 40px;
+            min-height: 60vh;
+        }
+
+        .botonera-flotante {
+            position: static;
+            min-width: 260px;
+            width: 260px;
             display: flex;
             flex-direction: column;
             gap: 16px;
-            width: 260px;
-            min-width: 260px;
-            z-index: 10;
+            z-index: 99;
+            margin-left: 40px;
+            margin-top: 10px;
         }
 
-        .menu-item {
+        .boton-index {
             width: 260px;
             min-width: 260px;
             max-width: 260px;
@@ -129,27 +141,60 @@
             text-decoration: none;
         }
 
-        .menu-item:hover {
+        .boton-index:hover {
             background-color: rgba(60, 60, 60, 1);
         }
 
-        .menu-item img {
+        .boton-index img {
             width: 22px;
             height: 22px;
             display: inline-block;
         }
 
-        .menu-item span {
+        .boton-index span {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             flex: 1;
         }
 
-        button.menu-item {
+        button.boton-index {
             border: none;
             cursor: pointer;
             background: rgba(0,0,0,0.58);
+        }
+
+        @media (max-width: 1100px) {
+            .contenedor-main {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .botonera-flotante {
+                flex-direction: row;
+                flex-wrap: wrap;
+                width: 100%;
+                min-width: 0;
+                margin-left: 0;
+                margin-top: 0;
+                justify-content: center;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .botonera-flotante {
+                flex-direction: column;
+                width: 100%;
+                min-width: 0;
+                margin-left: 0;
+                margin-top: 0;
+                align-items: stretch;
+            }
+            .boton-index {
+                min-width: 0;
+                font-size: 16px;
+                height: 32px;
+            }
         }
 
         #formulario-alquiler {
@@ -198,18 +243,20 @@
                 Baños
             </div>
         </div>
-        <div class="container-botones">
-            <a id="linkInicio" href="/" class="menu-item"><img src="/static/icons/inicio.png" alt="Inicio"><span>Inicio</span></a>
-            <button id="toggleFormulario" type="button" class="menu-item"><img src="/static/icons/ver-formulario.png" alt="Formulario"><span>Ver formulario</span></button>
-            <a id="linkGaleria" href="/galeria" class="menu-item"><img src="/static/icons/galeria.png" alt="Galería"><span>Galería</span></a>
-        </div>
-        <div class="mazo-fotos">
-            <img src="/static/imagenes/evento.jpg"   alt="Evento 1" style="left:0px;">
-            <img src="/static/imagenes/evento-2.jpg" alt="Evento 2" style="left:32px;">
-            <img src="/static/imagenes/evento-3.jpg" alt="Evento 3" style="left:64px;">
-            <img src="/static/imagenes/evento-4.jpg" alt="Evento 4" style="left:96px;">
-            <img src="/static/imagenes/obra.PNG"     alt="Obra 1"   style="left:128px;">
-            <img src="/static/imagenes/obra2.jpg"    alt="Obra 2"   style="left:160px;">
+        <div class="contenedor-main">
+            <div class="botonera-flotante">
+                <a id="linkInicio" href="/" class="boton-index"><img src="/static/icons/inicio.png" alt="Inicio"><span>Inicio</span></a>
+                <button id="toggleFormulario" type="button" class="boton-index"><img src="/static/icons/ver-formulario.png" alt="Formulario"><span>Ver formulario</span></button>
+                <a id="linkGaleria" href="/galeria" class="boton-index"><img src="/static/icons/galeria.png" alt="Galería"><span>Galería</span></a>
+            </div>
+            <div class="mazo-fotos">
+                <img src="/static/imagenes/evento.jpg"   alt="Evento 1" style="left:0px;">
+                <img src="/static/imagenes/evento-2.jpg" alt="Evento 2" style="left:32px;">
+                <img src="/static/imagenes/evento-3.jpg" alt="Evento 3" style="left:64px;">
+                <img src="/static/imagenes/evento-4.jpg" alt="Evento 4" style="left:96px;">
+                <img src="/static/imagenes/obra.PNG"     alt="Obra 1"   style="left:128px;">
+                <img src="/static/imagenes/obra2.jpg"    alt="Obra 2"   style="left:160px;">
+            </div>
         </div>
 
 <style>
@@ -217,7 +264,7 @@
   position: relative;
   height: 140px;
   width: 340px;
-  margin: 20px 0 20px 0;
+  margin: 20px 0 20px 40px;
   align-self: flex-start;
 }
 .mazo-fotos img {

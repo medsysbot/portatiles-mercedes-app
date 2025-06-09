@@ -1,8 +1,6 @@
 // Mostrar permanentemente el formulario de alquiler
 const form = document.getElementById('formulario-alquiler');
-const contBotones = document.getElementById('botones-formulario');
 
-if (form && contBotones) {
+if (form) {
   form.style.display = 'flex';
-  contBotones.style.display = 'flex';
 }

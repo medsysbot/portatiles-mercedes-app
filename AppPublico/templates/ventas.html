@@ -147,22 +147,64 @@
             }
         }
 
-        @media (max-width: 700px) {
-            .botonera-flotante {
-                position: static;
-                flex-direction: column;
-                width: 100%;
-                min-width: 0;
-                margin-left: 0;
-                margin-top: 0;
-                align-items: stretch;
-            }
-            .boton-index {
-                min-width: 0;
-                font-size: 16px;
-                height: 32px;
-            }
+    @media (max-width: 700px) {
+        .botonera-flotante {
+            position: static;
+            flex-direction: column;
+            width: 100%;
+            min-width: 0;
+            margin-left: 0;
+            margin-top: 0;
+            align-items: stretch;
         }
+        .boton-index {
+            min-width: 0;
+            font-size: 16px;
+            height: 32px;
+        }
+    }
+    </style>
+    <style>
+      .info-bloque {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 25px;
+        border-radius: 10px;
+        font-family: Arial, sans-serif;
+        font-size: 1rem;
+        line-height: 1.6;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      }
+
+      .info-bloque h2 {
+        text-align: center;
+        font-size: 1.6rem;
+        margin-bottom: 20px;
+        color: #1a1a1a;
+      }
+
+      .info-bloque p {
+        margin-bottom: 15px;
+      }
+
+      .info-final {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        margin-top: 25px;
+      }
+
+      @media (max-width: 600px) {
+        .info-bloque {
+          padding: 15px;
+          font-size: 0.95rem;
+        }
+
+        .info-bloque h2 {
+          font-size: 1.3rem;
+        }
+      }
     </style>
 </head>
 <body>
@@ -183,6 +225,24 @@
             <span>Ver formulario</span>
         </button>
     </div>
+    <section class="info-bloque">
+      <h2>¿Estás pensando en comprar un baño químico?</h2>
+      <p>
+        En <strong>Portátiles Mercedes</strong> te ofrecemos una amplia variedad de modelos de baños químicos para venta, pensados para cubrir distintas necesidades: desde modelos estándar hasta opciones VIP con mayor confort y prestaciones.
+      </p>
+      <p>
+        Si estás interesado, <strong>contactanos para conocer qué modelos tenemos disponibles en el momento</strong>. Nuestro equipo estará encantado de asesorarte y ayudarte a elegir la mejor opción según tus necesidades.
+      </p>
+      <p>
+        Además, <strong>nos encargamos del traslado</strong> del baño químico hasta el lugar que vos nos indiques. Vos solo tenés que elegir el modelo, y nosotros nos ocupamos del resto.
+      </p>
+      <p>
+        Y una vez que tengas tu baño, también podés contar con nosotros para el <strong>servicio de mantenimiento, reparación y limpieza</strong>, asegurando así que tu unidad esté siempre en óptimas condiciones.
+      </p>
+      <p class="info-final">
+        ¡Elegí con confianza, comprá con respaldo!
+      </p>
+    </section>
     <script src="/static/js/venta_form.js"></script>
 </body>
 </html>

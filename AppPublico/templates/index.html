@@ -28,17 +28,18 @@
 
     .contenedor-superior {
       position: absolute;
-      top: 40px;
+      top: 0px;                /* Subido 40px hacia el inicio de la página */
       left: 50%;
       transform: translateX(-50%);
-      width: 90%;
-      max-width: 575px;
-      height: 130px;
+      width: 100vw;           /* Usar todo el ancho de la ventana */
+      max-width: none;        /* Sin límite de ancho */
+      height: 220px;          /* Más alto para que el logo entre bien */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      white-space: nowrap;    /* Forzar una sola línea */
     }
 
     .titulo-index {
@@ -82,7 +83,7 @@
     .botonera-flotante {
       position: fixed;
       left: 40px;
-      bottom: 60px;
+      bottom: 135px; /* Bajada 45px respecto a la posición anterior */
       width: 220px;
       display: flex;
       flex-direction: column;
@@ -92,7 +93,8 @@
 
     .boton-index {
       width: 100%;
-      height: 48px;
+      min-width: 260px;         /* Más largo para que el texto entre bien */
+      height: 26px;             /* 2px más que el icono (icono 22px + 2px arriba y abajo) */
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
       font-size: 21px;
@@ -109,6 +111,8 @@
       transition: background .13s;
       padding-left: 16px;
       white-space: nowrap;
+      padding-top: 2px;
+      padding-bottom: 2px;
     }
 
     .boton-index img {
@@ -119,9 +123,11 @@
 
     .contenedor-texto {
       position: absolute;
-      left: calc(48px + 220px + 30px);
+      left: calc(220px + 40px + 80px); /* botonera + separación + margen */
+      right: 80px; /* 80px antes del borde derecho */
       top: 180px;
-      max-width: 700px;
+      max-width: none;
+      width: auto;
     }
 
     .presentacion-portatiles {
@@ -262,18 +268,19 @@
         </button>
       </div>
 
-    <div class="contenedor-principal">
-      <div class="contenedor-texto">
-        <div class="presentacion-portatiles">
+    <div class="contenedor-principal" style="width: 100vw; max-width: none; display: flex; flex-direction: row; justify-content: flex-start;">
+      <div class="contenedor-texto" style="position: absolute; left: calc(220px + 40px + 80px); right: 80px; top: 300px; max-width: none; width: auto;">
+        <div class="presentacion-portatiles" style="margin-bottom: 24px; max-width: 100%; font-size: 21px;">
           Portátiles Mercedes es líder en el alquiler, venta y mantenimiento de baños químicos portátiles para obras, eventos y situaciones especiales en toda la región.<br>
           Ofrecemos unidades modernas, limpias y completamente equipadas, listas para responder a las exigencias de cada cliente.<br>
           Nos ocupamos de todo el proceso: traslado, instalación, vaciado, limpieza y mantenimiento periódico, garantizando puntualidad y cumplimiento de todas las normas sanitarias y ambientales.<br>
           Nuestra atención es personalizada, rápida y flexible. Asesoramos a empresas, instituciones y particulares, adaptándonos a cualquier tipo de requerimiento, desde grandes proyectos hasta necesidades puntuales.<br>
-          Contamos con modelos estándar y opciones accesibles, brindando siempre soluciones confiables, seguras y confortables. Elija Portátiles Mercedes: calidad, experiencia y la mejor respuesta en servicios sanitarios portátiles.<br>
-          <span class="contacto">
-            portatilesmercedes@gmail.com<br>
-            Tel. 2657-627996
-          </span>
+          Contamos con modelos estándar y opciones accesibles, brindando siempre soluciones confiables, seguras y confortables.<br>
+          Elija Portátiles Mercedes: calidad, experiencia y la mejor respuesta en servicios sanitarios portátiles.
+        </div>
+        <div class="contacto" style="margin-top: 12px; margin-bottom: 0;">
+          <strong>portatilesmercedes@gmail.com</strong><br>
+          <strong>Tel. 2657-627996</strong>
         </div>
       </div>
     </div>

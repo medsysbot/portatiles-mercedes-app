@@ -9,26 +9,23 @@
   <style>
     html, body {
       height: 100%;
-      width: 100%;
       margin: 0;
       padding: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      width: 100vw;
       font-family: 'Nunito', Arial, sans-serif;
       background: url('/static/imagenes/fondo-login.png') no-repeat center center fixed;
       background-size: cover;
-      overflow: auto;
-    }
-
-    .fondo-login {
-      min-height: 100vh;
-      width: 100%;
+      position: relative;
+      overflow-x: hidden;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start;
-      position: relative;
-      padding-bottom: 2rem;
     }
-
     .contenedor-superior {
       width: 100vw;
       max-width: none;
@@ -41,7 +38,6 @@
       padding-bottom: 12px;
       background: transparent;
     }
-
     .titulo-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
@@ -56,41 +52,45 @@
       justify-content: center;
       width: 100%;
     }
-
     .logo-portatiles {
       height: 2.1em;
       margin: 0 18px;
       vertical-align: middle;
     }
-
-    .contenedor-main {
-      position: relative;
-      display: flex;
-      flex-direction: row;
-      width: 100vw;
-      box-sizing: border-box;
-      justify-content: flex-start;
-      align-items: flex-start;
-      padding-bottom: 40px;
-      min-height: 60vh;
-    }
-
-    .botonera-flotante {
-      position: absolute;
-      left: 40px;
-      bottom: 180px;
-      min-width: 260px;
-      width: 260px;
+    form {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      z-index: 99;
+      gap: 20px;
+      width: 260px;
+      box-sizing: border-box;
+      color: #fff;
+      margin-top: 40px;
     }
-
+    .campo-login {
+      display: flex;
+      align-items: center;
+      background: rgba(0,0,0,0.58);
+      border-radius: 8px;
+      padding: 8px 12px;
+      box-sizing: border-box;
+    }
+    .campo-login img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+    .campo-login input, .campo-login select {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 16px;
+      width: 100%;
+    }
     .boton-index {
-      width: 130px;
-      min-width: 130px;
-      max-width: 130px;
+      width: 260px;
+      min-width: 260px;
+      max-width: 260px;
       height: 38px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
@@ -102,92 +102,48 @@
       border-radius: 13px;
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      justify-content: center;
       gap: 10px;
       cursor: pointer;
       transition: background .13s;
       padding-left: 16px;
-      white-space: nowrap;
-      box-sizing: border-box;
     }
-
     .boton-index img {
       width: 22px;
       height: 22px;
+      display: inline-block;
     }
-
-    a.boton-index span {
-      text-decoration: none;
-    }
-
-    .formulario-login {
-      flex: 1 1 0;
-      margin-left: calc(320px + 25px);
-      margin-right: 80px;
-      margin-top: 40px;
-      max-width: 900px;
-      min-width: 0;
-    }
-
-    .campo-login {
+    .botonera-flotante {
+      position: absolute;
+      left: 40px;
+      bottom: 180px;
+      min-width: 260px;
+      width: 260px;
       display: flex;
-      align-items: center;
-      background: rgba(0,0,0,0.58);
-      border-radius: 8px;
-      padding: 8px 12px;
-      margin-bottom: 18px;
-      width: 130px;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 99;
     }
-
-    .campo-login img {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-    }
-
-    .campo-login input,
-    .campo-login select {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-size: 16px;
-      width: 100%;
-    }
-
-    @media (max-width: 1100px) {
-      .contenedor-main {
-        flex-direction: column;
-        align-items: stretch;
+    @media (max-width: 700px) {
+      .titulo-index {
+        font-size: 28px;
+        white-space: normal;
       }
       .botonera-flotante {
         position: static;
-        flex-direction: row;
-        flex-wrap: wrap;
-        width: 100%;
-        justify-content: center;
-        gap: 12px;
-      }
-      .formulario-login {
-        margin: 30px 20px 0 20px;
-        max-width: 100%;
-      }
-    }
-
-    @media (max-width: 700px) {
-      .botonera-flotante {
         flex-direction: column;
+        width: 100%;
+        min-width: 0;
+        margin-left: 0;
+        margin-top: 0;
         align-items: stretch;
       }
       .boton-index {
+        min-width: 0;
         font-size: 16px;
         height: 32px;
       }
-      .formulario-login {
-        margin: 20px 10px 0 10px;
-      }
     }
-
     @media (max-width: 500px) {
       .contenedor-superior {
         min-height: 120px;
@@ -204,51 +160,47 @@
     }
   </style>
 </head>
-<body class="login-page">
-  <div class="fondo-login">
-    <div class="contenedor-superior">
-      <div class="titulo-index">
-        Ingreso
-        <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
-        Sistema
-      </div>
+<body>
+  <div class="contenedor-superior">
+    <div class="titulo-index">
+      Ingreso
+      <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+      Sistema
+    </div>
+  </div>
+
+  <form method="post">
+    <div class="campo-login">
+      <img src="/static/icons/rol-port.png" alt="Rol">
+      <select name="rol" required>
+        <option value="" disabled selected>Seleccionar rol</option>
+        <option value="cliente">Cliente</option>
+        <option value="paciente">Paciente</option>
+        <option value="empleado">Empleado</option>
+      </select>
     </div>
 
-    <div class="contenedor-main">
-      <div class="botonera-flotante">
-        <a href="index.html" class="boton-index">
-          <img src="/static/icons/inicio.png" alt="Inicio">
-          <span>Inicio</span>
-        </a>
-      </div>
-
-      <form method="post" class="formulario-login">
-        <div class="campo-login">
-          <img src="/static/icons/rol-port.png" alt="Rol">
-          <select name="rol" required>
-            <option value="" disabled selected>Seleccionar rol</option>
-            <option value="cliente">Cliente</option>
-            <option value="paciente">Paciente</option>
-            <option value="empleado">Empleado</option>
-          </select>
-        </div>
-
-        <div class="campo-login">
-          <img src="/static/icons/usuario-port.png" alt="Usuario">
-          <input type="text" name="usuario" placeholder="Usuario" required>
-        </div>
-
-        <div class="campo-login">
-          <img src="/static/icons/password-port.png" alt="Contraseña">
-          <input type="password" name="password" placeholder="Contraseña" required>
-        </div>
-
-        <button type="submit" class="boton-index">
-          <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar">
-          <span>Ingresar al sistema</span>
-        </button>
-      </form>
+    <div class="campo-login">
+      <img src="/static/icons/usuario-port.png" alt="Usuario">
+      <input type="text" name="usuario" placeholder="Usuario" required>
     </div>
+
+    <div class="campo-login">
+      <img src="/static/icons/password-port.png" alt="Contraseña">
+      <input type="password" name="password" placeholder="Contraseña" required>
+    </div>
+
+    <button type="submit" class="boton-index">
+      <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar">
+      <span>Ingresar al sistema</span>
+    </button>
+  </form>
+
+  <div class="botonera-flotante">
+    <a href="index.html" class="boton-index">
+      <img src="/static/icons/inicio.png" alt="Inicio">
+      <span>Inicio</span>
+    </a>
   </div>
 </body>
 </html>

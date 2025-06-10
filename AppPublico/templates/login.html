@@ -7,6 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <style>
+  <div class="contenedor-main">
+    <div class="botonera-flotante">...</div>
+    <form>...</form>
+  </div>
     html, body {
       height: 100%;
       margin: 0;
@@ -57,6 +61,18 @@
       margin: 0 18px;
       vertical-align: middle;
     }
+    .contenedor-main {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      width: 100vw;
+      box-sizing: border-box;
+      justify-content: flex-start;
+      align-items: flex-start;
+      padding-bottom: 40px;
+      min-height: 60vh;
+    } 
+    
     form {
      display: flex;
      flex-direction: column;

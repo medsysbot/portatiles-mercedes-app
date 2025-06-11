@@ -3,11 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuestros Servicios</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Servicios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/estilos_comunes.css"> <!-- si hay un CSS común -->
+    <style>
+        body {
+            font-family: 'Nunito', Arial, sans-serif;
+            background: url('/static/imagenes/fondo-servicio.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            width: 100vw;
+            overflow: auto;
+        }
+
+        .fondo-servicios {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .contenedor-superior {
+            width: 100%;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 32px;
+            padding-bottom: 12px;
+        }
+
+        .titulo-index {
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 800;
+            font-size: 4.5vw;
+            color: #DEB460;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-portatiles {
+            height: 2.1em;
+            margin: 0 18px;
+        }
+
+        .botonera-flotante {
+            position: absolute;
+            left: 40px;
+            bottom: 180px;
+            min-width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 99;
+        }
+
+        .boton-index {
+            width: 260px;
+            height: 38px;
+            font-size: 18px;
+            background: rgba(0, 0, 0, 0.58);
+            color: #fff;
+            border: none;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 16px;
+            text-decoration: none;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .boton-index:hover {
+            background-color: rgba(60, 60, 60, 1);
+        }
+
+        .boton-index img {
+            width: 22px;
+            height: 22px;
+        }
+
+        .contenedor-texto {
+            margin: 40px auto;
+            max-width: 900px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 20px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .pie-pagina {
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #848280;
+            margin: 30px 0 10px;
+        }
+
+        @media (max-width: 700px) {
+            .titulo-index {
+                font-size: 28px;
+            }
+            .botonera-flotante {
+                position: static;
+                flex-direction: column;
+                align-items: stretch;
+                margin: 20px;
+            }
+            .boton-index {
+                width: 100%;
+                font-size: 16px;
+                height: 32px;
+            }
+            .contenedor-texto {
+                margin: 20px;
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Nuestros Servicios</h1>
-    <p>Ofrecemos alquiler y venta de baños químicos, junto con servicios de limpieza y mantenimiento.</p>
+    <div class="fondo-servicios">
+        <div class="contenedor-superior">
+            <div class="titulo-index">
+                Servicios
+                <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+                Incluidos
+            </div>
+        </div>
+
+        <div class="botonera-flotante">
+            <a href="/" class="boton-index">
+                <img src="/static/icons/inicio.png" alt="Inicio">
+                <span>Inicio</span>
+            </a>
+        </div>
+
+        <div class="contenedor-texto">
+            En <strong>Portátiles Mercedes</strong> ofrecemos un servicio completo para nuestros baños químicos portátiles:<br><br>
+            <ul>
+                <li>✔️ Limpieza especializada y periódica.</li>
+                <li>✔️ Reparaciones técnicas inmediatas.</li>
+                <li>✔️ Mantenimiento preventivo y correctivo.</li>
+            </ul><br>
+            Todos los contratos de <strong>alquiler</strong> incluyen estos servicios sin cargo adicional.<br><br>
+            También ofrecemos <strong>servicios extras</strong> para clientes que necesiten asistencia adicional, jornadas extendidas o atención en eventos especiales.<br><br>
+            Nuestro compromiso es que cada baño esté siempre en perfectas condiciones de uso.
+        </div>
+    </div>
+
+    <footer class="pie-pagina">
+        Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
+    </footer>
 </body>
 </html>

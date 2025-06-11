@@ -1,90 +1,69 @@
-"""Rutas de autenticación y manejo de sesiones."""
-
+from fastapi import APIRouter, HTTPException, Form
+from pydantic import BaseModel
+from passlib.hash import bcrypt
+from supabase import create_client
+from jose import jwt, JWTError
+from datetime import datetime, timedelta
 import os
 
-from fastapi import APIRouter, Form, HTTPException
-from itsdangerous import URLSafeSerializer, BadSignature
-from supabase import create_client, Client
-
-# Configurar Supabase
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+JWT_SECRET = os.getenv("JWT_SECRET", "clave_secreta")
+JWT_EXP_MINUTES = 60
 
-if not SUPABASE_URL or not SUPABASE_KEY:
-    print(
-        "Advertencia: SUPABASE_URL y SUPABASE_KEY no estan configurados. "
-        "La conexión a Supabase estará deshabilitada."
-    )
-    supabase = None
-else:
-    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-# Configurar el serializer para los tokens
-SECRET_KEY = os.getenv("SECRET_KEY", "portatiles-secret")
-serializer = URLSafeSerializer(SECRET_KEY)
-
+supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL and SUPABASE_KEY else None
 router = APIRouter()
 
+class LoginInput(BaseModel):
+    email: str
+    password: str
 
 @router.post("/login")
-async def login(
-    email: str = Form(...),
-    password: str = Form(...),
-    rol: str = Form(...),
-):
-    """Valida usuario y retorna un token de sesión."""
+def login(data: LoginInput):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    try:
-        resp = (
-            supabase.table("usuarios")
-            .select("id,email,password,rol")
-            .eq("email", email)
-            .eq("rol", rol)
-            .single()
-            .execute()
-        )
-        if not resp.data or resp.data.get("password") != password:
-            raise HTTPException(status_code=401, detail="Credenciales inválidas")
+    res = supabase.table("usuarios").select("*").eq("email", data.email).execute()
+    if not res.data:
+        raise HTTPException(status_code=401, detail="Usuario no encontrado")
+    usuario = res.data[0]
+    if not bcrypt.verify(data.password, usuario.get("password_hash", "")):
+        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
-        token = serializer.dumps({"user_id": resp.data["id"], "rol": rol})
-        return {"token": token}
-    except HTTPException:
-        raise
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
+    payload = {
+        "sub": usuario["id"],
+        "email": usuario["email"],
+        "rol": usuario.get("rol"),
+        "exp": datetime.utcnow() + timedelta(minutes=JWT_EXP_MINUTES),
+    }
+    token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
 
+    return {
+        "access_token": token,
+        "usuario": {
+            "nombre": usuario.get("nombre"),
+            "rol": usuario.get("rol"),
+            "email": usuario.get("email"),
+        },
+    }
 
 @router.post("/verificar_token")
-async def verificar_token(token: str = Form(...)):
-    """Comprueba que el token sea válido y devuelve su información."""
+def verificar_token(token: str = Form(...)):
     try:
-        datos = serializer.loads(token)
-        return {"valido": True, "rol": datos.get("rol"), "user_id": datos.get("user_id")}
-    except BadSignature:
+        datos = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        return {"valido": True, "rol": datos.get("rol"), "user_id": datos.get("sub")}
+    except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido")
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
-
 
 @router.post("/registrar_cliente")
-async def registrar_cliente(
-    email: str = Form(...),
-    password: str = Form(...),
-):
-    """Crea una cuenta de cliente."""
+def registrar_cliente(email: str = Form(...), password: str = Form(...)):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    try:
-        resp = (
-            supabase.table("usuarios")
-            .insert({"email": email, "password": password, "rol": "cliente"})
-            .execute()
-        )
-        if resp.error:
-            raise HTTPException(status_code=400, detail=str(resp.error))
-        return {"mensaje": "Registro exitoso"}
-    except HTTPException:
-        raise
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
+    hash_pwd = bcrypt.hash(password)
+    resp = supabase.table("usuarios").insert({
+        "email": email,
+        "password_hash": hash_pwd,
+        "rol": "cliente",
+    }).execute()
+    if resp.error:
+        raise HTTPException(status_code=400, detail=str(resp.error))
+    return {"mensaje": "Registro exitoso"}

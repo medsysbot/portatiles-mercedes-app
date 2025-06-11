@@ -3,24 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Clientes</title>
-    <!-- Ruta absoluta para que se cargue correctamente desde cualquier URL -->
-    <link rel="stylesheet" href="/styles.css">
+    <title>Registro de Cliente</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            min-height: 100vh;
+            min-width: 100vw;
+            font-family: 'Nunito', Arial, sans-serif;
+            background: url('/static/imagenes/fondo-registro.png') no-repeat center center fixed;
+            background-size: cover;
+            position: relative;
+            overflow: auto;
+        }
+
+        .fondo-registro {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .contenedor-superior {
+            width: 100vw;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-top: 32px;
+            padding-bottom: 12px;
+        }
+
+        .titulo-index {
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 800;
+            font-size: 4.5vw;
+            color: #DEB460;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-portatiles {
+            height: 2.1em;
+            margin: 0 18px;
+        }
+
+        .botonera-flotante {
+            position: absolute;
+            left: 40px;
+            bottom: 180px;
+            min-width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 99;
+        }
+
+        .boton-index {
+            width: 260px;
+            height: 38px;
+            font-size: 18px;
+            background: rgba(0, 0, 0, 0.58);
+            color: #fff;
+            border: none;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-left: 16px;
+            text-decoration: none;
+            font-style: italic;
+            font-weight: 400;
+        }
+
+        .boton-index:hover {
+            background-color: rgba(60, 60, 60, 1);
+        }
+
+        .boton-index img {
+            width: 22px;
+            height: 22px;
+        }
+
+        .contenedor-main {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            width: 100vw;
+            box-sizing: border-box;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding-bottom: 40px;
+            min-height: 60vh;
+        }
+
+        .contenedor-formulario {
+            flex: 1 1 0;
+            margin-left: 320px;
+            margin-right: 80px;
+            margin-top: 40px;
+            max-width: 900px;
+            min-width: 0;
+        }
+
+        .formulario-registro {
+            background-color: transparent;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 300;
+        }
+
+        .formulario-registro input,
+        .formulario-registro select,
+        .formulario-registro textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+            border: none;
+            font-family: 'Nunito', Arial, sans-serif;
+        }
+
+        .formulario-registro button {
+            background-color: #DEB460;
+            color: #000;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .pie-pagina {
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #848280;
+            margin-top: 40px;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 1100px) {
+            .contenedor-main {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .botonera-flotante {
+                position: static;
+                flex-direction: row;
+                flex-wrap: wrap;
+                width: 100%;
+                justify-content: center;
+                gap: 12px;
+            }
+            .contenedor-formulario {
+                margin: 30px 20px 0;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .botonera-flotante {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .boton-index {
+                font-size: 16px;
+                height: 32px;
+            }
+            .contenedor-formulario {
+                margin: 20px 10px 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Registro de Clientes</h1>
-    <form id="registroForm" class="login-form">
-        <label>E-mail
-            <input type="text" name="email">
-        </label>
-        <label>Contraseña
-            <input type="text" name="password">
-        </label>
-        <button type="submit">Registrarme</button>
-        <p id="msg"></p>
-    </form>
+    <div class="fondo-registro">
+        <div class="contenedor-superior">
+            <div class="titulo-index">
+                Registro
+                <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+                Clientes
+            </div>
+        </div>
 
-    <!-- Script principal para registrar nuevos clientes -->
-    <script src="/registro_clientes.js"></script>
+        <div class="contenedor-main">
+            <div class="botonera-flotante">
+                <a href="/" class="boton-index">
+                    <img src="/static/icons/inicio.png" alt="Inicio">
+                    <span>Inicio</span>
+                </a>
+            </div>
+
+            <div class="contenedor-formulario">
+                <form id="formularioRegistroCliente" class="formulario-registro" method="post" action="/registrar_cliente">
+                    <label for="nombre">Nombre completo</label>
+                    <input type="text" id="nombre" name="nombre" required>
+
+                    <label for="dni">DNI</label>
+                    <input type="text" id="dni" name="dni" required>
+
+                    <label for="telefono">Teléfono</label>
+                    <input type="text" id="telefono" name="telefono" required>
+
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+
+                    <label for="direccion">Dirección</label>
+                    <input type="text" id="direccion" name="direccion" required>
+
+                    <button type="submit">Registrar cliente</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="pie-pagina">
+        Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
+    </footer>
 </body>
 </html>

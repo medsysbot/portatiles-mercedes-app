@@ -4,13 +4,13 @@ from datetime import date
 import os
 
 from fastapi import APIRouter, HTTPException, Query
-from itsdangerous import BadSignature
+from jose import jwt, JWTError
 from supabase import create_client, Client
 
-from .auth import serializer
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+JWT_SECRET = os.getenv("JWT_SECRET", "clave_secreta")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
     print(
@@ -27,11 +27,11 @@ router = APIRouter()
 def verificar_admin(token: str) -> dict:
     """Devuelve la info del token si es válido y de rol empresa."""
     try:
-        datos = serializer.loads(token)
+        datos = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
         if datos.get("rol") != "empresa":
             raise HTTPException(status_code=401, detail="No autorizado")
         return datos
-    except BadSignature as exc:
+    except JWTError as exc:
         raise HTTPException(status_code=401, detail="Token inválido") from exc
 
 

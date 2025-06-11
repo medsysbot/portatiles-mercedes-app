@@ -7,6 +7,7 @@ from routes.router import router
 from routes.ventas import router as ventas_router
 from routes.limpieza import router as limpieza_router
 from routes.alertas import router as alertas_router
+from routes import auth
 
 app = FastAPI()
 
@@ -18,6 +19,7 @@ app.include_router(router)
 app.include_router(ventas_router)
 app.include_router(limpieza_router)
 app.include_router(alertas_router)
+app.include_router(auth.router)
 
 if __name__ == "__main__":
     import uvicorn

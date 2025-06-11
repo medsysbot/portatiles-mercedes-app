@@ -7,7 +7,7 @@ from routes.router import router
 from routes.ventas import router as ventas_router
 from routes.limpieza import router as limpieza_router
 from routes.alertas import router as alertas_router
-from routes import auth
+from app.backend.routes import auth
 
 app = FastAPI()
 

@@ -10,3 +10,5 @@ python-dotenv>=1.0
 requests>=2.28
 passlib[bcrypt]>=1.7
 python-jose>=3.3
+passlib[bcrypt]
+PyJWT

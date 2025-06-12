@@ -228,32 +228,43 @@
   document.querySelector("form").addEventListener("submit", async function(event) {
     event.preventDefault();
 
-    const email = document.querySelector("input[name='email']").value.trim();
-    const password = document.querySelector("input[name='password']").value.trim();
+    const email = document.querySelector("input[name='email']").value;
+    const password = document.querySelector("input[name='password']").value;
+
     if (!email || !password) {
-      alert("Los campos email y contraseña son obligatorios.");
+      alert("Por favor completá todos los campos.");
       return;
     }
-    const payload = { email, password };
 
     try {
       const res = await fetch("/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(payload)
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
       });
 
+      const data = await res.json();
+
       if (res.ok) {
-        const data = await res.json();
-        localStorage.setItem("token", data.access_token);
-        window.location.href = "/panel";  // Redirigir al panel
+        // Guardar token y datos de usuario
+        localStorage.setItem("access_token", data.access_token);
+        localStorage.setItem("usuario", JSON.stringify(data.usuario));
+
+        // Si es administrador, redirigir al splash
+        if (data.usuario.rol === "admin" || data.usuario.rol === "administrador") {
+          window.location.href = "/admin_splash";
+        } else if (data.usuario.rol === "cliente") {
+          window.location.href = "/cliente_panel";
+        } else {
+          alert("Rol no reconocido.");
+        }
       } else {
-        alert("Credenciales incorrectas o error al ingresar.");
+        alert(data.detail || "Credenciales incorrectas o error al ingresar.");
+        // (Opcional) console.log("Respuesta completa:", data);
       }
-    } catch (err) {
-      alert("Credenciales incorrectas o error al ingresar.");
+    } catch (error) {
+      alert("No se pudo conectar con el servidor.");
+      // (Opcional) console.error("Error de red:", error);
     }
   });
   </script>

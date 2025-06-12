@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 import traceback
 from pydantic import BaseModel
 from app.backend.supabase_client import supabase
@@ -13,13 +13,18 @@ class LoginRequest(BaseModel):
     password: str
 
 @router.post("/login")
-def login(data: LoginRequest):
+async def login(request: Request):
     try:
+        data = await request.json()
+        print("DATA RECIBIDA:", data)
+        email = data.get("email")
+        password = data.get("password")
+
         JWT_SECRET = os.getenv("JWT_SECRET")
         if not JWT_SECRET:
             raise HTTPException(status_code=500, detail="JWT_SECRET no configurado")
 
-        result = supabase.table("usuarios").select("*").eq("email", data.email).execute()
+        result = supabase.table("usuarios").select("*").eq("email", email).execute()
         if not result.data:
             raise HTTPException(status_code=401, detail="Credenciales inválidas")
 
@@ -27,7 +32,7 @@ def login(data: LoginRequest):
         if not usuario["activo"]:
             raise HTTPException(status_code=403, detail="Usuario inactivo")
 
-        if not bcrypt.verify(data.password, usuario["password_hash"]):
+        if not bcrypt.verify(password, usuario["password_hash"]):
             raise HTTPException(status_code=401, detail="Credenciales inválidas")
 
         token = jwt.encode({
@@ -53,10 +58,9 @@ def login(data: LoginRequest):
 
 @router.post("/test_env")
 def test_env():
-    """Devuelve todas las variables de entorno."""
-    try:
-        return dict(os.environ)
-    except Exception as e:
-        print("ERROR TEST_ENV:", e)
-        traceback.print_exc()
-        raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
+    import os
+    return {
+        "SUPABASE_URL": os.getenv("SUPABASE_URL"),
+        "SUPABASE_ROLE_KEY": os.getenv("SUPABASE_ROLE_KEY"),
+        "JWT_SECRET": os.getenv("JWT_SECRET"),
+    }

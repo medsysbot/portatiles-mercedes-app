@@ -224,5 +224,29 @@
       </button>
     </form>
   </div>
+  <script>
+  document.querySelector("form").addEventListener("submit", async function(event) {
+    event.preventDefault();
+
+    const email = document.querySelector("input[name='usuario']").value;
+    const password = document.querySelector("input[name='password']").value;
+
+    const res = await fetch("/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ email, password })
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      localStorage.setItem("token", data.token);
+      window.location.href = "/panel";  // Redirigir al panel
+    } else {
+      alert("Credenciales incorrectas o error al ingresar.");
+    }
+  });
+  </script>
 </body>
 </html>

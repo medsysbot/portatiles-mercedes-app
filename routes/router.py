@@ -80,7 +80,6 @@ async def mostrar_formulario_alquiler():
     html_contenido = html_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_contenido)
 
-
 @router.get("/alquiler_form", response_class=HTMLResponse)
 async def mostrar_alquiler_form():
     """Formulario de alquiler en ventana separada."""
@@ -167,15 +166,6 @@ async def mostrar_panel_cliente():
     html_path = TEMPLATES_DIR / "cliente_panel.html"
     html_contenido = html_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_contenido)
-
-
-@router.get("/admin_panel.html", response_class=HTMLResponse)
-async def mostrar_panel_admin():
-    """Panel privado para la empresa."""
-    html_path = TEMPLATES_DIR / "admin_panel.html"
-    html_contenido = html_path.read_text(encoding="utf-8")
-    return HTMLResponse(content=html_contenido)
-
 
 @router.get("/informacion-banos.html", response_class=HTMLResponse)
 async def mostrar_informacion_banos():

@@ -230,20 +230,27 @@
 
     const email = document.querySelector("input[name='email']").value;
     const password = document.querySelector("input[name='password']").value;
+    const payload = { email, password };
 
-    const res = await fetch("/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ email, password })
-    });
+    try {
+      const res = await fetch("/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
 
-    if (res.ok) {
-      const data = await res.json();
-      localStorage.setItem("token", data.token);
-      window.location.href = "/panel";  // Redirigir al panel
-    } else {
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem("token", data.token);
+        window.location.href = "/panel";  // Redirigir al panel
+      } else {
+        console.log("Login JSON:", payload);
+        alert("Credenciales incorrectas o error al ingresar.");
+      }
+    } catch (err) {
+      console.log("Error al enviar login:", payload, err);
       alert("Credenciales incorrectas o error al ingresar.");
     }
   });

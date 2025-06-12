@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Bienvenido - Portátiles Mercedes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      width: 100vw;
+      background: url('/static/imagenes/fondo-splash-admin.png') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Nunito', Arial, sans-serif;
+      color: #fff;
+    }
+    .splash-container {
+      background: rgba(0,0,0,0.78);
+      border-radius: 24px;
+      padding: 48px 68px;
+      box-shadow: 0 8px 32px 0 #222a;
+      text-align: center;
+      min-width: 320px;
+      max-width: 95vw;
+    }
+    .splash-logo {
+      width: 100px;
+      margin-bottom: 24px;
+    }
+    .splash-title {
+      font-size: 2.3rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+      color: #DEB460;
+      letter-spacing: 1px;
+    }
+    .splash-sub {
+      font-size: 1.2rem;
+      font-weight: 400;
+      margin-bottom: 28px;
+    }
+    .btn-ingresar {
+      padding: 12px 34px;
+      font-size: 1rem;
+      background: #DEB460;
+      color: #222;
+      border: none;
+      border-radius: 9px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .btn-ingresar:hover {
+      background: #cba246;
+    }
+    @media (max-width: 600px) {
+      .splash-container {
+        padding: 22px 12px;
+      }
+      .splash-title {
+        font-size: 1.3rem;
+      }
+      .splash-logo {
+        width: 66px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="splash-container">
+    <img src="/static/icons/logo-portatiles.png" alt="Portátiles Mercedes" class="splash-logo">
+    <div class="splash-title" id="splashSaludo">¡Bienvenido, Administrador!</div>
+    <div class="splash-sub">Nos alegra verte de nuevo en el sistema.</div>
+    <button class="btn-ingresar" onclick="window.location.href='/admin_panel'">Ir al panel de administración</button>
+  </div>
+  <script>
+    // Toma el nombre desde localStorage luego del login
+    const datosUsuario = JSON.parse(localStorage.getItem("usuario"));
+    if (datosUsuario && datosUsuario.nombre) {
+      document.getElementById("splashSaludo").textContent = "¡Bienvenido, " + datosUsuario.nombre + "!";
+    }
+  </script>
+</body>
+</html>

@@ -153,6 +153,14 @@ async def mostrar_login():
     return HTMLResponse(content=html_contenido)
 
 
+@router.get("/admin_splash", response_class=HTMLResponse)
+async def mostrar_admin_splash():
+    """Pantalla de bienvenida para administradores."""
+    html_path = TEMPLATES_DIR / "admin_splash.html"
+    html_contenido = html_path.read_text(encoding="utf-8")
+    return HTMLResponse(content=html_contenido)
+
+
 @router.get("/cliente_panel.html", response_class=HTMLResponse)
 async def mostrar_panel_cliente():
     """Panel privado para clientes."""

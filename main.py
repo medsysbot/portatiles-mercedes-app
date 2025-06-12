@@ -1,5 +1,16 @@
 """Aplicación principal de Portátiles Mercedes."""
 
+import sys
+import traceback
+
+
+def excepthook(type, value, tb):
+    print("UNCAUGHT EXCEPTION:")
+    traceback.print_exception(type, value, tb)
+
+
+sys.excepthook = excepthook
+
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 

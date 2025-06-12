@@ -49,3 +49,14 @@ def login(data: LoginRequest):
         print("ERROR LOGIN:", e)
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")
+
+
+@router.post("/test_env")
+def test_env():
+    """Devuelve todas las variables de entorno."""
+    try:
+        return dict(os.environ)
+    except Exception as e:
+        print("ERROR TEST_ENV:", e)
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error interno: {str(e)}")

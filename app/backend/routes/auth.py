@@ -17,18 +17,15 @@ def login(data: LoginRequest):
     if not JWT_SECRET:
         raise HTTPException(status_code=500, detail="JWT_SECRET no configurado")
 
-    if not supabase:
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
-
     result = supabase.table("usuarios").select("*").eq("email", data.email).execute()
     if not result.data:
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
 
     usuario = result.data[0]
-    if not usuario.get("activo", True):
+    if not usuario["activo"]:
         raise HTTPException(status_code=403, detail="Usuario inactivo")
 
-    if not bcrypt.verify(data.password, usuario.get("password_hash", "")):
+    if not bcrypt.verify(data.password, usuario["password_hash"]):
         raise HTTPException(status_code=401, detail="Credenciales inválidas")
 
     token = jwt.encode({
@@ -43,6 +40,6 @@ def login(data: LoginRequest):
             "id": usuario["id"],
             "email": usuario["email"],
             "rol": usuario["rol"],
-            "nombre": usuario.get("nombre")
+            "nombre": usuario["nombre"]
         }
     }

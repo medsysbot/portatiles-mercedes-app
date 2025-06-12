@@ -186,6 +186,12 @@
   </style>
 </head>
 <body>
+  <script>
+    const usuario = JSON.parse(localStorage.getItem("usuario"));
+    if (usuario && (usuario.rol === "admin" || usuario.rol === "administrador")) {
+      window.location.href = "/admin_splash";
+    }
+  </script>
   <div class="contenedor-superior">
     <div class="titulo-index">
       Ingreso

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Form
+from fastapi import APIRouter, HTTPException, Form, Body
 from pydantic import BaseModel
 from passlib.hash import bcrypt
 from supabase import create_client
@@ -67,3 +67,10 @@ def registrar_cliente(email: str = Form(...), password: str = Form(...)):
     if resp.error:
         raise HTTPException(status_code=400, detail=str(resp.error))
     return {"mensaje": "Registro exitoso"}
+
+
+@router.post("/test_echo")
+async def test_echo(payload: dict = Body(...)):
+    """Devuelve el JSON recibido para pruebas de conectividad."""
+    print("ECHO:", payload)
+    return payload

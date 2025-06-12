@@ -1,46 +1,37 @@
 from fastapi import APIRouter, HTTPException, Request
 import traceback
-from pydantic import BaseModel
-from app.backend.supabase_client import supabase
-from passlib.hash import bcrypt
-import jwt
-import os
-
 router = APIRouter()
-
-class LoginRequest(BaseModel):
-    email: str
-    password: str
 
 @router.post("/login")
 async def login(request: Request):
     try:
+        print("LOGIN: Recibiendo request")
         data = await request.json()
-        print("DATA RECIBIDA:", data)
+        print("LOGIN: DATA RECIBIDA:", data)
         email = data.get("email")
         password = data.get("password")
-
-        JWT_SECRET = os.getenv("JWT_SECRET")
-        if not JWT_SECRET:
-            raise HTTPException(status_code=500, detail="JWT_SECRET no configurado")
-
+        print("LOGIN: email:", email, "password:", password)
+        from app.backend.supabase_client import supabase
         result = supabase.table("usuarios").select("*").eq("email", email).execute()
+        print("LOGIN: Resultado de consulta:", result)
         if not result.data:
+            print("LOGIN: Usuario no encontrado")
             raise HTTPException(status_code=401, detail="Credenciales inválidas")
-
         usuario = result.data[0]
-        if not usuario["activo"]:
-            raise HTTPException(status_code=403, detail="Usuario inactivo")
-
+        print("LOGIN: Usuario encontrado:", usuario)
+        import os
+        from passlib.hash import bcrypt
         if not bcrypt.verify(password, usuario["password_hash"]):
+            print("LOGIN: Password incorrecto")
             raise HTTPException(status_code=401, detail="Credenciales inválidas")
-
+        import jwt
+        JWT_SECRET = os.getenv("JWT_SECRET")
         token = jwt.encode({
             "id": usuario["id"],
             "email": usuario["email"],
             "rol": usuario["rol"]
         }, JWT_SECRET, algorithm="HS256")
-
+        print("LOGIN: Token generado correctamente")
         return {
             "token": token,
             "usuario": {

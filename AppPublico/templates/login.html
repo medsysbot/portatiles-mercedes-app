@@ -250,11 +250,9 @@
         localStorage.setItem("token", data.access_token);
         window.location.href = "/panel";  // Redirigir al panel
       } else {
-        console.log("Login JSON:", payload);
         alert("Credenciales incorrectas o error al ingresar.");
       }
     } catch (err) {
-      console.log("Error al enviar login:", payload, err);
       alert("Credenciales incorrectas o error al ingresar.");
     }
   });

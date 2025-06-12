@@ -69,8 +69,3 @@ def registrar_cliente(email: str = Form(...), password: str = Form(...)):
     return {"mensaje": "Registro exitoso"}
 
 
-@router.post("/test_echo")
-async def test_echo(payload: dict = Body(...)):
-    """Devuelve el JSON recibido para pruebas de conectividad."""
-    print("ECHO:", payload)
-    return payload

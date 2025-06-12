@@ -4,17 +4,20 @@ const errorMsg = document.getElementById('errorMsg');
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     errorMsg.textContent = '';
-    const datos = new FormData(form);
+    const payload = {
+        email: form.email.value.trim(),
+        password: form.password.value.trim()
+    };
     try {
         const resp = await fetch('/login', {
             method: 'POST',
-            body: datos
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
         });
         const resultado = await resp.json();
         if (resp.ok) {
-            sessionStorage.setItem('token', resultado.token);
-            const rol = datos.get('rol');
-            if (rol === 'cliente') {
+            sessionStorage.setItem('token', resultado.access_token);
+            if (resultado.usuario.rol === 'cliente') {
                 window.location.href = '/cliente_panel.html';
             } else {
                 window.location.href = '/admin_panel.html';

@@ -3,7 +3,8 @@
 from datetime import date
 import os
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from app.backend.utils.auth_utils import auth_required
 from pydantic import BaseModel
 from supabase import create_client, Client
 
@@ -35,10 +36,12 @@ class Alquiler(BaseModel):
     observaciones: str | None = None
 
 @router.post("/registrar_alquiler")
-async def registrar_alquiler(alquiler: Alquiler):
+async def registrar_alquiler(alquiler: Alquiler, user: dict = Depends(auth_required)):
     """Guarda un nuevo alquiler en la tabla de Supabase."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
+    if user.get("rol") != "empresa":
+        raise HTTPException(status_code=401, detail="No autorizado")
     try:
         # Convertir los datos recibidos en un diccionario
         datos = alquiler.model_dump()

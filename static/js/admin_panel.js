@@ -52,7 +52,6 @@ function obtenerFiltros() {
     const desde = document.getElementById('filtroDesde').value;
     const hasta = document.getElementById('filtroHasta').value;
     const filtros = new URLSearchParams();
-    filtros.append('token', localStorage.getItem('access_token'));
     if (dni) filtros.append('dni', dni);
     if (desde) filtros.append('desde', desde);
     if (hasta) filtros.append('hasta', hasta);
@@ -69,7 +68,9 @@ async function cargarTodo() {
 }
 
 async function cargarClientes() {
-    const resp = await fetch(`/admin/clientes?${obtenerFiltros()}`);
+    const resp = await fetch(`/admin/clientes?${obtenerFiltros()}`, {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
+    });
     if (!resp.ok) return;
     const lista = await resp.json();
     const tbody = document.querySelector('#tablaClientes tbody');
@@ -86,7 +87,9 @@ async function cargarClientes() {
 }
 
 async function cargarAlquileres() {
-    const resp = await fetch(`/admin/alquileres?${obtenerFiltros()}`);
+    const resp = await fetch(`/admin/alquileres?${obtenerFiltros()}`, {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
+    });
     if (!resp.ok) return;
     const lista = await resp.json();
     const tbody = document.querySelector('#tablaAlquileres tbody');
@@ -103,7 +106,9 @@ async function cargarAlquileres() {
 }
 
 async function cargarVentas() {
-    const resp = await fetch(`/admin/ventas?${obtenerFiltros()}`);
+    const resp = await fetch(`/admin/ventas?${obtenerFiltros()}`, {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
+    });
     if (!resp.ok) return;
     const lista = await resp.json();
     const tbody = document.querySelector('#tablaVentas tbody');
@@ -120,7 +125,9 @@ async function cargarVentas() {
 }
 
 async function cargarLimpiezas() {
-    const resp = await fetch(`/admin/limpiezas?${obtenerFiltros()}`);
+    const resp = await fetch(`/admin/limpiezas?${obtenerFiltros()}`, {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
+    });
     if (!resp.ok) return;
     const lista = await resp.json();
     const tbody = document.querySelector('#tablaLimpiezas tbody');

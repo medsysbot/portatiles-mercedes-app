@@ -58,3 +58,9 @@ Para agregarlos o actualizarlos en el futuro:
 - **AdminLTE 3.2**: cargado desde CDN junto con jQuery 3.6 y Bootstrap 4.6.
 - **Flujo de administración**: tras el inicio de sesión, el splash (`/admin_splash`) incluye un botón que dirige únicamente al panel moderno ubicado en `/admin_panel`.
 - Se eliminó el panel administrativo antiguo y su hoja de estilos, consolidando todo en la plantilla moderna AdminLTE.
+
+### Migración 2025-06-13
+
+- Ruta vieja: `/admin_panel` servía un panel estático con `styles.css`.
+- Ruta nueva: `/admin_panel` ahora responde con `admin_panel.html` basado en AdminLTE.
+- Los endpoints privados requieren token JWT por `Authorization: Bearer`.

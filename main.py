@@ -2,6 +2,8 @@
 
 import sys
 import traceback
+import logging
+from pathlib import Path
 
 
 def excepthook(type, value, tb):
@@ -10,6 +12,20 @@ def excepthook(type, value, tb):
 
 
 sys.excepthook = excepthook
+
+# Configuración de logging para eventos de login
+LOG_DIR = Path("logs")
+LOG_DIR.mkdir(exist_ok=True)
+LOG_FILE = LOG_DIR / "login_events.log"
+
+login_logger = logging.getLogger("login_events")
+login_logger.setLevel(logging.INFO)
+if not login_logger.handlers:
+    file_handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    file_handler.setFormatter(formatter)
+    login_logger.addHandler(file_handler)
+    login_logger.propagate = False
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles

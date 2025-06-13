@@ -16,11 +16,12 @@ form.addEventListener('submit', async (e) => {
         });
         const resultado = await resp.json();
         if (resp.ok) {
-            sessionStorage.setItem('token', resultado.access_token);
+            localStorage.setItem('access_token', resultado.access_token);
+            localStorage.setItem('usuario', JSON.stringify(resultado.usuario));
             if (resultado.usuario.rol === 'cliente') {
                 window.location.href = '/cliente_panel.html';
             } else {
-                window.location.href = '/admin_panel.html';
+                window.location.href = '/admin_splash';
             }
         } else {
             errorMsg.textContent = resultado.detail || 'Error al iniciar sesión';

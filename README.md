@@ -39,7 +39,8 @@ Portátiles Mercedes es una solución SaaS diseñada para empresas de servicios 
 
 Por el momento el proyecto no incorpora los archivos de AdminLTE ni CoreUI. Las
 plantillas hacen referencia a la carpeta `/static/adminlte`, que deberá crearse
-solo si se decide incluir el tema.
+solo si se decide incluir el tema. Actualmente los estilos y scripts de
+AdminLTE se cargan desde CDN para simplificar la configuración inicial.
 
 Para agregarlos o actualizarlos en el futuro:
 
@@ -49,3 +50,9 @@ Para agregarlos o actualizarlos en el futuro:
 2. Eliminá demos, temas de ejemplo y plugins que no se utilicen para mantener el
    repositorio liviano.
 3. Registrá en este README la versión utilizada y cualquier ajuste necesario.
+
+### Assets recientes
+
+- **login.js**: maneja el inicio de sesión y almacena el token en `localStorage`.
+- **registro_clientes.js**: envía el formulario de registro de clientes de forma asíncrona.
+- **AdminLTE 3.2**: cargado desde CDN junto con jQuery 3.6 y Bootstrap 4.6.

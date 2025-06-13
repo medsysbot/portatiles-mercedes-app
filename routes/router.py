@@ -1,8 +1,9 @@
 """Rutas principales de la aplicación."""
 
 from pathlib import Path
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.templating import Jinja2Templates
 
 from .alquileres import router as alquileres_router
 from .ventas import router as ventas_router
@@ -18,6 +19,7 @@ TEMPLATES_DIR = BASE_DIR / "templates"
 STATIC_DIR = BASE_DIR / "static"
 
 router = APIRouter()
+templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
 # Incluir las rutas del módulo de alquileres
 router.include_router(alquileres_router)
@@ -145,11 +147,9 @@ async def mostrar_registro_clientes():
 
 
 @router.get("/login", response_class=HTMLResponse)
-async def mostrar_login():
+async def mostrar_login(request: Request):
     """Página de inicio de sesión."""
-    html_path = TEMPLATES_DIR / "login.html"
-    html_contenido = html_path.read_text(encoding="utf-8")
-    return HTMLResponse(content=html_contenido)
+    return templates.TemplateResponse("login.html", {"request": request})
 
 
 @router.get("/admin_splash", response_class=HTMLResponse)

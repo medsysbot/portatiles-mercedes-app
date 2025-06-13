@@ -80,12 +80,12 @@
       gap: 16px;
       z-index: 99;
     }
-    .boton-index {
-      width: 260px;
-      min-width: 260px;
-      max-width: 260px;
-      height: 38px;
-      font-family: 'Nunito', Arial, sans-serif;
+      .boton-index {
+        width: 260px;
+        min-width: 260px;
+        max-width: 260px;
+        height: 38px;
+        font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
       font-size: 18px;
       font-style: italic;
@@ -102,9 +102,16 @@
       padding-left: 16px;
       white-space: nowrap;
       padding-top: 0;
-      padding-bottom: 0;
-      box-sizing: border-box;
-    }
+        padding-bottom: 0;
+        box-sizing: border-box;
+      }
+
+      .boton-index,
+      .boton-index:visited,
+      .boton-index:active,
+      .boton-index:focus {
+        text-decoration: none !important;
+      }
     .boton-index img {
       width: 22px;
       height: 22px;

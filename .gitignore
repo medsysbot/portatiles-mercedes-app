@@ -176,3 +176,6 @@ cython_debug/
 # macOS
 .DS_Store
 static/icons/*.txt
+
+# AdminLTE assets
+static/adminlte/

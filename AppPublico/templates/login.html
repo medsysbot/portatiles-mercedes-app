@@ -1,293 +1,38 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Login - Portátiles Mercedes</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    body {
-      min-height: 100vh;
-      width: 100vw;
-      font-family: 'Nunito', Arial, sans-serif;
-      background: url('/static/imagenes/fondo-login.png') no-repeat center center fixed;
-      background-size: cover;
-      position: relative;
-      overflow-x: hidden;
-    }
-    .contenedor-superior {
-      width: 100vw;
-      max-width: none;
-      min-height: unset;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      padding-top: 0;
-      padding-bottom: 0;
-      margin-top: 0;
-      background: transparent;
-    }
-    .titulo-index {
-      font-family: 'Nunito', Arial, sans-serif;
-      font-weight: 800;
-      font-size: 4.5vw;
-      color: #DEB460;
-      text-align: center;
-      margin-top: 0;
-      margin-bottom: 6px;
-      line-height: 1.1;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
-    .logo-portatiles {
-      height: 2.1em;
-      margin: 0 18px;
-      vertical-align: middle;
-    }
-    .contenedor-main {
-      position: relative;
-      display: flex;
-      flex-direction: row;
-      width: 100vw;
-      box-sizing: border-box;
-      justify-content: center;   /* ¡Así queda centrado! */
-      align-items: flex-start;
-      padding-bottom: 40px;
-      min-height: 60vh;
-    }
-    .botonera-flotante {
-      position: absolute;
-      left: 40px;
-      bottom: 180px;
-      min-width: 260px;
-      width: 260px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      z-index: 99;
-    }
-    .boton-index {
-      width: 260px;
-      min-width: 260px;
-      max-width: 260px;
-      height: 38px;
-      font-family: 'Nunito', Arial, sans-serif;
-      font-weight: 400;
-      font-size: 18px;
-      font-style: italic;
-      background: rgba(0,0,0,0.58);
-      color: #fff;
-      border: none;
-      border-radius: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 10px;
-      cursor: pointer;
-      transition: background .13s;
-      padding-left: 16px;
-        text-decoration: none;
-      }
-
-      .boton-index,
-      .boton-index:visited,
-      .boton-index:active,
-      .boton-index:focus {
-        text-decoration: none !important;
-      }
-    .boton-index img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      width: 260px;
-      box-sizing: border-box;
-      color: #fff;
-      margin: 0;
-      margin-top: 60px;  /* Espacio para separar del título */
-    }
-    .campo-login {
-      display: flex;
-      align-items: center;
-      background: rgba(0,0,0,0.58);
-      border-radius: 8px;
-      padding: 8px 12px;
-      box-sizing: border-box;
-    }
-    .campo-login img {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-    }
-    .campo-login input, .campo-login select {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-size: 16px;
-      width: 100%;
-    }
-    @media (max-width: 1100px) {
-      .contenedor-main {
-        flex-direction: column;
-        align-items: center;
-      }
-      .botonera-flotante {
-        position: static;
-        flex-direction: row;
-        flex-wrap: wrap;
-        width: 100%;
-        min-width: 0;
-        margin-left: 0;
-        margin-top: 0;
-        justify-content: center;
-        gap: 12px;
-      }
-      form {
-        margin: 0;
-        margin-top: 60px;
-      }
-    }
-    @media (max-width: 700px) {
-      .botonera-flotante {
-        position: static;
-        flex-direction: column;
-        width: 100%;
-        min-width: 0;
-        margin-left: 0;
-        margin-top: 0;
-        align-items: stretch;
-      }
-      .boton-index {
-        min-width: 0;
-        font-size: 16px;
-        height: 32px;
-      }
-    }
-    @media (max-width: 500px) {
-      .contenedor-superior {
-        min-height: unset;
-        padding-top: 0;
-        padding-bottom: 0;
-      }
-      .titulo-index {
-        font-size: 20px;
-      }
-      .logo-portatiles {
-        height: 1.2em;
-        margin: 0 6px;
-      }
-    }
-  </style>
-</head>
-<body>
-  <script>
-    // Limpieza de sesión previa
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("usuario");
-  </script>
-  <script>
-    const usuario = JSON.parse(localStorage.getItem("usuario"));
-    if (usuario && (usuario.rol === "admin" || usuario.rol === "administrador")) {
-      window.location.href = "/admin_splash";
-    }
-  </script>
-  <div class="contenedor-superior">
-    <div class="titulo-index">
-      Ingreso
-      <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
-      Sistema
+{% extends 'base_adminlte.html' %}
+{% block title %}Login - Portátiles Mercedes{% endblock %}
+{% block body_class %}hold-transition login-page{% endblock %}
+{% block body %}
+<div class="login-box">
+  <div class="card card-outline card-primary">
+    <div class="card-header text-center">
+      <a href="/" class="h1"><b>Portátiles</b>Mercedes</a>
+    </div>
+    <div class="card-body">
+      <p class="login-box-msg">Ingresá tus datos</p>
+      <form id="loginForm">
+        <div class="input-group mb-3">
+          <input type="email" name="email" class="form-control" placeholder="Email" required>
+          <div class="input-group-append">
+            <div class="input-group-text"><span class="fas fa-envelope"></span></div>
+          </div>
+        </div>
+        <div class="input-group mb-3">
+          <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+          <div class="input-group-append">
+            <div class="input-group-text"><span class="fas fa-lock"></span></div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary btn-block">Ingresar</button>
+          </div>
+        </div>
+      </form>
+      <p id="errorMsg" class="text-danger mt-2"></p>
     </div>
   </div>
-  <div class="contenedor-main">
-    <div class="botonera-flotante">
-      <a href="/" class="boton-index">
-        <img src="/static/icons/inicio.png" alt="Inicio">
-        <span>Inicio</span>
-      </a>
-    </div>
-    <form method="post">
-      <div class="campo-login">
-        <img src="/static/icons/rol-port.png" alt="Rol">
-        <select name="rol" required>
-          <option value="" disabled selected>Seleccionar rol</option>
-          <option value="administrador">Administrador</option>
-          <option value="empleado">Empleado</option>
-          <option value="cliente">Cliente</option>
-        </select>
-      </div>
-      <div class="campo-login">
-        <img src="/static/icons/usuario-port.png" alt="Usuario">
-        <input type="email" name="email" placeholder="Email" required>
-      </div>
-      <div class="campo-login">
-        <img src="/static/icons/password-port.png" alt="Contraseña">
-        <input type="password" name="password" placeholder="Contraseña" required>
-      </div>
-      <button type="submit" class="boton-index">
-        <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar">
-        <span>Ingresar al sistema</span>
-      </button>
-    </form>
-  </div>
-  <script>
-  document.querySelector("form").addEventListener("submit", async function(event) {
-    event.preventDefault();
-
-    const email = document.querySelector("input[name='email']").value;
-    const password = document.querySelector("input[name='password']").value;
-
-    if (!email || !password) {
-      alert("Por favor completá todos los campos.");
-      return;
-    }
-
-    try {
-      const res = await fetch("/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        // Guardar token y datos de usuario
-        localStorage.setItem("access_token", data.access_token);
-        localStorage.setItem("usuario", JSON.stringify(data.usuario));
-
-        // Si es administrador, redirigir al splash
-        if (data.usuario.rol === "admin" || data.usuario.rol === "administrador") {
-          window.location.href = "/admin_splash";
-        } else if (data.usuario.rol === "cliente") {
-          window.location.href = "/cliente_panel";
-        } else {
-          alert("Rol no reconocido.");
-        }
-      } else {
-        alert(data.detail || "Credenciales incorrectas o error al ingresar.");
-        // (Opcional) console.log("Respuesta completa:", data);
-      }
-    } catch (error) {
-      alert("No se pudo conectar con el servidor.");
-      // (Opcional) console.error("Error de red:", error);
-    }
-  });
-  </script>
-</body>
-</html>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="/login.js"></script>
+{% endblock %}

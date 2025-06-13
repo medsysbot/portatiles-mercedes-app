@@ -1,105 +1,93 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel Administrativo</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body class="admin-panel">
-    <script>
-        // Si no hay token, redirigimos al inicio de sesión
-        if (!localStorage.getItem("access_token")) {
-            window.location.href = "/login";
-        }
-    </script>
-    <header>
-        <h1>Portátiles Mercedes</h1>
-        <button id="btnLogout" class="boton-index">Cerrar sesión</button>
-    </header>
-
-    <section class="filtros">
-        <input type="text" id="filtroDni" placeholder="Filtrar por DNI">
-        <input type="date" id="filtroDesde">
-        <input type="date" id="filtroHasta">
-        <button id="aplicarFiltros">Aplicar filtros</button>
-        <button id="exportarCsv" class="button-export">Exportar CSV</button>
-    </section>
-
-    <section>
-        <h2>Clientes</h2>
-        <table class="admin-table" id="tablaClientes">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>DNI</th>
-                    <th>Email</th>
-                    <th>Teléfono</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </section>
-
-    <section>
-        <h2>Alquileres</h2>
-        <table class="admin-table" id="tablaAlquileres">
-            <thead>
-                <tr>
-                    <th>Tipo</th>
-                    <th>Dirección</th>
-                    <th>Inicio</th>
-                    <th>Fin</th>
-                    <th>Estado</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </section>
-
-    <section>
-        <h2>Ventas</h2>
-        <table class="admin-table" id="tablaVentas">
-            <thead>
-                <tr>
-                    <th>PDF</th>
-                    <th>Fecha</th>
-                    <th>Monto</th>
-                    <th>Cliente</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </section>
-
-    <section>
-        <h2>Limpiezas</h2>
-        <table class="admin-table" id="tablaLimpiezas">
-            <thead>
-                <tr>
-                    <th>Remito</th>
-                    <th>Baño</th>
-                    <th>Fecha</th>
-                    <th>Empleado</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </section>
-
-    <section>
-        <h2>Reportes</h2>
-        <div id="resumen"></div>
-    </section>
-
-    <script src="admin_panel.js"></script>
-    <script>
-        document.getElementById("btnLogout").addEventListener("click", function() {
-            localStorage.removeItem("access_token");
-            localStorage.removeItem("usuario");
-            window.location.href = "/login";
-        });
-    </script>
-</body>
-</html>
+{% extends 'base_adminlte.html' %}
+{% block title %}Panel Administrativo{% endblock %}
+{% block body_class %}hold-transition sidebar-mini{% endblock %}
+{% block body %}
+<script>
+    if (!localStorage.getItem('access_token')) {
+        window.location.href = '/login';
+    }
+</script>
+<header class="m-3">
+    <h1>Portátiles Mercedes</h1>
+    <button id="btnLogout" class="btn btn-secondary">Cerrar sesión</button>
+</header>
+<section class="filtros m-3">
+    <input type="text" id="filtroDni" placeholder="Filtrar por DNI">
+    <input type="date" id="filtroDesde">
+    <input type="date" id="filtroHasta">
+    <button id="aplicarFiltros" class="btn btn-primary">Aplicar filtros</button>
+    <button id="exportarCsv" class="btn btn-outline-secondary">Exportar CSV</button>
+</section>
+<section class="m-3">
+    <h2>Clientes</h2>
+    <table class="table table-bordered" id="tablaClientes">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>DNI</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+<section class="m-3">
+    <h2>Alquileres</h2>
+    <table class="table table-bordered" id="tablaAlquileres">
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Dirección</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+<section class="m-3">
+    <h2>Ventas</h2>
+    <table class="table table-bordered" id="tablaVentas">
+        <thead>
+            <tr>
+                <th>PDF</th>
+                <th>Fecha</th>
+                <th>Monto</th>
+                <th>Cliente</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+<section class="m-3">
+    <h2>Limpiezas</h2>
+    <table class="table table-bordered" id="tablaLimpiezas">
+        <thead>
+            <tr>
+                <th>Remito</th>
+                <th>Baño</th>
+                <th>Fecha</th>
+                <th>Empleado</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</section>
+<section class="m-3">
+    <h2>Reportes</h2>
+    <div id="resumen"></div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script src="/admin_panel.js"></script>
+<script>
+    document.getElementById('btnLogout').addEventListener('click', function() {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('usuario');
+        window.location.href = '/login';
+    });
+</script>
+{% endblock %}

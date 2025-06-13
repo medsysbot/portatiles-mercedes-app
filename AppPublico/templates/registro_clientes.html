@@ -192,7 +192,7 @@
       </a>
     </div>
 
-    <form method="post" action="/registrar_cliente">
+    <form id="registroForm" method="post" action="/registrar_cliente">
       <div class="campo-login">
         <input type="text" name="nombre" placeholder="Nombre completo" required>
       </div>
@@ -208,11 +208,13 @@
       <div class="campo-login">
         <input type="text" name="direccion" placeholder="Dirección" required>
       </div>
+      <p id="msg" style="color:red"></p>
       <button type="submit" class="boton-index">
         <img src="/static/icons/ingresar-al-sistema.png" alt="Registrar">
         <span>Registrar cliente</span>
       </button>
     </form>
+    <script src="/registro_clientes.js"></script>
   </div>
 
   <footer class="pie-pagina">

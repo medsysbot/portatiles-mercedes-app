@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     if (!token) {
-        window.location.href = '/login.html';
+        window.location.href = '/login';
         return;
     }
 
@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!ver.ok) throw new Error('Token inválido');
         const info = await ver.json();
         if (!info.valido || info.rol !== 'cliente') {
-            window.location.href = '/login.html';
+            window.location.href = '/login';
             return;
         }
         const dni = info.user_id; // asumimos que user_id es el DNI
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         mostrarSplash(nombre, cumple);
         cargarDatos(dni);
     } catch (err) {
-        window.location.href = '/login.html';
+        window.location.href = '/login';
     }
 });
 

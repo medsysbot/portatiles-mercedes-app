@@ -7,9 +7,15 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body class="admin-panel">
+    <script>
+        // Si no hay token, redirigimos al inicio de sesión
+        if (!localStorage.getItem("access_token")) {
+            window.location.href = "/login";
+        }
+    </script>
     <header>
         <h1>Portátiles Mercedes</h1>
-        <button id="cerrarSesion">Cerrar sesión</button>
+        <button id="btnLogout" class="boton-index">Cerrar sesión</button>
     </header>
 
     <section class="filtros">
@@ -88,5 +94,12 @@
     </section>
 
     <script src="admin_panel.js"></script>
+    <script>
+        document.getElementById("btnLogout").addEventListener("click", function() {
+            localStorage.removeItem("access_token");
+            localStorage.removeItem("usuario");
+            window.location.href = "/login";
+        });
+    </script>
 </body>
 </html>

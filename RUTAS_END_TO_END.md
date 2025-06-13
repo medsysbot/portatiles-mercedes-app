@@ -16,7 +16,7 @@
 | GET | /venta | Formulario de venta de baños | venta.html | Sí |
 | GET | /debito | Activación de débitos automáticos | debito.html | Sí |
 | GET | /servicios | Descripción de servicios ofrecidos | servicios.html | No |
-| GET | /galeria | Galería de imágenes | galeria.html | No |
+| GET    | /galeria   | Galería de imágenes       | galeria.html         | No           |
 | GET | /registro_clientes | Registro de nuevos clientes | registro_clientes.html | No |
 | GET | /cliente_panel.html | Panel de clientes (versión HTML) | cliente_panel.html | Sí |
 | GET | /informacion-banos.html | Información sobre baños químicos | informacion-banos.html | No |

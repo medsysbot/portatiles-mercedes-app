@@ -65,3 +65,5 @@ Para agregarlos o actualizarlos en el futuro:
 - Ruta vieja: `/admin_panel` servía un panel estático con `styles.css`.
 - Ruta nueva: `/admin_panel` ahora responde con `admin_panel.html` basado en AdminLTE.
 - Los endpoints privados requieren token JWT por `Authorization: Bearer`.
+- Desde esta migración, **AdminLTE** queda establecido como la plantilla oficial
+  para todo el panel administrativo. El panel anterior se eliminó por completo.

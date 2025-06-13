@@ -56,3 +56,4 @@ Para agregarlos o actualizarlos en el futuro:
 - **login.js**: maneja el inicio de sesión y almacena el token en `localStorage`.
 - **registro_clientes.js**: envía el formulario de registro de clientes de forma asíncrona.
 - **AdminLTE 3.2**: cargado desde CDN junto con jQuery 3.6 y Bootstrap 4.6.
+- **Flujo de administración**: tras el inicio de sesión, el splash (`/admin_splash`) incluye un botón que dirige únicamente al panel moderno ubicado en `/admin_panel`.

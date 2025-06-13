@@ -34,3 +34,18 @@ Portátiles Mercedes es una solución SaaS diseñada para empresas de servicios 
 - Utilizá imagenes e íconos solo en formato `.png`.
 - Evitá espacios o caracteres especiales en los nombres.
 - No subas archivos de texto ni logs dentro de `static/icons`.
+
+## AdminLTE/CoreUI
+
+Por el momento el proyecto no incorpora los archivos de AdminLTE ni CoreUI. Las
+plantillas hacen referencia a la carpeta `/static/adminlte`, que deberá crearse
+solo si se decide incluir el tema.
+
+Para agregarlos o actualizarlos en el futuro:
+
+1. Copiá dentro de `static/adminlte` únicamente los CSS y JS que utiliza
+   `base_adminlte.html` (layout principal y plugins en uso, como DataTables o
+   Chart.js).
+2. Eliminá demos, temas de ejemplo y plugins que no se utilicen para mantener el
+   repositorio liviano.
+3. Registrá en este README la versión utilizada y cualquier ajuste necesario.

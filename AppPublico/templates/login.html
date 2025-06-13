@@ -25,13 +25,14 @@
     .contenedor-superior {
       width: 100vw;
       max-width: none;
-      min-height: 180px;
+      min-height: unset;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
-      padding-top: 12px;
-      padding-bottom: 12px;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-top: 0;
       background: transparent;
     }
     .titulo-index {
@@ -40,6 +41,7 @@
       font-size: 4.5vw;
       color: #DEB460;
       text-align: center;
+      margin-top: 0;
       margin-bottom: 6px;
       line-height: 1.1;
       white-space: nowrap;
@@ -109,7 +111,8 @@
       width: 260px;
       box-sizing: border-box;
       color: #fff;
-      margin: 0;  /* ¡Sin margen izquierdo ni superior! */
+      margin: 0;
+      margin-top: 60px;  /* Espacio para separar del título */
     }
     .campo-login {
       display: flex;
@@ -150,7 +153,7 @@
       }
       form {
         margin: 0;
-        margin-top: 40px;
+        margin-top: 60px;
       }
     }
     @media (max-width: 700px) {
@@ -171,9 +174,9 @@
     }
     @media (max-width: 500px) {
       .contenedor-superior {
-        min-height: 120px;
-        padding-top: 16px;
-        padding-bottom: 6px;
+        min-height: unset;
+        padding-top: 0;
+        padding-bottom: 0;
       }
       .titulo-index {
         font-size: 20px;

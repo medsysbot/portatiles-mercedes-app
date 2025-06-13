@@ -4,6 +4,7 @@ from passlib.hash import bcrypt
 from supabase import create_client
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
+import logging
 import os
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -13,6 +14,7 @@ JWT_EXP_MINUTES = 60
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY) if SUPABASE_URL and SUPABASE_KEY else None
 router = APIRouter()
+login_logger = logging.getLogger("login_events")
 
 class LoginInput(BaseModel):
     email: str
@@ -20,13 +22,16 @@ class LoginInput(BaseModel):
 
 @router.post("/login")
 def login(data: LoginInput):
+    login_logger.info(f"Intento de login - email: {data.email}")
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     res = supabase.table("usuarios").select("*").eq("email", data.email).execute()
     if not res.data:
+        login_logger.info(f"Login fallido - usuario no encontrado: {data.email}")
         raise HTTPException(status_code=401, detail="Usuario no encontrado")
     usuario = res.data[0]
     if not bcrypt.verify(data.password, usuario.get("password_hash", "")):
+        login_logger.info(f"Login fallido - contraseña incorrecta: {data.email}")
         raise HTTPException(status_code=401, detail="Contraseña incorrecta")
 
     payload = {
@@ -36,6 +41,8 @@ def login(data: LoginInput):
         "exp": datetime.utcnow() + timedelta(minutes=JWT_EXP_MINUTES),
     }
     token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+
+    login_logger.info(f"Login exitoso - email: {data.email}")
 
     return {
         "access_token": token,

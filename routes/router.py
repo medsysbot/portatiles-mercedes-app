@@ -42,13 +42,6 @@ async def mostrar_index():
     html_contenido = html_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_contenido)
 
-@router.get("/styles.css")
-async def obtener_css():
-    """Entrega la hoja de estilos."""
-    css_path = STATIC_DIR / "css" / "styles.css"
-    return FileResponse(css_path, media_type="text/css")
-
-
 @router.get("/login.js")
 async def obtener_login_js():
     """Script de la página de login."""

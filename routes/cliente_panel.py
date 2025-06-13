@@ -1,7 +1,8 @@
 """Rutas para consultar la información del panel de clientes."""
 
 import os
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Depends
+from app.backend.utils.auth_utils import auth_required
 from supabase import create_client, Client
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -20,7 +21,7 @@ router = APIRouter()
 
 
 @router.get("/info_cliente")
-async def info_cliente(dni: str = Query(...)):
+async def info_cliente(dni: str = Query(...), user: dict = Depends(auth_required)):
     """Devuelve nombre y fecha de nacimiento del cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -42,7 +43,7 @@ async def info_cliente(dni: str = Query(...)):
 
 
 @router.get("/alquileres_cliente")
-async def obtener_alquileres(dni: str = Query(...)):
+async def obtener_alquileres(dni: str = Query(...), user: dict = Depends(auth_required)):
     """Devuelve los alquileres asociados al cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -63,7 +64,7 @@ async def obtener_alquileres(dni: str = Query(...)):
 
 
 @router.get("/pagos_cliente")
-async def obtener_pagos(dni: str = Query(...)):
+async def obtener_pagos(dni: str = Query(...), user: dict = Depends(auth_required)):
     """Devuelve los pagos realizados por el cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -84,7 +85,7 @@ async def obtener_pagos(dni: str = Query(...)):
 
 
 @router.get("/limpiezas_cliente")
-async def obtener_limpiezas(dni: str = Query(...)):
+async def obtener_limpiezas(dni: str = Query(...), user: dict = Depends(auth_required)):
     """Devuelve las limpiezas realizadas para el cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")

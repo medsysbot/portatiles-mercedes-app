@@ -20,7 +20,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         const dni = info.user_id; // asumimos que user_id es el DNI
-        const datosCliRes = await fetch(`/info_cliente?dni=${encodeURIComponent(dni)}`);
+        const datosCliRes = await fetch(`/info_cliente?dni=${encodeURIComponent(dni)}`, {
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
         let nombre = dni;
         let cumple = null;
         if (datosCliRes.ok) {
@@ -38,10 +40,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function cargarDatos(dni) {
     try {
+        const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') };
         const [alqRes, pagRes, limpRes] = await Promise.all([
-            fetch(`/alquileres_cliente?dni=${encodeURIComponent(dni)}`),
-            fetch(`/pagos_cliente?dni=${encodeURIComponent(dni)}`),
-            fetch(`/limpiezas_cliente?dni=${encodeURIComponent(dni)}`)
+            fetch(`/alquileres_cliente?dni=${encodeURIComponent(dni)}`, { headers }),
+            fetch(`/pagos_cliente?dni=${encodeURIComponent(dni)}`, { headers }),
+            fetch(`/limpiezas_cliente?dni=${encodeURIComponent(dni)}`, { headers })
         ]);
 
         if (alqRes.ok) {

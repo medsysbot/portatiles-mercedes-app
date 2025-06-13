@@ -3,14 +3,13 @@
 from datetime import date
 import os
 
-from fastapi import APIRouter, HTTPException, Query
-from jose import jwt, JWTError
+from fastapi import APIRouter, HTTPException, Query, Depends
+from app.backend.utils.auth_utils import auth_required
 from supabase import create_client, Client
 
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-JWT_SECRET = os.getenv("JWT_SECRET", "clave_secreta")
 
 if not SUPABASE_URL or not SUPABASE_KEY:
     print(
@@ -24,26 +23,22 @@ else:
 router = APIRouter()
 
 
-def verificar_admin(token: str) -> dict:
-    """Devuelve la info del token si es válido y de rol empresa."""
-    try:
-        datos = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        if datos.get("rol") != "empresa":
-            raise HTTPException(status_code=401, detail="No autorizado")
-        return datos
-    except JWTError as exc:
-        raise HTTPException(status_code=401, detail="Token inválido") from exc
+def verificar_admin(user: dict) -> dict:
+    """Valida que el usuario autenticado sea de rol empresa."""
+    if user.get("rol") != "empresa":
+        raise HTTPException(status_code=401, detail="No autorizado")
+    return user
 
 
 @router.get("/admin/clientes")
 async def admin_clientes(
-    token: str = Query(...),
     dni: str | None = Query(None),
+    user: dict = Depends(auth_required),
 ):
     """Lista de clientes con filtro opcional por DNI."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    verificar_admin(token)
+    verificar_admin(user)
     consulta = supabase.table("clientes").select("*")
     if dni:
         consulta = consulta.eq("dni", dni)
@@ -55,15 +50,15 @@ async def admin_clientes(
 
 @router.get("/admin/alquileres")
 async def admin_alquileres(
-    token: str = Query(...),
     desde: date | None = Query(None),
     hasta: date | None = Query(None),
     dni: str | None = Query(None),
+    user: dict = Depends(auth_required),
 ):
     """Alquileres con filtros por fecha y cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    verificar_admin(token)
+    verificar_admin(user)
     consulta = supabase.table("alquileres").select("*")
     if dni:
         consulta = consulta.eq("dni_cliente", dni)
@@ -79,15 +74,15 @@ async def admin_alquileres(
 
 @router.get("/admin/ventas")
 async def admin_ventas(
-    token: str = Query(...),
     desde: date | None = Query(None),
     hasta: date | None = Query(None),
     cliente: str | None = Query(None),
+    user: dict = Depends(auth_required),
 ):
     """Ventas realizadas con filtros por fecha y nombre de cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    verificar_admin(token)
+    verificar_admin(user)
     consulta = supabase.table("ventas").select("*")
     if cliente:
         consulta = consulta.ilike("cliente_nombre", f"%{cliente}%")
@@ -103,15 +98,15 @@ async def admin_ventas(
 
 @router.get("/admin/limpiezas")
 async def admin_limpiezas(
-    token: str = Query(...),
     desde: date | None = Query(None),
     hasta: date | None = Query(None),
     dni: str | None = Query(None),
+    user: dict = Depends(auth_required),
 ):
     """Limpiezas registradas con filtros por fecha y cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    verificar_admin(token)
+    verificar_admin(user)
     consulta = supabase.table("limpiezas").select("*")
     if dni:
         consulta = consulta.eq("dni_cliente", dni)

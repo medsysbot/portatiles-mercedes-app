@@ -3,7 +3,8 @@
 from datetime import datetime, date
 import os
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from app.backend.utils.auth_utils import auth_required
 from pydantic import BaseModel
 from fpdf import FPDF
 from supabase import create_client, Client
@@ -37,10 +38,12 @@ class Venta(BaseModel):
 
 
 @router.post("/registrar_venta")
-async def registrar_venta(venta: Venta):
+async def registrar_venta(venta: Venta, user: dict = Depends(auth_required)):
     """Guarda la venta, genera el comprobante PDF y retorna su URL."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
+    if user.get("rol") != "empresa":
+        raise HTTPException(status_code=401, detail="No autorizado")
     try:
         datos = venta.model_dump()
         datos["fecha_venta"] = venta.fecha_venta.isoformat()

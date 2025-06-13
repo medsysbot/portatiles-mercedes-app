@@ -3,7 +3,8 @@
 from datetime import datetime, timedelta
 import os
 
-from fastapi import APIRouter, HTTPException, Form
+from fastapi import APIRouter, HTTPException, Form, Depends
+from app.backend.utils.auth_utils import auth_required
 from supabase import create_client, Client
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -26,10 +27,13 @@ async def activar_debito(
     dni: str = Form(...),
     monto: float = Form(...),
     frecuencia_dias: int = Form(...),
+    user: dict = Depends(auth_required),
 ):
     """Registra un nuevo débito automático para el cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
+    if user.get("rol") != "empresa":
+        raise HTTPException(status_code=401, detail="No autorizado")
     hoy = datetime.utcnow().date()
     proximo_pago = hoy + timedelta(days=frecuencia_dias)
 

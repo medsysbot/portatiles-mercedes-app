@@ -12,3 +12,5 @@ fpdf==1.7.2
 pytest
 httpx
 python-jose>=3.3
+bcrypt==4.0.1
+passlib==1.7.4

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión</title>
+    <!-- Se usa ruta absoluta para que Railway sirva correctamente el CSS -->
+    <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+    <h1>Acceso al sistema</h1>
+    <form id="loginForm" class="login-form">
+        <label>Email
+            <input type="text" name="email">
+        </label>
+        <label>Contraseña
+            <input type="text" name="password">
+        </label>
+        <label>Rol
+            <select name="rol">
+                <option value="cliente">Cliente</option>
+                <option value="empresa">Empresa</option>
+            </select>
+        </label>
+        <button type="submit">Iniciar sesión</button>
+        <p id="errorMsg" style="color:red;"></p>
+    </form>
+
+    <!-- Ruta absoluta para el script de inicio de sesión -->
+    <script src="/static/js/login.js"></script>
+</body>
+</html>

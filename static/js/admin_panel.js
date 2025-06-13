@@ -1,21 +1,23 @@
 // Funciones para manejar el panel administrativo
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('access_token');
     if (!token) {
-        window.location.href = '/login.html';
+        window.location.href = '/login';
         return;
     }
 
     if (!(await verificarToken(token))) {
-        sessionStorage.removeItem('token');
-        window.location.href = '/login.html';
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('usuario');
+        window.location.href = '/login';
         return;
     }
 
-    document.getElementById('cerrarSesion').addEventListener('click', () => {
-        sessionStorage.removeItem('token');
-        window.location.href = '/login.html';
+    document.getElementById('btnLogout').addEventListener('click', () => {
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('usuario');
+        window.location.href = '/login';
     });
 
     document.getElementById('aplicarFiltros').addEventListener('click', () => {
@@ -47,7 +49,7 @@ function obtenerFiltros() {
     const desde = document.getElementById('filtroDesde').value;
     const hasta = document.getElementById('filtroHasta').value;
     const filtros = new URLSearchParams();
-    filtros.append('token', sessionStorage.getItem('token'));
+    filtros.append('token', localStorage.getItem('access_token'));
     if (dni) filtros.append('dni', dni);
     if (desde) filtros.append('desde', desde);
     if (hasta) filtros.append('hasta', hasta);

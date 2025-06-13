@@ -24,13 +24,13 @@
     }
     .contenedor-superior {
       width: 100vw;
-      min-height: 180px;
+      min-height: 60px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
-      padding-top: 12px;
-      padding-bottom: 12px;
+      padding-top: 0;
+      padding-bottom: 0;
       background: transparent;
     }
     .titulo-index {
@@ -101,15 +101,16 @@
       height: 22px;
       display: inline-block;
     }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      width: 260px;
-      box-sizing: border-box;
-      color: #fff;
-      margin: 0;
-    }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 260px;
+        box-sizing: border-box;
+        color: #fff;
+        margin: 0;
+        margin-top: 60px;
+      }
     .campo-login {
       display: flex;
       align-items: center;
@@ -147,10 +148,10 @@
         justify-content: center;
         gap: 12px;
       }
-      form {
-        margin: 0;
-        margin-top: 40px;
-      }
+        form {
+          margin: 0;
+          margin-top: 60px;
+        }
     }
     @media (max-width: 700px) {
       .botonera-flotante {
@@ -168,12 +169,12 @@
         height: 32px;
       }
     }
-    @media (max-width: 500px) {
-      .contenedor-superior {
-        min-height: 120px;
-        padding-top: 16px;
-        padding-bottom: 6px;
-      }
+      @media (max-width: 500px) {
+        .contenedor-superior {
+          min-height: 60px;
+          padding-top: 0;
+          padding-bottom: 0;
+        }
       .titulo-index {
         font-size: 20px;
       }

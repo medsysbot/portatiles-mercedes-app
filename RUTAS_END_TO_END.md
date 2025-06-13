@@ -22,6 +22,8 @@
 | GET | /informacion-banos.html | Información sobre baños químicos | informacion-banos.html | No |
 | GET | /logout | Cerrar sesión (opcional) | JSON | Sí |
 
+> **Nota:** el botón para salir de la galería ahora redirige a la página de inicio (`/`).
+
 ## BACKEND (API / Rutas de FastAPI)
 
 | Método | Ruta | Descripción | Template/Response | Requiere Auth |

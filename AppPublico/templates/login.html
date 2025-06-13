@@ -202,6 +202,15 @@
     </div>
     <form id="loginForm" method="post">
       <div class="campo-login">
+        <img src="/static/icons/rol-port.png" alt="Rol">
+        <select name="rol" required>
+          <option value="" disabled selected>Seleccionar rol</option>
+          <option value="admin">Administrador</option>
+          <option value="empleado">Empleado</option>
+          <option value="cliente">Cliente</option>
+        </select>
+      </div>
+      <div class="campo-login">
         <img src="/static/icons/usuario-port.png" alt="Usuario">
         <input type="email" name="email" placeholder="Email" required>
       </div>

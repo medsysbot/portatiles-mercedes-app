@@ -35,7 +35,10 @@ async function verificarToken(token) {
     try {
         const resp = await fetch('/verificar_token', {
             method: 'POST',
-            body: new URLSearchParams({ token })
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
         });
         const data = await resp.json();
         return resp.ok && data.valido && data.rol === 'empresa';

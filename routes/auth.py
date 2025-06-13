@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Form, Body
+from fastapi import APIRouter, HTTPException, Form, Header
 from pydantic import BaseModel
 from passlib.hash import bcrypt
 from supabase import create_client
@@ -47,7 +47,10 @@ def login(data: LoginInput):
     }
 
 @router.post("/verificar_token")
-def verificar_token(token: str = Form(...)):
+def verificar_token(Authorization: str | None = Header(None)):
+    if not Authorization or not Authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Token faltante")
+    token = Authorization.split(" ", 1)[1]
     try:
         datos = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
         return {"valido": True, "rol": datos.get("rol"), "user_id": datos.get("sub")}

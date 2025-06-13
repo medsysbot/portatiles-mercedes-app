@@ -8,7 +8,10 @@ document.addEventListener('DOMContentLoaded', async () => {
     try {
         const ver = await fetch('/verificar_token', {
             method: 'POST',
-            body: new URLSearchParams({ token })
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+            }
         });
         if (!ver.ok) throw new Error('Token inválido');
         const info = await ver.json();

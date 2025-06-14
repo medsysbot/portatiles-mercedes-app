@@ -4,7 +4,7 @@ from datetime import date
 import os
 
 from fastapi import APIRouter, HTTPException, Depends
-from app.backend.utils.auth_utils import auth_required
+from app.utils.auth_utils import auth_required
 from pydantic import BaseModel
 from supabase import create_client, Client
 

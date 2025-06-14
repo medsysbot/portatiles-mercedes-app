@@ -2,7 +2,8 @@
 
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
-    if (!token) {
+    const rol = localStorage.getItem('rol');
+    if (!token || rol !== 'admin') {
         window.location.href = '/login';
         return;
     }
@@ -10,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!(await verificarToken(token))) {
         localStorage.removeItem('access_token');
         localStorage.removeItem('usuario');
+        localStorage.removeItem('rol');
         window.location.href = '/login';
         return;
     }
@@ -17,6 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('btnLogout').addEventListener('click', () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('usuario');
+        localStorage.removeItem('rol');
         window.location.href = '/login';
     });
 
@@ -41,7 +44,7 @@ async function verificarToken(token) {
             body: JSON.stringify({ token: token })
         });
         const data = await resp.json();
-        return resp.ok && data.status === 'ok' && data.rol === 'empresa';
+        return resp.ok && data.status === 'ok' && data.rol === 'admin';
     } catch (_) {
         return false;
     }

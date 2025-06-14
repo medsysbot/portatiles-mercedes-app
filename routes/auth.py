@@ -38,6 +38,7 @@ def login(data: LoginInput):
         "sub": usuario["id"],
         "email": usuario["email"],
         "rol": usuario.get("rol"),
+        "nombre": usuario.get("nombre"),
         "exp": datetime.utcnow() + timedelta(minutes=JWT_EXP_MINUTES),
     }
     token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
@@ -46,11 +47,8 @@ def login(data: LoginInput):
 
     return {
         "access_token": token,
-        "usuario": {
-            "nombre": usuario.get("nombre"),
-            "rol": usuario.get("rol"),
-            "email": usuario.get("email"),
-        },
+        "rol": usuario.get("rol"),
+        "nombre": usuario.get("nombre"),
     }
 
 @router.post("/verificar_token")

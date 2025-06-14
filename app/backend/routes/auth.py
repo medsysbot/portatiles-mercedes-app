@@ -73,11 +73,20 @@ async def login(datos: LoginInput):
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
 
         # Generar token
-        token_data = {"sub": usuario["email"], "rol": usuario.get("rol")}
+        token_data = {
+            "sub": usuario["email"],
+            "rol": usuario.get("rol"),
+            "nombre": usuario.get("nombre"),
+        }
         token = jwt.encode(token_data, JWT_SECRET, algorithm=ALGORITHM)
 
         logger.info(f"Login exitoso: {email}")
-        return {"access_token": token, "rol": usuario.get("rol"), "token_type": "bearer"}
+        return {
+            "access_token": token,
+            "rol": usuario.get("rol"),
+            "nombre": usuario.get("nombre"),
+            "token_type": "bearer",
+        }
 
     except HTTPException:
         raise

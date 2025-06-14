@@ -14,11 +14,14 @@ from .auth import router as auth_router
 from .archivos import router as archivos_router
 
 # Directorios base de las plantillas y archivos estáticos
-BASE_DIR = Path(__file__).resolve().parent.parent / "app_publico"
+# Al mover la carpeta `app_publico` al nivel raíz, las rutas deben
+# calcularse desde la raíz del proyecto.
+ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = ROOT_DIR / "app_publico"
 TEMPLATES_DIR = BASE_DIR / "templates"
 # Los archivos estáticos principales se encuentran en la carpeta de nivel raíz
 # para compartirlos entre módulos. Por eso `STATIC_DIR` apunta a `./static`.
-STATIC_DIR = Path(__file__).resolve().parent.parent / "static"
+STATIC_DIR = ROOT_DIR / "static"
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))

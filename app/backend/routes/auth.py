@@ -1,5 +1,6 @@
 import os
 import logging
+import traceback
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel
 from supabase import create_client, Client
@@ -95,7 +96,6 @@ async def login(datos: LoginInput):
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(
-            f"Error inesperado en login para {datos.email if 'datos' in locals() else 'desconocido'}: {e}"
-        )
+        with open("logs/error_login.log", "a") as f:
+            f.write(traceback.format_exc())
         raise HTTPException(status_code=500, detail="Error interno en el servidor")

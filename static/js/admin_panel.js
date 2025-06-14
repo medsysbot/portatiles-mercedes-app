@@ -36,12 +36,12 @@ async function verificarToken(token) {
         const resp = await fetch('/verificar_token', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ token: token })
         });
         const data = await resp.json();
-        return resp.ok && data.valido && data.rol === 'empresa';
+        return resp.ok && data.status === 'ok' && data.rol === 'empresa';
     } catch (_) {
         return false;
     }

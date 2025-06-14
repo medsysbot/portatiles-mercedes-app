@@ -1,40 +1,29 @@
-document.getElementById('loginForm').addEventListener('submit', async function(event) {
-  event.preventDefault();
+document.getElementById("form-login").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  const rol = document.querySelector("select[name='rol']").value;
-  const email = document.querySelector("input[name='email']").value;
-  const password = document.querySelector("input[name='password']").value;
+    const datos = {
+        email: document.getElementById("email").value,
+        password: document.getElementById("password").value
+    };
 
-  // Validación básica
-  if (!rol || !email || !password) {
-    alert("Por favor completá todos los campos.");
-    return;
-  }
-
-  try {
-    const res = await fetch("/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ rol, email, password })
+    fetch("/login", {
+        method: "POST",
+        body: JSON.stringify(datos),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.access_token) {
+            localStorage.setItem("access_token", data.access_token);
+            window.location.href = "/admin_panel";
+        } else {
+            alert("Credenciales incorrectas.");
+        }
+    })
+    .catch(error => {
+        console.error("Error en login:", error);
+        alert("Error al iniciar sesión.");
     });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      localStorage.setItem("access_token", data.access_token);
-      localStorage.setItem("usuario", JSON.stringify(data.usuario));
-      // Redirigir según rol
-      if (data.usuario.rol === "admin") {
-        window.location.href = "/admin_splash";
-      } else if (data.usuario.rol === "cliente") {
-        window.location.href = "/cliente_panel";
-      } else {
-        window.location.href = "/";
-      }
-    } else {
-      alert(data.detail || "Credenciales incorrectas o error al ingresar.");
-    }
-  } catch (error) {
-    alert("No se pudo conectar con el servidor.");
-  }
 });

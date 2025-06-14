@@ -37,6 +37,20 @@ if not logger.handlers:
     logger.addHandler(file_handler)
     logger.propagate = False
 
+
+def imprimir_log_error():
+    """Imprime en consola el contenido de logs/error_login.log para depuración."""
+    log_path = os.path.join(LOG_DIR, "error_login.log")
+    try:
+        if os.path.isfile(log_path):
+            with open(log_path, "r") as f:
+                print(f.read())
+    except Exception as e:  # pragma: no cover - solo para debugging manual
+        print(f"No se pudo leer {log_path}: {e}")
+
+# Mostrar errores previos al iniciar la aplicación
+imprimir_log_error()
+
 # --- Esquema de entrada ---
 class LoginInput(BaseModel):
     email: str
@@ -96,6 +110,7 @@ async def login(datos: LoginInput):
     except HTTPException:
         raise
     except Exception as e:
-        with open("logs/error_login.log", "a") as f:
+        with open(os.path.join(LOG_DIR, "error_login.log"), "a") as f:
             f.write(traceback.format_exc())
+        imprimir_log_error()
         raise HTTPException(status_code=500, detail="Error interno en el servidor")

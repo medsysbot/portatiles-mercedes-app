@@ -67,3 +67,14 @@ Para agregarlos o actualizarlos en el futuro:
 - Los endpoints privados requieren token JWT por `Authorization: Bearer`.
 - Desde esta migración, **AdminLTE** queda establecido como la plantilla oficial
   para todo el panel administrativo. El panel anterior se eliminó por completo.
+
+## 🧪 Tests
+
+Para ejecutar los tests desde la raíz del proyecto se debe exponer el paquete
+`app` en el `PYTHONPATH`. Ejecutá:
+
+```bash
+PYTHONPATH=. pytest
+```
+
+De esta manera `pytest` podrá resolver todos los imports de forma correcta.

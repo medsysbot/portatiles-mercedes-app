@@ -4,7 +4,7 @@ from fastapi.templating import Jinja2Templates
 from app.backend.utils.auth_utils import auth_required
 
 router = APIRouter()
-templates = Jinja2Templates(directory="AppPublico/templates")
+templates = Jinja2Templates(directory="app_publico/templates")
 
 
 @router.get("/admin_panel", response_class=HTMLResponse)

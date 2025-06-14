@@ -9,13 +9,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         const ver = await fetch('/verificar_token', {
             method: 'POST',
             headers: {
-                'Authorization': 'Bearer ' + token,
                 'Content-Type': 'application/json'
-            }
+            },
+            body: JSON.stringify({ token: token })
         });
         if (!ver.ok) throw new Error('Token inválido');
         const info = await ver.json();
-        if (!info.valido || info.rol !== 'cliente') {
+        if (info.status !== 'ok' || info.rol !== 'cliente') {
             window.location.href = '/login';
             return;
         }

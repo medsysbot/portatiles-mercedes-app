@@ -209,18 +209,18 @@
         <img src="/static/icons/rol-port.png" alt="Rol">
         <select name="rol" required>
           <option value="" disabled selected>Seleccionar rol</option>
-          <option value="admin">Administrador</option>
+          <option value="Administrador">Administrador</option>
           <option value="empleado">Empleado</option>
           <option value="cliente">Cliente</option>
         </select>
       </div>
       <div class="campo-login">
         <img src="/static/icons/usuario-port.png" alt="Usuario">
-        <input type="email" name="email" placeholder="Email" required>
+        <input id="email" type="email" name="email" placeholder="Email" required>
       </div>
       <div class="campo-login">
         <img src="/static/icons/password-port.png" alt="Contraseña">
-        <input type="password" name="password" placeholder="Contraseña" required>
+        <input id="password" type="password" name="password" placeholder="Contraseña" required>
       </div>
       <p id="errorMsg"></p>
       <button type="submit" class="boton-index">

@@ -20,36 +20,6 @@ class LoginInput(BaseModel):
     email: str
     password: str
 
-@router.post("/login")
-def login(data: LoginInput):
-    login_logger.info(f"Intento de login - email: {data.email}")
-    if not supabase:
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
-    res = supabase.table("usuarios").select("*").eq("email", data.email).execute()
-    if not res.data:
-        login_logger.info(f"Login fallido - usuario no encontrado: {data.email}")
-        raise HTTPException(status_code=401, detail="Usuario no encontrado")
-    usuario = res.data[0]
-    if not bcrypt.verify(data.password, usuario.get("password_hash", "")):
-        login_logger.info(f"Login fallido - contraseña incorrecta: {data.email}")
-        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
-
-    payload = {
-        "sub": usuario["id"],
-        "email": usuario["email"],
-        "rol": usuario.get("rol"),
-        "nombre": usuario.get("nombre"),
-        "exp": datetime.utcnow() + timedelta(minutes=JWT_EXP_MINUTES),
-    }
-    token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
-
-    login_logger.info(f"Login exitoso - email: {data.email}")
-
-    return {
-        "access_token": token,
-        "rol": usuario.get("rol"),
-        "nombre": usuario.get("nombre"),
-    }
 
 @router.post("/verificar_token")
 def verificar_token(data: dict):

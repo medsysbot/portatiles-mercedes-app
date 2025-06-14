@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function() {
           if (data.nombre) {
             localStorage.setItem("nombre", data.nombre);
           }
-          if (data.rol === "admin") {
+          if (data.rol === "Administrador") {
             window.location.href = "/admin_splash";
           } else if (data.rol === "cliente") {
             window.location.href = "/cliente_panel";

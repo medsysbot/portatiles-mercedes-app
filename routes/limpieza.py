@@ -38,7 +38,7 @@ async def registrar_limpieza(
     """Recibe datos de limpieza y almacena la imagen del remito."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    if user.get("rol") != "empresa":
+    if user.get("rol") != "Administrador":
         raise HTTPException(status_code=401, detail="No autorizado")
 
     extension = Path(remito.filename).suffix.lower()

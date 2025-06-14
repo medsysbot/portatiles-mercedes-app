@@ -72,6 +72,10 @@ async def login(datos: LoginInput):
             logger.warning(f"Login fallido – contraseña incorrecta: {email}")
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
 
+        if not usuario.get("activo", True):
+            logger.warning(f"Login fallido – usuario inactivo: {email}")
+            raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Usuario inactivo")
+
         # Generar token
         token_data = {
             "sub": usuario["email"],

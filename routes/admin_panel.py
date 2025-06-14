@@ -24,8 +24,8 @@ router = APIRouter()
 
 
 def verificar_admin(user: dict) -> dict:
-    """Valida que el usuario autenticado sea de rol empresa."""
-    if user.get("rol") != "empresa":
+    """Valida que el usuario autenticado sea de rol Administrador."""
+    if user.get("rol") != "Administrador":
         raise HTTPException(status_code=401, detail="No autorizado")
     return user
 

@@ -40,7 +40,7 @@ async def registrar_alquiler(alquiler: Alquiler, user: dict = Depends(auth_requi
     """Guarda un nuevo alquiler en la tabla de Supabase."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    if user.get("rol") != "empresa":
+    if user.get("rol") != "Administrador":
         raise HTTPException(status_code=401, detail="No autorizado")
     try:
         # Convertir los datos recibidos en un diccionario

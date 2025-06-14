@@ -32,7 +32,7 @@ async def activar_debito(
     """Registra un nuevo débito automático para el cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    if user.get("rol") != "empresa":
+    if user.get("rol") != "Administrador":
         raise HTTPException(status_code=401, detail="No autorizado")
     hoy = datetime.utcnow().date()
     proximo_pago = hoy + timedelta(days=frecuencia_dias)

@@ -42,7 +42,7 @@ async def registrar_venta(venta: Venta, user: dict = Depends(auth_required)):
     """Guarda la venta, genera el comprobante PDF y retorna su URL."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    if user.get("rol") != "empresa":
+    if user.get("rol") != "Administrador":
         raise HTTPException(status_code=401, detail="No autorizado")
     try:
         datos = venta.model_dump()

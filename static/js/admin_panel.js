@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     const rol = localStorage.getItem('rol');
-    if (!token || rol !== 'admin') {
+    if (!token || rol !== 'Administrador') {
         window.location.href = '/login';
         return;
     }
@@ -52,7 +52,7 @@ async function verificarToken(token) {
             body: JSON.stringify({ token: token })
         });
         const data = await resp.json();
-        return resp.ok && data.status === 'ok' && data.rol === 'admin';
+        return resp.ok && data.status === 'ok' && data.rol === 'Administrador';
     } catch (_) {
         return false;
     }

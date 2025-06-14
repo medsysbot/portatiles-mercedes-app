@@ -1,10 +1,12 @@
-document.getElementById("form-login").addEventListener("submit", function (e) {
-    e.preventDefault();
+const form = document.getElementById("loginForm") || document.getElementById("form-login");
+if (form) {
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    const datos = {
-        email: document.getElementById("email").value,
-        password: document.getElementById("password").value
-    };
+        const datos = {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+        };
 
     fetch("/login", {
         method: "POST",
@@ -17,6 +19,9 @@ document.getElementById("form-login").addEventListener("submit", function (e) {
     .then(data => {
         if (data.access_token) {
             localStorage.setItem("access_token", data.access_token);
+            if (data.rol) {
+                localStorage.setItem("rol", data.rol);
+            }
             window.location.href = "/admin_panel";
         } else {
             alert("Credenciales incorrectas.");
@@ -26,4 +31,4 @@ document.getElementById("form-login").addEventListener("submit", function (e) {
         console.error("Error en login:", error);
         alert("Error al iniciar sesión.");
     });
-});
+}

@@ -22,6 +22,9 @@ if (form) {
             if (data.rol) {
                 localStorage.setItem("rol", data.rol);
             }
+            if (data.nombre) {
+                localStorage.setItem("nombre", data.nombre);
+            }
             window.location.href = "/admin_panel";
         } else {
             alert("Credenciales incorrectas.");

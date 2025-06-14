@@ -24,10 +24,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
         if (res.ok) {
           localStorage.setItem("access_token", data.access_token);
-          localStorage.setItem("usuario", JSON.stringify(data.usuario));
-          if (data.usuario.rol === "admin") {
+          if (data.rol) {
+            localStorage.setItem("rol", data.rol);
+          }
+          if (data.nombre) {
+            localStorage.setItem("nombre", data.nombre);
+          }
+          if (data.rol === "admin") {
             window.location.href = "/admin_splash";
-          } else if (data.usuario.rol === "cliente") {
+          } else if (data.rol === "cliente") {
             window.location.href = "/cliente_panel";
           } else {
             window.location.href = "/";

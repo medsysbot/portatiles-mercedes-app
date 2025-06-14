@@ -16,6 +16,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
+    const nombre = localStorage.getItem('nombre');
+    if (nombre) {
+        const saludoEl = document.getElementById('saludo');
+        if (saludoEl) {
+            saludoEl.textContent = `¡Bienvenido/a, ${nombre}!`;
+        }
+    }
+
     document.getElementById('btnLogout').addEventListener('click', () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('usuario');

@@ -30,13 +30,13 @@ if not login_logger.handlers:
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from routes.router import router
-from routes.ventas import router as ventas_router
-from routes.limpieza import router as limpieza_router
-from routes.alertas import router as alertas_router
-from app.backend.routes import auth
-from app.backend.routes import admin
-from app.backend.routes import cliente
+from app.routes.router import router
+from app.routes.ventas import router as ventas_router
+from app.routes.limpieza import router as limpieza_router
+from app.routes.alertas import router as alertas_router
+from app.routes.auth import router as auth_router
+from app.routes.admin_panel import router as admin_router
+from app.routes.cliente_panel import router as cliente_router
 
 app = FastAPI()
 
@@ -48,9 +48,9 @@ app.include_router(router)
 app.include_router(ventas_router)
 app.include_router(limpieza_router)
 app.include_router(alertas_router)
-app.include_router(auth.router)
-app.include_router(admin.router)
-app.include_router(cliente.router)
+app.include_router(auth_router)
+app.include_router(admin_router)
+app.include_router(cliente_router)
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,4 +1,4 @@
-from app.backend.supabase_client import supabase
+from app.utils.supabase_client import supabase
 from passlib.hash import bcrypt
 import jwt
 import os

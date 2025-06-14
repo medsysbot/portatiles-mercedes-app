@@ -2,7 +2,7 @@
 
 import os
 from fastapi import APIRouter, HTTPException, Query, Depends
-from app.backend.utils.auth_utils import auth_required
+from app.utils.auth_utils import auth_required
 from supabase import create_client, Client
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -18,6 +18,13 @@ else:
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 router = APIRouter()
+
+
+@router.get("/cliente_panel")
+def cliente_panel(user=Depends(auth_required)):
+    if user["rol"] != "cliente":
+        raise HTTPException(status_code=403, detail="Acceso solo para clientes")
+    return {"msg": f"Bienvenido {user['email']}, rol: {user['rol']}"}
 
 
 @router.get("/info_cliente")

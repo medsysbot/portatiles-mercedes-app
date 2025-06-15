@@ -1,3 +1,5 @@
+"""Funciones de autenticación y registro de usuarios."""
+
 import os
 import logging
 import traceback
@@ -18,8 +20,19 @@ JWT_SECRET = os.getenv("JWT_SECRET")
 ALGORITHM = "HS256"
 JWT_EXP_MINUTES = 60
 
-if not SUPABASE_URL or not SUPABASE_KEY or not JWT_SECRET:
-    raise RuntimeError("Variables de entorno de Supabase o JWT no configuradas")
+faltantes = [
+    nombre
+    for nombre, valor in {
+        "SUPABASE_URL": SUPABASE_URL,
+        "SUPABASE_KEY": SUPABASE_KEY,
+        "JWT_SECRET": JWT_SECRET,
+    }.items()
+    if not valor
+]
+if faltantes:
+    raise RuntimeError(
+        "Faltan variables de entorno requeridas: " + ", ".join(faltantes)
+    )
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -58,6 +71,7 @@ router = APIRouter()
 
 @router.post("/login")
 async def login(datos: LoginInput):
+    """Autentica un usuario y devuelve un token JWT."""
     try:
         email = datos.email
         password = datos.password
@@ -87,14 +101,6 @@ async def login(datos: LoginInput):
 
         usuario = response.data
         hashed_password = usuario.get("password") or usuario.get("password_hash")
-
-        print("HASH LEÍDO DE BASE:")
-        print(f"[{hashed_password}]")
-        print(f"LARGO: {len(hashed_password) if hashed_password else 'None'}")
-
-        print(f"EMAIL RECIBIDO: [{email}]")
-        print(f"PASSWORD RECIBIDO: [{password}]")
-        print(f"ROL RECIBIDO: [{rol}]")
 
         if not hashed_password or not pwd_context.verify(password, hashed_password):
             logger.warning(f"Login fallido – contraseña incorrecta: {email}")
@@ -128,6 +134,7 @@ async def login(datos: LoginInput):
 
 @router.post("/verificar_token")
 def verificar_token(data: dict):
+    """Valida un token JWT y retorna el rol del usuario."""
     token = data.get("token")
     if not token:
         raise HTTPException(status_code=401, detail="Token faltante")
@@ -139,6 +146,7 @@ def verificar_token(data: dict):
 
 @router.post("/registrar_cliente")
 def registrar_cliente(email: str = Form(...), password: str = Form(...)):
+    """Crea un nuevo usuario con rol cliente."""
     hash_pwd = bcrypt.hash(password)
     resp = (
         supabase.table("usuarios")

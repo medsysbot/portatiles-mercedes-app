@@ -10,7 +10,7 @@ from routes.ventas import router as ventas_router
 from routes.debito import router as debito_router
 from routes.cliente_panel import router as cliente_router
 from routes.admin_panel import router as admin_router
-from routes.auth import router as auth_router
+from routes.login import router as login_router
 from routes.archivos import router as archivos_router
 
 # Directorios base de las plantillas y archivos estáticos
@@ -38,7 +38,7 @@ router.include_router(debito_router)
 # Rutas específicas del panel del cliente
 router.include_router(cliente_router)
 router.include_router(admin_router)
-router.include_router(auth_router)
+router.include_router(login_router)
 router.include_router(archivos_router)
 
 @router.get("/", response_class=HTMLResponse)

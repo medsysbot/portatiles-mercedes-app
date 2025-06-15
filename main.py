@@ -42,7 +42,14 @@ from routes.cliente_panel import router as cliente_router
 app = FastAPI()
 
 # Carpeta para servir todos los recursos estáticos
+# Directorio de imágenes e íconos de uso general
 app.mount("/static", StaticFiles(directory="static"), name="static")
+# Directorio para los scripts públicos reubicados en `app_publico/static/js`
+app.mount(
+    "/static/js",
+    StaticFiles(directory="app_publico/static/js"),
+    name="public-js",
+)
 
 # Registrar las rutas definidas en el módulo router, incluido el formulario de limpieza
 app.include_router(router)

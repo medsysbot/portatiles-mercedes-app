@@ -5,13 +5,13 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 
-from .alquileres import router as alquileres_router
-from .ventas import router as ventas_router
-from .debito import router as debito_router
-from .cliente_panel import router as cliente_router
-from .admin_panel import router as admin_router
-from .auth import router as auth_router
-from .archivos import router as archivos_router
+from routes.alquileres import router as alquileres_router
+from routes.ventas import router as ventas_router
+from routes.debito import router as debito_router
+from routes.cliente_panel import router as cliente_router
+from routes.admin_panel import router as admin_router
+from routes.auth import router as auth_router
+from routes.archivos import router as archivos_router
 
 # Directorios base de las plantillas y archivos estáticos
 # Al mover la carpeta `app_publico` al nivel raíz, las rutas deben

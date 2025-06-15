@@ -20,9 +20,11 @@ from routes.archivos import router as archivos_router
 ROOT_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = ROOT_DIR / "app_publico"
 TEMPLATES_DIR = BASE_DIR / "templates"
-# Los scripts públicos ahora se ubican en `app_publico/static/js`.
-# `STATIC_DIR` apunta a esa carpeta para servirlos de manera directa.
-STATIC_DIR = BASE_DIR / "static"
+# Los scripts públicos se encuentran en `app_publico/static`.
+# Los scripts privados, como los del panel administrativo o de clientes,
+# se ubican en la carpeta `static` de la raíz del proyecto.
+PUBLIC_STATIC_DIR = BASE_DIR / "static"
+PRIVATE_STATIC_DIR = ROOT_DIR / "static"
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
@@ -49,28 +51,28 @@ async def mostrar_index():
 @router.get("/login.js")
 async def obtener_login_js():
     """Script de la página de login."""
-    js_path = STATIC_DIR / "js" / "login.js"
+    js_path = PUBLIC_STATIC_DIR / "js" / "login.js"
     return FileResponse(js_path, media_type="application/javascript")
 
 
 @router.get("/cliente_panel.js")
 async def obtener_cliente_js():
     """Script del panel del cliente."""
-    js_path = STATIC_DIR / "js" / "cliente_panel.js"
+    js_path = PRIVATE_STATIC_DIR / "js" / "cliente_panel.js"
     return FileResponse(js_path, media_type="application/javascript")
 
 
 @router.get("/admin_panel.js")
 async def obtener_admin_js():
     """Script del panel administrativo."""
-    js_path = STATIC_DIR / "js" / "admin_panel.js"
+    js_path = PRIVATE_STATIC_DIR / "js" / "admin_panel.js"
     return FileResponse(js_path, media_type="application/javascript")
 
 
 @router.get("/registro_clientes.js")
 async def obtener_registro_js():
     """Script del formulario de registro de clientes."""
-    js_path = STATIC_DIR / "js" / "registro_clientes.js"
+    js_path = PUBLIC_STATIC_DIR / "js" / "registro_clientes.js"
     return FileResponse(js_path, media_type="application/javascript")
 
 

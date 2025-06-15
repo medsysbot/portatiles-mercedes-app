@@ -78,3 +78,40 @@ def test_login_rol_incorrecto(monkeypatch, client):
         'rol': 'cliente'
     })
     assert response.status_code == 401
+
+
+def test_login_password_incorrecto(monkeypatch, client):
+    """Contraseña incorrecta debería devolver 401."""
+    user = create_user()
+    setup_mock_supabase(monkeypatch, user)
+    response = client.post('/login', json={
+        'email': user['email'],
+        'password': 'clave-incorrecta',
+        'rol': 'Administrador'
+    })
+    assert response.status_code == 401
+
+
+def test_login_usuario_inactivo(monkeypatch, client):
+    """Usuario inactivo debería devolver 403."""
+    user = create_user()
+    user['activo'] = False
+    setup_mock_supabase(monkeypatch, user)
+    response = client.post('/login', json={
+        'email': user['email'],
+        'password': 'admin123',
+        'rol': 'Administrador'
+    })
+    assert response.status_code == 403
+
+
+def test_login_usuario_inexistente(monkeypatch, client):
+    """Usuario no registrado debería devolver 401."""
+    user = create_user()
+    setup_mock_supabase(monkeypatch, user)
+    response = client.post('/login', json={
+        'email': 'otro@portatiles.com',
+        'password': 'admin123',
+        'rol': 'Administrador'
+    })
+    assert response.status_code == 401

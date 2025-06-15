@@ -1,6 +1,12 @@
+/*
+Archivo: registro_clientes.js
+Descripción: Gestión del registro de clientes
+Proyecto: Portátiles Mercedes
+*/
 const form = document.getElementById('registroForm');
 const msg = document.getElementById('msg');
 
+// ==== Eventos de UI ==== 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     msg.textContent = '';

@@ -1,3 +1,8 @@
+<!--
+Archivo: venta.html
+Descripción: Formulario para solicitud de venta
+Proyecto: Portátiles Mercedes
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -100,6 +105,7 @@
     </style>
 </head>
 <body>
+<!-- ==== Formulario principal ==== -->
     <form id="formVenta">
         <label>Nombre del cliente
             <input type="text" name="cliente_nombre">
@@ -134,6 +140,7 @@
         <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
         <span>Cerrar formulario</span>
     </button>
+<!-- ==== Funciones auxiliares ==== -->
     <script src="/app_publico/static/js/guardar_venta.js"></script>
     <script>
         document.getElementById('cerrarFormulario').addEventListener('click', () => {

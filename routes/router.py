@@ -14,9 +14,10 @@ from routes.auth import router as auth_router
 from routes.archivos import router as archivos_router
 
 # Directorios base de las plantillas y archivos estáticos
-# Al mover la carpeta `app_publico` al nivel raíz, las rutas deben
-# calcularse desde la raíz del proyecto.
-ROOT_DIR = Path(__file__).resolve().parent.parent.parent
+# Luego de reubicar `routes/` en la raíz del repositorio, la carpeta
+# `app_publico` se encuentra al mismo nivel que este módulo. Por eso
+# la raíz del proyecto se obtiene con `parent.parent`.
+ROOT_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = ROOT_DIR / "app_publico"
 TEMPLATES_DIR = BASE_DIR / "templates"
 # Los scripts públicos ahora se ubican en `app_publico/static/js`.

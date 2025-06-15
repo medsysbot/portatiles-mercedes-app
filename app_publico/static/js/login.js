@@ -5,7 +5,8 @@ if (form) {
 
         const datos = {
             email: document.getElementById("email").value,
-            password: document.getElementById("password").value
+            password: document.getElementById("password").value,
+            rol: form.querySelector('select[name="rol"]').value
         };
 
         const errorEl = document.getElementById("errorMsg");

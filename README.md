@@ -68,6 +68,19 @@ Para agregarlos o actualizarlos en el futuro:
 - Desde esta migración, **AdminLTE** queda establecido como la plantilla oficial
   para todo el panel administrativo. El panel anterior se eliminó por completo.
 
+### Ubicación de plantillas públicas
+
+Los archivos HTML visibles para cualquier visitante se almacenan en
+`app_publico/templates`. Allí se encuentran, entre otros:
+
+- `index.html` (página de bienvenida o *landing*).
+- `login.html`.
+- `registro_clientes.html`.
+- `informacion-banos.html`.
+
+Esto facilita mantener separadas las plantillas públicas de las privadas y
+centraliza la carga de vistas estáticas.
+
 ## 🧪 Tests
 
 Para ejecutar los tests desde la raíz del proyecto se debe exponer el paquete

@@ -90,7 +90,7 @@ async def login(datos: LoginInput):
     Errores
     -------
     HTTPException 401
-        Credenciales incorrectas o usuario inexistente.
+        Usuario o contraseña incorrectos.
     HTTPException 403
         El usuario existe pero se encuentra inactivo.
     HTTPException 500
@@ -120,7 +120,7 @@ async def login(datos: LoginInput):
             logger.warning(f"Login fallido – usuario no encontrado: {email}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Credenciales inválidas",
+                detail="Usuario o contraseña incorrectos",
             )
 
         usuario = response.data
@@ -128,7 +128,10 @@ async def login(datos: LoginInput):
 
         if not hashed_password or not pwd_context.verify(password, hashed_password):
             logger.warning(f"Login fallido – contraseña incorrecta: {email}")
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Usuario o contraseña incorrectos",
+            )
 
         if not usuario.get("activo", True):
             logger.warning(f"Login fallido – usuario inactivo: {email}")

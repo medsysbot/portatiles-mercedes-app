@@ -1,7 +1,9 @@
 /*
 Archivo: login.js
 Descripción: Lógica de validación y envío del login público
+Acceso: Público
 Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
 */
 const form = document.getElementById("loginForm") || document.getElementById("form-login");
 if (form) {
@@ -18,6 +20,7 @@ if (form) {
         const errorEl = document.getElementById("errorMsg");
         if (errorEl) errorEl.textContent = "";
 
+// ==== Envío de datos ====
         fetch("/login", {
             method: "POST",
             body: JSON.stringify(datos),

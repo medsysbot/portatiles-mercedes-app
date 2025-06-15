@@ -2,8 +2,9 @@
 ----------------------------------------------------------
 Archivo: routes/ventas.py
 Descripción: Rutas y lógica para el registro de ventas
-Última modificación: 2025-06-15
+Acceso: Privado
 Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
 ----------------------------------------------------------
 """
 
@@ -18,6 +19,7 @@ from pydantic import BaseModel
 from fpdf import FPDF
 from supabase import create_client, Client
 
+# ==== Configuración de Supabase ====
 # Configurar la conexión con Supabase usando las variables de entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SERVICE_ROLE_KEY = os.getenv("SERVICE_ROLE_KEY")
@@ -33,6 +35,7 @@ else:
 
 router = APIRouter()
 
+# ==== Modelo de datos ====
 
 class Venta(BaseModel):
     """Modelo de validación para el registro de una venta."""
@@ -45,6 +48,7 @@ class Venta(BaseModel):
     fecha_venta: date
     observaciones: str | None = None
 
+# ==== Endpoints ====
 
 @router.post("/registrar_venta")
 async def registrar_venta(venta: Venta, user: dict = Depends(auth_required)):
@@ -52,6 +56,7 @@ async def registrar_venta(venta: Venta, user: dict = Depends(auth_required)):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     if user.get("rol") != "Administrador":
+# ==== Lógica de guardado ====
         raise HTTPException(status_code=401, detail="No autorizado")
     try:
         datos = venta.model_dump()

@@ -1,3 +1,11 @@
+/*
+Archivo: cliente_panel.js
+Descripción: Lógica del panel del cliente
+Acceso: Privado
+Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
+*/
+// ==== Eventos principales ====
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     if (!token) {
@@ -37,6 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         window.location.href = '/login';
     }
 });
+// ==== Funciones auxiliares ====
 
 async function cargarDatos(dni) {
     try {

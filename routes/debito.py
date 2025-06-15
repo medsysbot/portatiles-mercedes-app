@@ -2,8 +2,9 @@
 ----------------------------------------------------------
 Archivo: routes/debito.py
 Descripción: Rutas para manejar la activación de débitos automáticos
-Última modificación: 2025-06-15
+Acceso: Privado
 Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
 ----------------------------------------------------------
 """
 
@@ -15,6 +16,7 @@ import os
 from fastapi import APIRouter, HTTPException, Form, Depends
 from utils.auth_utils import auth_required
 from supabase import create_client, Client
+# ==== Configuración de Supabase ====
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
@@ -30,6 +32,7 @@ else:
 
 router = APIRouter()
 
+# ==== Endpoints ====
 
 @router.post("/activar_debito")
 async def activar_debito(
@@ -53,6 +56,7 @@ async def activar_debito(
         "fecha_inicio": hoy.isoformat(),
         "proximo_pago": proximo_pago.isoformat(),
     }
+# ==== Lógica de guardado ====
 
     try:
         resp = supabase.table("debitos_programados").insert(datos).execute()

@@ -4,7 +4,7 @@ body {
 }
 
 .landing-hero {
-    background: url('/static/imagenes/portada-index.png') center/cover no-repeat;
+    background: url('/app_publico/static/imagenes/portada-index.png') center/cover no-repeat;
     min-height: 100vh;
     display: flex;
     align-items: center;

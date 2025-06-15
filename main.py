@@ -44,10 +44,8 @@ app = FastAPI()
 # Carpeta para servir todos los recursos estáticos
 # Directorio de imágenes e íconos de uso general
 # Directorio unificado para recursos estáticos públicos
-app.mount("/static", StaticFiles(directory="app_publico/static"), name="static")
-# Rutas específicas para íconos e imágenes heredadas de la carpeta antigua
-app.mount("/static/icons", StaticFiles(directory="static/icons"), name="icons")
-app.mount("/static/imagenes", StaticFiles(directory="static/imagenes"), name="imagenes")
+# Carpeta unificada de recursos estáticos
+app.mount("/app_publico/static", StaticFiles(directory="app_publico/static"), name="static")
 
 # Registrar las rutas definidas en el módulo router, incluido el formulario de limpieza
 app.include_router(router)

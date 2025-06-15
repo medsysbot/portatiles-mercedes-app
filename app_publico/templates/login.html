@@ -17,7 +17,7 @@
       min-height: 100vh;
       width: 100vw;
       font-family: 'Nunito', Arial, sans-serif;
-      background: url('/static/imagenes/fondo-login.png') no-repeat center center fixed;
+      background: url('/app_publico/static/imagenes/fondo-login.png') no-repeat center center fixed;
       background-size: cover;
       position: relative;
       overflow-x: hidden;
@@ -193,20 +193,20 @@
   <div class="contenedor-superior">
     <div class="titulo-index">
       Ingreso
-      <img src="/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+      <img src="/app_publico/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
       Sistema
     </div>
   </div>
   <div class="contenedor-main">
     <div class="botonera-flotante">
       <a href="/" class="boton-index">
-        <img src="/static/icons/inicio.png" alt="Inicio">
+        <img src="/app_publico/static/icons/inicio.png" alt="Inicio">
         <span>Inicio</span>
       </a>
     </div>
     <form id="loginForm">
       <div class="campo-login">
-        <img src="/static/icons/rol-port.png" alt="Rol">
+        <img src="/app_publico/static/icons/rol-port.png" alt="Rol">
         <select name="rol" required>
           <option value="" disabled selected>Seleccionar rol</option>
           <option value="Administrador">Administrador</option>
@@ -215,20 +215,20 @@
         </select>
       </div>
       <div class="campo-login">
-        <img src="/static/icons/usuario-port.png" alt="Usuario">
+        <img src="/app_publico/static/icons/usuario-port.png" alt="Usuario">
         <input id="email" type="email" name="email" placeholder="Email" required>
       </div>
       <div class="campo-login">
-        <img src="/static/icons/password-port.png" alt="Contraseña">
+        <img src="/app_publico/static/icons/password-port.png" alt="Contraseña">
         <input id="password" type="password" name="password" placeholder="Contraseña" required>
       </div>
       <p id="errorMsg"></p>
       <button type="submit" class="boton-index">
-        <img src="/static/icons/ingresar-al-sistema.png" alt="Ingresar">
+        <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Ingresar">
         <span>Ingresar al sistema</span>
       </button>
     </form>
-    <script src="/static/js/login.js"></script>
+    <script src="/app_publico/static/js/login.js"></script>
   </div>
 </body>
 </html>

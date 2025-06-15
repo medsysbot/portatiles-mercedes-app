@@ -16,7 +16,7 @@
             min-height: 100vh;
             min-width: 100vw;
             font-family: 'Nunito', Arial, sans-serif;
-            background: url('/static/imagenes/fondo-alquiler.png') no-repeat center center fixed;
+            background: url('/app_publico/static/imagenes/fondo-alquiler.png') no-repeat center center fixed;
             background-size: cover;
             position: relative;
         }
@@ -123,16 +123,16 @@
             <input type="text" name="fecha">
         </label>
         <button type="submit" class="boton-index">
-            <img src="/static/icons/ver-formulario.png" alt="Enviar">
+            <img src="/app_publico/static/icons/ver-formulario.png" alt="Enviar">
             <span>Enviar</span>
         </button>
     </form>
     <button id="cerrarFormulario" class="boton-index" type="button">
-        <img src="/static/icons/cerrar-galeria.png" alt="Cerrar">
+        <img src="/app_publico/static/icons/cerrar-galeria.png" alt="Cerrar">
         <span>Cerrar Formulario</span>
     </button>
 
-    <script src="/static/js/guardar_alquiler.js"></script>
+    <script src="/app_publico/static/js/guardar_alquiler.js"></script>
     <script>
         document.getElementById('cerrarFormulario').addEventListener('click', () => {
             if (window.opener) {

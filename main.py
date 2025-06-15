@@ -30,13 +30,13 @@ if not login_logger.handlers:
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from app.routes.router import router
-from app.routes.ventas import router as ventas_router
-from app.routes.limpieza import router as limpieza_router
-from app.routes.alertas import router as alertas_router
-from app.routes.auth import router as auth_router
-from app.routes.admin_panel import router as admin_router
-from app.routes.cliente_panel import router as cliente_router
+from routes.router import router
+from routes.ventas import router as ventas_router
+from routes.limpieza import router as limpieza_router
+from routes.alertas import router as alertas_router
+from routes.auth import router as auth_router
+from routes.admin_panel import router as admin_router
+from routes.cliente_panel import router as cliente_router
 
 app = FastAPI()
 

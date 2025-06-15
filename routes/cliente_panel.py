@@ -2,7 +2,7 @@
 
 import os
 from fastapi import APIRouter, HTTPException, Query, Depends
-from app.utils.auth_utils import auth_required
+from utils.auth_utils import auth_required
 from supabase import create_client, Client
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")

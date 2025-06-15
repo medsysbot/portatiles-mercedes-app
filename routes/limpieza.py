@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
-from app.utils.auth_utils import auth_required
+from utils.auth_utils import auth_required
 from supabase import create_client, Client
 
 # Obtener configuración de Supabase desde variables de entorno

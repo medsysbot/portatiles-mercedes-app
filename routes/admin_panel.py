@@ -6,7 +6,7 @@ import os
 from fastapi import APIRouter, HTTPException, Query, Depends, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from app.utils.auth_utils import auth_required
+from utils.auth_utils import auth_required
 from supabase import create_client, Client
 
 

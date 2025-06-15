@@ -60,8 +60,15 @@ async def admin_clientes(
     if dni:
         consulta = consulta.eq("dni", dni)
     resp = consulta.execute()
-    if resp.error:
-        raise HTTPException(status_code=400, detail=str(resp.error))
+    if (
+        not resp.data
+        or (hasattr(resp, "status_code") and resp.status_code != 200)
+        or getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=str(getattr(resp, "error", "Error en Supabase")),
+        )
     return resp.data
 
 
@@ -84,8 +91,15 @@ async def admin_alquileres(
     if hasta:
         consulta = consulta.lte("fecha_fin", hasta.isoformat())
     resp = consulta.execute()
-    if resp.error:
-        raise HTTPException(status_code=400, detail=str(resp.error))
+    if (
+        not resp.data
+        or (hasattr(resp, "status_code") and resp.status_code != 200)
+        or getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=str(getattr(resp, "error", "Error en Supabase")),
+        )
     return resp.data
 
 
@@ -108,8 +122,15 @@ async def admin_ventas(
     if hasta:
         consulta = consulta.lte("created_at", hasta.isoformat())
     resp = consulta.execute()
-    if resp.error:
-        raise HTTPException(status_code=400, detail=str(resp.error))
+    if (
+        not resp.data
+        or (hasattr(resp, "status_code") and resp.status_code != 200)
+        or getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=str(getattr(resp, "error", "Error en Supabase")),
+        )
     return resp.data
 
 
@@ -132,6 +153,13 @@ async def admin_limpiezas(
     if hasta:
         consulta = consulta.lte("fecha_hora", hasta.isoformat())
     resp = consulta.execute()
-    if resp.error:
-        raise HTTPException(status_code=400, detail=str(resp.error))
+    if (
+        not resp.data
+        or (hasattr(resp, "status_code") and resp.status_code != 200)
+        or getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=str(getattr(resp, "error", "Error en Supabase")),
+        )
     return resp.data

@@ -71,9 +71,16 @@ async def login(datos: LoginInput):
             .execute()
         )
 
-        if response.error:
+        if (
+            not response.data
+            or (hasattr(response, "status_code") and response.status_code != 200)
+            or getattr(response, "error", None) is not None
+        ):
             logger.warning(f"Login fallido – usuario no encontrado: {email}")
-            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Credenciales inválidas",
+            )
 
         usuario = response.data
         hashed_password = usuario.get("password") or usuario.get("password_hash")
@@ -127,6 +134,10 @@ def registrar_cliente(email: str = Form(...), password: str = Form(...)):
         .insert({"email": email, "password_hash": hash_pwd, "rol": "cliente"})
         .execute()
     )
-    if resp.error:
-        raise HTTPException(status_code=400, detail=str(resp.error))
+    if (
+        not resp.data
+        or (hasattr(resp, "status_code") and resp.status_code != 200)
+        or getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(status_code=400, detail=str(getattr(resp, "error", "Error en Supabase")))
     return {"mensaje": "Registro exitoso"}

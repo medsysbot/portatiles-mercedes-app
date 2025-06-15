@@ -74,8 +74,15 @@ async def registrar_limpieza(
             "remito_url": url,
         }
         respuesta = supabase.table("limpiezas").insert(datos).execute()
-        if respuesta.error:
-            raise HTTPException(status_code=400, detail=str(respuesta.error))
+        if (
+            not respuesta.data
+            or (hasattr(respuesta, "status_code") and respuesta.status_code != 200)
+            or getattr(respuesta, "error", None) is not None
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(respuesta, "error", "Error en Supabase")),
+            )
 
         return {"mensaje": "Limpieza registrada correctamente"}
     except HTTPException:

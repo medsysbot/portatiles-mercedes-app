@@ -40,8 +40,15 @@ async def info_cliente(dni: str = Query(...), user: dict = Depends(auth_required
             .single()
             .execute()
         )
-        if resp.error:
-            raise HTTPException(status_code=400, detail=str(resp.error))
+        if (
+            not resp.data
+            or (hasattr(resp, "status_code") and resp.status_code != 200)
+            or getattr(resp, "error", None) is not None
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(resp, "error", "Error en Supabase")),
+            )
         return resp.data
     except HTTPException:
         raise
@@ -61,8 +68,15 @@ async def obtener_alquileres(dni: str = Query(...), user: dict = Depends(auth_re
             .eq("dni_cliente", dni)
             .execute()
         )
-        if resp.error:
-            raise HTTPException(status_code=400, detail=str(resp.error))
+        if (
+            not resp.data
+            or (hasattr(resp, "status_code") and resp.status_code != 200)
+            or getattr(resp, "error", None) is not None
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(resp, "error", "Error en Supabase")),
+            )
         return resp.data
     except HTTPException:
         raise
@@ -82,8 +96,15 @@ async def obtener_pagos(dni: str = Query(...), user: dict = Depends(auth_require
             .eq("dni_cliente", dni)
             .execute()
         )
-        if resp.error:
-            raise HTTPException(status_code=400, detail=str(resp.error))
+        if (
+            not resp.data
+            or (hasattr(resp, "status_code") and resp.status_code != 200)
+            or getattr(resp, "error", None) is not None
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(resp, "error", "Error en Supabase")),
+            )
         return resp.data
     except HTTPException:
         raise
@@ -103,8 +124,15 @@ async def obtener_limpiezas(dni: str = Query(...), user: dict = Depends(auth_req
             .eq("dni_cliente", dni)
             .execute()
         )
-        if resp.error:
-            raise HTTPException(status_code=400, detail=str(resp.error))
+        if (
+            not resp.data
+            or (hasattr(resp, "status_code") and resp.status_code != 200)
+            or getattr(resp, "error", None) is not None
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(resp, "error", "Error en Supabase")),
+            )
         return resp.data
     except HTTPException:
         raise

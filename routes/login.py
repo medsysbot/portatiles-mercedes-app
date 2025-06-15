@@ -71,7 +71,29 @@ router = APIRouter()
 
 @router.post("/login")
 async def login(datos: LoginInput):
-    """Autentica un usuario y devuelve un token JWT."""
+    """Autentica a un usuario y genera un token de acceso.
+
+    Parámetros
+    ----------
+    datos : LoginInput
+        Objeto con las credenciales enviadas por el cliente. Incluye
+        `email`, `password` y `rol`.
+
+    Retorna
+    -------
+    dict
+        Información del usuario junto con un token JWT si las
+        credenciales son correctas.
+
+    Errores
+    -------
+    HTTPException 401
+        Credenciales incorrectas o usuario inexistente.
+    HTTPException 403
+        El usuario existe pero se encuentra inactivo.
+    HTTPException 500
+        Error interno al procesar la solicitud.
+    """
     try:
         email = datos.email
         password = datos.password
@@ -134,7 +156,25 @@ async def login(datos: LoginInput):
 
 @router.post("/verificar_token")
 def verificar_token(data: dict):
-    """Valida un token JWT y retorna el rol del usuario."""
+    """Valida un token JWT y extrae la información del usuario.
+
+    Parámetros
+    ----------
+    data : dict
+        Diccionario que debe contener la clave ``token`` con el
+        JWT emitido por el sistema.
+
+    Retorna
+    -------
+    dict
+        Estado de la verificación y datos básicos del usuario si el
+        token es válido.
+
+    Errores
+    -------
+    HTTPException 401
+        Cuando el token está ausente o es inválido.
+    """
     token = data.get("token")
     if not token:
         raise HTTPException(status_code=401, detail="Token faltante")
@@ -146,7 +186,26 @@ def verificar_token(data: dict):
 
 @router.post("/registrar_cliente")
 def registrar_cliente(email: str = Form(...), password: str = Form(...)):
-    """Crea un nuevo usuario con rol cliente."""
+    """Registra un usuario final con rol ``cliente``.
+
+    Parámetros
+    ----------
+    email : str
+        Correo electrónico del nuevo cliente.
+    password : str
+        Contraseña proporcionada en el formulario.
+
+    Retorna
+    -------
+    dict
+        Mensaje de confirmación cuando el alta se realiza
+        correctamente.
+
+    Errores
+    -------
+    HTTPException 400
+        Se produce si la inserción en Supabase falla.
+    """
     hash_pwd = bcrypt.hash(password)
     resp = (
         supabase.table("usuarios")

@@ -30,6 +30,7 @@ if not login_logger.handlers:
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
+# Imports actualizados según la nueva estructura
 from routes.router import router
 from routes.ventas import router as ventas_router
 from routes.limpieza import router as limpieza_router

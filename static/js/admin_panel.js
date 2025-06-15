@@ -1,6 +1,14 @@
+/*
+Archivo: admin_panel.js
+Descripción: Lógica del panel administrativo
+Acceso: Privado
+Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
+*/
 // Funciones para manejar el panel administrativo
 
 document.addEventListener('DOMContentLoaded', async () => {
+// ==== Eventos principales ====
     const token = localStorage.getItem('access_token');
     const rol = localStorage.getItem('rol');
     if (!token || rol !== 'Administrador') {
@@ -40,6 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
     await cargarTodo();
+// ==== Funciones auxiliares ====
 });
 
 async function verificarToken(token) {

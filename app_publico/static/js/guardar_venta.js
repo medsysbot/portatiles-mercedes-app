@@ -1,12 +1,14 @@
 /*
 Archivo: guardar_venta.js
 Descripción: Envía los datos del formulario de venta
+Acceso: Público
 Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
 */
-// Script para enviar el formulario de venta
 const form = document.getElementById('formVenta');
 
 // ==== Eventos de UI ==== 
+// ==== Envío de datos ====
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = Object.fromEntries(new FormData(form));

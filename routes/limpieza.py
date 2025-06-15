@@ -2,11 +2,11 @@
 ----------------------------------------------------------
 Archivo: routes/limpieza.py
 Descripción: Rutas y lógica para el módulo de limpieza de baños
-Última modificación: 2025-06-15
+Acceso: Privado
 Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
 ----------------------------------------------------------
 """
-
 """Rutas y lógica para el módulo de limpieza de baños."""
 
 from datetime import datetime
@@ -17,6 +17,7 @@ from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
 from utils.auth_utils import auth_required
 from supabase import create_client, Client
 
+# ==== Configuración de Supabase ====
 # Obtener configuración de Supabase desde variables de entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SERVICE_ROLE_KEY = os.getenv("SERVICE_ROLE_KEY")
@@ -32,6 +33,7 @@ else:
 
 router = APIRouter()
 
+# ==== Endpoints ====
 
 @router.post("/registrar_limpieza")
 async def registrar_limpieza(
@@ -61,6 +63,7 @@ async def registrar_limpieza(
     bucket_name = f"remitos-limpieza-{cliente_id}"
     fecha_archivo = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     nombre_archivo = f"remito_{bano_id}_{fecha_archivo}{extension}"
+# ==== Lógica de guardado ====
 
     try:
         # Crear bucket si no existe

@@ -2,11 +2,11 @@
 ----------------------------------------------------------
 Archivo: routes/login.py
 Descripción: Funciones de autenticación y registro de usuarios
-Última modificación: 2025-06-15
+Acceso: Privado
 Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
 ----------------------------------------------------------
 """
-
 """Funciones de autenticación y registro de usuarios."""
 
 import os
@@ -22,6 +22,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# ==== Configuración de Supabase ====
 # Configuración de Supabase y JWT
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
@@ -63,6 +64,7 @@ if not logger.handlers:
 
 def imprimir_log_error():
     """Imprime errores anteriores al inicio."""
+# ==== Lógica de validación ====
     log_path = os.path.join(LOG_DIR, "error_login.log")
     try:
         if os.path.isfile(log_path):
@@ -79,6 +81,7 @@ class LoginInput(BaseModel):
     rol: str
 
 router = APIRouter()
+# ==== Endpoints ====
 
 @router.post("/login")
 async def login(datos: LoginInput):
@@ -103,6 +106,7 @@ async def login(datos: LoginInput):
     HTTPException 403
         El usuario existe pero se encuentra inactivo.
     HTTPException 500
+# ==== Lógica de generación de token ====
         Error interno al procesar la solicitud.
     """
     try:
@@ -189,6 +193,7 @@ def verificar_token(data: dict):
     HTTPException 401
         Cuando el token está ausente o es inválido.
     """
+# ==== Lógica de registro ====
     token = data.get("token")
     if not token:
         raise HTTPException(status_code=401, detail="Token faltante")

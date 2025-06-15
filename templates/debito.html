@@ -1,3 +1,10 @@
+<!--
+Archivo: debito.html
+Descripción: Formulario para activar el débito automático
+Acceso: Privado
+Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -7,6 +14,7 @@
 </head>
 <body>
     <h1>Activar Débito Automático</h1>
+<!-- ==== Formulario principal ==== -->
     <form id="formDebito">
         <label>DNI del cliente
             <input type="text" name="dni">
@@ -19,6 +27,7 @@
         </label>
         <button type="submit">Activar Débito Automático</button>
     </form>
+<!-- ==== Scripts ==== -->
     <script>
         const form = document.getElementById('formDebito');
         form.addEventListener('submit', async (e) => {

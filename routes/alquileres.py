@@ -2,11 +2,11 @@
 ----------------------------------------------------------
 Archivo: routes/alquileres.py
 Descripción: Rutas y lógica para el registro de alquileres de baños
-Última modificación: 2025-06-15
+Acceso: Privado
 Proyecto: Portátiles Mercedes
+Última modificación: 2025-06-15
 ----------------------------------------------------------
 """
-
 """Rutas y lógica para el registro de alquileres de baños."""
 
 from datetime import date
@@ -17,6 +17,7 @@ from utils.auth_utils import auth_required
 from pydantic import BaseModel
 from supabase import create_client, Client
 
+# ==== Configuración de Supabase ====
 # Configurar la conexión con Supabase usando variables de entorno
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SERVICE_ROLE_KEY = os.getenv("SERVICE_ROLE_KEY")
@@ -32,6 +33,7 @@ else:
 
 # Crear un router específico para este módulo
 router = APIRouter()
+# ==== Modelo de datos ====
 
 class Alquiler(BaseModel):
     """Modelo de validación para registrar un alquiler de baño."""
@@ -43,6 +45,7 @@ class Alquiler(BaseModel):
     fecha_inicio: date
     fecha_fin: date
     observaciones: str | None = None
+# ==== Endpoints ====
 
 @router.post("/registrar_alquiler")
 async def registrar_alquiler(alquiler: Alquiler, user: dict = Depends(auth_required)):
@@ -50,6 +53,7 @@ async def registrar_alquiler(alquiler: Alquiler, user: dict = Depends(auth_requi
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     if user.get("rol") != "Administrador":
+# ==== Lógica de guardado ====
         raise HTTPException(status_code=401, detail="No autorizado")
     try:
         # Convertir los datos recibidos en un diccionario

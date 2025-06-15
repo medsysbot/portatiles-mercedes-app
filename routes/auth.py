@@ -52,6 +52,7 @@ imprimir_log_error()
 class LoginInput(BaseModel):
     email: str
     password: str
+    rol: str
 
 router = APIRouter()
 
@@ -60,13 +61,15 @@ async def login(datos: LoginInput):
     try:
         email = datos.email
         password = datos.password
+        rol = datos.rol
 
-        logger.info(f"Intento de login para: {email}")
+        logger.info(f"Intento de login para: {email} con rol {rol}")
 
         response = (
             supabase.table("usuarios")
             .select("*")
             .eq("email", email)
+            .eq("rol", rol)
             .single()
             .execute()
         )
@@ -91,7 +94,7 @@ async def login(datos: LoginInput):
 
         print(f"EMAIL RECIBIDO: [{email}]")
         print(f"PASSWORD RECIBIDO: [{password}]")
-        print(f"ROL RECIBIDO: [{datos.rol if hasattr(datos, 'rol') else ''}]")
+        print(f"ROL RECIBIDO: [{rol}]")
 
         if not hashed_password or not pwd_context.verify(password, hashed_password):
             logger.warning(f"Login fallido – contraseña incorrecta: {email}")

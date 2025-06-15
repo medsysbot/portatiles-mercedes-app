@@ -14,6 +14,7 @@ app_publico/templates/galeria.html,/static/,/app_publico/static/
 templates/alquiler.html,/static/,/app_publico/static/
 templates/alquiler_form.html,/static/,/app_publico/static/
 templates/limpieza.html,/static/,/app_publico/static/
-templates/ventas.html,/static/,/app_publico/static/
-templates/venta.html,/static/,/app_publico/static/
+app_publico/templates/ventas.html,/static/,/app_publico/static/
+app_publico/templates/venta.html,/static/,/app_publico/static/
 templates/admin_splash.html,/static/,/app_publico/static/
+app_publico/static/js/guardar_alquiler.js,/static/js,/app_publico/static/js

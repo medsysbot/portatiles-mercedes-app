@@ -1,4 +1,4 @@
-// Archivo: static/js/guardar_alquiler.js
+// Archivo: /app_publico/static/js/guardar_alquiler.js
 // Maneja el envío del formulario de alquiler
 // Obtenemos el formulario principal del módulo de alquiler
 const form = document.getElementById('formulario-alquiler');

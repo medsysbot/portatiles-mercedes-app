@@ -85,6 +85,10 @@ async def login(datos: LoginInput):
         usuario = response.data
         hashed_password = usuario.get("password") or usuario.get("password_hash")
 
+        print("HASH LEÍDO DE BASE:")
+        print(f"[{hashed_password}]")
+        print(f"LARGO: {len(hashed_password) if hashed_password else 'None'}")
+
         if not hashed_password or not pwd_context.verify(password, hashed_password):
             logger.warning(f"Login fallido – contraseña incorrecta: {email}")
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")

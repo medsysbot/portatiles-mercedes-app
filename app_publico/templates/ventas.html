@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venta de Baños</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Nunito', Arial, sans-serif;
+            background-image: url('/app_publico/static/imagenes/fondo-ventas.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .fondo-alquiler {
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            padding-bottom: 2rem;
+        }
+
+        .contenedor-superior {
+            width: 100vw;
+            max-width: none;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-top: 32px;
+            padding-bottom: 12px;
+            background: transparent;
+        }
+
+        .titulo-index {
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 800;
+            font-size: 4.5vw;
+            color: #DEB460;
+            text-align: center;
+            margin-bottom: 6px;
+            line-height: 1.1;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .logo-portatiles {
+            height: 2.1em;
+            margin: 0 18px;
+            vertical-align: middle;
+        }
+
+        @media (max-width: 700px) {
+            .titulo-index {
+                font-size: 28px;
+                white-space: normal;
+            }
+        }
+
+        @media (max-width: 500px) {
+            .contenedor-superior {
+                min-height: 120px;
+                padding-top: 16px;
+                padding-bottom: 6px;
+            }
+            .titulo-index {
+                font-size: 20px;
+            }
+            .logo-portatiles {
+                height: 1.2em;
+                margin: 0 6px;
+            }
+        }
+
+        .botonera-flotante {
+            position: absolute;
+            left: 40px;
+            bottom: 180px;
+            min-width: 260px;
+            width: 260px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 99;
+        }
+
+        .boton-index {
+            width: 260px;
+            min-width: 260px;
+            max-width: 260px;
+            height: 38px;
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 400;
+            font-size: 18px;
+            font-style: italic;
+            background: rgba(0,0,0,0.58);
+            color: #fff;
+            border: none;
+            border-radius: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            transition: background 0.13s;
+            padding-left: 16px;
+            white-space: nowrap;
+            padding-top: 0;
+            padding-bottom: 0;
+            box-sizing: border-box;
+            text-decoration: none;
+        }
+
+        .boton-index,
+        .boton-index:visited,
+        .boton-index:active,
+        .boton-index:focus {
+            text-decoration: none !important;
+        }
+
+        .boton-index:hover {
+            background-color: rgba(60, 60, 60, 1);
+        }
+
+        .boton-index img {
+            width: 22px;
+            height: 22px;
+            display: inline-block;
+        }
+
+        .boton-index span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            flex: 1;
+        }
+
+        button.boton-index {
+            border: none;
+            cursor: pointer;
+            background: rgba(0,0,0,0.58);
+        }
+
+        #toggleFormulario {
+            padding-right: 0;
+        }
+
+        .contenedor-main {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            width: 100vw;
+            box-sizing: border-box;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding-bottom: 40px;
+            min-height: 60vh;
+        }
+
+        .contenedor-texto {
+            flex: 1 1 0;
+            margin-left: 320px;
+            margin-right: 80px;
+            margin-top: 40px;
+            max-width: 900px;
+            min-width: 0;
+        }
+
+        .presentacion-portatiles {
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 300;
+            font-size: 21px;
+            color: #fff;
+            text-align: left;
+            line-height: 1.6;
+            text-shadow: none;
+            margin-bottom: 24px;
+            max-width: 100%;
+        }
+
+        .contacto {
+            display: block;
+            color: #DEB460;
+            font-size: 1.15em;
+            font-weight: 700;
+            margin-top: 24px;
+            text-shadow: none;
+        }
+
+        @media (max-width: 1100px) {
+            .contenedor-main {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .botonera-flotante {
+                position: static;
+                flex-direction: row;
+                flex-wrap: wrap;
+                width: 100%;
+                min-width: 0;
+                margin-left: 0;
+                margin-top: 0;
+                justify-content: center;
+                gap: 12px;
+            }
+            .contenedor-texto {
+                margin-left: 20px;
+                margin-right: 20px;
+                margin-top: 30px;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .botonera-flotante {
+                position: static;
+                flex-direction: column;
+                width: 100%;
+                min-width: 0;
+                margin-left: 0;
+                margin-top: 0;
+                align-items: stretch;
+            }
+            .boton-index {
+                min-width: 0;
+                font-size: 16px;
+                height: 32px;
+            }
+            .contenedor-texto {
+                margin-left: 10px;
+                margin-right: 10px;
+                margin-top: 20px;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="fondo-alquiler">
+    <div class="contenedor-superior">
+        <div class="titulo-index">
+            Venta
+            <img src="/app_publico/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+            Baños
+        </div>
+    </div>
+    <div class="contenedor-main">
+        <div class="botonera-flotante">
+            <a id="linkInicio" href="/" class="boton-index">
+                <img src="/app_publico/static/icons/inicio.png" alt="Inicio">
+                <span>Volver a inicio</span>
+            </a>
+            <a id="toggleFormulario" type="button" class="boton-index">
+                <img src="/app_publico/static/icons/ver-formulario.png" alt="Ver Formulario">
+                <span>Ver formulario</span>
+            </a>
+        </div>
+        <div class="contenedor-texto">
+            <div class="presentacion-portatiles">
+                En <strong>Portátiles Mercedes</strong> ofrecemos la venta de baños químicos portátiles con modelos que se adaptan a todo tipo de necesidad: estándar, confort o VIP.<br><br>
+                Podés consultarnos para conocer la disponibilidad actual y recibir asesoramiento personalizado según tu caso.<br><br>
+                Nos encargamos del traslado del baño al destino que nos indiques, sin complicaciones.<br><br>
+                Además, ofrecemos servicios posteriores como <strong>mantenimiento, limpieza y reparación</strong> para que tu baño portátil esté siempre en las mejores condiciones.<br><br>
+                Completá el formulario y un representante se pondrá en contacto con vos.
+            </div>
+            <span class="contacto">
+                portatilesmercedes@gmail.com<br>
+                Tel. 2657-627996
+            </span>
+        </div>
+    </div>
+    </div>
+    <script src="/app_publico/static/js/venta_form.js"></script>
+</body>
+</html>

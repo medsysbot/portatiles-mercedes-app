@@ -23,7 +23,9 @@ else:
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app_publico/templates")
+# Las plantillas privadas ahora se ubican en la carpeta `templates` de la raíz
+# del proyecto. Por eso actualizamos la ruta que usa Jinja2Templates.
+templates = Jinja2Templates(directory="templates")
 
 
 def verificar_admin(user: dict) -> dict:

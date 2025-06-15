@@ -19,9 +19,9 @@ from routes.archivos import router as archivos_router
 ROOT_DIR = Path(__file__).resolve().parent.parent.parent
 BASE_DIR = ROOT_DIR / "app_publico"
 TEMPLATES_DIR = BASE_DIR / "templates"
-# Los archivos estáticos principales se encuentran en la carpeta de nivel raíz
-# para compartirlos entre módulos. Por eso `STATIC_DIR` apunta a `./static`.
-STATIC_DIR = ROOT_DIR / "static"
+# Los scripts públicos ahora se ubican en `app_publico/static/js`.
+# `STATIC_DIR` apunta a esa carpeta para servirlos de manera directa.
+STATIC_DIR = BASE_DIR / "static"
 
 router = APIRouter()
 templates = Jinja2Templates(directory=str(TEMPLATES_DIR))

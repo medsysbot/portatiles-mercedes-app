@@ -116,14 +116,23 @@ async def login(datos: LoginInput):
 
         logger.info(f"Intento de login para: {email} con rol {rol}")
 
-        response = (
-            supabase.table("usuarios")
-            .select("*")
-            .eq("email", email)
-            .eq("rol", rol)
-            .single()
-            .execute()
-        )
+        try:
+            response = (
+                supabase.table("usuarios")
+                .select("*")
+                .eq("email", email)
+                .eq("rol", rol)
+                .single()
+                .execute()
+            )
+        except Exception as exc:  # pragma: no cover - Supabase errors
+            logger.warning(
+                f"Login fallido – consulta sin resultado para {email}: {exc}"
+            )
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Credenciales inválidas",
+            )
 
         if (
             not response.data

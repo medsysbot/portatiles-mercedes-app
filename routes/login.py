@@ -45,7 +45,9 @@ logger = logging.getLogger("login_events")
 logger.setLevel(logging.INFO)
 if not logger.handlers:
     handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
-    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+    formatter = logging.Formatter(
+        "%(asctime)s [%(levelname)s] %(message)s"
+    )
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     logger.propagate = False
@@ -217,5 +219,12 @@ def registrar_cliente(email: str = Form(...), password: str = Form(...)):
         or (hasattr(resp, "status_code") and resp.status_code != 200)
         or getattr(resp, "error", None) is not None
     ):
-        raise HTTPException(status_code=400, detail=str(getattr(resp, "error", "Error en Supabase")))
+        logger.error(
+            f"Registro fallido para {email}: {getattr(resp, 'error', 'Error en Supabase')}"
+        )
+        raise HTTPException(
+            status_code=400,
+            detail=str(getattr(resp, "error", "Error en Supabase")),
+        )
+    logger.info(f"Registro exitoso para nuevo cliente: {email}")
     return {"mensaje": "Registro exitoso"}

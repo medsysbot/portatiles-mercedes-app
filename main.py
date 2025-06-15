@@ -35,7 +35,7 @@ from routes.router import router
 from routes.ventas import router as ventas_router
 from routes.limpieza import router as limpieza_router
 from routes.alertas import router as alertas_router
-from routes.auth import router as auth_router
+from routes.login import router as login_router
 from routes.admin_panel import router as admin_router
 from routes.cliente_panel import router as cliente_router
 
@@ -52,7 +52,7 @@ app.include_router(router)
 app.include_router(ventas_router)
 app.include_router(limpieza_router)
 app.include_router(alertas_router)
-app.include_router(auth_router)
+app.include_router(login_router)
 app.include_router(admin_router)
 app.include_router(cliente_router)
 

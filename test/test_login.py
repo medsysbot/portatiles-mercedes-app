@@ -8,7 +8,7 @@ import pytest
 load_dotenv(dotenv_path='.env')
 
 import main
-from routes import auth
+from routes import login
 
 class MockQuery:
     def __init__(self, user):
@@ -38,7 +38,7 @@ class MockSupabase:
         return MockQuery(self.user)
 
 def setup_mock_supabase(monkeypatch, user):
-    monkeypatch.setattr(auth, 'supabase', MockSupabase(user))
+    monkeypatch.setattr(login, 'supabase', MockSupabase(user))
 
 @pytest.fixture
 def client():

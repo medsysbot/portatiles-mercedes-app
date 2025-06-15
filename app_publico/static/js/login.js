@@ -1,5 +1,11 @@
+/*
+Archivo: login.js
+Descripción: Lógica de validación y envío del login público
+Proyecto: Portátiles Mercedes
+*/
 const form = document.getElementById("loginForm") || document.getElementById("form-login");
 if (form) {
+// ==== Eventos de UI ==== 
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 

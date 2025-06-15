@@ -1,8 +1,13 @@
-// Archivo: /app_publico/static/js/guardar_alquiler.js
+/*
+Archivo: guardar_alquiler.js
+Descripción: Envía los datos del formulario de alquiler
+Proyecto: Portátiles Mercedes
+*/
 // Maneja el envío del formulario de alquiler
 // Obtenemos el formulario principal del módulo de alquiler
 const form = document.getElementById('formulario-alquiler');
 
+// ==== Eventos de UI ==== 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = Object.fromEntries(new FormData(form));

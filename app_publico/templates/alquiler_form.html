@@ -1,3 +1,8 @@
+<!--
+Archivo: alquiler_form.html
+Descripción: Formulario para solicitar alquiler
+Proyecto: Portátiles Mercedes
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -100,6 +105,7 @@
     </style>
 </head>
 <body>
+<!-- ==== Formulario principal ==== -->
     <form id="formulario-alquiler">
         <label>Nombre y apellido
             <input type="text" name="nombre">
@@ -132,6 +138,7 @@
         <span>Cerrar Formulario</span>
     </button>
 
+<!-- ==== Funciones auxiliares ==== -->
     <script src="/app_publico/static/js/guardar_alquiler.js"></script>
     <script>
         document.getElementById('cerrarFormulario').addEventListener('click', () => {

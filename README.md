@@ -91,3 +91,92 @@ PYTHONPATH=. pytest
 ```
 
 De esta manera `pytest` podrá resolver todos los imports de forma correcta.
+
+## 🔐 API de Login y Registro
+
+A continuación se describen los principales endpoints para autenticación de usuarios. Todos devuelven y reciben datos en formato JSON salvo que se indique lo contrario.
+
+### POST `/login`
+Autentica al usuario según su correo y rol.
+
+**Request**
+```json
+{
+  "email": "admin@portatiles.com",
+  "password": "admin123",
+  "rol": "Administrador"
+}
+```
+
+**Respuesta exitosa**
+```json
+{
+  "access_token": "<jwt>",
+  "rol": "Administrador",
+  "nombre": "Admin",
+  "token_type": "bearer"
+}
+```
+
+**Errores comunes**
+- `401` Usuario o contraseña incorrectos
+- `403` Usuario inactivo
+
+### POST `/registrar_cliente`
+Registra un nuevo cliente. Los datos se envían como `multipart/form-data`.
+
+**Campos requeridos**
+- `email`
+- `password`
+
+**Respuesta exitosa**
+```json
+{ "mensaje": "Registro exitoso" }
+```
+
+En caso de fallar se devuelve `400` con el detalle del error.
+
+### POST `/verificar_token`
+Verifica la validez de un token JWT.
+
+**Request**
+```json
+{ "token": "<jwt>" }
+```
+
+**Respuesta exitosa**
+```json
+{ "status": "ok", "rol": "Administrador", "user_id": "admin@portatiles.com" }
+```
+
+Si el token es inválido o falta se obtiene `401` con el mensaje correspondiente.
+
+### Consumo desde JavaScript
+Ejemplo básico de inicio de sesión con `fetch`:
+```js
+fetch('/login', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ email, password, rol })
+}).then(async r => {
+  const data = await r.json();
+  if (r.ok && data.access_token) {
+    localStorage.setItem('access_token', data.access_token);
+  }
+});
+```
+Para verificar el token:
+```js
+fetch('/verificar_token', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ token: localStorage.getItem('access_token') })
+});
+```
+
+### Recomendaciones de seguridad
+- Evitá imprimir contraseñas o tokens en la consola o archivos de log.
+- Guardá el token sólo el tiempo necesario (por ejemplo en `localStorage`) y eliminalo al cerrar sesión.
+- Utilizá siempre HTTPS para proteger las credenciales durante la comunicación.
+- Mantené las claves secretas (`JWT_SECRET`, etc.) en variables de entorno y fuera del repositorio.
+

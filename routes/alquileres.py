@@ -47,8 +47,15 @@ async def registrar_alquiler(alquiler: Alquiler, user: dict = Depends(auth_requi
         datos = alquiler.model_dump()
         # Insertar el registro en la tabla 'alquileres'
         respuesta = supabase.table("alquileres").insert(datos).execute()
-        if respuesta.error:
-            raise HTTPException(status_code=400, detail=str(respuesta.error))
+        if (
+            not respuesta.data
+            or (hasattr(respuesta, "status_code") and respuesta.status_code != 200)
+            or getattr(respuesta, "error", None) is not None
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(respuesta, "error", "Error en Supabase")),
+            )
         return {"mensaje": "Alquiler registrado con éxito"}
     except HTTPException:
         raise

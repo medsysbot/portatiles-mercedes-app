@@ -47,8 +47,15 @@ async def activar_debito(
 
     try:
         resp = supabase.table("debitos_programados").insert(datos).execute()
-        if resp.error:
-            raise HTTPException(status_code=400, detail=str(resp.error))
+        if (
+            not resp.data
+            or (hasattr(resp, "status_code") and resp.status_code != 200)
+            or getattr(resp, "error", None) is not None
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(resp, "error", "Error en Supabase")),
+            )
         return {"mensaje": "Débito automático activado correctamente."}
     except HTTPException:
         raise

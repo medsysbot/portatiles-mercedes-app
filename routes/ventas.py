@@ -78,8 +78,15 @@ async def registrar_venta(venta: Venta, user: dict = Depends(auth_required)):
         # Guardar la venta en la tabla junto con la URL del PDF
         datos["pdf_url"] = url
         respuesta = supabase.table("ventas").insert(datos).execute()
-        if respuesta.error:
-            raise HTTPException(status_code=400, detail=str(respuesta.error))
+        if (
+            not respuesta.data
+            or (hasattr(respuesta, "status_code") and respuesta.status_code != 200)
+            or getattr(respuesta, "error", None) is not None
+        ):
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(respuesta, "error", "Error en Supabase")),
+            )
 
         return {"mensaje": "Venta registrada con éxito", "pdf_url": url}
     except HTTPException:

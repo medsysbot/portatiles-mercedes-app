@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/alertas.py
+Descripción: Sistema de alertas automáticas
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Sistema de alertas automáticas."""
 
 from datetime import date, timedelta

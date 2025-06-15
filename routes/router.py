@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/router.py
+Descripción: Rutas principales de la aplicación
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Rutas principales de la aplicación."""
 
 from pathlib import Path

@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/debito.py
+Descripción: Rutas para manejar la activación de débitos automáticos
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Rutas para manejar la activación de débitos automáticos."""
 
 from datetime import datetime, timedelta

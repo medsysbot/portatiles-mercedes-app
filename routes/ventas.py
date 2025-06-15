@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/ventas.py
+Descripción: Rutas y lógica para el registro de ventas
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Rutas y lógica para el registro de ventas."""
 
 from datetime import datetime, date

@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: utils/auth_utils.py
+Descripción: Funciones utilitarias de autenticación
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 from fastapi import HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt

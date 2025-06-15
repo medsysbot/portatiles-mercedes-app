@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: test/test_login.py
+Descripción: Pruebas unitarias del módulo de login
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 import os
 from dotenv import load_dotenv
 from fastapi.testclient import TestClient

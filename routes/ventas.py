@@ -4,7 +4,7 @@ from datetime import datetime, date
 import os
 
 from fastapi import APIRouter, HTTPException, Depends
-from app.utils.auth_utils import auth_required
+from utils.auth_utils import auth_required
 from pydantic import BaseModel
 from fpdf import FPDF
 from supabase import create_client, Client

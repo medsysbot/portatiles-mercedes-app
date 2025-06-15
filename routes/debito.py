@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import os
 
 from fastapi import APIRouter, HTTPException, Form, Depends
-from app.utils.auth_utils import auth_required
+from utils.auth_utils import auth_required
 from supabase import create_client, Client
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")

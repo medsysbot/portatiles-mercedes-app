@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/archivos.py
+Descripción: Rutas para obtener el contenido de archivos Python del proyecto
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Rutas para obtener el contenido de archivos Python del proyecto."""
 
 from pathlib import Path

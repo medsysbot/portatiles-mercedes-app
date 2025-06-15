@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/login.py
+Descripción: Funciones de autenticación y registro de usuarios
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Funciones de autenticación y registro de usuarios."""
 
 import os

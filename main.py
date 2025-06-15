@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: main.py
+Descripción: Punto de entrada de la aplicación FastAPI
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Aplicación principal de Portátiles Mercedes."""
 
 import sys

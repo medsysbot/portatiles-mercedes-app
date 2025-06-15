@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/admin_panel.py
+Descripción: Endpoints para el panel administrativo de la empresa
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Endpoints para el panel administrativo de la empresa."""
 
 from datetime import date

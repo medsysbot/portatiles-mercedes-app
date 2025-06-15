@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/limpieza.py
+Descripción: Rutas y lógica para el módulo de limpieza de baños
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Rutas y lógica para el módulo de limpieza de baños."""
 
 from datetime import datetime

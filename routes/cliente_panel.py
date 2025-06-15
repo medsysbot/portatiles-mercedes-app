@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/cliente_panel.py
+Descripción: Rutas para consultar la información del panel de clientes
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Rutas para consultar la información del panel de clientes."""
 
 import os

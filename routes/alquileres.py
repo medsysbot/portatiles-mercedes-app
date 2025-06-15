@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/alquileres.py
+Descripción: Rutas y lógica para el registro de alquileres de baños
+Última modificación: 2025-06-15
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 """Rutas y lógica para el registro de alquileres de baños."""
 
 from datetime import date

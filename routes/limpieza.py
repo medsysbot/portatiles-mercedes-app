@@ -13,8 +13,7 @@ from datetime import datetime
 import os
 from pathlib import Path
 
-from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends
-from utils.auth_utils import auth_required
+from fastapi import APIRouter, HTTPException, UploadFile, File, Form
 from supabase import create_client, Client
 
 # ==== Configuración de Supabase ====
@@ -44,13 +43,10 @@ async def registrar_limpieza(
     fecha_hora: str = Form(...),
     observaciones: str | None = Form(None),
     remito: UploadFile = File(...),
-    user: dict = Depends(auth_required),
 ):
     """Recibe datos de limpieza y almacena la imagen del remito."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    if user.get("rol") != "Administrador":
-        raise HTTPException(status_code=401, detail="No autorizado")
 
     extension = Path(remito.filename).suffix.lower()
     # Desactivar temporalmente la validación de extensiones para permitir

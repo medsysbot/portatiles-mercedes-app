@@ -88,7 +88,7 @@ async function cargarTodo() {
 }
 
 async function cargarClientes() {
-    const resp = await fetch(`/admin/clientes?${obtenerFiltros()}`, {
+    const resp = await fetch(`/admin/api/clientes?${obtenerFiltros()}`, {
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
     });
     if (!resp.ok) return;
@@ -107,7 +107,7 @@ async function cargarClientes() {
 }
 
 async function cargarAlquileres() {
-    const resp = await fetch(`/admin/alquileres?${obtenerFiltros()}`, {
+    const resp = await fetch(`/admin/api/alquileres?${obtenerFiltros()}`, {
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
     });
     if (!resp.ok) return;
@@ -126,7 +126,7 @@ async function cargarAlquileres() {
 }
 
 async function cargarVentas() {
-    const resp = await fetch(`/admin/ventas?${obtenerFiltros()}`, {
+    const resp = await fetch(`/admin/api/ventas?${obtenerFiltros()}`, {
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
     });
     if (!resp.ok) return;
@@ -145,7 +145,7 @@ async function cargarVentas() {
 }
 
 async function cargarLimpiezas() {
-    const resp = await fetch(`/admin/limpiezas?${obtenerFiltros()}`, {
+    const resp = await fetch(`/admin/api/limpiezas?${obtenerFiltros()}`, {
         headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
     });
     if (!resp.ok) return;

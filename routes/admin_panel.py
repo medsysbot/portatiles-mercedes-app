@@ -44,39 +44,67 @@ def verificar_admin(user: dict) -> dict:
     return user
 
 
-@router.get("/admin/panel", response_class=HTMLResponse)
-def admin_panel_view(request: Request):
-    return templates.TemplateResponse("admin_panel.html", {"request": request})
-
-
-@router.get("/admin/dashboard", response_class=HTMLResponse)
-def admin_dashboard_view(request: Request):
-    """Vista principal con menú de secciones"""
-    return templates.TemplateResponse("panel_admin.html", {"request": request})
+# Vista principal de reportes
+@router.get("/admin/reportes", response_class=HTMLResponse)
+def admin_reportes_view(request: Request):
+    """Pantalla inicial con resumen de reportes"""
+    return templates.TemplateResponse("reportes_admin.html", {"request": request})
 
 
 @router.get("/admin/mercadopago", response_class=HTMLResponse)
 def admin_mercadopago_view(request: Request):
-    """Dashboard de pagos y cobros."""
-    return templates.TemplateResponse("admin_mercadopago.html", {"request": request})
+    """Panel para pagos y cobranzas."""
+    return templates.TemplateResponse("mercadopago_admin.html", {"request": request})
 
 
 @router.get("/admin/facturacion", response_class=HTMLResponse)
 def admin_facturacion_view(request: Request):
     """Pantalla de facturación"""
-    return templates.TemplateResponse("facturacion.html", {"request": request})
+    return templates.TemplateResponse("facturacion_admin.html", {"request": request})
 
 
-@router.get("/admin/revisos", response_class=HTMLResponse)
-def admin_revisos_view(request: Request):
-    """Pantalla para revisos técnicos"""
-    return templates.TemplateResponse("revisos.html", {"request": request})
 
 
 @router.get("/admin/bash-generator", response_class=HTMLResponse)
 def admin_bash_generator_view(request: Request):
     """Pantalla para generación de scripts bash"""
-    return templates.TemplateResponse("bash_generator.html", {"request": request})
+    return templates.TemplateResponse("bash_generator_admin.html", {"request": request})
+
+# Secciones del panel
+@router.get("/admin/clientes", response_class=HTMLResponse)
+def admin_clientes_page(request: Request):
+    """Administración de clientes."""
+    return templates.TemplateResponse("clientes_admin.html", {"request": request})
+
+@router.get("/admin/alquileres", response_class=HTMLResponse)
+def admin_alquileres_page(request: Request):
+    """Gestión de alquileres."""
+    return templates.TemplateResponse("alquileres_admin.html", {"request": request})
+
+@router.get("/admin/ventas", response_class=HTMLResponse)
+def admin_ventas_page(request: Request):
+    """Gestión de ventas."""
+    return templates.TemplateResponse("ventas_admin.html", {"request": request})
+
+@router.get("/admin/limpiezas", response_class=HTMLResponse)
+def admin_limpiezas_page(request: Request):
+    """Registro de limpiezas."""
+    return templates.TemplateResponse("limpiezas_admin.html", {"request": request})
+
+@router.get("/admin/morosos", response_class=HTMLResponse)
+def admin_morosos_page(request: Request):
+    """Listado de clientes morosos."""
+    return templates.TemplateResponse("morosos_admin.html", {"request": request})
+
+@router.get("/admin/emails", response_class=HTMLResponse)
+def admin_emails_page(request: Request):
+    """Módulo de envíos de emails."""
+    return templates.TemplateResponse("emails_admin.html", {"request": request})
+
+@router.get("/admin/ia-respuestas", response_class=HTMLResponse)
+def admin_ia_respuestas_page(request: Request):
+    """Respuestas automáticas con IA."""
+    return templates.TemplateResponse("ia_respuestas_admin.html", {"request": request})
 
 
 @router.get("/cliente_panel")
@@ -86,7 +114,7 @@ def cliente_panel(user=Depends(auth_required)):
     return {"msg": f"Bienvenido {user['email']}, rol: {user['rol']}"}
 
 
-@router.get("/admin/clientes")
+@router.get("/admin/api/clientes")
 async def admin_clientes(
     dni: str | None = Query(None),
     user: dict = Depends(auth_required),
@@ -111,7 +139,7 @@ async def admin_clientes(
     return resp.data
 
 
-@router.get("/admin/alquileres")
+@router.get("/admin/api/alquileres")
 async def admin_alquileres(
     desde: date | None = Query(None),
     hasta: date | None = Query(None),
@@ -142,7 +170,7 @@ async def admin_alquileres(
     return resp.data
 
 
-@router.get("/admin/ventas")
+@router.get("/admin/api/ventas")
 async def admin_ventas(
     desde: date | None = Query(None),
     hasta: date | None = Query(None),
@@ -173,7 +201,7 @@ async def admin_ventas(
     return resp.data
 
 
-@router.get("/admin/limpiezas")
+@router.get("/admin/api/limpiezas")
 async def admin_limpiezas(
     desde: date | None = Query(None),
     hasta: date | None = Query(None),

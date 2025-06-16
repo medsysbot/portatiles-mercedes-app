@@ -1,6 +1,6 @@
 # Portátiles Mercedes
 
-Sistema integral para la gestión profesional de alquiler, venta y mantenimiento de baños químicos portátiles.
+Sistema int. para la gestión profesional de alquiler, venta y mantenimiento de baños químicos portátiles.
 
 ## 🏢 Descripción General
 

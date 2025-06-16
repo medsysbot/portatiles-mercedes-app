@@ -13,6 +13,7 @@ if (form) {
 
         const datos = {
             email: document.getElementById("email").value,
+            // IMPORTANTE: El campo debe llamarse "password" (sin ñ ni tilde) en todo el flujo
             password: document.getElementById("password").value,
             rol: form.querySelector('select[name="rol"]').value
         };

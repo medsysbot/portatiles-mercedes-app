@@ -77,6 +77,7 @@ imprimir_log_error()
 
 class LoginInput(BaseModel):
     email: str
+    # IMPORTANTE: El campo debe llamarse "password" (sin ñ ni tilde) en todo el flujo
     password: str
     rol: str
 

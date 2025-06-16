@@ -73,20 +73,31 @@ Para agregarlos o actualizarlos en el futuro:
 - Ruta vieja: `/admin_panel` servía un panel estático con `styles.css`.
 - Ruta nueva: `/admin/panel` ahora responde con `admin_panel.html` basado en AdminLTE.
 - Los endpoints privados requieren token JWT por `Authorization: Bearer`.
-- Desde esta migración, **AdminLTE** queda establecido como la plantilla oficial
-  para todo el panel administrativo. El panel anterior se eliminó por completo.
+- Desde esta migración, **AdminLTE** queda establecido como la plantilla oficial para todo el panel administrativo. El panel anterior se eliminó por completo.
 
 ### Limpieza 2025-06-15
 
 - Se eliminaron las plantillas obsoletas `admin_bash.html`, `admin_facturacion.html`, `admin_revisos.html` y `panel_admin.html`.
 - Solo permanecen las plantillas vigentes en `/templates` y los assets actuales en `/static` y `app_publico/static`.
 
-### Panel administrativo renovado 2025-06-16
+### Panel administrativo modular 2025-06-17
 
-Se restableció una vista de inicio llamada `panel_admin.html` con menú lateral.
-Desde allí se accede a secciones de **Reportes**, **Facturación**, **Revisos**,
-**Bash Generator** y **Mercado Pago**. Cada una cuenta con su propia plantilla
-en la carpeta `templates` y se sirve mediante rutas `/admin/*`.
+`panel_admin.html` actúa como layout del dashboard y cada módulo cuenta con su propia vista.
+Principales rutas disponibles:
+
+- `/admin/clientes` → `clientes_admin.html`
+- `/admin/alquileres` → `alquileres_admin.html`
+- `/admin/ventas` → `ventas_admin.html`
+- `/admin/limpiezas` → `limpiezas_admin.html`
+- `/admin/reportes` → `reportes_admin.html`
+- `/admin/facturacion` → `facturacion_admin.html`
+- `/admin/morosos` → `morosos_admin.html`
+- `/admin/emails` → `emails_admin.html`
+- `/admin/ia-respuestas` → `ia_respuestas_admin.html`
+- `/admin/bash-generator` → `bash_generator_admin.html`
+- `/admin/mercadopago` → `mercadopago_admin.html`
+
+Las peticiones de datos se sirven ahora en endpoints `/admin/api/*` para separar las vistas HTML del API.
 
 ### Ubicación de plantillas públicas
 

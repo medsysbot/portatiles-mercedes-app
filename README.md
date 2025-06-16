@@ -108,6 +108,9 @@ Autentica al usuario según su correo y rol.
 }
 ```
 
+> **Nota:** el campo debe llamarse siempre `password`. Evitá usar variantes con
+> ñ o tildes en el nombre de la propiedad.
+
 **Respuesta exitosa**
 ```json
 {

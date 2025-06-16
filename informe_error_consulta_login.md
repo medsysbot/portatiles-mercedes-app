@@ -14,9 +14,9 @@ Se encapsuló la llamada `.single().execute()` dentro de un bloque `try/except` 
                 .single()
                 .execute()
             )
-        except Exception as exc:  # pragma: no cover - Supabase errors
+        except Exception as exc:
             logger.warning(
-                f"Login fallido – consulta sin resultado para {email}: {exc}"
+                f"Login fallido – usuario o rol no encontrado: {email} / {rol} ({exc})"
             )
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
@@ -27,7 +27,7 @@ Se encapsuló la llamada `.single().execute()` dentro de un bloque `try/except` 
 ## Ejemplo de log
 
 ```
-2025-06-16 09:40:12,678 [WARNING] Login fallido – consulta sin resultado para usuario@ejemplo.com: JSON object requested, multiple (or no) rows returned
+2025-06-16 09:40:12,678 [WARNING] Login fallido – usuario o rol no encontrado: usuario@ejemplo.com / Administrador (JSON object requested, multiple (or no) rows returned)
 ```
 
 ## Ejemplo de respuesta

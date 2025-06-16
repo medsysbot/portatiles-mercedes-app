@@ -125,9 +125,9 @@ async def login(datos: LoginInput):
                 .single()
                 .execute()
             )
-        except Exception as exc:  # pragma: no cover - Supabase errors
+        except Exception as exc:
             logger.warning(
-                f"Login fallido – consulta sin resultado para {email}: {exc}"
+                f"Login fallido – usuario o rol no encontrado: {email} / {rol} ({exc})"
             )
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

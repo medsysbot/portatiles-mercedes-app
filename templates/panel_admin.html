@@ -28,16 +28,16 @@
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
           <li class="nav-item"><a href="/admin/clientes" class="nav-link"><i class="nav-icon fas fa-users"></i><p>Clientes</p></a></li>
-          <li class="nav-item"><a href="/admin/alquileres" class="nav-link btn btn-tab"><i class="nav-icon fas fa-toilet"></i><p>Alquileres</p></a></li>
+          <li class="nav-item"><a href="/admin/alquileres" class="nav-link"><i class="nav-icon fas fa-file-contract"></i><p>Alquileres</p></a></li>
           <li class="nav-item"><a href="/admin/ventas" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Ventas</p></a></li>
-          <li class="nav-item"><a href="/admin/limpiezas" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Limpiezas</p></a></li>
-          <li class="nav-item"><a href="/admin/reportes" class="nav-link"><i class="nav-icon fas fa-chart-bar"></i><p>Reportes</p></a></li>
-          <li class="nav-item"><a href="/admin/facturacion" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturación</p></a></li>
+          <li class="nav-item"><a href="/admin/limpieza" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
+          <li class="nav-item"><a href="/admin/reportes" class="nav-link"><i class="nav-icon fas fa-file-alt"></i><p>Reportes</p></a></li>
+          <li class="nav-item"><a href="/admin/facturas" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturas pendientes</p></a></li>
           <li class="nav-item"><a href="/admin/morosos" class="nav-link"><i class="nav-icon fas fa-exclamation-triangle"></i><p>Morosos</p></a></li>
           <li class="nav-item"><a href="/admin/emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
-          <li class="nav-item"><a href="/admin/ia-respuestas" class="nav-link"><i class="nav-icon fas fa-robot"></i><p>IA Respuestas</p></a></li>
-          <li class="nav-item"><a href="/admin/bash-generator" class="nav-link"><i class="nav-icon fas fa-terminal"></i><p>Bash Generator</p></a></li>
-          <li class="nav-item"><a href="/admin/mercadopago" class="nav-link"><i class="nav-icon fas fa-credit-card"></i><p>Mercado Pago</p></a></li>
+          <li class="nav-item"><a href="/admin/ia/respuestas" class="nav-link"><i class="nav-icon fas fa-robot"></i><p>IA – Respuestas</p></a></li>
+          <li class="nav-item"><a href="/admin/ia/clasificados" class="nav-link"><i class="nav-icon fas fa-mail-bulk"></i><p>IA – Clasificados</p></a></li>
+          <li class="nav-item"><a href="/admin/graficos" class="nav-link"><i class="nav-icon fas fa-chart-line"></i><p>Gráficos</p></a></li>
         </ul>
       </nav>
     </div>
@@ -48,9 +48,91 @@
     <section class="content">
       <div class="container-fluid">
         {% block content %}
-        <h2>Panel de administración</h2>
-        <p>Seleccioná una sección del menú para comenzar.</p>
-        {% endblock %}
+<div class="row">
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-info">
+      <div class="inner">
+        <h3>384</h3>
+        <p>Total Clientes</p>
+      </div>
+      <div class="icon"><i class="fas fa-users"></i></div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-success">
+      <div class="inner">
+        <h3>128</h3>
+        <p>Alquileres</p>
+      </div>
+      <div class="icon"><i class="fas fa-file-contract"></i></div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-warning">
+      <div class="inner">
+        <h3>96</h3>
+        <p>Ventas</p>
+      </div>
+      <div class="icon"><i class="fas fa-shopping-cart"></i></div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-primary">
+      <div class="inner">
+        <h3>23</h3>
+        <p>Pendientes</p>
+      </div>
+      <div class="icon"><i class="fas fa-clock"></i></div>
+    </div>
+  </div>
+  <div class="col-lg-3 col-6">
+    <div class="small-box bg-danger">
+      <div class="inner">
+        <h3>8</h3>
+        <p>Morosos</p>
+      </div>
+      <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+    </div>
+  </div>
+</div>
+<div class="row mt-4">
+  <div class="col-12">
+    <canvas id="graficoVentas" style="min-height:300px"></canvas>
+  </div>
+</div>
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Últimos movimientos</h3></div>
+      <div class="card-body p-0">
+        <table class="table table-striped">
+          <thead><tr><th>Fecha</th><th>Descripción</th><th>Monto</th></tr></thead>
+          <tbody>
+            <tr><td>01/06</td><td>Venta de insumos</td><td>$2.500</td></tr>
+            <tr><td>03/06</td><td>Alquiler mensual</td><td>$8.000</td></tr>
+            <tr><td>05/06</td><td>Servicio de limpieza</td><td>$1.200</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header"><h3 class="card-title">Últimos emails</h3></div>
+      <div class="card-body p-0">
+        <table class="table table-striped">
+          <thead><tr><th>Fecha</th><th>Asunto</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td>02/06</td><td>Bienvenida</td><td>Enviado</td></tr>
+            <tr><td>04/06</td><td>Factura pendiente</td><td>Enviado</td></tr>
+            <tr><td>06/06</td><td>Recordatorio pago</td><td>Pendiente</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
       </div>
     </section>
   </div>
@@ -58,12 +140,30 @@
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
   document.getElementById('btnLogout').addEventListener('click', () => {
     localStorage.removeItem('access_token');
     localStorage.removeItem('usuario');
     localStorage.removeItem('rol');
     window.location.href = '/login';
+  });
+
+  const ctx = document.getElementById('graficoVentas').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+      datasets: [{
+        label: 'Ventas',
+        data: [12, 19, 7, 15, 22, 17],
+        backgroundColor: 'rgba(60,141,188,0.9)'
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false
+    }
   });
 </script>
 {% endblock %}

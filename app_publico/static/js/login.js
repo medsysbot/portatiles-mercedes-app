@@ -43,7 +43,7 @@ if (form) {
                         localStorage.setItem("nombre", data.nombre);
                     }
                     if (data.rol === "Administrador") {
-                        window.location.href = "/admin/panel";
+                        window.location.href = "/admin/dashboard";
                     } else {
                         window.location.href = "/cliente_panel";
                     }

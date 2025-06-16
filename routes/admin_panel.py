@@ -49,6 +49,12 @@ def admin_panel_view(request: Request):
     return templates.TemplateResponse("admin_panel.html", {"request": request})
 
 
+@router.get("/admin/mercadopago", response_class=HTMLResponse)
+def admin_mercadopago_view(request: Request):
+    """Dashboard de pagos y cobros."""
+    return templates.TemplateResponse("admin_mercadopago.html", {"request": request})
+
+
 @router.get("/cliente_panel")
 def cliente_panel(user=Depends(auth_required)):
     if user["rol"] != "cliente":

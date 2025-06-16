@@ -42,10 +42,10 @@ if (form) {
                     if (data.nombre) {
                         localStorage.setItem("nombre", data.nombre);
                     }
-                    if (data.rol === "Administrador") {
-                        window.location.href = "/admin/dashboard";
+                    if (data.rol === "Administrador" || data.rol === "empleado") {
+                        window.location.href = "/admin/panel";
                     } else {
-                        window.location.href = "/cliente_panel";
+                        window.location.href = "/cliente_panel.html";
                     }
                 } else {
                     if (errorEl) {

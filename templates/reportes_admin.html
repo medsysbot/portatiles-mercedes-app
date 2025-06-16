@@ -2,5 +2,23 @@
 {% block title %}Reportes{% endblock %}
 {% block content %}
 <h2>Reportes generales</h2>
-<p>Resumen y análisis de la operación.</p>
+<div style="overflow-x:auto; background-color:#f9f9f9; padding:1rem;">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Dato 1</th>
+        <th>Dato 2</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-reportes">
+      <!-- filas dinámicas desde JS -->
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='/js/reportes_admin.js') }}"></script>
 {% endblock %}

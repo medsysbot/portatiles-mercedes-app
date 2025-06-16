@@ -86,6 +86,8 @@ Para agregarlos o actualizarlos en el futuro:
 Principales rutas disponibles:
 
 - `/admin/clientes` → `clientes_admin.html`
+  - Alta: `/admin/clientes/nuevo`
+  - Edición: `/admin/clientes/{dni}/editar`
 - `/admin/alquileres` → `alquileres_admin.html`
 - `/admin/ventas` → `ventas_admin.html`
 - `/admin/limpiezas` → `limpiezas_admin.html`

@@ -43,7 +43,12 @@
 | POST | /registrar_venta | Registra una venta de baños | JSON (URL PDF) | Sí |
 | POST | /registrar_limpieza | Guarda los datos de limpieza y sube remito | JSON | Sí |
 | POST | /activar_debito | Activa débitos automáticos para un cliente | JSON | Sí |
-| GET | /admin/clientes | Lista de clientes con filtros | JSON | Sí |
+| GET | /admin/clientes | Vista de clientes | HTML | Sí |
+| GET | /admin/clientes/nuevo | Formulario alta de cliente | HTML | Sí |
+| POST | /admin/clientes/nuevo | Crear cliente | Redirección | Sí |
+| GET | /admin/clientes/{dni}/editar | Formulario edición cliente | HTML | Sí |
+| POST | /admin/clientes/{dni}/editar | Actualizar cliente | Redirección | Sí |
+| POST | /admin/clientes/{dni}/eliminar | Eliminar cliente | Redirección | Sí |
 | GET | /admin/alquileres | Consulta de alquileres | JSON | Sí |
 | GET | /admin/ventas | Consulta de ventas | JSON | Sí |
 | GET | /admin/limpiezas | Consulta de limpiezas | JSON | Sí |

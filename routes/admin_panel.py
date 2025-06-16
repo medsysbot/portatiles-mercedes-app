@@ -12,11 +12,12 @@ Proyecto: Portátiles Mercedes
 from datetime import date
 import os
 
-from fastapi import APIRouter, HTTPException, Query, Depends, Request
-from fastapi.responses import HTMLResponse
+from fastapi import APIRouter, HTTPException, Query, Depends, Request, Form
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from utils.auth_utils import auth_required
 from supabase import create_client, Client
+from pydantic import BaseModel
 
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -35,6 +36,16 @@ router = APIRouter()
 # Las plantillas privadas ahora se ubican en la carpeta `templates` de la raíz
 # del proyecto. Por eso actualizamos la ruta que usa Jinja2Templates.
 templates = Jinja2Templates(directory="templates")
+
+
+class Cliente(BaseModel):
+    """Modelo de datos para crear o actualizar clientes."""
+
+    nombre: str
+    dni: str
+    email: str
+    telefono: str | None = None
+    estado: str = "activo"
 
 
 @router.get("/admin/panel", response_class=HTMLResponse)
@@ -78,9 +89,170 @@ def admin_bash_generator_view(request: Request):
 
 # Secciones del panel
 @router.get("/admin/clientes", response_class=HTMLResponse)
-def admin_clientes_page(request: Request):
-    """Administración de clientes."""
-    return templates.TemplateResponse("clientes_admin.html", {"request": request})
+def admin_clientes_page(
+    request: Request,
+    q: str | None = Query(None, description="Búsqueda por nombre o email"),
+    estado: str | None = Query(None),
+    page: int = Query(1, gt=0),
+    user: dict = Depends(auth_required),
+):
+    """Administración de clientes con filtros y paginación."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    verificar_admin(user)
+
+    resp = supabase.table("clientes").select("*").execute()
+    if (
+        not resp.data
+        or (hasattr(resp, "status_code") and resp.status_code != 200)
+        or getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=str(getattr(resp, "error", "Error en Supabase")),
+        )
+    clientes = resp.data
+    if q:
+        q_low = q.lower()
+        clientes = [
+            c
+            for c in clientes
+            if q_low in (c.get("nombre") or "").lower()
+            or q_low in (c.get("email") or "").lower()
+        ]
+    if estado:
+        clientes = [c for c in clientes if c.get("estado") == estado]
+
+    page_size = 20
+    start = (page - 1) * page_size
+    end = start + page_size
+    paginados = clientes[start:end]
+    hay_mas = end < len(clientes)
+
+    # Conservar los query params excepto page para los enlaces de paginación
+    params = request.query_params.multi_items()
+    query_str = "&".join(
+        f"{k}={v}" for k, v in params if k != "page"
+    )
+
+    contexto = {
+        "request": request,
+        "clientes": paginados,
+        "pagina_actual": page,
+        "hay_mas": hay_mas,
+        "query_str": query_str,
+    }
+    return templates.TemplateResponse("clientes_admin.html", contexto)
+
+
+@router.get("/admin/clientes/nuevo", response_class=HTMLResponse)
+def form_nuevo_cliente(request: Request, user: dict = Depends(auth_required)):
+    """Formulario para crear un nuevo cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    verificar_admin(user)
+    return templates.TemplateResponse("cliente_form.html", {"request": request, "cliente": None})
+
+
+@router.post("/admin/clientes/nuevo")
+def crear_cliente(
+    nombre: str = Form(...),
+    dni: str = Form(...),
+    email: str = Form(...),
+    telefono: str | None = Form(None),
+    estado: str = Form("activo"),
+    user: dict = Depends(auth_required),
+):
+    """Procesa la creación de un cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    verificar_admin(user)
+    datos = Cliente(
+        nombre=nombre,
+        dni=dni,
+        email=email,
+        telefono=telefono,
+        estado=estado,
+    ).model_dump()
+    resp = supabase.table("clientes").insert(datos).execute()
+    if (
+        not resp.data
+        or (hasattr(resp, "status_code") and resp.status_code != 201)
+        or getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=str(getattr(resp, "error", "Error en Supabase")),
+        )
+    return RedirectResponse("/admin/clientes", status_code=303)
+
+
+@router.get("/admin/clientes/{dni}/editar", response_class=HTMLResponse)
+def form_editar_cliente(dni: str, request: Request, user: dict = Depends(auth_required)):
+    """Formulario de edición de un cliente existente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    verificar_admin(user)
+    resp = supabase.table("clientes").select("*").eq("dni", dni).single().execute()
+    if (
+        not resp.data
+        or (hasattr(resp, "status_code") and resp.status_code != 200)
+        or getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(status_code=404, detail="Cliente no encontrado")
+    return templates.TemplateResponse(
+        "cliente_form.html",
+        {"request": request, "cliente": resp.data},
+    )
+
+
+@router.post("/admin/clientes/{dni}/editar")
+def editar_cliente(
+    dni: str,
+    nombre: str = Form(...),
+    email: str = Form(...),
+    telefono: str | None = Form(None),
+    estado: str = Form("activo"),
+    user: dict = Depends(auth_required),
+):
+    """Guarda los cambios de un cliente."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    verificar_admin(user)
+    datos = {
+        "nombre": nombre,
+        "email": email,
+        "telefono": telefono,
+        "estado": estado,
+    }
+    resp = supabase.table("clientes").update(datos).eq("dni", dni).execute()
+    if (
+        not resp.data
+        or (hasattr(resp, "status_code") and resp.status_code not in (200, 204))
+        or getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=str(getattr(resp, "error", "Error en Supabase")),
+        )
+    return RedirectResponse("/admin/clientes", status_code=303)
+
+
+@router.post("/admin/clientes/{dni}/eliminar")
+def eliminar_cliente(dni: str, user: dict = Depends(auth_required)):
+    """Elimina un cliente por su DNI."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    verificar_admin(user)
+    resp = supabase.table("clientes").delete().eq("dni", dni).execute()
+    if (
+        getattr(resp, "error", None) is not None
+    ):
+        raise HTTPException(
+            status_code=400,
+            detail=str(getattr(resp, "error", "Error en Supabase")),
+        )
+    return RedirectResponse("/admin/clientes", status_code=303)
 
 @router.get("/admin/alquileres", response_class=HTMLResponse)
 def admin_alquileres_page(request: Request):

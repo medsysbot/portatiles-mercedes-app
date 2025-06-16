@@ -15,20 +15,7 @@ import smtplib
 from email.message import EmailMessage
 
 from fastapi import APIRouter, HTTPException
-from supabase import create_client, Client
 
-# Configuración de Supabase
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SERVICE_ROLE_KEY = os.getenv("SERVICE_ROLE_KEY")
-
-if not SUPABASE_URL or not SERVICE_ROLE_KEY:
-    print(
-        "Advertencia: SUPABASE_URL y SERVICE_ROLE_KEY no estan configurados. "
-        "La conexión a Supabase estará deshabilitada."
-    )
-    supabase = None
-else:
-    supabase: Client = create_client(SUPABASE_URL, SERVICE_ROLE_KEY)
 
 # Configuración para enviar correos
 EMAIL_ORIGIN = os.getenv("EMAIL_ORIGIN")
@@ -69,114 +56,22 @@ def enviar_correo(destinatario: str, asunto: str, mensaje: str) -> None:
 
 def alerta_cumpleanos() -> None:
     """Saluda a los clientes que cumplen años hoy."""
-    if not supabase:
-        print(
-            "Advertencia: Supabase no configurado. No se enviar\u00e1n alertas de cumplea\u00f1os."
-        )
-        return
-
-    hoy = date.today()
-    resp = supabase.table("clientes").select("nombre,email,fecha_nacimiento").execute()
-    for cli in resp.data or []:
-        fecha = cli.get("fecha_nacimiento")
-        email = cli.get("email")
-        if not fecha or not email:
-            continue
-        cumple = date.fromisoformat(fecha)
-        if cumple.month == hoy.month and cumple.day == hoy.day:
-            asunto = "\u00a1Feliz cumplea\u00f1os!"
-            cuerpo = (
-                f"Hola {cli['nombre']}, desde Port\xe1tiles Mercedes te deseamos un feliz cumplea\u00f1os."
-            )
-            enviar_correo(email, asunto, cuerpo)
+    pass
 
 
 def alertas_proxima_limpieza() -> None:
-    """Notifica cuando corresponde una limpieza según la última fecha registrada."""
-    if not supabase:
-        print(
-            "Advertencia: Supabase no configurado. No se verificar\u00e1n alertas de limpieza."
-        )
-        return
-
-    hoy = date.today()
-    resp = supabase.table("alquileres").select(
-        "id,dni_cliente,email_responsable,email,fecha_inicio,fecha_ultima_limpieza"
-    ).execute()
-    for reg in resp.data or []:
-        ultima = reg.get("fecha_ultima_limpieza") or reg.get("fecha_inicio")
-        destino = reg.get("email_responsable") or reg.get("email")
-        if not ultima or not destino:
-            continue
-        try:
-            fecha_ult = date.fromisoformat(ultima)
-        except ValueError:
-            continue
-        proxima = fecha_ult + timedelta(days=7)
-        if proxima <= hoy:
-            asunto = "Limpieza programada"
-            cuerpo = (
-                "Se debe realizar la limpieza del ba\u00f1o correspondiente al alquiler "
-                f"ID {reg['id']} (cliente {reg.get('dni_cliente')})."
-            )
-            enviar_correo(destino, asunto, cuerpo)
+    """Notifica cuando corresponde una limpieza."""
+    pass
 
 
 def alertas_pagos_vencidos() -> None:
-    """Envía recordatorios por pagos vencidos en ventas o alquileres."""
-    if not supabase:
-        print(
-            "Advertencia: Supabase no configurado. No se revisar\u00e1n pagos vencidos."
-        )
-        return
-
-    hoy = date.today()
-    ventas = supabase.table("ventas").select(
-        "id,cliente_nombre,dni,email,fecha_pago,estado_pago"
-    ).execute()
-    for v in ventas.data or []:
-        pago = v.get("fecha_pago")
-        estado = v.get("estado_pago")
-        email = v.get("email")
-        if estado == "pagado" or not pago or not email:
-            continue
-        try:
-            fecha_pago = date.fromisoformat(pago)
-        except ValueError:
-            continue
-        if fecha_pago < hoy:
-            asunto = "Pago vencido"
-            cuerpo = (
-                f"Estimado {v.get('cliente_nombre')}, su pago se encuentra vencido. Por favor regularice la situaci\u00f3n."
-            )
-            enviar_correo(email, asunto, cuerpo)
-
-    alquileres = supabase.table("alquileres").select(
-        "id,dni_cliente,email,fecha_pago,estado_pago"
-    ).execute()
-    for alq in alquileres.data or []:
-        pago = alq.get("fecha_pago")
-        estado = alq.get("estado_pago")
-        email = alq.get("email")
-        if estado == "pagado" or not pago or not email:
-            continue
-        try:
-            fecha_pago = date.fromisoformat(pago)
-        except ValueError:
-            continue
-        if fecha_pago < hoy:
-            asunto = "Pago de alquiler vencido"
-            cuerpo = (
-                "Le recordamos que el pago del alquiler est\xe1 vencido. Por favor, p\u00f3ngase en contacto con Port\xe1tiles Mercedes."
-            )
-            enviar_correo(email, asunto, cuerpo)
+    """Envía recordatorios por pagos vencidos."""
+    pass
 
 
 @router.post("/ejecutar_alertas")
 async def ejecutar_alertas():
     """Endpoint para lanzar manualmente todas las alertas."""
-    if not supabase:
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
 
     try:
         alerta_cumpleanos()

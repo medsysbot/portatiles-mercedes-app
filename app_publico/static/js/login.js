@@ -3,7 +3,7 @@ Archivo: login.js
 Descripción: Lógica de validación y envío del login público
 Acceso: Público
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-06-15
+Última modificación: 2025-06-16
 */
 const form = document.getElementById("loginForm") || document.getElementById("form-login");
 if (form) {
@@ -14,7 +14,7 @@ if (form) {
         const email = document.getElementById("email").value;
         // IMPORTANTE: El campo debe llamarse "password" (sin ñ ni tilde) en todo el flujo
         const password = document.getElementById("password").value;
-        const rol = form.querySelector('select[name="rol"]').value;
+        const rol = document.getElementById("rol").value.trim();
 
         // Log de depuración para verificar los datos antes del envío
         console.log("Datos enviados al backend:", { email, password, rol });

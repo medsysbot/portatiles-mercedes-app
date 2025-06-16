@@ -101,6 +101,12 @@ Principales rutas disponibles:
 
 Las peticiones de datos se sirven ahora en endpoints `/admin/api/*` para separar las vistas HTML del API.
 
+### Actualización módulo de clientes 2025-06-17
+
+Se incorporaron campos de **apellido** y **observaciones** en el CRUD de clientes,
+además de búsqueda en tiempo real por nombre, DNI o email. Esta sección ahora es
+accesible para usuarios con rol *Administrador* o *Empleado*.
+
 ### Ubicación de plantillas públicas
 
 Los archivos HTML visibles para cualquier visitante se almacenan en

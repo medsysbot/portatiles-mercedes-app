@@ -42,10 +42,12 @@ class Cliente(BaseModel):
     """Modelo de datos para crear o actualizar clientes."""
 
     nombre: str
+    apellido: str
     dni: str
     email: str
     telefono: str | None = None
     estado: str = "activo"
+    observaciones: str | None = None
 
 
 @router.get("/admin/panel", response_class=HTMLResponse)
@@ -55,8 +57,8 @@ def admin_panel_view(request: Request):
 
 
 def verificar_admin(user: dict) -> dict:
-    """Valida que el usuario autenticado sea de rol Administrador."""
-    if user.get("rol") != "Administrador":
+    """Valida que el usuario autenticado sea de rol Administrador o Empleado."""
+    if user.get("rol") not in ("Administrador", "Empleado"):
         raise HTTPException(status_code=401, detail="No autorizado")
     return user
 
@@ -91,7 +93,7 @@ def admin_bash_generator_view(request: Request):
 @router.get("/admin/clientes", response_class=HTMLResponse)
 def admin_clientes_page(
     request: Request,
-    q: str | None = Query(None, description="Búsqueda por nombre o email"),
+    q: str | None = Query(None, description="Búsqueda por nombre, email o DNI"),
     estado: str | None = Query(None),
     page: int = Query(1, gt=0),
     user: dict = Depends(auth_required),
@@ -118,7 +120,9 @@ def admin_clientes_page(
             c
             for c in clientes
             if q_low in (c.get("nombre") or "").lower()
+            or q_low in (c.get("apellido") or "").lower()
             or q_low in (c.get("email") or "").lower()
+            or q_low in (c.get("dni") or "").lower()
         ]
     if estado:
         clientes = [c for c in clientes if c.get("estado") == estado]
@@ -157,10 +161,12 @@ def form_nuevo_cliente(request: Request, user: dict = Depends(auth_required)):
 @router.post("/admin/clientes/nuevo")
 def crear_cliente(
     nombre: str = Form(...),
+    apellido: str = Form(...),
     dni: str = Form(...),
     email: str = Form(...),
     telefono: str | None = Form(None),
     estado: str = Form("activo"),
+    observaciones: str | None = Form(None),
     user: dict = Depends(auth_required),
 ):
     """Procesa la creación de un cliente."""
@@ -169,10 +175,12 @@ def crear_cliente(
     verificar_admin(user)
     datos = Cliente(
         nombre=nombre,
+        apellido=apellido,
         dni=dni,
         email=email,
         telefono=telefono,
         estado=estado,
+        observaciones=observaciones,
     ).model_dump()
     resp = supabase.table("clientes").insert(datos).execute()
     if (
@@ -210,9 +218,11 @@ def form_editar_cliente(dni: str, request: Request, user: dict = Depends(auth_re
 def editar_cliente(
     dni: str,
     nombre: str = Form(...),
+    apellido: str = Form(...),
     email: str = Form(...),
     telefono: str | None = Form(None),
     estado: str = Form("activo"),
+    observaciones: str | None = Form(None),
     user: dict = Depends(auth_required),
 ):
     """Guarda los cambios de un cliente."""
@@ -221,9 +231,11 @@ def editar_cliente(
     verificar_admin(user)
     datos = {
         "nombre": nombre,
+        "apellido": apellido,
         "email": email,
         "telefono": telefono,
         "estado": estado,
+        "observaciones": observaciones,
     }
     resp = supabase.table("clientes").update(datos).eq("dni", dni).execute()
     if (
@@ -295,9 +307,11 @@ def cliente_panel(user=Depends(auth_required)):
 @router.get("/admin/api/clientes")
 async def admin_clientes(
     dni: str | None = Query(None),
+    q: str | None = Query(None),
+    estado: str | None = Query(None),
     user: dict = Depends(auth_required),
 ):
-    """Lista de clientes con filtro opcional por DNI."""
+    """Lista de clientes con filtros por DNI, búsqueda y estado."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     verificar_admin(user)
@@ -314,7 +328,20 @@ async def admin_clientes(
             status_code=400,
             detail=str(getattr(resp, "error", "Error en Supabase")),
         )
-    return resp.data
+    clientes = resp.data
+    if q:
+        q_low = q.lower()
+        clientes = [
+            c
+            for c in clientes
+            if q_low in (c.get("nombre") or "").lower()
+            or q_low in (c.get("apellido") or "").lower()
+            or q_low in (c.get("email") or "").lower()
+            or q_low in (c.get("dni") or "").lower()
+        ]
+    if estado:
+        clientes = [c for c in clientes if c.get("estado") == estado]
+    return clientes
 
 
 @router.get("/admin/api/alquileres")

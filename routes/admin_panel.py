@@ -49,10 +49,34 @@ def admin_panel_view(request: Request):
     return templates.TemplateResponse("admin_panel.html", {"request": request})
 
 
+@router.get("/admin/dashboard", response_class=HTMLResponse)
+def admin_dashboard_view(request: Request):
+    """Vista principal con menú de secciones"""
+    return templates.TemplateResponse("panel_admin.html", {"request": request})
+
+
 @router.get("/admin/mercadopago", response_class=HTMLResponse)
 def admin_mercadopago_view(request: Request):
     """Dashboard de pagos y cobros."""
     return templates.TemplateResponse("admin_mercadopago.html", {"request": request})
+
+
+@router.get("/admin/facturacion", response_class=HTMLResponse)
+def admin_facturacion_view(request: Request):
+    """Pantalla de facturación"""
+    return templates.TemplateResponse("facturacion.html", {"request": request})
+
+
+@router.get("/admin/revisos", response_class=HTMLResponse)
+def admin_revisos_view(request: Request):
+    """Pantalla para revisos técnicos"""
+    return templates.TemplateResponse("revisos.html", {"request": request})
+
+
+@router.get("/admin/bash-generator", response_class=HTMLResponse)
+def admin_bash_generator_view(request: Request):
+    """Pantalla para generación de scripts bash"""
+    return templates.TemplateResponse("bash_generator.html", {"request": request})
 
 
 @router.get("/cliente_panel")

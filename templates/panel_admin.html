@@ -1,0 +1,61 @@
+{% extends 'base_adminlte.html' %}
+{% block title %}Panel Administración{% endblock %}
+{% block body_class %}hold-transition sidebar-mini layout-fixed{% endblock %}
+
+{% block body %}
+<div class="wrapper">
+  <!-- Navbar -->
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <button id="btnLogout" class="btn btn-default btn-sm">Cerrar sesión</button>
+      </li>
+    </ul>
+  </nav>
+  <!-- /.navbar -->
+
+  <!-- Main Sidebar Container -->
+  <aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <a href="#" class="brand-link text-center">
+      <span class="brand-text font-weight-light">Portátiles Mercedes</span>
+    </a>
+    <div class="sidebar">
+      <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+          <li class="nav-item"><a href="/admin/panel" class="nav-link"><i class="nav-icon fas fa-chart-bar"></i><p>Reportes</p></a></li>
+          <li class="nav-item"><a href="/admin/facturacion" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturación</p></a></li>
+          <li class="nav-item"><a href="/admin/revisos" class="nav-link"><i class="nav-icon fas fa-clipboard-check"></i><p>Revisos</p></a></li>
+          <li class="nav-item"><a href="/admin/bash-generator" class="nav-link"><i class="nav-icon fas fa-terminal"></i><p>Bash Generator</p></a></li>
+          <li class="nav-item"><a href="/admin/mercadopago" class="nav-link"><i class="nav-icon fas fa-credit-card"></i><p>Mercado Pago</p></a></li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+  <!-- /.sidebar -->
+
+  <div class="content-wrapper pt-4">
+    <section class="content">
+      <div class="container-fluid">
+        <h2>Panel de administración</h2>
+        <p>Seleccioná una sección del menú para comenzar.</p>
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.getElementById('btnLogout').addEventListener('click', () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('rol');
+    window.location.href = '/login';
+  });
+</script>
+{% endblock %}

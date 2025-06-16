@@ -56,7 +56,7 @@ Para agregarlos o actualizarlos en el futuro:
 - **login.js**: maneja el inicio de sesión y almacena el token en `localStorage`.
 - **registro_clientes.js**: envía el formulario de registro de clientes de forma asíncrona.
 - **AdminLTE 3.2**: cargado desde CDN junto con jQuery 3.6 y Bootstrap 4.6.
-- **Flujo de administración**: tras el inicio de sesión, el splash (`/admin_splash`) incluye un botón que dirige únicamente al panel moderno ubicado en `/admin/panel`.
+ - **Flujo de administración**: tras el inicio de sesión, el splash (`/admin_splash`) incluye un botón que dirige al tablero ubicado en `/admin/dashboard`.
 - Se eliminó el panel administrativo antiguo y su hoja de estilos, consolidando todo en la plantilla moderna AdminLTE.
 - Todo el flujo posterior al splash ahora se muestra exclusivamente con esta plantilla basada en AdminLTE.
 
@@ -72,6 +72,13 @@ Para agregarlos o actualizarlos en el futuro:
 
 - Se eliminaron las plantillas obsoletas `admin_bash.html`, `admin_facturacion.html`, `admin_revisos.html` y `panel_admin.html`.
 - Solo permanecen las plantillas vigentes en `/templates` y los assets actuales en `/static` y `app_publico/static`.
+
+### Panel administrativo renovado 2025-06-16
+
+Se restableció una vista de inicio llamada `panel_admin.html` con menú lateral.
+Desde allí se accede a secciones de **Reportes**, **Facturación**, **Revisos**,
+**Bash Generator** y **Mercado Pago**. Cada una cuenta con su propia plantilla
+en la carpeta `templates` y se sirve mediante rutas `/admin/*`.
 
 ### Ubicación de plantillas públicas
 

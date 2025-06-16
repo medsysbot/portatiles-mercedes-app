@@ -7,7 +7,12 @@
 | GET | / | Página de inicio / landing | index.html | No |
 | GET | /login | Formulario de login | login.html | No |
 | GET | /admin_splash | Splash de bienvenida de administrador | admin_splash.html | Sí |
+| GET | /admin/dashboard | Inicio del panel administrativo | panel_admin.html | Sí |
 | GET | /admin/panel | Panel de administración moderno | admin_panel.html | Sí |
+| GET | /admin/facturacion | Facturación | facturacion.html | Sí |
+| GET | /admin/revisos | Revisos técnicos | revisos.html | Sí |
+| GET | /admin/bash-generator | Generador de Bash | bash_generator.html | Sí |
+| GET | /admin/mercadopago | Pagos (Mercado Pago) | admin_mercadopago.html | Sí |
 | GET | /panel_viejo | [OBSOLETA] Panel anterior | panel_viejo.html | Sí |
 | GET | /cliente_panel | Panel de clientes | cliente_panel.html | Sí |
 | GET | /alquiler | Página para registrar alquileres | alquiler.html | Sí |

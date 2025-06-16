@@ -20,7 +20,6 @@ from routes.debito import router as debito_router
 from routes.cliente_panel import router as cliente_router
 from routes.admin_panel import router as admin_router
 from routes.login import router as login_router
-from routes.archivos import router as archivos_router
 
 # Directorios base de las plantillas y archivos estáticos
 # Luego de reubicar `routes/` en la raíz del repositorio, la carpeta
@@ -48,7 +47,6 @@ router.include_router(debito_router)
 router.include_router(cliente_router)
 router.include_router(admin_router)
 router.include_router(login_router)
-router.include_router(archivos_router)
 
 @router.get("/", response_class=HTMLResponse)
 async def mostrar_index():

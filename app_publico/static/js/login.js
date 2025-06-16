@@ -18,6 +18,9 @@ if (form) {
             rol: form.querySelector('select[name="rol"]').value
         };
 
+        // Log de depuración para verificar los datos antes del envío
+        console.log("Datos enviados al backend:", datos);
+
         const errorEl = document.getElementById("errorMsg");
         if (errorEl) errorEl.textContent = "";
 

@@ -7,7 +7,7 @@
 | GET | / | Página de inicio / landing | index.html | No |
 | GET | /login | Formulario de login | login.html | No |
 | GET | /admin_splash | Splash de bienvenida de administrador | admin_splash.html | Sí |
-| GET | /admin_panel | Panel de administración moderno | admin_panel.html | Sí |
+| GET | /admin/panel | Panel de administración moderno | admin_panel.html | Sí |
 | GET | /panel_viejo | [OBSOLETA] Panel anterior | panel_viejo.html | Sí |
 | GET | /cliente_panel | Panel de clientes | cliente_panel.html | Sí |
 | GET | /alquiler | Página para registrar alquileres | alquiler.html | Sí |
@@ -66,4 +66,4 @@ Mantener este archivo actualizado para soporte y desarrollo.
 
 ### Historial reciente
 
-- 2025-06-13: migración total al panel administrativo moderno (`/admin_panel`). Ruta anterior `/panel_viejo` declarada obsoleta.
+- 2025-06-13: migración total al panel administrativo moderno (`/admin/panel`). Ruta anterior `/panel_viejo` declarada obsoleta.

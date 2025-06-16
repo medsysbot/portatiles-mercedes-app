@@ -71,7 +71,7 @@ async def obtener_cliente_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
-@router.get("/admin_panel.js")
+@router.get("/admin/panel.js")
 async def obtener_admin_js():
     """Script del panel administrativo."""
     js_path = PRIVATE_STATIC_DIR / "js" / "admin_panel.js"

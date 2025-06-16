@@ -23,6 +23,7 @@ Proyecto: Portátiles Mercedes
             width: 100vw;
             height: 100vh;
             font-family: 'Nunito', Arial, sans-serif;
+            /* Fondo principal de la pantalla de información */
             background: url('/app_publico/static/imagenes/fondo-info-bano.png') no-repeat center center fixed;
             background-size: cover;
             position: relative;
@@ -207,6 +208,29 @@ Proyecto: Portátiles Mercedes
             max-width: 100%;
         }
 
+        /* Contenedor que agrupa el icono y el texto informativo */
+        .info-contenedor {
+            margin-left: 20px;
+            margin-right: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        /* Icono de información ubicado antes del texto */
+        .icono-info {
+            width: 32px;
+            height: 32px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Área de texto con scroll propio */
+        .info-texto {
+            overflow-y: auto;
+            max-height: calc(100vh - 300px);
+        }
+
 
         .pie-pagina {
             width: 100%;
@@ -284,33 +308,39 @@ Proyecto: Portátiles Mercedes
             </div>
             <div class="contenedor-texto">
 <!-- ==== Texto descriptivo ==== -->
-                <div class="presentacion-portatiles">
-  <h3>🧪 Funcionamiento de los baños químicos</h3>
-  <p>
-    Los baños químicos funcionan mediante dos compartimentos clave:<br>
-    • Tanque de almacenamiento, con una solución química desinfectante y biodegradable que descompone los desechos y neutraliza olores.<br>
-    • Tanque de desechos, donde se depositan heces y orina, mezclándose con el reactivo sanitario.
-  </p>
-  <p>
-    Cuando el tanque está lleno, se vacía y limpia conforme a normas ambientales. Además, suele usarse un tinte azul para disimular el contenido y mejorar la apariencia del inodoro.
-  </p>
+                <div class="info-contenedor">
+                    <img src="/app_publico/static/icons/info-banos.png" alt="Información" class="icono-info">
+                    <div class="presentacion-portatiles info-texto">
+                        <h2><strong>Historia y funcionamiento del baño químico 🚽</strong></h2>
 
-  <h3>🕰️ Historia</h3>
-  <p>
-    Estos baños surgieron en los años 40 en California, EE.UU., para mejorar las condiciones sanitarias en astilleros navales. Con los años, se optimizó su diseño usando materiales como el polietileno, aumentando su durabilidad y adaptabilidad a diversos entornos. También se desarrollaron versiones compactas para vehículos, barcos y aviones.
-  </p>
+                        <p>Los baños químicos surgieron como una solución práctica y sanitaria para lugares donde no existe acceso a redes de saneamiento tradicionales. Su invención se remonta a la década de 1940, cuando la industria aeronáutica de Estados Unidos necesitaba baños portátiles en sus fábricas y obras.</p>
 
-  <h3>🌍 Usos actuales</h3>
-  <p>
-    Hoy en día, los baños químicos son fundamentales en:<br>
-    • Eventos masivos (conciertos, ferias).<br>
-    • Obras de construcción, como solución sanitaria para trabajadores.<br>
-    • Zonas rurales o de emergencia, donde no hay acceso a redes de saneamiento.
-  </p>
-  <p>
-    Su portabilidad e independencia los convierten en una herramienta crucial para la higiene y salud pública en entornos temporales o vulnerables.
-  </p>
-</div>
+                        <p>A diferencia de los baños convencionales, el baño químico almacena los desechos en un depósito sellado, utilizando una mezcla de productos químicos especiales que descomponen la materia orgánica, neutralizan olores y eliminan bacterias. Esto permite su uso seguro por varias personas antes de requerir vaciado.</p>
+
+                        <h3><strong>Ventajas del baño químico:</strong></h3>
+                        <ul>
+                            <li>Portabilidad total: puede instalarse en obras, eventos, campos, playas y zonas rurales.</li>
+                            <li>Independencia de redes cloacales.</li>
+                            <li>Fácil mantenimiento, con servicios de limpieza y recambio del líquido químico.</li>
+                            <li>Diseños modernos y cómodos, con ventilación, iluminación y hasta sistemas de lavado de manos.</li>
+                        </ul>
+
+                        <h3><strong>Curiosidades:</strong></h3>
+                        <ul>
+                            <li>El líquido azul típico es una mezcla de biocidas, surfactantes y colorantes. Neutraliza olores y evita la proliferación de gérmenes.</li>
+                            <li>En eventos masivos, se calculan entre 1 y 2 baños químicos cada 50 personas para garantizar la comodidad.</li>
+                            <li>Los baños químicos han evolucionado e incluyen modelos para personas con movilidad reducida, con barras de apoyo y rampas de acceso.</li>
+                        </ul>
+
+                        <h3><strong>¿Cómo se mantiene un baño químico?</strong></h3>
+                        <p>El servicio de limpieza consiste en el retiro de desechos mediante equipos especiales, lavado interior, reposición de papel y recarga del líquido químico desinfectante, garantizando higiene y seguridad para el usuario.</p>
+
+                        <h3><strong>¿Dónde se usan los baños químicos hoy?</strong></h3>
+                        <p>Son fundamentales en la construcción, en espectáculos y festivales, en campañas de emergencia, en la industria petrolera y en eventos deportivos, entre otros.</p>
+
+                        <p>Portátiles Mercedes brinda baños químicos de última generación, con servicio de mantenimiento rápido, cobertura regional y atención personalizada para cada cliente.</p>
+                    </div>
+                </div>
 <img src="/app_publico/static/imagenes/plano.png" alt="Plano de funcionamiento" style="display: block; margin: 30px auto 0 auto; width: 100%; max-width: 500px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
             </div>
         </div>

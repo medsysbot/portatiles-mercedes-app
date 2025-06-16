@@ -42,7 +42,11 @@ if (form) {
                     if (data.nombre) {
                         localStorage.setItem("nombre", data.nombre);
                     }
-                    window.location.href = "/admin_panel";
+                    if (data.rol === "Administrador") {
+                        window.location.href = "/admin/panel";
+                    } else {
+                        window.location.href = "/cliente_panel";
+                    }
                 } else {
                     if (errorEl) {
                         errorEl.textContent = data.detail || "Credenciales incorrectas.";

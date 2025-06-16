@@ -44,7 +44,7 @@ def verificar_admin(user: dict) -> dict:
     return user
 
 
-@router.get("/admin_panel", response_class=HTMLResponse)
+@router.get("/admin/panel", response_class=HTMLResponse)
 def admin_panel_view(request: Request):
     return templates.TemplateResponse("admin_panel.html", {"request": request})
 

@@ -2,5 +2,23 @@
 {% block title %}IA Clasificados{% endblock %}
 {% block content %}
 <h2>Sección de IA – Clasificados</h2>
-<p>Aquí se gestionarán los anuncios clasificados generados con IA.</p>
+<div style="overflow-x:auto; background-color:#f9f9f9; padding:1rem;">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Dato 1</th>
+        <th>Dato 2</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody id="tabla-ia-clasificados">
+      <!-- filas dinámicas desde JS -->
+    </tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', path='/js/ia_clasificados_admin.js') }}"></script>
 {% endblock %}

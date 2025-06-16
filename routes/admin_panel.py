@@ -181,6 +181,25 @@ async def admin_clientes(
     estado: str | None = Query(None),
 ):
     """Lista de clientes con filtros por DNI, búsqueda y estado."""
+    if supabase:
+        consulta = supabase.table("clientes").select("*")
+        if dni:
+            consulta = consulta.eq("dni", dni)
+        resp = consulta.execute()
+        clientes = getattr(resp, "data", []) or []
+        if q:
+            q_low = q.lower()
+            clientes = [
+                c
+                for c in clientes
+                if q_low in (c.get("nombre") or "").lower()
+                or q_low in (c.get("apellido") or "").lower()
+                or q_low in (c.get("email") or "").lower()
+                or q_low in (c.get("dni") or "").lower()
+            ]
+        if estado:
+            clientes = [c for c in clientes if c.get("estado") == estado]
+        return clientes
     return []
 
 

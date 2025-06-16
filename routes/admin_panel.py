@@ -37,6 +37,12 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 
+@router.get("/admin/panel", response_class=HTMLResponse)
+def admin_panel_view(request: Request):
+    """Vista principal del panel administrativo."""
+    return templates.TemplateResponse("panel_admin.html", {"request": request})
+
+
 def verificar_admin(user: dict) -> dict:
     """Valida que el usuario autenticado sea de rol Administrador."""
     if user.get("rol") != "Administrador":

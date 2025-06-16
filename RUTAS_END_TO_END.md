@@ -47,10 +47,7 @@
 | GET | /admin/alquileres | Consulta de alquileres | JSON | Sí |
 | GET | /admin/ventas | Consulta de ventas | JSON | Sí |
 | GET | /admin/limpiezas | Consulta de limpiezas | JSON | Sí |
-| GET | /ver_archivo | Devuelve el contenido de un archivo del proyecto | Texto plano | Sí |
 | POST | /ejecutar_alertas | Ejecuta manualmente las alertas programadas | JSON | Sí |
-| GET | /test_echo | [SOLO TESTING] Devuelve eco de pruebas | JSON | No |
-| POST | /test_env | [SOLO TESTING] Devuelve variables de entorno | JSON | No |
 
 ## SUPABASE
 

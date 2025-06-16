@@ -148,8 +148,17 @@ async def login(datos: LoginInput):
 
         usuario = response.data
         hashed_password = usuario.get("password") or usuario.get("password_hash")
+        verificacion = False
+        if hashed_password:
+            verificacion = pwd_context.verify(password, hashed_password)
+        # Debug: imprimir valores recibidos y hash antes de decidir
+        print(f"Email recibido: {email}")
+        print(f"Password recibido: {password}")
+        print(f"Rol recibido: {rol}")
+        print(f"Hash leído: {hashed_password}")
+        print(f"Resultado de pwd_context.verify: {verificacion}")
 
-        if not hashed_password or not pwd_context.verify(password, hashed_password):
+        if not hashed_password or not verificacion:
             logger.warning(f"Login fallido – contraseña incorrecta: {email}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,

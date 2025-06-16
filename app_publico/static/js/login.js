@@ -11,15 +11,15 @@ if (form) {
     form.addEventListener("submit", function (e) {
         e.preventDefault();
 
-        const datos = {
-            email: document.getElementById("email").value,
-            // IMPORTANTE: El campo debe llamarse "password" (sin ñ ni tilde) en todo el flujo
-            password: document.getElementById("password").value,
-            rol: form.querySelector('select[name="rol"]').value
-        };
+        const email = document.getElementById("email").value;
+        // IMPORTANTE: El campo debe llamarse "password" (sin ñ ni tilde) en todo el flujo
+        const password = document.getElementById("password").value;
+        const rol = form.querySelector('select[name="rol"]').value;
 
         // Log de depuración para verificar los datos antes del envío
-        console.log("Datos enviados al backend:", datos);
+        console.log("Datos enviados al backend:", { email, password, rol });
+
+        const datos = { email, password, rol };
 
         const errorEl = document.getElementById("errorMsg");
         if (errorEl) errorEl.textContent = "";

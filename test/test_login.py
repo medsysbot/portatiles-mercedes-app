@@ -124,3 +124,7 @@ def test_login_usuario_inexistente(monkeypatch, client):
         'rol': 'Administrador'
     })
     assert response.status_code == 401
+
+hash_db = "$2b$12$9wKzOAsFvXMCFOA8A3n8n.gSaECKmPjv8PhY3mCU7i6R9Fqd9hklK"
+print("Probando hash de admin123 vs hash guardado:")
+print("Resultado:", bcrypt.verify("admin123", hash_db))

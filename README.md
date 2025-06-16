@@ -28,6 +28,14 @@ Portátiles Mercedes es una solución SaaS diseñada para empresas de servicios 
 ## 🚀 Instalación y Puesta en Marcha
 
 1. **Cloná el repositorio:**
+   ```bash
+   git clone https://github.com/tu-usuario/portatiles-mercedes-app.git
+   cd portatiles-mercedes-app
+   ```
+2. **Instalá las dependencias:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 ## 📝 Buenas prácticas de archivos
 

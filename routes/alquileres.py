@@ -12,8 +12,7 @@ Proyecto: Portátiles Mercedes
 from datetime import date
 import os
 
-from fastapi import APIRouter, HTTPException, Depends
-from utils.auth_utils import auth_required
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from supabase import create_client, Client
 
@@ -48,13 +47,11 @@ class Alquiler(BaseModel):
 # ==== Endpoints ====
 
 @router.post("/registrar_alquiler")
-async def registrar_alquiler(alquiler: Alquiler, user: dict = Depends(auth_required)):
+async def registrar_alquiler(alquiler: Alquiler):
     """Guarda un nuevo alquiler en la tabla de Supabase."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    if user.get("rol") != "Administrador":
-# ==== Lógica de guardado ====
-        raise HTTPException(status_code=401, detail="No autorizado")
+    
     try:
         # Convertir los datos recibidos en un diccionario
         datos = alquiler.model_dump()

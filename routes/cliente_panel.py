@@ -10,8 +10,7 @@ Proyecto: Portátiles Mercedes
 """Rutas para consultar la información del panel de clientes."""
 
 import os
-from fastapi import APIRouter, HTTPException, Query, Depends
-from utils.auth_utils import auth_required
+from fastapi import APIRouter, HTTPException, Query
 from supabase import create_client, Client
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -30,14 +29,12 @@ router = APIRouter()
 
 
 @router.get("/cliente_panel")
-def cliente_panel(user=Depends(auth_required)):
-    if user["rol"] != "cliente":
-        raise HTTPException(status_code=403, detail="Acceso solo para clientes")
-    return {"msg": f"Bienvenido {user['email']}, rol: {user['rol']}"}
+def cliente_panel():
+    return {"msg": "Bienvenido"}
 
 
 @router.get("/info_cliente")
-async def info_cliente(dni: str = Query(...), user: dict = Depends(auth_required)):
+async def info_cliente(dni: str = Query(...)):
     """Devuelve nombre y fecha de nacimiento del cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -66,7 +63,7 @@ async def info_cliente(dni: str = Query(...), user: dict = Depends(auth_required
 
 
 @router.get("/alquileres_cliente")
-async def obtener_alquileres(dni: str = Query(...), user: dict = Depends(auth_required)):
+async def obtener_alquileres(dni: str = Query(...)):
     """Devuelve los alquileres asociados al cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -94,7 +91,7 @@ async def obtener_alquileres(dni: str = Query(...), user: dict = Depends(auth_re
 
 
 @router.get("/pagos_cliente")
-async def obtener_pagos(dni: str = Query(...), user: dict = Depends(auth_required)):
+async def obtener_pagos(dni: str = Query(...)):
     """Devuelve los pagos realizados por el cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -122,7 +119,7 @@ async def obtener_pagos(dni: str = Query(...), user: dict = Depends(auth_require
 
 
 @router.get("/limpiezas_cliente")
-async def obtener_limpiezas(dni: str = Query(...), user: dict = Depends(auth_required)):
+async def obtener_limpiezas(dni: str = Query(...)):
     """Devuelve las limpiezas realizadas para el cliente."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")

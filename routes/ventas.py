@@ -13,8 +13,7 @@ Proyecto: Portátiles Mercedes
 from datetime import datetime, date
 import os
 
-from fastapi import APIRouter, HTTPException, Depends
-from utils.auth_utils import auth_required
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from fpdf import FPDF
 from supabase import create_client, Client
@@ -51,13 +50,11 @@ class Venta(BaseModel):
 # ==== Endpoints ====
 
 @router.post("/registrar_venta")
-async def registrar_venta(venta: Venta, user: dict = Depends(auth_required)):
+async def registrar_venta(venta: Venta):
     """Guarda la venta, genera el comprobante PDF y retorna su URL."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    if user.get("rol") != "Administrador":
-# ==== Lógica de guardado ====
-        raise HTTPException(status_code=401, detail="No autorizado")
+
     try:
         datos = venta.model_dump()
         datos["fecha_venta"] = venta.fecha_venta.isoformat()

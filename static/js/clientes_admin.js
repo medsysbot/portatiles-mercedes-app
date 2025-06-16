@@ -3,6 +3,25 @@
 // Proyecto: Portátiles Mercedes
 // Última modificación: 2025-06-17
 
+function handleUnauthorized() {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('usuario');
+  localStorage.removeItem('rol');
+  localStorage.removeItem('nombre');
+  window.location.href = '/login';
+}
+
+async function fetchConAuth(url) {
+  const resp = await fetch(url, {
+    headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
+  });
+  if (resp.status === 401) {
+    handleUnauthorized();
+    throw new Error('Unauthorized');
+  }
+  return resp;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('busquedaCliente');
   const estadoSel = document.getElementById('estadoFiltro');
@@ -12,9 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams();
     if (input.value.trim()) params.append('q', input.value.trim());
     if (estadoSel && estadoSel.value) params.append('estado', estadoSel.value);
-    const resp = await fetch(`/admin/api/clientes?${params.toString()}`, {
-      headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
-    });
+    const resp = await fetchConAuth(`/admin/api/clientes?${params.toString()}`);
     if (!resp.ok) return;
     const lista = await resp.json();
     const tbody = document.querySelector('#tablaClientes tbody');

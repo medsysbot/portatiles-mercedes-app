@@ -6,6 +6,29 @@ Proyecto: Portátiles Mercedes
 Última modificación: 2025-06-15
 */
 // ==== Eventos principales ====
+function handleUnauthorized() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('rol');
+    localStorage.removeItem('nombre');
+    window.location.href = '/login';
+}
+
+async function fetchConAuth(url, options = {}) {
+    const resp = await fetch(url, {
+        ...options,
+        headers: {
+            ...options.headers,
+            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        }
+    });
+    if (resp.status === 401) {
+        handleUnauthorized();
+        throw new Error('Unauthorized');
+    }
+    return resp;
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     if (!token) {
@@ -24,13 +47,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (!ver.ok) throw new Error('Token inválido');
         const info = await ver.json();
         if (info.status !== 'ok' || info.rol !== 'cliente') {
-            window.location.href = '/login';
+            handleUnauthorized();
             return;
         }
         const dni = info.user_id; // asumimos que user_id es el DNI
-        const datosCliRes = await fetch(`/info_cliente?dni=${encodeURIComponent(dni)}`, {
-            headers: { 'Authorization': 'Bearer ' + token }
-        });
+        const datosCliRes = await fetchConAuth(`/info_cliente?dni=${encodeURIComponent(dni)}`);
         let nombre = dni;
         let cumple = null;
         if (datosCliRes.ok) {
@@ -42,18 +63,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         mostrarSplash(nombre, cumple);
         cargarDatos(dni);
     } catch (err) {
-        window.location.href = '/login';
+        handleUnauthorized();
     }
 });
 // ==== Funciones auxiliares ====
 
 async function cargarDatos(dni) {
     try {
-        const headers = { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') };
         const [alqRes, pagRes, limpRes] = await Promise.all([
-            fetch(`/alquileres_cliente?dni=${encodeURIComponent(dni)}`, { headers }),
-            fetch(`/pagos_cliente?dni=${encodeURIComponent(dni)}`, { headers }),
-            fetch(`/limpiezas_cliente?dni=${encodeURIComponent(dni)}`, { headers })
+            fetchConAuth(`/alquileres_cliente?dni=${encodeURIComponent(dni)}`),
+            fetchConAuth(`/pagos_cliente?dni=${encodeURIComponent(dni)}`),
+            fetchConAuth(`/limpiezas_cliente?dni=${encodeURIComponent(dni)}`)
         ]);
 
         if (alqRes.ok) {
@@ -70,6 +90,7 @@ async function cargarDatos(dni) {
         }
     } catch (err) {
         console.error(err);
+        if (err.message === 'Unauthorized') handleUnauthorized();
     }
 }
 

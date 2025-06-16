@@ -18,6 +18,7 @@ from supabase import create_client, Client
 from passlib.context import CryptContext
 from passlib.hash import bcrypt
 from jose import jwt, JWTError
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -173,6 +174,7 @@ async def login(datos: LoginInput):
             "sub": usuario["email"],
             "rol": usuario.get("rol"),
             "nombre": usuario.get("nombre"),
+            "exp": datetime.utcnow() + timedelta(minutes=JWT_EXP_MINUTES),
         }
         token = jwt.encode(token_data, JWT_SECRET, algorithm=ALGORITHM)
 
@@ -220,7 +222,7 @@ def verificar_token(data: dict):
         datos = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
         return {"status": "ok", "rol": datos.get("rol"), "user_id": datos.get("sub")}
     except JWTError:
-        raise HTTPException(status_code=401, detail="Token inválido")
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
 
 @router.post("/registrar_cliente")
 def registrar_cliente(email: str = Form(...), password: str = Form(...)):

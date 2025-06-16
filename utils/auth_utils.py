@@ -12,15 +12,19 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 import jwt
 import os
 
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)
 
 
 def auth_required(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Valida el token JWT presente en la cabecera Authorization."""
     JWT_SECRET = os.getenv("JWT_SECRET")
-    token = credentials.credentials if credentials else None
+    if not JWT_SECRET:
+        raise HTTPException(status_code=500, detail="JWT_SECRET no configurado")
 
-    if not token or not JWT_SECRET:
-        raise HTTPException(status_code=401, detail="Token no enviado o configuración incompleta")
+    if credentials is None or credentials.scheme.lower() != "bearer":
+        raise HTTPException(status_code=401, detail="Token faltante")
+
+    token = credentials.credentials
 
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])

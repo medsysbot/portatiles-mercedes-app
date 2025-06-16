@@ -51,6 +51,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 // ==== Funciones auxiliares ====
 });
 
+function handleUnauthorized() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('rol');
+    localStorage.removeItem('nombre');
+    window.location.href = '/login';
+}
+
+async function fetchConAuth(url) {
+    const resp = await fetch(url, {
+        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
+    });
+    if (resp.status === 401) {
+        handleUnauthorized();
+        throw new Error('Unauthorized');
+    }
+    return resp;
+}
+
 async function verificarToken(token) {
     try {
         const resp = await fetch('/verificar_token', {
@@ -88,9 +107,7 @@ async function cargarTodo() {
 }
 
 async function cargarClientes() {
-    const resp = await fetch(`/admin/api/clientes?${obtenerFiltros()}`, {
-        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
-    });
+    const resp = await fetchConAuth(`/admin/api/clientes?${obtenerFiltros()}`);
     if (!resp.ok) return;
     const lista = await resp.json();
     const tbody = document.querySelector('#tablaClientes tbody');
@@ -107,9 +124,7 @@ async function cargarClientes() {
 }
 
 async function cargarAlquileres() {
-    const resp = await fetch(`/admin/api/alquileres?${obtenerFiltros()}`, {
-        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
-    });
+    const resp = await fetchConAuth(`/admin/api/alquileres?${obtenerFiltros()}`);
     if (!resp.ok) return;
     const lista = await resp.json();
     const tbody = document.querySelector('#tablaAlquileres tbody');
@@ -126,9 +141,7 @@ async function cargarAlquileres() {
 }
 
 async function cargarVentas() {
-    const resp = await fetch(`/admin/api/ventas?${obtenerFiltros()}`, {
-        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
-    });
+    const resp = await fetchConAuth(`/admin/api/ventas?${obtenerFiltros()}`);
     if (!resp.ok) return;
     const lista = await resp.json();
     const tbody = document.querySelector('#tablaVentas tbody');
@@ -145,9 +158,7 @@ async function cargarVentas() {
 }
 
 async function cargarLimpiezas() {
-    const resp = await fetch(`/admin/api/limpiezas?${obtenerFiltros()}`, {
-        headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
-    });
+    const resp = await fetchConAuth(`/admin/api/limpiezas?${obtenerFiltros()}`);
     if (!resp.ok) return;
     const lista = await resp.json();
     const tbody = document.querySelector('#tablaLimpiezas tbody');

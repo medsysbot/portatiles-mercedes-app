@@ -1,0 +1,81 @@
+{% extends 'base_adminlte.html' %}
+{% block title %}Pagos (Mercado Pago){% endblock %}
+{% block body_class %}hold-transition sidebar-mini layout-fixed{% endblock %}
+
+{% block body %}
+<div class="wrapper">
+  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+          <i class="fas fa-bars"></i>
+        </a>
+      </li>
+    </ul>
+  </nav>
+  <div class="content-wrapper pt-4">
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <select class="form-control" id="filtroEstado">
+              <option value="">Todos los estados</option>
+              <option value="aprobado">Aprobados</option>
+              <option value="pendiente">Pendientes</option>
+              <option value="rechazado">Rechazados</option>
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="small-box bg-success">
+              <div class="inner">
+                <h3 id="totalCobrado">$0</h3>
+                <p>Total cobrado</p>
+              </div>
+              <div class="icon"><i class="fas fa-dollar-sign"></i></div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="small-box bg-warning">
+              <div class="inner">
+                <h3 id="totalPendiente">$0</h3>
+                <p>Total pendiente</p>
+              </div>
+              <div class="icon"><i class="fas fa-clock"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">Pagos recientes</h3>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-striped">
+                <thead class="thead-light">
+                  <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Cliente</th>
+                    <th>Monto</th>
+                    <th>Estado</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- TODO: cargar pagos desde la base de datos o API -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- Instrucciones para integrar Mercado Pago:
+             1. Crear las credenciales y tokens en la cuenta de Mercado Pago.
+             2. Usar el SDK oficial de Python para generar links y consultar estados.
+             3. Configurar webhooks que notifiquen al endpoint /admin/mercadopago.
+             4. Registrar cada pago y su movimiento en la base de datos. -->
+      </div>
+    </section>
+  </div>
+</div>
+{% endblock %}

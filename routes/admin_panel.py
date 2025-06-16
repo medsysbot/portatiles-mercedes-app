@@ -103,7 +103,7 @@ def admin_clientes_page(
 
     resp = supabase.table("clientes").select("*").execute()
     if (
-        not resp.data
+        resp.data is None
         or (hasattr(resp, "status_code") and resp.status_code != 200)
         or getattr(resp, "error", None) is not None
     ):

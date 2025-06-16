@@ -141,32 +141,63 @@ def eliminar_cliente(dni: str):
 @router.get("/admin/alquileres", response_class=HTMLResponse)
 def admin_alquileres_page(request: Request):
     """Gestión de alquileres."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("alquileres_admin.html", {"request": request})
 
 @router.get("/admin/ventas", response_class=HTMLResponse)
 def admin_ventas_page(request: Request):
     """Gestión de ventas."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("ventas_admin.html", {"request": request})
 
 @router.get("/admin/limpiezas", response_class=HTMLResponse)
 def admin_limpiezas_page(request: Request):
     """Registro de limpiezas."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("limpiezas_admin.html", {"request": request})
+
+@router.get("/admin/limpieza", response_class=HTMLResponse)
+def admin_limpieza_page(request: Request):
+    """Registro de limpiezas."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
+    return templates.TemplateResponse("limpieza_admin.html", {"request": request})
 
 @router.get("/admin/morosos", response_class=HTMLResponse)
 def admin_morosos_page(request: Request):
     """Listado de clientes morosos."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("morosos_admin.html", {"request": request})
 
 @router.get("/admin/emails", response_class=HTMLResponse)
 def admin_emails_page(request: Request):
     """Módulo de envíos de emails."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("emails_admin.html", {"request": request})
 
 @router.get("/admin/ia-respuestas", response_class=HTMLResponse)
+@router.get("/admin/ia/respuestas", response_class=HTMLResponse)
 def admin_ia_respuestas_page(request: Request):
     """Respuestas automáticas con IA."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("ia_respuestas_admin.html", {"request": request})
+
+@router.get("/admin/ia/clasificados", response_class=HTMLResponse)
+def admin_ia_clasificados_page(request: Request):
+    """Clasificados generados por IA."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
+    return templates.TemplateResponse("ia_clasificados_admin.html", {"request": request})
+
+@router.get("/admin/graficos", response_class=HTMLResponse)
+def admin_graficos_page(request: Request):
+    """Visualización de gráficos y estadísticas."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
+    return templates.TemplateResponse("graficos_admin.html", {"request": request})
+
+@router.get("/admin/facturas", response_class=HTMLResponse)
+def admin_facturas_page(request: Request):
+    """Facturas pendientes y emitidas."""
+    # Sección conectada correctamente. Listo para insertar datos reales.
+    return templates.TemplateResponse("facturas_admin.html", {"request": request})
 
 
 @router.get("/cliente_panel")

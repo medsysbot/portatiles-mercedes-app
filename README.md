@@ -180,6 +180,7 @@ En caso de fallar se devuelve `400` con el detalle del error.
 
 ### POST `/verificar_token`
 Verifica la validez de un token JWT.
+Los tokens poseen expiración configurada en el servidor.
 
 **Request**
 ```json
@@ -191,7 +192,7 @@ Verifica la validez de un token JWT.
 { "status": "ok", "rol": "Administrador", "user_id": "admin@portatiles.com" }
 ```
 
-Si el token es inválido o falta se obtiene `401` con el mensaje correspondiente.
+Si el token es inválido, expiró o falta se obtiene `401` con el mensaje correspondiente.
 
 ### Consumo desde JavaScript
 Ejemplo básico de inicio de sesión con `fetch`:

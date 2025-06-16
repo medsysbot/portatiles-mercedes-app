@@ -68,6 +68,11 @@ Para agregarlos o actualizarlos en el futuro:
 - Desde esta migración, **AdminLTE** queda establecido como la plantilla oficial
   para todo el panel administrativo. El panel anterior se eliminó por completo.
 
+### Limpieza 2025-06-15
+
+- Se eliminaron las plantillas obsoletas `admin_bash.html`, `admin_facturacion.html`, `admin_revisos.html` y `panel_admin.html`.
+- Solo permanecen las plantillas vigentes en `/templates` y los assets actuales en `/static` y `app_publico/static`.
+
 ### Ubicación de plantillas públicas
 
 Los archivos HTML visibles para cualquier visitante se almacenan en

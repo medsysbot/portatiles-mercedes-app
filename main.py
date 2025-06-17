@@ -38,6 +38,7 @@ if not login_logger.handlers:
 
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 
 # Imports actualizados según la nueva estructura
 from routes.router import router
@@ -64,6 +65,14 @@ app.include_router(alertas_router)
 app.include_router(login_router)
 app.include_router(admin_router)
 app.include_router(cliente_router)
+
+
+@app.get("/logout")
+def cerrar_sesion():
+    """Elimina el token de autenticación y redirige al login."""
+    response = RedirectResponse(url="/login", status_code=302)
+    response.delete_cookie("access_token")
+    return response
 
 if __name__ == "__main__":
     import uvicorn

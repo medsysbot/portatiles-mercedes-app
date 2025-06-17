@@ -36,7 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('usuario');
         localStorage.removeItem('rol');
-        window.location.href = '/login';
     });
 
     document.getElementById('aplicarFiltros').addEventListener('click', () => {

@@ -13,6 +13,8 @@ from pathlib import Path
 from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
+from fastapi import Depends
+from utils.auth_utils import verificar_token
 
 from routes.alquileres import router as alquileres_router
 from routes.ventas import router as ventas_router
@@ -165,6 +167,16 @@ async def mostrar_registro_clientes():
 async def mostrar_login(request: Request):
     """Página de inicio de sesión."""
     return templates.TemplateResponse("login.html", {"request": request})
+
+
+@router.get("/splash", response_class=HTMLResponse)
+async def splash(request: Request, token_data: dict = Depends(verificar_token)):
+    """Pantalla transitoria luego del login de administrador."""
+    nombre_admin = token_data.get("nombre", "Administrador")
+    return templates.TemplateResponse(
+        "admin_splash.html",
+        {"request": request, "nombre_admin": nombre_admin},
+    )
 
 
 @router.get("/admin_splash", response_class=HTMLResponse)

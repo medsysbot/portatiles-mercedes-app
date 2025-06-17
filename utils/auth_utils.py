@@ -9,7 +9,7 @@ Proyecto: Portátiles Mercedes
 
 from fastapi import HTTPException, Depends
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-import jwt
+from jose import jwt, JWTError
 import os
 
 security = HTTPBearer(auto_error=False)
@@ -31,3 +31,8 @@ def auth_required(credentials: HTTPAuthorizationCredentials = Depends(security))
         return payload
     except Exception:
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
+
+
+def verificar_token(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Alias de ``auth_required`` para usar como dependencia."""
+    return auth_required(credentials)

@@ -12,7 +12,7 @@ Proyecto: Portátiles Mercedes
 import os
 import logging
 import traceback
-from fastapi import APIRouter, HTTPException, status, Form
+from fastapi import APIRouter, HTTPException, status, Form, Response
 from pydantic import BaseModel
 from supabase import create_client, Client
 from passlib.context import CryptContext
@@ -86,7 +86,7 @@ router = APIRouter()
 # ==== Endpoints ====
 
 @router.post("/login")
-async def login(datos: LoginInput):
+async def login(datos: LoginInput, response: Response):
     """Autentica a un usuario y genera un token de acceso.
 
     Parámetros
@@ -119,7 +119,7 @@ async def login(datos: LoginInput):
         logger.info(f"Intento de login para: {email} con rol {rol}")
 
         try:
-            response = (
+            supabase_resp = (
                 supabase.table("usuarios")
                 .select("*")
                 .eq("email", email)
@@ -137,9 +137,9 @@ async def login(datos: LoginInput):
             )
 
         if (
-            not response.data
-            or (hasattr(response, "status_code") and response.status_code != 200)
-            or getattr(response, "error", None) is not None
+            not supabase_resp.data
+            or (hasattr(supabase_resp, "status_code") and supabase_resp.status_code != 200)
+            or getattr(supabase_resp, "error", None) is not None
         ):
             logger.warning(f"Login fallido – usuario no encontrado: {email}")
             raise HTTPException(
@@ -147,7 +147,7 @@ async def login(datos: LoginInput):
                 detail="Usuario o contraseña incorrectos",
             )
 
-        usuario = response.data
+        usuario = supabase_resp.data
         hashed_password = usuario.get("password") or usuario.get("password_hash")
         verificacion = False
         if hashed_password:
@@ -179,6 +179,7 @@ async def login(datos: LoginInput):
         token = jwt.encode(token_data, JWT_SECRET, algorithm=ALGORITHM)
 
         logger.info(f"Login exitoso: {email}")
+        response.set_cookie(key="access_token", value=token, httponly=True)
         return {
             "access_token": token,
             "rol": usuario.get("rol"),

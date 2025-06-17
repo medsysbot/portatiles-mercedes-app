@@ -35,7 +35,7 @@
   </style>
 </head>
 <body class="fondo-splash">
-  <h1 class="titulo-bienvenida" id="splashSaludo">¡Bienvenido!</h1>
+  <h1 class="titulo-bienvenida" id="splashSaludo">¡Bienvenido, {{ nombre_admin }}!</h1>
   <script>
     const nombre = localStorage.getItem('nombre');
     if (nombre) {

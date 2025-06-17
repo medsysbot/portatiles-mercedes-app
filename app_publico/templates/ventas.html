@@ -252,58 +252,56 @@ Proyecto: Portátiles Mercedes
     </style>
 </head>
 <body>
-    <div class="fondo-alquiler">
-<!-- ==== Encabezado de la página ==== -->
+  <div class="fondo-alquiler">
+    <!-- ==== Encabezado de la página ==== -->
     <div class="contenedor-superior">
-        <div class="titulo-index">
-            Venta
-            <img src="/app_publico/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
-            Baños
-        </div>
+      <div class="titulo-index">
+        Venta
+        <img src="/app_publico/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
+        Baños
+      </div>
     </div>
+
     <div class="contenedor-main">
-<!-- ==== Botonera principal ==== -->
-        <div class="botonera-flotante">
-            <a id="linkInicio" href="/" class="boton-index">
-                <img src="/app_publico/static/icons/inicio.png" alt="Inicio">
-                <span>Volver a inicio</span>
-            </a>
-            <a id="toggleFormulario" type="button" class="boton-index">
-                <img src="/app_publico/static/icons/ver-formulario.png" alt="Ver Formulario">
-                <span>Ver formulario</span>
-            </a>
+      <!-- ==== Botonera principal ==== -->
+      <div class="botonera-flotante">
+        <a id="linkInicio" href="/" class="boton-index">
+          <img src="/app_publico/static/icons/inicio.png" alt="Inicio">
+          <span>Volver a inicio</span>
+        </a>
+        <a id="toggleFormulario" type="button" class="boton-index">
+          <img src="/app_publico/static/icons/ver-formulario.png" alt="Ver Formulario">
+          <span>Ver formulario</span>
+        </a>
+      </div>
+
+      <!-- ==== Texto descriptivo + contenido ==== -->
+      <div class="contenedor-texto">
+        <div class="presentacion-portatiles">
+          En <strong>Portátiles Mercedes</strong> ofrecemos la venta de baños químicos portátiles con modelos que se adaptan a todo tipo de necesidad: estándar, confort o VIP.<br><br>
+          Podés consultarnos para conocer la disponibilidad actual y recibir asesoramiento personalizado según tu caso.<br><br>
+          Nos encargamos del traslado del baño al destino que nos indiques, sin complicaciones.<br><br>
+          Además, ofrecemos servicios posteriores como <strong>mantenimiento, limpieza y reparación</strong> para que tu baño portátil esté siempre en las mejores condiciones.<br><br>
+          Completá el formulario y un representante se pondrá en contacto con vos.
         </div>
-<!-- ==== Texto descriptivo ==== -->
-<div class="contenedor-texto">
-    <div class="presentacion-portatiles">
-        En <strong>Portátiles Mercedes</strong> ofrecemos la venta de baños químicos portátiles con modelos que se adaptan a todo tipo de necesidad: estándar, confort o VIP.<br><br>
-        Podés consultarnos para conocer la disponibilidad actual y recibir asesoramiento personalizado según tu caso.<br><br>
-        Nos encargamos del traslado del baño al destino que nos indiques, sin complicaciones.<br><br>
-        Además, ofrecemos servicios posteriores como <strong>mantenimiento, limpieza y reparación</strong> para que tu baño portátil esté siempre en las mejores condiciones.<br><br>
-        Completá el formulario y un representante se pondrá en contacto con vos.
+
+        <span class="contacto">
+          portatilesmercedes@gmail.com<br>
+          Tel. 2657-627996
+        </span>
+
+        <!-- ==== Galería de modelos de baños en venta ==== -->
+        <img src="/app_publico/static/imagenes/img-ventas-1.png"
+             alt="Modelo estándar con lavamanos integrado"
+             style="display: block; margin: 30px auto 12px auto; width: 100%; max-width: 480px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+
+        <img src="/app_publico/static/imagenes/img-ventas-2.png"
+             alt="Modelo premium reforzado para eventos masivos"
+             style="display: block; margin: 20px auto 0 auto; width: 100%; max-width: 480px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
+      </div>
     </div>
+  </div>
 
-    <span class="contacto">
-        portatilesmercedes@gmail.com<br>
-        Tel. 2657-627996
-    </span>
-
-    <!-- ==== Galería de modelos de baños en venta ==== -->
-    <div class="row mt-4">
-        <div class="col-md-6 text-center">
-            <img src="/app_publico/static/imagenes/img-ventas-1.png" 
-                 alt="Modelo de baño 1" class="img-fluid rounded shadow">
-            <p class="mt-2">Modelo estándar con lavamanos integrado</p>
-        </div>
-        <div class="col-md-6 text-center">
-            <img src="/app_publico/static/imagenes/img-ventas-2.png" 
-                 alt="Modelo de baño 2" class="img-fluid rounded shadow">
-            <p class="mt-2">Modelo premium reforzado para eventos masivos</p>
-        </div>
-    </div>
-</div>
-
-<!-- ==== Funciones auxiliares ==== -->
-    <script src="/app_publico/static/js/venta_form.js"></script>
+  <!-- ==== Funciones auxiliares ==== -->
+  <script src="/app_publico/static/js/venta_form.js"></script>
 </body>
-</html>

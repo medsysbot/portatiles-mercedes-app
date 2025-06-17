@@ -53,6 +53,8 @@ def verificar_token(
 
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        return payload
+        if not isinstance(payload, dict):
+            raise JWTError("Payload malformado")
+        return {"nombre": payload.get("nombre"), "rol": payload.get("rol")}
     except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido o expirado")

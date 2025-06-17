@@ -56,6 +56,7 @@ app = FastAPI()
 # Directorio unificado para recursos estáticos públicos
 # Carpeta unificada de recursos estáticos
 app.mount("/app_publico/static", StaticFiles(directory="app_publico/static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static-private")
 
 # Registrar las rutas definidas en el módulo router, incluido el formulario de limpieza
 app.include_router(router)

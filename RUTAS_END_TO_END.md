@@ -6,7 +6,7 @@
 |--------|------|-------------|------------------|---------------|
 | GET | / | Página de inicio / landing | index.html | No |
 | GET | /login | Formulario de login | login.html | No |
-| GET | /admin_splash | Splash de bienvenida de administrador | admin_splash.html | Sí |
+| GET | /splash | Splash de bienvenida de administrador | admin_splash.html | Sí |
 | GET | /admin/panel | Panel de administración moderno | admin_panel.html | Sí |
 | GET | /admin/facturacion | Facturación | facturacion.html | Sí |
 | GET | /admin/revisos | Revisos técnicos | revisos.html | Sí |

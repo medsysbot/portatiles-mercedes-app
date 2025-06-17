@@ -30,6 +30,8 @@ from routes.login import router as login_router
 ROOT_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = ROOT_DIR / "app_publico"
 TEMPLATES_DIR = BASE_DIR / "templates"
+# Directorio de plantillas privadas
+PRIVATE_TEMPLATES_DIR = ROOT_DIR / "templates"
 # Los scripts públicos se encuentran en `app_publico/static`.
 # Los scripts privados, como los del panel administrativo o de clientes,
 # se ubican en la carpeta `static` de la raíz del proyecto.
@@ -37,7 +39,12 @@ PUBLIC_STATIC_DIR = BASE_DIR / "static"
 PRIVATE_STATIC_DIR = ROOT_DIR / "static"
 
 router = APIRouter()
-templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
+# Plantillas públicas ubicadas en `app_publico/templates` (para index, login,
+# etc.).
+public_templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
+# Plantillas privadas del panel administrativo ahora residen en la carpeta
+# `templates` de la raíz del proyecto.
+templates = Jinja2Templates(directory="templates")
 
 # Incluir las rutas del módulo de alquileres
 router.include_router(alquileres_router)
@@ -166,7 +173,7 @@ async def mostrar_registro_clientes():
 @router.get("/login", response_class=HTMLResponse)
 async def mostrar_login(request: Request):
     """Página de inicio de sesión."""
-    return templates.TemplateResponse("login.html", {"request": request})
+    return public_templates.TemplateResponse("login.html", {"request": request})
 
 
 @router.get("/splash", response_class=HTMLResponse)
@@ -182,7 +189,7 @@ async def splash(request: Request, token_data: dict = Depends(verificar_token)):
 @router.get("/admin_splash", response_class=HTMLResponse)
 async def mostrar_admin_splash():
     """Pantalla de bienvenida para administradores."""
-    html_path = TEMPLATES_DIR / "admin_splash.html"
+    html_path = PRIVATE_TEMPLATES_DIR / "admin_splash.html"
     html_contenido = html_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_contenido)
 

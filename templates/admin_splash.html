@@ -6,47 +6,34 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;700;900&display=swap" rel="stylesheet">
   <style>
-    /* Fondo animado */
     body {
-        animation: zoomFondo 5s ease-out forwards;
         background: url('/static/imagenes/fondo-splash-admin.png') no-repeat center center fixed;
         background-size: cover;
         margin: 0;
         padding: 0;
+        min-height: 100vh;
         font-family: 'Nunito', sans-serif;
-        height: 100vh;
-        overflow: hidden;
     }
 
-    /* Zoom suave al fondo */
-    @keyframes zoomFondo {
-        0% {
-            transform: scale(1.05);
-            filter: brightness(0.8);
-        }
-        100% {
-            transform: scale(1);
-            filter: brightness(1);
-        }
-    }
-
-    /* Animación de texto */
     #saludo-admin {
-        opacity: 0;
-        transform: translateY(40px);
-        animation: aparecerTexto 2s ease-out 1s forwards;
-        color: white;
-        font-size: 3vw;
-        font-weight: 700;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: #fff;
+        font-size: 6vw;
+        font-weight: 900;
+        letter-spacing: 1px;
         text-align: center;
+        white-space: pre-line;
+        animation: zoomInOut 2.4s ease-in-out infinite;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.28);
     }
 
-    /* Movimiento de entrada del texto */
-    @keyframes aparecerTexto {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+    @keyframes zoomInOut {
+        0%   { transform: translate(-50%, -50%) scale(1); }
+        50%  { transform: translate(-50%, -50%) scale(1.12); }
+        100% { transform: translate(-50%, -50%) scale(1); }
     }
   </style>
 </head>

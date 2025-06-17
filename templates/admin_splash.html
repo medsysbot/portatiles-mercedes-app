@@ -6,44 +6,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;700;900&display=swap" rel="stylesheet">
   <style>
-    @keyframes zoomIn {
-      0% { transform: scale(1.1); opacity: 0; }
-      100% { transform: scale(1); opacity: 1; }
+    /* Fondo animado */
+    body {
+        animation: zoomFondo 5s ease-out forwards;
+        background: url('/static/imagenes/fondo-splash-admin.png') no-repeat center center fixed;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+        font-family: 'Nunito', sans-serif;
+        height: 100vh;
+        overflow: hidden;
     }
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(40px); }
-      100% { opacity: 1; transform: translateY(0); }
+
+    /* Zoom suave al fondo */
+    @keyframes zoomFondo {
+        0% {
+            transform: scale(1.05);
+            filter: brightness(0.8);
+        }
+        100% {
+            transform: scale(1);
+            filter: brightness(1);
+        }
     }
-    body.fondo-splash {
-      background: url('/static/imagenes/fondo-splash-admin.png') no-repeat center center fixed;
-      background-size: cover;
-      height: 100vh;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Nunito', sans-serif;
-      animation: zoomIn 1.5s ease-out;
+
+    /* Animación de texto */
+    #saludo-admin {
+        opacity: 0;
+        transform: translateY(40px);
+        animation: aparecerTexto 2s ease-out 1s forwards;
+        color: white;
+        font-size: 3vw;
+        font-weight: 700;
+        text-align: center;
     }
-    .titulo-bienvenida {
-      color: white;
-      font-size: 3em;
-      text-align: center;
-      margin: 0;
-      animation: fadeInUp 1.2s ease-out;
+
+    /* Movimiento de entrada del texto */
+    @keyframes aparecerTexto {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
   </style>
 </head>
-<body class="fondo-splash">
-  <h1 class="titulo-bienvenida" id="splashSaludo">¡Bienvenido, {{ nombre_admin }}!</h1>
-  <script>
-    const nombre = localStorage.getItem('nombre');
-    if (nombre) {
-      document.getElementById('splashSaludo').textContent = '¡Bienvenido, ' + nombre + '!';
-    }
-    setTimeout(() => {
-      window.location.href = '/admin/panel';
-    }, 3000);
-  </script>
+<body>
+    <div id="saludo-admin">
+        ¡Bienvenido, {{ usuario }}!
+    </div>
+    <script>
+        setTimeout(() => {
+            window.location.href = '/admin/panel';
+        }, 3000);
+    </script>
 </body>
 </html>

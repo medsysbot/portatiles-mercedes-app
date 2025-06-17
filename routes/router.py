@@ -182,7 +182,7 @@ async def splash(request: Request, token_data: dict = Depends(verificar_token)):
     nombre_admin = token_data.get("nombre", "Administrador")
     return templates.TemplateResponse(
         "admin_splash.html",
-        {"request": request, "nombre_admin": nombre_admin},
+        {"request": request, "usuario": nombre_admin},
     )
 
 

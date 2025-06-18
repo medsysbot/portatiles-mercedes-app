@@ -6,18 +6,32 @@ from routes import cliente_panel
 client = TestClient(main.app)
 
 class MockUpsertQuery:
-    def __init__(self):
+    def __init__(self, existing_dni=None):
         self.upsert_data = None
+        self.existing_dni = existing_dni
+        self.is_select = False
+        self.filter = None
     def upsert(self, data):
         self.upsert_data = data
+        self.is_select = False
+        return self
+    def select(self, *_):
+        self.is_select = True
+        return self
+    def eq(self, _field, value):
+        self.filter = value
         return self
     def execute(self):
+        if self.is_select:
+            if self.filter == self.existing_dni:
+                return types.SimpleNamespace(data=[{"id": 1}], status_code=200, error=None)
+            return types.SimpleNamespace(data=[], status_code=200, error=None)
         return types.SimpleNamespace(data=[{"id": 1}], status_code=200, error=None)
 
 class MockSupabaseSave:
-    def __init__(self):
+    def __init__(self, existing_dni=None):
         self.table_name = None
-        self.query = MockUpsertQuery()
+        self.query = MockUpsertQuery(existing_dni)
     def table(self, name):
         self.table_name = name
         return self.query
@@ -60,8 +74,25 @@ def test_guardar_datos_cliente(monkeypatch):
         },
     )
     assert resp.status_code == 200
-    assert db.table_name == "datos_personales_clientes"
+    assert db.table_name == "clientes"
     assert db.query.upsert_data["dni"] == "123"
+
+
+def test_guardar_datos_cliente_dni_repetido(monkeypatch):
+    db = MockSupabaseSave(existing_dni="123")
+    monkeypatch.setattr(cliente_panel, "supabase", db)
+    resp = client.post(
+        "/guardar_datos_cliente",
+        data={
+            "email": "otro@test.com",
+            "nombre": "Pepe",
+            "apellido": "Lopez",
+            "dni": "123",
+            "direccion": "Calle x",
+            "telefono": "444",
+        },
+    )
+    assert resp.status_code == 400
 
 
 def test_info_cliente_ok(monkeypatch):

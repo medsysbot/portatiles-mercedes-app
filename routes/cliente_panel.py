@@ -12,9 +12,10 @@ Proyecto: Portátiles Mercedes
 from fastapi import APIRouter, HTTPException, Query, Form
 
 supabase = None  # Cliente de Supabase, se inyecta desde la app
+# Nota: este flujo conecta el frontend con la tabla CLIENTES de Supabase
 
 # Los datos personales se guardarán en la tabla
-# `datos_personales_clientes`
+# `clientes` en Supabase
 
 router = APIRouter()
 
@@ -28,9 +29,9 @@ def cliente_panel():
 async def info_cliente(email: str = Query(...)):
     """Devuelve los datos personales del cliente."""
     if supabase:
-        # Consulta en la tabla datos_personales_clientes
+        # Consulta en la tabla clientes
         resp = (
-            supabase.table("datos_personales_clientes")
+            supabase.table("clientes")
             .select("nombre,apellido,dni,direccion,telefono,email")
             .eq("email", email)
             .single()
@@ -71,7 +72,14 @@ async def guardar_datos_cliente(
 ):
     """Guarda o actualiza los datos personales del cliente."""
     if supabase:
-        # Almacenamos en la tabla datos_personales_clientes
+        # Validar DNI único antes de insertar
+        existe = (
+            supabase.table("clientes").select("id").eq("dni", dni).execute()
+        )
+        if getattr(existe, "data", []):
+            raise HTTPException(status_code=400, detail="Ese DNI ya está registrado")
+
+        # Almacenamos o actualizamos en la tabla clientes
         data = {
             "email": email,
             "nombre": nombre,
@@ -80,5 +88,5 @@ async def guardar_datos_cliente(
             "direccion": direccion,
             "telefono": telefono,
         }
-        supabase.table("datos_personales_clientes").upsert(data).execute()
+        supabase.table("clientes").upsert(data).execute()
     return {"mensaje": "Datos guardados"}

@@ -53,19 +53,17 @@ document.addEventListener('DOMContentLoaded', async () => {
         const email = info.user_id; // user_id es el email del cliente
         const datosCliRes = await fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`);
         let nombre = email;
-        let cumple = null;
         let datosCompletos = false;
         if (datosCliRes.ok) {
             const datosCli = await datosCliRes.json();
             nombre = datosCli.nombre || email;
-            cumple = datosCli.fecha_nacimiento || null;
-            if (datosCli.dni) datosCompletos = true;
+            datosCompletos = ['nombre', 'apellido', 'dni', 'direccion', 'telefono'].every(c => datosCli[c]);
         }
         if (!datosCompletos) {
             mostrarFormularioDatos(email);
         }
         document.getElementById('bienvenida').textContent = `Bienvenido ${nombre}`;
-        mostrarSplash(nombre, cumple);
+        mostrarSplash(nombre);
         cargarDatos(email);
     } catch (err) {
         handleUnauthorized();

@@ -245,7 +245,10 @@ Eliminado envío y lógica de campos creado_en y actualizado_en porque ya no exi
       <div class="campo-login">
         <input type="password" id="password" name="password" placeholder="Elige una contraseña" required minlength="6" autocomplete="new-password">
       </div>
-      <!-- Campo repetición de contraseña eliminado -->
+      <!-- Implementación de doble campo de contraseña según estándar Portátiles Mercedes -->
+      <div class="campo-login">
+        <input type="password" id="password2" name="password2" placeholder="Verificar contraseña" required minlength="6" autocomplete="new-password">
+      </div>
 <!-- ==== Sección de mensajes ==== -->
       <p id="msg" style="color:red"></p>
       <button type="submit" class="boton-index">

@@ -2,6 +2,9 @@
 {% block title %}Clientes{% endblock %}
 {% block content %}
 <h2 class="mb-3 mt-0">Administración de clientes</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
+<div class="subtitulo-portatiles">
+    Lo tradicional, hecho inteligente
+</div><!-- Subtítulo institucional agregado según estándar visual Portátiles Mercedes -->
 
 <form method="get" class="form-inline mb-3">
   <input type="text" id="busquedaCliente" name="q" class="form-control mr-2" placeholder="Nombre, DNI o email" value="{{ request.query_params.get('q','') }}">

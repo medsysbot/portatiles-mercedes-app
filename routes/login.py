@@ -258,8 +258,10 @@ def registrar_cliente(
             "password_hash": password_hash,
             "rol": "cliente",
             "activo": True,  # El campo "activo" se agrega automáticamente
-            "creado_en": datetime.now().isoformat(),
         }
+        # <!--
+        # Eliminado envío y lógica de campos creado_en y actualizado_en porque ya no existen en la tabla usuarios.
+        # -->
         print("Datos a insertar en usuarios:", datos_insert)
         try:
             resp = supabase.table("usuarios").insert(datos_insert).execute()

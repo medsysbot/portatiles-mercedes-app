@@ -65,8 +65,7 @@ Ejemplo de tabla principal: **usuarios**
 - `nombre`
 - `rol`
 - `activo`
-- `creado_en`
-- `actualizado_en`
+<!-- Eliminado envío y lógica de campos creado_en y actualizado_en porque ya no existen en la tabla usuarios. -->
 
 Mantener este archivo actualizado para soporte y desarrollo.
 

@@ -9,7 +9,7 @@ Proyecto: Portátiles Mercedes
 
 """Endpoints para el panel administrativo de la empresa."""
 
-from datetime import date, datetime
+from datetime import date
 
 from fastapi import APIRouter, HTTPException, Query, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -158,8 +158,10 @@ def crear_empleado(
             "password_hash": bcrypt.hash(password),
             "rol": rol,
             "activo": True,
-            "creado_en": datetime.now().isoformat(),
         }).execute()
+        # <!--
+        # Eliminado envío y lógica de campos creado_en y actualizado_en porque ya no existen en la tabla usuarios.
+        # -->
         if getattr(insertar, "error", None) is not None or not insertar.data:
             raise HTTPException(status_code=500, detail="No se pudo crear el usuario")
     return {"mensaje": "Empleado creado correctamente"}

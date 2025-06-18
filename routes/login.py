@@ -250,11 +250,14 @@ def registrar_cliente(
             )
 
         password_hash = pwd_context.hash(password)
+        # El campo "activo" se agrega automáticamente en el backend,
+        # nunca es visible ni editable para el cliente.
         datos_insert = {
             "nombre": nombre,
             "email": email,
             "password_hash": password_hash,
             "rol": "cliente",
+            "activo": True,  # El campo "activo" se agrega automáticamente
         }
         print("Datos a insertar en usuarios:", datos_insert)
         try:

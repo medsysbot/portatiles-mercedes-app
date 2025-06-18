@@ -226,45 +226,60 @@ def verificar_token(data: dict):
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
 
 @router.post("/registrar_cliente")
-def registrar_cliente(email: str = Form(...), password: str = Form(...)):
+def registrar_cliente(
+    nombre: str = Form(...),
+    dni: str = Form(...),
+    telefono: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+):
     """Registra un usuario final con rol ``cliente``.
 
-    Parámetros
-    ----------
-    email : str
-        Correo electrónico del nuevo cliente.
-    password : str
-        Contraseña proporcionada en el formulario.
-
-    Retorna
-    -------
-    dict
-        Mensaje de confirmación cuando el alta se realiza
-        correctamente.
-
-    Errores
-    -------
-    HTTPException 400
-        Se produce si la inserción en Supabase falla.
+    Elimina la lógica antigua de direcciones y guarda la
+    contraseña de forma segura mediante ``bcrypt``.
     """
-    # Modificación: se eliminó el campo dirección y se agregó campo contraseña para acceso seguro por JWT.
-    hash_pwd = bcrypt.hash(password)
-    resp = (
-        supabase.table("usuarios")
-        .insert({"email": email, "password_hash": hash_pwd, "rol": "cliente"})
-        .execute()
-    )
-    if (
-        not resp.data
-        or (hasattr(resp, "status_code") and resp.status_code != 200)
-        or getattr(resp, "error", None) is not None
-    ):
-        logger.error(
-            f"Registro fallido para {email}: {getattr(resp, 'error', 'Error en Supabase')}"
+
+    if not password:
+        raise HTTPException(status_code=400, detail="Contraseña requerida")
+
+    if supabase:
+        existe = (
+            supabase.table("usuarios").select("id").eq("email", email).execute()
         )
-        raise HTTPException(
-            status_code=400,
-            detail=str(getattr(resp, "error", "Error en Supabase")),
+        if getattr(existe, "data", []):
+            raise HTTPException(
+                status_code=400, detail="El email ya está registrado"
+            )
+
+        password_hash = pwd_context.hash(password)
+        resp = (
+            supabase.table("usuarios")
+            .insert(
+                {
+                    "nombre": nombre,
+                    "dni": dni,
+                    "telefono": telefono,
+                    "email": email,
+                    "password_hash": password_hash,
+                    "rol": "cliente",
+                    "activo": True,
+                }
+            )
+            .execute()
         )
+
+        if (
+            not resp.data
+            or (hasattr(resp, "status_code") and resp.status_code != 200)
+            or getattr(resp, "error", None) is not None
+        ):
+            logger.error(
+                f"Registro fallido para {email}: {getattr(resp, 'error', 'Error en Supabase')}"
+            )
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(resp, "error", "Error en Supabase")),
+            )
+
     logger.info(f"Registro exitoso para nuevo cliente: {email}")
     return {"mensaje": "Registro exitoso"}

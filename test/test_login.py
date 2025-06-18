@@ -126,3 +126,77 @@ def test_login_usuario_inexistente(monkeypatch, client):
     assert response.status_code == 401
 
 
+class InMemoryQuery:
+    def __init__(self, data):
+        self.data = data
+        self.filters = {}
+        self.is_select = True
+        self.insert_data = None
+
+    def select(self, *_args):
+        self.is_select = True
+        return self
+
+    def eq(self, field, value):
+        self.filters[field] = value
+        return self
+
+    def insert(self, data):
+        self.is_select = False
+        self.insert_data = data
+        return self
+
+    def execute(self):
+        if self.is_select:
+            result = [
+                u for u in self.data
+                if all(u.get(k) == v for k, v in self.filters.items())
+            ]
+            return types.SimpleNamespace(data=result, status_code=200, error=None)
+        if self.insert_data is not None:
+            self.data.append(self.insert_data)
+            return types.SimpleNamespace(data=[{'id': len(self.data)}], status_code=200, error=None)
+        return types.SimpleNamespace(data=None, status_code=400, error='invalid')
+
+
+class InMemorySupabase:
+    def __init__(self):
+        self.users = []
+
+    def table(self, name):
+        if name == 'usuarios':
+            return InMemoryQuery(self.users)
+        return InMemoryQuery([])
+
+
+def test_registrar_cliente_ok(monkeypatch, client):
+    db = InMemorySupabase()
+    monkeypatch.setattr(login, 'supabase', db)
+    resp = client.post('/registrar_cliente', data={
+        'nombre': 'Ana',
+        'dni': '123',
+        'telefono': '111',
+        'email': 'ana@test.com',
+        'password': 'abc123'
+    })
+    assert resp.status_code == 200
+    assert resp.json()['mensaje'] == 'Registro exitoso'
+    assert len(db.users) == 1
+    assert db.users[0]['email'] == 'ana@test.com'
+    assert 'password_hash' in db.users[0]
+
+
+def test_registrar_cliente_email_repetido(monkeypatch, client):
+    db = InMemorySupabase()
+    db.users.append({'email': 'ana@test.com', 'password_hash': 'x', 'rol': 'cliente'})
+    monkeypatch.setattr(login, 'supabase', db)
+    resp = client.post('/registrar_cliente', data={
+        'nombre': 'Ana',
+        'dni': '123',
+        'telefono': '111',
+        'email': 'ana@test.com',
+        'password': 'abc123'
+    })
+    assert resp.status_code == 400
+
+

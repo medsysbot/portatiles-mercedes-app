@@ -5,14 +5,14 @@ from routes import cliente_panel
 
 client = TestClient(main.app)
 
-class MockUpsertQuery:
+class MockInsertQuery:
     def __init__(self, existing_dni=None):
-        self.upsert_data = None
+        self.insert_data = None
         self.existing_dni = existing_dni
         self.is_select = False
         self.filter = None
-    def upsert(self, data):
-        self.upsert_data = data
+    def insert(self, data):
+        self.insert_data = data
         self.is_select = False
         return self
     def select(self, *_):
@@ -49,7 +49,7 @@ class MockUserQuery:
 class MockSupabaseSave:
     def __init__(self, existing_dni=None, valid_user=True):
         self.table_name = None
-        self.clientes_query = MockUpsertQuery(existing_dni)
+        self.clientes_query = MockInsertQuery(existing_dni)
         self.user_query = MockUserQuery(valid_user)
     def table(self, name):
         self.table_name = name
@@ -57,7 +57,7 @@ class MockSupabaseSave:
             return self.clientes_query
         if name == "usuarios":
             return self.user_query
-        return MockUpsertQuery()
+        return MockInsertQuery()
 
 class MockSelectQuery:
     def __init__(self, data):
@@ -103,8 +103,8 @@ def test_guardar_datos_cliente(monkeypatch):
     client.app.dependency_overrides = {}
     assert resp.status_code == 200
     assert db.table_name == "clientes"
-    assert db.clientes_query.upsert_data["dni"] == "123"
-    assert db.clientes_query.upsert_data["id_usuario"] == "uuid-123"
+    assert db.clientes_query.insert_data["dni"] == "123"
+    assert db.clientes_query.insert_data["id_usuario"] == "uuid-123"
 
 
 def test_guardar_datos_cliente_dni_repetido(monkeypatch):

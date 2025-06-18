@@ -69,6 +69,18 @@ Proyecto: Portátiles Mercedes
             width: 100%;
         }
 
+        .subtitulo-portatiles {
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 700;
+            font-style: italic;
+            font-size: 2.2vw;
+            color: #545454;
+            text-align: center;
+            margin-top: 0.2em;
+            margin-bottom: 30px;
+            text-shadow: 0 1.5px 2.5px #fff;
+        }
+
         .logo-portatiles {
             height: 2.1em;
             margin: 0 18px;
@@ -79,6 +91,9 @@ Proyecto: Portátiles Mercedes
             .titulo-index {
                 font-size: 28px;
                 white-space: normal;
+            }
+            .subtitulo-portatiles {
+                font-size: 16px;
             }
         }
 
@@ -94,6 +109,10 @@ Proyecto: Portátiles Mercedes
             .logo-portatiles {
                 height: 1.2em;
                 margin: 0 6px;
+            }
+            .subtitulo-portatiles {
+                font-size: 13px;
+                margin-bottom: 10px;
             }
             .presentacion-portatiles {
                 font-size: 15px;
@@ -217,14 +236,6 @@ Proyecto: Portátiles Mercedes
             gap: 10px;
         }
 
-        /* Icono de información ubicado antes del texto */
-        .icono-info {
-            width: 32px;
-            height: 32px;
-            margin-right: 10px;
-            flex-shrink: 0;
-        }
-
         /* Área de texto con scroll propio */
         .info-texto {
             overflow-y: auto;
@@ -293,12 +304,17 @@ Proyecto: Portátiles Mercedes
 </head>
 <body>
     <div class="fondo-alquiler">
+<!-- Título y subtítulo unificados, icono retirado según estándar Portátiles Mercedes -->
 <!-- ==== Encabezado de la página ==== -->
         <div class="contenedor-superior">
             <div class="titulo-index"><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
                 Información
                 <img src="/app_publico/static/icons/logo-portatiles.png" alt="Logo Portátiles Mercedes" class="logo-portatiles">
                 Baños
+            </div>
+            <!-- Subtítulo institucional, solo en páginas públicas según estándar visual Portátiles Mercedes -->
+            <div class="subtitulo-portatiles">
+                Lo tradicional, hecho inteligente
             </div>
         </div>
         <div class="contenedor-main">
@@ -310,7 +326,6 @@ Proyecto: Portátiles Mercedes
             <div class="contenedor-texto">
 <!-- ==== Texto descriptivo ==== -->
                 <div class="info-contenedor">
-                    <img src="/app_publico/static/icons/info-banos.png" alt="Información" class="icono-info">
                     <div class="presentacion-portatiles info-texto">
                         <h2><strong>Historia y funcionamiento del baño químico 🚽</strong></h2>
 

@@ -7,12 +7,19 @@ Proyecto: Portátiles Mercedes
 */
 const form = document.getElementById('registroForm');
 const msg = document.getElementById('msg');
+const password = document.getElementById('password');
+const password2 = document.getElementById('password2');
 
 // ==== Eventos de UI ==== 
 // ==== Envío de datos ====
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
     msg.textContent = '';
+    if (password.value !== password2.value) {
+        msg.style.color = 'red';
+        msg.textContent = 'Las contraseñas no coinciden';
+        return;
+    }
     const datos = new FormData(form);
     try {
         const resp = await fetch('/registrar_cliente', {

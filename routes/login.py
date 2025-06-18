@@ -247,6 +247,7 @@ def registrar_cliente(email: str = Form(...), password: str = Form(...)):
     HTTPException 400
         Se produce si la inserción en Supabase falla.
     """
+    # Modificación: se eliminó el campo dirección y se agregó campo contraseña para acceso seguro por JWT.
     hash_pwd = bcrypt.hash(password)
     resp = (
         supabase.table("usuarios")

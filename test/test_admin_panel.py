@@ -162,6 +162,7 @@ def test_crear_y_login_empleado(monkeypatch):
         'rol': 'Empleado'
     })
     assert create.status_code == 200
+    assert 'creado_en' in mock_db.users[0]
     login_resp = client.post('/login', json={
         'email': 'pepe@test.com',
         'password': 'abc123',

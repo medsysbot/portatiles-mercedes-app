@@ -69,6 +69,7 @@ async def guardar_datos_cliente(
     dni: str = Form(...),
     direccion: str = Form(...),
     telefono: str = Form(...),
+    id_usuario: str = Form(...),
 ):
     """Guarda o actualiza los datos personales del cliente."""
     if supabase:
@@ -79,8 +80,19 @@ async def guardar_datos_cliente(
         if getattr(existe, "data", []):
             raise HTTPException(status_code=400, detail="Ese DNI ya está registrado")
 
+        if not id_usuario:
+            raise HTTPException(status_code=400, detail="UUID faltante")
+
+        # Verificamos que el usuario exista
+        usuario_resp = (
+            supabase.table("usuarios").select("id").eq("id", id_usuario).single().execute()
+        )
+        if not usuario_resp.data:
+            raise HTTPException(status_code=400, detail="UUID inválido")
+
         # Almacenamos o actualizamos en la tabla clientes
         data = {
+            "id_usuario": id_usuario,
             "email": email,
             "nombre": nombre,
             "apellido": apellido,

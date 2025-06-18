@@ -172,6 +172,7 @@ async def login(datos: LoginInput, response: Response):
 
         token_data = {
             "sub": usuario["email"],
+            "id": usuario.get("id"),
             "rol": usuario.get("rol"),
             "nombre": usuario.get("nombre"),
             "exp": datetime.utcnow() + timedelta(minutes=JWT_EXP_MINUTES),
@@ -184,6 +185,7 @@ async def login(datos: LoginInput, response: Response):
             "access_token": token,
             "rol": usuario.get("rol"),
             "nombre": usuario.get("nombre"),
+            "id": usuario.get("id"),
             "token_type": "bearer",
         }
     except HTTPException:
@@ -221,7 +223,12 @@ def verificar_token(data: dict):
         raise HTTPException(status_code=401, detail="Token faltante")
     try:
         datos = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
-        return {"status": "ok", "rol": datos.get("rol"), "user_id": datos.get("sub")}
+        return {
+            "status": "ok",
+            "rol": datos.get("rol"),
+            "user_id": datos.get("id"),
+            "email": datos.get("sub"),
+        }
     except JWTError:
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
 

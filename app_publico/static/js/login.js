@@ -42,6 +42,9 @@ if (form) {
                     if (data.nombre) {
                         localStorage.setItem("nombre", data.nombre);
                     }
+                    if (data.id) {
+                        localStorage.setItem("user_id", data.id);
+                    }
                     if (data.rol === "Administrador" || data.rol === "empleado") {
                         window.location.href = "/splash";
                     } else {

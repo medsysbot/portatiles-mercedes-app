@@ -258,6 +258,7 @@ def registrar_cliente(
             "password_hash": password_hash,
             "rol": "cliente",
             "activo": True,  # El campo "activo" se agrega automáticamente
+            "creado_en": datetime.now().isoformat(),
         }
         print("Datos a insertar en usuarios:", datos_insert)
         try:

@@ -183,6 +183,10 @@ def test_registrar_cliente_ok(monkeypatch, client):
     assert db.users[0]['email'] == 'ana@test.com'
     assert 'password_hash' in db.users[0]
     assert db.users[0]['activo'] is True
+    assert 'creado_en' in db.users[0]
+    # Validar formato ISO 8601
+    from datetime import datetime
+    datetime.fromisoformat(db.users[0]['creado_en'])
 
 
 def test_registrar_cliente_email_repetido(monkeypatch, client):

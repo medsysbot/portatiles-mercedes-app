@@ -228,7 +228,6 @@ def verificar_token(data: dict):
 @router.post("/registrar_cliente")
 def registrar_cliente(
     nombre: str = Form(...),
-    telefono: str = Form(...),
     email: str = Form(...),
     password: str = Form(...),
 ):
@@ -256,7 +255,6 @@ def registrar_cliente(
             .insert(
                 {
                     "nombre": nombre,
-                    "telefono": telefono,
                     "email": email,
                     "password_hash": password_hash,
                     "rol": "cliente",

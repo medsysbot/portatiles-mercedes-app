@@ -168,6 +168,7 @@ Autentica al usuario según su correo y rol.
 Registra un nuevo cliente. Los datos se envían como `multipart/form-data`.
 
 **Campos requeridos**
+- `nombre`
 - `email`
 - `password`
 

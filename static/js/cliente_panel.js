@@ -196,6 +196,9 @@ function mostrarFormularioDatos(email) {
             });
             if (resp.ok) {
                 modal.style.display = 'none';
+            } else if (resp.status === 400) {
+                const data = await resp.json().catch(() => ({}));
+                alert(data.detail || 'Ese DNI ya está registrado');
             }
         } catch (_) {
             console.error('Error al guardar datos');

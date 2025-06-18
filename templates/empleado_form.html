@@ -11,10 +11,14 @@
     <label>Email</label>
     <input type="email" name="email" class="form-control" required>
   </div>
+  <!--
+  Modificación: El alta de empleados requiere definir una contraseña inicial,
+  necesaria para autenticación y generación de token JWT.
+  -->
   <div class="form-group">
-    <label>Contraseña inicial</label>
+    <label for="password">Contraseña inicial</label>
     <div class="input-group">
-      <input type="password" id="password" name="password" class="form-control" required>
+      <input type="password" id="password" name="password" class="form-control" required minlength="6" autocomplete="new-password">
       <div class="input-group-append">
         <button class="btn btn-outline-secondary" type="button" id="togglePass"><i class="fas fa-eye"></i></button>
       </div>

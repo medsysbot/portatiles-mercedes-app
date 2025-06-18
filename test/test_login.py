@@ -182,6 +182,7 @@ def test_registrar_cliente_ok(monkeypatch, client):
     assert len(db.users) == 1
     assert db.users[0]['email'] == 'ana@test.com'
     assert 'password_hash' in db.users[0]
+    assert db.users[0]['activo'] is True
 
 
 def test_registrar_cliente_email_repetido(monkeypatch, client):

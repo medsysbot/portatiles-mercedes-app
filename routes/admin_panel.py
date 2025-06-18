@@ -15,6 +15,7 @@ from fastapi import APIRouter, HTTPException, Query, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
+from passlib.hash import bcrypt
 
 
 supabase = None
@@ -108,6 +109,55 @@ def crear_cliente(
 ):
     """Procesa la creación de un cliente."""
     return RedirectResponse("/admin/clientes", status_code=303)
+
+
+# ============================ Empleados ============================
+
+@router.get("/admin/empleados", response_class=HTMLResponse)
+def admin_empleados_page(request: Request, mensaje: str | None = Query(None)):
+    """Listado de empleados y administradores."""
+    empleados = []
+    if supabase:
+        resp = supabase.table("usuarios").select("*").execute()
+        empleados = [
+            u for u in getattr(resp, "data", []) or [] if u.get("rol") in ("Empleado", "Administrador")
+        ]
+    contexto = {"request": request, "empleados": empleados, "mensaje": mensaje}
+    return templates.TemplateResponse("empleados_admin.html", contexto)
+
+
+@router.get("/admin/empleados/nuevo", response_class=HTMLResponse)
+def form_nuevo_empleado(request: Request):
+    """Formulario para crear un nuevo empleado."""
+    return templates.TemplateResponse("empleado_form.html", {"request": request})
+
+
+@router.post("/admin/empleados/nuevo")
+def crear_empleado(
+    nombre: str = Form(...),
+    email: str = Form(...),
+    password: str = Form(...),
+    rol: str = Form(...),
+):
+    """Alta de empleados o administradores desde el panel."""
+    if rol not in ("Empleado", "Administrador"):
+        raise HTTPException(status_code=400, detail="Rol inv\u00e1lido")
+    if supabase:
+        existe = (
+            supabase.table("usuarios").select("id").eq("email", email).execute()
+        )
+        if getattr(existe, "data", []):
+            raise HTTPException(status_code=400, detail="Ese email ya est\u00e1 registrado")
+        insertar = supabase.table("usuarios").insert({
+            "nombre": nombre,
+            "email": email,
+            "password_hash": bcrypt.hash(password),
+            "rol": rol,
+            "activo": True,
+        }).execute()
+        if getattr(insertar, "error", None) is not None or not insertar.data:
+            raise HTTPException(status_code=500, detail="No se pudo crear el usuario")
+    return {"mensaje": "Empleado creado correctamente"}
 
 
 @router.get("/admin/clientes/{dni}/editar", response_class=HTMLResponse)

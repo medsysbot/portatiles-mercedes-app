@@ -50,3 +50,61 @@ def test_admin_api_clientes_busqueda(monkeypatch):
     assert response.status_code == 200
     assert len(response.json()) == 1
     assert response.json()[0]['dni'] == '456'
+
+
+def test_admin_empleados_html():
+    resp = client.get('/admin/empleados')
+    assert resp.status_code == 200
+    assert 'text/html' in resp.headers['content-type']
+
+
+class EmpleadoMockQuery:
+    def __init__(self, existing_email=None):
+        self.filters = {}
+        self.existing_email = existing_email
+        self.is_select = True
+    def select(self, *_):
+        self.is_select = True
+        return self
+    def eq(self, field, value):
+        self.filters[field] = value
+        return self
+    def insert(self, _data):
+        self.is_select = False
+        return self
+    def execute(self):
+        if self.is_select:
+            if self.filters.get('email') == self.existing_email:
+                return types.SimpleNamespace(data=[{'id':1}], status_code=200, error=None)
+            return types.SimpleNamespace(data=[], status_code=200, error=None)
+        return types.SimpleNamespace(data=[{'id':2}], status_code=200, error=None)
+
+
+class EmpleadoMockSupabase:
+    def __init__(self, existing_email=None):
+        self.existing_email = existing_email
+    def table(self, _name):
+        return EmpleadoMockQuery(self.existing_email)
+
+
+def test_crear_empleado_email_repetido(monkeypatch):
+    monkeypatch.setattr(admin_panel, 'supabase', EmpleadoMockSupabase('existe@test.com'))
+    resp = client.post('/admin/empleados/nuevo', data={
+        'nombre': 'Juan',
+        'email': 'existe@test.com',
+        'password': '1234',
+        'rol': 'Empleado'
+    })
+    assert resp.status_code == 400
+
+
+def test_crear_empleado_ok(monkeypatch):
+    monkeypatch.setattr(admin_panel, 'supabase', EmpleadoMockSupabase())
+    resp = client.post('/admin/empleados/nuevo', data={
+        'nombre': 'Ana',
+        'email': 'ana@test.com',
+        'password': '1234',
+        'rol': 'Administrador'
+    })
+    assert resp.status_code == 200
+    assert resp.json()['mensaje'] == 'Empleado creado correctamente'

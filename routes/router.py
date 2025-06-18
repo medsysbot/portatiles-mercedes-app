@@ -194,6 +194,26 @@ async def mostrar_admin_splash():
     return HTMLResponse(content=html_contenido)
 
 
+@router.get("/splash_cliente", response_class=HTMLResponse)
+def splash_cliente(request: Request, token_data: dict = Depends(verificar_token)):
+    """Pantalla de bienvenida transitoria para clientes."""
+    nombre_cliente = token_data.get("nombre", "Cliente")
+    return templates.TemplateResponse(
+        "splash_cliente.html",
+        {
+            "request": request,
+            "nombre_cliente": nombre_cliente,
+            "cliente_femenino": False,
+        },
+    )
+
+
+@router.get("/panel_cliente", response_class=HTMLResponse)
+def panel_cliente_view(request: Request, token_data: dict = Depends(verificar_token)):
+    """Panel privado para clientes sin extensión HTML."""
+    return templates.TemplateResponse("cliente_panel.html", {"request": request})
+
+
 @router.get("/cliente_panel.html", response_class=HTMLResponse)
 async def mostrar_panel_cliente():
     """Panel privado para clientes."""

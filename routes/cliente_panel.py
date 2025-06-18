@@ -9,10 +9,12 @@ Proyecto: Portátiles Mercedes
 
 """Rutas para consultar la información del panel de clientes."""
 
-from datetime import date
 from fastapi import APIRouter, HTTPException, Query, Form
 
-supabase = None
+supabase = None  # Cliente de Supabase, se inyecta desde la app
+
+# Los datos personales se guardarán en la tabla
+# `datos_personales_clientes`
 
 router = APIRouter()
 
@@ -24,11 +26,12 @@ def cliente_panel():
 
 @router.get("/info_cliente")
 async def info_cliente(email: str = Query(...)):
-    """Devuelve nombre y fecha de nacimiento del cliente."""
+    """Devuelve los datos personales del cliente."""
     if supabase:
+        # Consulta en la tabla datos_personales_clientes
         resp = (
-            supabase.table("clientes_info")
-            .select("dni,fecha_nacimiento")
+            supabase.table("datos_personales_clientes")
+            .select("nombre,apellido,dni,direccion,telefono,email")
             .eq("email", email)
             .single()
             .execute()
@@ -60,13 +63,22 @@ async def obtener_limpiezas(email: str = Query(...)):
 @router.post("/guardar_datos_cliente")
 async def guardar_datos_cliente(
     email: str = Form(...),
+    nombre: str = Form(...),
+    apellido: str = Form(...),
     dni: str = Form(...),
-    fecha_nacimiento: date | None = Form(None),
+    direccion: str = Form(...),
+    telefono: str = Form(...),
 ):
     """Guarda o actualiza los datos personales del cliente."""
     if supabase:
-        data = {"email": email, "dni": dni}
-        if fecha_nacimiento:
-            data["fecha_nacimiento"] = fecha_nacimiento.isoformat()
-        supabase.table("clientes_info").upsert(data).execute()
+        # Almacenamos en la tabla datos_personales_clientes
+        data = {
+            "email": email,
+            "nombre": nombre,
+            "apellido": apellido,
+            "dni": dni,
+            "direccion": direccion,
+            "telefono": telefono,
+        }
+        supabase.table("datos_personales_clientes").upsert(data).execute()
     return {"mensaje": "Datos guardados"}

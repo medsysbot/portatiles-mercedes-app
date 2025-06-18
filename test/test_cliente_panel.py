@@ -85,6 +85,9 @@ class MockSupabaseInfo:
 def test_guardar_datos_cliente(monkeypatch):
     db = MockSupabaseSave()
     monkeypatch.setattr(cliente_panel, "supabase", db)
+    client.app.dependency_overrides[cliente_panel.auth_required] = (
+        lambda credentials=None: {"id": "uuid-123"}
+    )
     resp = client.post(
         "/guardar_datos_cliente",
         data={
@@ -94,9 +97,10 @@ def test_guardar_datos_cliente(monkeypatch):
             "dni": "123",
             "direccion": "Calle 1",
             "telefono": "555",
-            "id_usuario": "uuid-123",
         },
+        headers={"Authorization": "Bearer test"},
     )
+    client.app.dependency_overrides = {}
     assert resp.status_code == 200
     assert db.table_name == "clientes"
     assert db.clientes_query.upsert_data["dni"] == "123"
@@ -106,6 +110,9 @@ def test_guardar_datos_cliente(monkeypatch):
 def test_guardar_datos_cliente_dni_repetido(monkeypatch):
     db = MockSupabaseSave(existing_dni="123")
     monkeypatch.setattr(cliente_panel, "supabase", db)
+    client.app.dependency_overrides[cliente_panel.auth_required] = (
+        lambda credentials=None: {"id": "uuid-123"}
+    )
     resp = client.post(
         "/guardar_datos_cliente",
         data={
@@ -115,15 +122,19 @@ def test_guardar_datos_cliente_dni_repetido(monkeypatch):
             "dni": "123",
             "direccion": "Calle x",
             "telefono": "444",
-            "id_usuario": "uuid-123",
         },
+        headers={"Authorization": "Bearer test"},
     )
+    client.app.dependency_overrides = {}
     assert resp.status_code == 400
 
 
 def test_guardar_datos_cliente_uuid_invalido(monkeypatch):
     db = MockSupabaseSave(valid_user=False)
     monkeypatch.setattr(cliente_panel, "supabase", db)
+    client.app.dependency_overrides[cliente_panel.auth_required] = (
+        lambda credentials=None: {"id": "invalido"}
+    )
     resp = client.post(
         "/guardar_datos_cliente",
         data={
@@ -133,9 +144,10 @@ def test_guardar_datos_cliente_uuid_invalido(monkeypatch):
             "dni": "122",
             "direccion": "Calle x",
             "telefono": "444",
-            "id_usuario": "invalido",
         },
+        headers={"Authorization": "Bearer test"},
     )
+    client.app.dependency_overrides = {}
     assert resp.status_code == 400
 
 

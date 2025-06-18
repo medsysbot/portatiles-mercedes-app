@@ -9,7 +9,8 @@ Proyecto: Portátiles Mercedes
 
 """Rutas para consultar la información del panel de clientes."""
 
-from fastapi import APIRouter, HTTPException, Query, Form
+from fastapi import APIRouter, HTTPException, Query, Form, Depends
+from utils.auth_utils import auth_required
 
 supabase = None  # Cliente de Supabase, se inyecta desde la app
 # Nota: este flujo conecta el frontend con la tabla CLIENTES de Supabase
@@ -69,7 +70,7 @@ async def guardar_datos_cliente(
     dni: str = Form(...),
     direccion: str = Form(...),
     telefono: str = Form(...),
-    id_usuario: str = Form(...),
+    token_data: dict = Depends(auth_required),
 ):
     """Guarda o actualiza los datos personales del cliente."""
     if supabase:
@@ -80,6 +81,7 @@ async def guardar_datos_cliente(
         if getattr(existe, "data", []):
             raise HTTPException(status_code=400, detail="Ese DNI ya está registrado")
 
+        id_usuario = token_data.get("id")
         if not id_usuario:
             raise HTTPException(status_code=400, detail="UUID faltante")
 
@@ -100,5 +102,13 @@ async def guardar_datos_cliente(
             "direccion": direccion,
             "telefono": telefono,
         }
-        supabase.table("clientes").upsert(data).execute()
+        try:
+            resultado = supabase.table("clientes").upsert(data).execute()
+            print("Resultado del insert:", resultado)
+        except Exception as e:
+            print("ERROR AL GUARDAR CLIENTE:", e)
+            raise HTTPException(
+                status_code=500,
+                detail="No se pudo guardar el registro. Ver logs para más detalles.",
+            )
     return {"mensaje": "Datos guardados"}

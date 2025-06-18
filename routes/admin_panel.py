@@ -140,6 +140,8 @@ def crear_empleado(
     rol: str = Form(...),
 ):
     """Alta de empleados o administradores desde el panel."""
+    if not password:
+        raise HTTPException(status_code=400, detail="Contraseña requerida")
     if rol not in ("Empleado", "Administrador"):
         raise HTTPException(status_code=400, detail="Rol inv\u00e1lido")
     if supabase:
@@ -151,6 +153,8 @@ def crear_empleado(
         insertar = supabase.table("usuarios").insert({
             "nombre": nombre,
             "email": email,
+            # Modificación: El alta de empleados requiere definir una contraseña inicial
+            # para que pueda autenticarse y obtener su token JWT.
             "password_hash": bcrypt.hash(password),
             "rol": rol,
             "activo": True,

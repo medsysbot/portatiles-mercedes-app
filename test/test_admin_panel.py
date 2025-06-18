@@ -11,7 +11,7 @@ def test_admin_panel_html():
 import os
 import jwt
 import types
-from routes import admin_panel
+from routes import admin_panel, login
 
 class MockQuery:
     def __init__(self, data):
@@ -87,6 +87,47 @@ class EmpleadoMockSupabase:
         return EmpleadoMockQuery(self.existing_email)
 
 
+class InMemoryQuery:
+    def __init__(self, data):
+        self.data = data
+        self.filters = {}
+        self.is_select = True
+        self.single_mode = False
+        self.insert_data = None
+    def select(self, *_):
+        self.is_select = True
+        return self
+    def eq(self, field, value):
+        self.filters[field] = value
+        return self
+    def single(self):
+        self.single_mode = True
+        return self
+    def insert(self, data):
+        self.is_select = False
+        self.insert_data = data
+        return self
+    def execute(self):
+        if self.is_select:
+            result = [u for u in self.data if all(u.get(k) == v for k, v in self.filters.items())]
+            if self.single_mode:
+                result = result[0] if result else None
+            return types.SimpleNamespace(data=result, status_code=200, error=None)
+        if self.insert_data:
+            self.data.append(self.insert_data)
+            return types.SimpleNamespace(data=[{"id": len(self.data)}], status_code=200, error=None)
+        return types.SimpleNamespace(data=None, status_code=400, error="invalid")
+
+
+class InMemorySupabase:
+    def __init__(self):
+        self.users = []
+    def table(self, name):
+        if name == "usuarios":
+            return InMemoryQuery(self.users)
+        return InMemoryQuery([])
+
+
 def test_crear_empleado_email_repetido(monkeypatch):
     monkeypatch.setattr(admin_panel, 'supabase', EmpleadoMockSupabase('existe@test.com'))
     resp = client.post('/admin/empleados/nuevo', data={
@@ -108,3 +149,23 @@ def test_crear_empleado_ok(monkeypatch):
     })
     assert resp.status_code == 200
     assert resp.json()['mensaje'] == 'Empleado creado correctamente'
+
+
+def test_crear_y_login_empleado(monkeypatch):
+    mock_db = InMemorySupabase()
+    monkeypatch.setattr(admin_panel, 'supabase', mock_db)
+    monkeypatch.setattr(login, 'supabase', mock_db)
+    create = client.post('/admin/empleados/nuevo', data={
+        'nombre': 'Pepe',
+        'email': 'pepe@test.com',
+        'password': 'abc123',
+        'rol': 'Empleado'
+    })
+    assert create.status_code == 200
+    login_resp = client.post('/login', json={
+        'email': 'pepe@test.com',
+        'password': 'abc123',
+        'rol': 'Empleado'
+    })
+    assert login_resp.status_code == 200
+    assert 'access_token' in login_resp.json()

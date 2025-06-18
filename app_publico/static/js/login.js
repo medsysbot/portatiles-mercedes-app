@@ -45,7 +45,7 @@ if (form) {
                     if (data.rol === "Administrador" || data.rol === "empleado") {
                         window.location.href = "/splash";
                     } else {
-                        window.location.href = "/cliente_panel.html";
+                        window.location.href = "/splash_cliente";
                     }
                 } else {
                     if (errorEl) {

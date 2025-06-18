@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', async () => {
             handleUnauthorized();
             return;
         }
-        const email = info.user_id; // user_id es el email del cliente
+        const email = info.email;
+        const userId = info.user_id || localStorage.getItem('user_id'); // UUID del usuario
         const datosCliRes = await fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`);
         let nombre = email;
         let datosCompletos = false;
@@ -60,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             datosCompletos = ['nombre', 'apellido', 'dni', 'direccion', 'telefono'].every(c => datosCli[c]);
         }
         if (!datosCompletos) {
-            mostrarFormularioDatos(email);
+            mostrarFormularioDatos(email, userId);
         }
         document.getElementById('bienvenida').textContent = `Bienvenido ${nombre}`;
         mostrarSplash(nombre);
@@ -180,12 +181,15 @@ function mostrarSplash(nombre, fechaNac) {
     }, 5000);
 }
 
-function mostrarFormularioDatos(email) {
+function mostrarFormularioDatos(email, userId) {
     const modal = document.getElementById('modalDatos');
     const form = document.getElementById('formDatos');
     if (!modal || !form) return;
     modal.style.display = 'block';
     form.email.value = email;
+    if (form.id_usuario) {
+        form.id_usuario.value = userId;
+    }
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const datos = new FormData(form);

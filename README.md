@@ -190,7 +190,7 @@ Los tokens poseen expiración configurada en el servidor.
 
 **Respuesta exitosa**
 ```json
-{ "status": "ok", "rol": "Administrador", "user_id": "admin@portatiles.com" }
+{ "status": "ok", "rol": "Administrador", "user_id": "<uuid>", "email": "admin@portatiles.com" }
 ```
 
 Si el token es inválido, expiró o falta se obtiene `401` con el mensaje correspondiente.

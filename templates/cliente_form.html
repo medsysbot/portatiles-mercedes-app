@@ -1,7 +1,7 @@
 {% extends 'panel_admin.html' %}
 {% block title %}{{ 'Editar' if cliente else 'Nuevo' }} Cliente{% endblock %}
 {% block content %}
-<h2>{{ 'Editar' if cliente else 'Nuevo' }} Cliente</h2>
+<h2 class="mt-0">{{ 'Editar' if cliente else 'Nuevo' }} Cliente</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
 <form method="post">
   <div class="form-group">
     <label>Nombre</label>

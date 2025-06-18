@@ -174,7 +174,6 @@ def test_registrar_cliente_ok(monkeypatch, client):
     monkeypatch.setattr(login, 'supabase', db)
     resp = client.post('/registrar_cliente', data={
         'nombre': 'Ana',
-        'dni': '123',
         'telefono': '111',
         'email': 'ana@test.com',
         'password': 'abc123'
@@ -192,7 +191,6 @@ def test_registrar_cliente_email_repetido(monkeypatch, client):
     monkeypatch.setattr(login, 'supabase', db)
     resp = client.post('/registrar_cliente', data={
         'nombre': 'Ana',
-        'dni': '123',
         'telefono': '111',
         'email': 'ana@test.com',
         'password': 'abc123'

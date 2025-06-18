@@ -50,30 +50,35 @@ document.addEventListener('DOMContentLoaded', async () => {
             handleUnauthorized();
             return;
         }
-        const dni = info.user_id; // asumimos que user_id es el DNI
-        const datosCliRes = await fetchConAuth(`/info_cliente?dni=${encodeURIComponent(dni)}`);
-        let nombre = dni;
+        const email = info.user_id; // user_id es el email del cliente
+        const datosCliRes = await fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`);
+        let nombre = email;
         let cumple = null;
+        let datosCompletos = false;
         if (datosCliRes.ok) {
             const datosCli = await datosCliRes.json();
-            nombre = datosCli.nombre || dni;
+            nombre = datosCli.nombre || email;
             cumple = datosCli.fecha_nacimiento || null;
+            if (datosCli.dni) datosCompletos = true;
+        }
+        if (!datosCompletos) {
+            mostrarFormularioDatos(email);
         }
         document.getElementById('bienvenida').textContent = `Bienvenido ${nombre}`;
         mostrarSplash(nombre, cumple);
-        cargarDatos(dni);
+        cargarDatos(email);
     } catch (err) {
         handleUnauthorized();
     }
 });
 // ==== Funciones auxiliares ====
 
-async function cargarDatos(dni) {
+async function cargarDatos(email) {
     try {
         const [alqRes, pagRes, limpRes] = await Promise.all([
-            fetchConAuth(`/alquileres_cliente?dni=${encodeURIComponent(dni)}`),
-            fetchConAuth(`/pagos_cliente?dni=${encodeURIComponent(dni)}`),
-            fetchConAuth(`/limpiezas_cliente?dni=${encodeURIComponent(dni)}`)
+            fetchConAuth(`/alquileres_cliente?email=${encodeURIComponent(email)}`),
+            fetchConAuth(`/pagos_cliente?email=${encodeURIComponent(email)}`),
+            fetchConAuth(`/limpiezas_cliente?email=${encodeURIComponent(email)}`)
         ]);
 
         if (alqRes.ok) {
@@ -175,4 +180,27 @@ function mostrarSplash(nombre, fechaNac) {
     setTimeout(() => {
         splash.style.display = 'none';
     }, 5000);
+}
+
+function mostrarFormularioDatos(email) {
+    const modal = document.getElementById('modalDatos');
+    const form = document.getElementById('formDatos');
+    if (!modal || !form) return;
+    modal.style.display = 'block';
+    form.email.value = email;
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const datos = new FormData(form);
+        try {
+            const resp = await fetchConAuth('/guardar_datos_cliente', {
+                method: 'POST',
+                body: datos
+            });
+            if (resp.ok) {
+                modal.style.display = 'none';
+            }
+        } catch (_) {
+            console.error('Error al guardar datos');
+        }
+    }, { once: true });
 }

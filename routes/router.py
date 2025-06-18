@@ -182,7 +182,7 @@ async def splash(request: Request, token_data: dict = Depends(verificar_token)):
     nombre_admin = token_data.get("nombre", "Administrador")
     return templates.TemplateResponse(
         "admin_splash.html",
-        {"request": request, "usuario": nombre_admin},
+        {"request": request, "nombre_usuario": nombre_admin},
     )
 
 
@@ -197,12 +197,12 @@ async def mostrar_admin_splash():
 @router.get("/splash_cliente", response_class=HTMLResponse)
 def splash_cliente(request: Request, token_data: dict = Depends(verificar_token)):
     """Pantalla de bienvenida transitoria para clientes."""
-    nombre_cliente = token_data.get("nombre", "Cliente")
+    nombre_usuario = token_data.get("nombre", "Cliente")
     return templates.TemplateResponse(
         "splash_cliente.html",
         {
             "request": request,
-            "nombre_cliente": nombre_cliente,
+            "nombre_usuario": nombre_usuario,
             "cliente_femenino": False,
         },
     )

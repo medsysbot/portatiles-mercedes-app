@@ -15,7 +15,7 @@
         font-family: 'Nunito', sans-serif;
     }
 
-    #saludo-admin {
+    .saludo-splash {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -30,6 +30,11 @@
         text-shadow: 0 2px 10px rgba(0,0,0,0.28);
     }
 
+    .saludo-splash .linea-uno,
+    .saludo-splash .linea-dos {
+        display: block;
+    }
+
     @keyframes zoomInOut {
         0%   { transform: translate(-50%, -50%) scale(1); }
         50%  { transform: translate(-50%, -50%) scale(1.12); }
@@ -38,8 +43,10 @@
   </style>
 </head>
 <body>
-    <div id="saludo-admin">
-        ¡Bienvenido, {{ usuario }}!
+    <!-- Formato de saludo unificado para clientes y administradores, con barra de género -->
+    <div class="saludo-splash">
+        <span class="linea-uno">Bienvenido/a</span><br>
+        <span class="linea-dos">{{ nombre_usuario }}</span>
     </div>
     <script>
         setTimeout(() => {

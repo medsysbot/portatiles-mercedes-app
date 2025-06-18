@@ -11,9 +11,24 @@ Proyecto: Portátiles Mercedes
 
 from fastapi import APIRouter, HTTPException, Query, Form, Depends
 from utils.auth_utils import auth_required
+import logging
+import os
 
 supabase = None  # Cliente de Supabase, se inyecta desde la app
 # Nota: este flujo conecta el frontend con la tabla CLIENTES de Supabase
+
+# Configuración de logging para operaciones de clientes
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOG_DIR, "cliente_events.log")
+logger = logging.getLogger("cliente_events")
+logger.setLevel(logging.INFO)
+if not logger.handlers:
+    handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.propagate = False
 
 # Los datos personales se guardarán en la tabla
 # `clientes` en Supabase
@@ -92,8 +107,8 @@ async def guardar_datos_cliente(
         if not usuario_resp.data:
             raise HTTPException(status_code=400, detail="UUID inválido")
 
-        # Almacenamos o actualizamos en la tabla clientes
-        data = {
+        # Almacenamos en la tabla clientes
+        datos = {
             "id_usuario": id_usuario,
             "email": email,
             "nombre": nombre,
@@ -102,13 +117,25 @@ async def guardar_datos_cliente(
             "direccion": direccion,
             "telefono": telefono,
         }
+
+        # Validamos que ningún campo esté vacío
+        for campo, valor in datos.items():
+            if not valor:
+                raise HTTPException(status_code=400, detail=f"Campo '{campo}' faltante")
+
         try:
-            resultado = supabase.table("clientes").upsert(data).execute()
-            print("Resultado del insert:", resultado)
+            resultado = supabase.table("clientes").insert(datos).execute()
+            print("Resultado del insert en CLIENTES:", resultado)
+            logger.info("Resultado del insert en CLIENTES: %s", resultado)
         except Exception as e:
             print("ERROR AL GUARDAR CLIENTE:", e)
+            logger.error("ERROR AL GUARDAR CLIENTE: %s", e)
             raise HTTPException(
                 status_code=500,
                 detail="No se pudo guardar el registro. Ver logs para más detalles.",
             )
+
+        if not getattr(resultado, "data", None):
+            raise HTTPException(status_code=500, detail="Insert no generó datos")
+
     return {"mensaje": "Datos guardados"}

@@ -250,19 +250,18 @@ def registrar_cliente(
             )
 
         password_hash = pwd_context.hash(password)
-        resp = (
-            supabase.table("usuarios")
-            .insert(
-                {
-                    "nombre": nombre,
-                    "email": email,
-                    "password_hash": password_hash,
-                    "rol": "cliente",
-                    "activo": True,
-                }
-            )
-            .execute()
-        )
+        datos_insert = {
+            "nombre": nombre,
+            "email": email,
+            "password_hash": password_hash,
+            "rol": "cliente",
+        }
+        print("Datos a insertar en usuarios:", datos_insert)
+        try:
+            resp = supabase.table("usuarios").insert(datos_insert).execute()
+        except Exception as e:  # pragma: no cover - debug supabase errors
+            print("Error al insertar en usuarios:", e)
+            raise HTTPException(status_code=500, detail=str(e))
 
         if (
             not resp.data

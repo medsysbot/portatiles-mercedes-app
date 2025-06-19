@@ -24,8 +24,8 @@ def obtener_conexion_supabase():
     """Devuelve una conexión a la base de Supabase."""
     try:
         return psycopg2.connect(DATABASE_URL)
-    except Exception as e:  # pragma: no cover - log de errores de conexión
-        logger.error("Error en conexión con Supabase: %s", e)
+    except Exception as exc:  # pragma: no cover - log de errores de conexión
+        logger.error("Fallo al conectar con Supabase: %s", exc)
         return None
 
 supabase = None  # Cliente de Supabase, se inyecta desde la app
@@ -77,16 +77,21 @@ def cliente_panel():
 async def info_cliente(email: str = Query(...)):
     """Devuelve los datos personales del cliente."""
     if supabase:
-        resp = (
-            supabase.table("datos_personales_clientes")
-            .select("dni,nombre,apellido,direccion,telefono,cuit,razon_social,email")
-            .eq("email", email)
-            .single()
-            .execute()
-        )
+        try:
+            resp = (
+                supabase.table("datos_personales_clientes")
+                .select("dni,nombre,apellido,direccion,telefono,cuit,razon_social,email")
+                .eq("email", email)
+                .single()
+                .execute()
+            )
+        except Exception as exc:  # pragma: no cover - debug
+            logger.error("Error consultando datos de cliente: %s", exc)
+            raise HTTPException(status_code=500, detail="Error consultando datos")
         if getattr(resp, "data", None):
             return resp.data
         raise HTTPException(status_code=404, detail="Datos no encontrados")
+    logger.error("Cliente_panel supabase no configurado")
     return {}
 
 
@@ -117,7 +122,11 @@ def guardar_datos_cliente(
     try:
         conn = obtener_conexion_supabase()
         if conn is None:
-            raise Exception("No se pudo conectar a Supabase")
+            logger.error("No se pudo establecer conexión con Supabase")
+            raise HTTPException(
+                status_code=500,
+                detail="Problema de conexión a la base de datos",
+            )
         cur = conn.cursor()
 
         insert_query = """
@@ -132,5 +141,6 @@ def guardar_datos_cliente(
         conn.close()
 
         return {"mensaje": "Datos guardados correctamente"}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception as exc:
+        logger.error("Error al guardar datos del cliente: %s", exc)
+        raise HTTPException(status_code=500, detail="Error al guardar los datos")

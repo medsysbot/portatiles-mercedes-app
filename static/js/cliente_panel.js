@@ -52,19 +52,19 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         const email = info.email;
         window.emailCliente = email;
-        const datosCliRes = await fetch(`/info_datos_cliente?email=${email}`);
+        const datosCliRes = await fetch(`/info_datos_cliente?email=${encodeURIComponent(email)}`);
         let nombre = email;
-        let datosCompletos = false;
         if (datosCliRes.ok) {
             const datosCli = await datosCliRes.json();
             nombre = datosCli.nombre || email;
-            datosCompletos = ['nombre','apellido','dni','direccion','telefono','cuit','razon_social'].every(c => datosCli[c]);
+            cargarDatosPersonales(email, datosCli);
+        } else {
+            cargarDatosPersonales(email);
         }
-        // Modal ya no se muestra automáticamente
         document.getElementById('bienvenida').textContent = `Bienvenido ${nombre}`;
         mostrarSplash(nombre);
         cargarDatos(email);
-        cargarDatosPersonales(window.emailCliente);
+        prepararListenersFormulario();
     } catch (err) {
         handleUnauthorized();
     }
@@ -180,31 +180,53 @@ function mostrarSplash(nombre, fechaNac) {
     }, 5000);
 }
 
-async function cargarDatosPersonales(email) {
+let datosOriginales = null;
+
+async function cargarDatosPersonales(email, datos = null) {
     try {
-        const resp = await fetch(`/info_datos_cliente?email=${email}`);
-        if (!resp.ok) return;
+        let info = datos;
+        if (!info) {
+            const resp = await fetch(`/info_datos_cliente?email=${encodeURIComponent(email)}`);
+            if (!resp.ok) {
+                console.warn('No se encontraron datos personales');
+                return;
+            }
+            info = await resp.json();
+        }
 
-        const datos = await resp.json();
-
-        document.getElementById("nombre").value = datos.nombre || "";
-        document.getElementById("apellido").value = datos.apellido || "";
-        document.getElementById("direccion").value = datos.direccion || "";
-        document.getElementById("telefono").value = datos.telefono || "";
-        document.getElementById("dni").value = datos.dni || "";
-        document.getElementById("cuit").value = datos.cuit || "";
-        document.getElementById("razon_social").value = datos.razon_social || "";
-        document.getElementById("email").value = datos.email || "";
+        datosOriginales = info;
+        document.getElementById("nombre").value = info.nombre || "";
+        document.getElementById("apellido").value = info.apellido || "";
+        document.getElementById("direccion").value = info.direccion || "";
+        document.getElementById("telefono").value = info.telefono || "";
+        document.getElementById("dni").value = info.dni || "";
+        document.getElementById("cuit").value = info.cuit || "";
+        document.getElementById("razon_social").value = info.razon_social || "";
+        document.getElementById("email").value = info.email || "";
 
         document.getElementById("botonGuardarDatos").disabled = true;
     } catch (err) {
         console.error("\u274c Error cargando datos:", err);
+        alert('No se pudieron cargar sus datos personales');
     }
 }
 
-const emailStored = localStorage.getItem("email");
-if (emailStored) {
-    cargarDatosPersonales(emailStored);
+function prepararListenersFormulario() {
+    const inputs = ["nombre", "apellido", "direccion", "telefono", "dni", "cuit", "razon_social", "email"];
+    inputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => {
+                document.getElementById('botonGuardarDatos').disabled = !hayCambios();
+            });
+        }
+    });
+}
+
+function hayCambios() {
+    if (!datosOriginales) return true;
+    const campos = ["nombre", "apellido", "direccion", "telefono", "dni", "cuit", "razon_social", "email"];
+    return campos.some(c => (datosOriginales[c] || "") !== document.getElementById(c).value);
 }
 
 async function guardarDatos() {
@@ -238,6 +260,7 @@ async function guardarDatos() {
     const resultado = await response.json();
     if (response.ok) {
         alert('Datos guardados correctamente');
+        datosOriginales = datos;
         document.getElementById('botonGuardarDatos').disabled = true;
     } else {
         alert('Error al guardar datos: ' + resultado.detail);

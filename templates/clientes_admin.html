@@ -17,6 +17,9 @@
 <a href="/admin/clientes/nuevo" class="btn btn-success mb-3">Agregar cliente</a>
 
 <div class="table-responsive bg-light p-3">
+  {% if not clientes %}
+  <p>No hay clientes registrados</p>
+  {% endif %}
   <table id="tablaClientes" class="table table-striped table-bordered" style="width:100%;">
   <thead>
     <tr>

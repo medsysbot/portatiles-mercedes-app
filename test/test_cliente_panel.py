@@ -68,3 +68,24 @@ def test_guardar_datos_cliente_error(monkeypatch):
     client.app.dependency_overrides = {}
 
     assert resp.status_code == 500
+
+
+def test_guardar_datos_cliente_sin_email(monkeypatch):
+    db = MockSupabase()
+    monkeypatch.setattr(cliente_panel, "supabase", db)
+    client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
+
+    datos = {
+        "dni": "111",
+        "nombre": "Ana",
+        "apellido": "Gomez",
+        "direccion": "Av 1",
+        "telefono": "555",
+        "cuit": "20-12345678-9",
+        "razon_social": "AG Servicios",
+    }
+
+    resp = client.post("/guardar_datos_cliente", json=datos, headers={"Authorization": "Bearer a"})
+    client.app.dependency_overrides = {}
+
+    assert resp.status_code == 400

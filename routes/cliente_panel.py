@@ -9,10 +9,9 @@ Proyecto: Portátiles Mercedes
 
 """Rutas para consultar la información del panel de clientes."""
 
-from fastapi import APIRouter, HTTPException, Query, Depends, Request
+from fastapi import APIRouter, HTTPException, Query, Request
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
-from utils.auth_utils import auth_required
 import logging
 import os
 from supabase import create_client, Client
@@ -94,47 +93,21 @@ async def obtener_limpiezas(email: str = Query(...)):
 
 
 @router.post("/guardar_datos_cliente")
-async def guardar_datos_cliente(
-    request: Request, token_data: dict = Depends(auth_required)
-):
+async def guardar_datos_cliente(request: Request):
     """Guarda los datos personales del cliente en la base de datos."""
     try:
         data = await request.json()
         logger.info("\ud83d\udce5 Datos recibidos del cliente: %s", data)
 
-        if not data.get("email"):
-            return JSONResponse(
-                status_code=400,
-                content={"message": "El campo email es obligatorio"},
-            )
+        response = supabase.table("datos_personales_clientes").insert(data).execute()
 
-        if not supabase:
-            logger.error("Supabase no configurado")
-            return JSONResponse(
-                status_code=500,
-                content={"message": "Supabase no configurado"},
-            )
+        if response.status_code >= 300:
+            logger.error("\u274c Supabase insert failed: %s", response)
+            return JSONResponse(content={"message": "Error al guardar en Supabase"}, status_code=500)
 
-        response = (
-            supabase.table("datos_personales_clientes").insert(data).execute()
-        )
-
-        if getattr(response, "status_code", 500) >= 300:
-            logger.error("\u274c Error en respuesta Supabase: %s", response)
-            return JSONResponse(
-                content={"message": "Error al guardar en Supabase"},
-                status_code=500,
-            )
-
-        logger.info("\u2705 Datos guardados correctamente en Supabase")
-        return JSONResponse(
-            content={"message": "Datos guardados correctamente"},
-            status_code=200,
-        )
+        logger.info("\u2705 Datos guardados correctamente")
+        return JSONResponse(content={"message": "Datos guardados correctamente"}, status_code=200)
 
     except Exception as e:
-        logger.exception("\ud83d\udd25 Excepci\u00f3n al guardar datos: %s", str(e))
-        return JSONResponse(
-            content={"message": f"Error al guardar datos: {str(e)}"},
-            status_code=500,
-        )
+        logger.error("\ud83d\udd25 Excepci\u00f3n al guardar datos: %s", str(e))
+        return JSONResponse(content={"message": f"Error interno: {str(e)}"}, status_code=500)

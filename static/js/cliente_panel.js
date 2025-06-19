@@ -52,10 +52,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         const email = info.email;
         window.emailCliente = email;
-        if (localStorage.getItem('datos_guardados') === '1') {
-            const btn = document.getElementById('btnGuardarDatos');
-            if (btn) btn.disabled = true;
-        }
         const datosCliRes = await fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`);
         let nombre = email;
         let datosCompletos = false;
@@ -203,10 +199,8 @@ function mostrarFormularioDatos(email) {
                 form.razon_social.value = d.razon_social || '';
                 form.email.value = d.email || email;
                 btnGuardar.disabled = true;
-                localStorage.setItem('datos_guardados', '1');
             } else {
                 btnGuardar.disabled = false;
-                localStorage.removeItem('datos_guardados');
             }
         })
         .catch(() => {
@@ -250,7 +244,6 @@ async function guardarDatos() {
     if (response.ok) {
         alert('Datos guardados correctamente');
         document.getElementById('btnGuardarDatos').disabled = true;
-        localStorage.setItem('datos_guardados', '1');
     } else {
         alert('Error al guardar datos: ' + resultado.detail);
     }

@@ -7,7 +7,12 @@
 {% block content %}
 <h2 class="mb-3 mt-0">Administración de clientes</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
 
-<input type="text" id="busquedaCliente" class="form-control mb-3" placeholder="Buscar por nombre, DNI o email">
+<div class="input-group mb-3">
+  <input type="text" id="busquedaCliente" class="form-control" placeholder="Buscar por nombre, DNI o email">
+  <div class="input-group-append">
+    <button class="btn btn-primary" id="btnBuscarCliente" type="button">Buscar</button>
+  </div>
+</div>
 
 <a href="/admin/clientes/nuevo" class="btn btn-success mb-3">Agregar cliente</a>
 

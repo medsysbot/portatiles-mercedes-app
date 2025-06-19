@@ -132,10 +132,11 @@ async def guardar_datos_cliente(request: Request):
             .execute()
         )
 
-        if resultado.status_code >= 300:
+        logger.info("\ud83d\udce6 Respuesta Supabase: %s", resultado)
+
+        if resultado.status_code >= 300 or getattr(resultado, "error", None):
             logger.error(
-                "\u274c Error al guardar en Supabase. Status: %s",
-                resultado.status_code,
+                "\u274c Error en Supabase: %s", getattr(resultado, "error", resultado.data)
             )
             return JSONResponse(
                 content={"message": "Error al guardar"}, status_code=500

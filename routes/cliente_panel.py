@@ -10,6 +10,8 @@ Proyecto: Portátiles Mercedes
 """Rutas para consultar la información del panel de clientes."""
 
 from fastapi import APIRouter, HTTPException, Query, Form, Depends
+from fastapi.responses import JSONResponse
+import psycopg2
 from utils.auth_utils import auth_required
 import logging
 import os
@@ -36,6 +38,25 @@ if not logger.handlers:
 router = APIRouter()
 
 # Refactor: integración exclusiva con datos_personales_clientes, usando DNI como clave única. Limpieza de código viejo.
+
+# Verifica conexión al pooler de Supabase usando psycopg2.
+def verificar_conexion_pooler() -> bool:
+    """Comprueba la conexión al pooler de Supabase si está habilitado."""
+    if os.getenv("ENABLE_POOLER_CHECK") != "1":
+        return True
+
+    url = os.getenv(
+        "DATABASE_URL",
+        "postgresql://postgres.kccmlqoqhbkaecvetfce:porta1182villa@aws-0-us-west-1.pooler.supabase.com:5432/postgres",
+    )
+    try:
+        conn = psycopg2.connect(url, connect_timeout=5)
+        conn.close()
+        logger.info("Conexión a pooler Supabase exitosa")
+        return True
+    except Exception as exc:  # pragma: no cover - solo log
+        logger.error("Fallo conexión pooler Supabase: %s", exc)
+        return False
 
 
 @router.get("/cliente_panel")
@@ -92,15 +113,21 @@ async def guardar_datos_cliente(
 ):
     """Guarda o actualiza los datos personales del cliente."""
     if supabase:
+        if not verificar_conexion_pooler():
+            return JSONResponse(
+                status_code=500,
+                content={"status": "error", "detalle": "Fallo conexión pooler"},
+            )
+
         datos = {
-            "email": email,
+            "dni": dni,
             "nombre": nombre,
             "apellido": apellido,
-            "dni": dni,
             "direccion": direccion,
             "telefono": telefono,
             "cuit": cuit,
             "razon_social": razon_social,
+            "email": email,
         }
 
         logger.info("Payload recibido: %s", datos)
@@ -132,23 +159,18 @@ async def guardar_datos_cliente(
                     .execute()
                 )
             logger.info("Resultado en DATOS_PERSONALES_CLIENTES: %s", resultado)
-        except Exception as e:
-            logger.error("ERROR AL GUARDAR CLIENTE: %s", e)
-            # Devolver el error exacto para diagnóstico
-            raise HTTPException(status_code=500, detail=str(e))
 
-        if (
-            not resultado.data
-            or (hasattr(resultado, "status_code") and resultado.status_code != 200)
-            or getattr(resultado, "error", None) is not None
-        ):
-            logger.error(
-                "Fallo en DATOS_PERSONALES_CLIENTES: %s",
-                getattr(resultado, "error", "Error en Supabase"),
-            )
-            raise HTTPException(
+            if getattr(resultado, "error", None):
+                raise Exception(resultado.error)
+
+            if not resultado.data:
+                raise Exception("Operación sin datos devueltos")
+
+        except Exception as e:  # Captura y log claro de cualquier excepción
+            logger.error("Error en guardado Supabase: %s", e)
+            return JSONResponse(
                 status_code=400,
-                detail=str(getattr(resultado, "error", "Error en Supabase")),
+                content={"status": "error", "detalle": str(e)},
             )
 
         # <!-- Debug: Verificación completa de guardado en datos_personales_clientes, errores visibles en logs y frontend. -->

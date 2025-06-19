@@ -205,21 +205,35 @@ function mostrarFormularioDatos(email) {
         .catch(() => {});
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const datos = new FormData(form);
-        datos.set('email', form.email.value); // Aseguramos incluir email
-        try {
-            const resp = await fetchConAuth('/guardar_datos_cliente', {
-                method: 'POST',
-                body: datos
-            });
-            if (resp.ok) {
-                modal.style.display = 'none';
-            } else if (resp.status === 400) {
-                const data = await resp.json().catch(() => ({}));
-                alert(data.detail || 'Ese DNI ya está registrado');
-            }
-        } catch (_) {
-            console.error('Error al guardar datos');
-        }
+        await guardarDatos();
     }, { once: true });
+}
+
+async function guardarDatos() {
+    const datos = {
+        dni: document.getElementById('dni').value,
+        nombre: document.getElementById('nombre').value,
+        apellido: document.getElementById('apellido').value,
+        direccion: document.getElementById('direccion').value,
+        telefono: document.getElementById('telefono').value,
+        cuit: document.getElementById('cuit').value,
+        razon_social: document.getElementById('razon_social').value,
+        email: document.getElementById('email').value,
+    };
+
+    const response = await fetchConAuth('/guardar_datos_cliente', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datos)
+    });
+
+    const resultado = await response.json();
+    if (response.ok) {
+        alert('Datos guardados correctamente');
+        document.getElementById('modalDatos').style.display = 'none';
+    } else {
+        alert('Error al guardar datos: ' + resultado.detail);
+    }
 }

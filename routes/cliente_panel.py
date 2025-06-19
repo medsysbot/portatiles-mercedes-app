@@ -9,7 +9,8 @@ Proyecto: Portátiles Mercedes
 
 """Rutas para consultar la información del panel de clientes."""
 
-from fastapi import APIRouter, HTTPException, Query, Depends
+from fastapi import APIRouter, HTTPException, Query, Depends, Request
+from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from utils.auth_utils import auth_required
 import logging
@@ -89,17 +90,24 @@ async def obtener_limpiezas(email: str = Query(...)):
 
 
 @router.post("/guardar_datos_cliente")
-def guardar_datos_cliente(
-    datos: dict,
+async def guardar_datos_cliente(
+    request: Request,
     token_data: dict = Depends(auth_required),
 ):
     """Guarda los datos personales del cliente en la base de datos."""
     if not supabase:
         logger.error("Supabase no configurado")
         raise HTTPException(status_code=500, detail="Supabase no configurado")
+
+    data = await request.json()
+    email = data.get("email")
+    print("EMAIL recibido:", email)
+    if not email:
+        return JSONResponse(status_code=400, content={"error": "Email no recibido"})
+
     try:
-        logger.info("Insertando datos en Supabase: %s", datos)
-        resp = supabase.table("datos_personales_clientes").insert(datos).execute()
+        logger.info("Insertando datos en Supabase: %s", data)
+        resp = supabase.table("datos_personales_clientes").insert(data).execute()
         if getattr(resp, "error", None):
             logger.error("ERROR AL GUARDAR EN SUPABASE: %s", resp.error)
             raise HTTPException(status_code=500, detail="Error al guardar en Supabase")

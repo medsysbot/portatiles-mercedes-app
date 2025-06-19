@@ -49,6 +49,7 @@ from routes.alertas import router as alertas_router
 from routes.login import router as login_router, supabase as supabase_client
 from routes.admin_panel import router as admin_router
 from routes.cliente_panel import router as cliente_router
+from routes.datos_personales import router as datos_personales_router
 from routes import admin_panel, cliente_panel, ventas, limpieza, debito
 
 app = FastAPI()
@@ -77,6 +78,7 @@ app.include_router(alertas_router)
 app.include_router(login_router)
 app.include_router(admin_router)
 app.include_router(cliente_router)
+app.include_router(datos_personales_router)
 
 
 @app.get("/logout")

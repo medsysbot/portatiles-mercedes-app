@@ -9,7 +9,7 @@ Proyecto: Portátiles Mercedes
 
 """Rutas para consultar la información del panel de clientes."""
 
-from fastapi import APIRouter, HTTPException, Query, Form, Depends
+from fastapi import APIRouter, HTTPException, Query, Depends
 from fastapi.responses import JSONResponse
 import psycopg2
 from utils.auth_utils import auth_required
@@ -100,79 +100,26 @@ async def obtener_limpiezas(email: str = Query(...)):
 
 
 @router.post("/guardar_datos_cliente")
-async def guardar_datos_cliente(
-    email: str = Form(...),
-    nombre: str = Form(...),
-    apellido: str = Form(...),
-    dni: str = Form(...),
-    direccion: str = Form(...),
-    telefono: str = Form(...),
-    cuit: str = Form(...),
-    razon_social: str = Form(...),
+def guardar_datos_cliente(
+    datos: dict,
     token_data: dict = Depends(auth_required),
 ):
-    """Guarda o actualiza los datos personales del cliente."""
-    if supabase:
-        if not verificar_conexion_pooler():
-            return JSONResponse(
-                status_code=500,
-                content={"status": "error", "detalle": "Fallo conexión pooler"},
-            )
+    """Guarda los datos personales del cliente en la base de datos."""
+    try:
+        conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+        cur = conn.cursor()
 
-        datos = {
-            "dni": dni,
-            "nombre": nombre,
-            "apellido": apellido,
-            "direccion": direccion,
-            "telefono": telefono,
-            "cuit": cuit,
-            "razon_social": razon_social,
-            "email": email,
-        }
+        insert_query = """
+            INSERT INTO datos_personales_clientes (dni, nombre, apellido, direccion, telefono, cuit, razon_social, email)
+            VALUES (%(dni)s, %(nombre)s, %(apellido)s, %(direccion)s, %(telefono)s, %(cuit)s, %(razon_social)s, %(email)s);
+        """
 
-        logger.info("Payload recibido: %s", datos)
+        cur.execute(insert_query, datos)
+        conn.commit()
 
-        for campo, valor in datos.items():
-            if not valor:
-                raise HTTPException(status_code=400, detail=f"Campo '{campo}' faltante")
+        cur.close()
+        conn.close()
 
-        existe = (
-            supabase.table("datos_personales_clientes")
-            .select("dni")
-            .eq("dni", dni)
-            .single()
-            .execute()
-        )
-
-        try:
-            if getattr(existe, "data", None):
-                resultado = (
-                    supabase.table("datos_personales_clientes")
-                    .update(datos)
-                    .eq("dni", dni)
-                    .execute()
-                )
-            else:
-                resultado = (
-                    supabase.table("datos_personales_clientes")
-                    .insert(datos)
-                    .execute()
-                )
-            logger.info("Resultado en DATOS_PERSONALES_CLIENTES: %s", resultado)
-
-            if getattr(resultado, "error", None):
-                raise Exception(resultado.error)
-
-            if not resultado.data:
-                raise Exception("Operación sin datos devueltos")
-
-        except Exception as e:  # Captura y log claro de cualquier excepción
-            logger.error("Error en guardado Supabase: %s", e)
-            return JSONResponse(
-                status_code=400,
-                content={"status": "error", "detalle": str(e)},
-            )
-
-        # <!-- Debug: Verificación completa de guardado en datos_personales_clientes, errores visibles en logs y frontend. -->
-
-    return {"mensaje": "Datos guardados"}
+        return {"mensaje": "Datos guardados correctamente"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

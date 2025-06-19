@@ -24,16 +24,6 @@ async function fetchConAuth(url) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const tabla = $('#tablaClientes').DataTable({
-    columns: [
-      { data: 'dni' },
-      { data: 'nombre' },
-      { data: 'apellido' },
-      { data: 'direccion' },
-      { data: 'telefono' },
-      { data: 'cuit' },
-      { data: 'razon_social' },
-      { data: 'email' },
-    ],
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,

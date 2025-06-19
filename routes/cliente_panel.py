@@ -12,7 +12,6 @@ Proyecto: Portátiles Mercedes
 from fastapi import APIRouter, HTTPException, Query, Depends
 from fastapi.responses import JSONResponse
 import psycopg2
-from psycopg2.extras import RealDictCursor
 from dotenv import load_dotenv
 from utils.auth_utils import auth_required
 import logging
@@ -24,7 +23,7 @@ DATABASE_URL = os.getenv("DATABASE_URL")
 def obtener_conexion_supabase():
     """Devuelve una conexión a la base de Supabase."""
     try:
-        return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+        return psycopg2.connect(DATABASE_URL)
     except Exception as e:  # pragma: no cover - log de errores de conexión
         logger.error("Error en conexión con Supabase: %s", e)
         return None
@@ -58,12 +57,9 @@ def verificar_conexion_pooler() -> bool:
     if os.getenv("ENABLE_POOLER_CHECK") != "1":
         return True
 
-    url = os.getenv(
-        "DATABASE_URL",
-        "postgresql://postgres.kccmlqoqhbkaecvetfce:porta1182villa@aws-0-us-west-1.pooler.supabase.com:5432/postgres",
-    )
+    url = os.getenv("DATABASE_URL")
     try:
-        conn = psycopg2.connect(url, connect_timeout=5)
+        conn = psycopg2.connect(url)
         conn.close()
         logger.info("Conexión a pooler Supabase exitosa")
         return True

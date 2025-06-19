@@ -13,3 +13,4 @@ fpdf==1.7.2
 pytest
 httpx
 python-jose>=3.3
+psycopg2-binary>=2.9

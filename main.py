@@ -12,6 +12,7 @@ Proyecto: Portátiles Mercedes
 import sys
 import traceback
 import logging
+import os
 from pathlib import Path
 
 
@@ -45,11 +46,21 @@ from routes.router import router
 from routes.ventas import router as ventas_router
 from routes.limpieza import router as limpieza_router
 from routes.alertas import router as alertas_router
-from routes.login import router as login_router
+from routes.login import router as login_router, supabase as supabase_client
 from routes.admin_panel import router as admin_router
 from routes.cliente_panel import router as cliente_router
+from routes import admin_panel, cliente_panel, ventas, limpieza, debito
 
 app = FastAPI()
+
+# Inyectar el cliente de Supabase global en todos los módulos solo si está habilitado
+if os.getenv("ENABLE_SUPABASE") == "1":
+    admin_panel.supabase = supabase_client
+    cliente_panel.supabase = supabase_client
+    ventas.supabase = supabase_client
+    limpieza.supabase = supabase_client
+    debito.supabase = supabase_client
+    login_logger.info("Cliente Supabase asignado a modulos")
 
 # Carpeta para servir todos los recursos estáticos
 # Directorio de imágenes e íconos de uso general

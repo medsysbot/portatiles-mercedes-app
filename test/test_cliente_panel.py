@@ -36,10 +36,7 @@ class DummyConn:
 def test_guardar_datos_cliente(monkeypatch):
     conn = DummyConn()
 
-    def fake_connect(url):
-        return conn
-
-    monkeypatch.setattr(cliente_panel.psycopg2, "connect", fake_connect)
+    monkeypatch.setattr(cliente_panel, "obtener_conexion_supabase", lambda: conn)
     client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {
@@ -62,10 +59,7 @@ def test_guardar_datos_cliente(monkeypatch):
 
 
 def test_guardar_datos_cliente_error(monkeypatch):
-    def fake_connect(url):
-        raise Exception("fail")
-
-    monkeypatch.setattr(cliente_panel.psycopg2, "connect", fake_connect)
+    monkeypatch.setattr(cliente_panel, "obtener_conexion_supabase", lambda: None)
     client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {

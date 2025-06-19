@@ -35,7 +35,7 @@
 | POST | /login | Autenticación de usuario, devuelve token | JSON (token, usuario) | No |
 | POST | /verificar_token | Verifica un token JWT | JSON | No |
 | POST | /registrar_cliente | Registro de usuario cliente | JSON | No |
-| GET | /info_cliente | Datos básicos del cliente por email | JSON | Sí |
+| GET | /info_cliente | Datos básicos del cliente por `id_usuario` | JSON | Sí |
 | GET | /alquileres_cliente | Alquileres asociados al cliente | JSON | Sí |
 | GET | /pagos_cliente | Pagos realizados por el cliente | JSON | Sí |
 | GET | /limpiezas_cliente | Limpiezas registradas para el cliente | JSON | Sí |

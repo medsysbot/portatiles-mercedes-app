@@ -1,15 +1,15 @@
 # Informe de Prueba de Conexión a Supabase
 
 Se verificó que el archivo `.env` contiene la variable de entorno:
-- `DATABASE_URL=postgresql://postgres.kccmlqoqhbkaecvetfce:porta1182villa@aws-0-us-west-1.pooler.supabase.com:5432/postgres`
+- `DATABASE_URL=postgresql://postgres.kccmlqoqhbkaecvetfce:porta1182villa@db.kccmlqoqhbkaecvetfce.supabase.co:5432/postgres`
 
 Luego se ejecutó `test_db_connection.py` para probar la conexión utilizando la URL completa.
 
 Resultado obtenido:
 ```
-Failed to connect: connection to server at "aws-0-us-west-1.pooler.supabase.com" (54.177.55.191), port 5432 failed: Network is unreachable
+Failed to connect: connection to server at "db.kccmlqoqhbkaecvetfce.supabase.co" (XX.XX.XX.XX), port 5432 failed: Network is unreachable
         Is the server running on that host and accepting TCP/IP connections?
-connection to server at "aws-0-us-west-1.pooler.supabase.com" (52.8.172.168), port 5432 failed: Network is unreachable
+connection to server at "db.kccmlqoqhbkaecvetfce.supabase.co" (XX.XX.XX.XX), port 5432 failed: Network is unreachable
         Is the server running on that host and accepting TCP/IP connections?
 ```
 

@@ -2,7 +2,7 @@
 ----------------------------------------------------------
 Archivo: routes/cliente_panel.py
 Descripción: Rutas para consultar la información del panel de clientes
-Última modificación: 2025-06-18
+Última modificación: 2025-06-20
 Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
 """
@@ -12,9 +12,22 @@ Proyecto: Portátiles Mercedes
 from fastapi import APIRouter, HTTPException, Query, Depends
 from fastapi.responses import JSONResponse
 import psycopg2
+from psycopg2.extras import RealDictCursor
+from dotenv import load_dotenv
 from utils.auth_utils import auth_required
 import logging
 import os
+
+load_dotenv()
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+def obtener_conexion_supabase():
+    """Devuelve una conexión a la base de Supabase."""
+    try:
+        return psycopg2.connect(DATABASE_URL, cursor_factory=RealDictCursor)
+    except Exception as e:  # pragma: no cover - log de errores de conexión
+        logger.error("Error en conexión con Supabase: %s", e)
+        return None
 
 supabase = None  # Cliente de Supabase, se inyecta desde la app
 # Nota: este flujo conecta el frontend con la tabla DATOS_PERSONALES_CLIENTES en Supabase
@@ -106,7 +119,9 @@ def guardar_datos_cliente(
 ):
     """Guarda los datos personales del cliente en la base de datos."""
     try:
-        conn = psycopg2.connect(os.getenv("DATABASE_URL"))
+        conn = obtener_conexion_supabase()
+        if conn is None:
+            raise Exception("No se pudo conectar a Supabase")
         cur = conn.cursor()
 
         insert_query = """

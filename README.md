@@ -36,6 +36,9 @@ Portátiles Mercedes es una solución SaaS diseñada para empresas de servicios 
    ```bash
    pip install -r requirements.txt
    ```
+3. **Configurá las variables de entorno:**
+   Asegurate de definir `SUPABASE_URL`, `SUPABASE_ROLE_KEY` y `JWT_SECRET` en un
+   archivo `.env`. Para habilitar la conexión con Supabase poné `ENABLE_SUPABASE=1`.
 
 ## 📝 Buenas prácticas de archivos
 

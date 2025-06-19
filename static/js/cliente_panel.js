@@ -189,7 +189,7 @@ function mostrarFormularioDatos(email) {
     fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`)
         .then(r => r.ok ? r.json() : null)
         .then(d => {
-            if (d) {
+            if (d && Object.keys(d).length > 0) {
                 form.nombre.value = d.nombre || '';
                 form.apellido.value = d.apellido || '';
                 form.dni.value = d.dni || '';
@@ -198,7 +198,9 @@ function mostrarFormularioDatos(email) {
                 form.cuit.value = d.cuit || '';
                 form.razon_social.value = d.razon_social || '';
                 form.email.value = d.email || email;
-                btnGuardar.disabled = true;
+                const completos = ['nombre','apellido','dni','direccion','telefono','cuit','razon_social']
+                  .every(c => d[c]);
+                btnGuardar.disabled = completos;
             } else {
                 btnGuardar.disabled = false;
             }

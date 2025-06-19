@@ -30,7 +30,20 @@
       <th>Email</th>
     </tr>
   </thead>
-  <tbody></tbody>
+  <tbody>
+    {% for c in clientes %}
+    <tr>
+      <td>{{ c.dni }}</td>
+      <td>{{ c.nombre }}</td>
+      <td>{{ c.apellido }}</td>
+      <td>{{ c.direccion }}</td>
+      <td>{{ c.telefono }}</td>
+      <td>{{ c.cuit }}</td>
+      <td>{{ c.razon_social }}</td>
+      <td>{{ c.email }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
   </table>
 </div>
 {% endblock %}

@@ -79,13 +79,26 @@ def admin_clientes_page(
     page: int = Query(1, gt=0),
 ):
     """Administración de clientes con filtros y paginación."""
+    clientes = []
+    if supabase:
+        resp = supabase.table("datos_personales_clientes").select("*").execute()
+        clientes = getattr(resp, "data", []) or []
+        if q:
+            q_low = q.lower()
+            clientes = [
+                c
+                for c in clientes
+                if q_low in (c.get("nombre") or "").lower()
+                or q_low in (c.get("dni") or "").lower()
+                or q_low in (c.get("email") or "").lower()
+            ]
 
     contexto = {
         "request": request,
-        "clientes": [],
+        "clientes": clientes,
         "pagina_actual": page,
         "hay_mas": False,
-        "query_str": "",
+        "query_str": q or "",
     }
     return templates.TemplateResponse("clientes_admin.html", contexto)
 
@@ -321,18 +334,25 @@ async def admin_clientes(
         consulta = supabase.table("datos_personales_clientes").select("*")
         if dni:
             consulta = consulta.eq("dni", dni)
+        if q:
+            texto = f"%{q}%"
+            if hasattr(consulta, "or_"):
+                consulta = consulta.or_(
+                    f"nombre.ilike.{texto},dni.ilike.{texto},email.ilike.{texto}"
+                )
+            else:
+                resp = consulta.execute()
+                clientes = getattr(resp, "data", []) or []
+                q_low = q.lower()
+                return [
+                    c
+                    for c in clientes
+                    if q_low in (c.get("nombre") or "").lower()
+                    or q_low in (c.get("dni") or "").lower()
+                    or q_low in (c.get("email") or "").lower()
+                ]
         resp = consulta.execute()
         clientes = getattr(resp, "data", []) or []
-        if q:
-            q_low = q.lower()
-            clientes = [
-                c
-                for c in clientes
-                if q_low in (c.get("nombre") or "").lower()
-                or q_low in (c.get("apellido") or "").lower()
-                or q_low in (c.get("email") or "").lower()
-                or q_low in (c.get("dni") or "").lower()
-            ]
         return clientes
     return []
 

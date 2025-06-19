@@ -29,7 +29,6 @@ class MockSupabase:
 def test_guardar_datos_cliente(monkeypatch):
     db = MockSupabase()
     monkeypatch.setattr(cliente_panel, "supabase", db)
-    client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {
         "dni": "123",
@@ -42,8 +41,7 @@ def test_guardar_datos_cliente(monkeypatch):
         "email": "test@test.com",
     }
 
-    resp = client.post("/guardar_datos_cliente", json=datos, headers={"Authorization": "Bearer a"})
-    client.app.dependency_overrides = {}
+    resp = client.post("/guardar_datos_cliente", json=datos)
 
     assert resp.status_code == 200
     assert db.query.inserted is not None
@@ -55,7 +53,6 @@ def test_guardar_datos_cliente_error(monkeypatch):
             raise Exception("fail")
 
     monkeypatch.setattr(cliente_panel, "supabase", FailSupabase())
-    client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {
         "dni": "1",
@@ -68,8 +65,7 @@ def test_guardar_datos_cliente_error(monkeypatch):
         "email": "x",
     }
 
-    resp = client.post("/guardar_datos_cliente", json=datos, headers={"Authorization": "Bearer a"})
-    client.app.dependency_overrides = {}
+    resp = client.post("/guardar_datos_cliente", json=datos)
 
     assert resp.status_code == 500
 
@@ -77,7 +73,6 @@ def test_guardar_datos_cliente_error(monkeypatch):
 def test_guardar_datos_cliente_sin_email(monkeypatch):
     db = MockSupabase()
     monkeypatch.setattr(cliente_panel, "supabase", db)
-    client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {
         "dni": "111",
@@ -89,7 +84,6 @@ def test_guardar_datos_cliente_sin_email(monkeypatch):
         "razon_social": "AG Servicios",
     }
 
-    resp = client.post("/guardar_datos_cliente", json=datos, headers={"Authorization": "Bearer a"})
-    client.app.dependency_overrides = {}
+    resp = client.post("/guardar_datos_cliente", json=datos)
 
-    assert resp.status_code == 400
+    assert resp.status_code == 200

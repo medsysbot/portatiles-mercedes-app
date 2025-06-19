@@ -51,20 +51,23 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         const email = info.email;
+        window.emailCliente = email;
         const datosCliRes = await fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`);
         let nombre = email;
         let datosCompletos = false;
         if (datosCliRes.ok) {
             const datosCli = await datosCliRes.json();
             nombre = datosCli.nombre || email;
-            datosCompletos = ['nombre', 'apellido', 'dni', 'direccion', 'telefono'].every(c => datosCli[c]);
+            datosCompletos = ['nombre','apellido','dni','direccion','telefono','cuit','razon_social'].every(c => datosCli[c]);
         }
-        if (!datosCompletos) {
-            mostrarFormularioDatos(email);
-        }
+        // Modal ya no se muestra automáticamente
         document.getElementById('bienvenida').textContent = `Bienvenido ${nombre}`;
         mostrarSplash(nombre);
         cargarDatos(email);
+        const btnDatos = document.getElementById('btnDatosPersonales');
+        if (btnDatos) {
+            btnDatos.addEventListener('click', () => mostrarFormularioDatos(window.emailCliente));
+        }
     } catch (err) {
         handleUnauthorized();
     }
@@ -185,7 +188,21 @@ function mostrarFormularioDatos(email) {
     const form = document.getElementById('formDatos');
     if (!modal || !form) return;
     modal.style.display = 'block';
+    form.reset();
     form.email.value = email;
+    fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`)
+        .then(r => r.ok ? r.json() : {})
+        .then(d => {
+            form.nombre.value = d.nombre || '';
+            form.apellido.value = d.apellido || '';
+            form.dni.value = d.dni || '';
+            form.direccion.value = d.direccion || '';
+            form.telefono.value = d.telefono || '';
+            form.cuit.value = d.cuit || '';
+            form.razon_social.value = d.razon_social || '';
+            form.email.value = d.email || email;
+        })
+        .catch(() => {});
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const datos = new FormData(form);

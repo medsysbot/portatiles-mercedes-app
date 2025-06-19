@@ -229,6 +229,15 @@ function hayCambios() {
     return campos.some(c => (datosOriginales[c] || "") !== document.getElementById(c).value);
 }
 
+function mostrarMensajeFormulario(mensaje, tipo) {
+    const contenedor = document.getElementById('mensajeFormDatos');
+    if (!contenedor) return;
+    contenedor.textContent = mensaje;
+    contenedor.classList.remove('alert-success', 'alert-danger');
+    contenedor.classList.add(tipo === 'success' ? 'alert-success' : 'alert-danger');
+    contenedor.style.display = 'block';
+}
+
 async function guardarDatos(ev) {
     if (ev) ev.preventDefault();
     const datos = {
@@ -260,10 +269,10 @@ async function guardarDatos(ev) {
 
     const resultado = await response.json();
     if (response.ok) {
-        alert('Datos guardados correctamente');
+        mostrarMensajeFormulario('¡Datos guardados correctamente!', 'success');
         datosOriginales = datos;
         document.getElementById('botonGuardarDatos').disabled = true;
     } else {
-        alert('Error al guardar datos: ' + resultado.detail);
+        mostrarMensajeFormulario(resultado.message || 'Error al guardar datos', 'danger');
     }
 }

@@ -16,23 +16,24 @@
     <input type="text" name="dni" class="form-control" value="{{ cliente.dni if cliente else '' }}" {% if cliente %}readonly{% endif %} required>
   </div>
   <div class="form-group">
-    <label>Email</label>
-    <input type="email" name="email" class="form-control" value="{{ cliente.email if cliente else '' }}" required>
+    <label>Dirección</label>
+    <input type="text" name="direccion" class="form-control" value="{{ cliente.direccion if cliente else '' }}" required>
   </div>
   <div class="form-group">
     <label>Teléfono</label>
-    <input type="text" name="telefono" class="form-control" value="{{ cliente.telefono if cliente else '' }}">
+    <input type="text" name="telefono" class="form-control" value="{{ cliente.telefono if cliente else '' }}" required>
   </div>
   <div class="form-group">
-    <label>Estado</label>
-    <select name="estado" class="form-control">
-      <option value="activo" {% if cliente and cliente.estado=='activo' %}selected{% endif %}>Activo</option>
-      <option value="inactivo" {% if cliente and cliente.estado=='inactivo' %}selected{% endif %}>Inactivo</option>
-    </select>
+    <label>CUIT</label>
+    <input type="text" name="cuit" class="form-control" value="{{ cliente.cuit if cliente else '' }}" required>
   </div>
   <div class="form-group">
-    <label>Observaciones</label>
-    <textarea name="observaciones" class="form-control">{{ cliente.observaciones if cliente else '' }}</textarea>
+    <label>Razón social</label>
+    <input type="text" name="razon_social" class="form-control" value="{{ cliente.razon_social if cliente else '' }}" required>
+  </div>
+  <div class="form-group">
+    <label>Email</label>
+    <input type="email" name="email" class="form-control" value="{{ cliente.email if cliente else '' }}" required>
   </div>
   <button type="submit" class="btn btn-primary">Guardar</button>
   <a href="/admin/clientes" class="btn btn-secondary">Volver</a>

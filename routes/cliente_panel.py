@@ -15,7 +15,7 @@ import logging
 import os
 
 supabase = None  # Cliente de Supabase, se inyecta desde la app
-# Nota: este flujo conecta el frontend con la tabla CLIENTES de Supabase
+# Nota: este flujo conecta el frontend con la tabla DATOS_PERSONALES_CLIENTES en Supabase
 
 # Configuración de logging para operaciones de clientes
 LOG_DIR = "logs"
@@ -31,9 +31,11 @@ if not logger.handlers:
     logger.propagate = False
 
 # Los datos personales se guardarán en la tabla
-# `clientes` en Supabase
+# `datos_personales_clientes` en Supabase
 
 router = APIRouter()
+
+# Refactor: integración exclusiva con datos_personales_clientes, usando DNI como clave única. Limpieza de código viejo.
 
 
 @router.get("/cliente_panel")
@@ -42,14 +44,13 @@ def cliente_panel():
 
 
 @router.get("/info_cliente")
-async def info_cliente(id_usuario: str = Query(...)):
+async def info_cliente(email: str = Query(...)):
     """Devuelve los datos personales del cliente."""
     if supabase:
-        # Consulta en la tabla clientes
         resp = (
-            supabase.table("clientes")
-            .select("nombre,apellido,dni,direccion,telefono,email")
-            .eq("id_usuario", id_usuario)
+            supabase.table("datos_personales_clientes")
+            .select("dni,nombre,apellido,direccion,telefono,cuit,razon_social,email")
+            .eq("email", email)
             .single()
             .execute()
         )
@@ -85,58 +86,59 @@ async def guardar_datos_cliente(
     dni: str = Form(...),
     direccion: str = Form(...),
     telefono: str = Form(...),
-    id_usuario: str = Form(None),
+    cuit: str = Form(...),
+    razon_social: str = Form(...),
     token_data: dict = Depends(auth_required),
 ):
     """Guarda o actualiza los datos personales del cliente."""
     if supabase:
-        # Validar DNI único antes de insertar
-        existe = supabase.table("clientes").select("id").eq("dni", dni).execute()
-        if getattr(existe, "data", []):
-            raise HTTPException(status_code=400, detail="Ese DNI ya está registrado")
-
-        id_usuario = id_usuario or token_data.get("id")
-        if not id_usuario:
-            raise HTTPException(status_code=400, detail="UUID faltante")
-
-        # Verificamos que el usuario exista
-        usuario_resp = (
-            supabase.table("usuarios").select("id").eq("id", id_usuario).single().execute()
-        )
-        if not usuario_resp.data:
-            raise HTTPException(status_code=400, detail="UUID inválido")
-
-        # Almacenamos en la tabla clientes
         datos = {
-            "id_usuario": id_usuario,
             "email": email,
             "nombre": nombre,
             "apellido": apellido,
             "dni": dni,
             "direccion": direccion,
             "telefono": telefono,
+            "cuit": cuit,
+            "razon_social": razon_social,
         }
 
         logger.info("Payload recibido: %s", datos)
 
-        # Validamos que ningún campo esté vacío
         for campo, valor in datos.items():
             if not valor:
                 raise HTTPException(status_code=400, detail=f"Campo '{campo}' faltante")
 
+        existe = (
+            supabase.table("datos_personales_clientes")
+            .select("dni")
+            .eq("dni", dni)
+            .single()
+            .execute()
+        )
+
         try:
-            resultado = supabase.table("clientes").insert(datos).execute()
-            print("Resultado del insert en CLIENTES:", resultado)
-            logger.info("Resultado del insert en CLIENTES: %s", resultado)
+            if getattr(existe, "data", None):
+                resultado = (
+                    supabase.table("datos_personales_clientes")
+                    .update(datos)
+                    .eq("dni", dni)
+                    .execute()
+                )
+            else:
+                resultado = (
+                    supabase.table("datos_personales_clientes")
+                    .insert(datos)
+                    .execute()
+                )
+            logger.info("Resultado en DATOS_PERSONALES_CLIENTES: %s", resultado)
         except Exception as e:
-            print("ERROR AL GUARDAR CLIENTE:", e)
             logger.error("ERROR AL GUARDAR CLIENTE: %s", e)
             raise HTTPException(
                 status_code=500,
                 detail="No se pudo guardar el registro. Ver logs para más detalles.",
             )
-
         if not getattr(resultado, "data", None):
-            raise HTTPException(status_code=500, detail="Insert no generó datos")
+            raise HTTPException(status_code=500, detail="Operación sin datos")
 
     return {"mensaje": "Datos guardados"}

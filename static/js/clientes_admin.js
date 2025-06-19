@@ -24,13 +24,13 @@ async function fetchConAuth(url) {
 
 document.addEventListener('DOMContentLoaded', () => {
   const input = document.getElementById('busquedaCliente');
-  const estadoSel = document.getElementById('estadoFiltro');
+  const estadoSel = null;
   if (!input) return;
 
   async function buscar() {
     const params = new URLSearchParams();
     if (input.value.trim()) params.append('q', input.value.trim());
-    if (estadoSel && estadoSel.value) params.append('estado', estadoSel.value);
+    
     const resp = await fetchConAuth(`/admin/api/clientes?${params.toString()}`);
     if (!resp.ok) return;
     const lista = await resp.json();
@@ -45,12 +45,10 @@ document.addEventListener('DOMContentLoaded', () => {
         `<td>${c.dni || ''}</td>` +
         `<td>${c.email || ''}</td>` +
         `<td>${c.telefono || ''}</td>` +
-        `<td>${c.estado || ''}</td>` +
         `<td>${c.fecha_alta || ''}</td>`;
       tbody.appendChild(tr);
     }
   }
 
   input.addEventListener('input', buscar);
-  if (estadoSel) estadoSel.addEventListener('change', buscar);
 });

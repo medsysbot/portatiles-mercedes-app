@@ -193,6 +193,7 @@ function mostrarFormularioDatos(email, userId) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const datos = new FormData(form);
+        datos.set('email', form.email.value); // Aseguramos incluir email
         try {
             const resp = await fetchConAuth('/guardar_datos_cliente', {
                 method: 'POST',

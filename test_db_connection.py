@@ -1,26 +1,18 @@
+import os
 import psycopg2
 from dotenv import load_dotenv
-import os
 
 # Cargar variables de entorno desde .env
 load_dotenv()
 
-# Obtener variables
-USER = os.getenv("user")
-PASSWORD = os.getenv("password")
-HOST = os.getenv("host")
-PORT = os.getenv("port")
-DBNAME = os.getenv("dbname")
+# <!-- Actualización de conexión a base Supabase: nueva URL configurada en backend y .env -->
 
-# Conectar a la base de datos utilizando el Transaction Pooler
+# Obtener la URL de conexión completa
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+# Conectar a la base de datos utilizando la URL completa
 try:
-    connection = psycopg2.connect(
-        user=USER,
-        password=PASSWORD,
-        host=HOST,
-        port=PORT,
-        dbname=DBNAME,
-    )
+    connection = psycopg2.connect(DATABASE_URL)
     print("Connection successful!")
 
     # Crear cursor y ejecutar consulta sencilla

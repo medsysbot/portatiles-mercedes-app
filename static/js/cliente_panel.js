@@ -229,7 +229,8 @@ function hayCambios() {
     return campos.some(c => (datosOriginales[c] || "") !== document.getElementById(c).value);
 }
 
-async function guardarDatos() {
+async function guardarDatos(ev) {
+    if (ev) ev.preventDefault();
     const datos = {
         dni: document.getElementById("dni").value,
         nombre: document.getElementById("nombre").value,

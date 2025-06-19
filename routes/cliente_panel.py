@@ -42,14 +42,14 @@ def cliente_panel():
 
 
 @router.get("/info_cliente")
-async def info_cliente(email: str = Query(...)):
+async def info_cliente(id_usuario: str = Query(...)):
     """Devuelve los datos personales del cliente."""
     if supabase:
         # Consulta en la tabla clientes
         resp = (
             supabase.table("clientes")
             .select("nombre,apellido,dni,direccion,telefono,email")
-            .eq("email", email)
+            .eq("id_usuario", id_usuario)
             .single()
             .execute()
         )
@@ -85,6 +85,7 @@ async def guardar_datos_cliente(
     dni: str = Form(...),
     direccion: str = Form(...),
     telefono: str = Form(...),
+    id_usuario: str = Form(None),
     token_data: dict = Depends(auth_required),
 ):
     """Guarda o actualiza los datos personales del cliente."""
@@ -96,7 +97,7 @@ async def guardar_datos_cliente(
         if getattr(existe, "data", []):
             raise HTTPException(status_code=400, detail="Ese DNI ya está registrado")
 
-        id_usuario = token_data.get("id")
+        id_usuario = id_usuario or token_data.get("id")
         if not id_usuario:
             raise HTTPException(status_code=400, detail="UUID faltante")
 

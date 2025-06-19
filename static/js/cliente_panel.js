@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         const email = info.email;
         const userId = info.user_id || localStorage.getItem('user_id'); // UUID del usuario
-        const datosCliRes = await fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`);
+        const datosCliRes = await fetchConAuth(`/info_cliente?id_usuario=${encodeURIComponent(userId)}`);
         let nombre = email;
         let datosCompletos = false;
         if (datosCliRes.ok) {

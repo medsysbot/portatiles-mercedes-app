@@ -71,7 +71,7 @@ class MockSelectQuery:
     def single(self):
         return self
     def execute(self):
-        if self.data and self.filter == self.data["email"]:
+        if self.data and self.filter == self.data["id_usuario"]:
             return types.SimpleNamespace(data=self.data, status_code=200, error=None)
         return types.SimpleNamespace(data=None, status_code=200, error=None)
 
@@ -154,6 +154,7 @@ def test_guardar_datos_cliente_uuid_invalido(monkeypatch):
 def test_info_cliente_ok(monkeypatch):
     data = {
         "email": "ana@test.com",
+        "id_usuario": "uuid-321",
         "nombre": "Ana",
         "apellido": "Gomez",
         "dni": "321",
@@ -161,12 +162,12 @@ def test_info_cliente_ok(monkeypatch):
         "telefono": "1234",
     }
     monkeypatch.setattr(cliente_panel, "supabase", MockSupabaseInfo(data))
-    resp = client.get("/info_cliente", params={"email": data["email"]})
+    resp = client.get("/info_cliente", params={"id_usuario": data["id_usuario"]})
     assert resp.status_code == 200
     assert resp.json()["dni"] == "321"
 
 
 def test_info_cliente_no_encontrado(monkeypatch):
     monkeypatch.setattr(cliente_panel, "supabase", MockSupabaseInfo(None))
-    resp = client.get("/info_cliente", params={"email": "no@test.com"})
+    resp = client.get("/info_cliente", params={"id_usuario": "x"})
     assert resp.status_code == 404

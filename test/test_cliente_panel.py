@@ -1,42 +1,34 @@
 import main
 from fastapi.testclient import TestClient
 from routes import cliente_panel
+import types
 
 client = TestClient(main.app)
 
 
-class DummyCursor:
+class MockQuery:
     def __init__(self):
-        self.query = None
-        self.params = None
+        self.inserted = None
 
-    def execute(self, query, params):
-        self.query = query
-        self.params = params
+    def insert(self, data):
+        self.inserted = data
+        return self
 
-    def close(self):
-        pass
+    def execute(self):
+        return types.SimpleNamespace(data=[{"id": 1}], error=None)
 
 
-class DummyConn:
+class MockSupabase:
     def __init__(self):
-        self.cursor_obj = DummyCursor()
-        self.committed = False
+        self.query = MockQuery()
 
-    def cursor(self):
-        return self.cursor_obj
-
-    def commit(self):
-        self.committed = True
-
-    def close(self):
-        pass
+    def table(self, _name):
+        return self.query
 
 
 def test_guardar_datos_cliente(monkeypatch):
-    conn = DummyConn()
-
-    monkeypatch.setattr(cliente_panel, "obtener_conexion_supabase", lambda: conn)
+    db = MockSupabase()
+    monkeypatch.setattr(cliente_panel, "supabase", db)
     client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {
@@ -54,12 +46,11 @@ def test_guardar_datos_cliente(monkeypatch):
     client.app.dependency_overrides = {}
 
     assert resp.status_code == 200
-    assert conn.cursor_obj.query is not None
-    assert conn.committed
+    assert db.query.inserted is not None
 
 
 def test_guardar_datos_cliente_error(monkeypatch):
-    monkeypatch.setattr(cliente_panel, "obtener_conexion_supabase", lambda: None)
+    monkeypatch.setattr(cliente_panel, "supabase", None)
     client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {

@@ -34,3 +34,4 @@ try:
     print("Connection closed.")
 except Exception as e:
     print(f"Failed to connect: {e}")
+# <!-- Pruebas de conexión y registro a Supabase completadas en entorno con acceso a internet habilitado -->

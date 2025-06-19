@@ -51,8 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             return;
         }
         const email = info.email;
-        const userId = info.user_id || localStorage.getItem('user_id'); // UUID del usuario
-        const datosCliRes = await fetchConAuth(`/info_cliente?id_usuario=${encodeURIComponent(userId)}`);
+        const datosCliRes = await fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`);
         let nombre = email;
         let datosCompletos = false;
         if (datosCliRes.ok) {
@@ -61,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             datosCompletos = ['nombre', 'apellido', 'dni', 'direccion', 'telefono'].every(c => datosCli[c]);
         }
         if (!datosCompletos) {
-            mostrarFormularioDatos(email, userId);
+            mostrarFormularioDatos(email);
         }
         document.getElementById('bienvenida').textContent = `Bienvenido ${nombre}`;
         mostrarSplash(nombre);
@@ -181,15 +180,12 @@ function mostrarSplash(nombre, fechaNac) {
     }, 5000);
 }
 
-function mostrarFormularioDatos(email, userId) {
+function mostrarFormularioDatos(email) {
     const modal = document.getElementById('modalDatos');
     const form = document.getElementById('formDatos');
     if (!modal || !form) return;
     modal.style.display = 'block';
     form.email.value = email;
-    if (form.id_usuario) {
-        form.id_usuario.value = userId;
-    }
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         const datos = new FormData(form);

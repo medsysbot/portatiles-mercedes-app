@@ -5,169 +5,122 @@ from routes import cliente_panel
 
 client = TestClient(main.app)
 
-class MockInsertQuery:
-    def __init__(self, existing_dni=None):
-        self.insert_data = None
-        self.existing_dni = existing_dni
+class InMemoryQuery:
+    def __init__(self, existing=None):
+        self.data = existing
+        self.inserted = None
+        self.updated = None
         self.is_select = False
         self.filter = None
+    def select(self, *_):
+        self.is_select = True
+        return self
     def insert(self, data):
-        self.insert_data = data
+        self.inserted = data
         self.is_select = False
         return self
-    def select(self, *_):
-        self.is_select = True
+    def update(self, data):
+        self.updated = data
+        self.is_select = False
         return self
-    def eq(self, _field, value):
+    def eq(self, field, value):
         self.filter = value
-        return self
-    def execute(self):
-        if self.is_select:
-            if self.filter == self.existing_dni:
-                return types.SimpleNamespace(data=[{"id": 1}], status_code=200, error=None)
-            return types.SimpleNamespace(data=[], status_code=200, error=None)
-        return types.SimpleNamespace(data=[{"id": 1}], status_code=200, error=None)
-
-class MockUserQuery:
-    def __init__(self, valid_id=True):
-        self.valid_id = valid_id
-        self.is_select = False
-    def select(self, *_):
-        self.is_select = True
-        return self
-    def eq(self, _field, _value):
         return self
     def single(self):
         return self
     def execute(self):
-        if self.is_select and self.valid_id:
-            return types.SimpleNamespace(data={"id": "uuid"}, status_code=200, error=None)
         if self.is_select:
+            if self.data and self.filter in (self.data.get("dni"), self.data.get("email")):
+                return types.SimpleNamespace(data=self.data, status_code=200, error=None)
             return types.SimpleNamespace(data=None, status_code=200, error=None)
-        return types.SimpleNamespace(data=None, status_code=200, error=None)
+        return types.SimpleNamespace(data=[{"ok": True}], status_code=200, error=None)
 
-class MockSupabaseSave:
-    def __init__(self, existing_dni=None, valid_user=True):
+class MockSupabase:
+    def __init__(self, existing=None):
+        self.query = InMemoryQuery(existing)
         self.table_name = None
-        self.clientes_query = MockInsertQuery(existing_dni)
-        self.user_query = MockUserQuery(valid_user)
     def table(self, name):
         self.table_name = name
-        if name == "clientes":
-            return self.clientes_query
-        if name == "usuarios":
-            return self.user_query
-        return MockInsertQuery()
-
-class MockSelectQuery:
-    def __init__(self, data):
-        self.data = data
-        self.filter = None
-    def select(self, *_):
-        return self
-    def eq(self, _field, value):
-        self.filter = value
-        return self
-    def single(self):
-        return self
-    def execute(self):
-        if self.data and self.filter == self.data["id_usuario"]:
-            return types.SimpleNamespace(data=self.data, status_code=200, error=None)
-        return types.SimpleNamespace(data=None, status_code=200, error=None)
-
-class MockSupabaseInfo:
-    def __init__(self, data):
-        self.data = data
-    def table(self, name):
-        return MockSelectQuery(self.data)
+        return self.query
 
 
 def test_guardar_datos_cliente(monkeypatch):
-    db = MockSupabaseSave()
+    db = MockSupabase()
     monkeypatch.setattr(cliente_panel, "supabase", db)
-    client.app.dependency_overrides[cliente_panel.auth_required] = (
-        lambda credentials=None: {"id": "uuid-123"}
-    )
+    client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
     resp = client.post(
         "/guardar_datos_cliente",
         data={
-            "email": "prueba@test.com",
+            "email": "test@test.com",
             "nombre": "Juan",
             "apellido": "Perez",
             "dni": "123",
             "direccion": "Calle 1",
-            "telefono": "555",
+            "telefono": "111",
+            "cuit": "20-12345678-9",
+            "razon_social": "JP Servicios",
         },
-        headers={"Authorization": "Bearer test"},
+        headers={"Authorization": "Bearer a"},
     )
     client.app.dependency_overrides = {}
     assert resp.status_code == 200
-    assert db.table_name == "clientes"
-    assert db.clientes_query.insert_data["dni"] == "123"
-    assert db.clientes_query.insert_data["id_usuario"] == "uuid-123"
+    assert db.table_name == "datos_personales_clientes"
+    assert db.query.inserted["dni"] == "123"
 
 
 def test_guardar_datos_cliente_dni_repetido(monkeypatch):
-    db = MockSupabaseSave(existing_dni="123")
+    existing = {
+        "dni": "123",
+        "nombre": "Ana",
+        "apellido": "Lopez",
+        "direccion": "x",
+        "telefono": "222",
+        "cuit": "20-12345678-9",
+        "razon_social": "AL",
+        "email": "ana@test.com",
+    }
+    db = MockSupabase(existing)
     monkeypatch.setattr(cliente_panel, "supabase", db)
-    client.app.dependency_overrides[cliente_panel.auth_required] = (
-        lambda credentials=None: {"id": "uuid-123"}
-    )
+    client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
     resp = client.post(
         "/guardar_datos_cliente",
         data={
             "email": "otro@test.com",
-            "nombre": "Pepe",
-            "apellido": "Lopez",
+            "nombre": "Juan",
+            "apellido": "Perez",
             "dni": "123",
-            "direccion": "Calle x",
-            "telefono": "444",
+            "direccion": "Calle 1",
+            "telefono": "111",
+            "cuit": "20-99999999-9",
+            "razon_social": "JP",
         },
-        headers={"Authorization": "Bearer test"},
+        headers={"Authorization": "Bearer a"},
     )
     client.app.dependency_overrides = {}
-    assert resp.status_code == 400
-
-
-def test_guardar_datos_cliente_uuid_invalido(monkeypatch):
-    db = MockSupabaseSave(valid_user=False)
-    monkeypatch.setattr(cliente_panel, "supabase", db)
-    client.app.dependency_overrides[cliente_panel.auth_required] = (
-        lambda credentials=None: {"id": "invalido"}
-    )
-    resp = client.post(
-        "/guardar_datos_cliente",
-        data={
-            "email": "otro@test.com",
-            "nombre": "Pepe",
-            "apellido": "Lopez",
-            "dni": "122",
-            "direccion": "Calle x",
-            "telefono": "444",
-        },
-        headers={"Authorization": "Bearer test"},
-    )
-    client.app.dependency_overrides = {}
-    assert resp.status_code == 400
+    assert resp.status_code == 200  # update
+    assert db.query.updated["telefono"] == "111"
 
 
 def test_info_cliente_ok(monkeypatch):
     data = {
-        "email": "ana@test.com",
-        "id_usuario": "uuid-321",
+        "dni": "321",
         "nombre": "Ana",
         "apellido": "Gomez",
-        "dni": "321",
         "direccion": "calle a",
         "telefono": "1234",
+        "cuit": "20-11111111-1",
+        "razon_social": "AG",
+        "email": "ana@test.com",
     }
-    monkeypatch.setattr(cliente_panel, "supabase", MockSupabaseInfo(data))
-    resp = client.get("/info_cliente", params={"id_usuario": data["id_usuario"]})
+    db = MockSupabase(data)
+    monkeypatch.setattr(cliente_panel, "supabase", db)
+    resp = client.get("/info_cliente", params={"email": data["email"]})
     assert resp.status_code == 200
     assert resp.json()["dni"] == "321"
 
 
 def test_info_cliente_no_encontrado(monkeypatch):
-    monkeypatch.setattr(cliente_panel, "supabase", MockSupabaseInfo(None))
-    resp = client.get("/info_cliente", params={"id_usuario": "x"})
+    db = MockSupabase(None)
+    monkeypatch.setattr(cliente_panel, "supabase", db)
+    resp = client.get("/info_cliente", params={"email": "x@test.com"})
     assert resp.status_code == 404

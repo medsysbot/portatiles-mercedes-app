@@ -32,10 +32,11 @@ class Cliente(BaseModel):
     nombre: str
     apellido: str
     dni: str
+    direccion: str
+    telefono: str
+    cuit: str
+    razon_social: str
     email: str
-    telefono: str | None = None
-    estado: str = "activo"
-    observaciones: str | None = None
 
 
 @router.get("/admin/panel", response_class=HTMLResponse)
@@ -75,7 +76,6 @@ def admin_bash_generator_view(request: Request):
 def admin_clientes_page(
     request: Request,
     q: str | None = Query(None, description="Búsqueda por nombre, email o DNI"),
-    estado: str | None = Query(None),
     page: int = Query(1, gt=0),
 ):
     """Administración de clientes con filtros y paginación."""
@@ -101,13 +101,37 @@ def crear_cliente(
     nombre: str = Form(...),
     apellido: str = Form(...),
     dni: str = Form(...),
+    direccion: str = Form(...),
+    telefono: str = Form(...),
+    cuit: str = Form(...),
+    razon_social: str = Form(...),
     email: str = Form(...),
-    telefono: str | None = Form(None),
-    estado: str = Form("activo"),
-    observaciones: str | None = Form(None),
-
 ):
     """Procesa la creación de un cliente."""
+    if supabase:
+        datos = {
+            "dni": dni,
+            "nombre": nombre,
+            "apellido": apellido,
+            "direccion": direccion,
+            "telefono": telefono,
+            "cuit": cuit,
+            "razon_social": razon_social,
+            "email": email,
+        }
+        for campo, val in datos.items():
+            if not val:
+                raise HTTPException(status_code=400, detail=f"Campo '{campo}' faltante")
+        existe = (
+            supabase.table("datos_personales_clientes")
+            .select("dni")
+            .eq("dni", dni)
+            .single()
+            .execute()
+        )
+        if getattr(existe, "data", None):
+            raise HTTPException(status_code=400, detail="Ese DNI ya está registrado")
+        supabase.table("datos_personales_clientes").insert(datos).execute()
     return RedirectResponse("/admin/clientes", status_code=303)
 
 
@@ -170,9 +194,19 @@ def crear_empleado(
 @router.get("/admin/clientes/{dni}/editar", response_class=HTMLResponse)
 def form_editar_cliente(dni: str, request: Request):
     """Formulario de edición de un cliente existente."""
+    cliente = None
+    if supabase:
+        resp = (
+            supabase.table("datos_personales_clientes")
+            .select("*")
+            .eq("dni", dni)
+            .single()
+            .execute()
+        )
+        cliente = getattr(resp, "data", None)
     return templates.TemplateResponse(
         "cliente_form.html",
-        {"request": request, "cliente": None},
+        {"request": request, "cliente": cliente},
     )
 
 
@@ -181,12 +215,27 @@ def editar_cliente(
     dni: str,
     nombre: str = Form(...),
     apellido: str = Form(...),
+    direccion: str = Form(...),
+    telefono: str = Form(...),
+    cuit: str = Form(...),
+    razon_social: str = Form(...),
     email: str = Form(...),
-    telefono: str | None = Form(None),
-    estado: str = Form("activo"),
-    observaciones: str | None = Form(None),
 ):
     """Guarda los cambios de un cliente."""
+    if supabase:
+        datos = {
+            "nombre": nombre,
+            "apellido": apellido,
+            "direccion": direccion,
+            "telefono": telefono,
+            "cuit": cuit,
+            "razon_social": razon_social,
+            "email": email,
+        }
+        for campo, val in datos.items():
+            if not val:
+                raise HTTPException(status_code=400, detail=f"Campo '{campo}' faltante")
+        supabase.table("datos_personales_clientes").update(datos).eq("dni", dni).execute()
     return RedirectResponse("/admin/clientes", status_code=303)
 
 
@@ -266,11 +315,10 @@ def cliente_panel():
 async def admin_clientes(
     dni: str | None = Query(None),
     q: str | None = Query(None),
-    estado: str | None = Query(None),
 ):
-    """Lista de clientes con filtros por DNI, búsqueda y estado."""
+    """Lista de clientes con filtros por DNI y búsqueda."""
     if supabase:
-        consulta = supabase.table("clientes").select("*")
+        consulta = supabase.table("datos_personales_clientes").select("*")
         if dni:
             consulta = consulta.eq("dni", dni)
         resp = consulta.execute()
@@ -285,8 +333,6 @@ async def admin_clientes(
                 or q_low in (c.get("email") or "").lower()
                 or q_low in (c.get("dni") or "").lower()
             ]
-        if estado:
-            clientes = [c for c in clientes if c.get("estado") == estado]
         return clientes
     return []
 

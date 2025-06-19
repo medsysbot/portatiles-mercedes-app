@@ -134,11 +134,23 @@ async def guardar_datos_cliente(
             logger.info("Resultado en DATOS_PERSONALES_CLIENTES: %s", resultado)
         except Exception as e:
             logger.error("ERROR AL GUARDAR CLIENTE: %s", e)
-            raise HTTPException(
-                status_code=500,
-                detail="No se pudo guardar el registro. Ver logs para más detalles.",
+            # Devolver el error exacto para diagnóstico
+            raise HTTPException(status_code=500, detail=str(e))
+
+        if (
+            not resultado.data
+            or (hasattr(resultado, "status_code") and resultado.status_code != 200)
+            or getattr(resultado, "error", None) is not None
+        ):
+            logger.error(
+                "Fallo en DATOS_PERSONALES_CLIENTES: %s",
+                getattr(resultado, "error", "Error en Supabase"),
             )
-        if not getattr(resultado, "data", None):
-            raise HTTPException(status_code=500, detail="Operación sin datos")
+            raise HTTPException(
+                status_code=400,
+                detail=str(getattr(resultado, "error", "Error en Supabase")),
+            )
+
+        # <!-- Debug: Verificación completa de guardado en datos_personales_clientes, errores visibles en logs y frontend. -->
 
     return {"mensaje": "Datos guardados"}

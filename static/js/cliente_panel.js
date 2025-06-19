@@ -64,10 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('bienvenida').textContent = `Bienvenido ${nombre}`;
         mostrarSplash(nombre);
         cargarDatos(email);
-        const btnDatos = document.getElementById('btnDatosPersonales');
-        if (btnDatos) {
-            btnDatos.addEventListener('click', () => mostrarFormularioDatos(window.emailCliente));
-        }
+        mostrarFormularioDatos(window.emailCliente);
     } catch (err) {
         handleUnauthorized();
     }
@@ -184,10 +181,8 @@ function mostrarSplash(nombre, fechaNac) {
 }
 
 function mostrarFormularioDatos(email) {
-    const modal = document.getElementById('modalDatos');
     const form = document.getElementById('formDatos');
-    if (!modal || !form) return;
-    modal.style.display = 'block';
+    if (!form) return;
     form.reset();
     form.email.value = email;
     fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`)
@@ -221,6 +216,14 @@ async function guardarDatos() {
         email: document.getElementById('email').value,
     };
 
+    const obligatorios = ['dni','nombre','apellido','direccion','telefono','email'];
+    for (const campo of obligatorios) {
+        if (!datos[campo]) {
+            alert('Completa el campo ' + campo);
+            return;
+        }
+    }
+
     const response = await fetchConAuth('/guardar_datos_cliente', {
         method: 'POST',
         headers: {
@@ -232,7 +235,6 @@ async function guardarDatos() {
     const resultado = await response.json();
     if (response.ok) {
         alert('Datos guardados correctamente');
-        document.getElementById('modalDatos').style.display = 'none';
     } else {
         alert('Error al guardar datos: ' + resultado.detail);
     }

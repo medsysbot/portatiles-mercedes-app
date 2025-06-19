@@ -91,9 +91,7 @@ async def guardar_datos_cliente(
     """Guarda o actualiza los datos personales del cliente."""
     if supabase:
         # Validar DNI único antes de insertar
-        existe = (
-            supabase.table("clientes").select("id").eq("dni", dni).execute()
-        )
+        existe = supabase.table("clientes").select("id").eq("dni", dni).execute()
         if getattr(existe, "data", []):
             raise HTTPException(status_code=400, detail="Ese DNI ya está registrado")
 
@@ -118,6 +116,8 @@ async def guardar_datos_cliente(
             "direccion": direccion,
             "telefono": telefono,
         }
+
+        logger.info("Payload recibido: %s", datos)
 
         # Validamos que ningún campo esté vacío
         for campo, valor in datos.items():

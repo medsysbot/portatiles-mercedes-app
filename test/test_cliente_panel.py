@@ -130,3 +130,12 @@ def test_info_datos_cliente(monkeypatch):
 
     assert resp.status_code == 200
     assert resp.json()["nombre"] == "Demo"
+
+
+def test_info_datos_cliente_no_encontrado(monkeypatch):
+    """Si el email no existe debe devolver 404."""
+    monkeypatch.setattr(cliente_panel, "supabase", DataSupabase({}))
+
+    resp = client.get("/info_datos_cliente", params={"email": "no@existe.com"})
+
+    assert resp.status_code == 404

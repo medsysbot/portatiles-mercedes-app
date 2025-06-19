@@ -93,8 +93,14 @@ async def obtener_limpiezas(email: str = Query(...)):
 
 
 @router.get("/info_datos_cliente")
-async def info_datos_cliente(request: Request):
-    email = request.query_params.get("email")
+async def info_datos_cliente(
+    email: str = Query(..., description="Email del cliente")
+):
+    """Devuelve los datos personales almacenados para un cliente."""
+    if not supabase:
+        logger.error("Supabase no configurado")
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+
     try:
         result = (
             supabase.table("datos_personales_clientes")
@@ -103,19 +109,14 @@ async def info_datos_cliente(request: Request):
             .single()
             .execute()
         )
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("\u274c Error al consultar datos personales: %s", exc)
+        raise HTTPException(status_code=500, detail="Error consultando datos")
 
-        if result.status_code >= 300:
-            return JSONResponse(
-                content={"message": "No se encontraron datos"}, status_code=404
-            )
+    if getattr(result, "data", None):
+        return result.data
 
-        return JSONResponse(content=result.data, status_code=200)
-
-    except Exception as e:
-        logger.error("\u274c Error al obtener datos personales: %s", str(e))
-        return JSONResponse(
-            content={"message": f"Error interno: {str(e)}"}, status_code=500
-        )
+    raise HTTPException(status_code=404, detail="Datos no encontrados")
 
 
 @router.post("/guardar_datos_cliente")

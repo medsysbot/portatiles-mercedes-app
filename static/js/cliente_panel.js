@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         const email = info.email;
         window.emailCliente = email;
-        const datosCliRes = await fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`);
+        const datosCliRes = await fetch(`/info_datos_cliente?email=${email}`);
         let nombre = email;
         let datosCompletos = false;
         if (datosCliRes.ok) {
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.getElementById('bienvenida').textContent = `Bienvenido ${nombre}`;
         mostrarSplash(nombre);
         cargarDatos(email);
-        mostrarFormularioDatos(window.emailCliente);
+        cargarDatosPersonales(window.emailCliente);
     } catch (err) {
         handleUnauthorized();
     }
@@ -180,32 +180,31 @@ function mostrarSplash(nombre, fechaNac) {
     }, 5000);
 }
 
-function mostrarFormularioDatos(email) {
+async function cargarDatosPersonales(email) {
     const form = document.getElementById('formDatos');
-    const btnGuardar = document.getElementById('btnGuardarDatos');
+    const btnGuardar = document.getElementById('botonGuardarDatos');
     if (!form) return;
     form.reset();
     form.email.value = email;
-    fetchConAuth(`/info_cliente?email=${encodeURIComponent(email)}`)
-        .then(r => r.ok ? r.json() : null)
-        .then(d => {
-            if (d && Object.keys(d).length > 0) {
-                form.nombre.value = d.nombre || '';
-                form.apellido.value = d.apellido || '';
-                form.dni.value = d.dni || '';
-                form.direccion.value = d.direccion || '';
-                form.telefono.value = d.telefono || '';
-                form.cuit.value = d.cuit || '';
-                form.razon_social.value = d.razon_social || '';
-                form.email.value = d.email || email;
-                btnGuardar.disabled = true;
-            } else {
-                btnGuardar.disabled = false;
-            }
-        })
-        .catch(() => {
+    try {
+        const resp = await fetch(`/info_datos_cliente?email=${email}`);
+        if (resp.ok) {
+            const d = await resp.json();
+            form.nombre.value = d.nombre || '';
+            form.apellido.value = d.apellido || '';
+            form.dni.value = d.dni || '';
+            form.direccion.value = d.direccion || '';
+            form.telefono.value = d.telefono || '';
+            form.cuit.value = d.cuit || '';
+            form.razon_social.value = d.razon_social || '';
+            form.email.value = d.email || email;
+            btnGuardar.disabled = true;
+        } else {
             btnGuardar.disabled = false;
-        });
+        }
+    } catch (_) {
+        btnGuardar.disabled = false;
+    }
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         await guardarDatos();
@@ -243,7 +242,7 @@ async function guardarDatos() {
     const resultado = await response.json();
     if (response.ok) {
         alert('Datos guardados correctamente');
-        document.getElementById('btnGuardarDatos').disabled = true;
+        document.getElementById('botonGuardarDatos').disabled = true;
     } else {
         alert('Error al guardar datos: ' + resultado.detail);
     }

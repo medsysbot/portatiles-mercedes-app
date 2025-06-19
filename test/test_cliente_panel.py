@@ -26,6 +26,35 @@ class MockSupabase:
         return self.query
 
 
+class DataQuery:
+    def __init__(self, record):
+        self.record = record
+        self.filters = {}
+
+    def select(self, *_):
+        return self
+
+    def eq(self, field, value):
+        self.filters[field] = value
+        return self
+
+    def single(self):
+        return self
+
+    def execute(self):
+        if self.filters.get("email") == self.record.get("email"):
+            return types.SimpleNamespace(data=self.record, status_code=200)
+        return types.SimpleNamespace(data=None, status_code=404)
+
+
+class DataSupabase:
+    def __init__(self, record):
+        self.q = DataQuery(record)
+
+    def table(self, _name):
+        return self.q
+
+
 def test_guardar_datos_cliente(monkeypatch):
     db = MockSupabase()
     monkeypatch.setattr(cliente_panel, "supabase", db)
@@ -87,3 +116,16 @@ def test_guardar_datos_cliente_sin_email(monkeypatch):
     resp = client.post("/guardar_datos_cliente", json=datos)
 
     assert resp.status_code == 200
+
+
+def test_info_datos_cliente(monkeypatch):
+    registro = {
+        "email": "demo@test.com",
+        "nombre": "Demo",
+    }
+    monkeypatch.setattr(cliente_panel, "supabase", DataSupabase(registro))
+
+    resp = client.get("/info_datos_cliente", params={"email": registro["email"]})
+
+    assert resp.status_code == 200
+    assert resp.json()["nombre"] == "Demo"

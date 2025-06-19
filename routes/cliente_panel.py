@@ -92,6 +92,32 @@ async def obtener_limpiezas(email: str = Query(...)):
     return []
 
 
+@router.get("/info_datos_cliente")
+async def info_datos_cliente(request: Request):
+    email = request.query_params.get("email")
+    try:
+        result = (
+            supabase.table("datos_personales_clientes")
+            .select("*")
+            .eq("email", email)
+            .single()
+            .execute()
+        )
+
+        if result.status_code >= 300:
+            return JSONResponse(
+                content={"message": "No se encontraron datos"}, status_code=404
+            )
+
+        return JSONResponse(content=result.data, status_code=200)
+
+    except Exception as e:
+        logger.error("\u274c Error al obtener datos personales: %s", str(e))
+        return JSONResponse(
+            content={"message": f"Error interno: {str(e)}"}, status_code=500
+        )
+
+
 @router.post("/guardar_datos_cliente")
 async def guardar_datos_cliente(request: Request):
     """Guarda los datos personales del cliente en la base de datos."""

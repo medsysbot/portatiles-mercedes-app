@@ -15,12 +15,16 @@ from dotenv import load_dotenv
 from utils.auth_utils import auth_required
 import logging
 import os
-from supabase import Client, create_client
+from supabase import create_client, Client
 
 load_dotenv()
 
-# Cliente de Supabase, se inyecta desde la app
+# Cliente de Supabase
+url: str | None = os.getenv("SUPABASE_URL")
+key: str | None = os.getenv("SUPABASE_KEY")
 supabase: Client | None = None
+if url and key:
+    supabase = create_client(url, key)
 # Nota: este flujo conecta el frontend con la tabla DATOS_PERSONALES_CLIENTES en Supabase
 
 # Configuración de logging para operaciones de clientes
@@ -90,29 +94,47 @@ async def obtener_limpiezas(email: str = Query(...)):
 
 
 @router.post("/guardar_datos_cliente")
-async def guardar_datos_cliente(request: Request, token_data: dict = Depends(auth_required)):
+async def guardar_datos_cliente(
+    request: Request, token_data: dict = Depends(auth_required)
+):
     """Guarda los datos personales del cliente en la base de datos."""
     try:
         data = await request.json()
-        print("📥 Datos recibidos del cliente:", data)
+        logger.info("\ud83d\udce5 Datos recibidos del cliente: %s", data)
 
         if not data.get("email"):
-            return JSONResponse(status_code=400, content={"message": "El campo email es obligatorio"})
+            return JSONResponse(
+                status_code=400,
+                content={"message": "El campo email es obligatorio"},
+            )
 
-        url = os.getenv("SUPABASE_URL")
-        key = os.getenv("SUPABASE_KEY")
-        if not url or not key:
-            return JSONResponse(status_code=500, content={"message": "Faltan variables de entorno de Supabase"})
+        if not supabase:
+            logger.error("Supabase no configurado")
+            return JSONResponse(
+                status_code=500,
+                content={"message": "Supabase no configurado"},
+            )
 
-        supabase = create_client(url, key)
-        response = supabase.table("datos_personales_clientes").insert(data).execute()
+        response = (
+            supabase.table("datos_personales_clientes").insert(data).execute()
+        )
 
-        if response.error:
-            print("❌ Error al guardar:", response.error)
-            return JSONResponse(status_code=500, content={"message": "Supabase no pudo guardar los datos"})
+        if getattr(response, "status_code", 500) >= 300:
+            logger.error("\u274c Error en respuesta Supabase: %s", response)
+            return JSONResponse(
+                content={"message": "Error al guardar en Supabase"},
+                status_code=500,
+            )
 
-        return JSONResponse(status_code=200, content={"message": "Datos guardados correctamente"})
+        logger.info("\u2705 Datos guardados correctamente en Supabase")
+        return JSONResponse(
+            content={"message": "Datos guardados correctamente"},
+            status_code=200,
+        )
 
     except Exception as e:
-        print("🔥 Excepción al guardar datos:", str(e))
-        return JSONResponse(status_code=500, content={"message": "Error interno al guardar datos"})
+        logger.exception("\ud83d\udd25 Excepci\u00f3n al guardar datos: %s", str(e))
+        return JSONResponse(
+            content={"message": f"Error al guardar datos: {str(e)}"},
+            status_code=500,
+        )

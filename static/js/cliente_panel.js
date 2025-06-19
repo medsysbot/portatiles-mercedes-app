@@ -198,12 +198,8 @@ function mostrarFormularioDatos(email) {
                 form.cuit.value = d.cuit || '';
                 form.razon_social.value = d.razon_social || '';
                 form.email.value = d.email || email;
-                const completos = ['nombre','apellido','dni','direccion','telefono','cuit','razon_social']
-                  .every(c => d[c]);
-                btnGuardar.disabled = completos;
-            } else {
-                btnGuardar.disabled = false;
             }
+            btnGuardar.disabled = false;
         })
         .catch(() => {
             btnGuardar.disabled = false;

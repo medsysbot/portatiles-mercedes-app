@@ -10,8 +10,9 @@ class MockQuery:
     def __init__(self):
         self.inserted = None
 
-    def insert(self, data):
+    def upsert(self, data, on_conflict=None):
         self.inserted = data
+        self.on_conflict = on_conflict
         return self
 
     def execute(self):

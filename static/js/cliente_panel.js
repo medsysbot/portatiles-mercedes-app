@@ -181,34 +181,30 @@ function mostrarSplash(nombre, fechaNac) {
 }
 
 async function cargarDatosPersonales(email) {
-    const form = document.getElementById('formDatos');
-    const btnGuardar = document.getElementById('botonGuardarDatos');
-    if (!form) return;
-    form.reset();
-    form.email.value = email;
     try {
         const resp = await fetch(`/info_datos_cliente?email=${email}`);
-        if (resp.ok) {
-            const d = await resp.json();
-            form.nombre.value = d.nombre || '';
-            form.apellido.value = d.apellido || '';
-            form.dni.value = d.dni || '';
-            form.direccion.value = d.direccion || '';
-            form.telefono.value = d.telefono || '';
-            form.cuit.value = d.cuit || '';
-            form.razon_social.value = d.razon_social || '';
-            form.email.value = d.email || email;
-            btnGuardar.disabled = true;
-        } else {
-            btnGuardar.disabled = false;
-        }
-    } catch (_) {
-        btnGuardar.disabled = false;
+        if (!resp.ok) return;
+
+        const datos = await resp.json();
+
+        document.getElementById("nombre").value = datos.nombre || "";
+        document.getElementById("apellido").value = datos.apellido || "";
+        document.getElementById("direccion").value = datos.direccion || "";
+        document.getElementById("telefono").value = datos.telefono || "";
+        document.getElementById("dni").value = datos.dni || "";
+        document.getElementById("cuit").value = datos.cuit || "";
+        document.getElementById("razon_social").value = datos.razon_social || "";
+        document.getElementById("email").value = datos.email || "";
+
+        document.getElementById("botonGuardarDatos").disabled = true;
+    } catch (err) {
+        console.error("\u274c Error cargando datos:", err);
     }
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        await guardarDatos();
-    }, { once: true });
+}
+
+const emailStored = localStorage.getItem("email");
+if (emailStored) {
+    cargarDatosPersonales(emailStored);
 }
 
 async function guardarDatos() {

@@ -121,19 +121,29 @@ async def info_datos_cliente(request: Request):
 @router.post("/guardar_datos_cliente")
 async def guardar_datos_cliente(request: Request):
     """Guarda los datos personales del cliente en la base de datos."""
+    data = await request.json()
+    logger.info("\ud83d\udce5 Datos recibidos del cliente: %s", data)
+
     try:
-        data = await request.json()
-        logger.info("\ud83d\udce5 Datos recibidos del cliente: %s", data)
+        resultado = (
+            supabase.table("datos_personales_clientes")
+            .upsert(data, on_conflict="dni")
+            .execute()
+        )
 
-        response = supabase.table("datos_personales_clientes").insert(data).execute()
+        if resultado.status_code >= 300:
+            logger.error(
+                "\u274c Error al guardar en Supabase. Status: %s",
+                resultado.status_code,
+            )
+            return JSONResponse(
+                content={"message": "Error al guardar"}, status_code=500
+            )
 
-        if response.status_code >= 300:
-            logger.error("\u274c Supabase insert failed: %s", response)
-            return JSONResponse(content={"message": "Error al guardar en Supabase"}, status_code=500)
-
-        logger.info("\u2705 Datos guardados correctamente")
-        return JSONResponse(content={"message": "Datos guardados correctamente"}, status_code=200)
+        return JSONResponse(content={"message": "Guardado exitoso"}, status_code=200)
 
     except Exception as e:
         logger.error("\ud83d\udd25 Excepci\u00f3n al guardar datos: %s", str(e))
-        return JSONResponse(content={"message": f"Error interno: {str(e)}"}, status_code=500)
+        return JSONResponse(
+            content={"message": f"Error interno: {str(e)}"}, status_code=500
+        )

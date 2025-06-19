@@ -36,6 +36,7 @@ if (form) {
                 const data = await res.json();
                 if (res.ok && data.access_token) {
                     localStorage.setItem("access_token", data.access_token);
+                    localStorage.setItem("email", email);
                     if (data.rol) {
                         localStorage.setItem("rol", data.rol);
                     }

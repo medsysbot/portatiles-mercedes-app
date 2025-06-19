@@ -134,18 +134,20 @@ async def guardar_datos_cliente(request: Request):
 
         logger.info("\ud83d\udce6 Respuesta Supabase: %s", resultado)
 
-        if resultado.status_code >= 300 or getattr(resultado, "error", None):
-            logger.error(
-                "\u274c Error en Supabase: %s", getattr(resultado, "error", resultado.data)
-            )
+        if getattr(resultado, "error", None) is None:
             return JSONResponse(
-                content={"message": "Error al guardar"}, status_code=500
+                content={"mensaje": "\u00a1Datos guardados correctamente!"},
+                status_code=200,
             )
 
-        return JSONResponse(content={"message": "Guardado exitoso"}, status_code=200)
+        logger.error("\u274c Error en Supabase: %s", resultado.error)
+        return JSONResponse(
+            content={"error": getattr(resultado.error, "message", str(resultado.error))},
+            status_code=400,
+        )
 
     except Exception as e:
         logger.error("\ud83d\udd25 Excepci\u00f3n al guardar datos: %s", str(e))
         return JSONResponse(
-            content={"message": f"Error interno: {str(e)}"}, status_code=500
+            content={"error": f"Error interno: {str(e)}"}, status_code=500
         )

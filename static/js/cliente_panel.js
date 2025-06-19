@@ -268,11 +268,11 @@ async function guardarDatos(ev) {
     });
 
     const resultado = await response.json();
-    if (response.ok) {
-        mostrarMensajeFormulario('¡Datos guardados correctamente!', 'success');
+    if (response.ok && resultado.mensaje) {
+        mostrarMensajeFormulario(resultado.mensaje, 'success');
         datosOriginales = datos;
         document.getElementById('botonGuardarDatos').disabled = true;
     } else {
-        mostrarMensajeFormulario(resultado.message || 'Error al guardar datos', 'danger');
+        mostrarMensajeFormulario(resultado.error || 'Error al guardar datos', 'danger');
     }
 }

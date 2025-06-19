@@ -74,6 +74,7 @@ def test_guardar_datos_cliente(monkeypatch):
     resp = client.post("/guardar_datos_cliente", json=datos)
 
     assert resp.status_code == 200
+    assert resp.json()["mensaje"].startswith("\u00a1Datos guardados")
     assert db.query.inserted is not None
 
 
@@ -98,6 +99,7 @@ def test_guardar_datos_cliente_error(monkeypatch):
     resp = client.post("/guardar_datos_cliente", json=datos)
 
     assert resp.status_code == 500
+    assert "error" in resp.json()
 
 
 def test_guardar_datos_cliente_sin_email(monkeypatch):
@@ -117,6 +119,7 @@ def test_guardar_datos_cliente_sin_email(monkeypatch):
     resp = client.post("/guardar_datos_cliente", json=datos)
 
     assert resp.status_code == 200
+    assert resp.json()["mensaje"].startswith("\u00a1Datos guardados")
 
 
 def test_info_datos_cliente(monkeypatch):

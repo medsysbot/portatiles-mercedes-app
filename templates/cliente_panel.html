@@ -22,22 +22,9 @@
     border-radius: 8px;
     text-align: center;
   }
-  #modalDatos {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.6);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1060;
-  }
-  #modalDatos .card {
-    width: 100%;
-    max-width: 400px;
-  }
+  /* Estilos del splash conservados; el formulario de datos personales se
+     mostrará fijo en el panel, por lo que se eliminan las reglas del
+     modal anterior. */
 </style>
 {% endblock %}
 
@@ -66,9 +53,8 @@
     <div class="sidebar">
       <nav class="mt-2">
           <ul class="nav nav-pills nav-sidebar flex-column" role="menu">
-          <li class="nav-item"><a href="#" id="btnDatosPersonales" class="nav-link"><i class="nav-icon fas fa-id-card"></i><p>Datos personales</p></a></li>
+          <li class="nav-item"><a href="#seccion-datos-personales" class="nav-link"><i class="nav-icon fas fa-id-card"></i><p>Datos personales</p></a></li>
           <li class="nav-item"><a href="#seccion-alquileres" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Mis baños alquilados</p></a></li>
-          <li class="nav-item"><a href="#seccion-facturacion" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturación</p></a></li>
           <li class="nav-item"><a href="#seccion-remitos" class="nav-link"><i class="nav-icon fas fa-file-alt"></i><p>Remitos y comprobantes</p></a></li>
           <li class="nav-item"><a href="#seccion-emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
           <li class="nav-item"><a href="#seccion-pagos" class="nav-link"><i class="nav-icon fas fa-credit-card"></i><p>Medios de pago</p></a></li>
@@ -90,10 +76,32 @@
             <button id="splashCerrar" class="btn btn-primary">Cerrar</button>
           </div>
         </div>
-        <div id="modalDatos">
-          <!-- Modal automático eliminado. Datos personales accesibles solo desde botón dedicado. -->
-          <div class="card p-3">
-            <h5 class="mb-3">Completá tu registro por favor</h5>
+
+
+        <!-- Sección alquileres -->
+        <div id="seccion-alquileres" class="card mb-4">
+          <div class="card-header"><h3 class="card-title">Mis baños alquilados</h3></div>
+          <div class="card-body table-responsive p-0">
+            <table id="tablaAlquileres" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Tipo</th>
+                  <th>Ubicación</th>
+                  <th>Inicio</th>
+                  <th>Vencimiento</th>
+                  <th>Estado</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sección datos personales -->
+        <div id="seccion-datos-personales" class="card mb-4">
+          <div class="card-header"><h3 class="card-title">Datos personales</h3></div>
+          <div class="card-body">
             <form id="formDatos">
               <div class="form-group">
                 <label for="nombre">Nombre</label>
@@ -117,61 +125,18 @@
               </div>
               <div class="form-group">
                 <label for="cuit">CUIT</label>
-                <input type="text" id="cuit" name="cuit" class="form-control" required>
+                <input type="text" id="cuit" name="cuit" class="form-control">
               </div>
               <div class="form-group">
                 <label for="razon_social">Razón social</label>
-                <input type="text" id="razon_social" name="razon_social" class="form-control" required>
+                <input type="text" id="razon_social" name="razon_social" class="form-control">
               </div>
               <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" class="form-control" readonly>
-                <!-- Verificación: el campo email se envía correctamente aunque sea solo lectura -->
               </div>
               <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
-          </div>
-        </div>
-
-        <!-- Sección alquileres -->
-        <div id="seccion-alquileres" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Mis baños alquilados</h3></div>
-          <div class="card-body table-responsive p-0">
-            <table id="tablaAlquileres" class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Tipo</th>
-                  <th>Ubicación</th>
-                  <th>Inicio</th>
-                  <th>Vencimiento</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Sección facturación -->
-        <div id="seccion-facturacion" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Facturación</h3></div>
-          <div class="card-body">
-            <p class="mb-2"><strong>Próxima factura:</strong> <span id="proximaFactura">-</span></p>
-            <p class="mb-4"><strong>Último pago:</strong> <span id="ultimoPago">-</span></p>
-            <h5>Historial</h5>
-            <div class="table-responsive">
-              <table id="tablaPagos" class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Monto</th>
-                    <th>Método</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
           </div>
         </div>
 

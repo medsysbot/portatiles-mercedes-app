@@ -10,25 +10,16 @@ Proyecto: Portátiles Mercedes
 """Rutas para consultar la información del panel de clientes."""
 
 from fastapi import APIRouter, HTTPException, Query, Depends
-from fastapi.responses import JSONResponse
-import psycopg2
 from dotenv import load_dotenv
 from utils.auth_utils import auth_required
 import logging
 import os
+from supabase import Client
 
 load_dotenv()
-DATABASE_URL = os.getenv("DATABASE_URL")
 
-def obtener_conexion_supabase():
-    """Devuelve una conexión a la base de Supabase."""
-    try:
-        return psycopg2.connect(DATABASE_URL)
-    except Exception as exc:  # pragma: no cover - log de errores de conexión
-        logger.error("Fallo al conectar con Supabase: %s", exc)
-        return None
-
-supabase = None  # Cliente de Supabase, se inyecta desde la app
+# Cliente de Supabase, se inyecta desde la app
+supabase: Client | None = None
 # Nota: este flujo conecta el frontend con la tabla DATOS_PERSONALES_CLIENTES en Supabase
 
 # Configuración de logging para operaciones de clientes
@@ -49,23 +40,7 @@ if not logger.handlers:
 
 router = APIRouter()
 
-# Refactor: integración exclusiva con datos_personales_clientes, usando DNI como clave única. Limpieza de código viejo.
-
-# Verifica conexión al pooler de Supabase usando psycopg2.
-def verificar_conexion_pooler() -> bool:
-    """Comprueba la conexión al pooler de Supabase si está habilitado."""
-    if os.getenv("ENABLE_POOLER_CHECK") != "1":
-        return True
-
-    url = os.getenv("DATABASE_URL")
-    try:
-        conn = psycopg2.connect(url)
-        conn.close()
-        logger.info("Conexión a pooler Supabase exitosa")
-        return True
-    except Exception as exc:  # pragma: no cover - solo log
-        logger.error("Fallo conexión pooler Supabase: %s", exc)
-        return False
+# Refactor: integración exclusiva con datos_personales_clientes, usando DNI como clave única.
 
 
 @router.get("/cliente_panel")
@@ -119,28 +94,16 @@ def guardar_datos_cliente(
     token_data: dict = Depends(auth_required),
 ):
     """Guarda los datos personales del cliente en la base de datos."""
+    if not supabase:
+        logger.error("Supabase no configurado")
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
-        conn = obtener_conexion_supabase()
-        if conn is None:
-            logger.error("No se pudo establecer conexión con Supabase")
-            raise HTTPException(
-                status_code=500,
-                detail="Problema de conexión a la base de datos",
-            )
-        cur = conn.cursor()
-
-        insert_query = """
-            INSERT INTO datos_personales_clientes (dni, nombre, apellido, direccion, telefono, cuit, razon_social, email)
-            VALUES (%(dni)s, %(nombre)s, %(apellido)s, %(direccion)s, %(telefono)s, %(cuit)s, %(razon_social)s, %(email)s);
-        """
-
-        cur.execute(insert_query, datos)
-        conn.commit()
-
-        cur.close()
-        conn.close()
-
+        logger.info("Insertando datos en Supabase: %s", datos)
+        resp = supabase.table("datos_personales_clientes").insert(datos).execute()
+        if getattr(resp, "error", None):
+            logger.error("ERROR AL GUARDAR EN SUPABASE: %s", resp.error)
+            raise HTTPException(status_code=500, detail="Error al guardar en Supabase")
         return {"mensaje": "Datos guardados correctamente"}
     except Exception as exc:
-        logger.error("Error al guardar datos del cliente: %s", exc)
-        raise HTTPException(status_code=500, detail="Error al guardar los datos")
+        logger.error("ERROR AL GUARDAR EN SUPABASE: %s", exc)
+        raise HTTPException(status_code=500, detail="Error al guardar en Supabase")

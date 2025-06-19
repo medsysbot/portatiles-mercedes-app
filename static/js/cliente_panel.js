@@ -198,8 +198,10 @@ function mostrarFormularioDatos(email) {
                 form.cuit.value = d.cuit || '';
                 form.razon_social.value = d.razon_social || '';
                 form.email.value = d.email || email;
+                btnGuardar.disabled = true;
+            } else {
+                btnGuardar.disabled = false;
             }
-            btnGuardar.disabled = false;
         })
         .catch(() => {
             btnGuardar.disabled = false;

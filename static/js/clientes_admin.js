@@ -1,7 +1,7 @@
 // Archivo: static/js/clientes_admin.js
-// Descripción: Búsqueda en tiempo real de clientes
+// Descripción: Carga y filtrado dinámico de clientes desde Supabase
 // Proyecto: Portátiles Mercedes
-// Última modificación: 2025-06-17
+// Última modificación: 2025-06-19
 
 function handleUnauthorized() {
   localStorage.removeItem('access_token');
@@ -13,7 +13,7 @@ function handleUnauthorized() {
 
 async function fetchConAuth(url) {
   const resp = await fetch(url, {
-    headers: { 'Authorization': 'Bearer ' + localStorage.getItem('access_token') }
+    headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') },
   });
   if (resp.status === 401) {
     handleUnauthorized();
@@ -23,32 +23,44 @@ async function fetchConAuth(url) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const input = document.getElementById('busquedaCliente');
-  const estadoSel = null;
-  if (!input) return;
+  const tabla = $('#tablaClientes').DataTable({
+    columns: [
+      { data: 'dni' },
+      { data: 'nombre' },
+      { data: 'apellido' },
+      { data: 'direccion' },
+      { data: 'telefono' },
+      { data: 'cuit' },
+      { data: 'razon_social' },
+      { data: 'email' },
+    ],
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+  });
 
-  async function buscar() {
+  async function cargarClientes(texto = '') {
     const params = new URLSearchParams();
-    if (input.value.trim()) params.append('q', input.value.trim());
-    
-    const resp = await fetchConAuth(`/admin/api/clientes?${params.toString()}`);
-    if (!resp.ok) return;
-    const lista = await resp.json();
-    const tbody = document.querySelector('#tablaClientes tbody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    for (const c of lista) {
-      const tr = document.createElement('tr');
-      tr.innerHTML =
-        `<td>${c.nombre || ''}</td>` +
-        `<td>${c.apellido || ''}</td>` +
-        `<td>${c.dni || ''}</td>` +
-        `<td>${c.email || ''}</td>` +
-        `<td>${c.telefono || ''}</td>` +
-        `<td>${c.fecha_alta || ''}</td>`;
-      tbody.appendChild(tr);
+    if (texto) params.append('q', texto);
+    try {
+      const resp = await fetchConAuth(`/admin/api/clientes?${params.toString()}`);
+      if (!resp.ok) throw new Error('Error');
+      const lista = await resp.json();
+      tabla.clear();
+      tabla.rows.add(lista).draw();
+    } catch (e) {
+      console.error('Error obteniendo clientes', e);
+      tabla.clear().draw();
     }
   }
 
-  input.addEventListener('input', buscar);
+  const buscador = document.getElementById('busquedaCliente');
+  if (buscador) {
+    buscador.addEventListener('input', () => {
+      cargarClientes(buscador.value.trim());
+    });
+  }
+
+  cargarClientes();
 });

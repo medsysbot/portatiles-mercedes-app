@@ -214,14 +214,14 @@ function mostrarFormularioDatos(email) {
 
 async function guardarDatos() {
     const datos = {
-        dni: document.getElementById('dni').value,
-        nombre: document.getElementById('nombre').value,
-        apellido: document.getElementById('apellido').value,
-        direccion: document.getElementById('direccion').value,
-        telefono: document.getElementById('telefono').value,
-        cuit: document.getElementById('cuit').value,
-        razon_social: document.getElementById('razon_social').value,
-        email: document.getElementById('email').value,
+        dni: document.getElementById("dni").value,
+        nombre: document.getElementById("nombre").value,
+        apellido: document.getElementById("apellido").value,
+        direccion: document.getElementById("direccion").value,
+        telefono: document.getElementById("telefono").value,
+        cuit: document.getElementById("cuit").value,
+        razon_social: document.getElementById("razon_social").value,
+        email: document.getElementById("email").value
     };
 
     const obligatorios = ['dni','nombre','apellido','direccion','telefono','email'];

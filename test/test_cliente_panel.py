@@ -28,7 +28,9 @@ class MockSupabase:
 
 def test_guardar_datos_cliente(monkeypatch):
     db = MockSupabase()
-    monkeypatch.setattr(cliente_panel, "supabase", db)
+    monkeypatch.setattr(cliente_panel, "create_client", lambda url, key: db)
+    monkeypatch.setenv("SUPABASE_URL", "url")
+    monkeypatch.setenv("SUPABASE_KEY", "key")
     client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {
@@ -50,7 +52,9 @@ def test_guardar_datos_cliente(monkeypatch):
 
 
 def test_guardar_datos_cliente_error(monkeypatch):
-    monkeypatch.setattr(cliente_panel, "supabase", None)
+    monkeypatch.setattr(cliente_panel, "create_client", lambda url, key: (_ for _ in ()).throw(Exception("fail")))
+    monkeypatch.setenv("SUPABASE_URL", "url")
+    monkeypatch.setenv("SUPABASE_KEY", "key")
     client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {
@@ -72,7 +76,9 @@ def test_guardar_datos_cliente_error(monkeypatch):
 
 def test_guardar_datos_cliente_sin_email(monkeypatch):
     db = MockSupabase()
-    monkeypatch.setattr(cliente_panel, "supabase", db)
+    monkeypatch.setattr(cliente_panel, "create_client", lambda url, key: db)
+    monkeypatch.setenv("SUPABASE_URL", "url")
+    monkeypatch.setenv("SUPABASE_KEY", "key")
     client.app.dependency_overrides[cliente_panel.auth_required] = lambda credentials=None: {}
 
     datos = {

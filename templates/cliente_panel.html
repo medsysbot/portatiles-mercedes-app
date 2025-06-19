@@ -135,8 +135,25 @@
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" class="form-control" readonly>
               </div>
-              <button type="submit" class="btn btn-primary">Guardar</button>
+              <button type="submit" id="btnGuardarDatos" class="btn btn-primary">Guardar</button>
             </form>
+          </div>
+        </div>
+
+        <!-- Sección facturación -->
+        <div id="seccion-facturacion" class="card mb-4">
+          <div class="card-header"><h3 class="card-title">Facturación</h3></div>
+          <div class="card-body table-responsive p-0">
+            <table id="tablaFacturas" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Comprobante</th>
+                  <th>Monto</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
           </div>
         </div>
 

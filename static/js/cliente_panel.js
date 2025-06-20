@@ -65,7 +65,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         cargarDatos(email);
         prepararListenersFormulario();
     } catch (err) {
-        handleUnauthorized();
+        if (err.message === 'Unauthorized' || err.message === 'Token inválido') {
+            handleUnauthorized();
+        } else {
+            console.error(err);
+        }
     }
 });
 // ==== Funciones auxiliares ====

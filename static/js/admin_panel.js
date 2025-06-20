@@ -108,7 +108,8 @@ async function cargarTodo() {
 async function cargarClientes() {
     const resp = await fetchConAuth(`/admin/api/clientes?${obtenerFiltros()}`);
     if (!resp.ok) return;
-    const lista = await resp.json();
+    const data = await resp.json();
+    const lista = data.clientes || [];
     const tbody = document.querySelector('#tablaClientes tbody');
     tbody.innerHTML = '';
     for (const c of lista) {

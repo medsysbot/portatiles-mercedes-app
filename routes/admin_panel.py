@@ -24,7 +24,12 @@ import psycopg2.extras
 
 load_dotenv()
 
-DATABASE_URL: str | None = os.getenv("DATABASE_URL")
+def get_database_url() -> str | None:
+    """Devuelve la URL de conexión a la base de datos."""
+    db_url = os.getenv("DATABASE_URL")
+    if not db_url:
+        logger.warning("DATABASE_URL no establecida")
+    return db_url
 
 
 supabase = None
@@ -60,34 +65,36 @@ class Cliente(BaseModel):
     email: str
 
 
-def obtener_clientes_db() -> list | None:
+def obtener_clientes_db() -> list:
     """Obtiene todos los clientes desde la base de datos."""
-    if not DATABASE_URL:
-        if supabase:
-            try:
-                resp = supabase.table("datos_personales_clientes").select("*").execute()
-            except Exception as exc:  # pragma: no cover - debug
-                logger.error("Error consultando clientes en Supabase: %s", exc)
-                return None
-            if getattr(resp, "error", None) is not None:
-                logger.error("Error de Supabase: %s", resp.error)
-                return None
-            return getattr(resp, "data", []) or []
-        logger.error("Supabase no configurado")
-        return None
-    try:
-        conn = psycopg2.connect(DATABASE_URL)
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute(
-            "SELECT nombre, apellido, dni, direccion, telefono, cuit, razon_social, email FROM datos_personales_clientes"
-        )
-        rows = cur.fetchall()
-        cur.close()
-        conn.close()
-        return [dict(r) for r in rows]
-    except Exception as exc:  # pragma: no cover - errores de conexión
-        logger.error("Error consultando clientes en Postgres: %s", exc)
-        return None
+    db_url = get_database_url()
+    if db_url:
+        try:
+            logger.info("Conectando a Postgres en %s", db_url.split("@")[1])
+            conn = psycopg2.connect(db_url)
+            cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+            cur.execute(
+                "SELECT nombre, apellido, dni, direccion, telefono, cuit, razon_social, email FROM datos_personales_clientes"
+            )
+            rows = cur.fetchall()
+            cur.close()
+            conn.close()
+            return [dict(r) for r in rows]
+        except Exception as exc:  # pragma: no cover - errores de conexión
+            logger.exception("Fallo de conexión a Postgres: %s", exc)
+            raise HTTPException(status_code=500, detail=str(exc))
+    if supabase:
+        try:
+            resp = supabase.table("datos_personales_clientes").select("*").execute()
+        except Exception as exc:  # pragma: no cover - debug
+            logger.exception("Error consultando clientes en Supabase: %s", exc)
+            raise HTTPException(status_code=500, detail=str(exc))
+        if getattr(resp, "error", None) is not None:
+            logger.error("Error de Supabase: %s", resp.error)
+            raise HTTPException(status_code=500, detail=str(resp.error))
+        return getattr(resp, "data", []) or []
+    logger.error("Base de datos no configurada")
+    raise HTTPException(status_code=500, detail="Base de datos no configurada")
 
 
 @router.get("/admin/panel", response_class=HTMLResponse)
@@ -384,10 +391,11 @@ async def admin_clientes(
 ):
     """Lista de clientes con filtros por DNI y búsqueda."""
     logger.info("Solicitud de listado de clientes")
-    clientes = obtener_clientes_db()
-    if clientes is None:
-        logger.error("Fallo obteniendo clientes")
-        raise HTTPException(status_code=500, detail="Error consultando la base de datos")
+    try:
+        clientes = obtener_clientes_db()
+    except HTTPException as exc:
+        logger.error("Fallo obteniendo clientes: %s", exc.detail)
+        raise
     if dni:
         clientes = [c for c in clientes if c.get("dni") == dni]
     if q:

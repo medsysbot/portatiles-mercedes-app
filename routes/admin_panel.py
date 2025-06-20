@@ -22,6 +22,7 @@ import logging
 import psycopg2
 import psycopg2.extras
 from supabase import create_client, Client
+from jose import jwt, JWTError
 
 load_dotenv()
 
@@ -90,9 +91,19 @@ def obtener_clientes_db() -> list:
             raise HTTPException(status_code=500, detail=str(exc))
     if supabase:
         try:
+            logger.info(
+                "==> Iniciando consulta a tabla datos_personales_clientes en Supabase (%s)",
+                SUPABASE_URL,
+            )
             resp = supabase.table("datos_personales_clientes").select("*").execute()
+            logger.info(
+                "==> Respuesta Supabase: result=%s, data=%s, error=%s",
+                resp,
+                getattr(resp, "data", None),
+                getattr(resp, "error", None),
+            )
         except Exception as exc:  # pragma: no cover - debug
-            logger.exception("Error consultando clientes en Supabase: %s", exc)
+            logger.exception("🔥 Error al consultar clientes en Supabase:")
             raise HTTPException(status_code=500, detail=str(exc))
         if getattr(resp, "error", None) is not None:
             logger.error("Error de Supabase: %s", resp.error)
@@ -141,7 +152,32 @@ def admin_clientes_page(
     page: int = Query(1, gt=0),
 ):
     """Administración de clientes con filtros y paginación."""
-    clientes = obtener_clientes_db()
+    usuario = "desconocido"
+    rol_usuario = "desconocido"
+    token = request.cookies.get("access_token")
+    auth_header = request.headers.get("Authorization")
+    if auth_header and auth_header.startswith("Bearer "):
+        token = auth_header.split(" ", 1)[1]
+    secret = os.getenv("JWT_SECRET")
+    if token and secret:
+        try:
+            payload = jwt.decode(token, secret, algorithms=["HS256"])
+            usuario = payload.get("nombre", "desconocido")
+            rol_usuario = payload.get("rol", "desconocido")
+        except JWTError:
+            logger.warning("Token inválido al acceder a /admin/clientes")
+    logger.info(
+        "==> Consulta de clientes recibida, usuario: %s, rol: %s",
+        usuario,
+        rol_usuario,
+    )
+    try:
+        logger.info("==> Iniciando consulta a clientes en la base de datos")
+        clientes = obtener_clientes_db()
+        logger.info("==> Datos recuperados: %d registros", len(clientes))
+    except Exception as e:  # pragma: no cover - debug
+        logger.exception("🔥 Error al consultar clientes en la base de datos:")
+        raise HTTPException(status_code=500, detail=f"Error al consultar clientes: {str(e)}")
     mensaje_error = None
     if clientes is None:
         mensaje_error = "Error consultando la base de datos"

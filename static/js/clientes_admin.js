@@ -37,14 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const resp = await fetchConAuth(`/admin/api/clientes?${params.toString()}`);
       if (!resp.ok) {
         const data = await resp.json().catch(() => ({}));
-        const msg = data.detail || 'Error obteniendo datos';
+        const msg = data.detail || 'No se pudo consultar la base de datos';
         mostrarMensaje(msg, 'danger');
         throw new Error(msg);
       }
-      const lista = await resp.json();
+      const data = await resp.json();
+      const lista = data.clientes || [];
       tabla.clear();
       tabla.rows.add(lista).draw();
-      mostrarMensaje('', '');
+      if (lista.length === 0) {
+        mostrarMensaje('No hay clientes registrados', '');
+      } else {
+        mostrarMensaje('', '');
+      }
     } catch (e) {
       console.error('Error obteniendo clientes', e);
       tabla.clear().draw();

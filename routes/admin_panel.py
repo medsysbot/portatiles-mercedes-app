@@ -21,8 +21,17 @@ import os
 import logging
 import psycopg2
 import psycopg2.extras
+from supabase import create_client, Client
 
 load_dotenv()
+
+# Conexión a Supabase (mismo enfoque que en cliente_panel)
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
+supabase: Client | None = None
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 
 def get_database_url() -> str | None:
     """Devuelve la URL de conexión a la base de datos."""
@@ -31,8 +40,6 @@ def get_database_url() -> str | None:
         logger.warning("DATABASE_URL no establecida")
     return db_url
 
-
-supabase = None
 
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -73,9 +80,7 @@ def obtener_clientes_db() -> list:
             logger.info("Conectando a Postgres en %s", db_url.split("@")[1])
             conn = psycopg2.connect(db_url)
             cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-            cur.execute(
-                "SELECT nombre, apellido, dni, direccion, telefono, cuit, razon_social, email FROM datos_personales_clientes"
-            )
+            cur.execute("SELECT * FROM datos_personales_clientes")
             rows = cur.fetchall()
             cur.close()
             conn.close()
@@ -122,12 +127,11 @@ def admin_facturacion_view(request: Request):
     return templates.TemplateResponse("facturacion_admin.html", {"request": request})
 
 
-
-
 @router.get("/admin/bash-generator", response_class=HTMLResponse)
 def admin_bash_generator_view(request: Request):
     """Pantalla para generación de scripts bash"""
     return templates.TemplateResponse("bash_generator_admin.html", {"request": request})
+
 
 # Secciones del panel
 @router.get("/admin/clientes", response_class=HTMLResponse)
@@ -166,7 +170,9 @@ def admin_clientes_page(
 @router.get("/admin/clientes/nuevo", response_class=HTMLResponse)
 def form_nuevo_cliente(request: Request):
     """Formulario para crear un nuevo cliente."""
-    return templates.TemplateResponse("cliente_form.html", {"request": request, "cliente": None})
+    return templates.TemplateResponse(
+        "cliente_form.html", {"request": request, "cliente": None}
+    )
 
 
 @router.post("/admin/clientes/nuevo")
@@ -210,6 +216,7 @@ def crear_cliente(
 
 # ============================ Empleados ============================
 
+
 @router.get("/admin/empleados", response_class=HTMLResponse)
 def admin_empleados_page(request: Request, mensaje: str | None = Query(None)):
     """Listado de empleados y administradores."""
@@ -217,7 +224,9 @@ def admin_empleados_page(request: Request, mensaje: str | None = Query(None)):
     if supabase:
         resp = supabase.table("usuarios").select("*").execute()
         empleados = [
-            u for u in getattr(resp, "data", []) or [] if u.get("rol") in ("Empleado", "Administrador")
+            u
+            for u in getattr(resp, "data", []) or []
+            if u.get("rol") in ("Empleado", "Administrador")
         ]
     contexto = {"request": request, "empleados": empleados, "mensaje": mensaje}
     return templates.TemplateResponse("empleados_admin.html", contexto)
@@ -242,20 +251,26 @@ def crear_empleado(
     if rol not in ("Empleado", "Administrador"):
         raise HTTPException(status_code=400, detail="Rol inv\u00e1lido")
     if supabase:
-        existe = (
-            supabase.table("usuarios").select("id").eq("email", email).execute()
-        )
+        existe = supabase.table("usuarios").select("id").eq("email", email).execute()
         if getattr(existe, "data", []):
-            raise HTTPException(status_code=400, detail="Ese email ya est\u00e1 registrado")
-        insertar = supabase.table("usuarios").insert({
-            "nombre": nombre,
-            "email": email,
-            # Modificación: El alta de empleados requiere definir una contraseña inicial
-            # para que pueda autenticarse y obtener su token JWT.
-            "password_hash": bcrypt.hash(password),
-            "rol": rol,
-            "activo": True,
-        }).execute()
+            raise HTTPException(
+                status_code=400, detail="Ese email ya est\u00e1 registrado"
+            )
+        insertar = (
+            supabase.table("usuarios")
+            .insert(
+                {
+                    "nombre": nombre,
+                    "email": email,
+                    # Modificación: El alta de empleados requiere definir una contraseña inicial
+                    # para que pueda autenticarse y obtener su token JWT.
+                    "password_hash": bcrypt.hash(password),
+                    "rol": rol,
+                    "activo": True,
+                }
+            )
+            .execute()
+        )
         # <!--
         # Eliminado envío y lógica de campos creado_en y actualizado_en porque ya no existen en la tabla usuarios.
         # -->
@@ -308,7 +323,9 @@ def editar_cliente(
         for campo, val in datos.items():
             if not val:
                 raise HTTPException(status_code=400, detail=f"Campo '{campo}' faltante")
-        supabase.table("datos_personales_clientes").update(datos).eq("dni", dni).execute()
+        supabase.table("datos_personales_clientes").update(datos).eq(
+            "dni", dni
+        ).execute()
     return RedirectResponse("/admin/clientes", status_code=303)
 
 
@@ -317,11 +334,13 @@ def eliminar_cliente(dni: str):
     """Elimina un cliente por su DNI."""
     return RedirectResponse("/admin/clientes", status_code=303)
 
+
 @router.get("/admin/alquileres", response_class=HTMLResponse)
 def admin_alquileres_page(request: Request):
     """Gestión de alquileres."""
     # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("alquileres_admin.html", {"request": request})
+
 
 @router.get("/admin/ventas", response_class=HTMLResponse)
 def admin_ventas_page(request: Request):
@@ -329,11 +348,13 @@ def admin_ventas_page(request: Request):
     # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("ventas_admin.html", {"request": request})
 
+
 @router.get("/admin/limpiezas", response_class=HTMLResponse)
 def admin_limpiezas_page(request: Request):
     """Registro de limpiezas."""
     # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("limpiezas_admin.html", {"request": request})
+
 
 @router.get("/admin/limpieza", response_class=HTMLResponse)
 def admin_limpieza_page(request: Request):
@@ -341,17 +362,20 @@ def admin_limpieza_page(request: Request):
     # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("limpieza_admin.html", {"request": request})
 
+
 @router.get("/admin/morosos", response_class=HTMLResponse)
 def admin_morosos_page(request: Request):
     """Listado de clientes morosos."""
     # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("morosos_admin.html", {"request": request})
 
+
 @router.get("/admin/emails", response_class=HTMLResponse)
 def admin_emails_page(request: Request):
     """Módulo de envíos de emails."""
     # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("emails_admin.html", {"request": request})
+
 
 @router.get("/admin/ia-respuestas", response_class=HTMLResponse)
 @router.get("/admin/ia/respuestas", response_class=HTMLResponse)
@@ -360,17 +384,22 @@ def admin_ia_respuestas_page(request: Request):
     # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("ia_respuestas_admin.html", {"request": request})
 
+
 @router.get("/admin/ia/clasificados", response_class=HTMLResponse)
 def admin_ia_clasificados_page(request: Request):
     """Clasificados generados por IA."""
     # Sección conectada correctamente. Listo para insertar datos reales.
-    return templates.TemplateResponse("ia_clasificados_admin.html", {"request": request})
+    return templates.TemplateResponse(
+        "ia_clasificados_admin.html", {"request": request}
+    )
+
 
 @router.get("/admin/graficos", response_class=HTMLResponse)
 def admin_graficos_page(request: Request):
     """Visualización de gráficos y estadísticas."""
     # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("graficos_admin.html", {"request": request})
+
 
 @router.get("/admin/facturas", response_class=HTMLResponse)
 def admin_facturas_page(request: Request):
@@ -407,7 +436,7 @@ async def admin_clientes(
             or q_low in (c.get("dni") or "").lower()
             or q_low in (c.get("email") or "").lower()
         ]
-    return clientes
+    return {"clientes": clientes}
 
 
 @router.get("/admin/api/alquileres")

@@ -1,5 +1,5 @@
 // Archivo: static/js/clientes_admin.js
-// Descripción: Carga y filtrado dinámico de clientes desde Supabase
+// Descripción: Carga y filtrado dinámico de clientes
 // Proyecto: Portátiles Mercedes
 // Última modificación: 2025-06-19
 

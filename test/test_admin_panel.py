@@ -46,6 +46,7 @@ def test_admin_api_clientes_busqueda(monkeypatch):
         {'nombre': 'Juan', 'apellido': 'Perez', 'dni': '123', 'email': 'juan@test.com', 'estado': 'activo'},
     ]
     monkeypatch.setattr(admin_panel, 'supabase', MockSupabase(data))
+    monkeypatch.setattr(admin_panel, 'DATABASE_URL', None)
     response = client.get('/admin/api/clientes?q=456', headers=auth_headers())
     assert response.status_code == 200
     assert len(response.json()) == 1

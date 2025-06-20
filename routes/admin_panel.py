@@ -16,6 +16,14 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from passlib.hash import bcrypt
+from dotenv import load_dotenv
+import os
+import psycopg2
+import psycopg2.extras
+
+load_dotenv()
+
+DATABASE_URL: str | None = os.getenv("DATABASE_URL")
 
 
 supabase = None
@@ -37,6 +45,28 @@ class Cliente(BaseModel):
     cuit: str
     razon_social: str
     email: str
+
+
+def obtener_clientes_db() -> list | None:
+    """Obtiene todos los clientes desde la base de datos."""
+    if not DATABASE_URL:
+        if supabase:
+            resp = supabase.table("datos_personales_clientes").select("*").execute()
+            return getattr(resp, "data", []) or []
+        return None
+    try:
+        conn = psycopg2.connect(DATABASE_URL)
+        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(
+            "SELECT nombre, apellido, dni, direccion, telefono, cuit, razon_social, email FROM datos_personales_clientes"
+        )
+        rows = cur.fetchall()
+        cur.close()
+        conn.close()
+        return [dict(r) for r in rows]
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        print("Error consultando clientes:", exc)
+        return None
 
 
 @router.get("/admin/panel", response_class=HTMLResponse)
@@ -79,23 +109,25 @@ def admin_clientes_page(
     page: int = Query(1, gt=0),
 ):
     """Administración de clientes con filtros y paginación."""
-    clientes = []
-    if supabase:
-        resp = supabase.table("datos_personales_clientes").select("*").execute()
-        clientes = getattr(resp, "data", []) or []
-        if q:
-            q_low = q.lower()
-            clientes = [
-                c
-                for c in clientes
-                if q_low in (c.get("nombre") or "").lower()
-                or q_low in (c.get("dni") or "").lower()
-                or q_low in (c.get("email") or "").lower()
-            ]
+    clientes = obtener_clientes_db()
+    mensaje_error = None
+    if clientes is None:
+        mensaje_error = "Error consultando la base de datos"
+        clientes = []
+    if q and clientes:
+        q_low = q.lower()
+        clientes = [
+            c
+            for c in clientes
+            if q_low in (c.get("nombre") or "").lower()
+            or q_low in (c.get("dni") or "").lower()
+            or q_low in (c.get("email") or "").lower()
+        ]
 
     contexto = {
         "request": request,
         "clientes": clientes,
+        "mensaje_error": mensaje_error,
         "pagina_actual": page,
         "hay_mas": False,
         "query_str": q or "",
@@ -330,31 +362,21 @@ async def admin_clientes(
     q: str | None = Query(None),
 ):
     """Lista de clientes con filtros por DNI y búsqueda."""
-    if supabase:
-        consulta = supabase.table("datos_personales_clientes").select("*")
-        if dni:
-            consulta = consulta.eq("dni", dni)
-        if q:
-            texto = f"%{q}%"
-            if hasattr(consulta, "or_"):
-                consulta = consulta.or_(
-                    f"nombre.ilike.{texto},dni.ilike.{texto},email.ilike.{texto}"
-                )
-            else:
-                resp = consulta.execute()
-                clientes = getattr(resp, "data", []) or []
-                q_low = q.lower()
-                return [
-                    c
-                    for c in clientes
-                    if q_low in (c.get("nombre") or "").lower()
-                    or q_low in (c.get("dni") or "").lower()
-                    or q_low in (c.get("email") or "").lower()
-                ]
-        resp = consulta.execute()
-        clientes = getattr(resp, "data", []) or []
-        return clientes
-    return []
+    clientes = obtener_clientes_db()
+    if clientes is None:
+        raise HTTPException(status_code=500, detail="Error consultando la base de datos")
+    if dni:
+        clientes = [c for c in clientes if c.get("dni") == dni]
+    if q:
+        q_low = q.lower()
+        clientes = [
+            c
+            for c in clientes
+            if q_low in (c.get("nombre") or "").lower()
+            or q_low in (c.get("dni") or "").lower()
+            or q_low in (c.get("email") or "").lower()
+        ]
+    return clientes
 
 
 @router.get("/admin/api/alquileres")

@@ -76,6 +76,20 @@ def test_admin_api_clientes_busqueda(monkeypatch):
     assert data["clientes"][0]["dni"] == "456"
 
 
+def test_info_todos_clientes(monkeypatch):
+    datos = [
+        {"dni": "1", "nombre": "Ana", "apellido": "G", "email": "a@test.com"},
+        {"dni": "2", "nombre": "Juan", "apellido": "P", "email": "j@test.com"},
+    ]
+    monkeypatch.setattr(admin_panel, "supabase", MockSupabase(datos))
+    monkeypatch.setattr(admin_panel, "get_database_url", lambda: None)
+    resp = client.get("/info_todos_clientes")
+    assert resp.status_code == 200
+    lista = resp.json()
+    assert isinstance(lista, list)
+    assert len(lista) == 2
+
+
 def test_admin_empleados_html(monkeypatch):
     monkeypatch.setattr(admin_panel, "supabase", EmpleadoMockSupabase())
     resp = client.get("/admin/empleados")

@@ -450,6 +450,23 @@ async def admin_clientes_todos():
     return {"clientes": clientes}
 
 
+@router.get("/info_todos_clientes")
+async def info_todos_clientes():
+    """Retorna todos los clientes registrados."""
+    if not supabase:
+        logger.error("Supabase no configurado")
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        result = (
+            supabase.table("datos_personales_clientes").select("*").execute()
+        )
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("Error al consultar todos los clientes: %s", exc)
+        raise HTTPException(status_code=500, detail="Error consultando datos")
+
+    return getattr(result, "data", []) or []
+
+
 @router.get("/admin/api/alquileres")
 async def admin_alquileres(
     desde: date | None = Query(None),

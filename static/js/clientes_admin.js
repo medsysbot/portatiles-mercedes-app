@@ -1,7 +1,7 @@
 // Archivo: static/js/clientes_admin.js
 // Descripción: Carga y filtrado dinámico de clientes
 // Proyecto: Portátiles Mercedes
-// Última modificación: 2025-06-19
+// Última modificación: 2025-06-21
 
 function handleUnauthorized() {
   localStorage.removeItem('access_token');
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function obtenerClientes() {
     try {
-      const resp = await fetchConAuth('/admin/api/clientes');
+      const resp = await fetchConAuth('/info_todos_clientes');
       if (!resp.ok) {
         const data = await resp.json().catch(() => ({}));
         const msg = data.detail || 'No se pudo consultar la base de datos';
@@ -109,4 +109,5 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   obtenerClientes();
+  setInterval(obtenerClientes, 60000);
 });

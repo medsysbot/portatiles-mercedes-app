@@ -20,6 +20,7 @@
   {% if mensaje_error %}
   <div class="alert alert-danger">{{ mensaje_error }}</div>
   {% endif %}
+  <div id="mensajeClientes" class="alert mt-3" style="display:none"></div>
   {% if not clientes %}
   <p>No hay clientes registrados</p>
   {% endif %}

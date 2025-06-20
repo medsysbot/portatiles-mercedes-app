@@ -3,29 +3,9 @@
 {% block body_class %}hold-transition sidebar-mini layout-fixed{% endblock %}
 
 {% block head_extra %}
-<style>
-  .splash {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.6);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1050;
-  }
-  .splash-card {
-    background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-  }
-  /* Estilos del splash conservados; el formulario de datos personales se
-     mostrará fijo en el panel, por lo que se eliminan las reglas del
-     modal anterior. */
-</style>
+  <style>
+  /* Se eliminó el estilo del splash de bienvenida */
+  </style>
 {% endblock %}
 
 {% block body %}
@@ -70,12 +50,7 @@
       <div class="container-fluid">
         <h1 id="bienvenida" class="mb-4 mt-0">Panel del Cliente</h1><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
 
-        <div id="splash" class="splash">
-          <div class="splash-card">
-            <p id="splashMensaje"></p>
-            <button id="splashCerrar" class="btn btn-primary">Cerrar</button>
-          </div>
-        </div>
+
 
 
         <!-- Sección alquileres -->

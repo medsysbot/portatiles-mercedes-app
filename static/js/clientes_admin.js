@@ -35,14 +35,34 @@ document.addEventListener('DOMContentLoaded', () => {
     if (texto) params.append('q', texto);
     try {
       const resp = await fetchConAuth(`/admin/api/clientes?${params.toString()}`);
-      if (!resp.ok) throw new Error('Error');
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        const msg = data.detail || 'Error obteniendo datos';
+        mostrarMensaje(msg, 'danger');
+        throw new Error(msg);
+      }
       const lista = await resp.json();
       tabla.clear();
       tabla.rows.add(lista).draw();
+      mostrarMensaje('', '');
     } catch (e) {
       console.error('Error obteniendo clientes', e);
       tabla.clear().draw();
     }
+  }
+
+  function mostrarMensaje(texto, tipo) {
+    const cont = document.getElementById('mensajeClientes');
+    if (!cont) return;
+    if (!texto) {
+      cont.style.display = 'none';
+      cont.textContent = '';
+      cont.classList.remove('alert-danger');
+      return;
+    }
+    cont.textContent = texto;
+    cont.classList.toggle('alert-danger', tipo === 'danger');
+    cont.style.display = 'block';
   }
 
   const buscador = document.getElementById('busquedaCliente');

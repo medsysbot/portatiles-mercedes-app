@@ -18,6 +18,7 @@ from pydantic import BaseModel
 from passlib.hash import bcrypt
 from dotenv import load_dotenv
 import os
+import logging
 import psycopg2
 import psycopg2.extras
 
@@ -27,6 +28,18 @@ DATABASE_URL: str | None = os.getenv("DATABASE_URL")
 
 
 supabase = None
+
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOG_DIR, "admin_panel.log")
+logger = logging.getLogger("admin_panel")
+logger.setLevel(logging.INFO)
+if not logger.handlers:
+    handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.propagate = False
 
 router = APIRouter()
 # Las plantillas privadas ahora se ubican en la carpeta `templates` de la raíz
@@ -51,8 +64,16 @@ def obtener_clientes_db() -> list | None:
     """Obtiene todos los clientes desde la base de datos."""
     if not DATABASE_URL:
         if supabase:
-            resp = supabase.table("datos_personales_clientes").select("*").execute()
+            try:
+                resp = supabase.table("datos_personales_clientes").select("*").execute()
+            except Exception as exc:  # pragma: no cover - debug
+                logger.error("Error consultando clientes en Supabase: %s", exc)
+                return None
+            if getattr(resp, "error", None) is not None:
+                logger.error("Error de Supabase: %s", resp.error)
+                return None
             return getattr(resp, "data", []) or []
+        logger.error("Supabase no configurado")
         return None
     try:
         conn = psycopg2.connect(DATABASE_URL)
@@ -65,7 +86,7 @@ def obtener_clientes_db() -> list | None:
         conn.close()
         return [dict(r) for r in rows]
     except Exception as exc:  # pragma: no cover - errores de conexión
-        print("Error consultando clientes:", exc)
+        logger.error("Error consultando clientes en Postgres: %s", exc)
         return None
 
 
@@ -362,8 +383,10 @@ async def admin_clientes(
     q: str | None = Query(None),
 ):
     """Lista de clientes con filtros por DNI y búsqueda."""
+    logger.info("Solicitud de listado de clientes")
     clientes = obtener_clientes_db()
     if clientes is None:
+        logger.error("Fallo obteniendo clientes")
         raise HTTPException(status_code=500, detail="Error consultando la base de datos")
     if dni:
         clientes = [c for c in clientes if c.get("dni") == dni]

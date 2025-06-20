@@ -439,6 +439,17 @@ async def admin_clientes(
     return {"clientes": clientes}
 
 
+@router.get("/admin/api/clientes/todos")
+async def admin_clientes_todos():
+    """Devuelve la lista completa de clientes sin filtros."""
+    try:
+        clientes = obtener_clientes_db()
+    except HTTPException as exc:
+        logger.error("Fallo obteniendo clientes: %s", exc.detail)
+        raise
+    return {"clientes": clientes}
+
+
 @router.get("/admin/api/alquileres")
 async def admin_alquileres(
     desde: date | None = Query(None),

@@ -22,19 +22,29 @@ async function fetchConAuth(url) {
   return resp;
 }
 
+let clientesCargados = [];
+
 document.addEventListener('DOMContentLoaded', () => {
   const tabla = $('#tablaClientes').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
     ordering: true,
+    columns: [
+      { data: 'dni' },
+      { data: 'nombre' },
+      { data: 'apellido' },
+      { data: 'direccion' },
+      { data: 'telefono' },
+      { data: 'cuit' },
+      { data: 'razon_social' },
+      { data: 'email' }
+    ]
   });
 
-  async function cargarClientes(texto = '') {
-    const params = new URLSearchParams();
-    if (texto) params.append('q', texto);
+  async function obtenerClientes() {
     try {
-      const resp = await fetchConAuth(`/admin/api/clientes?${params.toString()}`);
+      const resp = await fetchConAuth('/admin/api/clientes');
       if (!resp.ok) {
         const data = await resp.json().catch(() => ({}));
         const msg = data.detail || 'No se pudo consultar la base de datos';
@@ -42,18 +52,33 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(msg);
       }
       const data = await resp.json();
-      const lista = data.clientes || [];
-      tabla.clear();
-      tabla.rows.add(lista).draw();
-      if (lista.length === 0) {
-        mostrarMensaje('No hay clientes registrados', '');
-      } else {
-        mostrarMensaje('', '');
-      }
+      clientesCargados = data.clientes || [];
+      mostrarClientes(clientesCargados);
     } catch (e) {
       console.error('Error obteniendo clientes', e);
+      mostrarMensaje('Error consultando la base de datos', 'danger');
       tabla.clear().draw();
     }
+  }
+
+  function mostrarClientes(lista) {
+    tabla.clear();
+    tabla.rows.add(lista).draw();
+    if (lista.length === 0) {
+      mostrarMensaje('No hay clientes registrados', '');
+    } else {
+      mostrarMensaje('', '');
+    }
+  }
+
+  function filtrarClientes(texto) {
+    const q = texto.toLowerCase();
+    const filtrados = clientesCargados.filter(c =>
+      (c.nombre || '').toLowerCase().includes(q) ||
+      (c.dni || '').toLowerCase().includes(q) ||
+      (c.email || '').toLowerCase().includes(q)
+    );
+    mostrarClientes(filtrados);
   }
 
   function mostrarMensaje(texto, tipo) {
@@ -74,14 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarCliente');
   if (buscador) {
     buscador.addEventListener('input', () => {
-      cargarClientes(buscador.value.trim());
+      filtrarClientes(buscador.value.trim());
     });
   }
   if (btnBuscar) {
     btnBuscar.addEventListener('click', () => {
-      cargarClientes(buscador.value.trim());
+      filtrarClientes(buscador.value.trim());
     });
   }
 
-  cargarClientes();
+  obtenerClientes();
 });

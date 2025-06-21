@@ -19,8 +19,6 @@ from passlib.hash import bcrypt
 from dotenv import load_dotenv
 import os
 import logging
-import psycopg2
-import psycopg2.extras
 from supabase import create_client, Client
 from jose import jwt, JWTError
 
@@ -32,14 +30,6 @@ SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
 supabase: Client | None = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-
-def get_database_url() -> str | None:
-    """Devuelve la URL de conexión a la base de datos."""
-    db_url = os.getenv("DATABASE_URL")
-    if not db_url:
-        logger.warning("DATABASE_URL no establecida")
-    return db_url
 
 
 LOG_DIR = "logs"
@@ -74,43 +64,19 @@ class Cliente(BaseModel):
 
 
 def obtener_clientes_db() -> list:
-    """Obtiene todos los clientes desde la base de datos."""
-    db_url = get_database_url()
-    if db_url:
-        try:
-            logger.info("Conectando a Postgres en %s", db_url.split("@")[1])
-            conn = psycopg2.connect(db_url)
-            cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-            cur.execute("SELECT * FROM datos_personales_clientes")
-            rows = cur.fetchall()
-            cur.close()
-            conn.close()
-            return [dict(r) for r in rows]
-        except Exception as exc:  # pragma: no cover - errores de conexión
-            logger.exception("Fallo de conexión a Postgres: %s", exc)
-            raise HTTPException(status_code=500, detail=str(exc))
+    """Obtiene todos los clientes desde Supabase."""
     if supabase:
         try:
             logger.info(
-                "==> Iniciando consulta a tabla datos_personales_clientes en Supabase (%s)",
-                SUPABASE_URL,
+                "==> Iniciando consulta a tabla datos_personales_clientes en Supabase"
             )
             resp = supabase.table("datos_personales_clientes").select("*").execute()
-            logger.info(
-                "==> Respuesta Supabase: result=%s, data=%s, error=%s",
-                resp,
-                getattr(resp, "data", None),
-                getattr(resp, "error", None),
-            )
-        except Exception as exc:  # pragma: no cover - debug
+            return getattr(resp, "data", []) or []
+        except Exception as exc:
             logger.exception("🔥 Error al consultar clientes en Supabase:")
             raise HTTPException(status_code=500, detail=str(exc))
-        if getattr(resp, "error", None) is not None:
-            logger.error("Error de Supabase: %s", resp.error)
-            raise HTTPException(status_code=500, detail=str(resp.error))
-        return getattr(resp, "data", []) or []
-    logger.error("Base de datos no configurada")
-    raise HTTPException(status_code=500, detail="Base de datos no configurada")
+    logger.error("Supabase no configurado")
+    raise HTTPException(status_code=500, detail="Supabase no configurado")
 
 
 @router.get("/admin/panel", response_class=HTMLResponse)

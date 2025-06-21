@@ -1,7 +1,5 @@
 // Archivo: static/js/clientes_admin.js
-// Descripción: Carga y filtrado dinámico de clientes
 // Proyecto: Portátiles Mercedes
-// Última modificación: 2025-06-21
 
 function handleUnauthorized() {
   localStorage.removeItem('access_token');
@@ -52,7 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error('❌ Error al cargar clientes:', error);
       mostrarMensaje('Error consultando la base de datos', 'danger');
-      tabla.clear().draw();
+      // Solo borrar la tabla si está vacía desde el principio
+      if (clientesCargados.length === 0) {
+        tabla.clear().draw();
+      }
     }
   }
 

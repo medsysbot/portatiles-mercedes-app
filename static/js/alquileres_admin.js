@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
       direccion: "Calle 1",
       inicio: "2024-05-01",
       fin: "2024-06-01",
-      limpieza: "2024-05-20"
+      observaciones: "Contrato anual"
     },
     {
       numero: "B002",
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
       direccion: "Calle 2",
       inicio: "2024-06-10",
       fin: "2024-07-10",
-      limpieza: "2024-06-25"
+      observaciones: "Pendiente de firma"
     }
   ];
 
@@ -27,7 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
       <td>${item.direccion}</td>
       <td>${item.inicio}</td>
       <td>${item.fin}</td>
-      <td>${item.limpieza}</td>
+      <td>${item.observaciones}</td>
+      <td><button class='btn btn-danger btn-sm'>Eliminar</button></td>
     `;
     tabla.appendChild(fila);
   });

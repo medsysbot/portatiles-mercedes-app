@@ -1,5 +1,9 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Alquileres{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{% endblock %}
 {% block content %}
 <h1 class="titulo-seccion">Administración de alquileres</h1>
 
@@ -74,5 +78,6 @@
   </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="{{ url_for('static', path='/js/alquileres_admin.js') }}"></script>
 {% endblock %}

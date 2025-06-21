@@ -235,3 +235,47 @@ def test_crear_y_login_empleado(monkeypatch):
     )
     assert login_resp.status_code == 200
     assert "access_token" in login_resp.json()
+
+
+class AlquilerSupabase:
+    def __init__(self, data=None):
+        self.alquileres = data or []
+
+    def table(self, name):
+        if name == "alquileres":
+            return InMemoryQuery(self.alquileres)
+        return InMemoryQuery([])
+
+
+def test_crear_alquiler_ok(monkeypatch):
+    db = AlquilerSupabase([])
+    monkeypatch.setattr(admin_panel, "supabase", db)
+    datos = {
+        "numero_bano": "B1",
+        "cliente": "Juan",
+        "direccion": "Dir",
+        "inicio_contrato": "2025-01-01",
+        "fin_contrato": "2025-12-31",
+        "observaciones": "Obs"
+    }
+    resp = client.post("/admin/alquileres/nuevo", json=datos)
+    assert resp.status_code == 200
+    assert resp.json().get("ok") is True
+    assert db.alquileres and db.alquileres[0]["numero_bano"] == "B1"
+
+
+def test_crear_alquiler_duplicado(monkeypatch):
+    existente = [{"numero_bano": "B2"}]
+    db = AlquilerSupabase(existente)
+    monkeypatch.setattr(admin_panel, "supabase", db)
+    datos = {
+        "numero_bano": "B2",
+        "cliente": "Ana",
+        "direccion": "Dir",
+        "inicio_contrato": "2025-01-01",
+        "fin_contrato": None,
+        "observaciones": "Obs"
+    }
+    resp = client.post("/admin/alquileres/nuevo", json=datos)
+    assert resp.status_code == 200
+    assert resp.json().get("error")

@@ -3,9 +3,9 @@
 {% block content %}
 <h1 class="titulo-seccion">Administración de alquileres</h1>
 
-<div class="acciones-panel mb-3 d-flex gap-2">
-  <input type="text" id="busquedaAlquileres" class="form-control" placeholder="Buscar alquiler...">
-  <button id="btnNuevoAlquiler" class="btn btn-primary">Nuevo alquiler</button>
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <input type="text" id="busquedaAlquileres" class="form-control w-50" placeholder="Buscar alquiler...">
+  <button id="btnNuevoAlquiler" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalNuevoAlquiler">Nuevo alquiler</button>
 </div>
 
 <div class="table-responsive bg-light p-3">
@@ -17,11 +17,56 @@
         <th>Dirección</th>
         <th>Inicio contrato</th>
         <th>Fin contrato</th>
-        <th>Última limpieza</th>
+        <th>Observaciones</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
+
+  <!-- Modal Nuevo Alquiler -->
+  <div class="modal fade" id="modalNuevoAlquiler" tabindex="-1" aria-labelledby="modalNuevoAlquilerLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalNuevoAlquilerLabel">Nuevo alquiler</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formNuevoAlquiler">
+            <div class="mb-3">
+              <label for="numeroBano" class="form-label">N° Baño</label>
+              <input type="text" class="form-control" id="numeroBano" name="numeroBano">
+            </div>
+            <div class="mb-3">
+              <label for="clienteAlquiler" class="form-label">Cliente</label>
+              <input type="text" class="form-control" id="clienteAlquiler" name="clienteAlquiler">
+            </div>
+            <div class="mb-3">
+              <label for="direccionAlquiler" class="form-label">Dirección</label>
+              <input type="text" class="form-control" id="direccionAlquiler" name="direccionAlquiler">
+            </div>
+            <div class="mb-3">
+              <label for="inicioAlquiler" class="form-label">Fecha inicio</label>
+              <input type="date" class="form-control" id="inicioAlquiler" name="inicioAlquiler">
+            </div>
+            <div class="mb-3">
+              <label for="finAlquiler" class="form-label">Fecha fin</label>
+              <input type="date" class="form-control" id="finAlquiler" name="finAlquiler">
+            </div>
+            <div class="mb-3">
+              <label for="observacionesAlquiler" class="form-label">Observaciones</label>
+              <textarea class="form-control" id="observacionesAlquiler" name="observacionesAlquiler" rows="3"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-primary" id="guardarAlquiler">Guardar alquiler</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 

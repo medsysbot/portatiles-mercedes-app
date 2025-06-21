@@ -1,3 +1,12 @@
+"""
+----------------------------------------------------------
+Archivo: routes/clientes.py
+Descripción: Endpoints para consultas de clientes
+Última modificación: 2025-06-20
+Proyecto: Portátiles Mercedes
+----------------------------------------------------------
+"""
+
 from fastapi import APIRouter, HTTPException
 from supabase import create_client
 import os
@@ -5,7 +14,7 @@ import os
 router = APIRouter()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY")
+SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
 supabase = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
@@ -17,7 +26,7 @@ async def obtener_clientes():
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
         print("\ud83d\udd0d Solicitando clientes desde Supabase...")
-        response = supabase.table("clientes").select("*").execute()
+        response = supabase.table("datos_personales_clientes").select("*").execute()
         print("\u2705 Clientes obtenidos:", response.data)
         return response.data
     except Exception as e:

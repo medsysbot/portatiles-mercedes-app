@@ -8,7 +8,7 @@ Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
 """
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from datetime import date
 from supabase import create_client, Client

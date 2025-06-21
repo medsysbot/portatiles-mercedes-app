@@ -494,72 +494,7 @@ async def info_todos_clientes():
     return getattr(result, "data", []) or []
 
 
-@router.get("/admin/api/alquileres")
-async def admin_alquileres():
-    """Devuelve la lista de alquileres registrados."""
-    if not supabase:
-        logger.error("Supabase no configurado")
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
-    try:
-        result = supabase.table("alquileres").select("*").execute()
-    except Exception as exc:  # pragma: no cover - errores de conexión
-        logger.error("Error consultando alquileres: %s", exc)
-        raise HTTPException(status_code=500, detail="Error consultando datos")
-    return getattr(result, "data", []) or []
 
-
-@router.post("/admin/api/alquileres")
-async def crear_alquiler(alquiler: AlquilerNuevo):
-    """Inserta un nuevo alquiler en la base."""
-    if not supabase:
-        logger.error("Supabase no configurado")
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
-    datos = alquiler.model_dump()
-    if datos.get("inicio_contrato"):
-        datos["inicio_contrato"] = alquiler.inicio_contrato.isoformat()
-    if datos.get("fin_contrato"):
-        datos["fin_contrato"] = alquiler.fin_contrato.isoformat()
-    try:
-        supabase.table("alquileres").insert(datos).execute()
-    except Exception as exc:  # pragma: no cover - errores de conexión
-        logger.error("Error insertando alquiler: %s", exc)
-        raise HTTPException(status_code=500, detail="Error insertando alquiler")
-    return {"status": "ok"}
-
-
-@router.post("/admin/alquileres/nuevo")
-async def crear_alquiler_nuevo(alquiler: AlquilerNuevo):
-    """Inserta un nuevo alquiler verificando duplicados."""
-    if not supabase:
-        logger.error("Supabase no configurado")
-        return {"error": "Supabase no configurado"}
-
-    try:
-        existente = (
-            supabase.table("alquileres")
-            .select("numero_bano")
-            .eq("numero_bano", alquiler.numero_bano)
-            .single()
-            .execute()
-        )
-        if getattr(existente, "data", None):
-            return {"error": "Ya existe un alquiler con ese número de baño"}
-    except Exception as exc:  # pragma: no cover - errores de conexión
-        logger.error("Error verificando duplicados: %s", exc)
-        return {"error": "Error consultando datos"}
-
-    datos = alquiler.model_dump()
-    if datos.get("inicio_contrato"):
-        datos["inicio_contrato"] = alquiler.inicio_contrato.isoformat()
-    if datos.get("fin_contrato"):
-        datos["fin_contrato"] = alquiler.fin_contrato.isoformat()
-    try:
-        supabase.table("alquileres").insert(datos).execute()
-    except Exception as exc:  # pragma: no cover - errores de conexión
-        logger.error("Error insertando alquiler: %s", exc)
-        return {"error": "Error insertando alquiler"}
-
-    return {"ok": True}
 
 
 @router.get("/admin/api/ventas")

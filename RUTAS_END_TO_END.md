@@ -51,7 +51,8 @@
 | POST | /admin/clientes/{dni}/editar | Actualizar cliente | Redirección | Sí |
 | POST | /admin/clientes/{dni}/eliminar | Eliminar cliente | Redirección | Sí |
 | GET | /admin/alquileres | Vista de alquileres | alquileres_admin.html | Sí |
-| POST | /admin/alquileres/nuevo | Guardar nuevo alquiler | JSON | Sí |
+| POST | /admin/alquileres/nuevo | Crear nuevo alquiler en la tabla 'alquileres' | JSON | Sí |
+| GET  | /admin/api/alquileres  | Listar todos los alquileres desde la tabla 'alquileres' | JSON | Sí |
 | GET | /admin/ventas | Consulta de ventas | JSON | Sí |
 | GET | /admin/limpiezas | Consulta de limpiezas | JSON | Sí |
 | POST | /ejecutar_alertas | Ejecuta manualmente las alertas programadas | JSON | Sí |

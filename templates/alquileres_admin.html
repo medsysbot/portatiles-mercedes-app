@@ -40,12 +40,30 @@
       </div>
       <div class="modal-body">
         <form id="formNuevoAlquiler">
-          <input type="text" id="numero_bano" class="form-control mb-2" placeholder="Número de baño" required>
-          <input type="text" id="cliente" class="form-control mb-2" placeholder="Cliente" required>
-          <input type="text" id="direccion" class="form-control mb-2" placeholder="Dirección">
-          <input type="date" id="inicio_contrato" class="form-control mb-2" placeholder="Inicio contrato" required>
-          <input type="date" id="fin_contrato" class="form-control mb-2" placeholder="Fin contrato">
-          <textarea id="observaciones" class="form-control mb-2" placeholder="Observaciones"></textarea>
+          <div class="mb-3">
+            <label for="numero_bano" class="form-label">Número de baño *</label>
+            <input type="text" id="numero_bano" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="cliente" class="form-label">Cliente *</label>
+            <input type="text" id="cliente" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input type="text" id="direccion" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="inicio_contrato" class="form-label">Fecha de inicio *</label>
+            <input type="date" id="inicio_contrato" class="form-control" required>
+          </div>
+          <div class="mb-3">
+            <label for="fin_contrato" class="form-label">Fecha de fin</label>
+            <input type="date" id="fin_contrato" class="form-control">
+          </div>
+          <div class="mb-3">
+            <label for="observaciones" class="form-label">Observaciones</label>
+            <textarea id="observaciones" class="form-control"></textarea>
+          </div>
         </form>
       </div>
       <div class="modal-footer">

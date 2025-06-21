@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = bootstrap.Modal ? new bootstrap.Modal(modalEl) : null;
   const form = document.getElementById('formNuevoAlquiler');
   const btnGuardar = document.getElementById('btnGuardarAlquiler');
+  const btnNuevo = document.getElementById('btnNuevoAlquiler');
 
   let alquileres = [];
 
@@ -48,6 +49,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnBuscar?.addEventListener('click', filtrar);
   buscador?.addEventListener('input', filtrar);
 
+  btnNuevo?.addEventListener('click', () => {
+    modal?.show();
+  });
+
   btnGuardar?.addEventListener('click', async () => {
     const datos = {
       numero_bano: document.getElementById('numero_bano').value.trim(),
@@ -67,27 +72,19 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
       });
-      if (!resp.ok) throw new Error('Error al guardar');
+      const result = await resp.json();
+      if (!resp.ok || result.error) {
+        const msg = result.error || 'Error al guardar';
+        throw new Error(msg);
+      }
       form.reset();
       modal?.hide();
-      alert('Alquiler guardado correctamente');
       await cargarAlquileres();
     } catch (err) {
       console.error('Error guardando alquiler:', err);
-      alert('Error al guardar alquiler');
+      alert(err.message || 'Error al guardar alquiler');
     }
   });
 
   cargarAlquileres();
-});
-
-document.addEventListener("DOMContentLoaded", () => {
-  const nuevoBtn = document.getElementById("btnNuevoAlquiler");
-
-  if (nuevoBtn) {
-    nuevoBtn.addEventListener("click", () => {
-      const modal = new bootstrap.Modal(document.getElementById("modalNuevoAlquiler"));
-      modal.show();
-    });
-  }
 });

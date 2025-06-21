@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const cuerpoTabla = document.querySelector('#tablaAlquileres tbody');
   const buscador = document.getElementById('busquedaAlquileres');
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
   const modalEl = document.getElementById('modalNuevoAlquiler');
@@ -8,38 +7,43 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnGuardar = document.getElementById('btnGuardarAlquiler');
   const btnNuevo = document.getElementById('btnNuevoAlquiler');
 
-  let alquileres = [];
+  let alquileresCargados = [];
+
+  const tabla = $('#tablaAlquileres').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+    columns: [
+      { data: 'numero_bano' },
+      { data: 'cliente' },
+      { data: 'direccion' },
+      { data: 'inicio_contrato' },
+      { data: 'fin_contrato' },
+      { data: 'observaciones' },
+      { data: null }
+    ]
+  });
 
   async function cargarAlquileres() {
     try {
       const resp = await fetch('/admin/api/alquileres');
       if (!resp.ok) throw new Error('Error consultando alquileres');
-      alquileres = await resp.json();
-      mostrarAlquileres(alquileres);
+      alquileresCargados = await resp.json();
+      mostrarAlquileres(alquileresCargados);
     } catch (err) {
       console.error('Error al cargar alquileres:', err);
     }
   }
 
   function mostrarAlquileres(lista) {
-    cuerpoTabla.innerHTML = '';
-    for (const a of lista) {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${a.numero_bano || ''}</td>
-        <td>${a.cliente || ''}</td>
-        <td>${a.direccion || ''}</td>
-        <td>${a.inicio_contrato || ''}</td>
-        <td>${a.fin_contrato || ''}</td>
-        <td>${a.observaciones || ''}</td>
-        <td></td>`;
-      cuerpoTabla.appendChild(tr);
-    }
+    tabla.clear();
+    tabla.rows.add(lista).draw();
   }
 
   function filtrar() {
     const texto = (buscador.value || '').toLowerCase();
-    const filtrados = alquileres.filter(a =>
+    const filtrados = alquileresCargados.filter(a =>
       (a.cliente || '').toLowerCase().includes(texto) ||
       (a.numero_bano || '').toLowerCase().includes(texto)
     );

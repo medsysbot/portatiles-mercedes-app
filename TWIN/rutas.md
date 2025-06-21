@@ -1,0 +1,11 @@
+# Rutas - Módulo de Alquileres
+
+Este documento resume los endpoints principales para la gestión de alquileres en Portátiles Mercedes.
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/alquileres` | Vista de gestión de alquileres (`alquileres_admin.html`). | Sí |
+| POST | `/admin/alquileres/nuevo` | Crea un alquiler verificando número de baño único. | Sí |
+| GET | `/admin/api/alquileres` | Devuelve la lista completa de alquileres desde la base. | Sí |
+
+Mantener esta lista actualizada facilita el seguimiento de cambios en el backend.

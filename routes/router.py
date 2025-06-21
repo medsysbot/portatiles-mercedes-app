@@ -16,7 +16,6 @@ from fastapi.templating import Jinja2Templates
 from fastapi import Depends
 from utils.auth_utils import verificar_token
 
-from routes.alquileres import router as alquileres_router
 from routes.ventas import router as ventas_router
 from routes.debito import router as debito_router
 from routes.cliente_panel import router as cliente_router
@@ -47,8 +46,6 @@ public_templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 # `templates` de la raíz del proyecto.
 templates = Jinja2Templates(directory="templates")
 
-# Incluir las rutas del módulo de alquileres
-router.include_router(alquileres_router)
 # Incluir las rutas del módulo de ventas
 router.include_router(ventas_router)
 # Incluir las rutas del módulo de débito automático

@@ -250,6 +250,8 @@ class AlquilerSupabase:
 def test_crear_alquiler_ok(monkeypatch):
     db = AlquilerSupabase([])
     monkeypatch.setattr(admin_panel, "supabase", db)
+    import routes.alquileres as alquileres
+    monkeypatch.setattr(alquileres, "supabase", db)
     datos = {
         "numero_bano": "B1",
         "cliente": "Juan",
@@ -268,6 +270,8 @@ def test_crear_alquiler_duplicado(monkeypatch):
     existente = [{"numero_bano": "B2"}]
     db = AlquilerSupabase(existente)
     monkeypatch.setattr(admin_panel, "supabase", db)
+    import routes.alquileres as alquileres
+    monkeypatch.setattr(alquileres, "supabase", db)
     datos = {
         "numero_bano": "B2",
         "cliente": "Ana",

@@ -6,11 +6,12 @@
   <h2>Administración de alquileres</h2>
 
   <div class="d-flex justify-content-between align-items-center my-3">
-    <input type="text" id="buscar-alquiler" class="form-control w-50" placeholder="Buscar alquiler...">
-    <button id="btn-nuevo-alquiler" class="btn btn-primary ml-3">Nuevo alquiler</button>
+    <input type="text" id="busquedaAlquileres" class="form-control w-50" placeholder="Buscar alquiler...">
+    <button id="btnBuscarAlquiler" class="btn btn-secondary ml-2">Buscar</button>
+    <button id="btnNuevoAlquiler" class="btn btn-primary ml-3">Nuevo alquiler</button>
   </div>
 
-  <table id="tabla-alquileres" class="table table-striped">
+  <table id="tablaAlquileres" class="table table-striped">
     <thead>
       <tr>
         <th>Nº Baño</th>
@@ -25,11 +26,40 @@
   </table>
 </div>
 
-<!-- Modal manual para evitar errores -->
-<div id="modalNuevoAlquiler" class="modal" style="display:none;">
+<!-- Modal manual para nuevo alquiler -->
+<div id="modalNuevoAlquiler" class="modal" style="display: none;">
   <div class="modal-dialog">
-    <div class="modal-content">
-      {% include 'alquiler_form.html' %}
+    <div class="modal-content p-4">
+      <form id="formNuevoAlquiler">
+        <div class="form-group">
+          <label for="numero_bano">Nº Baño</label>
+          <input type="text" id="numero_bano" name="numero_bano" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="cliente">Cliente</label>
+          <input type="text" id="cliente" name="cliente" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <input type="text" id="direccion" name="direccion" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="inicio_contrato">Inicio contrato</label>
+          <input type="date" id="inicio_contrato" name="inicio_contrato" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="fin_contrato">Fin contrato</label>
+          <input type="date" id="fin_contrato" name="fin_contrato" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="observaciones">Observaciones</label>
+          <textarea id="observaciones" name="observaciones" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="cerrarModal()">Cancelar</button>
+          <button type="button" id="btnGuardarAlquiler" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

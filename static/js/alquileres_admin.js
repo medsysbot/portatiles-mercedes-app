@@ -1,13 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const buscador = document.getElementById('buscar-alquiler');
-  const btnNuevo = document.getElementById('btn-nuevo-alquiler');
+  const buscador = document.getElementById('busquedaAlquileres');
+  const btnNuevo = document.getElementById('btnNuevoAlquiler');
   const modalEl = document.getElementById('modalNuevoAlquiler');
-  const form = document.getElementById('form-alquiler');
   const btnGuardar = document.getElementById('btnGuardarAlquiler');
 
   let alquileresCargados = [];
 
-  const tabla = $('#tabla-alquileres').DataTable({
+  const tabla = $('#tablaAlquileres').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
@@ -90,4 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function cerrarModal() {
   document.getElementById('modalNuevoAlquiler').style.display = 'none';
+  const form = document.getElementById('formNuevoAlquiler');
+  form?.reset();
 }

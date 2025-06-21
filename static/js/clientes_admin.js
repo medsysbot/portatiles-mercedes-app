@@ -104,6 +104,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  obtenerClientes();
-  setInterval(obtenerClientes, 60000);
+  obtenerClientes();  // solo una vez, al cargar
+
+  // Si existe un botón de refrescar manual
+  document.getElementById('btnClientes')?.addEventListener('click', () => {
+    obtenerClientes();
+  });
 });

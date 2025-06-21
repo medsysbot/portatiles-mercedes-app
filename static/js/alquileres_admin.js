@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaAlquileres');
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
   const modalEl = document.getElementById('modalNuevoAlquiler');
-  const modal = bootstrap.Modal ? new bootstrap.Modal(modalEl) : null;
   const form = document.getElementById('formNuevoAlquiler');
   const btnGuardar = document.getElementById('btnGuardarAlquiler');
   const btnNuevo = document.getElementById('btnNuevoAlquiler');
@@ -53,42 +52,52 @@ document.addEventListener('DOMContentLoaded', () => {
   btnBuscar?.addEventListener('click', filtrar);
   buscador?.addEventListener('input', filtrar);
 
-  btnNuevo?.addEventListener('click', () => {
-    modal?.show();
+  btnNuevo?.addEventListener('click', function () {
+    modalEl.style.display = 'block';
   });
 
-  btnGuardar?.addEventListener('click', async () => {
-    const datos = {
-      numero_bano: document.getElementById('numero_bano').value.trim(),
-      cliente: document.getElementById('cliente').value.trim(),
-      direccion: document.getElementById('direccion').value.trim(),
-      inicio_contrato: document.getElementById('inicio_contrato').value,
-      fin_contrato: document.getElementById('fin_contrato').value,
-      observaciones: document.getElementById('observaciones').value.trim()
-    };
-    if (!datos.numero_bano || !datos.cliente || !datos.inicio_contrato) {
-      alert('Completá los campos obligatorios');
+  btnGuardar?.addEventListener('click', async function () {
+    const numero_bano = document.getElementById('numero_bano').value;
+    const cliente = document.getElementById('cliente').value;
+    const direccion = document.getElementById('direccion').value;
+    const inicio_contrato = document.getElementById('inicio_contrato').value;
+    const fin_contrato = document.getElementById('fin_contrato').value;
+    const observaciones = document.getElementById('observaciones').value;
+
+    if (!numero_bano || !cliente || !inicio_contrato) {
+      alert('Por favor complete los campos obligatorios.');
       return;
     }
-    try {
-      const resp = await fetch('/admin/alquileres/nuevo', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-      });
-      const result = await resp.json();
-      if (!resp.ok || result.error) {
-        const msg = result.error || 'Error al guardar';
-        throw new Error(msg);
-      }
-      form.reset();
-      modal?.hide();
-      await cargarAlquileres();
-    } catch (err) {
-      console.error('Error guardando alquiler:', err);
-      alert(err.message || 'Error al guardar alquiler');
+
+    const datos = {
+      numero_bano,
+      cliente,
+      direccion,
+      inicio_contrato,
+      fin_contrato,
+      observaciones
+    };
+
+    const respuesta = await fetch('/admin/alquileres/nuevo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(datos)
+    });
+
+    const resultado = await respuesta.json();
+
+    if (resultado.ok) {
+      alert('Alquiler guardado correctamente');
+      cerrarModal();
+      location.reload();
+    } else {
+      alert('Error al guardar: ' + resultado.error);
     }
   });
 
   cargarAlquileres();
 });
+
+function cerrarModal() {
+  document.getElementById('modalNuevoAlquiler').style.display = 'none';
+}

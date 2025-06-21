@@ -81,3 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cargarAlquileres();
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  const nuevoBtn = document.getElementById("btnNuevoAlquiler");
+
+  if (nuevoBtn) {
+    nuevoBtn.addEventListener("click", () => {
+      const modal = new bootstrap.Modal(document.getElementById("modalNuevoAlquiler"));
+      modal.show();
+    });
+  }
+});

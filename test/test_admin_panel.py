@@ -152,6 +152,10 @@ class InMemoryQuery:
         self.single_mode = True
         return self
 
+    def maybe_single(self):
+        self.single_mode = "maybe"
+        return self
+
     def insert(self, data):
         self.is_select = False
         self.insert_data = data
@@ -164,7 +168,9 @@ class InMemoryQuery:
                 for u in self.data
                 if all(u.get(k) == v for k, v in self.filters.items())
             ]
-            if self.single_mode:
+            if self.single_mode == True:
+                result = result[0]
+            elif self.single_mode == "maybe":
                 result = result[0] if result else None
             return types.SimpleNamespace(data=result, status_code=200, error=None)
         if self.insert_data:
@@ -252,6 +258,7 @@ def test_crear_alquiler_ok(monkeypatch):
     db = AlquilerSupabase([])
     monkeypatch.setattr(admin_panel, "supabase", db)
     import routes.alquileres as alquileres
+
     monkeypatch.setattr(alquileres, "supabase", db)
     datos = {
         "numero_bano": "B1",
@@ -259,7 +266,7 @@ def test_crear_alquiler_ok(monkeypatch):
         "direccion": "Dir",
         "inicio_contrato": "2025-01-01",
         "fin_contrato": "2025-12-31",
-        "observaciones": "Obs"
+        "observaciones": "Obs",
     }
     resp = client.post("/admin/alquileres/nuevo", json=datos)
     assert resp.status_code == 200
@@ -272,6 +279,7 @@ def test_crear_alquiler_duplicado(monkeypatch):
     db = AlquilerSupabase(existente)
     monkeypatch.setattr(admin_panel, "supabase", db)
     import routes.alquileres as alquileres
+
     monkeypatch.setattr(alquileres, "supabase", db)
     datos = {
         "numero_bano": "B2",
@@ -279,7 +287,7 @@ def test_crear_alquiler_duplicado(monkeypatch):
         "direccion": "Dir",
         "inicio_contrato": "2025-01-01",
         "fin_contrato": None,
-        "observaciones": "Obs"
+        "observaciones": "Obs",
     }
     resp = client.post("/admin/alquileres/nuevo", json=datos)
     assert resp.status_code == 200

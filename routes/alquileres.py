@@ -29,6 +29,7 @@ ALQUILERES_TABLE = "alquileres"
 
 # ==== Modelo Pydantic ====
 
+
 class AlquilerNuevo(BaseModel):
     """Datos necesarios para crear un alquiler."""
 
@@ -39,7 +40,9 @@ class AlquilerNuevo(BaseModel):
     fin_contrato: date | None = None
     observaciones: str | None = None
 
+
 # ==== Endpoint POST ====
+
 
 @router.post("/admin/alquileres/nuevo")
 async def crear_alquiler(request: Request):
@@ -64,13 +67,14 @@ async def crear_alquiler(request: Request):
             supabase.table(ALQUILERES_TABLE)
             .select("numero_bano")
             .eq("numero_bano", alquiler.numero_bano)
-            .single()
+            .maybe_single()
             .execute()
         )
-        if getattr(existente, "data", None):
-            return {"error": "Ya existe un alquiler con ese número de baño"}
     except Exception as exc:  # pragma: no cover - errores de conexión
         raise HTTPException(status_code=500, detail=f"Error consultando datos: {exc}")
+
+    if getattr(existente, "data", None):
+        return {"error": "Ya existe un alquiler con ese número de baño"}
 
     datos = alquiler.model_dump()
     if datos.get("inicio_contrato"):
@@ -81,13 +85,15 @@ async def crear_alquiler(request: Request):
     try:
         supabase.table(ALQUILERES_TABLE).insert(datos).execute()
     except Exception as exc:  # pragma: no cover - errores de conexión
-        raise HTTPException(status_code=500, detail=f"Error al guardar alquiler: {exc}")
+        return {"error": f"Error al guardar alquiler: {exc}"}
 
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}
     return RedirectResponse("/admin/alquileres", status_code=303)
 
+
 # ==== Endpoint GET ====
+
 
 @router.get("/admin/api/alquileres")
 async def listar_alquileres():

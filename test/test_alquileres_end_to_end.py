@@ -6,6 +6,7 @@ import routes.alquileres as alquileres
 
 client = TestClient(main.app)
 
+
 class InMemoryQuery:
     def __init__(self, data):
         self.data = data
@@ -26,6 +27,10 @@ class InMemoryQuery:
         self.single_mode = True
         return self
 
+    def maybe_single(self):
+        self.single_mode = "maybe"
+        return self
+
     def insert(self, data):
         self.is_select = False
         self.insert_data = data
@@ -34,24 +39,32 @@ class InMemoryQuery:
     def execute(self):
         if self.is_select:
             result = [
-                u for u in self.data
+                u
+                for u in self.data
                 if all(u.get(k) == v for k, v in self.filters.items())
             ]
-            if self.single_mode:
+            if self.single_mode == True:
+                result = result[0]
+            elif self.single_mode == "maybe":
                 result = result[0] if result else None
             return types.SimpleNamespace(data=result, status_code=200, error=None)
         if self.insert_data:
             self.data.append(self.insert_data)
-            return types.SimpleNamespace(data=[{"id": len(self.data)}], status_code=200, error=None)
+            return types.SimpleNamespace(
+                data=[{"id": len(self.data)}], status_code=200, error=None
+            )
         return types.SimpleNamespace(data=None, status_code=400, error="invalid")
+
 
 class AlquilerMemoryDB:
     def __init__(self, data=None):
         self.alquileres = data or []
+
     def table(self, name):
         if name == alquileres.ALQUILERES_TABLE:
             return InMemoryQuery(self.alquileres)
         return InMemoryQuery([])
+
 
 def test_alquileres_end_to_end(monkeypatch):
     db = AlquilerMemoryDB([])

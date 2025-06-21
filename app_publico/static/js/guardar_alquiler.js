@@ -14,14 +14,20 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = Object.fromEntries(new FormData(form));
 
+  let ok = false;
   try {
-    await fetch('/admin/alquileres/nuevo', {
+    const resp = await fetch('/admin/alquileres/nuevo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(datos)
     });
+    const resJson = await resp.json();
+    ok = resp.ok && resJson.ok;
+    if (!ok) {
+      alert(resJson.error || resJson.detail || 'Error al guardar');
+    }
   } catch (_) {
-    // Ignorar errores, se cierra igualmente
+    alert('Error al guardar');
   }
 
   if (window.opener) {

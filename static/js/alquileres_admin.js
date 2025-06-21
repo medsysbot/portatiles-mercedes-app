@@ -1,9 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaAlquileres');
-  const btnNuevo = document.getElementById('btnNuevoAlquiler');
-  const modalEl = document.getElementById('modalNuevoAlquiler');
-  const btnGuardar = document.getElementById('btnGuardarAlquiler');
-
+  
   let alquileresCargados = [];
 
   const tabla = $('#tablaAlquileres').DataTable({
@@ -46,49 +43,5 @@ document.addEventListener('DOMContentLoaded', () => {
     mostrarAlquileres(filtrados);
   });
 
-  btnNuevo?.addEventListener('click', () => {
-    modalEl.style.display = 'block';
-  });
-
-  btnGuardar?.addEventListener('click', async function (e) {
-    e.preventDefault();
-
-    const datos = {
-      numero_bano: document.getElementById('numero_bano').value,
-      cliente: document.getElementById('cliente').value,
-      direccion: document.getElementById('direccion').value,
-      inicio_contrato: document.getElementById('inicio_contrato').value,
-      fin_contrato: document.getElementById('fin_contrato').value,
-      observaciones: document.getElementById('observaciones').value
-    };
-
-    if (!datos.numero_bano || !datos.cliente || !datos.inicio_contrato) {
-      alert('Por favor complete los campos obligatorios.');
-      return;
-    }
-
-    const respuesta = await fetch('/admin/alquileres/nuevo', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(datos)
-    });
-
-    const resultado = await respuesta.json();
-
-    if (resultado.ok) {
-      alert('Alquiler guardado correctamente');
-      cerrarModal();
-      cargarAlquileres();
-    } else {
-      alert('Error al guardar: ' + resultado.error);
-    }
-  });
-
   cargarAlquileres();
 });
-
-function cerrarModal() {
-  document.getElementById('modalNuevoAlquiler').style.display = 'none';
-  const form = document.getElementById('formNuevoAlquiler');
-  form?.reset();
-}

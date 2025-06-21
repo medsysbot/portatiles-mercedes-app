@@ -6,7 +6,7 @@ Este informe describe las vistas y endpoints implementados para gestionar alquil
 
 - Listado de alquileres en el panel administrativo con tabla ordenable.
 - Búsqueda instantánea por número de baño o cliente.
-- Modal de alta de alquiler sin salir de la página.
+- Formulario dedicado para alta de alquileres desde el panel.
 - Formulario público independiente que se abre en una nueva pestaña.
 - Registro de datos en la tabla `alquileres` de Supabase.
 
@@ -15,6 +15,7 @@ Este informe describe las vistas y endpoints implementados para gestionar alquil
 | Método | Ruta | Descripción |
 |-------|------|-------------|
 | GET | `/admin/alquileres` | Vista con la tabla de alquileres (`alquileres_admin.html`) |
+| GET | `/admin/alquileres/nuevo` | Formulario de alta (`alquiler_form_admin.html`) |
 | POST | `/admin/alquileres/nuevo` | Creación de alquiler |
 | GET | `/admin/api/alquileres` | Listado en formato JSON |
 | GET | `/alquiler` | Página informativa pública |

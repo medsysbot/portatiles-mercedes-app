@@ -8,8 +8,9 @@ Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
 """
 
-from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import RedirectResponse
+from pydantic import BaseModel, ValidationError
 from datetime import date
 from supabase import create_client, Client
 import os
@@ -41,11 +42,22 @@ class AlquilerNuevo(BaseModel):
 # ==== Endpoint POST ====
 
 @router.post("/admin/alquileres/nuevo")
-async def crear_alquiler(alquiler: AlquilerNuevo):
+async def crear_alquiler(request: Request):
     """Crea un alquiler verificando que el número de baño no esté duplicado."""
 
     if not supabase:
         return {"error": "Supabase no configurado"}
+
+    if request.headers.get("content-type", "").startswith("application/json"):
+        datos = await request.json()
+    else:
+        form = await request.form()
+        datos = dict(form)
+
+    try:
+        alquiler = AlquilerNuevo(**datos)
+    except ValidationError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
 
     try:
         existente = (
@@ -71,7 +83,9 @@ async def crear_alquiler(alquiler: AlquilerNuevo):
     except Exception as exc:  # pragma: no cover - errores de conexión
         raise HTTPException(status_code=500, detail=f"Error al guardar alquiler: {exc}")
 
-    return {"ok": True}
+    if request.headers.get("content-type", "").startswith("application/json"):
+        return {"ok": True}
+    return RedirectResponse("/admin/alquileres", status_code=303)
 
 # ==== Endpoint GET ====
 

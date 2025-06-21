@@ -369,6 +369,12 @@ def admin_alquileres_page(request: Request):
     return templates.TemplateResponse("alquileres_admin.html", {"request": request})
 
 
+@router.get("/admin/alquileres/nuevo", response_class=HTMLResponse)
+def form_nuevo_alquiler(request: Request):
+    """Formulario para registrar un alquiler."""
+    return templates.TemplateResponse("alquiler_form_admin.html", {"request": request})
+
+
 @router.get("/admin/ventas", response_class=HTMLResponse)
 def admin_ventas_page(request: Request):
     """Gestión de ventas."""

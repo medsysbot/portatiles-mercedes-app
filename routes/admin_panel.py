@@ -66,12 +66,11 @@ class Cliente(BaseModel):
 class AlquilerNuevo(BaseModel):
     """Datos requeridos para registrar un alquiler."""
 
-    numero_banho: str
-    cliente_nombre: str | None = None
-    cliente_dni: str | None = None
+    numero_bano: str
+    cliente: str
     direccion: str | None = None
-    fecha_inicio: date | None = None
-    fecha_fin: date | None = None
+    inicio_contrato: date
+    fin_contrato: date | None = None
     observaciones: str | None = None
 
 
@@ -516,10 +515,29 @@ async def crear_alquiler(alquiler: AlquilerNuevo):
         logger.error("Supabase no configurado")
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     datos = alquiler.model_dump()
-    if datos.get("fecha_inicio"):
-        datos["fecha_inicio"] = alquiler.fecha_inicio.isoformat()
-    if datos.get("fecha_fin"):
-        datos["fecha_fin"] = alquiler.fecha_fin.isoformat()
+    if datos.get("inicio_contrato"):
+        datos["inicio_contrato"] = alquiler.inicio_contrato.isoformat()
+    if datos.get("fin_contrato"):
+        datos["fin_contrato"] = alquiler.fin_contrato.isoformat()
+    try:
+        supabase.table("alquileres").insert(datos).execute()
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("Error insertando alquiler: %s", exc)
+        raise HTTPException(status_code=500, detail="Error insertando alquiler")
+    return {"status": "ok"}
+
+
+@router.post("/admin/alquileres/nuevo")
+async def crear_alquiler_nuevo(alquiler: AlquilerNuevo):
+    """Inserta un nuevo alquiler y devuelve estado simple."""
+    if not supabase:
+        logger.error("Supabase no configurado")
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    datos = alquiler.model_dump()
+    if datos.get("inicio_contrato"):
+        datos["inicio_contrato"] = alquiler.inicio_contrato.isoformat()
+    if datos.get("fin_contrato"):
+        datos["fin_contrato"] = alquiler.fin_contrato.isoformat()
     try:
         supabase.table("alquileres").insert(datos).execute()
     except Exception as exc:  # pragma: no cover - errores de conexión

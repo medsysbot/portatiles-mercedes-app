@@ -25,11 +25,11 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const a of lista) {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td>${a.numero_banho || ''}</td>
-        <td>${a.cliente_nombre || ''}${a.cliente_dni ? ' - ' + a.cliente_dni : ''}</td>
+        <td>${a.numero_bano || ''}</td>
+        <td>${a.cliente || ''}</td>
         <td>${a.direccion || ''}</td>
-        <td>${a.fecha_inicio || ''}</td>
-        <td>${a.fecha_fin || ''}</td>
+        <td>${a.inicio_contrato || ''}</td>
+        <td>${a.fin_contrato || ''}</td>
         <td>${a.observaciones || ''}</td>
         <td></td>`;
       cuerpoTabla.appendChild(tr);
@@ -39,9 +39,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function filtrar() {
     const texto = (buscador.value || '').toLowerCase();
     const filtrados = alquileres.filter(a =>
-      (a.cliente_nombre || '').toLowerCase().includes(texto) ||
-      (a.cliente_dni || '').toLowerCase().includes(texto) ||
-      (a.numero_banho || '').toLowerCase().includes(texto)
+      (a.cliente || '').toLowerCase().includes(texto) ||
+      (a.numero_bano || '').toLowerCase().includes(texto)
     );
     mostrarAlquileres(filtrados);
   }
@@ -51,20 +50,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnGuardar?.addEventListener('click', async () => {
     const datos = {
-      numero_banho: document.getElementById('numero_banho').value.trim(),
-      cliente_nombre: document.getElementById('cliente_nombre').value.trim(),
-      cliente_dni: document.getElementById('cliente_dni').value.trim(),
+      numero_bano: document.getElementById('numero_bano').value.trim(),
+      cliente: document.getElementById('cliente').value.trim(),
       direccion: document.getElementById('direccion').value.trim(),
-      fecha_inicio: document.getElementById('fecha_inicio').value,
-      fecha_fin: document.getElementById('fecha_fin').value,
+      inicio_contrato: document.getElementById('inicio_contrato').value,
+      fin_contrato: document.getElementById('fin_contrato').value,
       observaciones: document.getElementById('observaciones').value.trim()
     };
-    if (!datos.numero_banho) {
-      alert('El número de baño es obligatorio');
+    if (!datos.numero_bano || !datos.cliente || !datos.inicio_contrato) {
+      alert('Completá los campos obligatorios');
       return;
     }
     try {
-      const resp = await fetch('/admin/api/alquileres', {
+      const resp = await fetch('/admin/alquileres/nuevo', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(datos)
@@ -72,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error al guardar');
       form.reset();
       modal?.hide();
+      alert('Alquiler guardado correctamente');
       await cargarAlquileres();
     } catch (err) {
       console.error('Error guardando alquiler:', err);

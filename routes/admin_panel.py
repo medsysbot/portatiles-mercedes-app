@@ -529,10 +529,25 @@ async def crear_alquiler(alquiler: AlquilerNuevo):
 
 @router.post("/admin/alquileres/nuevo")
 async def crear_alquiler_nuevo(alquiler: AlquilerNuevo):
-    """Inserta un nuevo alquiler y devuelve estado simple."""
+    """Inserta un nuevo alquiler verificando duplicados."""
     if not supabase:
         logger.error("Supabase no configurado")
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
+        return {"error": "Supabase no configurado"}
+
+    try:
+        existente = (
+            supabase.table("alquileres")
+            .select("numero_bano")
+            .eq("numero_bano", alquiler.numero_bano)
+            .single()
+            .execute()
+        )
+        if getattr(existente, "data", None):
+            return {"error": "Ya existe un alquiler con ese número de baño"}
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("Error verificando duplicados: %s", exc)
+        return {"error": "Error consultando datos"}
+
     datos = alquiler.model_dump()
     if datos.get("inicio_contrato"):
         datos["inicio_contrato"] = alquiler.inicio_contrato.isoformat()
@@ -542,8 +557,9 @@ async def crear_alquiler_nuevo(alquiler: AlquilerNuevo):
         supabase.table("alquileres").insert(datos).execute()
     except Exception as exc:  # pragma: no cover - errores de conexión
         logger.error("Error insertando alquiler: %s", exc)
-        raise HTTPException(status_code=500, detail="Error insertando alquiler")
-    return {"status": "ok"}
+        return {"error": "Error insertando alquiler"}
+
+    return {"ok": True}
 
 
 @router.get("/admin/api/ventas")

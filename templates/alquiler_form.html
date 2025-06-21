@@ -1,44 +1,38 @@
-<!-- 📄 alquiler_form.html :: Formulario modal para nuevo alquiler -->
+<!-- 📄 alquiler_form.html :: Formulario limpio y funcional de nuevo alquiler -->
 
-<div class="modal fade" id="modal-alquiler" tabindex="-1" role="dialog" aria-labelledby="modalAlquilerLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <form id="form-alquiler" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Nuevo Alquiler</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Nº Baño</label>
-          <input type="text" class="form-control" name="numero_banio" required>
-        </div>
-        <div class="form-group">
-          <label>Cliente</label>
-          <input type="text" class="form-control" name="cliente" required>
-        </div>
-        <div class="form-group">
-          <label>Dirección</label>
-          <input type="text" class="form-control" name="direccion" required>
-        </div>
-        <div class="form-group">
-          <label>Inicio contrato</label>
-          <input type="date" class="form-control" name="inicio_contrato" required>
-        </div>
-        <div class="form-group">
-          <label>Fin contrato</label>
-          <input type="date" class="form-control" name="fin_contrato" required>
-        </div>
-        <div class="form-group">
-          <label>Observaciones</label>
-          <textarea class="form-control" name="observaciones" rows="3"></textarea>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Guardar</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-      </div>
-    </form>
-  </div>
+<div class="modal-header">
+  <h5 class="modal-title">Nuevo Alquiler</h5>
+  <button type="button" class="btn-close" onclick="document.getElementById('modalNuevoAlquiler').style.display='none';"></button>
+</div>
+<div class="modal-body">
+  <form id="form-alquiler">
+    <div class="mb-3">
+      <label for="numero_banio" class="form-label">Nº Baño</label>
+      <input type="text" class="form-control" id="numero_banio" required>
+    </div>
+    <div class="mb-3">
+      <label for="cliente" class="form-label">Cliente</label>
+      <input type="text" class="form-control" id="cliente" required>
+    </div>
+    <div class="mb-3">
+      <label for="direccion" class="form-label">Dirección</label>
+      <input type="text" class="form-control" id="direccion" required>
+    </div>
+    <div class="mb-3">
+      <label for="inicio_contrato" class="form-label">Inicio contrato</label>
+      <input type="date" class="form-control" id="inicio_contrato" required>
+    </div>
+    <div class="mb-3">
+      <label for="fin_contrato" class="form-label">Fin contrato</label>
+      <input type="date" class="form-control" id="fin_contrato" required>
+    </div>
+    <div class="mb-3">
+      <label for="observaciones" class="form-label">Observaciones</label>
+      <textarea class="form-control" id="observaciones" rows="3"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" onclick="document.getElementById('modalNuevoAlquiler').style.display='none';">Cancelar</button>
+      <button type="submit" id="btnGuardarAlquiler" class="btn btn-primary">Guardar</button>
+    </div>
+  </form>
 </div>

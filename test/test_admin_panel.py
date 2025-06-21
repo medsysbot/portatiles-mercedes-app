@@ -67,7 +67,6 @@ def test_admin_api_clientes_busqueda(monkeypatch):
         },
     ]
     monkeypatch.setattr(admin_panel, "supabase", MockSupabase(data))
-    monkeypatch.setattr(admin_panel, "get_database_url", lambda: None)
     response = client.get("/admin/api/clientes?q=456", headers=auth_headers())
     assert response.status_code == 200
     data = response.json()
@@ -82,7 +81,6 @@ def test_info_todos_clientes(monkeypatch):
         {"dni": "2", "nombre": "Juan", "apellido": "P", "email": "j@test.com"},
     ]
     monkeypatch.setattr(admin_panel, "supabase", MockSupabase(datos))
-    monkeypatch.setattr(admin_panel, "get_database_url", lambda: None)
     resp = client.get("/info_todos_clientes")
     assert resp.status_code == 200
     lista = resp.json()

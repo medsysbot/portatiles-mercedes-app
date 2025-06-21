@@ -8,6 +8,7 @@ Proyecto: Portátiles Mercedes
 """
 
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from supabase import create_client
 import os
 
@@ -27,8 +28,13 @@ async def obtener_clientes():
     try:
         print("\ud83d\udd0d Solicitando clientes desde Supabase...")
         response = supabase.table("datos_personales_clientes").select("*").execute()
-        print("\u2705 Clientes obtenidos:", response.data)
-        return response.data
+        clientes = response.data or []
+        for c in clientes:
+            for key in c:
+                if isinstance(c[key], str):
+                    c[key] = c[key].encode("utf-8", "replace").decode("utf-8")
+        print("\u2705 Clientes obtenidos:", clientes)
+        return clientes
     except Exception as e:
         print("\u274c ERROR AL OBTENER CLIENTES:", e)
-        raise HTTPException(status_code=500, detail="Error al obtener clientes.")
+        return JSONResponse(status_code=500, content={"detail": "Error al obtener clientes."})

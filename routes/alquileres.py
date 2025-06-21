@@ -83,7 +83,9 @@ async def crear_alquiler(request: Request):
         datos["fin_contrato"] = alquiler.fin_contrato.isoformat()
 
     try:
-        supabase.table(ALQUILERES_TABLE).insert(datos).execute()
+        result = supabase.table(ALQUILERES_TABLE).insert(datos).execute()
+        if getattr(result, "error", None):
+            raise Exception(result.error.message)
     except Exception as exc:  # pragma: no cover - errores de conexión
         return {"error": f"Error al guardar alquiler: {exc}"}
 

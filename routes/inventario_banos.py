@@ -69,7 +69,9 @@ async def crear_bano(bano: BanoNuevo):
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     datos = bano.model_dump()
     try:
-        supabase.table(TABLA).insert(datos).execute()
+        result = supabase.table(TABLA).insert(datos).execute()
+        if getattr(result, "error", None):
+            raise Exception(result.error.message)
     except Exception as exc:  # pragma: no cover
         return {"error": f"Error al guardar baño: {exc}"}
     return {"ok": True}

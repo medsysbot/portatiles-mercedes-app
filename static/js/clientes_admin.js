@@ -44,18 +44,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function obtenerClientes() {
     try {
-      const resp = await fetchConAuth('/info_todos_clientes');
-      if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        const msg = data.detail || 'No se pudo consultar la base de datos';
-        mostrarMensaje(msg, 'danger');
-        throw new Error(msg);
-      }
+      const resp = await fetch('/clientes');
       const data = await resp.json();
-      clientesCargados = data.clientes || [];
+      console.log('✅ Clientes recibidos:', data);
+      clientesCargados = data || [];
       mostrarClientes(clientesCargados);
-    } catch (e) {
-      console.error('Error obteniendo clientes', e);
+    } catch (error) {
+      console.error('❌ Error al cargar clientes:', error);
       mostrarMensaje('Error consultando la base de datos', 'danger');
       tabla.clear().draw();
     }

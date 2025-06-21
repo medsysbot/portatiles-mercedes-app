@@ -1,20 +1,26 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Alquileres{% endblock %}
 {% block content %}
-<h2 class="mt-0">Administración de alquileres</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
-<div style="overflow-x:auto; background-color:#f9f9f9; padding:1rem;">
-  <table class="table table-striped">
+<h1 class="titulo-seccion">Administración de alquileres</h1>
+
+<div class="acciones-panel mb-3 d-flex gap-2">
+  <input type="text" id="busquedaAlquileres" class="form-control" placeholder="Buscar alquiler...">
+  <button id="btnNuevoAlquiler" class="btn btn-primary">Nuevo alquiler</button>
+</div>
+
+<div class="table-responsive bg-light p-3">
+  <table id="tablaAlquileres" class="table table-striped table-bordered" style="width:100%;">
     <thead>
       <tr>
-        <th>ID</th>
-        <th>Dato 1</th>
-        <th>Dato 2</th>
-        <th>Acciones</th>
+        <th>N° Baño</th>
+        <th>Cliente</th>
+        <th>Dirección</th>
+        <th>Inicio contrato</th>
+        <th>Fin contrato</th>
+        <th>Última limpieza</th>
       </tr>
     </thead>
-    <tbody id="tabla-alquileres">
-      <!-- filas dinámicas desde JS -->
-    </tbody>
+    <tbody></tbody>
   </table>
 </div>
 {% endblock %}

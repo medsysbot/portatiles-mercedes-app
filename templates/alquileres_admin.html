@@ -1,0 +1,31 @@
+<!-- 📄 alquileres_admin.html :: Vista administrativa de alquileres -->
+{% extends 'base_adminlte.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Administración de alquileres</h2>
+
+  <div class="d-flex justify-content-between align-items-center my-3">
+    <input type="text" id="buscar-alquiler" class="form-control w-50" placeholder="Buscar alquiler...">
+    <button id="btn-nuevo-alquiler" class="btn btn-primary ml-3" data-toggle="modal" data-target="#modal-alquiler">Nuevo alquiler</button>
+  </div>
+
+  <table id="tabla-alquileres" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nº Baño</th>
+        <th>Cliente</th>
+        <th>Dirección</th>
+        <th>Inicio contrato</th>
+        <th>Fin contrato</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Los datos se cargarán dinámicamente desde Supabase -->
+    </tbody>
+  </table>
+</div>
+
+{% include 'alquiler_form.html' %}
+{% endblock %}

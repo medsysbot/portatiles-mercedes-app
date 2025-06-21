@@ -14,6 +14,7 @@ import os
 import jwt
 import types
 from routes import admin_panel, login
+from routes.alquileres import ALQUILERES_TABLE
 
 
 class MockQuery:
@@ -242,7 +243,7 @@ class AlquilerSupabase:
         self.alquileres = data or []
 
     def table(self, name):
-        if name == "alquileres":
+        if name == ALQUILERES_TABLE:
             return InMemoryQuery(self.alquileres)
         return InMemoryQuery([])
 

@@ -18,6 +18,8 @@
 | GET | /limpieza | Registro de limpiezas | limpieza.html | Sí |
 | GET | /ventas | Vista de registro de ventas | ventas.html | Sí |
 | GET | /venta | Formulario de venta de baños | venta.html | Sí |
+| GET | /admin/inventario | Inventario de baños | inventario_banos_admin.html | Sí |
+| GET | /inventario_bano_form | Formulario de nuevo baño (modal) | inventario_bano_form.html | Sí |
 | GET | /debito | Activación de débitos automáticos | debito.html | Sí |
 | GET | /servicios | Descripción de servicios ofrecidos | servicios.html | No |
 | GET    | /galeria   | Galería de imágenes       | galeria.html         | No           |
@@ -52,6 +54,8 @@
 | GET | /admin/alquileres | Vista de alquileres | alquileres_admin.html | Sí |
 | POST | /admin/alquileres/nuevo | Crear nuevo alquiler en la tabla 'alquileres' | JSON | Sí |
 | GET  | /admin/api/alquileres  | Listar todos los alquileres desde la tabla 'alquileres' | JSON | Sí |
+| GET  | /admin/api/inventario_banos | Listar todos los baños | JSON | Sí |
+| POST | /admin/inventario_banos/nuevo | Crear nuevo baño | JSON | Sí |
 | GET | /admin/ventas | Consulta de ventas | JSON | Sí |
 | GET | /admin/limpiezas | Consulta de limpiezas | JSON | Sí |
 | POST | /ejecutar_alertas | Ejecuta manualmente las alertas programadas | JSON | Sí |

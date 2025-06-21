@@ -1,0 +1,36 @@
+{% extends 'panel_admin.html' %}
+{% block title %}Inventario de baños{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h2>Inventario de baños</h2>
+  <div class="d-flex justify-content-end mb-3">
+    <button id="btnNuevoBano" class="btn btn-primary">Agregar baño</button>
+  </div>
+  <table id="tablaInventario" class="table table-striped">
+    <thead>
+      <tr>
+        <th>Nº Baño</th>
+        <th>Condición</th>
+        <th>Última reparación</th>
+        <th>Último mantenimiento</th>
+        <th>Estado</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+<div id="modalNuevoBano" class="modal" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content p-4" id="modal-form-container"></div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', path='/js/inventario_banos_admin.js') }}"></script>
+{% endblock %}

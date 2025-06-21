@@ -215,15 +215,29 @@ def crear_cliente(
         for campo, val in datos.items():
             if not val:
                 raise HTTPException(status_code=400, detail=f"Campo '{campo}' faltante")
-        existe = (
+        # Verificamos si ya existe un cliente con el mismo DNI
+        existe_dni = (
             supabase.table("datos_personales_clientes")
             .select("dni")
             .eq("dni", dni)
-            .single()
+            .limit(1)
             .execute()
         )
-        if getattr(existe, "data", None):
+        if existe_dni.data and len(existe_dni.data) > 0:
             raise HTTPException(status_code=400, detail="Ese DNI ya está registrado")
+
+        # Verificamos si el email está registrado para evitar duplicados
+        resultado = (
+            supabase.table("datos_personales_clientes")
+            .select("*")
+            .eq("email", email)
+            .limit(1)
+            .execute()
+        )
+        if resultado.data and len(resultado.data) > 0:
+            # Si existe, no insertamos un nuevo registro
+            raise HTTPException(status_code=400, detail="Ese email ya está registrado")
+
         supabase.table("datos_personales_clientes").insert(datos).execute()
     return RedirectResponse("/admin/clientes", status_code=303)
 

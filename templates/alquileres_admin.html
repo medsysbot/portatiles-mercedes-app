@@ -7,7 +7,7 @@
 
   <div class="d-flex justify-content-between align-items-center my-3">
     <input type="text" id="buscar-alquiler" class="form-control w-50" placeholder="Buscar alquiler...">
-    <button id="btn-nuevo-alquiler" class="btn btn-primary ml-3" data-toggle="modal" data-target="#modal-alquiler">Nuevo alquiler</button>
+    <button id="btn-nuevo-alquiler" class="btn btn-primary ml-3">Nuevo alquiler</button>
   </div>
 
   <table id="tabla-alquileres" class="table table-striped">
@@ -21,11 +21,18 @@
         <th>Observaciones</th>
       </tr>
     </thead>
-    <tbody>
-      <!-- Los datos se cargarán dinámicamente desde Supabase -->
-    </tbody>
+    <tbody></tbody>
   </table>
 </div>
 
-{% include 'alquiler_form.html' %}
+<!-- Modal manual para evitar errores -->
+<div id="modalNuevoAlquiler" class="modal" style="display:none;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      {% include 'alquiler_form.html' %}
+    </div>
+  </div>
+</div>
+
+<script src="/static/js/alquileres_admin.js"></script>
 {% endblock %}

@@ -1,14 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const buscador = document.getElementById('busquedaAlquileres');
-  const btnBuscar = document.getElementById('btnBuscarAlquiler');
+  const buscador = document.getElementById('buscar-alquiler');
+  const btnNuevo = document.getElementById('btn-nuevo-alquiler');
   const modalEl = document.getElementById('modalNuevoAlquiler');
-  const form = document.getElementById('formNuevoAlquiler');
+  const form = document.getElementById('form-alquiler');
   const btnGuardar = document.getElementById('btnGuardarAlquiler');
-  const btnNuevo = document.getElementById('btnNuevoAlquiler');
 
   let alquileresCargados = [];
 
-  const tabla = $('#tablaAlquileres').DataTable({
+  const tabla = $('#tabla-alquileres').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
@@ -19,8 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'direccion' },
       { data: 'inicio_contrato' },
       { data: 'fin_contrato' },
-      { data: 'observaciones' },
-      { data: null }
+      { data: 'observaciones' }
     ]
   });
 
@@ -40,43 +38,35 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function filtrar() {
+  buscador?.addEventListener('input', () => {
     const texto = (buscador.value || '').toLowerCase();
     const filtrados = alquileresCargados.filter(a =>
       (a.cliente || '').toLowerCase().includes(texto) ||
       (a.numero_bano || '').toLowerCase().includes(texto)
     );
     mostrarAlquileres(filtrados);
-  }
+  });
 
-  btnBuscar?.addEventListener('click', filtrar);
-  buscador?.addEventListener('input', filtrar);
-
-  btnNuevo?.addEventListener('click', function () {
+  btnNuevo?.addEventListener('click', () => {
     modalEl.style.display = 'block';
   });
 
-  btnGuardar?.addEventListener('click', async function () {
-    const numero_bano = document.getElementById('numero_bano').value;
-    const cliente = document.getElementById('cliente').value;
-    const direccion = document.getElementById('direccion').value;
-    const inicio_contrato = document.getElementById('inicio_contrato').value;
-    const fin_contrato = document.getElementById('fin_contrato').value;
-    const observaciones = document.getElementById('observaciones').value;
+  btnGuardar?.addEventListener('click', async function (e) {
+    e.preventDefault();
 
-    if (!numero_bano || !cliente || !inicio_contrato) {
+    const datos = {
+      numero_bano: document.getElementById('numero_bano').value,
+      cliente: document.getElementById('cliente').value,
+      direccion: document.getElementById('direccion').value,
+      inicio_contrato: document.getElementById('inicio_contrato').value,
+      fin_contrato: document.getElementById('fin_contrato').value,
+      observaciones: document.getElementById('observaciones').value
+    };
+
+    if (!datos.numero_bano || !datos.cliente || !datos.inicio_contrato) {
       alert('Por favor complete los campos obligatorios.');
       return;
     }
-
-    const datos = {
-      numero_bano,
-      cliente,
-      direccion,
-      inicio_contrato,
-      fin_contrato,
-      observaciones
-    };
 
     const respuesta = await fetch('/admin/alquileres/nuevo', {
       method: 'POST',
@@ -89,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (resultado.ok) {
       alert('Alquiler guardado correctamente');
       cerrarModal();
-      location.reload();
+      cargarAlquileres();
     } else {
       alert('Error al guardar: ' + resultado.error);
     }

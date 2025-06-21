@@ -40,7 +40,6 @@
 | GET | /pagos_cliente | Pagos realizados por el cliente | JSON | Sí |
 | GET | /limpiezas_cliente | Limpiezas registradas para el cliente | JSON | Sí |
 | POST | /guardar_datos_cliente | Guarda datos personales del cliente | JSON | Sí |
-| POST | /registrar_alquiler | Guarda un alquiler de baño | JSON | Sí |
 | POST | /registrar_venta | Registra una venta de baños | JSON (URL PDF) | Sí |
 | POST | /registrar_limpieza | Guarda los datos de limpieza y sube remito | JSON | Sí |
 | POST | /activar_debito | Activa débitos automáticos para un cliente | JSON | Sí |

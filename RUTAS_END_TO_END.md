@@ -50,7 +50,8 @@
 | GET | /admin/clientes/{dni}/editar | Formulario edición cliente | HTML | Sí |
 | POST | /admin/clientes/{dni}/editar | Actualizar cliente | Redirección | Sí |
 | POST | /admin/clientes/{dni}/eliminar | Eliminar cliente | Redirección | Sí |
-| GET | /admin/alquileres | Consulta de alquileres | JSON | Sí |
+| GET | /admin/alquileres | Vista de alquileres | alquileres_admin.html | Sí |
+| POST | /admin/alquileres/nuevo | Guardar nuevo alquiler | JSON | Sí |
 | GET | /admin/ventas | Consulta de ventas | JSON | Sí |
 | GET | /admin/limpiezas | Consulta de limpiezas | JSON | Sí |
 | POST | /ejecutar_alertas | Ejecuta manualmente las alertas programadas | JSON | Sí |

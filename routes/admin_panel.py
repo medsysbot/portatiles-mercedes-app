@@ -63,6 +63,18 @@ class Cliente(BaseModel):
     email: str
 
 
+class AlquilerNuevo(BaseModel):
+    """Datos requeridos para registrar un alquiler."""
+
+    numero_banho: str
+    cliente_nombre: str | None = None
+    cliente_dni: str | None = None
+    direccion: str | None = None
+    fecha_inicio: date | None = None
+    fecha_fin: date | None = None
+    observaciones: str | None = None
+
+
 def obtener_clientes_db() -> list:
     """Obtiene todos los clientes desde Supabase."""
     if supabase:
@@ -470,13 +482,36 @@ async def info_todos_clientes():
 
 
 @router.get("/admin/api/alquileres")
-async def admin_alquileres(
-    desde: date | None = Query(None),
-    hasta: date | None = Query(None),
-    dni: str | None = Query(None),
-):
-    """Alquileres con filtros por fecha y cliente."""
-    return []
+async def admin_alquileres():
+    """Devuelve la lista de alquileres registrados."""
+    if not supabase:
+        logger.error("Supabase no configurado")
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        result = supabase.table("alquileres").select("*").execute()
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("Error consultando alquileres: %s", exc)
+        raise HTTPException(status_code=500, detail="Error consultando datos")
+    return getattr(result, "data", []) or []
+
+
+@router.post("/admin/api/alquileres")
+async def crear_alquiler(alquiler: AlquilerNuevo):
+    """Inserta un nuevo alquiler en la base."""
+    if not supabase:
+        logger.error("Supabase no configurado")
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    datos = alquiler.model_dump()
+    if datos.get("fecha_inicio"):
+        datos["fecha_inicio"] = alquiler.fecha_inicio.isoformat()
+    if datos.get("fecha_fin"):
+        datos["fecha_fin"] = alquiler.fecha_fin.isoformat()
+    try:
+        supabase.table("alquileres").insert(datos).execute()
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("Error insertando alquiler: %s", exc)
+        raise HTTPException(status_code=500, detail="Error insertando alquiler")
+    return {"status": "ok"}
 
 
 @router.get("/admin/api/ventas")

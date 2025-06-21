@@ -51,13 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnGuardar?.addEventListener('click', async () => {
     const datos = {
-      numero_banho: form.numeroBano.value.trim(),
-      cliente_nombre: form.clienteNombre.value.trim(),
-      cliente_dni: form.clienteDni.value.trim(),
-      direccion: form.direccion.value.trim(),
-      fecha_inicio: form.fechaInicio.value,
-      fecha_fin: form.fechaFin.value,
-      observaciones: form.observaciones.value.trim()
+      numero_banho: document.getElementById('numero_banho').value.trim(),
+      cliente_nombre: document.getElementById('cliente_nombre').value.trim(),
+      cliente_dni: document.getElementById('cliente_dni').value.trim(),
+      direccion: document.getElementById('direccion').value.trim(),
+      fecha_inicio: document.getElementById('fecha_inicio').value,
+      fecha_fin: document.getElementById('fecha_fin').value,
+      observaciones: document.getElementById('observaciones').value.trim()
     };
     if (!datos.numero_banho) {
       alert('El número de baño es obligatorio');

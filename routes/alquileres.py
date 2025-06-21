@@ -23,6 +23,9 @@ supabase: Client | None = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+# Nombre exacto de la tabla utilizada en Supabase
+ALQUILERES_TABLE = "alquileres"
+
 # ==== Modelo Pydantic ====
 
 class AlquilerNuevo(BaseModel):
@@ -46,7 +49,7 @@ async def crear_alquiler(alquiler: AlquilerNuevo):
 
     try:
         existente = (
-            supabase.table("alquileres")
+            supabase.table(ALQUILERES_TABLE)
             .select("numero_bano")
             .eq("numero_bano", alquiler.numero_bano)
             .single()
@@ -64,7 +67,7 @@ async def crear_alquiler(alquiler: AlquilerNuevo):
         datos["fin_contrato"] = alquiler.fin_contrato.isoformat()
 
     try:
-        supabase.table("alquileres").insert(datos).execute()
+        supabase.table(ALQUILERES_TABLE).insert(datos).execute()
     except Exception as exc:  # pragma: no cover - errores de conexión
         raise HTTPException(status_code=500, detail=f"Error al guardar alquiler: {exc}")
 
@@ -75,7 +78,7 @@ async def crear_alquiler(alquiler: AlquilerNuevo):
 @router.get("/admin/api/alquileres")
 async def listar_alquileres():
     try:
-        result = supabase.table("alquileres").select("*").execute()
+        result = supabase.table(ALQUILERES_TABLE).select("*").execute()
         if result.error:
             raise Exception(result.error.message)
         return result.data

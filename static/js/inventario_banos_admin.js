@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cargarTabla();
       alert('Baño guardado');
     } else {
-      alert(result.error || 'Error al guardar');
+      alert(result.error || result.detail || 'Error al guardar');
     }
   }
 

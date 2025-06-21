@@ -26,6 +26,7 @@ TEMPLATES = Jinja2Templates(directory="templates")
 
 TABLA = "inventario_banos"
 
+
 class BanoNuevo(BaseModel):
     numero_bano: str
     condicion: str
@@ -34,15 +35,20 @@ class BanoNuevo(BaseModel):
     estado: str
     observaciones: str | None = None
 
+
 @router.get("/admin/inventario", response_class=HTMLResponse)
 async def inventario_admin(request: Request):
     """Vista principal del inventario de baños."""
-    return TEMPLATES.TemplateResponse("inventario_banos_admin.html", {"request": request})
+    return TEMPLATES.TemplateResponse(
+        "inventario_banos_admin.html", {"request": request}
+    )
+
 
 @router.get("/inventario_bano_form", response_class=HTMLResponse)
 async def inventario_form(request: Request):
     """Formulario modal de alta de baño."""
     return TEMPLATES.TemplateResponse("inventario_bano_form.html", {"request": request})
+
 
 @router.get("/admin/api/inventario_banos")
 async def listar_banos():
@@ -56,6 +62,7 @@ async def listar_banos():
     except Exception as exc:  # pragma: no cover
         raise HTTPException(status_code=500, detail=str(exc))
 
+
 @router.post("/admin/inventario_banos/nuevo")
 async def crear_bano(bano: BanoNuevo):
     if not supabase:
@@ -64,5 +71,5 @@ async def crear_bano(bano: BanoNuevo):
     try:
         supabase.table(TABLA).insert(datos).execute()
     except Exception as exc:  # pragma: no cover
-        raise HTTPException(status_code=500, detail=str(exc))
+        return {"error": f"Error al guardar baño: {exc}"}
     return {"ok": True}

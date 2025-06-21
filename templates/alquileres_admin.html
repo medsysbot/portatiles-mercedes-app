@@ -1,6 +1,10 @@
 <!-- 📄 alquileres_admin.html :: Vista administrativa de alquileres -->
 {% extends 'panel_admin.html' %}
 {% block title %}Alquileres{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
@@ -65,5 +69,9 @@
   </div>
 </div>
 
-<script src="/static/js/alquileres_admin.js"></script>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="{{ url_for('static', path='/js/alquileres_admin.js') }}"></script>
 {% endblock %}

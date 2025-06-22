@@ -97,16 +97,37 @@ async def listar_reportes():
         return []
 
     try:
-        res = supabase.table(TABLA).select("*").execute()
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        datos = res.data or []
-    except Exception as exc:  # pragma: no cover
-        logger.exception("Error consultando reportes:")
-        raise HTTPException(status_code=500, detail=str(exc))
+        resultado = supabase.table(TABLA).select("*").execute()
+    except Exception as exc:  # pragma: no cover - posibles fallos de conexión
+        logger.exception("Error de conexión al listar reportes:")
+        raise HTTPException(status_code=500, detail=f"Error de conexión: {exc}")
 
-    for registro in datos:
+    if getattr(resultado, "error", None):
+        logger.error("Error en consulta de reportes: %s", resultado.error)
+        raise HTTPException(
+            status_code=500, detail=f"Error en consulta: {resultado.error.message}"
+        )
+
+    data = getattr(resultado, "data", None)
+    if not data:
+        logger.warning("Consulta de reportes sin datos")
+        return []
+
+    for registro in data:
         for key, val in registro.items():
             if isinstance(val, str):
                 registro[key] = val.encode("utf-8", "replace").decode("utf-8")
-    return datos
+
+    normalizados = []
+    for item in data:
+        normalizados.append(
+            {
+                "id_reporte": item.get("id_reporte") or item.get("id"),
+                "fecha": item.get("fecha"),
+                "nombre_persona": item.get("nombre_persona") or item.get("nombre"),
+                "asunto": item.get("asunto"),
+                "contenido": item.get("contenido"),
+            }
+        )
+
+    return normalizados

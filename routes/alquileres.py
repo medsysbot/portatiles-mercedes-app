@@ -138,6 +138,12 @@ async def listar_alquileres():
         logger.warning("Consulta de alquileres sin datos")
         return []
 
+    # Reemplazar caracteres inválidos para evitar errores de codificación
+    for registro in data:
+        for key, value in registro.items():
+            if isinstance(value, str):
+                registro[key] = value.encode("utf-8", "replace").decode("utf-8")
+
     # Unificar nombres de campos para el frontend
     normalizados = []
     for item in data:

@@ -1,41 +1,36 @@
-<div class="modal-header">
-  <h5 class="modal-title">Nuevo baño</h5>
-  <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-    <span aria-hidden="true">&times;</span>
-  </button>
-</div>
-<div class="modal-body">
-  <form id="formNuevoBano">
-    <div class="mb-3">
-      <label for="numero_bano" class="form-label">Número de baño</label>
-      <input type="text" id="numero_bano" name="numero_bano" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label for="condicion" class="form-label">Condición</label>
-      <input type="text" id="condicion" name="condicion" class="form-control" required>
-    </div>
-    <div class="mb-3">
-      <label for="ultima_reparacion" class="form-label">Última reparación</label>
-      <input type="date" id="ultima_reparacion" name="ultima_reparacion" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label for="ultimo_mantenimiento" class="form-label">Último mantenimiento</label>
-      <input type="date" id="ultimo_mantenimiento" name="ultimo_mantenimiento" class="form-control">
-    </div>
-    <div class="mb-3">
-      <label for="estado" class="form-label">Estado</label>
-      <select id="estado" name="estado" class="form-control" required>
-        <option value="activo">Activo</option>
-        <option value="inactivo">Inactivo</option>
-      </select>
-    </div>
-    <div class="mb-3">
-      <label for="observaciones" class="form-label">Observaciones</label>
-      <textarea id="observaciones" name="observaciones" class="form-control" rows="3"></textarea>
-    </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-        <button type="submit" class="btn btn-primary" id="btnGuardarBano">Guardar</button>
-      </div>
-  </form>
-</div>
+{% extends 'panel_admin.html' %}
+{% block title %}Nuevo Baño{% endblock %}
+{% block content %}
+<h2 class="mt-0">Nuevo Baño</h2>
+<form method="post">
+  <div class="form-group">
+    <label>Nº Baño</label>
+    <input type="text" name="numero_bano" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Condición</label>
+    <input type="text" name="condicion" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Última reparación</label>
+    <input type="date" name="ultima_reparacion" class="form-control">
+  </div>
+  <div class="form-group">
+    <label>Último mantenimiento</label>
+    <input type="date" name="ultimo_mantenimiento" class="form-control">
+  </div>
+  <div class="form-group">
+    <label>Estado</label>
+    <select name="estado" class="form-control" required>
+      <option value="activo">Activo</option>
+      <option value="inactivo">Inactivo</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Observaciones</label>
+    <textarea name="observaciones" class="form-control" rows="3"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+  <a href="/admin/inventario_banos" class="btn btn-secondary">Volver</a>
+</form>
+{% endblock %}

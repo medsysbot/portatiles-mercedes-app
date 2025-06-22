@@ -1,4 +1,4 @@
-// Archivo: static/js/inventario_bano_admin.js
+// Archivo: static/js/inventario_banos_admin.js
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarTabla() {
     try {
-      const resp = await fetch('/admin/api/inventario_bano', {
+      const resp = await fetch('/admin/api/inventario_banos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error al consultar inventario');
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Botón Agregar baño: navega al formulario de alta (NO modal)
   btnNuevo?.addEventListener('click', () => {
-    window.location.href = '/admin/inventario_bano/nuevo';
+    window.location.href = '/admin/inventario_banos/nuevo';
   });
 
   buscador?.addEventListener('input', () => {

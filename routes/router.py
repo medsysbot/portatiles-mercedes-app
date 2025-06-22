@@ -102,6 +102,13 @@ async def obtener_inventario_banos_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/servicios_limpieza_admin.js")
+async def obtener_servicios_limpieza_admin_js():
+    """Script para el módulo de servicios de limpieza."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "servicios_limpieza_admin.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/registro_clientes.js")
 async def obtener_registro_js():
     """Script del formulario de registro de clientes."""

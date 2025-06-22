@@ -120,7 +120,8 @@ async def crear_moroso(request: Request):
 
 @router.get("/admin/api/morosos")
 async def listar_morosos():
-    """Devuelve la lista completa de morosos."""
+    """Devuelve el listado completo de morosos con campos normalizados."""
+
     if not supabase:
         logger.warning("Supabase no configurado al listar morosos")
         return []
@@ -140,6 +141,7 @@ async def listar_morosos():
         logger.warning("Consulta de morosos sin datos")
         return []
 
+    # Reemplazar caracteres inválidos para evitar errores de codificación
     for registro in data:
         for key, value in registro.items():
             if isinstance(value, str):
@@ -147,15 +149,23 @@ async def listar_morosos():
 
     normalizados = []
     for item in data:
+        fecha = item.get("fecha_facturacion")
+        if isinstance(fecha, date):
+            fecha = fecha.isoformat()
+
+        monto = item.get("monto_adeudado")
+        if isinstance(monto, Decimal):
+            monto = float(monto)
+
         normalizados.append(
             {
                 "id_moroso": item.get("id_moroso") or item.get("id"),
-                "fecha_facturacion": item.get("fecha_facturacion"),
+                "fecha_facturacion": fecha,
                 "numero_factura": item.get("numero_factura"),
                 "dni_cuit_cuil": item.get("dni_cuit_cuil"),
                 "razon_social": item.get("razon_social"),
                 "nombre_cliente": item.get("nombre_cliente"),
-                "monto_adeudado": item.get("monto_adeudado"),
+                "monto_adeudado": monto,
             }
         )
 

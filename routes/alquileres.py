@@ -13,6 +13,7 @@ from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, ValidationError
 from datetime import date
 from supabase import create_client, Client
+import logging
 import os
 
 router = APIRouter()
@@ -23,6 +24,18 @@ SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
 supabase: Client | None = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOG_DIR, "alquileres.log")
+logger = logging.getLogger("alquileres")
+logger.setLevel(logging.INFO)
+if not logger.handlers:
+    handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.propagate = False
 
 # Nombre exacto de la tabla utilizada en Supabase
 ALQUILERES_TABLE = "alquileres"
@@ -99,10 +112,24 @@ async def crear_alquiler(request: Request):
 
 @router.get("/admin/api/alquileres")
 async def listar_alquileres():
+    if not supabase:
+        logger.error("Supabase no configurado")
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+
     try:
         result = supabase.table(ALQUILERES_TABLE).select("*").execute()
-        if result.error:
-            raise Exception(result.error.message)
-        return result.data
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al listar alquileres: {e}")
+    except Exception as exc:  # pragma: no cover - posibles fallos de conexión
+        logger.exception("Error de conexión al listar alquileres:")
+        raise HTTPException(status_code=500, detail=f"Error de conexión: {exc}")
+
+    if getattr(result, "error", None):
+        logger.error("Error en consulta de alquileres: %s", result.error)
+        raise HTTPException(status_code=500, detail=f"Error en consulta: {result.error.message}")
+
+    data = getattr(result, "data", None)
+    if data is None:
+        logger.warning("Consulta de alquileres sin datos")
+        return []
+
+    return data
+

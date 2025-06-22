@@ -52,6 +52,7 @@ from routes.cliente_panel import router as cliente_router
 from routes.datos_personales import router as datos_personales_router
 from routes.alquileres import router as alquileres_router
 import routes.alquileres as alquileres_module
+import routes.inventario_banos as inventario_banos_module
 from routes import admin_panel, cliente_panel, ventas, limpieza, debito
 
 app = FastAPI()
@@ -64,6 +65,7 @@ if os.getenv("ENABLE_SUPABASE") == "1":
     limpieza.supabase = supabase_client
     debito.supabase = supabase_client
     alquileres_module.supabase = supabase_client
+    inventario_banos_module.supabase = supabase_client
     login_logger.info("Cliente Supabase asignado a modulos")
 
 # Carpeta para servir todos los recursos estáticos

@@ -120,8 +120,8 @@ async def crear_alquiler(request: Request):
 @router.get("/admin/api/alquileres")
 async def listar_alquileres():
     if not supabase:
-        logger.error("Supabase no configurado")
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
+        logger.warning("Supabase no configurado")
+        return []
 
     try:
         result = supabase.table(ALQUILERES_TABLE).select("*").execute()

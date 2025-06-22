@@ -1,4 +1,4 @@
-// Archivo: static/js/inventario_banos_admin.js
+// Archivo: static/js/inventario_bano_admin.js
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {

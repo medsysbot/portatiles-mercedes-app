@@ -17,3 +17,12 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/inventario_banos` | Vista principal del inventario (`inventario_banos_admin.html`). | Sí |
 | GET | `/admin/api/inventario_banos` | Devuelve la lista completa de baños desde la base. | Sí |
 | POST | `/admin/inventario_banos/nuevo` | Crea un registro de baño en la tabla `inventario_banos`. | Sí |
+
+## Rutas - Ventas
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/ventas` | Vista de administración de ventas (`ventas_admin.html`). | Sí |
+| GET | `/admin/ventas/nueva` | Formulario de alta de venta. | Sí |
+| POST | `/admin/ventas/nueva` | Crea una venta en la tabla `ventas`. | Sí |
+| GET | `/admin/api/ventas` | Devuelve el listado de ventas. | Sí |

@@ -4,7 +4,7 @@ Archivo: routes/alquileres.py
 Descripción: Rutas y lógica para el registro de alquileres de baños
 Acceso: Privado
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-06-21
+Última modificación: 2025-06-23
 ----------------------------------------------------------
 """
 
@@ -13,6 +13,7 @@ from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, ValidationError
 from datetime import date
 from supabase import create_client, Client
+from postgrest.exceptions import APIError
 import logging
 import os
 
@@ -84,6 +85,11 @@ async def crear_alquiler(request: Request):
             .maybe_single()
             .execute()
         )
+    except APIError as exc:
+        if exc.code == "204":
+            existente = None
+        else:  # pragma: no cover - otros errores de conexión
+            raise HTTPException(status_code=500, detail=f"Error consultando datos: {exc}")
     except Exception as exc:  # pragma: no cover - errores de conexión
         raise HTTPException(status_code=500, detail=f"Error consultando datos: {exc}")
 

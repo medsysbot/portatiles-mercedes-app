@@ -3,7 +3,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaMorosos');
-  const btnBuscar = document.getElementById('btnBuscarMorosos');
   const mensajeError = document.getElementById('errorMorosos');
   const mensajeInfo = document.getElementById('mensajeMorosos');
 
@@ -66,18 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
     mensajeInfo.style.display = 'block';
   }
 
-
   buscador?.addEventListener('input', () => {
-    filtrarMorosos(buscador.value.trim());
-  });
-  btnBuscar?.addEventListener('click', () => {
-    filtrarMorosos(buscador.value.trim());
-  });
-
-  function filtrarMorosos(texto) {
-    const q = texto.toLowerCase();
+    const texto = (buscador.value || '').toLowerCase();
     const filtrados = morososCargados.filter(m =>
-      (m.dni_cuit_cuil || '').toLowerCase().includes(q)
+      (m.dni_cuit_cuil || '').toLowerCase().includes(texto)
     );
     mostrarMorosos(filtrados);
     if (filtrados.length === 0) {
@@ -85,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       mostrarMensaje('', '');
     }
-  }
+  });
 
   cargarMorosos();
 });

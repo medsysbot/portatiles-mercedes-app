@@ -120,7 +120,7 @@ async def crear_moroso(request: Request):
 
 @router.get("/admin/api/morosos")
 async def listar_morosos():
-    """Devuelve el listado completo de morosos con campos normalizados."""
+    """Obtiene todos los morosos desde Supabase y normaliza los campos."""
 
     if not supabase:
         logger.warning("Supabase no configurado al listar morosos")
@@ -128,7 +128,7 @@ async def listar_morosos():
 
     try:
         result = supabase.table(TABLA).select("*").execute()
-    except Exception as exc:  # pragma: no cover - posibles fallos de conexión
+    except Exception as exc:  # pragma: no cover - fallo de conexión
         logger.exception("Error de conexión al listar morosos:")
         raise HTTPException(status_code=500, detail=f"Error de conexión: {exc}")
 
@@ -141,7 +141,6 @@ async def listar_morosos():
         logger.warning("Consulta de morosos sin datos")
         return []
 
-    # Reemplazar caracteres inválidos para evitar errores de codificación
     for registro in data:
         for key, value in registro.items():
             if isinstance(value, str):

@@ -262,10 +262,11 @@ def test_crear_alquiler_ok(monkeypatch):
     monkeypatch.setattr(alquileres, "supabase", db)
     datos = {
         "numero_bano": "B1",
-        "cliente": "Juan",
+        "cliente_nombre": "Juan",
+        "cliente_dni": "20123456",
         "direccion": "Dir",
-        "inicio_contrato": "2025-01-01",
-        "fin_contrato": "2025-12-31",
+        "fecha_inicio": "2025-01-01",
+        "fecha_fin": "2025-12-31",
         "observaciones": "Obs",
     }
     resp = client.post("/admin/alquileres/nuevo", json=datos)
@@ -283,10 +284,11 @@ def test_crear_alquiler_duplicado(monkeypatch):
     monkeypatch.setattr(alquileres, "supabase", db)
     datos = {
         "numero_bano": "B2",
-        "cliente": "Ana",
+        "cliente_nombre": "Ana",
+        "cliente_dni": "20987654",
         "direccion": "Dir",
-        "inicio_contrato": "2025-01-01",
-        "fin_contrato": None,
+        "fecha_inicio": "2025-01-01",
+        "fecha_fin": None,
         "observaciones": "Obs",
     }
     resp = client.post("/admin/alquileres/nuevo", json=datos)

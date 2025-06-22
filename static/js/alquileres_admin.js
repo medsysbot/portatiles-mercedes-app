@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaAlquileres');
-  
+  const mensajeError = document.getElementById('errorAlquileres');
+
   let alquileresCargados = [];
 
   const tabla = $('#tablaAlquileres').DataTable({
@@ -10,10 +11,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ordering: true,
     columns: [
       { data: 'numero_bano' },
-      { data: 'cliente' },
+      { data: 'cliente_nombre' },
+      { data: 'cliente_dni' },
       { data: 'direccion' },
-      { data: 'inicio_contrato' },
-      { data: 'fin_contrato' },
+      { data: 'fecha_inicio' },
+      { data: 'fecha_fin' },
       { data: 'observaciones' }
     ]
   });
@@ -24,8 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error consultando alquileres');
       alquileresCargados = await resp.json();
       mostrarAlquileres(alquileresCargados);
+      mensajeError?.classList.add('d-none');
     } catch (err) {
       console.error('Error al cargar alquileres:', err);
+      if (mensajeError) {
+        mensajeError.textContent = 'No se pudieron cargar los alquileres.';
+        mensajeError.classList.remove('d-none');
+      }
     }
   }
 
@@ -37,7 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
   buscador?.addEventListener('input', () => {
     const texto = (buscador.value || '').toLowerCase();
     const filtrados = alquileresCargados.filter(a =>
-      (a.cliente || '').toLowerCase().includes(texto) ||
+      (a.cliente_nombre || '').toLowerCase().includes(texto) ||
+      (a.cliente_dni || '').toLowerCase().includes(texto) ||
       (a.numero_bano || '').toLowerCase().includes(texto)
     );
     mostrarAlquileres(filtrados);

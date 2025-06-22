@@ -13,6 +13,7 @@ from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, ValidationError
 from datetime import date
 from supabase import create_client, Client
+import logging
 import os
 
 router = APIRouter()
@@ -24,6 +25,18 @@ supabase: Client | None = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOG_DIR, "alquileres.log")
+logger = logging.getLogger("alquileres")
+logger.setLevel(logging.INFO)
+if not logger.handlers:
+    handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.propagate = False
+
 # Nombre exacto de la tabla utilizada en Supabase
 ALQUILERES_TABLE = "alquileres"
 
@@ -34,10 +47,11 @@ class AlquilerNuevo(BaseModel):
     """Datos necesarios para crear un alquiler."""
 
     numero_bano: str
-    cliente: str
+    cliente_nombre: str
+    cliente_dni: str
     direccion: str | None = None
-    inicio_contrato: date
-    fin_contrato: date | None = None
+    fecha_inicio: date
+    fecha_fin: date | None = None
     observaciones: str | None = None
 
 
@@ -77,10 +91,10 @@ async def crear_alquiler(request: Request):
         return {"error": "Ya existe un alquiler con ese número de baño"}
 
     datos = alquiler.model_dump()
-    if datos.get("inicio_contrato"):
-        datos["inicio_contrato"] = alquiler.inicio_contrato.isoformat()
-    if datos.get("fin_contrato"):
-        datos["fin_contrato"] = alquiler.fin_contrato.isoformat()
+    if datos.get("fecha_inicio"):
+        datos["fecha_inicio"] = alquiler.fecha_inicio.isoformat()
+    if datos.get("fecha_fin"):
+        datos["fecha_fin"] = alquiler.fecha_fin.isoformat()
 
     try:
         resp = supabase.table(ALQUILERES_TABLE).insert(datos).execute()
@@ -99,10 +113,40 @@ async def crear_alquiler(request: Request):
 
 @router.get("/admin/api/alquileres")
 async def listar_alquileres():
+    if not supabase:
+        logger.error("Supabase no configurado")
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+
     try:
         result = supabase.table(ALQUILERES_TABLE).select("*").execute()
-        if result.error:
-            raise Exception(result.error.message)
-        return result.data
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error al listar alquileres: {e}")
+    except Exception as exc:  # pragma: no cover - posibles fallos de conexión
+        logger.exception("Error de conexión al listar alquileres:")
+        raise HTTPException(status_code=500, detail=f"Error de conexión: {exc}")
+
+    if getattr(result, "error", None):
+        logger.error("Error en consulta de alquileres: %s", result.error)
+        raise HTTPException(status_code=500, detail=f"Error en consulta: {result.error.message}")
+
+    data = getattr(result, "data", None)
+    if not data:
+        logger.warning("Consulta de alquileres sin datos")
+        return []
+
+    # Unificar nombres de campos para el frontend
+    normalizados = []
+    for item in data:
+        normalizados.append(
+            {
+                "numero_bano": item.get("numero_bano"),
+                "cliente_nombre": item.get("cliente_nombre") or item.get("cliente"),
+                "cliente_dni": item.get("cliente_dni"),
+                "direccion": item.get("direccion"),
+                "fecha_inicio": item.get("fecha_inicio")
+                or item.get("inicio_contrato"),
+                "fecha_fin": item.get("fecha_fin") or item.get("fin_contrato"),
+                "observaciones": item.get("observaciones"),
+            }
+        )
+
+    return normalizados
+

@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnNuevo = document.getElementById('btnNuevoBano');
   const modal = document.getElementById('modalNuevoBano');
   const modalContainer = document.getElementById('modal-form-container');
+  const buscador = document.getElementById('busquedaInventario');
+  const btnBuscar = document.getElementById('btnBuscarInventario');
+  const mensajeError = document.getElementById('errorInventario');
+  const mensajeInfo = document.getElementById('mensajeInventario');
+
+  let banosCargados = [];
 
   const tabla = $('#tablaInventario').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
@@ -25,12 +31,39 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await fetch('/admin/api/inventario_banos');
       if (!resp.ok) throw new Error('Error al consultar inventario');
-      const datos = await resp.json();
-      tabla.clear();
-      tabla.rows.add(datos).draw();
+      banosCargados = await resp.json();
+      mostrarBanos(banosCargados);
+      mensajeError?.classList.add('d-none');
+      if (banosCargados.length === 0) {
+        mostrarMensaje('No hay baños registrados', '');
+      } else {
+        mostrarMensaje('', '');
+      }
     } catch (err) {
       console.error('Error cargando inventario:', err);
+      if (mensajeError) {
+        mensajeError.textContent = 'No se pudo cargar el inventario.';
+        mensajeError.classList.remove('d-none');
+      }
     }
+  }
+
+  function mostrarBanos(lista) {
+    tabla.clear();
+    tabla.rows.add(lista).draw();
+  }
+
+  function mostrarMensaje(texto, tipo) {
+    if (!mensajeInfo) return;
+    if (!texto) {
+      mensajeInfo.style.display = 'none';
+      mensajeInfo.textContent = '';
+      mensajeInfo.classList.remove('alert-danger');
+      return;
+    }
+    mensajeInfo.textContent = texto;
+    mensajeInfo.classList.toggle('alert-danger', tipo === 'danger');
+    mensajeInfo.style.display = 'block';
   }
 
   btnNuevo?.addEventListener('click', async () => {
@@ -39,6 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = 'block';
     const form = document.getElementById('formNuevoBano');
     form?.addEventListener('submit', guardarBano);
+  });
+
+  buscador?.addEventListener('input', () => {
+    filtrarBanos(buscador.value.trim());
+  });
+  btnBuscar?.addEventListener('click', () => {
+    filtrarBanos(buscador.value.trim());
   });
 
   async function guardarBano(event) {
@@ -61,9 +101,24 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.style.display = 'none';
       form.removeEventListener('submit', guardarBano);
       cargarTabla();
-      alert('Baño guardado');
+      mostrarMensaje('Baño guardado', '');
     } else {
-      alert(result.error || result.detail || 'Error al guardar');
+      mostrarMensaje(result.error || result.detail || 'Error al guardar', 'danger');
+    }
+  }
+
+  function filtrarBanos(texto) {
+    const q = texto.toLowerCase();
+    const filtrados = banosCargados.filter(b =>
+      (b.numero_bano || '').toLowerCase().includes(q) ||
+      (b.condicion || '').toLowerCase().includes(q) ||
+      (b.estado || '').toLowerCase().includes(q)
+    );
+    mostrarBanos(filtrados);
+    if (filtrados.length === 0) {
+      mostrarMensaje('No hay baños registrados', '');
+    } else {
+      mostrarMensaje('', '');
     }
   }
 

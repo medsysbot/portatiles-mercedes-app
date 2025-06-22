@@ -10,8 +10,9 @@ Proyecto: Portátiles Mercedes
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from supabase import create_client, Client
+from postgrest.exceptions import APIError
 import os
 
 router = APIRouter()
@@ -56,7 +57,7 @@ async def listar_banos():
         return []
     try:
         res = supabase.table(TABLA).select("*").execute()
-        if res.error:
+        if getattr(res, "error", None):
             raise Exception(res.error.message)
         return res.data or []
     except Exception as exc:  # pragma: no cover
@@ -64,9 +65,40 @@ async def listar_banos():
 
 
 @router.post("/admin/inventario_banos/nuevo")
-async def crear_bano(bano: BanoNuevo):
+async def crear_bano(request: Request):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
+
+    if request.headers.get("content-type", "").startswith("application/json"):
+        datos_req = await request.json()
+    else:
+        form = await request.form()
+        datos_req = dict(form)
+
+    try:
+        bano = BanoNuevo(**datos_req)
+    except ValidationError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    try:
+        existente = (
+            supabase.table(TABLA)
+            .select("numero_bano")
+            .eq("numero_bano", bano.numero_bano)
+            .maybe_single()
+            .execute()
+        )
+    except APIError as exc:
+        if exc.code == "204":
+            existente = None
+        else:
+            raise HTTPException(status_code=500, detail=f"Error consultando datos: {exc}")
+    except Exception as exc:  # pragma: no cover
+        raise HTTPException(status_code=500, detail=f"Error consultando datos: {exc}")
+
+    if getattr(existente, "data", None):
+        return {"error": "Ya existe un baño con ese número"}
+
     datos = bano.model_dump()
     try:
         result = supabase.table(TABLA).insert(datos).execute()

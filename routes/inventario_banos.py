@@ -61,12 +61,10 @@ async def inventario_admin(request: Request):
 
 @router.get("/admin/inventario_banos/nuevo", response_class=HTMLResponse)
 async def form_nuevo_bano(request: Request):
-    """
-    Muestra el formulario de alta de baño como página completa.
-    """
+    """Muestra el formulario de alta de baño como página completa."""
     logger.info("Vista de nuevo baño solicitada")
     return TEMPLATES.TemplateResponse("inventario_banos_form.html", {"request": request})
-
+@router.post("/admin/inventario_bano/nuevo")
 
 @router.get("/admin/api/inventario_banos")
 async def listar_banos():

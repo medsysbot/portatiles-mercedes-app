@@ -17,6 +17,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from supabase import create_client, Client
+from postgrest.exceptions import APIError
 
 router = APIRouter()
 
@@ -80,6 +81,26 @@ async def crear_moroso(request: Request):
     except Exception as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
+    # --- Verificar duplicados por número de factura ---
+    try:
+        existente = (
+            supabase.table(TABLA)
+            .select("numero_factura")
+            .eq("numero_factura", moroso.numero_factura)
+            .maybe_single()
+            .execute()
+        )
+    except APIError as exc:
+        if exc.code == "204":
+            existente = None
+        else:  # pragma: no cover - otros errores de conexión
+            raise HTTPException(status_code=500, detail=f"Error consultando datos: {exc}")
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        raise HTTPException(status_code=500, detail=f"Error consultando datos: {exc}")
+
+    if getattr(existente, "data", None):
+        return {"error": "Ya existe un moroso con ese número de factura"}
+
     datos = moroso.model_dump()
     datos["fecha_facturacion"] = moroso.fecha_facturacion.isoformat()
     datos["monto_adeudado"] = float(moroso.monto_adeudado)
@@ -105,10 +126,37 @@ async def listar_morosos():
         return []
 
     try:
-        res = supabase.table(TABLA).select("*").execute()
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        return res.data or []
-    except Exception as exc:  # pragma: no cover
-        logger.exception("Error consultando morosos:")
-        raise HTTPException(status_code=500, detail=str(exc))
+        result = supabase.table(TABLA).select("*").execute()
+    except Exception as exc:  # pragma: no cover - posibles fallos de conexión
+        logger.exception("Error de conexión al listar morosos:")
+        raise HTTPException(status_code=500, detail=f"Error de conexión: {exc}")
+
+    if getattr(result, "error", None):
+        logger.error("Error en consulta de morosos: %s", result.error)
+        raise HTTPException(status_code=500, detail=f"Error en consulta: {result.error.message}")
+
+    data = getattr(result, "data", None)
+    if not data:
+        logger.warning("Consulta de morosos sin datos")
+        return []
+
+    for registro in data:
+        for key, value in registro.items():
+            if isinstance(value, str):
+                registro[key] = value.encode("utf-8", "replace").decode("utf-8")
+
+    normalizados = []
+    for item in data:
+        normalizados.append(
+            {
+                "id_moroso": item.get("id_moroso") or item.get("id"),
+                "fecha_facturacion": item.get("fecha_facturacion"),
+                "numero_factura": item.get("numero_factura"),
+                "dni_cuit_cuil": item.get("dni_cuit_cuil"),
+                "razon_social": item.get("razon_social"),
+                "nombre_cliente": item.get("nombre_cliente"),
+                "monto_adeudado": item.get("monto_adeudado"),
+            }
+        )
+
+    return normalizados

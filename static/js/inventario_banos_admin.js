@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const btnNuevo = document.getElementById('btnNuevoBano');
-  const modal = document.getElementById('modalNuevoBano');
+  const modal = $('#modalNuevoBano');
   const modalContainer = document.getElementById('modal-form-container');
   const buscador = document.getElementById('busquedaInventario');
   const btnBuscar = document.getElementById('btnBuscarInventario');
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnNuevo?.addEventListener('click', async () => {
     const resp = await fetch('/inventario_bano_form');
     modalContainer.innerHTML = await resp.text();
-    modal.style.display = 'block';
+    modal.modal('show');
     const form = document.getElementById('formNuevoBano');
     form?.addEventListener('submit', guardarBano);
   });
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const result = await resp.json();
     if (resp.ok && result.ok) {
-      modal.style.display = 'none';
+      modal.modal('hide');
       form.removeEventListener('submit', guardarBano);
       cargarTabla();
       mostrarMensaje('Baño guardado', '');

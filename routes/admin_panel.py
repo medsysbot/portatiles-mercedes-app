@@ -493,14 +493,6 @@ async def info_todos_clientes():
 
 
 
-@router.get("/admin/api/ventas")
-async def admin_ventas(
-    desde: date | None = Query(None),
-    hasta: date | None = Query(None),
-    cliente: str | None = Query(None),
-):
-    """Ventas realizadas con filtros por fecha y nombre de cliente."""
-    return []
 
 
 @router.get("/admin/api/limpiezas")

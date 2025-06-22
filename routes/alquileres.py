@@ -47,10 +47,11 @@ class AlquilerNuevo(BaseModel):
     """Datos necesarios para crear un alquiler."""
 
     numero_bano: str
-    cliente: str
+    cliente_nombre: str
+    cliente_dni: str
     direccion: str | None = None
-    inicio_contrato: date
-    fin_contrato: date | None = None
+    fecha_inicio: date
+    fecha_fin: date | None = None
     observaciones: str | None = None
 
 
@@ -90,10 +91,10 @@ async def crear_alquiler(request: Request):
         return {"error": "Ya existe un alquiler con ese número de baño"}
 
     datos = alquiler.model_dump()
-    if datos.get("inicio_contrato"):
-        datos["inicio_contrato"] = alquiler.inicio_contrato.isoformat()
-    if datos.get("fin_contrato"):
-        datos["fin_contrato"] = alquiler.fin_contrato.isoformat()
+    if datos.get("fecha_inicio"):
+        datos["fecha_inicio"] = alquiler.fecha_inicio.isoformat()
+    if datos.get("fecha_fin"):
+        datos["fecha_fin"] = alquiler.fecha_fin.isoformat()
 
     try:
         resp = supabase.table(ALQUILERES_TABLE).insert(datos).execute()
@@ -127,9 +128,25 @@ async def listar_alquileres():
         raise HTTPException(status_code=500, detail=f"Error en consulta: {result.error.message}")
 
     data = getattr(result, "data", None)
-    if data is None:
+    if not data:
         logger.warning("Consulta de alquileres sin datos")
         return []
 
-    return data
+    # Unificar nombres de campos para el frontend
+    normalizados = []
+    for item in data:
+        normalizados.append(
+            {
+                "numero_bano": item.get("numero_bano"),
+                "cliente_nombre": item.get("cliente_nombre") or item.get("cliente"),
+                "cliente_dni": item.get("cliente_dni"),
+                "direccion": item.get("direccion"),
+                "fecha_inicio": item.get("fecha_inicio")
+                or item.get("inicio_contrato"),
+                "fecha_fin": item.get("fecha_fin") or item.get("fin_contrato"),
+                "observaciones": item.get("observaciones"),
+            }
+        )
+
+    return normalizados
 

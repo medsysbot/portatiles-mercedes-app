@@ -79,10 +79,11 @@ def test_alquileres_end_to_end(monkeypatch):
 
     datos = {
         "numero_bano": "B100",
-        "cliente": "Empresa SA",
+        "cliente_nombre": "Empresa SA",
+        "cliente_dni": "20345678",
         "direccion": "Calle 1",
-        "inicio_contrato": "2025-01-01",
-        "fin_contrato": "2025-12-31",
+        "fecha_inicio": "2025-01-01",
+        "fecha_fin": "2025-12-31",
         "observaciones": "Obs",
     }
     resp = client.post("/admin/alquileres/nuevo", json=datos)
@@ -94,3 +95,5 @@ def test_alquileres_end_to_end(monkeypatch):
     lista = resp.json()
     assert len(lista) == 1
     assert lista[0]["numero_bano"] == "B100"
+    assert lista[0]["cliente_nombre"] == "Empresa SA"
+    assert lista[0]["cliente_dni"] == "20345678"

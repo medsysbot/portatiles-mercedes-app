@@ -63,16 +63,6 @@ class Cliente(BaseModel):
     email: str
 
 
-class AlquilerNuevo(BaseModel):
-    """Datos requeridos para registrar un alquiler."""
-
-    numero_bano: str
-    cliente: str
-    direccion: str | None = None
-    inicio_contrato: date
-    fin_contrato: date | None = None
-    observaciones: str | None = None
-
 
 def obtener_clientes_db() -> list:
     """Obtiene todos los clientes desde Supabase."""

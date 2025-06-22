@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Bienvenido - Portátiles Mercedes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/app_publico/static/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: url('/static/imagenes/fondo-splash-empleados.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            font-family: 'Nunito', sans-serif;
+            animation: zoomFondo 5s ease-out forwards;
+        }
+        @keyframes zoomFondo {
+            0% { transform: scale(1.08); filter: brightness(0.7); }
+            100% { transform: scale(1); filter: brightness(1); }
+        }
+        .saludo-splash {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 3.6vw;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 20px 30px;
+            border-radius: 8px;
+            animation: pulso 2.2s ease-in-out infinite;
+        }
+        .saludo-splash span { display:block; }
+        @keyframes pulso {
+            0%   { transform: translate(-50%, -50%) scale(1); }
+            50%  { transform: translate(-50%, -50%) scale(1.08); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        .btn-entrar {
+            margin-top: 1rem;
+            padding: 0.5rem 1.2rem;
+            font-size: 1rem;
+            color: #fff;
+            background-color: #28a745;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="saludo-splash">
+        <span>Bienvenido/a</span>
+        <span>{{ nombre_usuario }}</span>
+        <button class="btn-entrar" id="btnEntrar">Entrar al panel</button>
+    </div>
+    <script>
+        const irPanel = () => { window.location.href = '/admin/panel'; };
+        document.getElementById('btnEntrar').addEventListener('click', irPanel);
+        setTimeout(irPanel, 3500);
+    </script>
+</body>
+</html>

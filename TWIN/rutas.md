@@ -62,3 +62,9 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/morosos/nuevo` | Formulario para crear un registro de moroso. | Sí |
 | POST | `/admin/morosos/nuevo` | Crea un moroso en la tabla `morosos`. | Sí |
 | GET | `/admin/api/morosos` | Devuelve el listado de morosos. | Sí |
+
+## Rutas - Splash
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/splash_empleado` | Pantalla transitoria para empleados (`splash_empleado.html`). | Sí |

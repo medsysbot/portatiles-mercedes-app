@@ -35,3 +35,12 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/limpieza/nuevo` | Formulario para crear un servicio. | Sí |
 | POST | `/admin/limpieza/nuevo` | Guarda un servicio en `servicios_limpieza`. | Sí |
 | GET | `/admin/api/servicios_limpieza` | Lista completa de servicios de limpieza. | Sí |
+
+## Rutas - Reportes
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/reportes` | Vista de administración de reportes (`reportes_admin.html`). | Sí |
+| GET | `/admin/reportes/nuevo` | Formulario para crear un reporte. | Sí |
+| POST | `/admin/reportes/nuevo` | Crea un reporte en la tabla `reportes`. | Sí |
+| GET | `/admin/api/reportes` | Devuelve el listado de reportes. | Sí |

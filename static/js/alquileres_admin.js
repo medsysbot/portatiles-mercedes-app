@@ -23,7 +23,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarAlquileres() {
     try {
-      const resp = await fetch('/admin/api/alquileres');
+      const resp = await fetch('/admin/api/alquileres', {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+      });
       if (!resp.ok) throw new Error('Error consultando alquileres');
       alquileresCargados = await resp.json();
       mostrarAlquileres(alquileresCargados);

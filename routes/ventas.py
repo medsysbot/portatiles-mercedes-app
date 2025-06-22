@@ -151,16 +151,28 @@ async def listar_ventas():
 
     try:
         res = supabase.table(VENTAS_TABLE).select("*").execute()
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        datos = res.data or []
-    except Exception as exc:  # pragma: no cover
-        logger.exception("Error consultando ventas:")
-        raise HTTPException(status_code=500, detail=str(exc))
+    except Exception as exc:  # pragma: no cover - posibles fallos de conexión
+        logger.exception("Error de conexión al listar ventas:")
+        raise HTTPException(status_code=500, detail=f"Error de conexión: {exc}")
+
+    if getattr(res, "error", None):
+        logger.error("Error en consulta de ventas: %s", res.error)
+        raise HTTPException(status_code=500, detail=f"Error en consulta: {res.error.message}")
+
+    data = getattr(res, "data", None)
+    if not data:
+        logger.warning("Consulta de ventas sin datos")
+        return []
+
+    # Reemplazar caracteres inválidos para evitar errores de codificación
+    for registro in data:
+        for key, value in registro.items():
+            if isinstance(value, str):
+                registro[key] = value.encode("utf-8", "replace").decode("utf-8")
 
     # Normalizar campos para el frontend
     normalizados = []
-    for item in datos:
+    for item in data:
         normalizados.append(
             {
                 "fecha_operacion": item.get("fecha_operacion"),

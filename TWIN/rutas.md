@@ -14,6 +14,6 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 
 | Método | Ruta | Descripción | Autenticación |
 |--------|------|-------------|---------------|
-| GET | `/admin/inventario` | Vista principal del inventario (`inventario_banos_admin.html`). | Sí |
+| GET | `/admin/inventario_banos` | Vista principal del inventario (`inventario_banos_admin.html`). | Sí |
 | GET | `/admin/api/inventario_banos` | Devuelve la lista completa de baños desde la base. | Sí |
 | POST | `/admin/inventario_banos/nuevo` | Crea un registro de baño en la tabla `inventario_banos`. | Sí |

@@ -50,7 +50,7 @@ class BanoNuevo(BaseModel):
     observaciones: str | None = None
 
 
-@router.get("/admin/inventario", response_class=HTMLResponse)
+@router.get("/admin/inventario_banos", response_class=HTMLResponse)
 async def inventario_admin(request: Request):
     """Vista principal del inventario de baños."""
     logger.info("Vista inventario de baños solicitada")

@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarTabla() {
     try {
-      const resp = await fetch('/admin/api/inventario_banos', {
+      const resp = await fetch('/admin/api/inventario_bano', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error al consultar inventario');
@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Botón Agregar baño: navega al formulario de alta (NO modal)
   btnNuevo?.addEventListener('click', () => {
-    window.location.href = '/admin/inventario_banos/nuevo';
+    window.location.href = '/admin/inventario_bano/nuevo';
   });
 
   buscador?.addEventListener('input', () => {

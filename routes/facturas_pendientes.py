@@ -11,12 +11,15 @@ from datetime import date
 import logging
 import os
 from decimal import Decimal, DecimalException
+from dotenv import load_dotenv
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from supabase import create_client, Client
+
+load_dotenv()
 
 router = APIRouter()
 

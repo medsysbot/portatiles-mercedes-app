@@ -427,8 +427,10 @@ def admin_graficos_page(request: Request):
 @router.get("/admin/facturas", response_class=HTMLResponse)
 def admin_facturas_page(request: Request):
     """Facturas pendientes y emitidas."""
-    # Sección conectada correctamente. Listo para insertar datos reales.
-    return templates.TemplateResponse("facturas_admin.html", {"request": request})
+    # Sección conectada correctamente. Alias a facturas_pendientes.
+    return templates.TemplateResponse(
+        "facturas_pendientes.html", {"request": request}
+    )
 
 
 @router.get("/cliente_panel")

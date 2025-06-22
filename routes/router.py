@@ -95,6 +95,13 @@ async def obtener_alquileres_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/ventas_admin.js")
+async def obtener_ventas_admin_js():
+    """Script para la sección de ventas del panel admin."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "ventas_admin.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/inventario_banos_admin.js")
 async def obtener_inventario_banos_admin_js():
     """Script para el inventario de baños."""

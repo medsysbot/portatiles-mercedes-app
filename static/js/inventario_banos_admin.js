@@ -3,7 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const btnNuevo = document.getElementById('btnNuevoBano');
-  const modal = document.getElementById('modalNuevoBano');
+  const modal = $('#modalNuevoBano');
   const modalContainer = document.getElementById('modal-form-container');
   const buscador = document.getElementById('busquedaInventario');
   const btnBuscar = document.getElementById('btnBuscarInventario');
@@ -29,7 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarTabla() {
     try {
-      const resp = await fetch('/admin/api/inventario_banos');
+      const resp = await fetch('/admin/api/inventario_banos', {
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+      });
       if (!resp.ok) throw new Error('Error al consultar inventario');
       banosCargados = await resp.json();
       mostrarBanos(banosCargados);
@@ -67,9 +69,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   btnNuevo?.addEventListener('click', async () => {
-    const resp = await fetch('/inventario_bano_form');
+    const resp = await fetch('/admin/inventario/form');
     modalContainer.innerHTML = await resp.text();
-    modal.style.display = 'block';
+    modal.modal('show');
     const form = document.getElementById('formNuevoBano');
     form?.addEventListener('submit', guardarBano);
   });
@@ -98,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     const result = await resp.json();
     if (resp.ok && result.ok) {
-      modal.style.display = 'none';
+      modal.modal('hide');
       form.removeEventListener('submit', guardarBano);
       cargarTabla();
       mostrarMensaje('Baño guardado', '');

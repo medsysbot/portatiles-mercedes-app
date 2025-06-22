@@ -11,6 +11,7 @@ class InMemoryQuery:
         self.filters = {}
         self.is_select = True
         self.insert_data = None
+        self.single_mode = False
 
     def select(self, *_):
         self.is_select = True
@@ -18,6 +19,10 @@ class InMemoryQuery:
 
     def eq(self, field, value):
         self.filters[field] = value
+        return self
+
+    def maybe_single(self):
+        self.single_mode = "maybe"
         return self
 
     def insert(self, data):
@@ -28,6 +33,8 @@ class InMemoryQuery:
     def execute(self):
         if self.is_select:
             result = [d for d in self.data if all(d.get(k) == v for k, v in self.filters.items())]
+            if self.single_mode == "maybe":
+                result = result[0] if result else None
             return types.SimpleNamespace(data=result, status_code=200, error=None)
         if self.insert_data is not None:
             self.data.append(self.insert_data)

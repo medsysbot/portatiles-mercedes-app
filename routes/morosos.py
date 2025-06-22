@@ -13,7 +13,7 @@ import os
 from decimal import Decimal, DecimalException
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from supabase import create_client, Client
@@ -115,7 +115,7 @@ async def crear_moroso(request: Request):
 
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}
-    return {"ok": True}
+    return RedirectResponse("/admin/morosos", status_code=303)
 
 
 @router.get("/admin/api/morosos")

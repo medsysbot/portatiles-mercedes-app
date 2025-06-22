@@ -2,7 +2,6 @@
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
-  const btnNuevo = document.getElementById('btnNuevoMoroso');
   const buscador = document.getElementById('busquedaMorosos');
   const btnBuscar = document.getElementById('btnBuscarMorosos');
   const mensajeError = document.getElementById('errorMorosos');
@@ -67,9 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
     mensajeInfo.style.display = 'block';
   }
 
-  btnNuevo?.addEventListener('click', () => {
-    window.location.href = '/admin/morosos/nuevo';
-  });
 
   buscador?.addEventListener('input', () => {
     filtrarMorosos(buscador.value.trim());

@@ -109,10 +109,10 @@ async def obtener_inventario_banos_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
-@router.get("/servicios_limpieza_admin.js")
-async def obtener_servicios_limpieza_admin_js():
+@router.get("/limpieza_admin.js")
+async def obtener_limpieza_admin_js():
     """Script para el módulo de servicios de limpieza."""
-    js_path = PRIVATE_STATIC_DIR / "js" / "servicios_limpieza_admin.js"
+    js_path = PRIVATE_STATIC_DIR / "js" / "limpieza_admin.js"
     return FileResponse(js_path, media_type="application/javascript")
 
 

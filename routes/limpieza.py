@@ -217,25 +217,38 @@ async def listar_servicios_limpieza():
         return []
 
     try:
-        res = supabase.table(TABLA).select("*").execute()
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        datos = res.data or []
-    except Exception as exc:  # pragma: no cover
+        result = supabase.table(TABLA).select("*").execute()
+    except Exception as exc:  # pragma: no cover - posibles fallos de conexión
         logger.exception("Error consultando servicios de limpieza:")
         raise HTTPException(status_code=500, detail=str(exc))
 
-    normalizados = [
-        {
-            "fecha_servicio": d.get("fecha_servicio"),
-            "numero_bano": d.get("numero_bano"),
-            "dni_cliente": d.get("dni_cliente"),
-            "nombre_cliente": d.get("nombre_cliente"),
-            "tipo_servicio": d.get("tipo_servicio"),
-            "remito_url": d.get("remito_url"),
-            "observaciones": d.get("observaciones"),
-        }
-        for d in datos
-    ]
+    if getattr(result, "error", None):
+        logger.error("Error en consulta de servicios de limpieza: %s", result.error)
+        raise HTTPException(status_code=500, detail=f"Error en consulta: {result.error.message}")
+
+    datos = getattr(result, "data", None)
+    if not datos:
+        logger.warning("Consulta de servicios de limpieza sin datos")
+        return []
+
+    for registro in datos:
+        for key, value in registro.items():
+            if isinstance(value, str):
+                registro[key] = value.encode("utf-8", "replace").decode("utf-8")
+
+    normalizados = []
+    for d in datos:
+        normalizados.append(
+            {
+                "fecha_servicio": d.get("fecha_servicio"),
+                "numero_bano": d.get("numero_bano"),
+                "dni_cliente": d.get("dni_cliente"),
+                "nombre_cliente": d.get("nombre_cliente"),
+                "tipo_servicio": d.get("tipo_servicio"),
+                "remito_url": d.get("remito_url"),
+                "observaciones": d.get("observaciones"),
+            }
+        )
+
     return normalizados
 

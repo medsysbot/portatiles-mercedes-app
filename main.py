@@ -53,10 +53,12 @@ from routes.datos_personales import router as datos_personales_router
 from routes.alquileres import router as alquileres_router
 from routes.reportes import router as reportes_router
 from routes.facturas_pendientes import router as facturas_pendientes_router
+from routes.morosos import router as morosos_router
 import routes.alquileres as alquileres_module
 import routes.inventario_banos as inventario_banos_module
 import routes.reportes as reportes_module
 import routes.facturas_pendientes as facturas_pendientes_module
+import routes.morosos as morosos_module
 from routes import admin_panel, cliente_panel, ventas, limpieza, debito, reportes
 
 app = FastAPI()
@@ -72,6 +74,7 @@ if os.getenv("ENABLE_SUPABASE") == "1":
     inventario_banos_module.supabase = supabase_client
     reportes_module.supabase = supabase_client
     facturas_pendientes_module.supabase = supabase_client
+    morosos_module.supabase = supabase_client
     login_logger.info("Cliente Supabase asignado a modulos")
 
 # Carpeta para servir todos los recursos estáticos
@@ -93,6 +96,7 @@ app.include_router(datos_personales_router)
 app.include_router(alquileres_router)
 app.include_router(reportes_router)
 app.include_router(facturas_pendientes_router)
+app.include_router(morosos_router)
 
 
 @app.get("/logout")

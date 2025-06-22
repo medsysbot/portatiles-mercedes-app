@@ -1,0 +1,70 @@
+import types
+import main
+from fastapi.testclient import TestClient
+import routes.morosos as morosos_module
+
+client = TestClient(main.app)
+
+class InMemoryQuery:
+    def __init__(self, data):
+        self.data = data
+        self.filters = {}
+        self.is_select = True
+        self.insert_data = None
+
+    def select(self, *_):
+        self.is_select = True
+        return self
+
+    def eq(self, field, value):
+        self.filters[field] = value
+        return self
+
+    def insert(self, data):
+        self.is_select = False
+        self.insert_data = data
+        return self
+
+    def execute(self):
+        if self.is_select:
+            result = [d for d in self.data if all(d.get(k) == v for k, v in self.filters.items())]
+            return types.SimpleNamespace(data=result, status_code=200, error=None)
+        if self.insert_data is not None:
+            self.data.append(self.insert_data)
+            return types.SimpleNamespace(data=[{"id": len(self.data)}], status_code=200, error=None)
+        return types.SimpleNamespace(data=None, status_code=400, error="invalid")
+
+class MemoryDB:
+    def __init__(self, data=None):
+        self.morosos = data or []
+    def table(self, name):
+        return InMemoryQuery(self.morosos)
+
+
+def test_morosos_end_to_end(monkeypatch):
+    db = MemoryDB([])
+    monkeypatch.setattr(morosos_module, "supabase", db)
+
+    resp = client.get("/admin/morosos")
+    assert resp.status_code == 200
+    assert "Morosos" in resp.text
+    assert 'id="tablaMorosos"' in resp.text
+
+    datos = {
+        "fecha_facturacion": "2025-01-01",
+        "numero_factura": "X001",
+        "dni_cuit_cuil": "20304567",
+        "razon_social": "Empresa SA",
+        "nombre_cliente": "Juan",
+        "monto_adeudado": "150.50",
+    }
+    resp = client.post("/admin/morosos/nuevo", json=datos)
+    assert resp.status_code == 200
+    assert resp.json().get("ok") is True
+
+    resp = client.get("/admin/api/morosos")
+    assert resp.status_code == 200
+    lista = resp.json()
+    assert len(lista) == 1
+    assert lista[0]["numero_factura"] == "X001"
+    assert lista[0]["dni_cuit_cuil"] == "20304567"

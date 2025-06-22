@@ -53,3 +53,12 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/facturas_pendientes/nueva` | Formulario para crear una factura pendiente. | Sí |
 | POST | `/admin/facturas_pendientes/nueva` | Crea una factura en la tabla `facturas_pendientes`. | Sí |
 | GET | `/admin/api/facturas_pendientes` | Devuelve el listado de facturas pendientes. | Sí |
+
+## Rutas - Morosos
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/morosos` | Vista de morosos (`morosos_admin.html`). | Sí |
+| GET | `/admin/morosos/nuevo` | Formulario para crear un registro de moroso. | Sí |
+| POST | `/admin/morosos/nuevo` | Crea un moroso en la tabla `morosos`. | Sí |
+| GET | `/admin/api/morosos` | Devuelve el listado de morosos. | Sí |

@@ -13,7 +13,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from supabase import create_client, Client
 from postgrest.exceptions import APIError
-import logging\
+import logging
 import os
 
 router = APIRouter()

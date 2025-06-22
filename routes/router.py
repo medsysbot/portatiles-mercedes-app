@@ -23,6 +23,7 @@ from routes.admin_panel import router as admin_router
 from routes.login import router as login_router
 from routes.clientes import router as clientes_router
 from routes.inventario_banos import router as inventario_router
+from routes.facturas_pendientes import router as facturas_pendientes_router
 
 # Directorios base de las plantillas y archivos estáticos
 # Luego de reubicar `routes/` en la raíz del repositorio, la carpeta
@@ -57,6 +58,7 @@ router.include_router(admin_router)
 router.include_router(login_router)
 router.include_router(clientes_router)
 router.include_router(inventario_router)
+router.include_router(facturas_pendientes_router)
 
 @router.get("/", response_class=HTMLResponse)
 async def mostrar_index():
@@ -113,6 +115,13 @@ async def obtener_inventario_banos_admin_js():
 async def obtener_limpieza_admin_js():
     """Script para el módulo de servicios de limpieza."""
     js_path = PRIVATE_STATIC_DIR / "js" / "limpieza_admin.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
+@router.get("/facturas_pendientes.js")
+async def obtener_facturas_pendientes_js():
+    """Script para el módulo de facturas pendientes."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "facturas_pendientes.js"
     return FileResponse(js_path, media_type="application/javascript")
 
 

@@ -44,3 +44,12 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/reportes/nuevo` | Formulario para crear un reporte. | Sí |
 | POST | `/admin/reportes/nuevo` | Crea un reporte en la tabla `reportes`. | Sí |
 | GET | `/admin/api/reportes` | Devuelve el listado de reportes. | Sí |
+
+## Rutas - Facturas pendientes
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/facturas_pendientes` | Vista de facturas pendientes (`facturas_pendientes.html`). | Sí |
+| GET | `/admin/facturas_pendientes/nueva` | Formulario para crear una factura pendiente. | Sí |
+| POST | `/admin/facturas_pendientes/nueva` | Crea una factura en la tabla `facturas_pendientes`. | Sí |
+| GET | `/admin/api/facturas_pendientes` | Devuelve el listado de facturas pendientes. | Sí |

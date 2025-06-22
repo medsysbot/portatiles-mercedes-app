@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaAlquileres');
   const mensajeError = document.getElementById('errorAlquileres');
+  const mensajeInfo = document.getElementById('mensajeAlquileres');
 
   let alquileresCargados = [];
 
@@ -27,6 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
       alquileresCargados = await resp.json();
       mostrarAlquileres(alquileresCargados);
       mensajeError?.classList.add('d-none');
+      if (alquileresCargados.length === 0) {
+        mostrarMensaje('No hay alquileres registrados', '');
+      } else {
+        mostrarMensaje('', '');
+      }
     } catch (err) {
       console.error('Error al cargar alquileres:', err);
       if (mensajeError) {
@@ -41,6 +47,19 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
+  function mostrarMensaje(texto, tipo) {
+    if (!mensajeInfo) return;
+    if (!texto) {
+      mensajeInfo.style.display = 'none';
+      mensajeInfo.textContent = '';
+      mensajeInfo.classList.remove('alert-danger');
+      return;
+    }
+    mensajeInfo.textContent = texto;
+    mensajeInfo.classList.toggle('alert-danger', tipo === 'danger');
+    mensajeInfo.style.display = 'block';
+  }
+
   buscador?.addEventListener('input', () => {
     const texto = (buscador.value || '').toLowerCase();
     const filtrados = alquileresCargados.filter(a =>
@@ -49,6 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
       (a.numero_bano || '').toLowerCase().includes(texto)
     );
     mostrarAlquileres(filtrados);
+    if (filtrados.length === 0) {
+      mostrarMensaje('No hay alquileres registrados', '');
+    } else {
+      mostrarMensaje('', '');
+    }
   });
 
   cargarAlquileres();

@@ -18,7 +18,7 @@
 | GET | /limpieza | Registro de limpiezas | limpieza.html | Sí |
 | GET | /ventas | Vista de registro de ventas | ventas.html | Sí |
 | GET | /venta | Formulario de venta de baños | venta.html | Sí |
-| GET | /admin/inventario | Inventario de baños | inventario_banos_admin.html | Sí |
+| GET | /admin/inventario_banos | Inventario de baños | inventario_banos_admin.html | Sí |
 | GET | /inventario_bano_form | Formulario de nuevo baño (modal) | inventario_bano_form.html | Sí |
 | GET | /debito | Activación de débitos automáticos | debito.html | Sí |
 | GET | /servicios | Descripción de servicios ofrecidos | servicios.html | No |

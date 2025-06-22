@@ -1,0 +1,117 @@
+/* ====== Portátiles Mercedes - CSS administrativo unificado ====== */
+
+/* 1. Importar fuente Nunito */
+@import url('https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap');
+
+body {
+  font-family: 'Nunito', Arial, sans-serif;
+  color: #6b6b6b; /* gris medio */
+  margin: 0;
+  min-height: 100vh;
+  min-width: 100vw;
+  /* 2. Gradiente diagonal de tres amarillos pastel */
+  background: linear-gradient(135deg,
+    #FFFDEB 0%,
+    #FFF6B7 33%,
+    #FFE780 66%,
+    #FFD766 100%);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* 3. Logo grande de fondo, centrado y con transparencia */
+body::before {
+  content: "";
+  position: fixed;
+  z-index: 0;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: url('/app_publico/static/icons/logo-portatiles-2.png') no-repeat center center;
+  background-size: 60vw 60vh;
+  opacity: 0.13; /* muy transparente, visible pero no molesta */
+  pointer-events: none;
+}
+
+/* 4. Formularios administrativos */
+form, .form-admin {
+  background: rgba(255,255,255,0.97);
+  border-radius: 12px;
+  padding: 32px 28px 26px 28px;
+  box-shadow: 0 2px 18px rgba(60,60,60,0.08);
+  max-width: 520px;
+  margin: 40px auto 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+.form-group label,
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+
+input, select, textarea {
+  font-family: 'Nunito', Arial, sans-serif;
+  color: #383838;
+  background: #fff;
+  border: 1px solid #dadada;
+  border-radius: 7px;
+  padding: 8px 10px;
+  margin-bottom: 17px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 5. Botones negro transparente, estilo igual en todos lados */
+.btn,
+button,
+input[type="submit"] {
+  background: rgba(0,0,0,0.68);
+  color: #fff;
+  font-family: 'Nunito', Arial, sans-serif;
+  border: none;
+  border-radius: 7px;
+  padding: 10px 32px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 3px 9px rgba(0,0,0,0.08);
+  margin-top: 14px;
+  transition: background 0.18s, transform 0.14s;
+  outline: none;
+  display: inline-block;
+  min-width: 120px;
+}
+
+.btn:hover,
+button:hover,
+input[type="submit"]:hover {
+  background: rgba(0,0,0,0.85);
+  transform: scale(1.025);
+}
+
+.btn-secondary {
+  background: rgba(0,0,0,0.38);
+  color: #fff;
+  margin-left: 6px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+/* 6. Responsividad */
+@media (max-width: 700px) {
+  form, .form-admin {
+    padding: 18px 6vw;
+    max-width: 99vw;
+  }
+  body::before {
+    background-size: 90vw 55vh;
+  }
+}
+
+/* ====== Fin CSS administrativo unificado ====== */

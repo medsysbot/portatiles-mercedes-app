@@ -118,6 +118,13 @@ async def obtener_limpieza_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/reportes_admin.js")
+async def obtener_reportes_admin_js():
+    """Script para el módulo de reportes del panel admin."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "reportes_admin.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/facturas_pendientes.js")
 async def obtener_facturas_pendientes_js():
     """Script para el módulo de facturas pendientes."""

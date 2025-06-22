@@ -1,0 +1,37 @@
+{% extends 'panel_admin.html' %}
+{% block title %}Nuevo servicio de limpieza{% endblock %}
+{% block content %}
+<h2 class="mt-0">Nuevo servicio de limpieza</h2>
+<form method="post" enctype="multipart/form-data">
+  <div class="form-group">
+    <label>Fecha del servicio</label>
+    <input type="date" name="fecha_servicio" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Nº de baño</label>
+    <input type="text" name="numero_bano" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>DNI del cliente</label>
+    <input type="text" name="dni_cliente" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Nombre del cliente</label>
+    <input type="text" name="nombre_cliente" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Tipo de servicio</label>
+    <input type="text" name="tipo_servicio" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Observaciones</label>
+    <textarea name="observaciones" class="form-control" rows="3"></textarea>
+  </div>
+  <div class="form-group">
+    <label>Foto del remito (JPG o PNG)</label>
+    <input type="file" name="remito" accept="image/*" class="form-control" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+  <a href="/admin/limpieza" class="btn btn-secondary">Volver</a>
+</form>
+{% endblock %}

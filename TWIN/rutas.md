@@ -26,3 +26,12 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/ventas/nueva` | Formulario de alta de venta. | Sí |
 | POST | `/admin/ventas/nueva` | Crea una venta en la tabla `ventas`. | Sí |
 | GET | `/admin/api/ventas` | Devuelve el listado de ventas. | Sí |
+
+## Rutas - Servicios de limpieza
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/limpieza` | Vista principal del módulo (`limpieza_admin.html`). | Sí |
+| GET | `/admin/limpieza/nuevo` | Formulario para crear un servicio. | Sí |
+| POST | `/admin/limpieza/nuevo` | Guarda un servicio en `servicios_limpieza`. | Sí |
+| GET | `/admin/api/servicios_limpieza` | Lista completa de servicios de limpieza. | Sí |

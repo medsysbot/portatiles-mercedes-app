@@ -148,11 +148,28 @@ async def listar_ventas():
     if not supabase:
         logger.warning("Supabase no configurado al listar ventas")
         return []
+
     try:
         res = supabase.table(VENTAS_TABLE).select("*").execute()
         if getattr(res, "error", None):
             raise Exception(res.error.message)
-        return res.data or []
+        datos = res.data or []
     except Exception as exc:  # pragma: no cover
         logger.exception("Error consultando ventas:")
         raise HTTPException(status_code=500, detail=str(exc))
+
+    # Normalizar campos para el frontend
+    normalizados = []
+    for item in datos:
+        normalizados.append(
+            {
+                "fecha_operacion": item.get("fecha_operacion"),
+                "tipo_bano": item.get("tipo_bano"),
+                "dni_cliente": item.get("dni_cliente"),
+                "nombre_cliente": item.get("nombre_cliente"),
+                "forma_pago": item.get("forma_pago"),
+                "observaciones": item.get("observaciones"),
+            }
+        )
+
+    return normalizados

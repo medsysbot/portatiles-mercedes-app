@@ -9,7 +9,7 @@ Proyecto: Portátiles Mercedes
 
 """Endpoints para el panel administrativo de la empresa."""
 
-from datetime import date
+from datetime import date, datetime
 
 from fastapi import APIRouter, HTTPException, Query, Request, Form
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -21,6 +21,8 @@ import os
 import logging
 from supabase import create_client, Client
 from jose import jwt, JWTError
+from routes.alquileres import ALQUILERES_TABLE
+from routes.ventas import VENTAS_TABLE
 
 load_dotenv()
 
@@ -505,3 +507,58 @@ async def admin_limpiezas(
 ):
     """Limpiezas registradas con filtros por fecha y cliente."""
     return []
+
+
+def _contar_por_mes(tabla: str, campo: str) -> list[int]:
+    """Devuelve la cantidad de registros por mes para la tabla indicada."""
+    valores = [0] * 12
+    if not supabase:
+        return valores
+    try:
+        res = supabase.table(tabla).select(campo).execute()
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("Error consultando %s: %s", tabla, exc)
+        return valores
+
+    for fila in getattr(res, "data", []):
+        fecha_str = fila.get(campo)
+        if not fecha_str:
+            continue
+        try:
+            mes = datetime.fromisoformat(str(fecha_str)).month
+        except Exception:
+            continue
+        valores[mes - 1] += 1
+    return valores
+
+
+@router.get("/admin/api/dashboard")
+async def datos_dashboard():
+    """Datos mensuales para los gráficos del panel."""
+    labels = [
+        "Ene",
+        "Feb",
+        "Mar",
+        "Abr",
+        "May",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dic",
+    ]
+    alquileres = _contar_por_mes(ALQUILERES_TABLE, "fecha_inicio")
+    ventas = _contar_por_mes(VENTAS_TABLE, "fecha_operacion")
+    # Tablas de gastos e ingresos aún no implementadas
+    gastos = [0] * 12
+    ingresos = [0] * 12
+
+    return {
+        "labels": labels,
+        "alquileres": alquileres,
+        "ventas": ventas,
+        "gastos": gastos,
+        "ingresos": ingresos,
+    }

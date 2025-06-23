@@ -59,6 +59,10 @@ class ServicioLimpiezaNuevo(BaseModel):
     observaciones: str | None = None
 
 
+class _IdLista(BaseModel):
+    ids: list[int]
+
+
 @router.get("/empleado/panel", response_class=HTMLResponse)
 def empleado_panel_view(request: Request):
     """Vista principal del panel de empleado."""
@@ -233,6 +237,7 @@ async def listar_servicios_limpieza():
     normalizados = []
     for d in datos:
         normalizados.append({
+            "id_servicio": d.get("id_servicio") or d.get("id"),
             "fecha_servicio": d.get("fecha_servicio"),
             "numero_bano": d.get("numero_bano"),
             "dni_cliente": d.get("dni_cliente"),
@@ -242,6 +247,19 @@ async def listar_servicios_limpieza():
             "observaciones": d.get("observaciones"),
         })
     return normalizados
+
+
+@router.post("/empleado/api/servicios_limpieza/eliminar")
+async def eliminar_servicios_empleado(payload: _IdLista):
+    """Elimina servicios de limpieza por ID desde el panel de empleados."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table(tabla_servicios).delete().in_("id_servicio", payload.ids).execute()
+    except Exception as exc:
+        logger.exception("Error eliminando servicios:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}
 
 
 # ------------------ Inventario de baños -----------------

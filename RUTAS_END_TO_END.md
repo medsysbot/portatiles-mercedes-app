@@ -20,6 +20,8 @@
 | GET | /venta | Formulario de venta de baños | venta.html | Sí |
 | GET | /admin/inventario_banos | Inventario de baños | inventario_banos_admin.html | Sí |
 | GET | /inventario_bano_form | Formulario de nuevo baño (modal) | inventario_bano_form.html | Sí |
+| GET | /admin/facturas_pendientes | Listado de facturas por cobrar | facturas_pendientes.html | Sí |
+| GET | /admin/facturas_pendientes/nueva | Alta de factura pendiente | facturas_pendientes_form.html | Sí |
 | GET | /debito | Activación de débitos automáticos | debito.html | Sí |
 | GET | /servicios | Descripción de servicios ofrecidos | servicios.html | No |
 | GET    | /galeria   | Galería de imágenes       | galeria.html         | No           |
@@ -56,6 +58,10 @@
 | GET  | /admin/api/alquileres  | Listar todos los alquileres desde la tabla 'alquileres' | JSON | Sí |
 | GET  | /admin/api/inventario_banos | Listar todos los baños | JSON | Sí |
 | POST | /admin/inventario_banos/nuevo | Crear nuevo baño | JSON | Sí |
+| GET | /admin/facturas_pendientes | Vista de facturas pendientes | HTML | Sí |
+| GET | /admin/facturas_pendientes/nueva | Formulario de factura | HTML | Sí |
+| POST | /admin/facturas_pendientes/nueva | Crear factura en la tabla 'facturas_pendientes' | JSON | Sí |
+| GET | /admin/api/facturas_pendientes | Listar facturas pendientes | JSON | Sí |
 | GET | /admin/ventas | Consulta de ventas | JSON | Sí |
 | GET | /admin/limpiezas | Consulta de limpiezas | JSON | Sí |
 | POST | /ejecutar_alertas | Ejecuta manualmente las alertas programadas | JSON | Sí |

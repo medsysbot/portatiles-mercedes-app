@@ -1,48 +1,50 @@
-// Reemplazá todo el script actual por esto:
+// Manejo de gráficos con carga manual de datos
 
-document.addEventListener('DOMContentLoaded', function () {
+// Ejecutar una vez cargado el script. El archivo se incluye al final de la
+// plantilla, por lo que el DOM ya está disponible y no es necesario esperar a
+// `DOMContentLoaded`.
+(async () => {
   const form = document.getElementById('formGraficos');
   const select = document.getElementById('dataset');
   const input = document.getElementById('valores');
 
-  // Si falta alguno, no seguir
-  if (!form || !select || !input) return;
+  const resp = await fetch('/admin/api/dashboard');
+  const datos = await resp.json();
+  const labels = datos.labels;
 
-  // Encontrar los gráficos
   const charts = {
-    alquileres: Chart.getChart('graficoAlquileres'),
-    ventas: Chart.getChart('graficoVentas'),
-    gastos: Chart.getChart('graficoGastos'),
-    ingresos: Chart.getChart('graficoIngresos')
+    alquileres: new Chart(document.getElementById('graficoAlquileres').getContext('2d'), {
+      type: 'bar',
+      data: { labels, datasets: [{ label: 'Alquileres', data: datos.alquileres, backgroundColor: 'rgba(60,141,188,0.9)' }] },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { suggestedMin: -7, suggestedMax: 7 } } }
+    }),
+    ventas: new Chart(document.getElementById('graficoVentas').getContext('2d'), {
+      type: 'bar',
+      data: { labels, datasets: [{ label: 'Ventas', data: datos.ventas, backgroundColor: 'rgba(40,167,69,0.9)' }] },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { suggestedMin: -7, suggestedMax: 7 } } }
+    }),
+    gastos: new Chart(document.getElementById('graficoGastos').getContext('2d'), {
+      type: 'line',
+      data: { labels, datasets: [{ label: 'Gastos', data: datos.gastos, borderColor: 'rgba(220,53,69,0.9)', fill: false }] },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { suggestedMin: -7, suggestedMax: 7 } } }
+    }),
+    ingresos: new Chart(document.getElementById('graficoIngresos').getContext('2d'), {
+      type: 'line',
+      data: { labels, datasets: [{ label: 'Ingresos', data: datos.ingresos, borderColor: 'rgba(0,123,255,0.9)', fill: false }] },
+      options: { responsive: true, maintainAspectRatio: false, scales: { y: { suggestedMin: -7, suggestedMax: 7 } } }
+    })
   };
 
-  // Si no existen, intentar instanciar desde cero (si es necesario)
-  for (const tipo in charts) {
-    if (!charts[tipo] && document.getElementById('grafico' + tipo.charAt(0).toUpperCase() + tipo.slice(1))) {
-      charts[tipo] = new Chart(document.getElementById('grafico' + tipo.charAt(0).toUpperCase() + tipo.slice(1)).getContext('2d'), {
-        type: (tipo === 'gastos' || tipo === 'ingresos') ? 'line' : 'bar',
-        data: { labels: Array(12).fill(''), datasets: [{ label: tipo.charAt(0).toUpperCase() + tipo.slice(1), data: Array(12).fill(0) }] },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
-    }
-  }
-
-  form.addEventListener('submit', function (e) {
+  form.addEventListener('submit', (e) => {
     e.preventDefault();
     const tipo = select.value;
     const valores = input.value
       .split(',')
       .map(v => parseFloat(v.trim()))
       .filter(v => !isNaN(v));
-    if (valores.length !== 12) {
-      alert('Debe ingresar exactamente 12 valores separados por coma.');
-      return;
-    }
-    if (charts[tipo]) {
+    if (valores.length) {
       charts[tipo].data.datasets[0].data = valores;
       charts[tipo].update();
-    } else {
-      alert('No se encontró el gráfico correspondiente.');
     }
   });
-});
+})();

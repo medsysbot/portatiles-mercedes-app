@@ -243,7 +243,7 @@ def admin_empleados_page(request: Request, mensaje: str | None = Query(None)):
         empleados = [
             u
             for u in getattr(resp, "data", []) or []
-            if u.get("rol") in ("Empleado", "Administrador")
+            if u.get("rol") in ("empleado", "Administrador")
         ]
     contexto = {"request": request, "empleados": empleados, "mensaje": mensaje}
     return templates.TemplateResponse("empleados_admin.html", contexto)
@@ -265,7 +265,7 @@ def crear_empleado(
     """Alta de empleados o administradores desde el panel."""
     if not password:
         raise HTTPException(status_code=400, detail="Contraseña requerida")
-    if rol not in ("Empleado", "Administrador"):
+    if rol not in ("empleado", "Administrador"):
         raise HTTPException(status_code=400, detail="Rol inv\u00e1lido")
     if supabase:
         existe = supabase.table("usuarios").select("id").eq("email", email).execute()

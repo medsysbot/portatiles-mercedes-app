@@ -123,31 +123,38 @@ async def login(datos: LoginInput, response: Response):
                 supabase.table("usuarios")
                 .select("*")
                 .eq("email", email)
-                .eq("rol", rol)
-                .single()
                 .execute()
             )
         except Exception as exc:
             logger.warning(
-                f"Login fallido – usuario o rol no encontrado: {email} / {rol} ({exc})"
+                f"Login fallido – error consultando usuario: {email} ({exc})"
             )
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Credenciales inválidas",
             )
 
+        usuarios = getattr(supabase_resp, "data", []) or []
+        usuario = next(
+            (
+                u
+                for u in usuarios
+                if u.get("rol", "").lower() == rol.lower()
+            ),
+            None,
+        )
+
         if (
-            not supabase_resp.data
+            not usuarios
             or (hasattr(supabase_resp, "status_code") and supabase_resp.status_code != 200)
             or getattr(supabase_resp, "error", None) is not None
+            or usuario is None
         ):
             logger.warning(f"Login fallido – usuario no encontrado: {email}")
             raise HTTPException(
                 status_code=status.HTTP_401_UNAUTHORIZED,
                 detail="Usuario o contraseña incorrectos",
             )
-
-        usuario = supabase_resp.data
         hashed_password = usuario.get("password") or usuario.get("password_hash")
         verificacion = False
         if hashed_password:

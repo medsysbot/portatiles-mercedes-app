@@ -201,7 +201,7 @@ def test_crear_empleado_email_repetido(monkeypatch):
             "nombre": "Juan",
             "email": "existe@test.com",
             "password": "1234",
-            "rol": "Empleado",
+            "rol": "empleado",
         },
     )
     assert resp.status_code == 400
@@ -232,13 +232,13 @@ def test_crear_y_login_empleado(monkeypatch):
             "nombre": "Pepe",
             "email": "pepe@test.com",
             "password": "abc123",
-            "rol": "Empleado",
+            "rol": "empleado",
         },
     )
     assert create.status_code == 200
     login_resp = client.post(
         "/login",
-        json={"email": "pepe@test.com", "password": "abc123", "rol": "Empleado"},
+        json={"email": "pepe@test.com", "password": "abc123", "rol": "empleado"},
     )
     assert login_resp.status_code == 200
     assert "access_token" in login_resp.json()

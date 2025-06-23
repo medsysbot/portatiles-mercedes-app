@@ -192,7 +192,7 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="{{ url_for('static-private', path='/js/cliente_panel.js') }}"></script>
+<script src="/cliente_panel.js"></script>
 <script>
   document.getElementById('btnLogout').addEventListener('click', () => {
     localStorage.removeItem('access_token');

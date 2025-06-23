@@ -139,3 +139,12 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/ventas_cliente` | Ventas asociadas al cliente | Sí |
 | POST | `/cliente/reporte` | Envía un reporte desde el panel | Sí |
 | POST | `/cliente/email` | Envía un email a la empresa | Sí |
+
+## Rutas - Recuperación de contraseña
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/recuperar_password` | Formulario para solicitar el enlace de recuperación | No |
+| POST | `/recuperar_password` | Procesa el envío del email de recuperación | No |
+| GET | `/reset_password` | Formulario para ingresar la nueva contraseña | No |
+| POST | `/reset_password` | Actualiza la contraseña usando el token recibido | No |

@@ -29,6 +29,62 @@ async function fetchConAuth(url, options = {}) {
     return resp;
 }
 
+let alquileresCargados = [];
+let facturasCargadas = [];
+let ventasCargadas = [];
+let tablaAlquileres;
+let tablaFacturas;
+let tablaVentas;
+
+function initTablas() {
+    tablaAlquileres = $('#tablaAlquileres').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+            { data: 'numero_bano' },
+            { data: 'cliente_nombre' },
+            { data: 'cliente_dni' },
+            { data: 'direccion' },
+            { data: 'fecha_inicio' },
+            { data: 'fecha_fin' },
+            { data: 'observaciones' }
+        ]
+    });
+
+    tablaFacturas = $('#tablaFacturasPendientes').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+            { data: 'id_factura' },
+            { data: 'fecha' },
+            { data: 'numero_factura' },
+            { data: 'dni_cuit_cuil' },
+            { data: 'razon_social' },
+            { data: 'nombre_cliente' },
+            { data: 'monto_adeudado' }
+        ]
+    });
+
+    tablaVentas = $('#tablaVentasCliente').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+            { data: 'fecha_operacion' },
+            { data: 'tipo_bano' },
+            { data: 'dni_cliente' },
+            { data: 'nombre_cliente' },
+            { data: 'forma_pago' },
+            { data: 'observaciones' }
+        ]
+    });
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('access_token');
     if (!token) {
@@ -63,9 +119,58 @@ document.addEventListener('DOMContentLoaded', async () => {
             cargarDatosPersonales(email);
         }
         document.getElementById('bienvenida').textContent = 'Panel del Cliente';
-        cargarDatos(window.dniCliente);
+        initTablas();
+        cargarAlquileres(window.dniCliente);
+        cargarFacturas(window.dniCliente);
+        cargarVentas(window.dniCliente);
         cargarEmailsCliente(email);
         prepararListenersFormulario();
+
+        const buscAlq = document.getElementById('busquedaAlquileres');
+        buscAlq?.addEventListener('input', () => {
+            const texto = (buscAlq.value || '').toLowerCase();
+            const filtrados = alquileresCargados.filter(a =>
+                (a.cliente_nombre || '').toLowerCase().includes(texto) ||
+                (a.cliente_dni || '').toLowerCase().includes(texto) ||
+                (a.numero_bano || '').toLowerCase().includes(texto)
+            );
+            mostrarAlquileres(filtrados);
+            if (filtrados.length === 0) {
+                mostrarMensaje('mensajeAlquileres', 'No hay alquileres registrados', '');
+            } else {
+                mostrarMensaje('mensajeAlquileres', '', '');
+            }
+        });
+
+        const buscFact = document.getElementById('busquedaFacturas');
+        const btnBuscFact = document.getElementById('btnBuscarFacturas');
+        function filtrarFacturas() {
+            const q = (buscFact.value || '').toLowerCase();
+            const filtradas = facturasCargadas.filter(f => (f.dni_cuit_cuil || '').toLowerCase().includes(q));
+            mostrarFacturas(filtradas);
+            if (filtradas.length === 0) {
+                mostrarMensaje('mensajeFacturas', 'No hay facturas registradas', '');
+            } else {
+                mostrarMensaje('mensajeFacturas', '', '');
+            }
+        }
+        buscFact?.addEventListener('input', filtrarFacturas);
+        btnBuscFact?.addEventListener('click', filtrarFacturas);
+
+        const buscVentas = document.getElementById('busquedaVentas');
+        buscVentas?.addEventListener('input', () => {
+            const texto = (buscVentas.value || '').toLowerCase();
+            const filtrados = ventasCargadas.filter(v =>
+                (v.nombre_cliente || '').toLowerCase().includes(texto) ||
+                (v.dni_cliente || '').toLowerCase().includes(texto)
+            );
+            mostrarVentas(filtrados);
+            if (filtrados.length === 0) {
+                mostrarMensaje('mensajeVentas', 'No hay ventas registradas', '');
+            } else {
+                mostrarMensaje('mensajeVentas', '', '');
+            }
+        });
     } catch (err) {
         if (err.message === 'Unauthorized' || err.message === 'Token inválido') {
             handleUnauthorized();
@@ -76,111 +181,99 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 // ==== Funciones auxiliares ====
 
-async function cargarDatos(dni) {
-    try {
-        const [alqRes, pendRes, histRes, limpRes, venRes] = await Promise.all([
-            fetchConAuth(`/alquileres_cliente?dni=${encodeURIComponent(dni)}`),
-            fetchConAuth(`/facturas_pendientes_cliente?dni=${encodeURIComponent(dni)}`),
-            fetchConAuth(`/facturas_cliente?dni=${encodeURIComponent(dni)}`),
-            fetchConAuth(`/limpiezas_cliente?dni=${encodeURIComponent(dni)}`),
-            fetchConAuth(`/ventas_cliente?dni=${encodeURIComponent(dni)}`)
-        ]);
+function mostrarMensaje(id, texto, tipo) {
+    const cont = document.getElementById(id);
+    if (!cont) return;
+    if (!texto) {
+        cont.style.display = 'none';
+        cont.textContent = '';
+        cont.classList.remove('alert-danger');
+        return;
+    }
+    cont.textContent = texto;
+    cont.classList.toggle('alert-danger', tipo === 'danger');
+    cont.style.display = 'block';
+}
 
-        if (alqRes.ok) {
-            const datos = await alqRes.json();
-            renderAlquileres(datos);
-        }
-        if (pendRes.ok) {
-            const datos = await pendRes.json();
-            renderPendientes(datos);
-        }
-        if (histRes.ok) {
-            const datos = await histRes.json();
-            renderHistorial(datos);
-        }
-        if (limpRes.ok) {
-            const datos = await limpRes.json();
-            renderLimpiezas(datos);
-        }
-        if (venRes.ok) {
-            const datos = await venRes.json();
-            renderVentas(datos);
+async function cargarAlquileres(dni) {
+    const mensajeError = document.getElementById('errorAlquileres');
+    try {
+        const resp = await fetchConAuth(`/alquileres_cliente?dni=${encodeURIComponent(dni)}`);
+        if (!resp.ok) throw new Error('Error consultando');
+        alquileresCargados = await resp.json();
+        mostrarAlquileres(alquileresCargados);
+        mensajeError?.classList.add('d-none');
+        if (alquileresCargados.length === 0) {
+            mostrarMensaje('mensajeAlquileres', 'No hay alquileres registrados', '');
+        } else {
+            mostrarMensaje('mensajeAlquileres', '', '');
         }
     } catch (err) {
-        console.error(err);
-        if (err.message === 'Unauthorized') handleUnauthorized();
+        console.error('Error al cargar alquileres:', err);
+        if (mensajeError) {
+            mensajeError.textContent = 'No se pudieron cargar los alquileres.';
+            mensajeError.classList.remove('d-none');
+        }
     }
 }
 
-function renderAlquileres(lista) {
-    const tbody = document.querySelector('#tablaAlquileres tbody');
-    tbody.innerHTML = '';
-    lista.forEach(reg => {
-        const tr = document.createElement('tr');
-        tr.innerHTML =
-            `<td>${reg.numero_bano || ''}</td>` +
-            `<td>${reg.cliente_nombre || ''}</td>` +
-            `<td>${reg.cliente_dni || ''}</td>` +
-            `<td>${reg.direccion || ''}</td>` +
-            `<td>${reg.fecha_inicio || ''}</td>` +
-            `<td>${reg.fecha_fin || ''}</td>` +
-            `<td>${reg.observaciones || ''}</td>`;
-        tbody.appendChild(tr);
-    });
+function mostrarAlquileres(lista) {
+    tablaAlquileres.clear();
+    tablaAlquileres.rows.add(lista).draw();
 }
 
-
-function renderPendientes(lista) {
-    const tbody = document.querySelector('#tablaFacturasPendientes tbody');
-    tbody.innerHTML = '';
-    lista.forEach(f => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${f.fecha || ''}</td>` +
-                       `<td>${f.numero_factura || ''}</td>` +
-                       `<td>${f.monto_adeudado || ''}</td>`;
-        tbody.appendChild(tr);
-    });
+async function cargarFacturas(dni) {
+    const mensajeError = document.getElementById('errorFacturas');
+    try {
+        const resp = await fetchConAuth(`/facturas_pendientes_cliente?dni=${encodeURIComponent(dni)}`);
+        if (!resp.ok) throw new Error('Error consultando');
+        facturasCargadas = await resp.json();
+        mostrarFacturas(facturasCargadas);
+        mensajeError?.classList.add('d-none');
+        if (facturasCargadas.length === 0) {
+            mostrarMensaje('mensajeFacturas', 'No hay facturas registradas', '');
+        } else {
+            mostrarMensaje('mensajeFacturas', '', '');
+        }
+    } catch (err) {
+        console.error('Error cargando facturas:', err);
+        if (mensajeError) {
+            mensajeError.textContent = 'No se pudo cargar el listado.';
+            mensajeError.classList.remove('d-none');
+        }
+    }
 }
 
-function renderHistorial(lista) {
-    const tbody = document.querySelector('#tablaHistorial tbody');
-    tbody.innerHTML = '';
-    lista.forEach(f => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${f.fecha || ''}</td>` +
-                       `<td>${f.numero_factura || ''}</td>` +
-                       `<td>${f.monto || ''}</td>` +
-                       `<td>${f.estado || ''}</td>`;
-        tbody.appendChild(tr);
-    });
+function mostrarFacturas(lista) {
+    tablaFacturas.clear();
+    tablaFacturas.rows.add(lista).draw();
 }
 
-function renderLimpiezas(lista) {
-    const tbody = document.querySelector('#tablaLimpiezas tbody');
-    tbody.innerHTML = '';
-    lista.forEach(l => {
-        const tr = document.createElement('tr');
-        const remito = l.remito_url ? `<a href="${l.remito_url}" target="_blank">Ver</a>` : '';
-        tr.innerHTML = `<td>${l.fecha || ''}</td>` +
-                       `<td>${l.numero_bano || ''}</td>` +
-                       `<td>${l.tipo_servicio || ''}</td>` +
-                       `<td>${l.observaciones || ''}</td>` +
-                       `<td>${remito}</td>`;
-        tbody.appendChild(tr);
-    });
+async function cargarVentas(dni) {
+    const mensajeError = document.getElementById('errorVentas');
+    try {
+        const resp = await fetchConAuth(`/ventas_cliente?dni=${encodeURIComponent(dni)}`);
+        if (!resp.ok) throw new Error('Error consultando');
+        ventasCargadas = await resp.json();
+        mostrarVentas(ventasCargadas);
+        mensajeError?.classList.add('d-none');
+        if (ventasCargadas.length === 0) {
+            mostrarMensaje('mensajeVentas', 'No hay ventas registradas', '');
+        } else {
+            mostrarMensaje('mensajeVentas', '', '');
+        }
+    } catch (err) {
+        console.error('Error al cargar ventas:', err);
+        if (mensajeError) {
+            mensajeError.textContent = 'No se pudo cargar el listado.';
+            mensajeError.classList.remove('d-none');
+        }
+    }
 }
 
-function renderVentas(lista) {
-    const tbody = document.querySelector('#tablaVentasCliente tbody');
-    tbody.innerHTML = '';
-    lista.forEach(v => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${v.fecha_operacion || ''}</td>` +
-                       `<td>${v.tipo_bano || ''}</td>` +
-                       `<td>${v.forma_pago || ''}</td>` +
-                       `<td>${v.observaciones || ''}</td>`;
-        tbody.appendChild(tr);
-    });
+function mostrarVentas(lista) {
+    tablaVentas.clear();
+    tablaVentas.rows.add(lista).draw();
 }
 
 function renderEmails(lista) {

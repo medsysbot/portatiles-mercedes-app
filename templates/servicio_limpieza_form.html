@@ -1,5 +1,9 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Nuevo servicio de limpieza{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock %}
 {% block content %}
 <h2 class="mt-0">Nuevo servicio de limpieza</h2>
 <form method="post" enctype="multipart/form-data">

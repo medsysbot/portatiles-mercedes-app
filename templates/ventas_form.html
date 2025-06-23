@@ -1,5 +1,9 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Nueva Venta{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock %}
 {% block content %}
 <h2 class="mt-0">Nueva Venta</h2>
 <form method="post">

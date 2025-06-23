@@ -46,5 +46,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script src="/emails_admin.js"></script>
+<script src="{{ url_for('static-private', path='/js/emails_admin.js') }}"></script>
 {% endblock %}

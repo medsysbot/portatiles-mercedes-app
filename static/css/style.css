@@ -124,3 +124,9 @@ button.cerrar-sesion {
   opacity: 1 !important;
   box-shadow: 2px 0 10px rgba(0,0,0,0.08);
 }
+
+/* Proporción 2:1 para los gráficos del dashboard */
+.grafico-panel {
+  width: 100%;
+  aspect-ratio: 2 / 1;
+}

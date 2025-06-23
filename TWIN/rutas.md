@@ -96,3 +96,9 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | Método | Ruta | Descripción | Autenticación |
 |--------|------|-------------|---------------|
 | GET | `/admin/api/dashboard` | Datos mensuales para los gráficos del panel. | Sí |
+
+## Rutas - Gráficos
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/graficos` | Vista para cargar datos manuales y actualizar gráficos. | Sí |

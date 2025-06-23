@@ -122,7 +122,7 @@
     <div class="card h-100">
       <div class="card-header"><h3 class="card-title">Alquileres</h3></div>
       <div class="card-body">
-        <canvas id="graficoAlquileres" style="min-height:250px"></canvas>
+        <canvas id="graficoAlquileres" class="grafico-panel"></canvas>
       </div>
     </div>
   </div>
@@ -130,7 +130,7 @@
     <div class="card h-100">
       <div class="card-header"><h3 class="card-title">Ventas</h3></div>
       <div class="card-body">
-        <canvas id="graficoVentas" style="min-height:250px"></canvas>
+        <canvas id="graficoVentas" class="grafico-panel"></canvas>
       </div>
     </div>
   </div>
@@ -138,7 +138,7 @@
     <div class="card h-100">
       <div class="card-header"><h3 class="card-title">Gastos</h3></div>
       <div class="card-body">
-        <canvas id="graficoGastos" style="min-height:250px"></canvas>
+        <canvas id="graficoGastos" class="grafico-panel"></canvas>
       </div>
     </div>
   </div>
@@ -146,7 +146,7 @@
     <div class="card h-100">
       <div class="card-header"><h3 class="card-title">Ingresos</h3></div>
       <div class="card-body">
-        <canvas id="graficoIngresos" style="min-height:250px"></canvas>
+        <canvas id="graficoIngresos" class="grafico-panel"></canvas>
       </div>
     </div>
   </div>
@@ -214,7 +214,11 @@
           backgroundColor: 'rgba(60,141,188,0.9)'
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
+      }
     });
 
     new Chart(document.getElementById('graficoVentas').getContext('2d'), {
@@ -227,7 +231,11 @@
           backgroundColor: 'rgba(40,167,69,0.9)'
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
+      }
     });
 
     new Chart(document.getElementById('graficoGastos').getContext('2d'), {
@@ -241,7 +249,11 @@
           fill: false
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
+      }
     });
 
     new Chart(document.getElementById('graficoIngresos').getContext('2d'), {
@@ -255,7 +267,11 @@
           fill: false
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false }
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
+      }
     });
   });
 </script>

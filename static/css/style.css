@@ -94,3 +94,33 @@ button.cerrar-sesion {
 .main-sidebar, .sidebar {
   background: inherit !important;
 }
+/* ================== SIDEBAR PORTÁTILES MERCEDES ================== */
+.main-sidebar,
+.sidebar,
+.sidebar-dark-primary,
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link,
+.sidebar-dark-primary .brand-link {
+  background: #171717 !important; /* negro puro */
+  color: #fff !important;
+}
+
+.main-sidebar .nav-link,
+.sidebar .nav-link,
+.sidebar-dark-primary .nav-link,
+.sidebar-dark-primary .nav-link span,
+.sidebar-dark-primary .brand-link {
+  color: #fff !important;
+}
+
+.main-sidebar .nav-link.active,
+.sidebar .nav-link.active {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
+}
+
+/* Evita transparencia accidental en sidebar */
+.main-sidebar,
+.sidebar {
+  opacity: 1 !important;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+}

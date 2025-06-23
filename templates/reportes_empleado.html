@@ -1,0 +1,34 @@
+{% extends 'panel_empleado.html' %}
+{% block title %}Reportes{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block content %}
+<h2 class="mt-0">Administración de reportes</h2>
+<div id="errorReportes" class="alert alert-danger d-none"></div>
+<div id="mensajeReportes" class="alert mt-3" style="display:none"></div>
+<div class="d-flex justify-content-between align-items-center my-3">
+  <input type="text" id="busquedaReportes" class="form-control w-50" placeholder="Buscar por nombre o asunto">
+  <button id="btnBuscarReportes" class="btn btn-secondary ml-2">Buscar</button>
+  <a href="/empleado/reportes/nuevo" class="btn btn-primary ml-3">Nuevo reporte</a>
+</div>
+<div class="table-responsive bg-light p-3">
+  <table id="tablaReportes" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Fecha</th>
+        <th>Nombre</th>
+        <th>Asunto</th>
+        <th>Contenido</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="/reportes_empleado.js"></script>
+{% endblock %}

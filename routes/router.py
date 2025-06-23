@@ -120,10 +120,24 @@ async def obtener_limpieza_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/limpieza_empleado.js")
+async def obtener_limpieza_empleado_js():
+    """Script para el módulo de limpieza del panel de empleados."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "limpieza_empleado.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/reportes_admin.js")
 async def obtener_reportes_admin_js():
     """Script para el módulo de reportes del panel admin."""
     js_path = PRIVATE_STATIC_DIR / "js" / "reportes_admin.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
+@router.get("/reportes_empleado.js")
+async def obtener_reportes_empleado_js():
+    """Script para el módulo de reportes del panel de empleados."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "reportes_empleado.js"
     return FileResponse(js_path, media_type="application/javascript")
 
 

@@ -1,0 +1,25 @@
+{% extends 'panel_empleado.html' %}
+{% block title %}Nuevo Reporte{% endblock %}
+{% block content %}
+<h2 class="mt-0">Nuevo Reporte</h2>
+<form method="post">
+  <div class="form-group">
+    <label>Fecha</label>
+    <input type="date" name="fecha" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Nombre de la persona</label>
+    <input type="text" name="nombre_persona" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Asunto</label>
+    <input type="text" name="asunto" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Contenido</label>
+    <textarea name="contenido" class="form-control" rows="4" required></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+  <a href="/empleado/reportes" class="btn btn-secondary">Volver</a>
+</form>
+{% endblock %}

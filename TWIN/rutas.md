@@ -68,3 +68,17 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | Método | Ruta | Descripción | Autenticación |
 |--------|------|-------------|---------------|
 | GET | `/splash_empleado` | Pantalla transitoria para empleados (`splash_empleado.html`). | Sí |
+
+## Rutas - Panel de Empleados
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/empleado/panel` | Vista principal del panel de empleado (`panel_empleado.html`). | Sí |
+| GET | `/empleado/reportes` | Listado de reportes (`reportes_empleado.html`). | Sí |
+| GET | `/empleado/reportes/nuevo` | Formulario para crear un reporte. | Sí |
+| POST | `/empleado/reportes/nuevo` | Guarda un reporte en `reportes`. | Sí |
+| GET | `/empleado/api/reportes` | Devuelve la lista de reportes. | Sí |
+| GET | `/empleado/limpieza` | Vista de servicios de limpieza (`limpieza_empleado.html`). | Sí |
+| GET | `/empleado/limpieza/nuevo` | Formulario para crear un servicio de limpieza. | Sí |
+| POST | `/empleado/limpieza/nuevo` | Guarda un servicio en `servicios_limpieza`. | Sí |
+| GET | `/empleado/api/servicios_limpieza` | Devuelve la lista de servicios de limpieza. | Sí |

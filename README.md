@@ -38,7 +38,9 @@ Portátiles Mercedes es una solución SaaS diseñada para empresas de servicios 
    ```
 3. **Configurá las variables de entorno:**
    Asegurate de definir `SUPABASE_URL`, `SUPABASE_ROLE_KEY` y `JWT_SECRET` en un
-   archivo `.env`. Para habilitar la conexión con Supabase poné `ENABLE_SUPABASE=1`.
+   archivo `.env`. Si querés habilitar el envío de correos desde el módulo de emails
+   agregá también `EMAIL_ORIGEN`, `EMAIL_PASSWORD`, `SMTP_SERVER` y `SMTP_PORT`.
+   Para habilitar la conexión con Supabase poné `ENABLE_SUPABASE=1`.
 
 ## 📝 Buenas prácticas de archivos
 

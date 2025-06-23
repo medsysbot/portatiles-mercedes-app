@@ -242,3 +242,61 @@ async def listar_servicios_limpieza():
             "observaciones": d.get("observaciones"),
         })
     return normalizados
+
+
+# ------------------ Inventario de baños -----------------
+
+@router.get("/empleado/inventario_banos", response_class=HTMLResponse)
+def ver_inventario_empleado(request: Request):
+    """Vista del inventario de baños para empleados."""
+    return templates.TemplateResponse("inventario_banos_empleado.html", {"request": request})
+
+
+@router.get("/empleado/api/inventario_banos")
+async def listar_inventario_empleado():
+    if not supabase:
+        return []
+    try:
+        res = supabase.table("inventario_banos").select("*").execute()
+        if getattr(res, "error", None):
+            raise Exception(res.error.message)
+        return res.data or []
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+# ------------------ Alquileres -----------------
+
+@router.get("/empleado/alquileres", response_class=HTMLResponse)
+def ver_alquileres_empleado(request: Request):
+    """Vista de alquileres en modo lectura para empleados."""
+    return templates.TemplateResponse("alquileres_empleado.html", {"request": request})
+
+
+@router.get("/empleado/api/alquileres")
+async def listar_alquileres_empleado():
+    if not supabase:
+        return []
+    try:
+        result = supabase.table("alquileres").select("*").execute()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Error de conexión: {exc}")
+
+    if getattr(result, "error", None):
+        raise HTTPException(status_code=500, detail=f"Error en consulta: {result.error.message}")
+
+    data = getattr(result, "data", None) or []
+    normalizados = []
+    for item in data:
+        normalizados.append(
+            {
+                "numero_bano": item.get("numero_bano"),
+                "cliente_nombre": item.get("cliente_nombre") or item.get("cliente"),
+                "cliente_dni": item.get("cliente_dni"),
+                "direccion": item.get("direccion"),
+                "fecha_inicio": item.get("fecha_inicio") or item.get("inicio_contrato"),
+                "fecha_fin": item.get("fecha_fin") or item.get("fin_contrato"),
+                "observaciones": item.get("observaciones"),
+            }
+        )
+    return normalizados

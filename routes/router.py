@@ -143,6 +143,20 @@ async def obtener_reportes_empleado_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/inventario_banos_empleado.js")
+async def obtener_inventario_banos_empleado_js():
+    """Script para el inventario de baños para empleados."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "inventario_banos_empleado.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
+@router.get("/alquileres_empleado.js")
+async def obtener_alquileres_empleado_js():
+    """Script para la sección de alquileres del panel de empleados."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "alquileres_empleado.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/facturas_pendientes.js")
 async def obtener_facturas_pendientes_js():
     """Script para el módulo de facturas pendientes."""

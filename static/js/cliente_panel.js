@@ -57,12 +57,13 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (datosCliRes.ok) {
             const datosCli = await datosCliRes.json();
             nombre = datosCli.nombre || email;
+            window.dniCliente = datosCli.dni;
             cargarDatosPersonales(email, datosCli);
         } else {
             cargarDatosPersonales(email);
         }
         document.getElementById('bienvenida').textContent = 'Panel del Cliente';
-        cargarDatos(email);
+        cargarDatos(window.dniCliente);
         prepararListenersFormulario();
     } catch (err) {
         if (err.message === 'Unauthorized' || err.message === 'Token inválido') {
@@ -74,25 +75,35 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 // ==== Funciones auxiliares ====
 
-async function cargarDatos(email) {
+async function cargarDatos(dni) {
     try {
-        const [alqRes, pagRes, limpRes] = await Promise.all([
-            fetchConAuth(`/alquileres_cliente?email=${encodeURIComponent(email)}`),
-            fetchConAuth(`/pagos_cliente?email=${encodeURIComponent(email)}`),
-            fetchConAuth(`/limpiezas_cliente?email=${encodeURIComponent(email)}`)
+        const [alqRes, pendRes, histRes, limpRes, venRes] = await Promise.all([
+            fetchConAuth(`/alquileres_cliente?dni=${encodeURIComponent(dni)}`),
+            fetchConAuth(`/facturas_pendientes_cliente?dni=${encodeURIComponent(dni)}`),
+            fetchConAuth(`/facturas_cliente?dni=${encodeURIComponent(dni)}`),
+            fetchConAuth(`/limpiezas_cliente?dni=${encodeURIComponent(dni)}`),
+            fetchConAuth(`/ventas_cliente?dni=${encodeURIComponent(dni)}`)
         ]);
 
         if (alqRes.ok) {
             const datos = await alqRes.json();
             renderAlquileres(datos);
         }
-        if (pagRes.ok) {
-            const datos = await pagRes.json();
-            renderPagos(datos);
+        if (pendRes.ok) {
+            const datos = await pendRes.json();
+            renderPendientes(datos);
+        }
+        if (histRes.ok) {
+            const datos = await histRes.json();
+            renderHistorial(datos);
         }
         if (limpRes.ok) {
             const datos = await limpRes.json();
             renderLimpiezas(datos);
+        }
+        if (venRes.ok) {
+            const datos = await venRes.json();
+            renderVentas(datos);
         }
     } catch (err) {
         console.error(err);
@@ -113,14 +124,28 @@ function renderAlquileres(lista) {
     });
 }
 
-function renderPagos(lista) {
-    const tbody = document.querySelector('#tablaPagos tbody');
+
+function renderPendientes(lista) {
+    const tbody = document.querySelector('#tablaFacturasPendientes tbody');
     tbody.innerHTML = '';
-    lista.forEach(p => {
+    lista.forEach(f => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${p.fecha || ''}</td>` +
-                       `<td>${p.monto || ''}</td>` +
-                       `<td>${p.metodo || ''}</td>`;
+        tr.innerHTML = `<td>${f.fecha || ''}</td>` +
+                       `<td>${f.numero_factura || ''}</td>` +
+                       `<td>${f.monto_adeudado || ''}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderHistorial(lista) {
+    const tbody = document.querySelector('#tablaHistorial tbody');
+    tbody.innerHTML = '';
+    lista.forEach(f => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${f.fecha || ''}</td>` +
+                       `<td>${f.numero_factura || ''}</td>` +
+                       `<td>${f.monto || ''}</td>` +
+                       `<td>${f.estado || ''}</td>`;
         tbody.appendChild(tr);
     });
 }
@@ -131,9 +156,24 @@ function renderLimpiezas(lista) {
     lista.forEach(l => {
         const tr = document.createElement('tr');
         const remito = l.remito_url ? `<a href="${l.remito_url}" target="_blank">Ver</a>` : '';
-        tr.innerHTML = `<td>${l.fecha || l.fecha_hora || ''}</td>` +
+        tr.innerHTML = `<td>${l.fecha || ''}</td>` +
+                       `<td>${l.numero_bano || ''}</td>` +
+                       `<td>${l.tipo_servicio || ''}</td>` +
                        `<td>${l.observaciones || ''}</td>` +
                        `<td>${remito}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+function renderVentas(lista) {
+    const tbody = document.querySelector('#tablaVentasCliente tbody');
+    tbody.innerHTML = '';
+    lista.forEach(v => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${v.fecha_operacion || ''}</td>` +
+                       `<td>${v.tipo_bano || ''}</td>` +
+                       `<td>${v.forma_pago || ''}</td>` +
+                       `<td>${v.observaciones || ''}</td>`;
         tbody.appendChild(tr);
     });
 }
@@ -235,4 +275,56 @@ async function guardarDatos(ev) {
     } else {
         mostrarMensajeFormulario(resultado.error || 'Error al guardar datos', 'danger');
     }
+}
+
+document.getElementById('formReporte').addEventListener('submit', enviarReporte);
+document.getElementById('formRespuestaEmail').addEventListener('submit', enviarEmail);
+
+async function enviarReporte(ev) {
+    ev.preventDefault();
+    const datos = {
+        dni: window.dniCliente,
+        motivo: document.getElementById('motivoReporte').value,
+        observaciones: document.getElementById('obsReporte').value
+    };
+    const resp = await fetchConAuth('/cliente/reporte', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+    });
+    const cont = document.getElementById('msgReporte');
+    if (resp.ok) {
+        cont.textContent = 'Reporte enviado correctamente';
+        cont.className = 'alert alert-success';
+        ev.target.reset();
+    } else {
+        const r = await resp.json();
+        cont.textContent = r.detail || 'Error al enviar';
+        cont.className = 'alert alert-danger';
+    }
+    cont.style.display = 'block';
+}
+
+async function enviarEmail(ev) {
+    ev.preventDefault();
+    const datos = {
+        email: document.getElementById('email').value,
+        mensaje: document.getElementById('mensajeEmail').value
+    };
+    const resp = await fetchConAuth('/cliente/email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos)
+    });
+    const cont = document.getElementById('mensajeEmailCliente');
+    if (resp.ok) {
+        cont.textContent = 'Email enviado';
+        cont.className = 'alert alert-success';
+        ev.target.reset();
+    } else {
+        const r = await resp.json();
+        cont.textContent = r.detail || 'Error al enviar';
+        cont.className = 'alert alert-danger';
+    }
+    cont.style.display = 'block';
 }

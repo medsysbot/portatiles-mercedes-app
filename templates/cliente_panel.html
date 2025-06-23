@@ -35,10 +35,14 @@
           <ul class="nav nav-pills nav-sidebar flex-column" role="menu">
           <li class="nav-item"><a href="#seccion-datos-personales" class="nav-link"><i class="nav-icon fas fa-id-card"></i><p>Datos personales</p></a></li>
           <li class="nav-item"><a href="#seccion-alquileres" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Mis baños alquilados</p></a></li>
+          <li class="nav-item"><a href="#seccion-facturas-pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice"></i><p>Facturas pendientes</p></a></li>
+          <li class="nav-item"><a href="#seccion-historial" class="nav-link"><i class="nav-icon fas fa-list-alt"></i><p>Historial facturación</p></a></li>
+          <li class="nav-item"><a href="#seccion-limpiezas" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
+          <li class="nav-item"><a href="#seccion-ventas" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Ventas</p></a></li>
           <li class="nav-item"><a href="#seccion-remitos" class="nav-link"><i class="nav-icon fas fa-file-alt"></i><p>Remitos y comprobantes</p></a></li>
           <li class="nav-item"><a href="#seccion-emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
-          <li class="nav-item"><a href="#seccion-pagos" class="nav-link"><i class="nav-icon fas fa-credit-card"></i><p>Medios de pago</p></a></li>
-          <li class="nav-item"><a href="#seccion-soporte" class="nav-link"><i class="nav-icon fas fa-life-ring"></i><p>Soporte</p></a></li>
+          <li class="nav-item"><a href="#seccion-reportes" class="nav-link"><i class="nav-icon fas fa-flag"></i><p>Reportar</p></a></li>
+          <li class="nav-item"><a href="#seccion-pagos" class="nav-link"><i class="nav-icon fas fa-credit-card"></i><p>Mercado Medios de Pago</p></a></li>
         </ul>
       </nav>
     </div>
@@ -122,20 +126,94 @@
           </div>
         </div>
 
-        <!-- Sección facturación -->
-        <div id="seccion-facturacion" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Facturación</h3></div>
+        <!-- Sección facturas pendientes -->
+        <div id="seccion-facturas-pendientes" class="card mb-4">
+          <div class="card-header"><h3 class="card-title">Facturas pendientes</h3></div>
           <div class="card-body table-responsive p-0">
-            <table id="tablaFacturas" class="table table-striped">
+            <table id="tablaFacturasPendientes" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Comprobante</th>
+                  <th>Monto adeudado</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sección historial de facturación -->
+        <div id="seccion-historial" class="card mb-4">
+          <div class="card-header"><h3 class="card-title">Historial de facturación</h3></div>
+          <div class="card-body table-responsive p-0">
+            <table id="tablaHistorial" class="table table-striped">
               <thead>
                 <tr>
                   <th>Fecha</th>
                   <th>Comprobante</th>
                   <th>Monto</th>
+                  <th>Estado</th>
                 </tr>
               </thead>
               <tbody></tbody>
             </table>
+          </div>
+        </div>
+
+        <!-- Sección servicios de limpieza -->
+        <div id="seccion-limpiezas" class="card mb-4">
+          <div class="card-header"><h3 class="card-title">Servicios de limpieza</h3></div>
+          <div class="card-body table-responsive p-0">
+            <table id="tablaLimpiezas" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>N° baño</th>
+                  <th>Tipo</th>
+                  <th>Observaciones</th>
+                  <th>Remito</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sección ventas -->
+        <div id="seccion-ventas" class="card mb-4">
+          <div class="card-header"><h3 class="card-title">Ventas</h3></div>
+          <div class="card-body table-responsive p-0">
+            <table id="tablaVentasCliente" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Fecha</th>
+                  <th>Tipo de baño</th>
+                  <th>Forma de pago</th>
+                  <th>Observaciones</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Sección reportes -->
+        <div id="seccion-reportes" class="card mb-4">
+          <div class="card-header"><h3 class="card-title">Enviar reporte</h3></div>
+          <div class="card-body">
+            <form id="formReporte">
+              <div class="form-group">
+                <label for="motivoReporte">Motivo</label>
+                <input type="text" id="motivoReporte" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="obsReporte">Observaciones</label>
+                <textarea id="obsReporte" class="form-control" rows="3" required></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary">Enviar</button>
+              <div id="msgReporte" class="alert mt-3" style="display:none"></div>
+            </form>
           </div>
         </div>
 
@@ -171,23 +249,16 @@
                 <textarea id="mensajeEmail" class="form-control" rows="3" placeholder="Escribe tu mensaje..."></textarea>
               </div>
               <button type="submit" class="btn btn-primary">Enviar</button>
+              <div id="mensajeEmailCliente" class="alert mt-3" style="display:none"></div>
             </form>
           </div>
         </div>
 
         <!-- Sección medios de pago -->
         <div id="seccion-pagos" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Medios de pago</h3></div>
+          <div class="card-header"><h3 class="card-title">Mercado Medios de Pago</h3></div>
           <div class="card-body">
-            <p>Próximamente podrás gestionar tus tarjetas y cuentas aquí.</p>
-          </div>
-        </div>
-
-        <!-- Sección soporte -->
-        <div id="seccion-soporte" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Soporte</h3></div>
-          <div class="card-body">
-            <p>Ante cualquier duda comunicate con nosotros por mail o teléfono.</p>
+            <p>Próximamente podrás abonar con Mercado Pago desde aquí.</p>
           </div>
         </div>
 

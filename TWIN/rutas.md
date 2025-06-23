@@ -103,3 +103,15 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | Método | Ruta | Descripción | Autenticación |
 |--------|------|-------------|---------------|
 | GET | `/admin/graficos` | Vista para cargar datos manuales y actualizar gráficos. | Sí |
+
+## Rutas - Panel de Clientes
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/alquileres_cliente` | Alquileres filtrados por DNI | Sí |
+| GET | `/facturas_pendientes_cliente` | Facturas pendientes del cliente | Sí |
+| GET | `/facturas_cliente` | Historial de facturación | Sí |
+| GET | `/limpiezas_cliente` | Servicios de limpieza del cliente | Sí |
+| GET | `/ventas_cliente` | Ventas asociadas al cliente | Sí |
+| POST | `/cliente/reporte` | Envía un reporte desde el panel | Sí |
+| POST | `/cliente/email` | Envía un email a la empresa | Sí |

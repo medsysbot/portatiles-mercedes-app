@@ -1,5 +1,15 @@
 // Manejo de gráficos con carga manual de datos
 
+// Ajusta la altura de cada gráfico para que sea la mitad de su ancho
+function ajustarAlturaGraficos() {
+  document.querySelectorAll('.grafico-panel').forEach(canvas => {
+    const ancho = canvas.offsetWidth;
+    canvas.style.height = `${ancho / 2}px`;
+  });
+}
+
+window.addEventListener('resize', ajustarAlturaGraficos);
+
 // Ejecutar una vez cargado el script. El archivo se incluye al final de la
 // plantilla, por lo que el DOM ya está disponible y no es necesario esperar a
 // `DOMContentLoaded`.
@@ -11,6 +21,8 @@
   const resp = await fetch('/admin/api/dashboard');
   const datos = await resp.json();
   const labels = datos.labels;
+
+  ajustarAlturaGraficos();
 
   const charts = {
     alquileres: new Chart(document.getElementById('graficoAlquileres').getContext('2d'), {
@@ -34,6 +46,8 @@
       options: { responsive: true, maintainAspectRatio: false, scales: { y: { suggestedMin: -7, suggestedMax: 7 } } }
     })
   };
+
+  ajustarAlturaGraficos();
 
   form.addEventListener('submit', (e) => {
     e.preventDefault();

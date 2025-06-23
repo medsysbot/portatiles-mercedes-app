@@ -7,6 +7,15 @@ function limpiarCredenciales() {
   localStorage.removeItem('rol');
 }
 
+function ajustarAlturaGraficos() {
+  document.querySelectorAll('.grafico-panel').forEach(canvas => {
+    const ancho = canvas.offsetWidth;
+    canvas.style.height = `${ancho / 2}px`;
+  });
+}
+
+window.addEventListener('resize', ajustarAlturaGraficos);
+
 async function cargarGraficos(charts) {
   try {
     const resp = await fetch('/admin/api/dashboard');
@@ -62,6 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const charts = {};
 
   btnLogout?.addEventListener('click', limpiarCredenciales);
-
+  ajustarAlturaGraficos();
   cargarGraficos(charts);
 });

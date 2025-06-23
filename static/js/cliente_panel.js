@@ -32,9 +32,11 @@ async function fetchConAuth(url, options = {}) {
 let alquileresCargados = [];
 let facturasCargadas = [];
 let ventasCargadas = [];
+let limpiezasCargadas = [];
 let tablaAlquileres;
 let tablaFacturas;
 let tablaVentas;
+let tablaLimpiezas;
 
 function initTablas() {
     tablaAlquileres = $('#tablaAlquileres').DataTable({
@@ -83,6 +85,22 @@ function initTablas() {
             { data: 'observaciones' }
         ]
     });
+
+    tablaLimpiezas = $('#tablaServicios').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+            { data: 'fecha_servicio' },
+            { data: 'numero_bano' },
+            { data: 'dni_cliente' },
+            { data: 'nombre_cliente' },
+            { data: 'tipo_servicio' },
+            { data: 'remito_url', render: data => `<a href="${data}" target="_blank">Ver</a>` },
+            { data: 'observaciones' }
+        ]
+    });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -123,6 +141,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         cargarAlquileres(window.dniCliente);
         cargarFacturas(window.dniCliente);
         cargarVentas(window.dniCliente);
+        cargarLimpiezas(window.dniCliente);
         cargarEmailsCliente(email);
         prepararListenersFormulario();
 
@@ -274,6 +293,33 @@ async function cargarVentas(dni) {
 function mostrarVentas(lista) {
     tablaVentas.clear();
     tablaVentas.rows.add(lista).draw();
+}
+
+async function cargarLimpiezas(dni) {
+    const mensajeError = document.getElementById('errorServicios');
+    try {
+        const resp = await fetchConAuth(`/limpiezas_cliente?dni=${encodeURIComponent(dni)}`);
+        if (!resp.ok) throw new Error('Error consultando');
+        limpiezasCargadas = await resp.json();
+        mostrarLimpiezas(limpiezasCargadas);
+        mensajeError?.classList.add('d-none');
+        if (limpiezasCargadas.length === 0) {
+            mostrarMensaje('mensajeServicios', 'No hay servicios registrados', '');
+        } else {
+            mostrarMensaje('mensajeServicios', '', '');
+        }
+    } catch (err) {
+        console.error('Error al cargar servicios:', err);
+        if (mensajeError) {
+            mensajeError.textContent = 'No se pudo cargar el listado.';
+            mensajeError.classList.remove('d-none');
+        }
+    }
+}
+
+function mostrarLimpiezas(lista) {
+    tablaLimpiezas.clear();
+    tablaLimpiezas.rows.add(lista).draw();
 }
 
 function renderEmails(lista) {

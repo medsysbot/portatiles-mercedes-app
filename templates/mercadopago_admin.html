@@ -1,5 +1,9 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Mercado Pago{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock %}
 {% block content %}
 <h2 class="mt-0">Integración con Mercado Pago</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
 <p>Panel para revisar pagos y cobranzas.</p>

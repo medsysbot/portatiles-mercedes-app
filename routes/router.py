@@ -78,6 +78,20 @@ async def obtener_login_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/recuperar_password.js")
+async def obtener_recuperar_js():
+    """Script para solicitar recuperación."""
+    js_path = PUBLIC_STATIC_DIR / "js" / "recuperar_password.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
+@router.get("/reset_password.js")
+async def obtener_reset_js():
+    """Script para restablecer la contraseña."""
+    js_path = PUBLIC_STATIC_DIR / "js" / "reset_password.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/cliente_panel.js")
 async def obtener_cliente_js():
     """Script del panel del cliente."""
@@ -261,6 +275,18 @@ async def mostrar_registro_clientes():
     html_path = TEMPLATES_DIR / "registro_clientes.html"
     html_contenido = html_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_contenido)
+
+
+@router.get("/recuperar_password", response_class=HTMLResponse)
+async def mostrar_recuperar_password(request: Request):
+    """Formulario para solicitar un enlace de recuperación."""
+    return public_templates.TemplateResponse("recuperar_password.html", {"request": request})
+
+
+@router.get("/reset_password", response_class=HTMLResponse)
+async def mostrar_reset_password(request: Request, token: str = ""):
+    """Formulario para restablecer la contraseña."""
+    return public_templates.TemplateResponse("reset_password.html", {"request": request, "token": token})
 
 
 @router.get("/login", response_class=HTMLResponse)

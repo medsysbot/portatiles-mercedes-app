@@ -19,6 +19,9 @@ from passlib.context import CryptContext
 from passlib.hash import bcrypt
 from jose import jwt, JWTError
 from datetime import datetime, timedelta
+import secrets
+import smtplib
+from email.message import EmailMessage
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -47,6 +50,11 @@ if faltantes:
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+EMAIL_ORIGEN = os.getenv("EMAIL_ORIGEN")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+SMTP_SERVER = os.getenv("SMTP_SERVER")
+SMTP_PORT = os.getenv("SMTP_PORT")
+APP_URL = os.getenv("APP_URL", "http://localhost:8000")
 
 # Configuración de logging
 LOG_DIR = "logs"
@@ -81,6 +89,13 @@ class LoginInput(BaseModel):
     # IMPORTANTE: El campo debe llamarse "password" (sin ñ ni tilde) en todo el flujo
     password: str
     rol: str
+
+class RecuperarInput(BaseModel):
+    email: str
+
+class ResetInput(BaseModel):
+    token: str
+    password: str
 
 router = APIRouter()
 # ==== Endpoints ====
@@ -298,3 +313,63 @@ def registrar_cliente(
 
     logger.info(f"Registro exitoso para nuevo cliente: {email}")
     return {"mensaje": "Registro exitoso"}
+
+
+@router.post("/recuperar_password")
+async def recuperar_password(datos: RecuperarInput):
+    """Inicia el proceso de recuperación de contraseña."""
+    mensaje = {"mensaje": "Si el email existe, se envió un correo de recuperación"}
+    email = datos.email.strip().lower()
+    try:
+        resp = supabase.table("usuarios").select("id").eq("email", email).execute()
+        if getattr(resp, "data", []):
+            token = secrets.token_urlsafe(32)
+            expira = (datetime.utcnow() + timedelta(minutes=30)).isoformat()
+            supabase.table("reset_tokens").insert({
+                "email": email,
+                "token": token,
+                "expira": expira,
+                "usado": False,
+            }).execute()
+            if all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
+                msg = EmailMessage()
+                msg["From"] = EMAIL_ORIGEN
+                msg["To"] = email
+                msg["Subject"] = "Recuperar contraseña"
+                enlace = f"{APP_URL}/reset_password?token={token}"
+                msg.set_content(
+                    f"Para restablecer tu contraseña hacé clic en el siguiente enlace:\n{enlace}\n\nSi no solicitaste este cambio podés ignorar este mensaje."
+                )
+                with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
+                    smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
+                    smtp.send_message(msg)
+    except Exception as exc:  # pragma: no cover - dependencias externas
+        logger.error("Error en recuperar_password: %s", exc)
+    return mensaje
+
+
+@router.post("/reset_password")
+async def reset_password(datos: ResetInput):
+    """Actualiza la contraseña si el token es válido."""
+    token = datos.token
+    nueva = datos.password
+    try:
+        res = (
+            supabase.table("reset_tokens").select("email, expira, usado").eq("token", token).single().execute()
+        )
+        registro = getattr(res, "data", None)
+        if not registro or registro.get("usado"):
+            raise HTTPException(status_code=400, detail="Token inválido o expirado")
+        exp = registro.get("expira")
+        if exp and datetime.fromisoformat(exp) < datetime.utcnow():
+            raise HTTPException(status_code=400, detail="Token inválido o expirado")
+
+        pwd_hash = pwd_context.hash(nueva)
+        supabase.table("usuarios").update({"password_hash": pwd_hash}).eq("email", registro["email"]).execute()
+        supabase.table("reset_tokens").update({"usado": True}).eq("token", token).execute()
+        return {"mensaje": "Contraseña actualizada"}
+    except HTTPException:
+        raise
+    except Exception as exc:  # pragma: no cover - dependencias externas
+        logger.error("Error en reset_password: %s", exc)
+        raise HTTPException(status_code=400, detail="Token inválido o expirado")

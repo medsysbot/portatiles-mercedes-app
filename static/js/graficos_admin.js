@@ -1,6 +1,9 @@
 // Manejo de gráficos con carga manual de datos
 
-document.addEventListener('DOMContentLoaded', async () => {
+// Ejecutar una vez cargado el script. El archivo se incluye al final de la
+// plantilla, por lo que el DOM ya está disponible y no es necesario esperar a
+// `DOMContentLoaded`.
+(async () => {
   const form = document.getElementById('formGraficos');
   const select = document.getElementById('dataset');
   const input = document.getElementById('valores');
@@ -35,10 +38,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const tipo = select.value;
-    const valores = input.value.split(',').map(v => parseFloat(v.trim())).filter(v => !isNaN(v));
+    const valores = input.value
+      .split(',')
+      .map(v => parseFloat(v.trim()))
+      .filter(v => !isNaN(v));
     if (valores.length) {
       charts[tipo].data.datasets[0].data = valores;
       charts[tipo].update();
     }
   });
-});
+})();

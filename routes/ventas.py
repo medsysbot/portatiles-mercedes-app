@@ -175,6 +175,7 @@ async def listar_ventas():
     for item in data:
         normalizados.append(
             {
+                "id_venta": item.get("id_venta") or item.get("id"),
                 "fecha_operacion": item.get("fecha_operacion"),
                 "tipo_bano": item.get("tipo_bano"),
                 "dni_cliente": item.get("dni_cliente"),
@@ -185,3 +186,20 @@ async def listar_ventas():
         )
 
     return normalizados
+
+
+class _IdLista(BaseModel):
+    ids: list[int]
+
+
+@router.post("/admin/api/ventas/eliminar")
+async def eliminar_ventas(payload: _IdLista):
+    """Elimina ventas por ID."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table(VENTAS_TABLE).delete().in_("id_venta", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error eliminando ventas:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}

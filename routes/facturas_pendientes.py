@@ -126,3 +126,20 @@ async def listar_facturas():
     except Exception as exc:  # pragma: no cover
         logger.exception("Error consultando facturas:")
         raise HTTPException(status_code=500, detail=str(exc))
+
+
+class _IdLista(BaseModel):
+    ids: list[int]
+
+
+@router.post("/admin/api/facturas_pendientes/eliminar")
+async def eliminar_facturas(payload: _IdLista):
+    """Elimina facturas pendientes por ID."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table(TABLA).delete().in_("id_factura", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error eliminando facturas:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}

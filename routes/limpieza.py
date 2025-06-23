@@ -240,6 +240,7 @@ async def listar_servicios_limpieza():
     for d in datos:
         normalizados.append(
             {
+                "id_servicio": d.get("id_servicio") or d.get("id"),
                 "fecha_servicio": d.get("fecha_servicio"),
                 "numero_bano": d.get("numero_bano"),
                 "dni_cliente": d.get("dni_cliente"),
@@ -251,4 +252,21 @@ async def listar_servicios_limpieza():
         )
 
     return normalizados
+
+
+class _IdLista(BaseModel):
+    ids: list[int]
+
+
+@router.post("/admin/api/servicios_limpieza/eliminar")
+async def eliminar_servicios(payload: _IdLista):
+    """Elimina servicios de limpieza por ID."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table(TABLA).delete().in_("id_servicio", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error eliminando servicios:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}
 

@@ -128,3 +128,20 @@ async def crear_bano(request: Request):
         return {"error": f"Error al guardar baño: {exc}"}
     logger.info("Baño creado exitosamente")
     return {"ok": True}
+
+
+class _IdLista(BaseModel):
+    ids: list[str]
+
+
+@router.post("/admin/api/inventario_banos/eliminar")
+async def eliminar_banos(payload: _IdLista):
+    """Elimina baños del inventario por número."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table(TABLA).delete().in_("numero_bano", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error eliminando baños:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}

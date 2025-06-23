@@ -131,3 +131,20 @@ async def listar_reportes():
         )
 
     return normalizados
+
+
+class _IdLista(BaseModel):
+    ids: list[int]
+
+
+@router.post("/admin/api/reportes/eliminar")
+async def eliminar_reportes(payload: _IdLista):
+    """Elimina reportes por ID."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table(TABLA).delete().in_("id_reporte", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error eliminando reportes:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}

@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
+      { data: 'numero_bano', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
       { data: 'numero_bano' },
       { data: 'cliente_nombre' },
       { data: 'cliente_dni' },
@@ -19,6 +20,34 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'fecha_fin' },
       { data: 'observaciones' }
     ]
+  });
+
+  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+
+  function actualizarBoton() {
+    const marcados = document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked');
+    if (btnEliminar) btnEliminar.disabled = marcados.length === 0;
+  }
+
+  $('#tablaAlquileres tbody').on('change', '.fila-check', actualizarBoton);
+
+  btnEliminar?.addEventListener('click', async () => {
+    const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
+    if (!seleccionados.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    try {
+      const resp = await fetch('/admin/api/alquileres/eliminar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        body: JSON.stringify({ ids: seleccionados })
+      });
+      if (!resp.ok) throw new Error('Error al eliminar');
+      await cargarAlquileres();
+    } catch (err) {
+      console.error('Error eliminando alquileres:', err);
+      mostrarMensaje('Error eliminando registros', 'danger');
+    } finally {
+      if (btnEliminar) btnEliminar.disabled = true;
+    }
   });
 
   async function cargarAlquileres() {

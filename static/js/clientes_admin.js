@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
+      { data: 'dni', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
       { data: 'dni' },
       { data: 'nombre' },
       { data: 'apellido' },
@@ -38,6 +39,34 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'razon_social' },
       { data: 'email' }
     ]
+  });
+
+  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+
+  function actualizarBoton() {
+    const checks = document.querySelectorAll('#tablaClientes tbody .fila-check:checked');
+    if (btnEliminar) btnEliminar.disabled = checks.length === 0;
+  }
+
+  $('#tablaClientes tbody').on('change', '.fila-check', actualizarBoton);
+
+  btnEliminar?.addEventListener('click', async () => {
+    const ids = Array.from(document.querySelectorAll('#tablaClientes tbody .fila-check:checked')).map(c => c.dataset.id);
+    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    try {
+      const resp = await fetch('/admin/api/clientes/eliminar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        body: JSON.stringify({ ids })
+      });
+      if (!resp.ok) throw new Error('Error al eliminar');
+      await obtenerClientes();
+    } catch (err) {
+      console.error('Error eliminando clientes:', err);
+      mostrarMensaje('Error eliminando registros', 'danger');
+    } finally {
+      if (btnEliminar) btnEliminar.disabled = true;
+    }
   });
 
   async function obtenerClientes() {

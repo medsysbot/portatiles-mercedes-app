@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
+      { data: 'numero_bano', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
       { data: 'numero_bano' },
       { data: 'condicion' },
       { data: 'ultima_reparacion' },
@@ -23,6 +24,34 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'estado' },
       { data: 'observaciones' }
     ]
+  });
+
+  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+
+  function actualizarBoton() {
+    const checks = document.querySelectorAll('#tablaInventario tbody .fila-check:checked');
+    if (btnEliminar) btnEliminar.disabled = checks.length === 0;
+  }
+
+  $('#tablaInventario tbody').on('change', '.fila-check', actualizarBoton);
+
+  btnEliminar?.addEventListener('click', async () => {
+    const ids = Array.from(document.querySelectorAll('#tablaInventario tbody .fila-check:checked')).map(c => c.dataset.id);
+    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    try {
+      const resp = await fetch('/admin/api/inventario_banos/eliminar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        body: JSON.stringify({ ids })
+      });
+      if (!resp.ok) throw new Error('Error al eliminar');
+      await cargarTabla();
+    } catch (err) {
+      console.error('Error eliminando baños:', err);
+      mostrarMensaje('Error eliminando registros', 'danger');
+    } finally {
+      if (btnEliminar) btnEliminar.disabled = true;
+    }
   });
 
   async function cargarTabla() {

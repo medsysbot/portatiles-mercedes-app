@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
+      { data: 'id_factura', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'id_factura' },
       { data: 'fecha' },
       { data: 'numero_factura' },
@@ -24,6 +25,34 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'nombre_cliente' },
       { data: 'monto_adeudado' }
     ]
+  });
+
+  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+
+  function actualizarBoton() {
+    const checks = document.querySelectorAll('#tablaFacturas tbody .fila-check:checked');
+    if (btnEliminar) btnEliminar.disabled = checks.length === 0;
+  }
+
+  $('#tablaFacturas tbody').on('change', '.fila-check', actualizarBoton);
+
+  btnEliminar?.addEventListener('click', async () => {
+    const ids = Array.from(document.querySelectorAll('#tablaFacturas tbody .fila-check:checked')).map(c => c.dataset.id);
+    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    try {
+      const resp = await fetch('/admin/api/facturas_pendientes/eliminar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        body: JSON.stringify({ ids })
+      });
+      if (!resp.ok) throw new Error('Error al eliminar');
+      await cargarFacturas();
+    } catch (err) {
+      console.error('Error eliminando facturas:', err);
+      mostrarMensaje('Error eliminando registros', 'danger');
+    } finally {
+      if (btnEliminar) btnEliminar.disabled = true;
+    }
   });
 
   async function cargarFacturas() {

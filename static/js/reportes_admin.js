@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
+      { data: 'id_reporte', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'id_reporte' },
       { data: 'fecha' },
       { data: 'nombre_persona' },
@@ -21,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const errorDiv = document.getElementById('errorReportes');
   const mensajeDiv = document.getElementById('mensajeReportes');
   let reportes = [];
+  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
   async function cargarReportes() {
     try {
@@ -47,6 +49,32 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.clear();
     tabla.rows.add(lista).draw();
   }
+
+  function actualizarBoton() {
+    const checks = document.querySelectorAll('#tablaReportes tbody .fila-check:checked');
+    if (btnEliminar) btnEliminar.disabled = checks.length === 0;
+  }
+
+  $('#tablaReportes tbody').on('change', '.fila-check', actualizarBoton);
+
+  btnEliminar?.addEventListener('click', async () => {
+    const ids = Array.from(document.querySelectorAll('#tablaReportes tbody .fila-check:checked')).map(c => c.dataset.id);
+    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    try {
+      const resp = await fetch('/admin/api/reportes/eliminar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        body: JSON.stringify({ ids })
+      });
+      if (!resp.ok) throw new Error('Error al eliminar');
+      await cargarReportes();
+    } catch (err) {
+      console.error('Error eliminando reportes:', err);
+      mostrarMensaje('Error eliminando registros', 'danger');
+    } finally {
+      if (btnEliminar) btnEliminar.disabled = true;
+    }
+  });
 
   function mostrarMensaje(texto, tipo) {
     if (!mensajeDiv) return;

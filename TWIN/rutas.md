@@ -7,6 +7,7 @@ Este documento resume los endpoints principales para la gestión de alquileres e
 | GET | `/admin/alquileres` | Vista de gestión de alquileres (`alquileres_admin.html`). | Sí |
 | POST | `/admin/alquileres/nuevo` | Crea un alquiler verificando número de baño único. | Sí |
 | GET | `/admin/api/alquileres` | Devuelve la lista completa de alquileres desde la base. | Sí |
+| POST | `/admin/api/alquileres/eliminar` | Elimina varios alquileres por número de baño. | Sí |
 
 Mantener esta lista actualizada facilita el seguimiento de cambios en el backend.
 
@@ -17,6 +18,24 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/inventario_banos` | Vista principal del inventario (`inventario_banos_admin.html`). | Sí |
 | GET | `/admin/api/inventario_banos` | Devuelve la lista completa de baños desde la base. | Sí |
 | POST | `/admin/inventario_banos/nuevo` | Crea un registro de baño en la tabla `inventario_banos`. | Sí |
+| POST | `/admin/api/inventario_banos/eliminar` | Elimina registros seleccionados del inventario. | Sí |
+
+## Rutas - Clientes
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/api/clientes` | Lista de clientes con filtros. | Sí |
+| GET | `/admin/api/clientes/todos` | Lista completa sin filtros. | Sí |
+| POST | `/admin/api/clientes/eliminar` | Elimina clientes por DNI. | Sí |
+
+## Rutas - Empleados
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/empleados` | Vista de empleados (`empleados_admin.html`). | Sí |
+| GET | `/admin/empleados/nuevo` | Formulario para crear un empleado. | Sí |
+| POST | `/admin/empleados/nuevo` | Alta de empleados. | Sí |
+| POST | `/admin/api/empleados/eliminar` | Elimina empleados por ID. | Sí |
 
 ## Rutas - Ventas
 
@@ -26,6 +45,7 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/ventas/nueva` | Formulario de alta de venta. | Sí |
 | POST | `/admin/ventas/nueva` | Crea una venta en la tabla `ventas`. | Sí |
 | GET | `/admin/api/ventas` | Devuelve el listado de ventas. | Sí |
+| POST | `/admin/api/ventas/eliminar` | Elimina ventas por ID. | Sí |
 
 ## Rutas - Servicios de limpieza
 
@@ -35,6 +55,7 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/limpieza/nuevo` | Formulario para crear un servicio. | Sí |
 | POST | `/admin/limpieza/nuevo` | Guarda un servicio en `servicios_limpieza`. | Sí |
 | GET | `/admin/api/servicios_limpieza` | Lista completa de servicios de limpieza. | Sí |
+| POST | `/admin/api/servicios_limpieza/eliminar` | Elimina servicios de limpieza por ID. | Sí |
 
 ## Rutas - Reportes
 
@@ -44,6 +65,7 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/reportes/nuevo` | Formulario para crear un reporte. | Sí |
 | POST | `/admin/reportes/nuevo` | Crea un reporte en la tabla `reportes`. | Sí |
 | GET | `/admin/api/reportes` | Devuelve el listado de reportes. | Sí |
+| POST | `/admin/api/reportes/eliminar` | Elimina reportes por ID. | Sí |
 
 ## Rutas - Facturas pendientes
 
@@ -53,6 +75,7 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/facturas_pendientes/nueva` | Formulario para crear una factura pendiente. | Sí |
 | POST | `/admin/facturas_pendientes/nueva` | Crea una factura en la tabla `facturas_pendientes`. | Sí |
 | GET | `/admin/api/facturas_pendientes` | Devuelve el listado de facturas pendientes. | Sí |
+| POST | `/admin/api/facturas_pendientes/eliminar` | Elimina facturas pendientes por ID. | Sí |
 
 ## Rutas - Morosos
 

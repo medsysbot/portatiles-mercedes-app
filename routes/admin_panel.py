@@ -65,6 +65,10 @@ class Cliente(BaseModel):
     email: str
 
 
+class _IdLista(BaseModel):
+    ids: list[str]
+
+
 
 def obtener_clientes_db() -> list:
     """Obtiene todos los clientes desde Supabase."""
@@ -562,3 +566,29 @@ async def datos_dashboard():
         "gastos": gastos,
         "ingresos": ingresos,
     }
+
+
+@router.post("/admin/api/clientes/eliminar")
+async def eliminar_clientes(payload: _IdLista):
+    """Elimina clientes por DNI."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table("datos_personales_clientes").delete().in_("dni", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error eliminando clientes:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}
+
+
+@router.post("/admin/api/empleados/eliminar")
+async def eliminar_empleados(payload: _IdLista):
+    """Elimina empleados por ID."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table("usuarios").delete().in_("id", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error eliminando empleados:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}

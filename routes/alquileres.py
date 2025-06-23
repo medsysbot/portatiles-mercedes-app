@@ -162,3 +162,20 @@ async def listar_alquileres():
 
     return normalizados
 
+
+class _IdLista(BaseModel):
+    ids: list[str]
+
+
+@router.post("/admin/api/alquileres/eliminar")
+async def eliminar_alquileres(payload: _IdLista):
+    """Elimina alquileres por número de baño."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table(ALQUILERES_TABLE).delete().in_("numero_bano", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover - fallos de conexión
+        logger.exception("Error eliminando alquileres:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}
+

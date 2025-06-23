@@ -40,7 +40,7 @@
 
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="#" class="brand-link text-center">
+    <a href="/admin/panel" class="brand-link text-center">
       <span class="brand-text font-weight-light">Portátiles Mercedes</span>
     </a>
     <div class="sidebar">
@@ -74,7 +74,7 @@
   <div class="col-lg-3 col-6">
     <div class="small-box bg-info">
       <div class="inner">
-        <h3>384</h3>
+        <h3>{{ total_clientes }}</h3>
         <p>Total Clientes</p>
       </div>
       <div class="icon"><i class="fas fa-users"></i></div>
@@ -83,7 +83,7 @@
   <div class="col-lg-3 col-6">
     <div class="small-box bg-success">
       <div class="inner">
-        <h3>128</h3>
+        <h3>{{ total_alquileres }}</h3>
         <p>Alquileres</p>
       </div>
       <div class="icon"><i class="fas fa-file-contract"></i></div>
@@ -92,7 +92,7 @@
   <div class="col-lg-3 col-6">
     <div class="small-box bg-warning">
       <div class="inner">
-        <h3>96</h3>
+        <h3>{{ total_ventas }}</h3>
         <p>Ventas</p>
       </div>
       <div class="icon"><i class="fas fa-shopping-cart"></i></div>
@@ -101,7 +101,7 @@
   <div class="col-lg-3 col-6">
     <div class="small-box bg-primary">
       <div class="inner">
-        <h3>23</h3>
+        <h3>{{ total_pendientes }}</h3>
         <p>Pendientes</p>
       </div>
       <div class="icon"><i class="fas fa-clock"></i></div>
@@ -110,7 +110,7 @@
   <div class="col-lg-3 col-6">
     <div class="small-box bg-danger">
       <div class="inner">
-        <h3>8</h3>
+        <h3>{{ total_morosos }}</h3>
         <p>Morosos</p>
       </div>
       <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>

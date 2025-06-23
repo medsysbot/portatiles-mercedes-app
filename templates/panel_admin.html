@@ -117,6 +117,9 @@
     </div>
   </div>
 </div>
+<div class="d-flex justify-content-end mb-2">
+  <button id="btnActualizarGraficos" class="btn btn-secondary">Actualizar Gráficos</button>
+</div>
 <div class="row mt-4">
   <div class="col-md-6 col-12 mb-4">
     <div class="card h-100">
@@ -192,87 +195,5 @@
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script>
-  document.getElementById('btnLogout').addEventListener('click', () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('rol');
-  });
-
-  document.addEventListener('DOMContentLoaded', async () => {
-    const resp = await fetch('/admin/api/dashboard');
-    const datos = await resp.json();
-    const labels = datos.labels;
-
-    new Chart(document.getElementById('graficoAlquileres').getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Alquileres',
-          data: datos.alquileres,
-          backgroundColor: 'rgba(60,141,188,0.9)'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
-    });
-
-    new Chart(document.getElementById('graficoVentas').getContext('2d'), {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Ventas',
-          data: datos.ventas,
-          backgroundColor: 'rgba(40,167,69,0.9)'
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
-    });
-
-    new Chart(document.getElementById('graficoGastos').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Gastos',
-          data: datos.gastos,
-          borderColor: 'rgba(220,53,69,0.9)',
-          fill: false
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
-    });
-
-    new Chart(document.getElementById('graficoIngresos').getContext('2d'), {
-      type: 'line',
-      data: {
-        labels,
-        datasets: [{
-          label: 'Ingresos',
-          data: datos.ingresos,
-          borderColor: 'rgba(0,123,255,0.9)',
-          fill: false
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
-    });
-  });
-</script>
+<script src="/dashboard_admin.js"></script>
 {% endblock %}

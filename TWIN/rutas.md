@@ -96,6 +96,7 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | Método | Ruta | Descripción | Autenticación |
 |--------|------|-------------|---------------|
 | GET | `/admin/api/dashboard` | Datos mensuales para los gráficos del panel. | Sí |
+| GET | `/dashboard_admin.js` | Script para actualizar los gráficos del dashboard. | No |
 
 ## Rutas - Gráficos
 

@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         document.getElementById('bienvenida').textContent = 'Panel del Cliente';
         cargarDatos(window.dniCliente);
+        cargarEmailsCliente(email);
         prepararListenersFormulario();
     } catch (err) {
         if (err.message === 'Unauthorized' || err.message === 'Token inválido') {
@@ -116,10 +117,14 @@ function renderAlquileres(lista) {
     tbody.innerHTML = '';
     lista.forEach(reg => {
         const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${reg.tipo_banio || ''}</td>` +
-                       `<td>${reg.ubicacion || ''}</td>` +
-                       `<td>${reg.fecha_inicio || ''}</td>` +
-                       `<td>${reg.fecha_fin || ''}</td>`;
+        tr.innerHTML =
+            `<td>${reg.numero_bano || ''}</td>` +
+            `<td>${reg.cliente_nombre || ''}</td>` +
+            `<td>${reg.cliente_dni || ''}</td>` +
+            `<td>${reg.direccion || ''}</td>` +
+            `<td>${reg.fecha_inicio || ''}</td>` +
+            `<td>${reg.fecha_fin || ''}</td>` +
+            `<td>${reg.observaciones || ''}</td>`;
         tbody.appendChild(tr);
     });
 }
@@ -176,6 +181,30 @@ function renderVentas(lista) {
                        `<td>${v.observaciones || ''}</td>`;
         tbody.appendChild(tr);
     });
+}
+
+function renderEmails(lista) {
+    const tbody = document.querySelector('#tablaEmails tbody');
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    lista.forEach(e => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${e.fecha || ''}</td>` +
+                       `<td>${e.asunto || ''}</td>` +
+                       `<td>${e.estado || ''}</td>`;
+        tbody.appendChild(tr);
+    });
+}
+
+async function cargarEmailsCliente(email) {
+    try {
+        const resp = await fetchConAuth(`/emails_cliente?email=${encodeURIComponent(email)}`);
+        if (!resp.ok) throw new Error('Error');
+        const datos = await resp.json();
+        renderEmails(datos);
+    } catch (err) {
+        console.error('Error cargando emails:', err);
+    }
 }
 
 
@@ -284,6 +313,8 @@ async function enviarReporte(ev) {
     ev.preventDefault();
     const datos = {
         dni: window.dniCliente,
+        fecha: document.getElementById('fechaReporte').value,
+        nombre_persona: document.getElementById('nombrePersonaReporte').value,
         motivo: document.getElementById('motivoReporte').value,
         observaciones: document.getElementById('obsReporte').value
     };

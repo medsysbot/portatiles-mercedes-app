@@ -39,7 +39,6 @@
           <li class="nav-item"><a href="#seccion-historial" class="nav-link"><i class="nav-icon fas fa-list-alt"></i><p>Historial facturación</p></a></li>
           <li class="nav-item"><a href="#seccion-limpiezas" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
           <li class="nav-item"><a href="#seccion-ventas" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Ventas</p></a></li>
-          <li class="nav-item"><a href="#seccion-remitos" class="nav-link"><i class="nav-icon fas fa-file-alt"></i><p>Remitos y comprobantes</p></a></li>
           <li class="nav-item"><a href="#seccion-emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
           <li class="nav-item"><a href="#seccion-reportes" class="nav-link"><i class="nav-icon fas fa-flag"></i><p>Reportar</p></a></li>
           <li class="nav-item"><a href="#seccion-pagos" class="nav-link"><i class="nav-icon fas fa-credit-card"></i><p>Mercado Medios de Pago</p></a></li>
@@ -64,12 +63,13 @@
             <table id="tablaAlquileres" class="table table-striped">
               <thead>
                 <tr>
-                  <th>Tipo</th>
-                  <th>Ubicación</th>
+                  <th>N° baño</th>
+                  <th>Nombre</th>
+                  <th>DNI</th>
+                  <th>Dirección</th>
                   <th>Inicio</th>
-                  <th>Vencimiento</th>
-                  <th>Estado</th>
-                  <th>Acciones</th>
+                  <th>Fin</th>
+                  <th>Observaciones</th>
                 </tr>
               </thead>
               <tbody></tbody>
@@ -204,6 +204,14 @@
           <div class="card-body">
             <form id="formReporte">
               <div class="form-group">
+                <label for="fechaReporte">Fecha</label>
+                <input type="date" id="fechaReporte" class="form-control" required>
+              </div>
+              <div class="form-group">
+                <label for="nombrePersonaReporte">Nombre de quien reporta</label>
+                <input type="text" id="nombrePersonaReporte" class="form-control" placeholder="Nombre de quien reporta" required>
+              </div>
+              <div class="form-group">
                 <label for="motivoReporte">Motivo</label>
                 <input type="text" id="motivoReporte" class="form-control" required>
               </div>
@@ -214,16 +222,6 @@
               <button type="submit" class="btn btn-primary">Enviar</button>
               <div id="msgReporte" class="alert mt-3" style="display:none"></div>
             </form>
-          </div>
-        </div>
-
-        <!-- Sección remitos -->
-        <div id="seccion-remitos" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Remitos y comprobantes</h3></div>
-          <div class="card-body">
-            <div id="galeriaRemitos" class="row">
-              <!-- Miniaturas de remitos cargadas por JS -->
-            </div>
           </div>
         </div>
 

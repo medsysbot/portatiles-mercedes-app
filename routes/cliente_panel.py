@@ -86,7 +86,9 @@ async def obtener_alquileres(dni: str = Query(...)):
     try:
         res = (
             supabase.table("alquileres")
-            .select("numero_bano,direccion,fecha_inicio,fecha_fin,observaciones")
+            .select(
+                "numero_bano,cliente_nombre,cliente_dni,direccion,fecha_inicio,fecha_fin,observaciones"
+            )
             .eq("cliente_dni", dni)
             .execute()
         )
@@ -249,16 +251,48 @@ async def obtener_ventas(dni: str = Query(...)):
         raise HTTPException(status_code=500, detail="Error consultando datos")
 
 
+@router.get("/emails_cliente")
+async def obtener_emails_cliente(email: str = Query(...)):
+    """Devuelve los últimos 10 emails enviados al cliente."""
+    if not supabase:
+        logger.warning("Supabase no configurado")
+        return []
+
+    try:
+        res = (
+            supabase.table("emails_enviados")
+            .select("fecha,asunto,estado")
+            .eq("email_destino", email)
+            .order("fecha", desc=True)
+            .limit(10)
+            .execute()
+        )
+        if getattr(res, "error", None):
+            raise Exception(res.error.message)
+        return res.data or []
+    except Exception as exc:  # pragma: no cover
+        logger.error("Error consultando emails cliente: %s", exc)
+        raise HTTPException(status_code=500, detail="Error consultando datos")
+
+
 @router.post("/cliente/reporte")
 async def crear_reporte_cliente(request: Request):
     """Permite al cliente enviar un reporte."""
     datos = await request.json()
+    registro = {
+        "fecha": datos.get("fecha"),
+        "nombre_persona": datos.get("nombre_persona"),
+        "asunto": datos.get("motivo"),
+        "contenido": datos.get("observaciones"),
+    }
+    if "dni" in datos:
+        registro["dni"] = datos["dni"]
     if not supabase:
         logger.warning("Supabase no configurado")
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
     try:
-        res = supabase.table("reportes").insert(datos).execute()
+        res = supabase.table("reportes").insert(registro).execute()
         if getattr(res, "error", None):
             raise Exception(res.error.message)
         return {"ok": True}

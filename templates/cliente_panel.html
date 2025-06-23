@@ -78,37 +78,43 @@
           <div class="card-header"><h3 class="card-title">Datos personales</h3></div>
           <div class="card-body">
             <form id="formDatos" onsubmit="guardarDatos(event)">
-              <div class="form-group">
-                <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" name="nombre" class="form-control" required>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="nombre">Nombre</label>
+                  <input type="text" id="nombre" name="nombre" class="form-control" required>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="apellido">Apellido</label>
+                  <input type="text" id="apellido" name="apellido" class="form-control" required>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="apellido">Apellido</label>
-                <input type="text" id="apellido" name="apellido" class="form-control" required>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="dni">DNI</label>
+                  <input type="text" id="dni" name="dni" class="form-control" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="cuit">CUIT</label>
+                  <input type="text" id="cuit" name="cuit" class="form-control">
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="telefono">Teléfono</label>
+                  <input type="text" id="telefono" name="telefono" class="form-control" required>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="dni">DNI</label>
-                <input type="text" id="dni" name="dni" class="form-control" required>
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  <label for="razon_social">Razón social</label>
+                  <input type="text" id="razon_social" name="razon_social" class="form-control">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" class="form-control" />
+                </div>
               </div>
               <div class="form-group">
                 <label for="direccion">Dirección</label>
                 <input type="text" id="direccion" name="direccion" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label for="telefono">Teléfono</label>
-                <input type="text" id="telefono" name="telefono" class="form-control" required>
-              </div>
-              <div class="form-group">
-                <label for="cuit">CUIT</label>
-                <input type="text" id="cuit" name="cuit" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="razon_social">Razón social</label>
-                <input type="text" id="razon_social" name="razon_social" class="form-control">
-              </div>
-              <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" name="email" class="form-control" />
               </div>
               <button type="submit" id="botonGuardarDatos" class="btn btn-primary">Guardar</button>
               <div id="mensajeFormDatos" class="alert mt-3" style="display:none"></div>

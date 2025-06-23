@@ -30,15 +30,12 @@ class MockQuery:
         return self
     def single(self):
         return self
+
     def execute(self):
         email = self.filters.get('email')
-        rol = self.filters.get('rol')
-        if (
-            email == self.user['email']
-            and rol == self.user['rol']
-        ):
-            return types.SimpleNamespace(data=self.user, status_code=200, error=None)
-        return types.SimpleNamespace(data=None, status_code=200, error=None)
+        if email == self.user['email']:
+            return types.SimpleNamespace(data=[self.user], status_code=200, error=None)
+        return types.SimpleNamespace(data=[], status_code=200, error=None)
 
 class MockSupabase:
     def __init__(self, user):

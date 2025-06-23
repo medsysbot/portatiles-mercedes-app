@@ -17,11 +17,16 @@ import email
 from email.message import EmailMessage
 from email.utils import parsedate_to_datetime, parseaddr
 
+from dotenv import load_dotenv
+
 from fastapi import APIRouter, HTTPException, Request, Form
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
 
 router = APIRouter()
+
+# Cargar variables de entorno desde el archivo .env
+load_dotenv()
 
 EMAIL_ORIGIN = os.getenv("EMAIL_ORIGEN")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
@@ -117,6 +122,6 @@ async def enviar_email(
         logger.info("Correo enviado a %s", destino)
     except Exception as exc:  # pragma: no cover - dependencias externas
         logger.exception("Error enviando correo: %s", exc)
-        raise HTTPException(status_code=500, detail="Error enviando correo")
+        raise HTTPException(status_code=500, detail=f"Error enviando correo: {exc}")
 
     return {"ok": True}

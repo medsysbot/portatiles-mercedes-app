@@ -88,8 +88,28 @@ def obtener_clientes_db() -> list:
 
 @router.get("/admin/panel", response_class=HTMLResponse)
 def admin_panel_view(request: Request):
-    """Vista principal del panel administrativo."""
-    return templates.TemplateResponse("panel_admin.html", {"request": request})
+    """Vista principal del panel administrativo con datos de resumen."""
+
+    def _contar_total(tabla: str) -> int:
+        if not supabase:
+            return 0
+        try:
+            resp = supabase.table(tabla).select("*").execute()
+            return len(getattr(resp, "data", []) or [])
+        except Exception as exc:  # pragma: no cover - errores de conexión
+            logger.error("Error contando registros en %s: %s", tabla, exc)
+            return 0
+
+    contexto = {
+        "request": request,
+        "total_clientes": _contar_total("datos_personales_clientes"),
+        "total_alquileres": _contar_total(ALQUILERES_TABLE),
+        "total_ventas": _contar_total(VENTAS_TABLE),
+        "total_pendientes": _contar_total("facturas_pendientes"),
+        "total_morosos": _contar_total("morosos"),
+    }
+
+    return templates.TemplateResponse("panel_admin.html", contexto)
 
 
 # Vista principal de reportes

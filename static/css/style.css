@@ -1,117 +1,96 @@
-/* ====== Portátiles Mercedes - CSS administrativo unificado ====== */
-
-/* 1. Importar fuente Nunito */
-@import url('https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap');
-
-body {
-  font-family: 'Nunito', Arial, sans-serif;
-  color: #6b6b6b; /* gris medio */
-  margin: 0;
+/* ================== CSS Global Panel Administrativo ================== */
+/* Fuente principal */
+body, html {
+  font-family: 'Nunito', Arial, sans-serif !important;
+  color: #444444 !important;
+  background: #fafafa;
   min-height: 100vh;
-  min-width: 100vw;
-  /* 2. Gradiente diagonal de tres amarillos pastel */
-  background: linear-gradient(135deg,
-    #FFFDEB 0%,
-    #FFF6B7 33%,
-    #FFE780 66%,
-    #FFD766 100%);
   position: relative;
-  overflow-x: hidden;
 }
 
-/* 3. Logo grande de fondo, centrado y con transparencia */
-body::before {
-  content: "";
-  position: fixed;
+/* Logo marca de agua en contenido administrativo */
+.content-wrapper::before,
+.main-content::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 600px;
+  height: 600px;
+  background: url('/static/icons/logo-portatiles-2.png') no-repeat center center;
+  background-size: contain;
+  opacity: 0.06;
   z-index: 0;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: url('/app_publico/static/icons/logo-portatiles-2.png') no-repeat center center;
-  background-size: 60vw 60vh;
-  opacity: 0.13; /* muy transparente, visible pero no molesta */
+  transform: translate(-50%, -50%);
   pointer-events: none;
 }
 
-/* 4. Formularios administrativos */
-form, .form-admin {
-  background: rgba(255,255,255,0.97);
-  border-radius: 12px;
-  padding: 32px 28px 26px 28px;
-  box-shadow: 0 2px 18px rgba(60,60,60,0.08);
-  max-width: 520px;
-  margin: 40px auto 0 auto;
-  position: relative;
-  z-index: 2;
-}
-
-.form-group label,
-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: 600;
-  letter-spacing: .03em;
-}
-
-input, select, textarea {
-  font-family: 'Nunito', Arial, sans-serif;
-  color: #383838;
-  background: #fff;
-  border: 1px solid #dadada;
-  border-radius: 7px;
-  padding: 8px 10px;
-  margin-bottom: 17px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* 5. Botones negro transparente, estilo igual en todos lados */
+/* Botones estándar (gris/negro, transparentes) */
 .btn,
-button,
-input[type="submit"] {
-  background: rgba(0,0,0,0.68);
-  color: #fff;
-  font-family: 'Nunito', Arial, sans-serif;
-  border: none;
-  border-radius: 7px;
-  padding: 10px 32px;
-  font-size: 1rem;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 3px 9px rgba(0,0,0,0.08);
-  margin-top: 14px;
-  transition: background 0.18s, transform 0.14s;
-  outline: none;
-  display: inline-block;
-  min-width: 120px;
+button[type="submit"],
+button[type="button"] {
+  background: rgba(34,34,34,0.85) !important;
+  color: #fff !important;
+  font-family: 'Nunito', Arial, sans-serif !important;
+  font-size: 1rem !important;
+  padding: 0.75em 2em !important;
+  border-radius: 8px !important;
+  border: none !important;
+  margin-left: 0.5em;
+  margin-top: 1em;
+  text-transform: none !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+  display: inline-block !important;
 }
 
-.btn:hover,
-button:hover,
-input[type="submit"]:hover {
-  background: rgba(0,0,0,0.85);
-  transform: scale(1.025);
+/* Botón especial "Cerrar sesión" */
+.boton-cerrar-sesion,
+.btn-danger,
+button.cerrar-sesion {
+  background: #c0392b !important;
+  color: #fff !important;
+  font-weight: bold !important;
 }
 
-.btn-secondary {
-  background: rgba(0,0,0,0.38);
-  color: #fff;
-  margin-left: 6px;
+/* Todos los botones alineados siempre a la derecha en formularios */
+.form-footer,
+.form-actions,
+.form-group.buttons,
+.botonera-formulario,
+.botones-final-form {
+  display: flex !important;
+  justify-content: flex-end !important;
+  gap: 0.5em;
+  margin-top: 1.5em;
 }
 
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+/* Evitar saltos en los botones */
+.btn, button {
+  white-space: nowrap !important;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
-/* 6. Responsividad */
-@media (max-width: 700px) {
-  form, .form-admin {
-    padding: 18px 6vw;
-    max-width: 99vw;
+/* Tablas administrativas */
+.table, .dataTable {
+  font-family: 'Nunito', Arial, sans-serif !important;
+  color: #444 !important;
+  background: #fff !important;
+}
+
+@media (max-width: 600px) {
+  .content-wrapper::before, .main-content::before {
+    width: 80vw;
+    height: 80vw;
   }
-  body::before {
-    background-size: 90vw 55vh;
+  .btn, button[type="submit"], button[type="button"] {
+    font-size: 0.95rem !important;
+    padding: 0.65em 1.4em !important;
   }
 }
 
-/* ====== Fin CSS administrativo unificado ====== */
+/* Sidebar no se modifica */
+.main-sidebar, .sidebar {
+  background: inherit !important;
+}

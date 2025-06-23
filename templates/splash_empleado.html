@@ -10,11 +10,14 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
+            width: 100vw;
             display: flex;
             align-items: center;
             justify-content: center;
             font-family: 'Nunito', sans-serif;
-            background-color: #000;
+            background: url('/static/imagenes/fondo-splash-empleados.png') no-repeat center center fixed;
+            background-size: cover;
+            overflow: hidden;
         }
         .saludo-splash {
             text-align: center;
@@ -42,7 +45,7 @@
     <script>
         setTimeout(() => {
             window.location.href = '/empleado/panel';
-        }, 3000);
+        }, 5000);
     </script>
 </body>
 </html>

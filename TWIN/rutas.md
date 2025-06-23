@@ -113,6 +113,7 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/empleado/limpieza/nuevo` | Formulario para crear un servicio de limpieza. | Sí |
 | POST | `/empleado/limpieza/nuevo` | Guarda un servicio en `servicios_limpieza`. | Sí |
 | GET | `/empleado/api/servicios_limpieza` | Devuelve la lista de servicios de limpieza. | Sí |
+| POST | `/empleado/api/servicios_limpieza/eliminar` | Elimina servicios de limpieza por ID. | Sí |
 
 ## Rutas - Dashboard
 

@@ -8,9 +8,14 @@ function limpiarCredenciales() {
 }
 
 async function cargarGraficos(charts) {
-  const resp = await fetch('/admin/api/dashboard');
-  const datos = await resp.json();
-  const labels = datos.labels;
+  const btn = document.getElementById('btnActualizarGraficos');
+  const mensaje = document.getElementById('mensajeGraficos');
+  if (btn) btn.disabled = true;
+  try {
+    const resp = await fetch('/admin/api/dashboard');
+    if (!resp.ok) throw new Error('Error consultando datos');
+    const datos = await resp.json();
+    const labels = datos.labels;
 
   if (!charts.alquileres) {
     charts.alquileres = new Chart(document.getElementById('graficoAlquileres').getContext('2d'), {
@@ -49,6 +54,23 @@ async function cargarGraficos(charts) {
     charts.ingresos.data.labels = labels;
     charts.ingresos.data.datasets[0].data = datos.ingresos;
     charts.ingresos.update();
+  }
+    if (mensaje) {
+      mensaje.textContent = 'Gráficos actualizados';
+      mensaje.classList.remove('alert-danger');
+      mensaje.classList.add('alert-success');
+      mensaje.style.display = 'block';
+    }
+  } catch (err) {
+    console.error('Error actualizando gráficos:', err);
+    if (mensaje) {
+      mensaje.textContent = 'No se pudieron actualizar los gráficos';
+      mensaje.classList.remove('alert-success');
+      mensaje.classList.add('alert-danger');
+      mensaje.style.display = 'block';
+    }
+  } finally {
+    if (btn) btn.disabled = false;
   }
 }
 

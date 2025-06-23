@@ -90,3 +90,9 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/empleado/limpieza/nuevo` | Formulario para crear un servicio de limpieza. | Sí |
 | POST | `/empleado/limpieza/nuevo` | Guarda un servicio en `servicios_limpieza`. | Sí |
 | GET | `/empleado/api/servicios_limpieza` | Devuelve la lista de servicios de limpieza. | Sí |
+
+## Rutas - Dashboard
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/api/dashboard` | Datos mensuales para los gráficos del panel. | Sí |

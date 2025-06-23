@@ -164,6 +164,13 @@ async def obtener_emails_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/dashboard_admin.js")
+async def obtener_dashboard_admin_js():
+    """Script para el dashboard del panel admin."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "dashboard_admin.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/registro_clientes.js")
 async def obtener_registro_js():
     """Script del formulario de registro de clientes."""

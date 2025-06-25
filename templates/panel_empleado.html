@@ -18,6 +18,49 @@
   .boton-cerrar-sesion:hover {
     background-color: #a93226;
   }
+
+  .bienvenida-panel-empleado {
+    min-height: 100vh;
+    width: 100%;
+    background: url('/static/imagenes/fondo-panel-empleados.png') no-repeat center center fixed;
+    background-size: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 0;
+  }
+  .bienvenida-overlay {
+    background: rgba(0,0,0,0.45);
+    padding: 2rem 2.5rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 90vw;
+  }
+  .bienvenida-overlay h1, .bienvenida-overlay p {
+    color: #fff;
+    text-shadow: 0 2px 12px #0008;
+  }
+  .bienvenida-overlay h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  .bienvenida-overlay p {
+    font-size: 1.3rem;
+  }
+
+  @media (max-width: 600px) {
+    .bienvenida-overlay {
+      padding: 1rem 0.7rem;
+      border-radius: 10px;
+    }
+    .bienvenida-overlay h1 {
+      font-size: 1.5rem;
+    }
+    .bienvenida-overlay p {
+      font-size: 1rem;
+    }
+  }
 </style>
 {% endblock %}
 
@@ -60,8 +103,13 @@
     <section class="content">
       <div class="container-fluid p-0">
         {% block content %}
-        <div class="welcome-text">
-          Aquí podrás cargar los datos de limpieza y ver algunos detalles sobre los baños tocando el desplegable de la esquina.
+        <div class="bienvenida-panel-empleado">
+          <div class="bienvenida-overlay">
+            <h1>Bienvenido/a</h1>
+            <p>
+              Aquí podrás cargar los datos de limpieza y ver algunos detalles sobre los baños tocando el desplegable de la esquina.
+            </p>
+          </div>
         </div>
         {% endblock %}
       </div>

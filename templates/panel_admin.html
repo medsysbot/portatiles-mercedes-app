@@ -172,11 +172,29 @@
       <div class="card-header"><h3 class="card-title">Últimos emails</h3></div>
       <div class="card-body p-0">
         <table class="table table-striped">
-          <thead><tr><th>Fecha</th><th>Asunto</th><th>Estado</th></tr></thead>
+          <thead>
+            <tr>
+              <th>Fecha y hora</th>
+              <th>Asunto</th>
+              <th>Destinatario</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
           <tbody>
-            <tr><td>02/06</td><td>Bienvenida</td><td>Enviado</td></tr>
-            <tr><td>04/06</td><td>Factura pendiente</td><td>Enviado</td></tr>
-            <tr><td>06/06</td><td>Recordatorio pago</td><td>Pendiente</td></tr>
+            {% if ultimos_emails %}
+              {% for e in ultimos_emails %}
+              <tr>
+                <td>{{ e.fecha }}</td>
+                <td>{{ e.asunto }}</td>
+                <td>{{ e.email_destino }}</td>
+                <td>{{ e.estado }}</td>
+              </tr>
+              {% endfor %}
+            {% else %}
+              <tr>
+                <td colspan="4" class="text-center">No hay correos registrados</td>
+              </tr>
+            {% endif %}
           </tbody>
         </table>
       </div>

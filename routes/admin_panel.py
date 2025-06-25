@@ -86,6 +86,24 @@ def obtener_clientes_db() -> list:
     raise HTTPException(status_code=500, detail="Supabase no configurado")
 
 
+def _ultimos_emails(limit: int = 5) -> list[dict]:
+    """Devuelve los últimos correos registrados en la base."""
+    if not supabase:
+        return []
+    try:
+        res = (
+            supabase.table("emails_enviados")
+            .select("fecha,asunto,email_destino,estado")
+            .order("fecha", desc=True)
+            .limit(limit)
+            .execute()
+        )
+        return getattr(res, "data", []) or []
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("Error consultando emails: %s", exc)
+        return []
+
+
 @router.get("/admin/panel", response_class=HTMLResponse)
 def admin_panel_view(request: Request):
     """Vista principal del panel administrativo con datos de resumen."""
@@ -107,6 +125,7 @@ def admin_panel_view(request: Request):
         "total_ventas": _contar_total(VENTAS_TABLE),
         "total_pendientes": _contar_total("facturas_pendientes"),
         "total_morosos": _contar_total("morosos"),
+        "ultimos_emails": _ultimos_emails(),
     }
 
     return templates.TemplateResponse("panel_admin.html", contexto)

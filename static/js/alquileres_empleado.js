@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     columns: [
       { data: 'numero_bano' },
       { data: 'cliente_nombre' },
-      { data: 'cliente_dni' },
+      { data: 'dni_cuit_cuil' },
       { data: 'direccion' },
       { data: 'fecha_inicio' },
       { data: 'fecha_fin' },
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const texto = (buscador.value || '').toLowerCase();
     const filtrados = alquileresCargados.filter(a =>
       (a.cliente_nombre || '').toLowerCase().includes(texto) ||
-      (a.cliente_dni || '').toLowerCase().includes(texto) ||
+      (a.dni_cuit_cuil || '').toLowerCase().includes(texto) ||
       (a.numero_bano || '').toLowerCase().includes(texto)
     );
     mostrar(filtrados);

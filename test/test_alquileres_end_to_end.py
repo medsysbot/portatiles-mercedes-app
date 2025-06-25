@@ -80,7 +80,7 @@ def test_alquileres_end_to_end(monkeypatch):
     datos = {
         "numero_bano": "B100",
         "cliente_nombre": "Empresa SA",
-        "cliente_dni": "20345678",
+        "dni_cuit_cuil": "20345678",
         "direccion": "Calle 1",
         "fecha_inicio": "2025-01-01",
         "fecha_fin": "2025-12-31",
@@ -96,4 +96,4 @@ def test_alquileres_end_to_end(monkeypatch):
     assert len(lista) == 1
     assert lista[0]["numero_bano"] == "B100"
     assert lista[0]["cliente_nombre"] == "Empresa SA"
-    assert lista[0]["cliente_dni"] == "20345678"
+    assert lista[0]["dni_cuit_cuil"] == "20345678"

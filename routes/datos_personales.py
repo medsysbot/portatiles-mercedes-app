@@ -25,7 +25,7 @@ router = APIRouter()
 def registrar_datos_cliente(
     nombre: str = Form(...),
     apellido: str = Form(...),
-    dni: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
     direccion: str = Form(...),
     telefono: str = Form(...),
     cuit: str = Form(...),
@@ -37,7 +37,7 @@ def registrar_datos_cliente(
     datos_insert = {
         "nombre": nombre,
         "apellido": apellido,
-        "dni": dni,
+        "dni_cuit_cuil": dni_cuit_cuil,
         "direccion": direccion,
         "telefono": telefono,
         "cuit": cuit,
@@ -52,8 +52,8 @@ def registrar_datos_cliente(
     if supabase:
         existe = (
             supabase.table("datos_personales_clientes")
-            .select("dni")
-            .eq("dni", dni)
+            .select("dni_cuit_cuil")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
             .execute()
         )
         if getattr(existe, "data", []):
@@ -73,13 +73,13 @@ def registrar_datos_cliente(
 
 
 @router.get("/datos_cliente")
-def obtener_datos_cliente(dni: str):
+def obtener_datos_cliente(dni_cuit_cuil: str):
     """Devuelve los datos personales del cliente por DNI."""
     if supabase:
         resp = (
             supabase.table("datos_personales_clientes")
             .select("*")
-            .eq("dni", dni)
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
             .single()
             .execute()
         )

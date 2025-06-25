@@ -49,7 +49,7 @@ class AlquilerNuevo(BaseModel):
 
     numero_bano: str
     cliente_nombre: str
-    cliente_dni: str
+    dni_cuit_cuil: str
     direccion: str | None = None
     fecha_inicio: date
     fecha_fin: date | None = None
@@ -151,7 +151,7 @@ async def listar_alquileres():
             {
                 "numero_bano": item.get("numero_bano"),
                 "cliente_nombre": item.get("cliente_nombre") or item.get("cliente"),
-                "cliente_dni": item.get("cliente_dni"),
+                "dni_cuit_cuil": item.get("dni_cuit_cuil"),
                 "direccion": item.get("direccion"),
                 "fecha_inicio": item.get("fecha_inicio")
                 or item.get("inicio_contrato"),

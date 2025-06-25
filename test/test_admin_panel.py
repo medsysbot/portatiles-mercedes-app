@@ -31,8 +31,8 @@ class MockQuery:
 
     def execute(self):
         result = self.data
-        if "dni" in self.filters:
-            result = [c for c in self.data if c["dni"] == self.filters["dni"]]
+        if "dni_cuit_cuil" in self.filters:
+            result = [c for c in self.data if c["dni_cuit_cuil"] == self.filters["dni_cuit_cuil"]]
         return types.SimpleNamespace(data=result, status_code=200, error=None)
 
 
@@ -55,14 +55,14 @@ def test_admin_api_clientes_busqueda(monkeypatch):
         {
             "nombre": "Ana",
             "apellido": "Gomez",
-            "dni": "456",
+            "dni_cuit_cuil": "456",
             "email": "ana@test.com",
             "estado": "activo",
         },
         {
             "nombre": "Juan",
             "apellido": "Perez",
-            "dni": "123",
+            "dni_cuit_cuil": "123",
             "email": "juan@test.com",
             "estado": "activo",
         },
@@ -73,13 +73,13 @@ def test_admin_api_clientes_busqueda(monkeypatch):
     data = response.json()
     assert "clientes" in data
     assert len(data["clientes"]) == 1
-    assert data["clientes"][0]["dni"] == "456"
+    assert data["clientes"][0]["dni_cuit_cuil"] == "456"
 
 
 def test_info_todos_clientes(monkeypatch):
     datos = [
-        {"dni": "1", "nombre": "Ana", "apellido": "G", "email": "a@test.com"},
-        {"dni": "2", "nombre": "Juan", "apellido": "P", "email": "j@test.com"},
+        {"dni_cuit_cuil": "1", "nombre": "Ana", "apellido": "G", "email": "a@test.com"},
+        {"dni_cuit_cuil": "2", "nombre": "Juan", "apellido": "P", "email": "j@test.com"},
     ]
     monkeypatch.setattr(admin_panel, "supabase", MockSupabase(datos))
     resp = client.get("/info_todos_clientes")
@@ -263,7 +263,7 @@ def test_crear_alquiler_ok(monkeypatch):
     datos = {
         "numero_bano": "B1",
         "cliente_nombre": "Juan",
-        "cliente_dni": "20123456",
+        "dni_cuit_cuil": "20123456",
         "direccion": "Dir",
         "fecha_inicio": "2025-01-01",
         "fecha_fin": "2025-12-31",
@@ -285,7 +285,7 @@ def test_crear_alquiler_duplicado(monkeypatch):
     datos = {
         "numero_bano": "B2",
         "cliente_nombre": "Ana",
-        "cliente_dni": "20987654",
+        "dni_cuit_cuil": "20987654",
         "direccion": "Dir",
         "fecha_inicio": "2025-01-01",
         "fecha_fin": None,

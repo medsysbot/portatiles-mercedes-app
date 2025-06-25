@@ -32,7 +32,7 @@ class InMemoryQuery:
 
     def execute(self):
         if self.is_select:
-            if self.data and self.filter == self.data.get("dni"):
+            if self.data and self.filter == self.data.get("dni_cuit_cuil"):
                 result = self.data if self.single_mode else [self.data]
                 return types.SimpleNamespace(data=result, status_code=200, error=None)
             return types.SimpleNamespace(data=None if self.single_mode else [], status_code=200, error=None)
@@ -58,7 +58,7 @@ def test_registrar_datos_cliente_ok(monkeypatch):
         data={
             "nombre": "Juan",
             "apellido": "Perez",
-            "dni": "123",
+            "dni_cuit_cuil": "123",
             "direccion": "Calle 1",
             "telefono": "555",
             "cuit": "20-12345678-9",
@@ -68,14 +68,14 @@ def test_registrar_datos_cliente_ok(monkeypatch):
     )
     assert resp.status_code == 200
     assert db.table_name == "datos_personales_clientes"
-    assert db.query.inserted["dni"] == "123"
+    assert db.query.inserted["dni_cuit_cuil"] == "123"
 
 
 def test_registrar_datos_cliente_dni_repetido(monkeypatch):
     existing = {
         "nombre": "Ana",
         "apellido": "Lopez",
-        "dni": "123",
+        "dni_cuit_cuil": "123",
         "direccion": "x",
         "telefono": "222",
         "cuit": "20-99999999-9",
@@ -89,7 +89,7 @@ def test_registrar_datos_cliente_dni_repetido(monkeypatch):
         data={
             "nombre": "Juan",
             "apellido": "Perez",
-            "dni": "123",
+            "dni_cuit_cuil": "123",
             "direccion": "Calle 1",
             "telefono": "111",
             "cuit": "20-12345678-9",
@@ -104,7 +104,7 @@ def test_obtener_datos_cliente(monkeypatch):
     data = {
         "nombre": "Ana",
         "apellido": "Gomez",
-        "dni": "321",
+        "dni_cuit_cuil": "321",
         "direccion": "calle a",
         "telefono": "1234",
         "cuit": "20-11111111-1",
@@ -113,6 +113,6 @@ def test_obtener_datos_cliente(monkeypatch):
     }
     db = MockSupabase(data)
     monkeypatch.setattr(datos_personales, "supabase", db)
-    resp = client.get("/datos_cliente", params={"dni": data["dni"]})
+    resp = client.get("/datos_cliente", params={"dni_cuit_cuil": data["dni_cuit_cuil"]})
     assert resp.status_code == 200
     assert resp.json()["email"] == data["email"]

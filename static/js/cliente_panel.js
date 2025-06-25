@@ -451,25 +451,29 @@ document.getElementById('formRespuestaEmail').addEventListener('submit', enviarE
 async function enviarReporte(ev) {
     ev.preventDefault();
     const datos = {
-        dni: window.dniCliente,
         fecha: document.getElementById('fechaReporte').value,
         nombre_persona: document.getElementById('nombrePersonaReporte').value,
         motivo: document.getElementById('motivoReporte').value,
         observaciones: document.getElementById('obsReporte').value
     };
-    const resp = await fetchConAuth('/cliente/reporte', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-    });
     const cont = document.getElementById('msgReporte');
-    if (resp.ok) {
-        cont.textContent = 'Reporte enviado correctamente';
-        cont.className = 'alert alert-success';
-        ev.target.reset();
-    } else {
-        const r = await resp.json();
-        cont.textContent = r.detail || 'Error al enviar';
+    try {
+        const resp = await fetchConAuth('/cliente/reporte', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(datos)
+        });
+        if (resp.ok) {
+            cont.textContent = 'Reporte enviado correctamente';
+            cont.className = 'alert alert-success';
+            ev.target.reset();
+        } else {
+            const r = await resp.json();
+            cont.textContent = r.detail || 'Error al enviar reporte';
+            cont.className = 'alert alert-danger';
+        }
+    } catch (error) {
+        cont.textContent = 'Error de conexión al enviar el reporte';
         cont.className = 'alert alert-danger';
     }
     cont.style.display = 'block';

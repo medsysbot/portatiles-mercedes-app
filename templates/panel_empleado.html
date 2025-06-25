@@ -59,7 +59,11 @@
   <div class="content-wrapper pt-2">
     <section class="content">
       <div class="container-fluid">
-        {% block content %}{% endblock %}
+        {% block content %}
+          <h2>Bienvenido al Panel de Empleados</h2>
+          <p>Desde aquí puede registrar y ver todos los servicios de limpieza realizados.</p>
+          {% include 'limpieza_empleado_include.html' %}
+        {% endblock %}
       </div>
     </section>
   </div>
@@ -67,16 +71,15 @@
 {% endblock %}
 
 {% block scripts %}
-
-<script>
-  const btn = document.getElementById("btnLogout");
-  if (btn) {
-    btn.addEventListener("click", () => {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("usuario");
-      localStorage.removeItem("rol");
-    });
-  }
-</script>
-
+  <script src="/static/js/limpieza_admin.js"></script>
+  <script>
+    const btn = document.getElementById("btnLogout");
+    if (btn) {
+      btn.addEventListener("click", () => {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("usuario");
+        localStorage.removeItem("rol");
+      });
+    }
+  </script>
 {% endblock %}

@@ -110,13 +110,20 @@ async def obtener_facturas_pendientes(dni: str = Query(...)):
     try:
         res = (
             supabase.table("facturas_pendientes")
-            .select("fecha,numero_factura,razon_social,monto_adeudado")
+            .select(
+                "id,fecha,numero_factura,dni_cuit_cuil,razon_social,monto_adeudado"
+            )
             .eq("dni_cuit_cuil", dni)
             .execute()
         )
         if getattr(res, "error", None):
             raise Exception(res.error.message)
-        return res.data or []
+        data = res.data or []
+        # Adaptar los campos al frontend
+        for item in data:
+            item["id_factura"] = item.get("id")  # Para la columna 'ID'
+            item["nombre_cliente"] = ""  # Si no hay nombre cliente, dejar vacío
+        return data
     except Exception as exc:  # pragma: no cover
         logger.error("Error consultando facturas pendientes: %s", exc)
         raise HTTPException(status_code=500, detail="Error consultando datos")
@@ -140,7 +147,11 @@ async def obtener_limpiezas(dni: str = Query(...)):
         )
         if getattr(res, "error", None):
             raise Exception(res.error.message)
-        return res.data or []
+        data = res.data or []
+        # Adaptar nombre del campo para el frontend
+        for item in data:
+            item["dni_quit_cuil"] = item.get("dni_cliente") or ""
+        return data
     except Exception as exc:  # pragma: no cover
         logger.error("Error consultando limpiezas: %s", exc)
         raise HTTPException(status_code=500, detail="Error consultando datos")
@@ -240,14 +251,18 @@ async def obtener_ventas(dni: str = Query(...)):
         res = (
             supabase.table("ventas")
             .select(
-                "fecha_operacion,tipo_bano,nombre_cliente,forma_pago,observaciones"
+                "fecha_operacion,tipo_bano,dni_cliente,nombre_cliente,forma_pago,observaciones"
             )
             .eq("dni_cliente", dni)
             .execute()
         )
         if getattr(res, "error", None):
             raise Exception(res.error.message)
-        return res.data or []
+        data = res.data or []
+        # Adaptar nombre del campo para el frontend
+        for item in data:
+            item["dni_quit_cuil"] = item.get("dni_cliente") or ""
+        return data
     except Exception as exc:  # pragma: no cover
         logger.error("Error consultando ventas: %s", exc)
         raise HTTPException(status_code=500, detail="Error consultando datos")

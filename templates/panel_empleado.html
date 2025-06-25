@@ -1,6 +1,6 @@
 {% extends 'base_adminlte.html' %}
 {% block title %}Panel Administración{% endblock %}
-{% block body_class %}hold-transition sidebar-mini layout-fixed admin-bg{% endblock %}
+{% block body_class %}hold-transition sidebar-mini layout-fixed admin-bg panel-empleados{% endblock %}
 
 {% block head_extra %}
 <link rel="stylesheet" href="/static/css/style.css">
@@ -56,16 +56,13 @@
   </aside>
   <!-- /.sidebar -->
 
-  <div class="content-wrapper pt-2">
+  <div class="content-wrapper">
     <section class="content">
-      <div class="container-fluid">
+      <div class="container-fluid p-0">
         {% block content %}
-          <div class="card text-center border-0">
-            <img src="/static/imagenes/fondo-panel-empleados.png" class="card-img-top" alt="Panel empleados">
-            <div class="card-body">
-              <p class="card-text">Aquí podrás cargar los datos de limpieza y ver algunos detalles sobre los baños tocando el desplegable de la esquina.</p>
-            </div>
-          </div>
+        <div class="welcome-text">
+          Aquí podrás cargar los datos de limpieza y ver algunos detalles sobre los baños tocando el desplegable de la esquina.
+        </div>
         {% endblock %}
       </div>
     </section>

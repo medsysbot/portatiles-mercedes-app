@@ -61,7 +61,7 @@ def test_guardar_datos_cliente(monkeypatch):
     monkeypatch.setattr(cliente_panel, "supabase", db)
 
     datos = {
-        "dni": "123",
+        "dni_cuit_cuil": "123",
         "nombre": "Juan",
         "apellido": "Perez",
         "direccion": "Calle 1",
@@ -86,7 +86,7 @@ def test_guardar_datos_cliente_error(monkeypatch):
     monkeypatch.setattr(cliente_panel, "supabase", FailSupabase())
 
     datos = {
-        "dni": "1",
+        "dni_cuit_cuil": "1",
         "nombre": "a",
         "apellido": "b",
         "direccion": "c",
@@ -107,7 +107,7 @@ def test_guardar_datos_cliente_sin_email(monkeypatch):
     monkeypatch.setattr(cliente_panel, "supabase", db)
 
     datos = {
-        "dni": "111",
+        "dni_cuit_cuil": "111",
         "nombre": "Ana",
         "apellido": "Gomez",
         "direccion": "Av 1",

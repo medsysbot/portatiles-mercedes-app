@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'id_servicio', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'fecha_servicio' },
       { data: 'numero_bano' },
-      { data: 'dni_cliente' },
+      { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
       { data: 'tipo_servicio' },
       { data: 'remito_url', render: data => `<a href="${data}" target="_blank">Ver</a>` },
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const q = texto.toLowerCase();
     const filtrados = servicios.filter(s =>
       (s.nombre_cliente || '').toLowerCase().includes(q) ||
-      (s.dni_cliente || '').toLowerCase().includes(q) ||
+      (s.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (s.numero_bano || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);

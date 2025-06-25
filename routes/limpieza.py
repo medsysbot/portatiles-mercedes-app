@@ -70,7 +70,7 @@ BUCKET = "servicios-limpieza"
 class ServicioLimpiezaNuevo(BaseModel):
     fecha_servicio: date
     numero_bano: str
-    dni_cliente: str
+    dni_cuit_cuil: str
     nombre_cliente: str
     tipo_servicio: str
     observaciones: str | None = None
@@ -125,7 +125,7 @@ async def crear_servicio_limpieza(
     request: Request,
     fecha_servicio: str = Form(...),
     numero_bano: str = Form(...),
-    dni_cliente: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
@@ -140,7 +140,7 @@ async def crear_servicio_limpieza(
     datos_form = {
         "fecha_servicio": fecha_servicio,
         "numero_bano": numero_bano,
-        "dni_cliente": dni_cliente,
+        "dni_cuit_cuil": dni_cuit_cuil,
         "nombre_cliente": nombre_cliente,
         "tipo_servicio": tipo_servicio,
         "observaciones": observaciones,
@@ -184,7 +184,7 @@ async def crear_servicio_limpieza(
         consulta = (
             supabase.table("datos_personales_clientes")
             .select("email")
-            .eq("dni", servicio.dni_cliente)
+            .eq("dni_cuit_cuil", servicio.dni_cuit_cuil)
             .maybe_single()
             .execute()
         )
@@ -243,7 +243,7 @@ async def listar_servicios_limpieza():
                 "id_servicio": d.get("id_servicio") or d.get("id"),
                 "fecha_servicio": d.get("fecha_servicio"),
                 "numero_bano": d.get("numero_bano"),
-                "dni_cliente": d.get("dni_cliente"),
+                "dni_cuit_cuil": d.get("dni_cuit_cuil"),
                 "nombre_cliente": d.get("nombre_cliente"),
                 "tipo_servicio": d.get("tipo_servicio"),
                 "remito_url": d.get("remito_url"),

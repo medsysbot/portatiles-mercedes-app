@@ -47,7 +47,7 @@ function initTablas() {
         columns: [
             { data: 'numero_bano' },
             { data: 'cliente_nombre' },
-            { data: 'cliente_dni' },
+            { data: 'dni_cuit_cuil' },
             { data: 'direccion' },
             { data: 'fecha_inicio' },
             { data: 'fecha_fin' },
@@ -79,7 +79,7 @@ function initTablas() {
         columns: [
             { data: 'fecha_operacion' },
             { data: 'tipo_bano' },
-            { data: 'dni_quit_quill' },
+            { data: 'dni_cuit_cuil' },
             { data: 'nombre_cliente' },
             { data: 'forma_pago' },
             { data: 'observaciones' }
@@ -94,7 +94,7 @@ function initTablas() {
         columns: [
             { data: 'fecha_servicio' },
             { data: 'numero_bano' },
-            { data: 'dni_quit_quill' },
+            { data: 'dni_cuit_cuil' },
             { data: 'nombre_cliente' },
             { data: 'tipo_servicio' },
             { data: 'remito_url', render: data => `<a href="${data}" target="_blank">Ver</a>` },
@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (datosCliRes.ok) {
             const datosCli = await datosCliRes.json();
             nombre = datosCli.nombre || email;
-            window.dniCliente = datosCli.dni;
+            window.dniCliente = datosCli.dni_cuit_cuil;
             cargarDatosPersonales(email, datosCli);
         } else {
             cargarDatosPersonales(email);
@@ -150,7 +150,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const texto = (buscAlq.value || '').toLowerCase();
             const filtrados = alquileresCargados.filter(a =>
                 (a.cliente_nombre || '').toLowerCase().includes(texto) ||
-                (a.cliente_dni || '').toLowerCase().includes(texto) ||
+                (a.dni_cuit_cuil || '').toLowerCase().includes(texto) ||
                 (a.numero_bano || '').toLowerCase().includes(texto)
             );
             mostrarAlquileres(filtrados);
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const texto = (buscVentas.value || '').toLowerCase();
             const filtrados = ventasCargadas.filter(v =>
                 (v.nombre_cliente || '').toLowerCase().includes(texto) ||
-                (v.dni_quit_quill || '').toLowerCase().includes(texto)
+                (v.dni_cuit_cuil || '').toLowerCase().includes(texto)
             );
             mostrarVentas(filtrados);
             if (filtrados.length === 0) {
@@ -214,10 +214,10 @@ function mostrarMensaje(id, texto, tipo) {
     cont.style.display = 'block';
 }
 
-async function cargarAlquileres(dni) {
+async function cargarAlquileres(dni_cuit_cuil) {
     const mensajeError = document.getElementById('errorAlquileres');
     try {
-        const resp = await fetchConAuth(`/alquileres_cliente?dni=${encodeURIComponent(dni)}`);
+        const resp = await fetchConAuth(`/alquileres_cliente?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
         if (!resp.ok) throw new Error('Error consultando');
         alquileresCargados = await resp.json();
         mostrarAlquileres(alquileresCargados);
@@ -241,10 +241,10 @@ function mostrarAlquileres(lista) {
     tablaAlquileres.rows.add(lista).draw();
 }
 
-async function cargarFacturas(dni) {
+async function cargarFacturas(dni_cuit_cuil) {
     const mensajeError = document.getElementById('errorFacturas');
     try {
-        const resp = await fetchConAuth(`/facturas_pendientes_cliente?dni=${encodeURIComponent(dni)}`);
+        const resp = await fetchConAuth(`/facturas_pendientes_cliente?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
         if (!resp.ok) throw new Error('Error consultando');
         facturasCargadas = await resp.json();
         mostrarFacturas(facturasCargadas);
@@ -268,10 +268,10 @@ function mostrarFacturas(lista) {
     tablaFacturas.rows.add(lista).draw();
 }
 
-async function cargarVentas(dni) {
+async function cargarVentas(dni_cuit_cuil) {
     const mensajeError = document.getElementById('errorVentas');
     try {
-        const resp = await fetchConAuth(`/ventas_cliente?dni=${encodeURIComponent(dni)}`);
+        const resp = await fetchConAuth(`/ventas_cliente?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
         if (!resp.ok) throw new Error('Error consultando');
         ventasCargadas = await resp.json();
         mostrarVentas(ventasCargadas);
@@ -295,10 +295,10 @@ function mostrarVentas(lista) {
     tablaVentas.rows.add(lista).draw();
 }
 
-async function cargarLimpiezas(dni) {
+async function cargarLimpiezas(dni_cuit_cuil) {
     const mensajeError = document.getElementById('errorServicios');
     try {
-        const resp = await fetchConAuth(`/limpiezas_cliente?dni=${encodeURIComponent(dni)}`);
+        const resp = await fetchConAuth(`/limpiezas_cliente?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
         if (!resp.ok) throw new Error('Error consultando');
         limpiezasCargadas = await resp.json();
         mostrarLimpiezas(limpiezasCargadas);
@@ -367,7 +367,7 @@ async function cargarDatosPersonales(email, datos = null) {
         document.getElementById("apellido").value = info.apellido || "";
         document.getElementById("direccion").value = info.direccion || "";
         document.getElementById("telefono").value = info.telefono || "";
-        document.getElementById("dni").value = info.dni || "";
+        document.getElementById("dni_cuit_cuil").value = info.dni_cuit_cuil || "";
         document.getElementById("cuit").value = info.cuit || "";
         document.getElementById("razon_social").value = info.razon_social || "";
         document.getElementById("email").value = info.email || "";
@@ -380,7 +380,7 @@ async function cargarDatosPersonales(email, datos = null) {
 }
 
 function prepararListenersFormulario() {
-    const inputs = ["nombre", "apellido", "direccion", "telefono", "dni", "cuit", "razon_social", "email"];
+    const inputs = ["nombre", "apellido", "direccion", "telefono", "dni_cuit_cuil", "cuit", "razon_social", "email"];
     inputs.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -393,7 +393,7 @@ function prepararListenersFormulario() {
 
 function hayCambios() {
     if (!datosOriginales) return true;
-    const campos = ["nombre", "apellido", "direccion", "telefono", "dni", "cuit", "razon_social", "email"];
+    const campos = ["nombre", "apellido", "direccion", "telefono", "dni_cuit_cuil", "cuit", "razon_social", "email"];
     return campos.some(c => (datosOriginales[c] || "") !== document.getElementById(c).value);
 }
 
@@ -409,7 +409,7 @@ function mostrarMensajeFormulario(mensaje, tipo) {
 async function guardarDatos(ev) {
     if (ev) ev.preventDefault();
     const datos = {
-        dni: document.getElementById("dni").value,
+        dni_cuit_cuil: document.getElementById("dni_cuit_cuil").value,
         nombre: document.getElementById("nombre").value,
         apellido: document.getElementById("apellido").value,
         direccion: document.getElementById("direccion").value,
@@ -419,7 +419,7 @@ async function guardarDatos(ev) {
         email: document.getElementById("email").value
     };
 
-    const obligatorios = ['dni','nombre','apellido','direccion','telefono','email'];
+    const obligatorios = ['dni_cuit_cuil','nombre','apellido','direccion','telefono','email'];
     for (const campo of obligatorios) {
         if (!datos[campo]) {
             alert('Completa el campo ' + campo);

@@ -59,7 +59,7 @@ class VentaPublica(BaseModel):
 class VentaNueva(BaseModel):
     fecha_operacion: date
     tipo_bano: str
-    dni_cliente: str
+    dni_cuit_cuil: str
     nombre_cliente: str
     forma_pago: str
     observaciones: str | None = None
@@ -73,7 +73,7 @@ async def registrar_venta(venta: VentaPublica):
             datos = {
                 "fecha_operacion": venta.fecha_venta.isoformat(),
                 "tipo_bano": venta.tipo_bano,
-                "dni_cliente": venta.dni,
+                "dni_cuit_cuil": venta.dni,
                 "nombre_cliente": venta.cliente_nombre,
                 "forma_pago": "otro",
                 "observaciones": venta.observaciones,
@@ -178,7 +178,7 @@ async def listar_ventas():
                 "id_venta": item.get("id_venta") or item.get("id"),
                 "fecha_operacion": item.get("fecha_operacion"),
                 "tipo_bano": item.get("tipo_bano"),
-                "dni_cliente": item.get("dni_cliente"),
+                "dni_cuit_cuil": item.get("dni_cuit_cuil"),
                 "nombre_cliente": item.get("nombre_cliente"),
                 "forma_pago": item.get("forma_pago"),
                 "observaciones": item.get("observaciones"),

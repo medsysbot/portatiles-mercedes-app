@@ -61,7 +61,7 @@ async def info_cliente(email: str = Query(...)):
         try:
             resp = (
                 supabase.table("datos_personales_clientes")
-                .select("dni,nombre,apellido,direccion,telefono,cuit,razon_social,email")
+                .select("dni_cuit_cuil,nombre,apellido,direccion,telefono,cuit,razon_social,email")
                 .eq("email", email)
                 .single()
                 .execute()
@@ -77,7 +77,7 @@ async def info_cliente(email: str = Query(...)):
 
 
 @router.get("/alquileres_cliente")
-async def obtener_alquileres(dni: str = Query(...)):
+async def obtener_alquileres(dni_cuit_cuil: str = Query(...)):
     """Devuelve los alquileres asociados al cliente."""
     if not supabase:
         logger.warning("Supabase no configurado")
@@ -87,9 +87,9 @@ async def obtener_alquileres(dni: str = Query(...)):
         res = (
             supabase.table("alquileres")
             .select(
-                "numero_bano,cliente_nombre,cliente_dni,direccion,fecha_inicio,fecha_fin,observaciones"
+                "numero_bano,cliente_nombre,dni_cuit_cuil,direccion,fecha_inicio,fecha_fin,observaciones"
             )
-            .eq("cliente_dni", dni)
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
             .execute()
         )
         if getattr(res, "error", None):
@@ -101,7 +101,7 @@ async def obtener_alquileres(dni: str = Query(...)):
 
 
 @router.get("/facturas_pendientes_cliente")
-async def obtener_facturas_pendientes(dni: str = Query(...)):
+async def obtener_facturas_pendientes(dni_cuit_cuil: str = Query(...)):
     """Facturas pendientes del cliente."""
     if not supabase:
         logger.warning("Supabase no configurado")
@@ -113,7 +113,7 @@ async def obtener_facturas_pendientes(dni: str = Query(...)):
             .select(
                 "id,fecha,numero_factura,dni_cuit_cuil,razon_social,monto_adeudado"
             )
-            .eq("dni_cuit_cuil", dni)
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
             .execute()
         )
         if getattr(res, "error", None):
@@ -130,7 +130,7 @@ async def obtener_facturas_pendientes(dni: str = Query(...)):
 
 
 @router.get("/limpiezas_cliente")
-async def obtener_limpiezas(dni: str = Query(...)):
+async def obtener_limpiezas(dni_cuit_cuil: str = Query(...)):
     """Servicios de limpieza del cliente."""
     if not supabase:
         logger.warning("Supabase no configurado")
@@ -140,9 +140,9 @@ async def obtener_limpiezas(dni: str = Query(...)):
         res = (
             supabase.table("servicios_limpieza")
             .select(
-                "fecha_servicio,numero_bano,dni_cliente,nombre_cliente,tipo_servicio,remito_url,observaciones"
+                "fecha_servicio,numero_bano,dni_cuit_cuil,nombre_cliente,tipo_servicio,remito_url,observaciones"
             )
-            .eq("dni_cliente", dni)
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
             .execute()
         )
         if getattr(res, "error", None):
@@ -150,7 +150,7 @@ async def obtener_limpiezas(dni: str = Query(...)):
         data = res.data or []
         # Adaptar nombre del campo para el frontend
         for item in data:
-            item["dni_quit_cuil"] = item.get("dni_cliente") or ""
+            item["dni_cuit_cuil"] = item.get("dni_cuit_cuil") or ""
         return data
     except Exception as exc:  # pragma: no cover
         logger.error("Error consultando limpiezas: %s", exc)
@@ -193,7 +193,7 @@ async def guardar_datos_cliente(request: Request):
     try:
         resultado = (
             supabase.table("datos_personales_clientes")
-            .upsert(data, on_conflict="dni")
+            .upsert(data, on_conflict="dni_cuit_cuil")
             .execute()
         )
 
@@ -219,7 +219,7 @@ async def guardar_datos_cliente(request: Request):
 
 
 @router.get("/facturas_cliente")
-async def obtener_facturas(dni: str = Query(...)):
+async def obtener_facturas(dni_cuit_cuil: str = Query(...)):
     """Historial de facturación del cliente."""
     if not supabase:
         logger.warning("Supabase no configurado")
@@ -229,7 +229,7 @@ async def obtener_facturas(dni: str = Query(...)):
         res = (
             supabase.table("facturas")
             .select("fecha,numero_factura,monto,estado")
-            .eq("dni_cuit_cuil", dni)
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
             .execute()
         )
         if getattr(res, "error", None):
@@ -241,7 +241,7 @@ async def obtener_facturas(dni: str = Query(...)):
 
 
 @router.get("/ventas_cliente")
-async def obtener_ventas(dni: str = Query(...)):
+async def obtener_ventas(dni_cuit_cuil: str = Query(...)):
     """Ventas asociadas al cliente."""
     if not supabase:
         logger.warning("Supabase no configurado")
@@ -251,9 +251,9 @@ async def obtener_ventas(dni: str = Query(...)):
         res = (
             supabase.table("ventas")
             .select(
-                "fecha_operacion,tipo_bano,dni_cliente,nombre_cliente,forma_pago,observaciones"
+                "fecha_operacion,tipo_bano,dni_cuit_cuil,nombre_cliente,forma_pago,observaciones"
             )
-            .eq("dni_cliente", dni)
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
             .execute()
         )
         if getattr(res, "error", None):
@@ -261,7 +261,7 @@ async def obtener_ventas(dni: str = Query(...)):
         data = res.data or []
         # Adaptar nombre del campo para el frontend
         for item in data:
-            item["dni_quit_cuil"] = item.get("dni_cliente") or ""
+            item["dni_cuit_cuil"] = item.get("dni_cuit_cuil") or ""
         return data
     except Exception as exc:  # pragma: no cover
         logger.error("Error consultando ventas: %s", exc)

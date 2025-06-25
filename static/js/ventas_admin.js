@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'id_venta', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
       { data: 'fecha_operacion' },
       { data: 'tipo_bano' },
-      { data: 'dni_cliente' },
+      { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
       { data: 'forma_pago' },
       { data: 'observaciones' }
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const texto = (buscador.value || '').toLowerCase();
     const filtrados = ventasCargadas.filter(v =>
       (v.nombre_cliente || '').toLowerCase().includes(texto) ||
-      (v.dni_cliente || '').toLowerCase().includes(texto)
+      (v.dni_cuit_cuil || '').toLowerCase().includes(texto)
     );
     mostrarVentas(filtrados);
     if (filtrados.length === 0) {

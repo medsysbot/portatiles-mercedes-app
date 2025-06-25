@@ -57,7 +57,7 @@ class Cliente(BaseModel):
 
     nombre: str
     apellido: str
-    dni: str
+    dni_cuit_cuil: str
     direccion: str
     telefono: str
     cuit: str
@@ -200,7 +200,7 @@ def admin_clientes_page(
             c
             for c in clientes
             if q_low in (c.get("nombre") or "").lower()
-            or q_low in (c.get("dni") or "").lower()
+            or q_low in (c.get("dni_cuit_cuil") or "").lower()
             or q_low in (c.get("email") or "").lower()
         ]
 
@@ -227,7 +227,7 @@ def form_nuevo_cliente(request: Request):
 def crear_cliente(
     nombre: str = Form(...),
     apellido: str = Form(...),
-    dni: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
     direccion: str = Form(...),
     telefono: str = Form(...),
     cuit: str = Form(...),
@@ -237,7 +237,7 @@ def crear_cliente(
     """Procesa la creación de un cliente."""
     if supabase:
         datos = {
-            "dni": dni,
+            "dni_cuit_cuil": dni_cuit_cuil,
             "nombre": nombre,
             "apellido": apellido,
             "direccion": direccion,
@@ -252,8 +252,8 @@ def crear_cliente(
         # Verificamos si ya existe un cliente con el mismo DNI
         existe_dni = (
             supabase.table("datos_personales_clientes")
-            .select("dni")
-            .eq("dni", dni)
+            .select("dni_cuit_cuil")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
             .limit(1)
             .execute()
         )
@@ -341,15 +341,15 @@ def crear_empleado(
     return {"mensaje": "Empleado creado correctamente"}
 
 
-@router.get("/admin/clientes/{dni}/editar", response_class=HTMLResponse)
-def form_editar_cliente(dni: str, request: Request):
+@router.get("/admin/clientes/{dni_cuit_cuil}/editar", response_class=HTMLResponse)
+def form_editar_cliente(dni_cuit_cuil: str, request: Request):
     """Formulario de edición de un cliente existente."""
     cliente = None
     if supabase:
         resp = (
             supabase.table("datos_personales_clientes")
             .select("*")
-            .eq("dni", dni)
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
             .single()
             .execute()
         )
@@ -360,9 +360,9 @@ def form_editar_cliente(dni: str, request: Request):
     )
 
 
-@router.post("/admin/clientes/{dni}/editar")
+@router.post("/admin/clientes/{dni_cuit_cuil}/editar")
 def editar_cliente(
-    dni: str,
+    dni_cuit_cuil: str,
     nombre: str = Form(...),
     apellido: str = Form(...),
     direccion: str = Form(...),
@@ -386,13 +386,13 @@ def editar_cliente(
             if not val:
                 raise HTTPException(status_code=400, detail=f"Campo '{campo}' faltante")
         supabase.table("datos_personales_clientes").update(datos).eq(
-            "dni", dni
+            "dni_cuit_cuil", dni_cuit_cuil
         ).execute()
     return RedirectResponse("/admin/clientes", status_code=303)
 
 
-@router.post("/admin/clientes/{dni}/eliminar")
-def eliminar_cliente(dni: str):
+@router.post("/admin/clientes/{dni_cuit_cuil}/eliminar")
+def eliminar_cliente(dni_cuit_cuil: str):
     """Elimina un cliente por su DNI."""
     return RedirectResponse("/admin/clientes", status_code=303)
 
@@ -485,7 +485,7 @@ def cliente_panel():
 
 @router.get("/admin/api/clientes")
 async def admin_clientes(
-    dni: str | None = Query(None),
+    dni_cuit_cuil: str | None = Query(None),
     q: str | None = Query(None),
 ):
     """Lista de clientes con filtros por DNI y búsqueda."""
@@ -495,15 +495,15 @@ async def admin_clientes(
     except HTTPException as exc:
         logger.error("Fallo obteniendo clientes: %s", exc.detail)
         raise
-    if dni:
-        clientes = [c for c in clientes if c.get("dni") == dni]
+    if dni_cuit_cuil:
+        clientes = [c for c in clientes if c.get("dni_cuit_cuil") == dni_cuit_cuil]
     if q:
         q_low = q.lower()
         clientes = [
             c
             for c in clientes
             if q_low in (c.get("nombre") or "").lower()
-            or q_low in (c.get("dni") or "").lower()
+            or q_low in (c.get("dni_cuit_cuil") or "").lower()
             or q_low in (c.get("email") or "").lower()
         ]
     return {"clientes": clientes}
@@ -546,7 +546,7 @@ async def info_todos_clientes():
 async def admin_limpiezas(
     desde: date | None = Query(None),
     hasta: date | None = Query(None),
-    dni: str | None = Query(None),
+    dni_cuit_cuil: str | None = Query(None),
 ):
     """Limpiezas registradas con filtros por fecha y cliente."""
     return []
@@ -613,7 +613,7 @@ async def eliminar_clientes(payload: _IdLista):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
-        supabase.table("datos_personales_clientes").delete().in_("dni", payload.ids).execute()
+        supabase.table("datos_personales_clientes").delete().in_("dni_cuit_cuil", payload.ids).execute()
     except Exception as exc:  # pragma: no cover
         logger.exception("Error eliminando clientes:")
         raise HTTPException(status_code=500, detail=str(exc))

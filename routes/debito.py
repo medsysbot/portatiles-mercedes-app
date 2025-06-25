@@ -31,7 +31,7 @@ async def activar_debito(
     proximo_pago = hoy + timedelta(days=frecuencia_dias)
 
     datos = {
-        "dni_cliente": dni,
+        "dni_cuit_cuil": dni,
         "monto": monto,
         "frecuencia_dias": frecuencia_dias,
         "fecha_inicio": hoy.isoformat(),

@@ -60,9 +60,12 @@
     <section class="content">
       <div class="container-fluid">
         {% block content %}
-          <h2>Bienvenido al Panel de Empleados</h2>
-          <p>Desde aquí puede registrar y ver todos los servicios de limpieza realizados.</p>
-          {% include 'limpieza_empleado_include.html' %}
+          <div class="card text-center border-0">
+            <img src="/static/imagenes/fondo-panel-empleados.png" class="card-img-top" alt="Panel empleados">
+            <div class="card-body">
+              <p class="card-text">Aquí podrás cargar los datos de limpieza y ver algunos detalles sobre los baños tocando el desplegable de la esquina.</p>
+            </div>
+          </div>
         {% endblock %}
       </div>
     </section>
@@ -71,7 +74,6 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="/static/js/limpieza_admin.js"></script>
   <script>
     const btn = document.getElementById("btnLogout");
     if (btn) {

@@ -132,8 +132,10 @@ async def obtener_limpiezas(dni: str = Query(...)):
     try:
         res = (
             supabase.table("servicios_limpieza")
-            .select("fecha,numero_bano,tipo_servicio,observaciones,remito_url")
-            .eq("dni_cuit_cuil", dni)
+            .select(
+                "fecha_servicio,numero_bano,dni_cliente,nombre_cliente,tipo_servicio,remito_url,observaciones"
+            )
+            .eq("dni_cliente", dni)
             .execute()
         )
         if getattr(res, "error", None):

@@ -79,7 +79,7 @@ function initTablas() {
         columns: [
             { data: 'fecha_operacion' },
             { data: 'tipo_bano' },
-            { data: 'dni_cliente' },
+            { data: 'dni_quit_quill' },
             { data: 'nombre_cliente' },
             { data: 'forma_pago' },
             { data: 'observaciones' }
@@ -94,7 +94,7 @@ function initTablas() {
         columns: [
             { data: 'fecha_servicio' },
             { data: 'numero_bano' },
-            { data: 'dni_cliente' },
+            { data: 'dni_quit_quill' },
             { data: 'nombre_cliente' },
             { data: 'tipo_servicio' },
             { data: 'remito_url', render: data => `<a href="${data}" target="_blank">Ver</a>` },
@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const texto = (buscVentas.value || '').toLowerCase();
             const filtrados = ventasCargadas.filter(v =>
                 (v.nombre_cliente || '').toLowerCase().includes(texto) ||
-                (v.dni_cliente || '').toLowerCase().includes(texto)
+                (v.dni_quit_quill || '').toLowerCase().includes(texto)
             );
             mostrarVentas(filtrados);
             if (filtrados.length === 0) {

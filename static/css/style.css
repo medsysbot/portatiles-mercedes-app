@@ -132,32 +132,3 @@ button.cerrar-sesion {
   aspect-ratio: 2 / 1;
 }
 
-/* ================= Panel de empleados ================= */
-body.panel-empleados .content-wrapper {
-  background: url('/static/imagenes/fondo-panel-empleados.png') no-repeat center center;
-  background-size: cover;
-  min-height: calc(100vh - 57px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-body.panel-empleados .content-wrapper::before {
-  display: none;
-}
-
-body.panel-empleados .welcome-text {
-  color: #fff;
-  text-align: center;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
-  font-size: 1.25rem;
-  padding: 1rem;
-  max-width: 90%;
-}
-
-@media (min-width: 768px) {
-  body.panel-empleados .welcome-text {
-    font-size: 1.5rem;
-    max-width: 600px;
-  }
-}

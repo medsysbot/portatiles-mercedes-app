@@ -382,6 +382,8 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
             try:
                 enviar_email_recuperacion(email, token, base_url)
             except Exception as exc:  # pragma: no cover - dependencias externas
+                print("DEBUG ERROR EN ENVÍO EMAIL RECUPERACIÓN:")
+                print(traceback.format_exc())
                 logger.exception("Error enviando email de recuperación: %s", exc)
                 raise HTTPException(
                     status_code=500,
@@ -392,8 +394,9 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
     except HTTPException:
         raise
     except Exception as exc:  # pragma: no cover - dependencias externas
-        logger.exception("Error en recuperar_password: %s", exc)
-        raise HTTPException(status_code=500, detail=str(exc))
+        print("DEBUG ERROR EN /recuperar_password:")
+        print(traceback.format_exc())
+        logger.error("Error en recuperar_password: %s", exc)
     return mensaje
 
 

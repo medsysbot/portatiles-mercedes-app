@@ -28,7 +28,6 @@ def registrar_datos_cliente(
     dni_cuit_cuil: str = Form(...),
     direccion: str = Form(...),
     telefono: str = Form(...),
-    cuit: str = Form(...),
     razon_social: str = Form(...),
     email: str = Form(...),
 ):
@@ -40,7 +39,6 @@ def registrar_datos_cliente(
         "dni_cuit_cuil": dni_cuit_cuil,
         "direccion": direccion,
         "telefono": telefono,
-        "cuit": cuit,
         "razon_social": razon_social,
         "email": email,
     }

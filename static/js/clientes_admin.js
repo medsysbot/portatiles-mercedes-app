@@ -29,13 +29,12 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
-      { data: 'dni', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
-      { data: 'dni' },
+      { data: 'dni_cuit_cuil', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
+      { data: 'dni_cuit_cuil' },
       { data: 'nombre' },
       { data: 'apellido' },
       { data: 'direccion' },
       { data: 'telefono' },
-      { data: 'cuit' },
       { data: 'razon_social' },
       { data: 'email' }
     ]
@@ -100,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const q = texto.toLowerCase();
     const filtrados = clientesCargados.filter(c =>
       (c.nombre || '').toLowerCase().includes(q) ||
-      (c.dni || '').toLowerCase().includes(q) ||
+      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (c.email || '').toLowerCase().includes(q)
     );
     mostrarClientes(filtrados);

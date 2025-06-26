@@ -66,7 +66,6 @@ def test_guardar_datos_cliente(monkeypatch):
         "apellido": "Perez",
         "direccion": "Calle 1",
         "telefono": "111",
-        "cuit": "20-12345678-9",
         "razon_social": "JP Servicios",
         "email": "test@test.com",
     }
@@ -91,7 +90,6 @@ def test_guardar_datos_cliente_error(monkeypatch):
         "apellido": "b",
         "direccion": "c",
         "telefono": "d",
-        "cuit": "e",
         "razon_social": "f",
         "email": "x",
     }
@@ -112,7 +110,6 @@ def test_guardar_datos_cliente_sin_email(monkeypatch):
         "apellido": "Gomez",
         "direccion": "Av 1",
         "telefono": "555",
-        "cuit": "20-12345678-9",
         "razon_social": "AG Servicios",
     }
 

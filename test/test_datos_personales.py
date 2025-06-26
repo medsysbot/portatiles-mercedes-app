@@ -61,7 +61,6 @@ def test_registrar_datos_cliente_ok(monkeypatch):
             "dni_cuit_cuil": "123",
             "direccion": "Calle 1",
             "telefono": "555",
-            "cuit": "20-12345678-9",
             "razon_social": "JP",
             "email": "test@test.com",
         },
@@ -78,7 +77,6 @@ def test_registrar_datos_cliente_dni_repetido(monkeypatch):
         "dni_cuit_cuil": "123",
         "direccion": "x",
         "telefono": "222",
-        "cuit": "20-99999999-9",
         "razon_social": "AL",
         "email": "ana@test.com",
     }
@@ -92,7 +90,6 @@ def test_registrar_datos_cliente_dni_repetido(monkeypatch):
             "dni_cuit_cuil": "123",
             "direccion": "Calle 1",
             "telefono": "111",
-            "cuit": "20-12345678-9",
             "razon_social": "JP",
             "email": "otro@test.com",
         },
@@ -107,7 +104,6 @@ def test_obtener_datos_cliente(monkeypatch):
         "dni_cuit_cuil": "321",
         "direccion": "calle a",
         "telefono": "1234",
-        "cuit": "20-11111111-1",
         "razon_social": "AG",
         "email": "ana@test.com",
     }

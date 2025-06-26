@@ -61,7 +61,7 @@ async def info_cliente(email: str = Query(...)):
         try:
             resp = (
                 supabase.table("datos_personales_clientes")
-                .select("dni_cuit_cuil,nombre,apellido,direccion,telefono,cuit,razon_social,email")
+                .select("dni_cuit_cuil,nombre,apellido,direccion,telefono,razon_social,email")
                 .eq("email", email)
                 .single()
                 .execute()
@@ -189,6 +189,7 @@ async def guardar_datos_cliente(request: Request):
     """Guarda los datos personales del cliente en la base de datos."""
     data = await request.json()
     logger.info("\ud83d\udce5 Datos recibidos del cliente: %s", data)
+    data.pop("cuit", None)
 
     try:
         resultado = (
@@ -302,8 +303,8 @@ async def crear_reporte_cliente(request: Request):
         "asunto": datos.get("motivo"),
         "contenido": datos.get("observaciones"),
     }
-    if "dni" in datos:
-        registro["dni"] = datos["dni"]
+    if "dni_cuit_cuil" in datos:
+        registro["dni_cuit_cuil"] = datos["dni_cuit_cuil"]
     if not supabase:
         logger.warning("Supabase no configurado")
         raise HTTPException(status_code=500, detail="Supabase no configurado")

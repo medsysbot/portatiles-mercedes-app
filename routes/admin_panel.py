@@ -60,7 +60,6 @@ class Cliente(BaseModel):
     dni_cuit_cuil: str
     direccion: str
     telefono: str
-    cuit: str
     razon_social: str
     email: str
 
@@ -230,7 +229,6 @@ def crear_cliente(
     dni_cuit_cuil: str = Form(...),
     direccion: str = Form(...),
     telefono: str = Form(...),
-    cuit: str = Form(...),
     razon_social: str = Form(...),
     email: str = Form(...),
 ):
@@ -242,7 +240,6 @@ def crear_cliente(
             "apellido": apellido,
             "direccion": direccion,
             "telefono": telefono,
-            "cuit": cuit,
             "razon_social": razon_social,
             "email": email,
         }
@@ -367,7 +364,6 @@ def editar_cliente(
     apellido: str = Form(...),
     direccion: str = Form(...),
     telefono: str = Form(...),
-    cuit: str = Form(...),
     razon_social: str = Form(...),
     email: str = Form(...),
 ):
@@ -378,7 +374,6 @@ def editar_cliente(
             "apellido": apellido,
             "direccion": direccion,
             "telefono": telefono,
-            "cuit": cuit,
             "razon_social": razon_social,
             "email": email,
         }

@@ -368,7 +368,6 @@ async function cargarDatosPersonales(email, datos = null) {
         document.getElementById("direccion").value = info.direccion || "";
         document.getElementById("telefono").value = info.telefono || "";
         document.getElementById("dni_cuit_cuil").value = info.dni_cuit_cuil || "";
-        document.getElementById("cuit").value = info.cuit || "";
         document.getElementById("razon_social").value = info.razon_social || "";
         document.getElementById("email").value = info.email || "";
 
@@ -380,7 +379,7 @@ async function cargarDatosPersonales(email, datos = null) {
 }
 
 function prepararListenersFormulario() {
-    const inputs = ["nombre", "apellido", "direccion", "telefono", "dni_cuit_cuil", "cuit", "razon_social", "email"];
+    const inputs = ["nombre", "apellido", "direccion", "telefono", "dni_cuit_cuil", "razon_social", "email"];
     inputs.forEach(id => {
         const el = document.getElementById(id);
         if (el) {
@@ -393,7 +392,7 @@ function prepararListenersFormulario() {
 
 function hayCambios() {
     if (!datosOriginales) return true;
-    const campos = ["nombre", "apellido", "direccion", "telefono", "dni_cuit_cuil", "cuit", "razon_social", "email"];
+    const campos = ["nombre", "apellido", "direccion", "telefono", "dni_cuit_cuil", "razon_social", "email"];
     return campos.some(c => (datosOriginales[c] || "") !== document.getElementById(c).value);
 }
 
@@ -414,7 +413,6 @@ async function guardarDatos(ev) {
         apellido: document.getElementById("apellido").value,
         direccion: document.getElementById("direccion").value,
         telefono: document.getElementById("telefono").value,
-        cuit: document.getElementById("cuit").value,
         razon_social: document.getElementById("razon_social").value,
         email: document.getElementById("email").value
     };

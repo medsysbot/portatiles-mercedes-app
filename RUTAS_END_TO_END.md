@@ -90,3 +90,4 @@ Mantener este archivo actualizado para soporte y desarrollo.
 ### Historial reciente
 
 - 2025-06-13: migración total al panel administrativo moderno (`/admin/panel`). Ruta anterior `/panel_viejo` declarada obsoleta.
+- 2025-06-26: corregido enlace de recuperación de contraseña utilizando la URL base de la solicitud cuando `APP_URL` no está definida.

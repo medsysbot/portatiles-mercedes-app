@@ -16,6 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
+  const form = document.getElementById('formComprobanteAdmin');
+  const msg = document.getElementById('msgComprobanteAdmin');
+
   async function cargarComprobantes() {
     try {
       const resp = await fetch('/admin/api/comprobantes_pago', {
@@ -35,6 +38,31 @@ document.addEventListener('DOMContentLoaded', () => {
       div.classList.remove('d-none');
     }
   }
+
+  form?.addEventListener('submit', async ev => {
+    ev.preventDefault();
+    const formData = new FormData(form);
+    try {
+      const resp = await fetch('/admin/comprobantes', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        body: formData
+      });
+      const data = await resp.json();
+      if (resp.ok) {
+        msg.textContent = 'Comprobante cargado correctamente';
+        msg.className = 'alert alert-success';
+        form.reset();
+        cargarComprobantes();
+      } else {
+        throw new Error(data.detail || 'Error');
+      }
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.className = 'alert alert-danger';
+    }
+    msg.style.display = 'block';
+  });
 
   cargarComprobantes();
 });

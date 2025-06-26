@@ -54,7 +54,10 @@ EMAIL_ORIGEN = os.getenv("EMAIL_ORIGEN")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 SMTP_SERVER = os.getenv("SMTP_SERVER")
 SMTP_PORT = os.getenv("SMTP_PORT")
-APP_URL = os.getenv("APP_URL", "http://localhost:8000")
+# URL base del aplicativo usada en enlaces de recuperación de contraseña
+# En producción se debe definir la variable de entorno APP_URL
+# (por ejemplo: https://mercedes-app-production.up.railway.app)
+APP_URL = os.getenv("APP_URL")
 
 # Configuración de logging
 LOG_DIR = "logs"

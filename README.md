@@ -40,6 +40,9 @@ Portátiles Mercedes es una solución SaaS diseñada para empresas de servicios 
    Asegurate de definir `SUPABASE_URL`, `SUPABASE_ROLE_KEY` y `JWT_SECRET` en un
    archivo `.env`. Si querés habilitar el envío de correos desde el módulo de emails
    agregá también `EMAIL_ORIGEN`, `EMAIL_PASSWORD`, `SMTP_SERVER` y `SMTP_PORT`.
+   Para que los enlaces de recuperación de contraseña apunten al dominio correcto,
+   seteá `APP_URL` con la URL pública del proyecto (por ejemplo
+   `https://mercedes-app-production.up.railway.app`).
    Para habilitar la conexión con Supabase poné `ENABLE_SUPABASE=1`.
 
 ## 📝 Buenas prácticas de archivos

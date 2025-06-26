@@ -2,6 +2,38 @@
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
+  // Si el token no existe, se redirige al login
+  if (!localStorage.getItem('access_token')) {
+    window.location.href = '/login';
+    return;
+  }
+
+  // Maneja expiración o ausencia de token durante las peticiones
+  function handleUnauthorized() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('rol');
+    localStorage.removeItem('nombre');
+    window.location.href = '/login';
+  }
+
+  // Helper para realizar fetch con la cabecera de autenticación
+  async function fetchConAuth(url, options = {}) {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      handleUnauthorized();
+      throw new Error('Token faltante');
+    }
+    const resp = await fetch(url, {
+      ...options,
+      headers: { ...options.headers, Authorization: 'Bearer ' + token }
+    });
+    if (resp.status === 401) {
+      handleUnauthorized();
+      throw new Error('Unauthorized');
+    }
+    return resp;
+  }
   const tabla = $('#tablaComprobantes').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
@@ -21,9 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarComprobantes() {
     try {
-      const resp = await fetch('/admin/api/comprobantes_pago', {
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
-      });
+      // Siempre enviamos el token en la cabecera Authorization
+      const resp = await fetchConAuth('/admin/api/comprobantes_pago');
       if (!resp.ok) throw new Error('Error consultando');
       const datos = await resp.json();
       tabla.clear();
@@ -43,9 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ev.preventDefault();
     const formData = new FormData(form);
     try {
-      const resp = await fetch('/admin/comprobantes', {
+      const resp = await fetchConAuth('/admin/comprobantes', {
         method: 'POST',
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') },
         body: formData
       });
       const data = await resp.json();

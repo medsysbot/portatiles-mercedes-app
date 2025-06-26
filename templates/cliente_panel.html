@@ -234,29 +234,28 @@
         </div>
 
         <!-- Sección emails -->
-        <div id="seccion-emails" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Emails</h3></div>
-          <div class="card-body">
-            <div class="table-responsive">
-              <table id="tablaEmails" class="table table-striped mb-3">
-                <thead>
-                  <tr>
-                    <th>Fecha</th>
-                    <th>Asunto</th>
-                    <th>Estado</th>
-                  </tr>
-                </thead>
-                <tbody></tbody>
-              </table>
+        <div id="seccion-emails" class="mb-4">
+          <div class="card">
+            <div class="card-body">
+              <h5>Emails</h5>
+              <p>Tu mensaje será enviado directamente al área administrativa de Portátiles Mercedes. Responderemos a la brevedad.</p>
+              <form id="formEmailCliente">
+                <div class="mb-3">
+                  <label for="destinatario" class="form-label">Destinatario</label>
+                  <input type="email" class="form-control" id="destinatario" name="destinatario" value="soporte@portatilesmercedes.com" readonly>
+                </div>
+                <div class="mb-3">
+                  <label for="asunto" class="form-label">Motivo / Asunto</label>
+                  <input type="text" class="form-control" id="asunto" name="asunto" required>
+                </div>
+                <div class="mb-3">
+                  <label for="mensaje" class="form-label">Mensaje</label>
+                  <textarea class="form-control" id="mensaje" name="mensaje" rows="4" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Enviar</button>
+              </form>
+              <div id="feedbackEmail" class="mt-2"></div>
             </div>
-            <form id="formRespuestaEmail">
-              <div class="form-group">
-                <label for="mensajeEmail">Responder</label>
-                <textarea id="mensajeEmail" class="form-control" rows="3" placeholder="Escribe tu mensaje..."></textarea>
-              </div>
-              <button type="submit" class="btn btn-primary">Enviar</button>
-              <div id="mensajeEmailCliente" class="alert mt-3" style="display:none"></div>
-            </form>
           </div>
         </div>
 

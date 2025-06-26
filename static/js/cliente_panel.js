@@ -443,7 +443,32 @@ async function guardarDatos(ev) {
 }
 
 document.getElementById('formReporte').addEventListener('submit', enviarReporte);
-document.getElementById('formRespuestaEmail').addEventListener('submit', enviarEmail);
+document.getElementById("formEmailCliente").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const destinatario = document.getElementById("destinatario").value.trim();
+    const asunto = document.getElementById("asunto").value.trim();
+    const mensaje = document.getElementById("mensaje").value.trim();
+    if (!asunto || !mensaje) {
+        document.getElementById("feedbackEmail").innerHTML = '<div class="alert alert-warning">Completa todos los campos.</div>';
+        return;
+    }
+    try {
+        let res = await fetch("/api/enviar_email_cliente", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({destinatario, asunto, mensaje})
+        });
+        let data = await res.json();
+        if (res.ok) {
+            document.getElementById("feedbackEmail").innerHTML = '<div class="alert alert-success">¡Mensaje enviado!</div>';
+            document.getElementById("formEmailCliente").reset();
+        } else {
+            throw new Error(data.detail || "Error desconocido");
+        }
+    } catch (err) {
+        document.getElementById("feedbackEmail").innerHTML = '<div class="alert alert-danger">Error al enviar: ' + err.message + '</div>';
+    }
+});
 
 async function enviarReporte(ev) {
     ev.preventDefault();
@@ -476,26 +501,3 @@ async function enviarReporte(ev) {
     cont.style.display = 'block';
 }
 
-async function enviarEmail(ev) {
-    ev.preventDefault();
-    const datos = {
-        email: document.getElementById('email').value,
-        mensaje: document.getElementById('mensajeEmail').value
-    };
-    const resp = await fetchConAuth('/cliente/email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(datos)
-    });
-    const cont = document.getElementById('mensajeEmailCliente');
-    if (resp.ok) {
-        cont.textContent = 'Email enviado';
-        cont.className = 'alert alert-success';
-        ev.target.reset();
-    } else {
-        const r = await resp.json();
-        cont.textContent = r.detail || 'Error al enviar';
-        cont.className = 'alert alert-danger';
-    }
-    cont.style.display = 'block';
-}

@@ -2,14 +2,14 @@
 ----------------------------------------------------------
 Archivo: routes/cliente_panel.py
 Descripción: Rutas para consultar la información del panel de clientes
-Última modificación: 2025-06-20
+Última modificación: 2025-06-26
 Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
 """
 
 """Rutas para consultar la información del panel de clientes."""
 
-from fastapi import APIRouter, HTTPException, Query, Request
+from fastapi import APIRouter, HTTPException, Query, Request, Body
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 import logging
@@ -314,30 +314,47 @@ async def crear_reporte_cliente(request: Request):
         raise HTTPException(status_code=500, detail="Error guardando reporte")
 
 
-@router.post("/cliente/email")
-async def enviar_email_cliente(request: Request):
-    """Envía un email a la empresa usando EMAIL_ORIGEN."""
-    data = await request.json()
+async def enviar_email(destino: str, asunto: str, cuerpo: str) -> None:
+    """Envía un correo simple usando la configuración SMTP."""
+
     email_origen = os.getenv("EMAIL_ORIGEN")
     email_pwd = os.getenv("EMAIL_PASSWORD")
     smtp_server = os.getenv("SMTP_SERVER")
     smtp_port = os.getenv("SMTP_PORT")
+
     if not all([email_origen, email_pwd, smtp_server, smtp_port]):
-        raise HTTPException(status_code=500, detail="SMTP no configurado")
+        raise Exception("SMTP no configurado")
 
     msg = EmailMessage()
     msg["From"] = email_origen
-    msg["To"] = email_origen
-    msg["Subject"] = data.get("asunto", "Mensaje desde panel cliente")
-    if data.get("email"):
-        msg["Reply-To"] = data["email"]
-    msg.set_content(data.get("mensaje", ""))
+    msg["To"] = destino
+    msg["Subject"] = asunto
+    msg.set_content(cuerpo)
+
+    with smtplib.SMTP_SSL(smtp_server, int(smtp_port)) as smtp:
+        smtp.login(email_origen, email_pwd)
+        smtp.send_message(msg)
+
+
+@router.post("/api/enviar_email_cliente")
+async def enviar_email_cliente(
+    data: dict = Body(...)
+):
+    """Recibe los datos del formulario y envía un correo a soporte."""
+
+    destinatario = data.get("destinatario", "").strip()
+    asunto = data.get("asunto", "").strip()
+    mensaje = data.get("mensaje", "").strip()
+
+    if not asunto or not mensaje:
+        raise HTTPException(status_code=400, detail="Motivo y mensaje obligatorios.")
+    if destinatario != "soporte@portatilesmercedes.com":
+        raise HTTPException(status_code=400, detail="Destinatario no permitido.")
 
     try:
-        with smtplib.SMTP_SSL(smtp_server, int(smtp_port)) as smtp:
-            smtp.login(email_origen, email_pwd)
-            smtp.send_message(msg)
-        return {"ok": True}
-    except Exception as exc:  # pragma: no cover
-        logger.error("Error enviando email cliente: %s", exc)
+        await enviar_email(destinatario, asunto, mensaje)
+        return {"ok": True, "msg": "Mensaje enviado correctamente"}
+    except Exception as e:
+        logger.error("Error enviando email de cliente: %s", e)
         raise HTTPException(status_code=500, detail="Error enviando email")
+

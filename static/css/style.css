@@ -132,3 +132,7 @@ button.cerrar-sesion {
   aspect-ratio: 2 / 1;
 }
 
+
+/* Miniaturas en el dashboard del cliente */
+.dashboard-thumb{max-height:100px;}
+

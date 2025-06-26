@@ -287,6 +287,109 @@ async def obtener_emails_cliente(email: str = Query(...)):
         logger.error("Error consultando emails cliente: %s", exc)
         raise HTTPException(status_code=500, detail="Error consultando datos")
 
+@router.get("/cliente/api/dashboard")
+async def obtener_dashboard_cliente(
+    dni_cuit_cuil: str = Query(...),
+    email: str = Query(...),
+):
+    """Datos de resumen para el dashboard del panel de cliente."""
+    if not supabase:
+        logger.warning("Supabase no configurado")
+        return {}
+
+    resultado = {
+        "facturas_pendientes": {"cantidad": 0, "monto_total": 0},
+        "moroso": False,
+        "alquileres": 0,
+        "ultimo_comprobante": None,
+        "proxima_limpieza": None,
+        "emails": [],
+    }
+
+    try:
+        fact = (
+            supabase.table("facturas_pendientes")
+            .select("monto_adeudado")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
+            .execute()
+        )
+        datos = fact.data or []
+        resultado["facturas_pendientes"]["cantidad"] = len(datos)
+        total = sum(float(f.get("monto_adeudado") or 0) for f in datos)
+        resultado["facturas_pendientes"]["monto_total"] = total
+    except Exception as exc:  # pragma: no cover - conexion
+        logger.error("Error facturas dashboard: %s", exc)
+
+    try:
+        mor = (
+            supabase.table("morosos")
+            .select("id")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
+            .maybe_single()
+            .execute()
+        )
+        if getattr(mor, "data", None):
+            resultado["moroso"] = True
+    except Exception as exc:  # pragma: no cover - conexion
+        logger.error("Error morosidad dashboard: %s", exc)
+
+    try:
+        alq = (
+            supabase.table("alquileres")
+            .select("id")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
+            .execute()
+        )
+        resultado["alquileres"] = len(alq.data or [])
+    except Exception as exc:  # pragma: no cover - conexion
+        logger.error("Error alquileres dashboard: %s", exc)
+
+    try:
+        comp = (
+            supabase.table("comprobantes_pago")
+            .select("comprobante_url,fecha_envio")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
+            .order("fecha_envio", desc=True)
+            .limit(1)
+            .execute()
+        )
+        if comp.data:
+            resultado["ultimo_comprobante"] = comp.data[0]
+    except Exception as exc:  # pragma: no cover - conexion
+        logger.error("Error comprobantes dashboard: %s", exc)
+
+    try:
+        from datetime import date
+        hoy = date.today().isoformat()
+        limp = (
+            supabase.table("servicios_limpieza")
+            .select("fecha_servicio,numero_bano")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
+            .gte("fecha_servicio", hoy)
+            .order("fecha_servicio")
+            .limit(1)
+            .execute()
+        )
+        if limp.data:
+            resultado["proxima_limpieza"] = limp.data[0]
+    except Exception as exc:  # pragma: no cover - conexion
+        logger.error("Error limpiezas dashboard: %s", exc)
+
+    try:
+        emails = (
+            supabase.table("emails_enviados")
+            .select("fecha,asunto,estado")
+            .eq("email_destino", email)
+            .order("fecha", desc=True)
+            .limit(4)
+            .execute()
+        )
+        resultado["emails"] = emails.data or []
+    except Exception as exc:  # pragma: no cover - conexion
+        logger.error("Error emails dashboard: %s", exc)
+
+    return resultado
+
 
 @router.post("/cliente/reporte")
 async def crear_reporte_cliente(request: Request):

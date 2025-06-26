@@ -48,7 +48,7 @@ VENTAS_TABLE = "ventas"
 
 class VentaPublica(BaseModel):
     cliente_nombre: str
-    dni: str
+    dni_cuit_cuil: str
     tipo_bano: str
     cantidad: int
     direccion_entrega: str
@@ -73,7 +73,7 @@ async def registrar_venta(venta: VentaPublica):
             datos = {
                 "fecha_operacion": venta.fecha_venta.isoformat(),
                 "tipo_bano": venta.tipo_bano,
-                "dni_cuit_cuil": venta.dni,
+                "dni_cuit_cuil": venta.dni_cuit_cuil,
                 "nombre_cliente": venta.cliente_nombre,
                 "forma_pago": "otro",
                 "observaciones": venta.observaciones,
@@ -87,7 +87,7 @@ async def registrar_venta(venta: VentaPublica):
         pdf.set_font("Arial", size=12)
         pdf.cell(0, 10, "Comprobante de Venta", ln=1)
         pdf.cell(0, 10, f"Cliente: {venta.cliente_nombre}", ln=1)
-        pdf.cell(0, 10, f"DNI: {venta.dni}", ln=1)
+        pdf.cell(0, 10, f"DNI: {venta.dni_cuit_cuil}", ln=1)
         pdf.cell(0, 10, f"Tipo de baño: {venta.tipo_bano}", ln=1)
         pdf.cell(0, 10, f"Cantidad: {venta.cantidad}", ln=1)
         pdf.cell(0, 10, f"Dirección: {venta.direccion_entrega}", ln=1)

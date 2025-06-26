@@ -17,8 +17,8 @@ Este informe resume las vistas y endpoints implementados para administrar client
 | GET | `/admin/clientes` | Tabla de clientes (`clientes_admin.html`) |
 | GET | `/admin/clientes/nuevo` | Formulario de alta (`cliente_form.html`) |
 | POST | `/admin/clientes/nuevo` | Creación de cliente |
-| GET | `/admin/clientes/{dni}/editar` | Formulario de edición |
-| POST | `/admin/clientes/{dni}/editar` | Actualización de datos |
-| POST | `/admin/clientes/{dni}/eliminar` | Borrado de cliente |
+| GET | `/admin/clientes/{dni_cuit_cuil}/editar` | Formulario de edición |
+| POST | `/admin/clientes/{dni_cuit_cuil}/editar` | Actualización de datos |
+| POST | `/admin/clientes/{dni_cuit_cuil}/eliminar` | Borrado de cliente |
 
 Estos cambios permiten gestionar de manera integral la base de clientes sin salir del panel administrativo.

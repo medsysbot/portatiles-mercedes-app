@@ -48,9 +48,9 @@
 | GET | /admin/clientes | Vista de clientes | HTML | Sí |
 | GET | /admin/clientes/nuevo | Formulario alta de cliente | HTML | Sí |
 | POST | /admin/clientes/nuevo | Crear cliente | Redirección | Sí |
-| GET | /admin/clientes/{dni}/editar | Formulario edición cliente | HTML | Sí |
-| POST | /admin/clientes/{dni}/editar | Actualizar cliente | Redirección | Sí |
-| POST | /admin/clientes/{dni}/eliminar | Eliminar cliente | Redirección | Sí |
+| GET | /admin/clientes/{dni_cuit_cuil}/editar | Formulario edición cliente | HTML | Sí |
+| POST | /admin/clientes/{dni_cuit_cuil}/editar | Actualizar cliente | Redirección | Sí |
+| POST | /admin/clientes/{dni_cuit_cuil}/eliminar | Eliminar cliente | Redirección | Sí |
 | GET | /admin/alquileres | Vista de alquileres | alquileres_admin.html | Sí |
 | POST | /admin/alquileres/nuevo | Crear nuevo alquiler en la tabla 'alquileres' | JSON | Sí |
 | GET  | /admin/api/alquileres  | Listar todos los alquileres desde la tabla 'alquileres' | JSON | Sí |

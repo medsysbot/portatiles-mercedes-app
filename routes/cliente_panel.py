@@ -340,7 +340,7 @@ async def enviar_email(destino: str, asunto: str, cuerpo: str) -> None:
 async def enviar_email_cliente(
     data: dict = Body(...)
 ):
-    """Recibe los datos del formulario y envía un correo a soporte."""
+    """Recibe los datos del formulario y envía un correo a la dirección oficial."""
 
     destinatario = data.get("destinatario", "").strip()
     asunto = data.get("asunto", "").strip()
@@ -348,7 +348,8 @@ async def enviar_email_cliente(
 
     if not asunto or not mensaje:
         raise HTTPException(status_code=400, detail="Motivo y mensaje obligatorios.")
-    if destinatario != "soporte@portatilesmercedes.com":
+    # Solo se permite la dirección oficial
+    if destinatario != "portatilesmercedes.bot@gmail.com":
         raise HTTPException(status_code=400, detail="Destinatario no permitido.")
 
     try:

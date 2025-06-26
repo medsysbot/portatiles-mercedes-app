@@ -22,7 +22,7 @@ router = APIRouter()
 
 @router.post("/activar_debito")
 async def activar_debito(
-    dni: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
     monto: float = Form(...),
     frecuencia_dias: int = Form(...),
 ):
@@ -31,7 +31,7 @@ async def activar_debito(
     proximo_pago = hoy + timedelta(days=frecuencia_dias)
 
     datos = {
-        "dni_cuit_cuil": dni,
+        "dni_cuit_cuil": dni_cuit_cuil,
         "monto": monto,
         "frecuencia_dias": frecuencia_dias,
         "fecha_inicio": hoy.isoformat(),

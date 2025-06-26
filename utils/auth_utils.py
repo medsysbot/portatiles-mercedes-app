@@ -15,16 +15,23 @@ import os
 security = HTTPBearer(auto_error=False)
 
 
-def auth_required(credentials: HTTPAuthorizationCredentials = Depends(security)):
-    """Valida el token JWT presente en la cabecera Authorization."""
+def auth_required(
+    request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    """Valida el token JWT presente en la cabecera Authorization o la cookie."""
     JWT_SECRET = os.getenv("JWT_SECRET")
     if not JWT_SECRET:
         raise HTTPException(status_code=500, detail="JWT_SECRET no configurado")
 
-    if credentials is None or credentials.scheme.lower() != "bearer":
-        raise HTTPException(status_code=401, detail="Token faltante")
+    token = None
+    if credentials is not None and credentials.scheme.lower() == "bearer":
+        token = credentials.credentials
 
-    token = credentials.credentials
+    if not token:
+        token = request.cookies.get("access_token")
+
+    if not token:
+        raise HTTPException(status_code=401, detail="Token faltante")
 
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])

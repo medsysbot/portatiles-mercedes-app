@@ -38,6 +38,7 @@
           <li class="nav-item"><a href="#seccion-datos-personales" class="nav-link"><i class="nav-icon fas fa-id-card"></i><p>Datos personales</p></a></li>
           <li class="nav-item"><a href="#seccion-alquileres" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Alquileres</p></a></li>
           <li class="nav-item"><a href="#seccion-facturas-pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice"></i><p>Facturas pendientes</p></a></li>
+          <li class="nav-item"><a href="#seccion-comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes</p></a></li>
           <li class="nav-item"><a href="#seccion-ventas" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Ventas</p></a></li>
           <li class="nav-item"><a href="#seccion-limpiezas" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
           <li class="nav-item"><a href="#seccion-emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
@@ -154,6 +155,51 @@
           </div>
         </div>
 
+
+
+        <!-- Sección comprobantes de pago -->
+        <div id="seccion-comprobantes" class="card mb-4">
+          <div class="card-header"><h3 class="card-title">Comprobantes de pago</h3></div>
+          <div class="card-body">
+            <form id="formComprobante" enctype="multipart/form-data">
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <label for="nombreComprobante">Nombre cliente</label>
+                  <input type="text" id="nombreComprobante" name="nombre_cliente" class="form-control" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="dniComprobante">DNI / CUIT / CUIL</label>
+                  <input type="text" id="dniComprobante" name="dni_cuit_cuil" class="form-control" required>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="facturaComprobante">Número factura</label>
+                  <input type="text" id="facturaComprobante" name="numero_factura" class="form-control" required>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="archivoComprobante">Archivo (PNG/JPG)</label>
+                <input type="file" id="archivoComprobante" name="archivo" accept="image/png,image/jpeg" class="form-control" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Subir comprobante</button>
+            </form>
+            <div id="msgComprobante" class="alert mt-3" style="display:none"></div>
+            <div class="table-responsive mt-3">
+              <table id="tablaComprobantes" class="table table-striped" style="width:100%">
+                <thead>
+                  <tr>
+                    <th>Nombre cliente</th>
+                    <th>DNI / CUIT / CUIL</th>
+                    <th>Número factura</th>
+                    <th>Comprobante</th>
+                    <th>Fecha</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
 
         <!-- Sección ventas -->
         <div id="seccion-ventas" class="card mb-4">

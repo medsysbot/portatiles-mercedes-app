@@ -17,6 +17,7 @@
 | GET | /alquiler_form | Formulario de alquiler en nueva ventana | alquiler_form.html | Sí |
 | GET | /limpieza | Registro de limpiezas | limpieza.html | Sí |
 | GET | /ventas | Vista de registro de ventas | ventas.html | Sí |
+| GET | /comprobantes | Carga y listado de comprobantes | cliente_panel.html | Sí |
 | GET | /venta | Formulario de venta de baños | venta.html | Sí |
 | GET | /admin/inventario_banos | Inventario de baños | inventario_banos_admin.html | Sí |
 | GET | /inventario_bano_form | Formulario de nuevo baño (modal) | inventario_bano_form.html | Sí |
@@ -41,6 +42,9 @@
 | GET | /alquileres_cliente | Alquileres asociados al cliente | JSON | Sí |
 | GET | /pagos_cliente | Pagos realizados por el cliente | JSON | Sí |
 | GET | /limpiezas_cliente | Limpiezas registradas para el cliente | JSON | Sí |
+| GET | /api/comprobantes_pago | Comprobantes de pago del cliente | JSON | Sí |
+| POST | /api/comprobantes_pago | Subir comprobante de pago | JSON | Sí |
+| DELETE | /api/comprobantes_pago/{id} | Borrar comprobante del cliente | JSON | Sí |
 | POST | /guardar_datos_cliente | Guarda datos personales del cliente | JSON | Sí |
 | POST | /registrar_venta | Registra una venta de baños | JSON (URL PDF) | Sí |
 | POST | /registrar_limpieza | Guarda los datos de limpieza y sube remito | JSON | Sí |
@@ -58,6 +62,7 @@
 | POST | /admin/inventario_banos/nuevo | Crear nuevo baño | JSON | Sí |
 | GET | /admin/ventas | Consulta de ventas | JSON | Sí |
 | GET | /admin/limpiezas | Consulta de limpiezas | JSON | Sí |
+| GET | /admin/api/comprobantes_pago | Listar comprobantes de pago | JSON | Sí |
 | POST | /ejecutar_alertas | Ejecuta manualmente las alertas programadas | JSON | Sí |
 
 ## SUPABASE

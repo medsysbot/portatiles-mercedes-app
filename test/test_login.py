@@ -13,6 +13,7 @@ from fastapi.testclient import TestClient
 from passlib.hash import bcrypt
 import types
 import pytest
+from datetime import datetime, timedelta, timezone
 
 load_dotenv(dotenv_path='.env')
 
@@ -127,11 +128,13 @@ class InMemoryQuery:
     def __init__(self, data):
         self.data = data
         self.filters = {}
-        self.is_select = True
+        self.mode = 'select'
         self.insert_data = None
+        self.update_data = None
+        self.single_mode = False
 
     def select(self, *_args):
-        self.is_select = True
+        self.mode = 'select'
         return self
 
     def eq(self, field, value):
@@ -139,20 +142,41 @@ class InMemoryQuery:
         return self
 
     def insert(self, data):
-        self.is_select = False
+        self.mode = 'insert'
         self.insert_data = data
         return self
 
+    def update(self, data):
+        self.mode = 'update'
+        self.update_data = data
+        return self
+
+    def single(self):
+        self.single_mode = True
+        return self
+
     def execute(self):
-        if self.is_select:
+        if self.mode == 'select':
             result = [
-                u for u in self.data
-                if all(u.get(k) == v for k, v in self.filters.items())
+                row for row in self.data
+                if all(row.get(k) == v for k, v in self.filters.items())
             ]
+            if self.single_mode:
+                result = result[0] if result else None
             return types.SimpleNamespace(data=result, status_code=200, error=None)
-        if self.insert_data is not None:
+
+        if self.mode == 'insert' and self.insert_data is not None:
             self.data.append(self.insert_data)
             return types.SimpleNamespace(data=[{'id': len(self.data)}], status_code=200, error=None)
+
+        if self.mode == 'update' and self.update_data is not None:
+            count = 0
+            for row in self.data:
+                if all(row.get(k) == v for k, v in self.filters.items()):
+                    row.update(self.update_data)
+                    count += 1
+            return types.SimpleNamespace(data=[{'count': count}], status_code=200, error=None)
+
         return types.SimpleNamespace(data=None, status_code=400, error='invalid')
 
 
@@ -235,5 +259,39 @@ def test_recuperar_password_usuario_inexistente(monkeypatch, client):
     assert resp.status_code == 200
     assert llamado['hecho'] is False
     assert len(db.tokens) == 0
+
+
+def test_reset_password_exitoso(monkeypatch, client):
+    db = InMemorySupabase()
+    db.users.append({'email': 'reset@test.com', 'password_hash': 'old'})
+    db.tokens.append({
+        'email': 'reset@test.com',
+        'token': 'abc',
+        'expira': (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat(),
+        'usado': False
+    })
+    monkeypatch.setattr(login, 'supabase', db)
+
+    resp = client.post('/reset_password', json={'token': 'abc', 'password': 'nueva'})
+    assert resp.status_code == 200
+    assert db.users[0]['password_hash'] != 'old'
+    assert db.tokens[0]['usado'] is True
+
+
+def test_reset_password_expirado(monkeypatch, client):
+    db = InMemorySupabase()
+    db.users.append({'email': 'reset@test.com', 'password_hash': 'old'})
+    db.tokens.append({
+        'email': 'reset@test.com',
+        'token': 'xyz',
+        'expira': (datetime.now(timezone.utc) - timedelta(hours=1)).isoformat(),
+        'usado': False
+    })
+    monkeypatch.setattr(login, 'supabase', db)
+
+    resp = client.post('/reset_password', json={'token': 'xyz', 'password': 'nueva'})
+    assert resp.status_code == 400
+    assert db.users[0]['password_hash'] == 'old'
+    assert db.tokens[0]['usado'] is False
 
 

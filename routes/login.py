@@ -18,7 +18,7 @@ from supabase import create_client, Client
 from passlib.context import CryptContext
 from passlib.hash import bcrypt
 from jose import jwt, JWTError
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import secrets
 import smtplib
 from email.message import EmailMessage
@@ -354,7 +354,7 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
         if getattr(resp, "data", []):
             logger.info("Usuario encontrado, generando token de recuperación")
             token = secrets.token_urlsafe(32)
-            expira = (datetime.utcnow() + timedelta(hours=1)).isoformat()
+            expira = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
             logger.info(
                 "Token generado para %s | token=%s expira=%s", email, token, expira
             )
@@ -413,8 +413,13 @@ async def reset_password(datos: ResetInput):
         if not registro or registro.get("usado"):
             raise HTTPException(status_code=400, detail="Token inválido o expirado")
         exp = registro.get("expira")
-        if exp and datetime.fromisoformat(exp) < datetime.utcnow():
-            raise HTTPException(status_code=400, detail="Token inválido o expirado")
+        if exp:
+            exp_dt = datetime.fromisoformat(exp)
+            if exp_dt.tzinfo is None:
+                exp_dt = exp_dt.replace(tzinfo=timezone.utc)
+            if exp_dt < datetime.now(timezone.utc):
+                raise HTTPException(status_code=400, detail="Token inválido o expirado")
+        
 
         pwd_hash = pwd_context.hash(nueva)
         supabase.table("usuarios").update({"password_hash": pwd_hash}).eq("email", registro["email"]).execute()

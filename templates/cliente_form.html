@@ -1,6 +1,7 @@
 {% extends 'panel_admin.html' %}
 <!-- Refactor: migración completa a tabla datos_personales_clientes. Eliminadas todas las referencias a clientes. -->
 {% block title %}{{ 'Editar' if cliente else 'Nuevo' }} Cliente{% endblock %}
+{% block description %}Formulario de gestión de clientes{% endblock %}
 {% block head_extra %}
 {{ super() }}
 <link rel="stylesheet" href="/static/css/style.css">

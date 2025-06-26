@@ -111,8 +111,12 @@ def admin_panel_view(request: Request):
         if not supabase:
             return 0
         try:
-            resp = supabase.table(tabla).select("*").execute()
-            return len(getattr(resp, "data", []) or [])
+            resp = (
+                supabase.table(tabla)
+                .select("id", count="exact", head=True)
+                .execute()
+            )
+            return getattr(resp, "count", 0) or 0
         except Exception as exc:  # pragma: no cover - errores de conexión
             logger.error("Error contando registros en %s: %s", tabla, exc)
             return 0

@@ -33,10 +33,12 @@ let alquileresCargados = [];
 let facturasCargadas = [];
 let ventasCargadas = [];
 let limpiezasCargadas = [];
+let comprobantesCargados = [];
 let tablaAlquileres;
 let tablaFacturas;
 let tablaVentas;
 let tablaLimpiezas;
+let tablaComprobantes;
 
 function initTablas() {
     tablaAlquileres = $('#tablaAlquileres').DataTable({
@@ -100,6 +102,21 @@ function initTablas() {
             { data: 'observaciones' }
         ]
     });
+
+    tablaComprobantes = $('#tablaComprobantes').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+            { data: 'nombre_cliente' },
+            { data: 'dni_cuit_cuil' },
+            { data: 'numero_factura' },
+            { data: 'comprobante_url', render: d => `<a href="${d}" target="_blank">Ver</a>` },
+            { data: 'fecha_envio' },
+            { data: 'id', render: id => `<button class="btn btn-danger btn-sm eliminar-comp" data-id="${id}">Borrar</button>` }
+        ]
+    });
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -141,6 +158,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         cargarFacturas(window.dniCliente);
         cargarVentas(window.dniCliente);
         cargarLimpiezas(window.dniCliente);
+        cargarComprobantes(window.dniCliente);
         cargarEmailsCliente(email);
         prepararListenersFormulario();
 
@@ -321,6 +339,26 @@ function mostrarLimpiezas(lista) {
     tablaLimpiezas.rows.add(lista).draw();
 }
 
+async function cargarComprobantes(dni_cuit_cuil) {
+    const contError = document.getElementById('msgComprobante');
+    try {
+        const resp = await fetchConAuth(`/api/comprobantes_pago?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
+        if (!resp.ok) throw new Error('Error consultando');
+        comprobantesCargados = await resp.json();
+        mostrarComprobantes(comprobantesCargados);
+        contError.classList.add('d-none');
+    } catch (err) {
+        console.error('Error cargando comprobantes:', err);
+        contError.textContent = 'No se pudo cargar el listado';
+        contError.classList.remove('d-none');
+    }
+}
+
+function mostrarComprobantes(lista) {
+    tablaComprobantes.clear();
+    tablaComprobantes.rows.add(lista).draw();
+}
+
 function renderEmails(lista) {
     const tbody = document.querySelector('#tablaEmails tbody');
     if (!tbody) return;
@@ -443,6 +481,8 @@ async function guardarDatos(ev) {
 }
 
 document.getElementById('formReporte').addEventListener('submit', enviarReporte);
+document.getElementById('formComprobante').addEventListener('submit', subirComprobante);
+$('#tablaComprobantes').on('click', '.eliminar-comp', eliminarComprobante);
 document.getElementById("formEmailCliente").addEventListener("submit", async function(e) {
     e.preventDefault();
     const destinatario = document.getElementById("destinatario").value.trim();
@@ -499,5 +539,47 @@ async function enviarReporte(ev) {
         cont.className = 'alert alert-danger';
     }
     cont.style.display = 'block';
+}
+
+async function subirComprobante(ev) {
+    ev.preventDefault();
+    const form = ev.target;
+    const formData = new FormData(form);
+    const msg = document.getElementById('msgComprobante');
+    try {
+        const resp = await fetch('/api/comprobantes_pago', {
+            method: 'POST',
+            headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+            body: formData
+        });
+        const data = await resp.json();
+        if (resp.ok) {
+            msg.textContent = 'Comprobante cargado correctamente';
+            msg.className = 'alert alert-success';
+            form.reset();
+            cargarComprobantes(formData.get('dni_cuit_cuil'));
+        } else {
+            throw new Error(data.detail || 'Error');
+        }
+    } catch (err) {
+        msg.textContent = err.message;
+        msg.className = 'alert alert-danger';
+    }
+    msg.style.display = 'block';
+}
+
+async function eliminarComprobante(ev) {
+    const id = ev.target.dataset.id;
+    if (!id || !confirm('¿Borrar comprobante?')) return;
+    try {
+        const resp = await fetch(`/api/comprobantes_pago/${id}?dni_cuit_cuil=${encodeURIComponent(window.dniCliente)}`, {
+            method: 'DELETE',
+            headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+        });
+        if (!resp.ok) throw new Error('Error al borrar');
+        cargarComprobantes(window.dniCliente);
+    } catch (err) {
+        alert('No se pudo borrar: ' + err.message);
+    }
 }
 

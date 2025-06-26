@@ -61,7 +61,6 @@ function initTablas() {
         searching: false,
         ordering: true,
         columns: [
-            { data: 'id_factura' },
             { data: 'fecha' },
             { data: 'numero_factura' },
             { data: 'dni_cuit_cuil' },
@@ -244,7 +243,7 @@ function mostrarAlquileres(lista) {
 async function cargarFacturas(dni_cuit_cuil) {
     const mensajeError = document.getElementById('errorFacturas');
     try {
-        const resp = await fetchConAuth(`/facturas_pendientes_cliente?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
+        const resp = await fetchConAuth(`/facturas_pendientes_cliente?dni=${encodeURIComponent(dni_cuit_cuil)}`);
         if (!resp.ok) throw new Error('Error consultando');
         facturasCargadas = await resp.json();
         mostrarFacturas(facturasCargadas);

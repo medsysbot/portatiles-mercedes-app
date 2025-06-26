@@ -192,6 +192,13 @@ async def obtener_emails_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/comprobantes_pago_admin.js")
+async def obtener_comprobantes_pago_admin_js():
+    """Script para el módulo de comprobantes del panel admin."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "comprobantes_pago_admin.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/dashboard_admin.js")
 async def obtener_dashboard_admin_js():
     """Script para el dashboard del panel admin."""

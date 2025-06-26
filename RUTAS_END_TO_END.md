@@ -82,6 +82,11 @@ Ejemplo de tabla principal: **usuarios**
 
 Mantener este archivo actualizado para soporte y desarrollo.
 
+## UI/UX
+
+- Unificación del estilo de todas las tablas con bordes verticales usando `table-bordered`.
+- En el panel de clientes se reemplazó el borrado individual de comprobantes por selección múltiple mediante casillas y un botón global.
+
 ### Historial reciente
 
 - 2025-06-13: migración total al panel administrativo moderno (`/admin/panel`). Ruta anterior `/panel_viejo` declarada obsoleta.

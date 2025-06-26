@@ -109,12 +109,12 @@ function initTablas() {
         searching: false,
         ordering: true,
         columns: [
+            { data: 'id', render: id => `<input type="checkbox" class="seleccion-comp" value="${id}">`, orderable: false },
             { data: 'nombre_cliente' },
             { data: 'dni_cuit_cuil' },
             { data: 'numero_factura' },
             { data: 'comprobante_url', render: d => `<a href="${d}" target="_blank">Ver</a>` },
-            { data: 'fecha_envio' },
-            { data: 'id', render: id => `<button class="btn btn-danger btn-sm eliminar-comp" data-id="${id}">Borrar</button>` }
+            { data: 'fecha_envio' }
         ]
     });
 }
@@ -482,7 +482,33 @@ async function guardarDatos(ev) {
 
 document.getElementById('formReporte').addEventListener('submit', enviarReporte);
 document.getElementById('formComprobante').addEventListener('submit', subirComprobante);
-$('#tablaComprobantes').on('click', '.eliminar-comp', eliminarComprobante);
+const btnEliminarComprobantes = document.getElementById('btnEliminarComprobantes');
+
+function actualizarBotonComprobantes() {
+    const checks = document.querySelectorAll('#tablaComprobantes tbody .seleccion-comp:checked');
+    if (btnEliminarComprobantes) btnEliminarComprobantes.disabled = checks.length === 0;
+}
+
+$('#tablaComprobantes tbody').on('change', '.seleccion-comp', actualizarBotonComprobantes);
+
+btnEliminarComprobantes?.addEventListener('click', async () => {
+    const ids = Array.from(document.querySelectorAll('#tablaComprobantes tbody .seleccion-comp:checked')).map(c => c.value);
+    if (!ids.length || !confirm('¿Borrar comprobantes seleccionados?')) return;
+    try {
+        for (const id of ids) {
+            const resp = await fetch(`/api/comprobantes_pago/${id}?dni_cuit_cuil=${encodeURIComponent(window.dniCliente)}`, {
+                method: 'DELETE',
+                headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+            });
+            if (!resp.ok) throw new Error('Error al borrar');
+        }
+        cargarComprobantes(window.dniCliente);
+    } catch (err) {
+        alert('No se pudieron borrar: ' + err.message);
+    } finally {
+        if (btnEliminarComprobantes) btnEliminarComprobantes.disabled = true;
+    }
+});
 document.getElementById("formEmailCliente").addEventListener("submit", async function(e) {
     e.preventDefault();
     const destinatario = document.getElementById("destinatario").value.trim();
@@ -568,18 +594,4 @@ async function subirComprobante(ev) {
     msg.style.display = 'block';
 }
 
-async function eliminarComprobante(ev) {
-    const id = ev.target.dataset.id;
-    if (!id || !confirm('¿Borrar comprobante?')) return;
-    try {
-        const resp = await fetch(`/api/comprobantes_pago/${id}?dni_cuit_cuil=${encodeURIComponent(window.dniCliente)}`, {
-            method: 'DELETE',
-            headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
-        });
-        if (!resp.ok) throw new Error('Error al borrar');
-        cargarComprobantes(window.dniCliente);
-    } catch (err) {
-        alert('No se pudo borrar: ' + err.message);
-    }
-}
 

@@ -101,7 +101,12 @@ def enviar_email_recuperacion(destino: str, token: str, base_url: str) -> None:
         f"{enlace}\n\nSi no solicitaste este cambio podés ignorar este mensaje."
     )
 
-    logger.info("Enviando correo de recuperación a %s", destino)
+    logger.info(
+        "Preparando email de recuperación | destino=%s token=%s url=%s",
+        destino,
+        token,
+        enlace,
+    )
     with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
         smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
         smtp.send_message(msg)
@@ -350,12 +355,29 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
             logger.info("Usuario encontrado, generando token de recuperación")
             token = secrets.token_urlsafe(32)
             expira = (datetime.utcnow() + timedelta(hours=1)).isoformat()
-            supabase.table("reset_tokens").insert({
-                "email": email,
-                "token": token,
-                "expira": expira,
-                "usado": False,
-            }).execute()
+            logger.info(
+                "Token generado para %s | token=%s expira=%s", email, token, expira
+            )
+            resp_token = (
+                supabase.table("reset_tokens")
+                .insert({
+                    "email": email,
+                    "token": token,
+                    "expira": expira,
+                    "usado": False,
+                })
+                .execute()
+            )
+            logger.info(
+                "Respuesta de Supabase al registrar token: %s", getattr(resp_token, "data", None)
+            )
+            if not getattr(resp_token, "data", None):
+                logger.error("Fallo al registrar el token en Supabase: %s", getattr(resp_token, "error", "desconocido"))
+                raise HTTPException(
+                    status_code=500,
+                    detail="Error registrando token de recuperación",
+                )
+
             base_url = APP_URL or str(request.base_url).rstrip("/")
             try:
                 enviar_email_recuperacion(email, token, base_url)
@@ -370,7 +392,8 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
     except HTTPException:
         raise
     except Exception as exc:  # pragma: no cover - dependencias externas
-        logger.error("Error en recuperar_password: %s", exc)
+        logger.exception("Error en recuperar_password: %s", exc)
+        raise HTTPException(status_code=500, detail=str(exc))
     return mensaje
 
 

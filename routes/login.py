@@ -88,6 +88,7 @@ imprimir_log_error()
 def enviar_email_recuperacion(destino: str, token: str, base_url: str) -> None:
     """Envía un correo con el enlace para restablecer la contraseña."""
     if not all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
+        logger.error("Variables SMTP faltantes - no se puede enviar correo")
         raise Exception("SMTP no configurado")
 
     enlace = f"{base_url}/reset_password?token={token}"
@@ -100,6 +101,7 @@ def enviar_email_recuperacion(destino: str, token: str, base_url: str) -> None:
         f"{enlace}\n\nSi no solicitaste este cambio podés ignorar este mensaje."
     )
 
+    logger.info("Enviando correo de recuperación a %s", destino)
     with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
         smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
         smtp.send_message(msg)
@@ -341,9 +343,11 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
     """Inicia el proceso de recuperación de contraseña."""
     mensaje = {"mensaje": "Si el email existe, se envió un correo de recuperación"}
     email = datos.email.strip().lower()
+    logger.info("Solicitud de recuperación recibida para %s", email)
     try:
         resp = supabase.table("usuarios").select("id").eq("email", email).execute()
         if getattr(resp, "data", []):
+            logger.info("Usuario encontrado, generando token de recuperación")
             token = secrets.token_urlsafe(32)
             expira = (datetime.utcnow() + timedelta(hours=1)).isoformat()
             supabase.table("reset_tokens").insert({
@@ -361,6 +365,8 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
                     status_code=500,
                     detail="No se pudo enviar el email de recuperación, intente nuevamente más tarde.",
                 )
+        else:
+            logger.info("Recuperación solicitada para email inexistente: %s", email)
     except HTTPException:
         raise
     except Exception as exc:  # pragma: no cover - dependencias externas

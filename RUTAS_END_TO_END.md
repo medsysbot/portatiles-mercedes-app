@@ -45,7 +45,7 @@
 | GET | /limpiezas_cliente | Limpiezas registradas para el cliente | JSON | Sí |
 | GET | /api/comprobantes_pago | Comprobantes de pago del cliente | JSON | Sí |
 | POST | /api/comprobantes_pago | Subir comprobante de pago | JSON | Sí |
-| DELETE | /api/comprobantes_pago/{id} | Borrar comprobante del cliente | JSON | Sí |
+| DELETE | /api/comprobantes_pago/{id} | Borrar comprobante del cliente (selección múltiple en frontend) | JSON | Sí |
 | POST | /guardar_datos_cliente | Guarda datos personales del cliente | JSON | Sí |
 | POST | /registrar_venta | Registra una venta de baños | JSON (URL PDF) | Sí |
 | POST | /registrar_limpieza | Guarda los datos de limpieza y sube remito | JSON | Sí |

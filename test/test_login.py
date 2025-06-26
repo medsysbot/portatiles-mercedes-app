@@ -159,10 +159,13 @@ class InMemoryQuery:
 class InMemorySupabase:
     def __init__(self):
         self.users = []
+        self.tokens = []
 
     def table(self, name):
         if name == 'usuarios':
             return InMemoryQuery(self.users)
+        if name == 'reset_tokens':
+            return InMemoryQuery(self.tokens)
         return InMemoryQuery([])
 
 
@@ -192,5 +195,45 @@ def test_registrar_cliente_email_repetido(monkeypatch, client):
         'password': 'abc123'
     })
     assert resp.status_code == 400
+
+
+def test_recuperar_password_envia_email(monkeypatch, client):
+    db = InMemorySupabase()
+    db.users.append({'id': 1, 'email': 'usuario@test.com'})
+    monkeypatch.setattr(login, 'supabase', db)
+
+    enviado = {}
+
+    def fake_enviar(destino, token, url):
+        enviado['destino'] = destino
+        enviado['token'] = token
+        enviado['url'] = url
+
+    monkeypatch.setattr(login, 'enviar_email_recuperacion', fake_enviar)
+
+    resp = client.post('/recuperar_password', json={'email': 'usuario@test.com'})
+
+    assert resp.status_code == 200
+    assert enviado['destino'] == 'usuario@test.com'
+    assert len(db.tokens) == 1
+    assert db.tokens[0]['token'] == enviado['token']
+
+
+def test_recuperar_password_usuario_inexistente(monkeypatch, client):
+    db = InMemorySupabase()
+    monkeypatch.setattr(login, 'supabase', db)
+
+    llamado = {'hecho': False}
+
+    def fake_enviar(*_args, **_kwargs):
+        llamado['hecho'] = True
+
+    monkeypatch.setattr(login, 'enviar_email_recuperacion', fake_enviar)
+
+    resp = client.post('/recuperar_password', json={'email': 'no@existe.com'})
+
+    assert resp.status_code == 200
+    assert llamado['hecho'] is False
+    assert len(db.tokens) == 0
 
 

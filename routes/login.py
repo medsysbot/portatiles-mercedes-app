@@ -84,6 +84,27 @@ def imprimir_log_error():
 
 imprimir_log_error()
 
+
+def enviar_email_recuperacion(destino: str, token: str, base_url: str) -> None:
+    """Envía un correo con el enlace para restablecer la contraseña."""
+    if not all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
+        raise Exception("SMTP no configurado")
+
+    enlace = f"{base_url}/reset_password?token={token}"
+    msg = EmailMessage()
+    msg["From"] = EMAIL_ORIGEN
+    msg["To"] = destino
+    msg["Subject"] = "Recuperar contraseña"
+    msg.set_content(
+        "Para restablecer tu contraseña hacé clic en el siguiente enlace:\n"
+        f"{enlace}\n\nSi no solicitaste este cambio podés ignorar este mensaje."
+    )
+
+    with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
+        smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+    logger.info("Correo de recuperación enviado a %s", destino)
+
 class LoginInput(BaseModel):
     email: str
     # IMPORTANTE: El campo debe llamarse "password" (sin ñ ni tilde) en todo el flujo
@@ -324,26 +345,24 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
         resp = supabase.table("usuarios").select("id").eq("email", email).execute()
         if getattr(resp, "data", []):
             token = secrets.token_urlsafe(32)
-            expira = (datetime.utcnow() + timedelta(minutes=30)).isoformat()
+            expira = (datetime.utcnow() + timedelta(hours=1)).isoformat()
             supabase.table("reset_tokens").insert({
                 "email": email,
                 "token": token,
                 "expira": expira,
                 "usado": False,
             }).execute()
-            if all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
-                msg = EmailMessage()
-                msg["From"] = EMAIL_ORIGEN
-                msg["To"] = email
-                msg["Subject"] = "Recuperar contraseña"
-                base_url = APP_URL or str(request.base_url).rstrip("/")
-                enlace = f"{base_url}/reset_password?token={token}"
-                msg.set_content(
-                    f"Para restablecer tu contraseña hacé clic en el siguiente enlace:\n{enlace}\n\nSi no solicitaste este cambio podés ignorar este mensaje."
+            base_url = APP_URL or str(request.base_url).rstrip("/")
+            try:
+                enviar_email_recuperacion(email, token, base_url)
+            except Exception as exc:  # pragma: no cover - dependencias externas
+                logger.exception("Error enviando email de recuperación: %s", exc)
+                raise HTTPException(
+                    status_code=500,
+                    detail="No se pudo enviar el email de recuperación, intente nuevamente más tarde.",
                 )
-                with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
-                    smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
-                    smtp.send_message(msg)
+    except HTTPException:
+        raise
     except Exception as exc:  # pragma: no cover - dependencias externas
         logger.error("Error en recuperar_password: %s", exc)
     return mensaje

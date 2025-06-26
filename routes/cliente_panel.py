@@ -101,7 +101,7 @@ async def obtener_alquileres(dni_cuit_cuil: str = Query(...)):
 
 
 @router.get("/facturas_pendientes_cliente")
-async def obtener_facturas_pendientes(dni_cuit_cuil: str = Query(...)):
+async def obtener_facturas_pendientes(dni: str = Query(...)):
     """Facturas pendientes del cliente."""
     if not supabase:
         logger.warning("Supabase no configurado")
@@ -111,19 +111,14 @@ async def obtener_facturas_pendientes(dni_cuit_cuil: str = Query(...)):
         res = (
             supabase.table("facturas_pendientes")
             .select(
-                "id,fecha,numero_factura,dni_cuit_cuil,razon_social,monto_adeudado"
+                "fecha,numero_factura,dni_cuit_cuil,razon_social,nombre_cliente,monto_adeudado"
             )
-            .eq("dni_cuit_cuil", dni_cuit_cuil)
+            .eq("dni_cuit_cuil", dni)
             .execute()
         )
         if getattr(res, "error", None):
             raise Exception(res.error.message)
-        data = res.data or []
-        # Adaptar los campos al frontend
-        for item in data:
-            item["id_factura"] = item.get("id")  # Para la columna 'ID'
-            item["nombre_cliente"] = ""  # Si no hay nombre cliente, dejar vacío
-        return data
+        return res.data or []
     except Exception as exc:  # pragma: no cover
         logger.error("Error consultando facturas pendientes: %s", exc)
         raise HTTPException(status_code=500, detail="Error consultando datos")

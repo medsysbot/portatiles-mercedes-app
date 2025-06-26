@@ -12,7 +12,7 @@ Proyecto: Portátiles Mercedes
 import os
 import logging
 import traceback
-from fastapi import APIRouter, HTTPException, status, Form, Response
+from fastapi import APIRouter, HTTPException, status, Form, Response, Request
 from pydantic import BaseModel
 from supabase import create_client, Client
 from passlib.context import CryptContext
@@ -316,7 +316,7 @@ def registrar_cliente(
 
 
 @router.post("/recuperar_password")
-async def recuperar_password(datos: RecuperarInput):
+async def recuperar_password(datos: RecuperarInput, request: Request):
     """Inicia el proceso de recuperación de contraseña."""
     mensaje = {"mensaje": "Si el email existe, se envió un correo de recuperación"}
     email = datos.email.strip().lower()
@@ -336,7 +336,8 @@ async def recuperar_password(datos: RecuperarInput):
                 msg["From"] = EMAIL_ORIGEN
                 msg["To"] = email
                 msg["Subject"] = "Recuperar contraseña"
-                enlace = f"{APP_URL}/reset_password?token={token}"
+                base_url = APP_URL or str(request.base_url).rstrip("/")
+                enlace = f"{base_url}/reset_password?token={token}"
                 msg.set_content(
                     f"Para restablecer tu contraseña hacé clic en el siguiente enlace:\n{enlace}\n\nSi no solicitaste este cambio podés ignorar este mensaje."
                 )

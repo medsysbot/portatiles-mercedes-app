@@ -55,6 +55,7 @@ from routes.alquileres import router as alquileres_router
 from routes.reportes import router as reportes_router
 from routes.facturas_pendientes import router as facturas_pendientes_router
 from routes.morosos import router as morosos_router
+from routes.sitemap import router as sitemap_router
 import routes.alquileres as alquileres_module
 import routes.inventario_banos as inventario_banos_module
 import routes.reportes as reportes_module
@@ -100,6 +101,7 @@ app.include_router(alquileres_router)
 app.include_router(reportes_router)
 app.include_router(facturas_pendientes_router)
 app.include_router(morosos_router)
+app.include_router(sitemap_router)
 
 
 @app.get("/logout")

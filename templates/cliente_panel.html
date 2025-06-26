@@ -55,6 +55,79 @@
       <div class="container-fluid">
         <h1 id="bienvenida" class="mb-4 mt-0">Panel del Cliente</h1><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
 
+<div id="dashboard-resumen">
+  <div class="row">
+    <div class="col-lg-3 col-sm-6 mb-4">
+      <div class="small-box bg-info">
+        <div class="inner text-center">
+          <h3 id="dashFacturasCnt">0</h3>
+          <p>Facturas pendientes</p>
+          <span id="dashFacturasMonto" class="h5 d-block"></span>
+        </div>
+        <div class="icon"><i class="fas fa-file-invoice"></i></div>
+        <a href="#seccion-facturas-pendientes" class="small-box-footer">Ver facturas <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-sm-6 mb-4">
+      <div class="small-box bg-success" id="boxMorosidad">
+        <div class="inner text-center">
+          <h3 id="dashMorosidad">Al d&iacute;a</h3>
+          <p>Estado de cuenta</p>
+        </div>
+        <div class="icon"><i class="fas fa-check-circle"></i></div>
+        <a href="#seccion-facturas-pendientes" class="small-box-footer">Detalle <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-sm-6 mb-4">
+      <div class="small-box bg-primary">
+        <div class="inner text-center">
+          <h3 id="dashAlquileres">0</h3>
+          <p>Ba&ntilde;os alquilados</p>
+        </div>
+        <div class="icon"><i class="fas fa-toilet"></i></div>
+        <a href="#seccion-alquileres" class="small-box-footer">Ver ba&ntilde;os <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+    <div class="col-lg-3 col-sm-6 mb-4">
+      <div class="small-box bg-warning">
+        <div class="inner text-center">
+          <h3 id="limpiezaFecha">-</h3>
+          <p id="limpiezaBano">Pr&oacute;xima limpieza</p>
+        </div>
+        <div class="icon"><i class="fas fa-broom"></i></div>
+        <a href="#seccion-limpiezas" class="small-box-footer">Servicios <i class="fas fa-arrow-circle-right"></i></a>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 mb-4">
+      <div class="card h-100 dashboard-card">
+        <div class="card-header"><h3 class="card-title">&Uacute;ltimo comprobante de pago</h3></div>
+        <div class="card-body text-center" id="cardComprobanteBody">
+          <p id="comprobanteSinDatos" class="mb-0">Sin comprobantes subidos a&uacute;n</p>
+          <img id="comprobanteThumb" src="" alt="Comprobante" class="img-fluid d-none dashboard-thumb" />
+          <p id="comprobanteFecha" class="mt-2"></p>
+        </div>
+        <div class="card-footer text-right">
+          <a href="#seccion-comprobantes" class="btn btn-sm btn-primary" target="_blank">Ver comprobantes</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 mb-4">
+      <div class="card h-100">
+        <div class="card-header"><h3 class="card-title">&Uacute;ltimos emails</h3></div>
+        <div class="card-body p-0">
+          <table id="tablaEmails" class="table table-striped mb-0">
+            <thead>
+              <tr><th>Fecha</th><th>Asunto</th><th>Estado</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 

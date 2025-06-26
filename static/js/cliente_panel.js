@@ -157,6 +157,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         cargarAlquileres(window.dniCliente);
         cargarFacturas(window.dniCliente);
         cargarVentas(window.dniCliente);
+        cargarDashboardDatos(window.dniCliente, email);
         cargarLimpiezas(window.dniCliente);
         cargarComprobantes(window.dniCliente);
         cargarEmailsCliente(email);
@@ -594,4 +595,53 @@ async function subirComprobante(ev) {
     msg.style.display = 'block';
 }
 
+
+
+async function cargarDashboardDatos(dni, email){
+    try{
+        const resp = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(email)}`);
+        if(!resp.ok) throw new Error("Error");
+        const data = await resp.json();
+        actualizarDashboard(data);
+    }catch(err){
+        console.error("Error cargando dashboard:", err);
+    }
+}
+
+function actualizarDashboard(data){
+    const f = data.facturas_pendientes || {cantidad:0,monto_total:0};
+    document.getElementById("dashFacturasCnt").textContent = f.cantidad;
+    document.getElementById("dashFacturasMonto").textContent = "$" + f.monto_total;
+    const estado = document.getElementById("dashMorosidad");
+    estado.textContent = data.moroso ? "Moroso" : "Al d\u00eda";
+    const box = document.getElementById("boxMorosidad");
+    if(data.moroso){
+        box.classList.remove("bg-success");
+        box.classList.add("bg-danger");
+    } else {
+        box.classList.add("bg-success");
+        box.classList.remove("bg-danger");
+    }
+    document.getElementById("dashAlquileres").textContent = data.alquileres || 0;
+    if(data.ultimo_comprobante){
+        document.getElementById("comprobanteThumb").src = data.ultimo_comprobante.comprobante_url;
+        document.getElementById("comprobanteFecha").textContent = data.ultimo_comprobante.fecha_envio || "";
+        document.getElementById("comprobanteThumb").classList.remove("d-none");
+        document.getElementById("comprobanteSinDatos").classList.add("d-none");
+    } else {
+        document.getElementById("comprobanteThumb").classList.add("d-none");
+        document.getElementById("comprobanteSinDatos").classList.remove("d-none");
+        document.getElementById("comprobanteFecha").textContent = "";
+    }
+    if(data.proxima_limpieza){
+        document.getElementById("limpiezaFecha").textContent = data.proxima_limpieza.fecha_servicio;
+        document.getElementById("limpiezaBano").textContent = `Ba\u00f1o ${data.proxima_limpieza.numero_bano}`;
+    } else {
+        document.getElementById("limpiezaFecha").textContent = "-";
+        document.getElementById("limpiezaBano").textContent = "Pr\u00f3xima limpieza";
+    }
+    if(data.emails){
+        renderEmails(data.emails);
+    }
+}
 

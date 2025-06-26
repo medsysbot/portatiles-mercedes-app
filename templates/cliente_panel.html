@@ -184,41 +184,19 @@
             </form>
             <div id="msgComprobante" class="alert mt-3" style="display:none"></div>
             <div class="table-responsive mt-3">
-              <button id="btnBorrarComprobantes" class="btn btn-danger mb-2" disabled>Borrar seleccionados</button>
               <table id="tablaComprobantes" class="table table-striped" style="width:100%">
                 <thead>
                   <tr>
-                    <th></th>
                     <th>Nombre cliente</th>
                     <th>DNI / CUIT / CUIL</th>
                     <th>Número factura</th>
                     <th>Comprobante</th>
                     <th>Fecha</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody></tbody>
               </table>
-            </div>
-
-            <!-- Modal confirmación borrado -->
-            <div class="modal fade" id="confirmBorrarModal" tabindex="-1" role="dialog" aria-labelledby="confirmBorrarLabel" aria-hidden="true">
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="confirmBorrarLabel">Confirmar borrado</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    ¿Está seguro que desea borrar los comprobantes seleccionados?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                    <button type="button" id="confirmarBorradoComps" class="btn btn-danger">Borrar</button>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>

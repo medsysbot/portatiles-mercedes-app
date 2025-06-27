@@ -104,15 +104,16 @@ def _ultimos_emails(limit: int = 5) -> list[dict]:
 
 
 def _contar_total(tabla: str) -> int:
-    """Devuelve el total de registros en la tabla."""
+    """Devuelve el total de registros en la tabla.
+
+    2025-07-10: Ajuste de consulta para evitar errores cuando la tabla
+    no posee campo ``id``. Se selecciona cualquier columna y se utiliza
+    ``count='exact'`` con ``head=True`` para obtener solo el total.
+    """
     if not supabase:
         return 0
     try:
-        resp = (
-            supabase.table(tabla)
-            .select("id", count="exact", head=True)
-            .execute()
-        )
+        resp = supabase.table(tabla).select("*", count="exact", head=True).execute()
         return getattr(resp, "count", 0) or 0
     except Exception as exc:  # pragma: no cover - errores de conexión
         logger.error("Error contando registros en %s: %s", tabla, exc)

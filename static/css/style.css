@@ -162,3 +162,13 @@ body.panel-empleados .card-title,
 .titulo-panel {
   color: #fff !important;
 }
+
+/* 2025-07-10: unificación de colores en encabezados y etiquetas */
+body.panel-admin h1,
+body.panel-admin h2,
+body.panel-empleados h1,
+body.panel-empleados h2,
+body.panel-admin label,
+body.panel-empleados label {
+  color: #fff !important;
+}

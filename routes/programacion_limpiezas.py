@@ -86,7 +86,7 @@ async def vista_cliente(request: Request, usuario=Depends(auth_required)):
     )
 
 
-@router.get("/admin/programacion_limpiezas")
+@router.get("/admin/api/limpiezas_programadas")
 async def listar_programacion_admin(usuario=Depends(auth_required)):
     """Listado completo de limpiezas programadas."""
     if usuario.get("rol") != "Administrador":
@@ -109,7 +109,7 @@ async def listar_programacion_admin(usuario=Depends(auth_required)):
         raise HTTPException(status_code=500, detail=str(exc))
 
 
-@router.post("/admin/programacion_limpiezas")
+@router.post("/admin/api/limpiezas_programadas/agregar")
 async def crear_programacion(
     datos: LimpiezaProgramada, usuario=Depends(auth_required)
 ):
@@ -130,7 +130,7 @@ async def crear_programacion(
         raise HTTPException(status_code=500, detail=str(exc))
 
 
-@router.delete("/admin/programacion_limpiezas")
+@router.post("/admin/api/limpiezas_programadas/eliminar")
 async def eliminar_programaciones(
     payload: IdsPayload, usuario=Depends(auth_required)
 ):
@@ -147,7 +147,7 @@ async def eliminar_programaciones(
         raise HTTPException(status_code=500, detail=str(exc))
 
 
-@router.get("/cliente/programacion_limpiezas")
+@router.get("/cliente/api/limpiezas_programadas")
 async def programacion_cliente(usuario=Depends(auth_required)):
     """Limpiezas programadas del cliente autenticado."""
     if usuario.get("rol") != "Cliente":
@@ -171,7 +171,7 @@ async def programacion_cliente(usuario=Depends(auth_required)):
         raise HTTPException(status_code=500, detail=str(exc))
 
 
-@router.get("/empleado/programacion_limpiezas")
+@router.get("/empleado/api/limpiezas_programadas")
 async def programacion_empleado(usuario=Depends(auth_required)):
     """Lista de limpiezas programadas para empleados."""
     if usuario.get("rol") != "Empleado":

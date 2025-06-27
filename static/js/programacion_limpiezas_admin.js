@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarDatos() {
     try {
-      const resp = await fetch('/admin/programacion_limpiezas', {
+      const resp = await fetch('/admin/api/limpiezas_programadas', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       registros = await resp.json();
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ev.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
     try {
-      const resp = await fetch('/admin/programacion_limpiezas', {
+      const resp = await fetch('/admin/api/limpiezas_programadas/agregar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
         body: JSON.stringify(data)
@@ -73,8 +73,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const ids = Array.from(document.querySelectorAll('#tablaProgramacion tbody .fila-check:checked')).map(c => parseInt(c.dataset.id));
     if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
     try {
-      await fetch('/admin/programacion_limpiezas', {
-        method: 'DELETE',
+      await fetch('/admin/api/limpiezas_programadas/eliminar', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
         body: JSON.stringify({ ids })
       });

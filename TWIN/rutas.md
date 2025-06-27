@@ -57,6 +57,19 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/admin/api/servicios_limpieza` | Lista completa de servicios de limpieza. | Sí |
 | POST | `/admin/api/servicios_limpieza/eliminar` | Elimina servicios de limpieza por ID. | Sí |
 
+## Rutas - Limpiezas programadas
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/programacion_limpiezas/view` | Formulario y tabla de limpiezas programadas. | Sí |
+| GET | `/admin/api/limpiezas_programadas` | Lista completa de limpiezas programadas. | Sí |
+| POST | `/admin/api/limpiezas_programadas/agregar` | Registra una limpieza programada. | Sí |
+| POST | `/admin/api/limpiezas_programadas/eliminar` | Elimina limpiezas programadas por ID. | Sí |
+| GET | `/empleado/programacion_limpiezas/view` | Tabla de limpiezas programadas para empleados. | Sí |
+| GET | `/empleado/api/limpiezas_programadas` | Datos de limpiezas programadas para empleados. | Sí |
+| GET | `/cliente/programacion_limpiezas/view` | Tabla de limpiezas programadas para clientes. | Sí |
+| GET | `/cliente/api/limpiezas_programadas` | Limpiezas programadas del cliente autenticado. | Sí |
+
 ## Rutas - Reportes
 
 | Método | Ruta | Descripción | Autenticación |

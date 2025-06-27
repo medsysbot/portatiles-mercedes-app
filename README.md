@@ -78,6 +78,7 @@ Para agregarlos o actualizarlos en el futuro:
 - **Flujo de administración**: tras el inicio de sesión, se muestra un splash (`/splash`) durante unos segundos y luego se redirige automáticamente al tablero en `/admin/panel`.
 - Se eliminó el panel administrativo antiguo y su hoja de estilos, consolidando todo en la plantilla moderna AdminLTE.
 - Todo el flujo posterior al splash ahora se muestra exclusivamente con esta plantilla basada en AdminLTE.
+- **fondo-panel.png**: se usa como imagen de fondo fija para todo el panel administrativo.
 
 ### Migración 2025-06-13
 

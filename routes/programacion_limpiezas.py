@@ -61,7 +61,7 @@ class IdsPayload(BaseModel):
 @router.get("/admin/programacion_limpiezas/view", response_class=HTMLResponse)
 async def vista_admin(request: Request, usuario=Depends(auth_required)):
     """Vista con formulario y tabla para administración."""
-    if usuario.get("rol") != "Administrador":
+    if usuario.get("rol", "").lower() != "administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     return TEMPLATES.TemplateResponse(
         "programacion_limpiezas_admin.html", {"request": request}
@@ -70,7 +70,7 @@ async def vista_admin(request: Request, usuario=Depends(auth_required)):
 
 @router.get("/empleado/programacion_limpiezas/view", response_class=HTMLResponse)
 async def vista_empleado(request: Request, usuario=Depends(auth_required)):
-    if usuario.get("rol") != "Empleado":
+    if usuario.get("rol", "").lower() != "empleado":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     return TEMPLATES.TemplateResponse(
         "programacion_limpiezas_empleado.html", {"request": request}
@@ -79,7 +79,7 @@ async def vista_empleado(request: Request, usuario=Depends(auth_required)):
 
 @router.get("/cliente/programacion_limpiezas/view", response_class=HTMLResponse)
 async def vista_cliente(request: Request, usuario=Depends(auth_required)):
-    if usuario.get("rol") != "Cliente":
+    if usuario.get("rol", "").lower() != "cliente":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     return TEMPLATES.TemplateResponse(
         "programacion_limpiezas_cliente.html", {"request": request}
@@ -89,7 +89,7 @@ async def vista_cliente(request: Request, usuario=Depends(auth_required)):
 @router.get("/admin/api/limpiezas_programadas")
 async def listar_programacion_admin(usuario=Depends(auth_required)):
     """Listado completo de limpiezas programadas."""
-    if usuario.get("rol") != "Administrador":
+    if usuario.get("rol", "").lower() != "administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -114,7 +114,7 @@ async def crear_programacion(
     datos: LimpiezaProgramada, usuario=Depends(auth_required)
 ):
     """Registra una nueva limpieza programada."""
-    if usuario.get("rol") != "Administrador":
+    if usuario.get("rol", "").lower() != "administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -135,7 +135,7 @@ async def eliminar_programaciones(
     payload: IdsPayload, usuario=Depends(auth_required)
 ):
     """Elimina limpiezas programadas por ID."""
-    if usuario.get("rol") != "Administrador":
+    if usuario.get("rol", "").lower() != "administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -150,11 +150,29 @@ async def eliminar_programaciones(
 @router.get("/cliente/api/limpiezas_programadas")
 async def programacion_cliente(usuario=Depends(auth_required)):
     """Limpiezas programadas del cliente autenticado."""
-    if usuario.get("rol") != "Cliente":
+    if usuario.get("rol", "").lower() != "cliente":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     dni = usuario.get("dni_cuit_cuil")
+    email = usuario.get("sub")
+    if not dni and email:
+        try:
+            resp = (
+                supabase.table("datos_personales_clientes")
+                .select("dni_cuit_cuil")
+                .eq("email", email)
+                .single()
+                .execute()
+            )
+            if getattr(resp, "error", None):
+                raise Exception(resp.error.message)
+            dni = resp.data.get("dni_cuit_cuil") if resp.data else None
+        except Exception as exc:  # pragma: no cover
+            logger.error("Error obteniendo DNI cliente: %s", exc)
+            raise HTTPException(status_code=500, detail="Error consultando datos")
+    if not dni:
+        return []
     try:
         res = (
             supabase.table(TABLA)
@@ -174,7 +192,7 @@ async def programacion_cliente(usuario=Depends(auth_required)):
 @router.get("/empleado/api/limpiezas_programadas")
 async def programacion_empleado(usuario=Depends(auth_required)):
     """Lista de limpiezas programadas para empleados."""
-    if usuario.get("rol") != "Empleado":
+    if usuario.get("rol", "").lower() != "empleado":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")

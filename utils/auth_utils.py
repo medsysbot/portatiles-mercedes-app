@@ -11,6 +11,21 @@ from fastapi import HTTPException, Depends, Request
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 import os
+import logging
+import traceback
+
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+AUTH_LOG_FILE = os.path.join(LOG_DIR, "autenticacion.log")
+
+auth_logger = logging.getLogger("autenticacion")
+auth_logger.setLevel(logging.ERROR)
+if not auth_logger.handlers:
+    handler = logging.FileHandler(AUTH_LOG_FILE, mode="a", encoding="utf-8")
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
+    handler.setFormatter(formatter)
+    auth_logger.addHandler(handler)
+    auth_logger.propagate = False
 
 security = HTTPBearer(auto_error=False)
 
@@ -36,7 +51,8 @@ def auth_required(
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
         return payload
-    except Exception:
+    except Exception as exc:
+        auth_logger.error("Error en auth_required: %s\n%s", exc, traceback.format_exc())
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
 
 
@@ -63,5 +79,11 @@ def verificar_token(
         if not isinstance(payload, dict):
             raise JWTError("Payload malformado")
         return {"nombre": payload.get("nombre"), "rol": payload.get("rol")}
-    except JWTError:
+    except JWTError as exc:
+        auth_logger.error("Token inválido: %s\n%s", exc, traceback.format_exc())
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+    except Exception as exc:
+        auth_logger.error(
+            "Error inesperado en verificar_token: %s\n%s", exc, traceback.format_exc()
+        )
         raise HTTPException(status_code=401, detail="Token inválido o expirado")

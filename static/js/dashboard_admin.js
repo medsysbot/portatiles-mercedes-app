@@ -24,8 +24,9 @@ async function cargarGraficos(charts) {
     let ventas = obtenerLocal('graficoVentasData');
     let gastos = obtenerLocal('graficoGastosData');
     let ingresos = obtenerLocal('graficoIngresosData');
+    let totales = obtenerLocal('dashboardTotales');
 
-    if (!labels || !alquileres || !ventas || !gastos || !ingresos) {
+    if (!labels || !alquileres || !ventas || !gastos || !ingresos || !totales) {
       const resp = await fetch('/admin/api/dashboard');
       if (!resp.ok) throw new Error('Error consultando datos');
       const datos = await resp.json();
@@ -34,11 +35,13 @@ async function cargarGraficos(charts) {
       ventas = ventas || datos.ventas;
       gastos = gastos || datos.gastos;
       ingresos = ingresos || datos.ingresos;
+      totales = totales || datos.totales;
       guardarLocal('graficoLabels', labels);
       guardarLocal('graficoAlquileresData', alquileres);
       guardarLocal('graficoVentasData', ventas);
       guardarLocal('graficoGastosData', gastos);
       guardarLocal('graficoIngresosData', ingresos);
+      guardarLocal('dashboardTotales', totales);
     }
 
   if (!charts.alquileres) {
@@ -95,6 +98,14 @@ async function cargarGraficos(charts) {
     charts.ingresos.data.datasets[0].data = ingresos;
     charts.ingresos.update();
   }
+
+  if (totales) {
+    document.getElementById('totalClientes').textContent = totales.clientes;
+    document.getElementById('totalAlquileres').textContent = totales.alquileres;
+    document.getElementById('totalVentas').textContent = totales.ventas;
+    document.getElementById('totalPendientes').textContent = totales.pendientes;
+    document.getElementById('totalMorosos').textContent = totales.morosos;
+  }
   } catch (err) {
     console.error('Error actualizando gráficos:', err);
   }
@@ -103,7 +114,16 @@ async function cargarGraficos(charts) {
 document.addEventListener('DOMContentLoaded', () => {
   const btnLogout = document.getElementById('btnLogout');
   const charts = {};
+  const calendarioEl = document.getElementById('calendario');
 
   btnLogout?.addEventListener('click', limpiarCredenciales);
   cargarGraficos(charts);
+
+  if (calendarioEl && window.FullCalendar) {
+    const calendario = new FullCalendar.Calendar(calendarioEl, {
+      initialView: 'dayGridMonth',
+      height: 'auto'
+    });
+    calendario.render();
+  }
 });

@@ -34,11 +34,13 @@ let facturasCargadas = [];
 let ventasCargadas = [];
 let limpiezasCargadas = [];
 let comprobantesCargados = [];
+let programacionCargada = [];
 let tablaAlquileres;
 let tablaFacturas;
 let tablaVentas;
 let tablaLimpiezas;
 let tablaComprobantes;
+let tablaProgramacion;
 
 function initTablas() {
     tablaAlquileres = $('#tablaAlquileres').DataTable({
@@ -103,6 +105,19 @@ function initTablas() {
         ]
     });
 
+    tablaProgramacion = $('#tablaProgramacion').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+            { data: 'fecha_limpieza' },
+            { data: 'hora_aprox' },
+            { data: 'numero_bano' },
+            { data: 'direccion' }
+        ]
+    });
+
     tablaComprobantes = $('#tablaComprobantes').DataTable({
         language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
         paging: true,
@@ -159,6 +174,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         cargarVentas(window.dniCliente);
         cargarDashboardDatos(window.dniCliente, email);
         cargarLimpiezas(window.dniCliente);
+        cargarProgramacion();
         cargarComprobantes(window.dniCliente);
         cargarEmailsCliente(email);
         prepararListenersFormulario();
@@ -338,6 +354,22 @@ async function cargarLimpiezas(dni_cuit_cuil) {
 function mostrarLimpiezas(lista) {
     tablaLimpiezas.clear();
     tablaLimpiezas.rows.add(lista).draw();
+}
+
+async function cargarProgramacion() {
+    try {
+        const resp = await fetchConAuth('/cliente/api/limpiezas_programadas');
+        if (!resp.ok) throw new Error('Error consultando');
+        programacionCargada = await resp.json();
+        mostrarProgramacion(programacionCargada);
+    } catch (err) {
+        console.error('Error al cargar programacion:', err);
+    }
+}
+
+function mostrarProgramacion(lista) {
+    tablaProgramacion.clear();
+    tablaProgramacion.rows.add(lista).draw();
 }
 
 async function cargarComprobantes(dni_cuit_cuil) {

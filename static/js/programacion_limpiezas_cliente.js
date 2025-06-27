@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarDatos() {
     try {
-      const resp = await fetch('/cliente/programacion_limpiezas', {
+      const resp = await fetch('/cliente/api/limpiezas_programadas', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       const datos = await resp.json();

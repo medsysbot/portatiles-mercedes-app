@@ -19,7 +19,7 @@ body, html {
   height: 600px;
   background: url('/app_publico/static/icons/logo-portatiles-2.png') no-repeat center center;
   background-size: contain;
-  opacity: 0.06;
+  opacity: 0.03;
   z-index: 0;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -151,4 +151,11 @@ body.panel-admin .content-wrapper,
 body.panel-cliente .content-wrapper {
   background-color: transparent !important;
   overflow-y: auto;
+}
+
+/* Color blanco para títulos principales – Portátiles Mercedes */
+body.panel-admin .card-title,
+body.panel-cliente .card-title,
+.titulo-panel {
+  color: #fff !important;
 }

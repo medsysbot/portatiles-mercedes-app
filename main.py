@@ -9,6 +9,31 @@ Proyecto: Portátiles Mercedes
 
 """Aplicación principal de Portátiles Mercedes."""
 
+import os
+from datetime import datetime
+
+
+def diagnostico_deploy():
+    print("=== DIAGNÓSTICO DEPLOY PORTÁTILES MERCEDES ===")
+    extensiones = ('.py', '.html', '.js')
+    for root, _, files in os.walk('.'):
+        for f in files:
+            if f.endswith(extensiones):
+                path = os.path.join(root, f)
+                modif = datetime.fromtimestamp(os.path.getmtime(path)).strftime('%Y-%m-%d %H:%M:%S')
+                print(f"{path} - {modif}")
+    if os.path.isdir('.git'):
+        try:
+            import subprocess
+            commit = subprocess.check_output(['git', 'log', '-1', '--pretty=format:%h %ad', '--date=iso']).decode().strip()
+            print(f"Último commit: {commit}")
+        except Exception as e:
+            print(f"No se pudo obtener commit: {e}")
+    print("="*50)
+
+
+diagnostico_deploy()
+
 import sys
 import traceback
 import logging

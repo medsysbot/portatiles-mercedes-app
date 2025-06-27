@@ -19,7 +19,7 @@ body, html {
   height: 600px;
   background: url('/app_publico/static/icons/logo-portatiles-2.png') no-repeat center center;
   background-size: contain;
-  opacity: 0.03;
+  opacity: 0.015;
   z-index: 0;
   transform: translate(-50%, -50%);
   pointer-events: none;
@@ -139,7 +139,8 @@ button.cerrar-sesion {
 /* Fondo exclusivo para el panel administrativo
    Se aplica solo a la clase "panel-admin" para no afectar otros módulos */
 body.panel-admin,
-body.panel-cliente {
+body.panel-cliente,
+body.panel-empleados {
   background-image: url('/static/imagenes/fondo-panel.png');
   background-size: cover;
   background-attachment: fixed;
@@ -148,7 +149,8 @@ body.panel-cliente {
 }
 /* Evita que el fondo gris de AdminLTE tape la imagen */
 body.panel-admin .content-wrapper,
-body.panel-cliente .content-wrapper {
+body.panel-cliente .content-wrapper,
+body.panel-empleados .content-wrapper {
   background-color: transparent !important;
   overflow-y: auto;
 }
@@ -156,6 +158,7 @@ body.panel-cliente .content-wrapper {
 /* Color blanco para títulos principales – Portátiles Mercedes */
 body.panel-admin .card-title,
 body.panel-cliente .card-title,
+body.panel-empleados .card-title,
 .titulo-panel {
   color: #fff !important;
 }

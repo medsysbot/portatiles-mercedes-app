@@ -49,7 +49,7 @@ if (form) {
                     if (data.rol === "Administrador") {
                         window.location.href = "/splash";
                     } else if (data.rol === "empleado" || data.rol === "Empleado") {
-                        window.location.href = "/splash_empleado";
+                        window.location.href = "/empleado/panel";
                     } else {
                         window.location.href = "/splash_cliente";
                     }

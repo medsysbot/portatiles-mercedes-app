@@ -6,6 +6,7 @@
 {% block head_extra %}
 <link rel="stylesheet" href="/static/css/style.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
 <style>
   .boton-cerrar-sesion {
     background-color: #c0392b;
@@ -20,48 +21,8 @@
   .boton-cerrar-sesion:hover {
     background-color: #a93226;
   }
-
-  .bienvenida-panel-empleado {
-    min-height: 100vh;
-    width: 100%;
-    background: url('/static/imagenes/fondo-panel-empleados.png') no-repeat center center fixed;
-    background-size: cover;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 0;
-  }
-  .bienvenida-overlay {
-    background: rgba(0,0,0,0.45);
-    padding: 2rem 2.5rem;
-    border-radius: 16px;
-    text-align: center;
-    max-width: 90vw;
-  }
-  .bienvenida-overlay h1, .bienvenida-overlay p {
-    color: #fff;
-    text-shadow: 0 2px 12px #0008;
-  }
-  .bienvenida-overlay h1 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-  }
-  .bienvenida-overlay p {
-    font-size: 1.3rem;
-  }
-
-  @media (max-width: 600px) {
-    .bienvenida-overlay {
-      padding: 1rem 0.7rem;
-      border-radius: 10px;
-    }
-    .bienvenida-overlay h1 {
-      font-size: 1.5rem;
-    }
-    .bienvenida-overlay p {
-      font-size: 1rem;
-    }
+  .content-wrapper {
+    overflow-y: auto;
   }
 </style>
 {% endblock %}
@@ -106,33 +67,65 @@
     <section class="content">
       <div class="container-fluid p-0">
         {% block content %}
-        <div class="bienvenida-panel-empleado">
-          <div class="bienvenida-overlay">
-            <h1>Bienvenido/a</h1>
-            <p>
-              Aquí podrás cargar los datos de limpieza y ver algunos detalles sobre los baños tocando el desplegable de la esquina.
-            </p>
+        <!-- Panel resumen empleados – Portátiles Mercedes -->
+        <div class="row">
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-info">
+              <div class="inner text-center">
+                <h3 id="cntLimpiezas">0</h3>
+                <p>Servicios esta semana</p>
+              </div>
+              <div class="icon"><i class="fas fa-calendar-check"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-success">
+              <div class="inner text-center">
+                <h3 id="cntComprobantes">0</h3>
+                <p>Servicios registrados</p>
+              </div>
+              <div class="icon"><i class="fas fa-clipboard-check"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-warning">
+              <div class="inner text-center">
+                <h3 id="cntReportes">0</h3>
+                <p>Reportes enviados</p>
+              </div>
+              <div class="icon"><i class="fas fa-flag"></i></div>
+            </div>
           </div>
         </div>
 
-        <div class="container mt-4">
-          <div class="card">
-            <div class="card-header"><h3 class="card-title">Programación de limpiezas</h3></div>
-            <div class="card-body">
-              <div class="table-responsive">
-                <table id="tablaProgramacion" class="table table-striped table-bordered" style="width:100%">
-                  <thead>
-                    <tr>
-                      <th>Fecha</th>
-                      <th>Hora</th>
-                      <th>Nº baño</th>
-                      <th>Cliente</th>
-                      <th>DNI/CUIT/CUIL</th>
-                      <th>Dirección</th>
-                    </tr>
-                  </thead>
-                  <tbody></tbody>
-                </table>
+        <div class="row mt-4">
+          <div class="col-md-6 mb-4">
+            <div class="card h-100">
+              <div class="card-header"><h3 class="card-title">Calendario</h3></div>
+              <div class="card-body">
+                <div id="calendario"></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card h-100">
+              <div class="card-header"><h3 class="card-title">Programación de limpiezas</h3></div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table id="tablaProgramacion" class="table table-striped table-bordered" style="width:100%">
+                    <thead>
+                      <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Nº baño</th>
+                        <th>Cliente</th>
+                        <th>DNI/CUIT/CUIL</th>
+                        <th>Dirección</th>
+                      </tr>
+                    </thead>
+                    <tbody></tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
@@ -156,5 +149,7 @@
     }
   </script>
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="/dashboard_empleado.js"></script>
   <script src="/programacion_limpiezas_empleado.js?v=1"></script>
 {% endblock %}

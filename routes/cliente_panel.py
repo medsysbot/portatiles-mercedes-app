@@ -336,11 +336,16 @@ async def obtener_dashboard_cliente(
     try:
         alq = (
             supabase.table("alquileres")
-            .select("id", count="exact", head=True)
+            .select("numero_bano")
             .eq("dni_cuit_cuil", dni_cuit_cuil)
             .execute()
         )
-        resultado["alquileres"] = getattr(alq, "count", 0) or 0
+        resultado["alquileres"] = len(alq.data or [])
+        logger.info(
+            "\u2139\ufe0f Dashboard alquileres para %s: %s",
+            dni_cuit_cuil,
+            resultado["alquileres"],
+        )
     except Exception as exc:  # pragma: no cover - conexion
         logger.error("Error alquileres dashboard: %s", exc)
 

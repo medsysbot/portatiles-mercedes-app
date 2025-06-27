@@ -136,3 +136,16 @@ button.cerrar-sesion {
 /* Miniaturas en el dashboard del cliente */
 .dashboard-thumb{max-height:100px;}
 
+/* Fondo exclusivo para el panel administrativo
+   Se aplica solo a la clase "panel-admin" para no afectar otros módulos */
+body.panel-admin {
+  background-image: url('/static/imagenes/fondo-panel.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+/* Evita que el fondo gris de AdminLTE tape la imagen */
+body.panel-admin .content-wrapper {
+  background-color: transparent !important;
+}

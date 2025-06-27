@@ -37,9 +37,20 @@ if not login_logger.handlers:
     login_logger.addHandler(file_handler)
     login_logger.propagate = False
 
-from fastapi import FastAPI
+# Logger para registrar tracebacks de errores generales
+ERROR_LOG_FILE = LOG_DIR / "errores_backend.log"
+error_logger = logging.getLogger("errores_backend")
+error_logger.setLevel(logging.ERROR)
+if not error_logger.handlers:
+    err_handler = logging.FileHandler(ERROR_LOG_FILE, mode="a", encoding="utf-8")
+    err_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    err_handler.setFormatter(err_formatter)
+    error_logger.addHandler(err_handler)
+    error_logger.propagate = False
+
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 
 # Imports actualizados según la nueva estructura
 from routes.router import router
@@ -66,6 +77,18 @@ import routes.morosos as morosos_module
 from routes import admin_panel, empleado_panel, cliente_panel, ventas, limpieza, debito, reportes
 
 app = FastAPI()
+
+# Registrar manejador de excepciones para capturar tracebacks
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    """Registra el traceback completo antes de responder."""
+    error_logger.error(
+        "Error en %s: %s\n%s",
+        request.url.path,
+        exc.detail,
+        traceback.format_exc(),
+    )
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 # Inyectar el cliente de Supabase global en todos los módulos solo si está habilitado
 if os.getenv("ENABLE_SUPABASE") == "1":

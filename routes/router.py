@@ -143,6 +143,27 @@ async def obtener_limpieza_empleado_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/programacion_limpiezas_admin.js")
+async def obtener_prog_limpiezas_admin_js():
+    """Script de programación de limpiezas para admin."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "programacion_limpiezas_admin.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
+@router.get("/programacion_limpiezas_empleado.js")
+async def obtener_prog_limpiezas_empleado_js():
+    """Script de programación de limpiezas para empleados."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "programacion_limpiezas_empleado.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
+@router.get("/programacion_limpiezas_cliente.js")
+async def obtener_prog_limpiezas_cliente_js():
+    """Script de programación de limpiezas para clientes."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "programacion_limpiezas_cliente.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/reportes_admin.js")
 async def obtener_reportes_admin_js():
     """Script para el módulo de reportes del panel admin."""

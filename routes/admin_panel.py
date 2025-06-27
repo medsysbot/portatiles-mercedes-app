@@ -103,23 +103,25 @@ def _ultimos_emails(limit: int = 5) -> list[dict]:
         return []
 
 
+def _contar_total(tabla: str) -> int:
+    """Devuelve el total de registros en la tabla."""
+    if not supabase:
+        return 0
+    try:
+        resp = (
+            supabase.table(tabla)
+            .select("id", count="exact", head=True)
+            .execute()
+        )
+        return getattr(resp, "count", 0) or 0
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("Error contando registros en %s: %s", tabla, exc)
+        return 0
+
+
 @router.get("/admin/panel", response_class=HTMLResponse)
 def admin_panel_view(request: Request):
     """Vista principal del panel administrativo con datos de resumen."""
-
-    def _contar_total(tabla: str) -> int:
-        if not supabase:
-            return 0
-        try:
-            resp = (
-                supabase.table(tabla)
-                .select("id", count="exact", head=True)
-                .execute()
-            )
-            return getattr(resp, "count", 0) or 0
-        except Exception as exc:  # pragma: no cover - errores de conexión
-            logger.error("Error contando registros en %s: %s", tabla, exc)
-            return 0
 
     contexto = {
         "request": request,
@@ -597,12 +599,21 @@ async def datos_dashboard():
     gastos = [0] * 12
     ingresos = [0] * 12
 
+    totales = {
+        "clientes": _contar_total("datos_personales_clientes"),
+        "alquileres": _contar_total(ALQUILERES_TABLE),
+        "ventas": _contar_total(VENTAS_TABLE),
+        "pendientes": _contar_total("facturas_pendientes"),
+        "morosos": _contar_total("morosos"),
+    }
+
     return {
         "labels": labels,
         "alquileres": alquileres,
         "ventas": ventas,
         "gastos": gastos,
         "ingresos": ingresos,
+        "totales": totales,
     }
 
 

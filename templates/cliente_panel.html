@@ -1,25 +1,12 @@
 {% extends 'base_adminlte.html' %}
 {% block title %}Panel del Cliente{% endblock %}
 {% block description %}Panel para que el cliente consulte sus servicios{% endblock %}
-{% block body_class %}hold-transition sidebar-mini layout-fixed{% endblock %}
+{% block body_class %}hold-transition sidebar-mini layout-fixed panel-cliente{% endblock %}
 
 {% block head_extra %}
   {{ super() }}
+  <link rel="stylesheet" href="/static/css/style.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-  <style>
-  body {
-    min-height: 100vh;
-    width: 100vw;
-    background: url('/static/imagenes/fondo-panel.png') no-repeat center center fixed;
-    background-size: cover;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  .content-wrapper {
-    overflow-y: auto;
-  }
-  </style>
 {% endblock %}
 
 {% block body %}

@@ -178,6 +178,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         cargarComprobantes(window.dniCliente);
         cargarEmailsCliente(email);
         prepararListenersFormulario();
+        initSecciones();
 
         const buscAlq = document.getElementById('busquedaAlquileres');
         buscAlq?.addEventListener('input', () => {
@@ -675,5 +676,28 @@ function actualizarDashboard(data){
     if(data.emails){
         renderEmails(data.emails);
     }
+}
+
+function initSecciones(){
+    const sections = Array.from(document.querySelectorAll('#dashboard-resumen,[id^="seccion-"]'));
+    if(!sections.length) return;
+    const menuLinks = document.querySelectorAll('.nav-sidebar .nav-link[href^="#seccion-"]');
+    const allLinks = document.querySelectorAll('a[href^="#seccion-"]');
+    function mostrar(id){
+        sections.forEach(sec => {
+            sec.style.display = sec.id === id ? '' : 'none';
+        });
+        menuLinks.forEach(link => {
+            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+    }
+    allLinks.forEach(link => {
+        link.addEventListener('click', ev => {
+            ev.preventDefault();
+            const id = link.getAttribute('href').substring(1);
+            mostrar(id);
+        });
+    });
+    mostrar(sections[0].id);
 }
 

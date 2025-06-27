@@ -138,7 +138,8 @@ button.cerrar-sesion {
 
 /* Fondo exclusivo para el panel administrativo
    Se aplica solo a la clase "panel-admin" para no afectar otros módulos */
-body.panel-admin {
+body.panel-admin,
+body.panel-cliente {
   background-image: url('/static/imagenes/fondo-panel.png');
   background-size: cover;
   background-attachment: fixed;
@@ -146,6 +147,8 @@ body.panel-admin {
   background-repeat: no-repeat;
 }
 /* Evita que el fondo gris de AdminLTE tape la imagen */
-body.panel-admin .content-wrapper {
+body.panel-admin .content-wrapper,
+body.panel-cliente .content-wrapper {
   background-color: transparent !important;
+  overflow-y: auto;
 }

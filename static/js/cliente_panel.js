@@ -690,6 +690,15 @@ function initSecciones(){
         menuLinks.forEach(link => {
             link.classList.toggle('active', link.getAttribute('href') === '#' + id);
         });
+        const heading = document.getElementById('bienvenida');
+        const link = document.querySelector('a[href="#' + id + '"]');
+        if(heading){
+            if(link && link.textContent){
+                heading.textContent = link.textContent.trim();
+            } else if(id === 'dashboard-resumen'){
+                heading.textContent = 'Panel del Cliente';
+            }
+        }
     }
     allLinks.forEach(link => {
         link.addEventListener('click', ev => {

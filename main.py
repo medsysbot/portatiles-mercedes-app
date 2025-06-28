@@ -95,6 +95,9 @@ from routes.morosos import router as morosos_router
 from routes.sitemap import router as sitemap_router
 from routes.comprobantes_pago import router as comprobantes_router
 from routes.comprobantes_admin import router as comprobantes_admin_router
+from routes.empleados_datos_personales import router as empleados_datos_personales_router
+from routes.empleados_salarios import router as empleados_salarios_router
+from routes.empleados_ausencias import router as empleados_ausencias_router
 import routes.alquileres as alquileres_module
 import routes.inventario_banos as inventario_banos_module
 import routes.reportes as reportes_module
@@ -130,6 +133,12 @@ if os.getenv("ENABLE_SUPABASE") == "1":
     morosos_module.supabase = supabase_client
     empleado_panel.supabase = supabase_client
     programacion_limpiezas.supabase = supabase_client
+    import routes.empleados_datos_personales as edp_module
+    import routes.empleados_salarios as es_module
+    import routes.empleados_ausencias as ea_module
+    edp_module.supabase = supabase_client
+    es_module.supabase = supabase_client
+    ea_module.supabase = supabase_client
     login_logger.info("Cliente Supabase asignado a modulos")
 
 # Carpeta para servir todos los recursos estáticos
@@ -156,6 +165,9 @@ app.include_router(facturas_pendientes_router)
 app.include_router(morosos_router)
 app.include_router(comprobantes_router)
 app.include_router(comprobantes_admin_router)
+app.include_router(empleados_datos_personales_router)
+app.include_router(empleados_salarios_router)
+app.include_router(empleados_ausencias_router)
 app.include_router(sitemap_router)
 
 

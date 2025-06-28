@@ -1,0 +1,32 @@
+{% extends 'panel_admin.html' %}
+{% block title %}Salarios{% endblock %}
+{% block description %}Gestión de salarios de empleados{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/style.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block content %}
+<h2 class="mb-3 mt-0">Salarios de empleados</h2>
+<a href="/admin/empleados_salarios/nuevo" class="btn btn-success mb-3">Agregar registro</a>
+<button id="btnEliminarSeleccionados" class="btn btn-danger mb-3" disabled>Eliminar seleccionados</button>
+<div class="table-responsive bg-light p-3">
+  <table id="tablaSalarios" class="table table-striped table-bordered" style="width:100%">
+    <thead>
+      <tr>
+        <th></th>
+        <th>Nombre</th>
+        <th>Salario</th>
+        <th>Anticipo</th>
+        <th>Saldo</th>
+        <th>Recibo</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="/static/js/empleados_salarios_admin.js"></script>
+{% endblock %}

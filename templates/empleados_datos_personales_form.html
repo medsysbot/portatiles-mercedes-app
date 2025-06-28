@@ -1,0 +1,34 @@
+{% extends 'panel_admin.html' %}
+{% block title %}Nuevo dato personal{% endblock %}
+{% block description %}Alta de datos personales{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="/static/css/style.css">
+{% endblock %}
+{% block content %}
+<h2 class="mt-0">Nuevo dato personal</h2>
+<form method="post" enctype="multipart/form-data">
+  <div class="form-group">
+    <label>Nombre empleado</label>
+    <input type="text" name="nombre_empleado" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>DNI</label>
+    <input type="text" name="dni" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>CUIT/CUIL</label>
+    <input type="text" name="quit_quill" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Fecha ingreso</label>
+    <input type="date" name="fecha_ingreso" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Documento (PDF o imagen)</label>
+    <input type="file" name="documento" class="form-control" accept="application/pdf,image/*" required>
+  </div>
+  <button type="submit" class="btn btn-primary">Guardar</button>
+  <a href="/admin/empleados_datos_personales" class="btn btn-secondary">Volver</a>
+</form>
+{% endblock %}

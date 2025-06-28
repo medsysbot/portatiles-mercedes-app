@@ -26,6 +26,11 @@ from routes.inventario_banos import router as inventario_router
 from routes.facturas_pendientes import router as facturas_pendientes_router
 from routes.morosos import router as morosos_router
 from routes.emails_admin import router as emails_router
+from routes.empleados_datos_personales import (
+    router as empleados_datos_personales_router,
+)
+from routes.empleados_salarios import router as empleados_salarios_router
+from routes.empleados_ausencias import router as empleados_ausencias_router
 
 # Directorios base de las plantillas y archivos estáticos
 # Luego de reubicar `routes/` en la raíz del repositorio, la carpeta
@@ -63,6 +68,9 @@ router.include_router(inventario_router)
 router.include_router(facturas_pendientes_router)
 router.include_router(morosos_router)
 router.include_router(emails_router)
+router.include_router(empleados_datos_personales_router)
+router.include_router(empleados_salarios_router)
+router.include_router(empleados_ausencias_router)
 
 @router.get("/", response_class=HTMLResponse)
 async def mostrar_index():

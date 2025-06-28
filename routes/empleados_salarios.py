@@ -48,6 +48,7 @@ BUCKET = "empleados-salarios"
 
 class SalarioEmpleado(BaseModel):
     nombre_empleado: str
+    dni_cuit_cuil: str
     salario: float
     anticipo_pedido: float
     saldo_a_pagar: float
@@ -100,6 +101,7 @@ async def listar_salarios_empleado(usuario=Depends(auth_required)):
 @router.post("/admin/empleados_salarios/nuevo")
 async def crear_salario(
     nombre_empleado: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
     salario: float = Form(...),
     anticipo_pedido: float = Form(...),
     saldo_a_pagar: float = Form(...),
@@ -113,6 +115,7 @@ async def crear_salario(
 
     datos_form = {
         "nombre_empleado": nombre_empleado,
+        "dni_cuit_cuil": dni_cuit_cuil,
         "salario": salario,
         "anticipo_pedido": anticipo_pedido,
         "saldo_a_pagar": saldo_a_pagar,
@@ -138,7 +141,7 @@ async def crear_salario(
         pdf_bytes = contenido
 
     fecha_arch = date.today().strftime("%Y%m%d%H%M%S")
-    nombre_pdf = f"recibo_{nombre_empleado}_{fecha_arch}.pdf"
+    nombre_pdf = f"recibo_{dni_cuit_cuil}_{fecha_arch}.pdf"
     bucket = supabase.storage.from_(BUCKET)
     try:
         bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})

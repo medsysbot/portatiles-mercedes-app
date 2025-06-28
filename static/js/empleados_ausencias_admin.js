@@ -10,8 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     columns: [
       { data: 'id', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'nombre_empleado' },
-      { data: 'dni' },
-      { data: 'quit_quill' },
+      { data: 'dni_cuit_cuil' },
       { data: 'tipo_ausencia' },
       { data: 'fecha_inicio' },
       { data: 'fecha_fin' },

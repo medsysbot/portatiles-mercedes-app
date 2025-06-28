@@ -48,8 +48,7 @@ BUCKET = "empleados-datos-personales"
 
 class DatosEmpleado(BaseModel):
     nombre_empleado: str
-    dni: str
-    quit_quill: str
+    dni_cuit_cuil: str
     fecha_ingreso: date
 
 
@@ -102,8 +101,7 @@ async def listar_datos_personales_empleado(usuario=Depends(auth_required)):
 @router.post("/admin/empleados_datos_personales/nuevo")
 async def crear_dato_personal(
     nombre_empleado: str = Form(...),
-    dni: str = Form(...),
-    quit_quill: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
     fecha_ingreso: date = Form(...),
     documento: UploadFile = File(...),
     usuario=Depends(auth_required),
@@ -115,8 +113,7 @@ async def crear_dato_personal(
 
     datos_form = {
         "nombre_empleado": nombre_empleado,
-        "dni": dni,
-        "quit_quill": quit_quill,
+        "dni_cuit_cuil": dni_cuit_cuil,
         "fecha_ingreso": fecha_ingreso,
     }
     try:
@@ -140,7 +137,7 @@ async def crear_dato_personal(
         pdf_bytes = contenido
 
     fecha_arch = date.today().strftime("%Y%m%d%H%M%S")
-    nombre_pdf = f"doc_{dni}_{fecha_arch}.pdf"
+    nombre_pdf = f"doc_{dni_cuit_cuil}_{fecha_arch}.pdf"
     bucket = supabase.storage.from_(BUCKET)
     try:
         bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})

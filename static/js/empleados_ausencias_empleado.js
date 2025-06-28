@@ -9,8 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ordering: true,
     columns: [
       { data: 'nombre_empleado' },
-      { data: 'dni' },
-      { data: 'quit_quill' },
+      { data: 'dni_cuit_cuil' },
       { data: 'tipo_ausencia' },
       { data: 'fecha_inicio' },
       { data: 'fecha_fin' },

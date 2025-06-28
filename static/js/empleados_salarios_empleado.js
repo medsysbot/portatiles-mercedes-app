@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ordering: true,
     columns: [
       { data: 'nombre_empleado' },
+      { data: 'dni_cuit_cuil' },
       { data: 'salario' },
       { data: 'anticipo_pedido' },
       { data: 'saldo_a_pagar' },

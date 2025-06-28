@@ -9,8 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ordering: true,
     columns: [
       { data: 'nombre_empleado' },
-      { data: 'dni' },
-      { data: 'quit_quill' },
+      { data: 'dni_cuit_cuil' },
       { data: 'fecha_ingreso' },
       { data: 'imagen_documento_pdf_url', render: url => `<a href="${url}" target="_blank">Ver</a>` }
     ]

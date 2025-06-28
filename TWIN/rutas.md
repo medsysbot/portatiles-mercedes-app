@@ -166,6 +166,8 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 
 | Método | Ruta | Descripción | Autenticación |
 |--------|------|-------------|---------------|
+| GET | `/admin/recursos_humanos` | Vista unificada de Recursos Humanos | Sí |
+| GET | `/empleado/recursos_humanos` | Recursos Humanos para el empleado | Sí |
 | GET | `/admin/empleados_datos_personales` | Vista de datos personales de empleados | Sí |
 | POST | `/admin/empleados_datos_personales/nuevo` | Alta de dato personal | Sí |
 | GET | `/admin/api/empleados_datos_personales` | Lista completa de datos personales | Sí |

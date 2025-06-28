@@ -265,13 +265,13 @@ table.dataTable,
 
 /* Buscadores unificados en tablas */
 .buscador-tabla {
-    width: 35% !important; /* 30% más corto que la versión original */
+    width: 20% !important; /* Ancho unificado tal como en clientes */
     background: transparent !important;
     color: #fff !important;
     border: 1px solid #fff !important;
 }
 .buscador-clientes {
-    width: 20% !important; /* Reducción especial para clientes */
+    width: 20% !important; /* Mantiene compatibilidad, mismo ancho que todas */
     background: transparent !important;
     color: #fff !important;
     border: 1px solid #fff !important;

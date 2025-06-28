@@ -252,3 +252,13 @@ table.dataTable,
     height: calc(1.5em + 0.75rem + 2px);
     margin-top: 0;
 }
+
+/* Correcciones visuales para tablas y botoneras en todos los paneles */
+.table-responsive.bg-light {
+    background: rgba(0,0,0,0.6) !important; /* fondo unificado */
+    color: #fff !important;
+}
+
+.d-flex.align-items-center .btn {
+    margin-top: 0 !important; /* botones alineados con el buscador */
+}

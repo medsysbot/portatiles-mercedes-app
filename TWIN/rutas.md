@@ -161,3 +161,26 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | POST | `/recuperar_password` | Procesa el envío del email de recuperación | No |
 | GET | `/reset_password` | Formulario para ingresar la nueva contraseña | No |
 | POST | `/reset_password` | Actualiza la contraseña usando el token recibido | No |
+
+## Rutas - Recursos Humanos
+
+| Método | Ruta | Descripción | Autenticación |
+|--------|------|-------------|---------------|
+| GET | `/admin/empleados_datos_personales` | Vista de datos personales de empleados | Sí |
+| POST | `/admin/empleados_datos_personales/nuevo` | Alta de dato personal | Sí |
+| GET | `/admin/api/empleados_datos_personales` | Lista completa de datos personales | Sí |
+| POST | `/admin/api/empleados_datos_personales/eliminar` | Elimina registros por ID | Sí |
+| GET | `/empleado/datos_personales` | Vista de datos personales para el empleado | Sí |
+| GET | `/empleado/api/datos_personales` | Datos personales del empleado autenticado | Sí |
+| GET | `/admin/empleados_salarios` | Vista de salarios de empleados | Sí |
+| POST | `/admin/empleados_salarios/nuevo` | Alta de salario | Sí |
+| GET | `/admin/api/empleados_salarios` | Lista de salarios | Sí |
+| POST | `/admin/api/empleados_salarios/eliminar` | Elimina salarios por ID | Sí |
+| GET | `/empleado/empleados_salarios` | Vista de salarios del empleado | Sí |
+| GET | `/empleado/api/empleados_salarios` | Salarios del empleado autenticado | Sí |
+| GET | `/admin/empleados_ausencias` | Vista de ausencias de empleados | Sí |
+| POST | `/admin/empleados_ausencias/nuevo` | Alta de ausencia | Sí |
+| GET | `/admin/api/empleados_ausencias` | Lista de ausencias | Sí |
+| POST | `/admin/api/empleados_ausencias/eliminar` | Elimina ausencias por ID | Sí |
+| GET | `/empleado/empleados_ausencias` | Vista de ausencias del empleado | Sí |
+| GET | `/empleado/api/empleados_ausencias` | Ausencias del empleado autenticado | Sí |

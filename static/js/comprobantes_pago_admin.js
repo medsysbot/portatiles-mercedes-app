@@ -50,6 +50,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const form = document.getElementById('formComprobanteAdmin');
   const msg = document.getElementById('msgComprobanteAdmin');
+  const btnNuevo = document.getElementById('btnMostrarForm');
+  const contTabla = document.getElementById('contenedorTabla');
+  const btnCancelar = document.getElementById('btnCancelarForm');
+
+  form.style.display = 'none';
+
+  btnNuevo.addEventListener('click', () => {
+    form.style.display = 'block';
+    contTabla.style.display = 'none';
+    btnNuevo.style.display = 'none';
+  });
+
+  btnCancelar.addEventListener('click', () => {
+    form.style.display = 'none';
+    contTabla.style.display = 'block';
+    btnNuevo.style.display = 'inline-block';
+  });
 
   async function cargarComprobantes() {
     try {
@@ -84,6 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
         msg.className = 'alert alert-success';
         form.reset();
         cargarComprobantes();
+        btnCancelar.click();
       } else {
         throw new Error(data.detail || 'Error');
       }

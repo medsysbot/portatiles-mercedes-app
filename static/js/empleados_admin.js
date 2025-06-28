@@ -1,6 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const tabla = document.getElementById('tablaEmpleados');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+  const buscador = document.getElementById('busquedaEmpleado');
+  const btnBuscar = document.getElementById('btnBuscarEmpleado');
 
   function actualizarBoton() {
     const marcados = tabla.querySelectorAll('.fila-check:checked');
@@ -10,6 +12,17 @@ document.addEventListener('DOMContentLoaded', () => {
   tabla.addEventListener('change', e => {
     if (e.target.classList.contains('fila-check')) actualizarBoton();
   });
+
+  function filtrarEmpleados() {
+    const q = (buscador?.value || '').toLowerCase();
+    tabla.querySelectorAll('tbody tr').forEach(tr => {
+      const texto = tr.textContent.toLowerCase();
+      tr.style.display = texto.includes(q) ? '' : 'none';
+    });
+  }
+
+  buscador?.addEventListener('input', filtrarEmpleados);
+  btnBuscar?.addEventListener('click', filtrarEmpleados);
 
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(tabla.querySelectorAll('.fila-check:checked')).map(c => c.dataset.id);

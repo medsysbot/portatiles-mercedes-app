@@ -21,6 +21,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('formProgramacion');
   const mensajeDiv = document.getElementById('mensajeProgramacion');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+  const btnNuevo = document.getElementById('btnMostrarForm');
+  const contTabla = document.getElementById('contenedorTabla');
+  const btnCancelar = document.getElementById('btnCancelarForm');
+
+  form.style.display = 'none';
+
+  btnNuevo.addEventListener('click', () => {
+    form.style.display = 'block';
+    contTabla.style.display = 'none';
+    btnNuevo.style.display = 'none';
+  });
+
+  btnCancelar.addEventListener('click', () => {
+    form.style.display = 'none';
+    contTabla.style.display = 'block';
+    btnNuevo.style.display = 'inline-block';
+  });
   let registros = [];
 
   async function cargarDatos() {
@@ -50,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
       form.reset();
       mostrarMensaje('Limpieza programada', 'success');
       cargarDatos();
+      btnCancelar.click();
     } catch (err) {
       mostrarMensaje('Error guardando', 'danger');
     }

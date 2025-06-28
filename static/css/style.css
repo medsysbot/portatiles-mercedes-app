@@ -212,16 +212,17 @@ table.dataTable,
 
 /* Filas y cabeceras */
 table.dataTable {
-    background: rgba(0,0,0,0.5) !important;
+    background: #fff !important;
     border-radius: 6px;
     overflow: hidden;
     box-shadow: none !important;
+    color: #333 !important;
 }
 table.dataTable tbody tr {
-    background: rgba(0,0,0,0.4) !important;
-    color: #fff !important;
+    background: #fff !important;
+    color: #333 !important;
 }
 table.dataTable thead th {
-    background: rgba(0,0,0,0.6) !important;
-    color: #fff !important;
+    background: #eaeaea !important;
+    color: #333 !important;
 }

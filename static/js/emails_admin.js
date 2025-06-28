@@ -6,6 +6,23 @@ document.addEventListener('DOMContentLoaded', () => {
   const errorDiv = document.getElementById('errorEmails');
   const mensajeDiv = document.getElementById('mensajeEmails');
   const form = document.getElementById('formEnviarEmail');
+  const btnNuevo = document.getElementById('btnMostrarForm');
+  const contTabla = document.getElementById('contenedorTabla');
+  const btnCancelar = document.getElementById('btnCancelarForm');
+
+  form.style.display = 'none';
+
+  btnNuevo.addEventListener('click', () => {
+    form.style.display = 'block';
+    contTabla.style.display = 'none';
+    btnNuevo.style.display = 'none';
+  });
+
+  btnCancelar.addEventListener('click', () => {
+    form.style.display = 'none';
+    contTabla.style.display = 'block';
+    btnNuevo.style.display = 'inline-block';
+  });
 
   async function cargarEmails() {
     try {
@@ -49,6 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mensajeDiv.style.display = 'block';
       form.reset();
       cargarEmails();
+      btnCancelar.click();
     } catch (err) {
       mensajeDiv.textContent = err.message;
       mensajeDiv.className = 'alert alert-danger';

@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             cargarDatosPersonales(email);
         }
-        document.getElementById('bienvenida').textContent = 'Panel del Cliente';
+        document.getElementById('bienvenida').textContent = 'Panel de clientes';
         initTablas();
         cargarAlquileres(window.dniCliente);
         cargarFacturas(window.dniCliente);
@@ -696,7 +696,7 @@ function initSecciones(){
             if(link && link.textContent){
                 heading.textContent = link.textContent.trim();
             } else if(id === 'dashboard-resumen'){
-                heading.textContent = 'Panel del Cliente';
+                heading.textContent = 'Panel de clientes';
             }
         }
     }

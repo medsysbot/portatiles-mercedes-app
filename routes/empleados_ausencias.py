@@ -48,8 +48,7 @@ BUCKET = "empleados-ausencias"
 
 class AusenciaEmpleado(BaseModel):
     nombre_empleado: str
-    dni: str
-    quit_quill: str
+    dni_cuit_cuil: str
     tipo_ausencia: str
     fecha_inicio: date
     fecha_fin: date
@@ -102,8 +101,7 @@ async def listar_ausencias_empleado(usuario=Depends(auth_required)):
 @router.post("/admin/empleados_ausencias/nuevo")
 async def crear_ausencia(
     nombre_empleado: str = Form(...),
-    dni: str = Form(...),
-    quit_quill: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
     tipo_ausencia: str = Form(...),
     fecha_inicio: date = Form(...),
     fecha_fin: date = Form(...),
@@ -117,8 +115,7 @@ async def crear_ausencia(
 
     datos_form = {
         "nombre_empleado": nombre_empleado,
-        "dni": dni,
-        "quit_quill": quit_quill,
+        "dni_cuit_cuil": dni_cuit_cuil,
         "tipo_ausencia": tipo_ausencia,
         "fecha_inicio": fecha_inicio,
         "fecha_fin": fecha_fin,
@@ -144,7 +141,7 @@ async def crear_ausencia(
         pdf_bytes = contenido
 
     fecha_arch = date.today().strftime("%Y%m%d%H%M%S")
-    nombre_pdf = f"certificado_{dni}_{fecha_arch}.pdf"
+    nombre_pdf = f"certificado_{dni_cuit_cuil}_{fecha_arch}.pdf"
     bucket = supabase.storage.from_(BUCKET)
     try:
         bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})

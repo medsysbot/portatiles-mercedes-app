@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     columns: [
       { data: 'id', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'nombre_empleado' },
+      { data: 'dni_cuit_cuil' },
       { data: 'salario' },
       { data: 'anticipo_pedido' },
       { data: 'saldo_a_pagar' },

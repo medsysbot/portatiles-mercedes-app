@@ -72,11 +72,16 @@ button.cerrar-sesion {
   overflow: hidden;
 }
 
-/* Tablas administrativas */
+/* Tablas administrativas - fondo negro semi-transparente y letras blancas */
 .table, .dataTable {
   font-family: 'Nunito', Arial, sans-serif !important;
-  color: #444 !important;
-  background: #fff !important;
+  background: rgba(0,0,0,0.6) !important; /* Unificación visual 2025-07 */
+  color: #fff !important;
+  border-collapse: collapse !important;
+}
+.table th, .table td,
+.dataTable th, .dataTable td {
+  border: 1px solid #fff !important; /* Líneas blancas */
 }
 
 @media (max-width: 600px) {
@@ -191,7 +196,7 @@ table.dataTable,
 .dataTables_wrapper .dataTables_filter input[type="search"] {
     background: transparent !important;
     color: #fff !important;
-    border: none !important;
+    border: 1px solid #fff !important;
 }
 
 /* Paginador */
@@ -212,17 +217,21 @@ table.dataTable,
 
 /* Filas y cabeceras */
 table.dataTable {
-    background: #fff !important;
+    background: rgba(0,0,0,0.6) !important; /* Fondo unificado */
     border-radius: 6px;
     overflow: hidden;
     box-shadow: none !important;
-    color: #333 !important;
+    color: #fff !important;
+    border-collapse: collapse !important;
 }
 table.dataTable tbody tr {
-    background: #fff !important;
-    color: #333 !important;
+    background: transparent !important;
+    color: #fff !important;
 }
 table.dataTable thead th {
-    background: #eaeaea !important;
-    color: #333 !important;
+    background: transparent !important;
+    color: #fff !important;
+}
+table.dataTable td, table.dataTable th {
+    border: 1px solid #fff !important;
 }

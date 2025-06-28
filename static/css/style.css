@@ -75,7 +75,7 @@ button.cerrar-sesion {
 /* Tablas administrativas - fondo negro semi-transparente y letras blancas */
 .table, .dataTable {
   font-family: 'Nunito', Arial, sans-serif !important;
-  background: rgba(0,0,0,0.6) !important; /* Unificación visual 2025-07 */
+  background: rgba(0,0,0,0.7) !important; /* Unificación visual 2025-07 */
   color: #fff !important;
   border-collapse: collapse !important;
 }
@@ -217,7 +217,7 @@ table.dataTable,
 
 /* Filas y cabeceras */
 table.dataTable {
-    background: rgba(0,0,0,0.6) !important; /* Fondo unificado */
+    background: rgba(0,0,0,0.7) !important; /* Fondo unificado */
     border-radius: 6px;
     overflow: hidden;
     box-shadow: none !important;
@@ -255,7 +255,7 @@ table.dataTable,
 
 /* Correcciones visuales para tablas y botoneras en todos los paneles */
 .table-responsive.bg-light {
-    background: rgba(0,0,0,0.6) !important; /* fondo unificado */
+    background: rgba(0,0,0,0.7) !important; /* fondo unificado */
     color: #fff !important;
 }
 

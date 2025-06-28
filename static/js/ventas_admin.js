@@ -3,6 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaVentas');
+  const btnBuscar = document.getElementById('btnBuscarVentas');
   const mensajeError = document.getElementById('errorVentas');
   const mensajeInfo = document.getElementById('mensajeVentas');
 
@@ -93,11 +94,11 @@ document.addEventListener('DOMContentLoaded', () => {
     mensajeInfo.style.display = 'block';
   }
 
-  buscador?.addEventListener('input', () => {
-    const texto = (buscador.value || '').toLowerCase();
+  function filtrarVentas(texto) {
+    const q = texto.toLowerCase();
     const filtrados = ventasCargadas.filter(v =>
-      (v.nombre_cliente || '').toLowerCase().includes(texto) ||
-      (v.dni_cuit_cuil || '').toLowerCase().includes(texto)
+      (v.nombre_cliente || '').toLowerCase().includes(q) ||
+      (v.dni_cuit_cuil || '').toLowerCase().includes(q)
     );
     mostrarVentas(filtrados);
     if (filtrados.length === 0) {
@@ -105,6 +106,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       mostrarMensaje('', '');
     }
+  }
+
+  buscador?.addEventListener('input', () => {
+    filtrarVentas(buscador.value.trim());
+  });
+  btnBuscar?.addEventListener('click', () => {
+    filtrarVentas(buscador.value.trim());
   });
 
   cargarVentas();

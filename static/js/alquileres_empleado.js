@@ -3,6 +3,7 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaAlquileres');
+  const btnBuscar = document.getElementById('btnBuscarAlquiler');
   const mensajeError = document.getElementById('errorAlquileres');
   const mensajeInfo = document.getElementById('mensajeAlquileres');
 
@@ -65,12 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
     mensajeInfo.style.display = 'block';
   }
 
-  buscador?.addEventListener('input', () => {
-    const texto = (buscador.value || '').toLowerCase();
+  function filtrarAlquileres(texto) {
+    const q = texto.toLowerCase();
     const filtrados = alquileresCargados.filter(a =>
-      (a.cliente_nombre || '').toLowerCase().includes(texto) ||
-      (a.dni_cuit_cuil || '').toLowerCase().includes(texto) ||
-      (a.numero_bano || '').toLowerCase().includes(texto)
+      (a.cliente_nombre || '').toLowerCase().includes(q) ||
+      (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (a.numero_bano || '').toLowerCase().includes(q)
     );
     mostrar(filtrados);
     if (filtrados.length === 0) {
@@ -78,6 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       mostrarMensaje('', '');
     }
+  }
+
+  buscador?.addEventListener('input', () => {
+    filtrarAlquileres(buscador.value.trim());
+  });
+  btnBuscar?.addEventListener('click', () => {
+    filtrarAlquileres(buscador.value.trim());
   });
 
   cargar();

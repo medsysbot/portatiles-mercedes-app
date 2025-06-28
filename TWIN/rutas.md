@@ -186,3 +186,13 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | POST | `/admin/api/empleados_ausencias/eliminar` | Elimina ausencias por ID | Sí |
 | GET | `/empleado/empleados_ausencias` | Vista de ausencias del empleado | Sí |
 | GET | `/empleado/api/empleados_ausencias` | Ausencias del empleado autenticado | Sí |
+
+## Buscadores revisados
+
+| Módulo | Archivo HTML | Archivo JS | Endpoint |
+|--------|--------------|-----------|----------|
+| Alquileres (Admin) | `templates/alquileres_admin.html` | `static/js/alquileres_admin.js` | `/admin/api/alquileres` |
+| Alquileres (Empleado) | `templates/alquileres_empleado.html` | `static/js/alquileres_empleado.js` | `/empleado/api/alquileres` |
+| Morosos | `templates/morosos_admin.html` | `static/js/morosos_admin.js` | `/admin/api/morosos` |
+| Ventas | `templates/ventas_admin.html` | `static/js/ventas_admin.js` | `/admin/api/ventas` |
+

@@ -168,49 +168,60 @@ body.panel-admin h1,
 body.panel-admin h2,
 body.panel-empleados h1,
 body.panel-empleados h2,
+body.panel-cliente h1,
+body.panel-cliente h2,
 body.panel-admin label,
-body.panel-empleados label {
+body.panel-empleados label,
+body.panel-cliente label {
   color: #fff !important;
 }
 /* === Unificación de tablas para todos los paneles === */
-table.dataTable, 
-.dataTables_wrapper .dataTables_paginate, 
-.dataTables_wrapper .dataTables_info, 
-.dataTables_wrapper .dataTables_length, 
+table.dataTable,
+.dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_length,
 .dataTables_wrapper .dataTables_filter {
-    background: #fff !important;
-    color: #222 !important;
+    background: transparent !important;
+    color: #fff !important;
     border-radius: 6px;
 }
 
-/* Letras blancas para paginación (fuera de la tabla) */
+/* Inputs y selects de DataTables */
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input[type="search"] {
+    background: transparent !important;
+    color: #fff !important;
+    border: none !important;
+}
+
+/* Paginador */
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     color: #fff !important;
     background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
 }
-
-/* Mejorar contraste de texto de paginación activo */
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    text-decoration: underline;
+    background: transparent !important;
+}
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    background: #007bff !important;
-    color: #fff !important;
-    border-radius: 3px;
+    text-decoration: underline;
+    background: transparent !important;
 }
 
-/* Fondo de las filas de la tabla */
-table.dataTable tbody tr {
-    background: #fff !important;
-    color: #222 !important;
-}
-
-/* Fondo cabecera */
-table.dataTable thead th {
-    background: #fff !important;
-    color: #222 !important;
-}
-
-/* Bordes suaves para integración con fondo */
+/* Filas y cabeceras */
 table.dataTable {
+    background: rgba(0,0,0,0.5) !important;
     border-radius: 6px;
     overflow: hidden;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+    box-shadow: none !important;
+}
+table.dataTable tbody tr {
+    background: rgba(0,0,0,0.4) !important;
+    color: #fff !important;
+}
+table.dataTable thead th {
+    background: rgba(0,0,0,0.6) !important;
+    color: #fff !important;
 }

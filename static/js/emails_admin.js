@@ -9,6 +9,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
   const btnCancelar = document.getElementById('btnCancelarForm');
+  const buscador = document.getElementById('busquedaEmail');
+  const btnBuscar = document.getElementById('btnBuscarEmail');
+  let emailsCargados = [];
 
   form.style.display = 'none';
 
@@ -24,24 +27,28 @@ document.addEventListener('DOMContentLoaded', () => {
     btnNuevo.style.display = 'inline-block';
   });
 
+  function mostrarEmails(lista) {
+    tabla.innerHTML = '';
+    lista.forEach(e => {
+      const fila = document.createElement('tr');
+      fila.innerHTML = `
+        <td>${e.fecha}</td>
+        <td>${e.remitente}</td>
+        <td>${e.asunto}</td>
+        <td>${(e.cuerpo || '').slice(0, 100)}</td>
+      `;
+      tabla.appendChild(fila);
+    });
+  }
+
   async function cargarEmails() {
     try {
       const resp = await fetch('/admin/api/emails', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error al consultar emails');
-      const datos = await resp.json();
-      tabla.innerHTML = '';
-      datos.forEach(e => {
-        const fila = document.createElement('tr');
-        fila.innerHTML = `
-          <td>${e.fecha}</td>
-          <td>${e.remitente}</td>
-          <td>${e.asunto}</td>
-          <td>${(e.cuerpo || '').slice(0, 100)}</td>
-        `;
-        tabla.appendChild(fila);
-      });
+      emailsCargados = await resp.json();
+      mostrarEmails(emailsCargados);
       errorDiv.classList.add('d-none');
     } catch (err) {
       console.error('Error cargando emails:', err);
@@ -49,6 +56,18 @@ document.addEventListener('DOMContentLoaded', () => {
       errorDiv.classList.remove('d-none');
     }
   }
+
+  function filtrarEmails() {
+    const q = (buscador?.value || '').toLowerCase();
+    const filtrados = emailsCargados.filter(e =>
+      (e.remitente || '').toLowerCase().includes(q) ||
+      (e.asunto || '').toLowerCase().includes(q)
+    );
+    mostrarEmails(filtrados);
+  }
+
+  buscador?.addEventListener('input', filtrarEmails);
+  btnBuscar?.addEventListener('click', filtrarEmails);
 
   form.addEventListener('submit', async ev => {
     ev.preventDefault();

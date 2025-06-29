@@ -48,6 +48,10 @@
   <div class="content-wrapper">
     <section class="content">
       <div class="container-fluid p-0">
+        <div class="text-center">
+          <img src="/app_publico/static/icons/usuario-port.png" alt="Empleados" class="mb-2" width="80">
+          <h1 class="titulo-panel mb-4 mt-0">Panel de empleados</h1>
+        </div>
         {% block content %}
         <!-- Panel resumen empleados – Portátiles Mercedes -->
         <div class="row">
@@ -93,10 +97,16 @@
             <div class="card h-100">
               <div class="card-header"><h3 class="card-title">Programación de limpiezas</h3></div>
               <div class="card-body">
+                <div class="buscador-container mb-2">
+                  <input type="search" placeholder="Buscar programación..." id="buscador-programacion">
+                  <button class="boton-buscar"><i class="fas fa-user"></i> Buscar</button>
+                  <button class="boton-eliminar">Eliminar</button>
+                </div>
                 <div class="table-responsive bg-light p-3">
-                  <table id="tablaProgramacion" class="table pm-tabla table-striped table-bordered">
+                  <table id="tablaProgramacion" class="table tabla-mercedes">
                     <thead>
                       <tr>
+                        <th><input type="checkbox"></th>
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Nº baño</th>

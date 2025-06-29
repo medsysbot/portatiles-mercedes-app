@@ -59,6 +59,10 @@
   <div class="content-wrapper pt-2">
     <section class="content">
       <div class="container-fluid">
+        <div class="text-center">
+          <img src="/app_publico/static/icons/logo-portatiles-2.png" alt="Administración" class="mb-2" width="80">
+          <h1 class="titulo-panel mb-4 mt-0">Panel de administración</h1>
+        </div>
         {% block content %}
 <div class="row">
   <div class="col-lg-3 col-6">
@@ -155,10 +159,16 @@
     <div class="card">
       <div class="card-header"><h3 class="card-title">Últimos emails</h3></div>
       <div class="card-body p-0">
+        <div class="buscador-container px-3">
+          <input type="search" placeholder="Buscar email..." id="buscador-emails">
+          <button class="boton-buscar"><i class="fas fa-user-cog"></i> Buscar</button>
+          <button class="boton-eliminar">Eliminar</button>
+        </div>
         <div class="table-responsive bg-light p-3">
-        <table class="table pm-tabla table-striped table-bordered">
+        <table class="table tabla-mercedes">
           <thead>
             <tr>
+              <th><input type="checkbox"></th>
               <th>Fecha y hora</th>
               <th>Asunto</th>
               <th>Destinatario</th>
@@ -169,6 +179,7 @@
             {% if ultimos_emails %}
               {% for e in ultimos_emails %}
               <tr>
+                <td><input type="checkbox"></td>
                 <td>{{ e.fecha }}</td>
                 <td>{{ e.asunto }}</td>
                 <td>{{ e.email_destino }}</td>
@@ -177,7 +188,7 @@
               {% endfor %}
             {% else %}
               <tr>
-                <td colspan="4" class="text-center">No hay correos registrados</td>
+                <td colspan="5" class="text-center">No hay correos registrados</td>
               </tr>
             {% endif %}
           </tbody>

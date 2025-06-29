@@ -8,25 +8,55 @@ body.panel-admin, body.panel-cliente, body.panel-empleados {
     background-color: transparent;
 }
 
-/* Tablas línea infinita */
-.table, .dataTable, .tabla-mercedes {
-    width: 100% !important;
-    font-family: 'Nunito', Arial, sans-serif !important;
-    background: rgba(0,0,0,0.7) !important;
-    color: #fff !important;
-    border-collapse: separate !important;
-    border-spacing: 0 !important;
-    border: none !important;
+/* Tablas unificadas */
+.tabla-mercedes {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    border-radius: 6px;
+    font-family: 'Nunito', Arial, sans-serif;
 }
-.table th, .table td, .dataTable th, .dataTable td {
-    border: none !important;
-    padding: 12px 16px !important;
+.tabla-mercedes th,
+.tabla-mercedes td {
+    border: none;
+    padding: 12px;
 }
-.table tr:nth-child(even), .dataTable tr:nth-child(even) {
-    background-color: rgba(0, 0, 0, 0.4) !important;
+.tabla-mercedes tr:nth-child(even) {
+    background-color: rgba(0,0,0,0.5);
 }
-.table tr:hover, .dataTable tr:hover {
-    background-color: rgba(32, 64, 96, 0.5) !important;
+
+/* Buscador y botones */
+.buscador-container {
+    background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+.buscador-container input[type="search"] {
+    flex: 1;
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    padding: 0.5rem;
+}
+.boton-buscar {
+    background: rgba(0,0,0,0.9);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.boton-eliminar {
+    background: #c0392b;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
 }
 
 /* Paginador gris oscuro semitransparente */
@@ -47,17 +77,6 @@ body.panel-admin, body.panel-cliente, body.panel-empleados {
 .d-flex.align-items-center .btn {
     margin-top: 0 !important;
 }
-
-/* Botones personalizados */
-.boton-buscar {
-    background: rgba(0,0,0,0.85) !important;
-    color: #fff !important;
-}
-.boton-eliminar, .btn-danger {
-    background: #c0392b !important;
-    color: #fff !important;
-}
-
 /* Ícono en botón buscar (FontAwesome lupa) */
 .boton-buscar::before {
     font-family: "Font Awesome 5 Free";

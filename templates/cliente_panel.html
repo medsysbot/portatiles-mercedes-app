@@ -1,6 +1,6 @@
 {% extends 'base_adminlte.html' %}
-{% block title %}Panel Clientes{% endblock %}
-{% block description %}Consulta de servicios y datos personales{% endblock %}
+{% block title %}Panel de clientes{% endblock %}
+{% block description %}Panel para que el cliente consulte sus servicios{% endblock %}
 {% block body_class %}hold-transition sidebar-mini layout-fixed panel-cliente{% endblock %}
 
 {% block head_extra %}
@@ -26,36 +26,28 @@
   <!-- Sidebar -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="/panel_cliente" class="brand-link text-center">
-      <span class="brand-text font-weight-light">Portátiles Mercedes</span>
+      <span class="brand-text">Portátiles Mercedes</span>
     </a>
     <div class="sidebar">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column">
           <li class="nav-item"><a href="#seccion-datos-personales" class="nav-link"><i class="nav-icon fas fa-id-card"></i><p>Datos personales</p></a></li>
           <li class="nav-item"><a href="#seccion-alquileres" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Alquileres</p></a></li>
-          <li class="nav-item"><a href="#seccion-facturas-pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice"></i><p>Facturas pendientes</p></a></li>
+          <!-- Agrega más secciones según tu proyecto -->
         </ul>
       </nav>
     </div>
   </aside>
 
-  <!-- Contenido principal -->
   <div class="content-wrapper">
     <section class="content">
       <div class="container-fluid">
-        <div class="text-center">
-          <img src="/app_publico/static/icons/registro-clientes.png" alt="Clientes" class="mb-2" width="80">
-          <h1 id="bienvenida" class="titulo-panel mb-4">Panel de clientes</h1>
+        <h1 class="titulo-panel">Panel de clientes</h1>
+
+        <div id="dashboard-resumen">
+          <!-- Resumen con gráficos o miniaturas -->
         </div>
 
-        <!-- Resumen dashboard -->
-        <div id="dashboard-resumen" class="mb-4">
-          <div class="row">
-            <div class="col-lg-3 col-sm-6"><div class="small-box bg-info"><div class="inner"><h3 id="dashFacturasCnt">0</h3><p>Facturas pendientes</p></div></div></div>
-          </div>
-        </div>
-
-        <!-- Sección alquileres -->
         <div id="seccion-alquileres" class="card mb-4">
           <div class="card-header"><h3 class="card-title">Mis baños alquilados</h3></div>
           <div class="card-body">
@@ -64,11 +56,18 @@
               <button class="boton-buscar"><i class="fas fa-toilet"></i> Buscar</button>
               <button class="boton-eliminar">Eliminar</button>
             </div>
-            <div class="table-responsive bg-light p-3">
+            <div class="table-responsive">
               <table id="tablaAlquileres" class="pm-tabla">
                 <thead>
                   <tr>
-                    <th><input type="checkbox"></th><th>N° Baño</th><th>Cliente</th><th>DNI</th><th>Dirección</th>
+                    <th><input type="checkbox" id="checkAll"></th>
+                    <th>N° Baño</th>
+                    <th>Cliente</th>
+                    <th>DNI/CUIT/CUIL</th>
+                    <th>Dirección</th>
+                    <th>Fecha inicio</th>
+                    <th>Fecha fin</th>
+                    <th>Observaciones</th>
                   </tr>
                 </thead>
                 <tbody></tbody>
@@ -77,34 +76,13 @@
           </div>
         </div>
 
-        <!-- Datos personales -->
         <div id="seccion-datos-personales" class="card mb-4">
           <div class="card-header"><h3 class="card-title">Datos personales</h3></div>
           <div class="card-body">
-            <form id="formDatos" onsubmit="guardarDatos(event)">
-              <div class="form-group"><label>Nombre</label><input type="text" id="nombre" class="form-control"></div>
+            <form id="formDatos">
+              <!-- Tus campos del formulario -->
               <button type="submit" class="btn btn-primary">Guardar</button>
             </form>
-          </div>
-        </div>
-
-        <!-- Facturas pendientes -->
-        <div id="seccion-facturas-pendientes" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Facturas pendientes</h3></div>
-          <div class="card-body">
-            <div class="botones-acciones">
-              <input type="text" id="busquedaFacturas" class="form-control" placeholder="Buscar factura...">
-              <button class="boton-buscar"><i class="fas fa-file-invoice"></i> Buscar</button>
-              <button class="boton-eliminar">Eliminar</button>
-            </div>
-            <div class="table-responsive bg-light p-3">
-              <table id="tablaFacturasPendientes" class="pm-tabla">
-                <thead>
-                  <tr><th><input type="checkbox"></th><th>Fecha</th><th>Nº Factura</th><th>Cliente</th></tr>
-                </thead>
-                <tbody></tbody>
-              </table>
-            </div>
           </div>
         </div>
 
@@ -118,4 +96,3 @@
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/cliente_panel.js"></script>
 {% endblock %}
-

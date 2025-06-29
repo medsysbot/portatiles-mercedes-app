@@ -17,3 +17,8 @@
 background: url('/app_publico/static/imagenes/portada-index.png');
 ```
 
+
+## CSS global de tablas
+El archivo `/static/css/style.css` centraliza el estilo de las tablas.
+Se aplican las clases `.table`, `.dataTable` y `.table-responsive.bg-light` en los
+paneles de clientes y empleados para asegurar la misma visual.

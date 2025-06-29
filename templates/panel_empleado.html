@@ -97,16 +97,16 @@
             <div class="card h-100">
               <div class="card-header"><h3 class="card-title">Programación de limpiezas</h3></div>
               <div class="card-body">
-                <div class="buscador-container mb-2">
-                  <input type="search" placeholder="Buscar programación..." id="buscador-programacion">
-                  <button class="boton-buscar"><i class="fas fa-user"></i> Buscar</button>
+                <div class="botones-acciones">
+                  <input type="text" class="form-control" placeholder="Buscar programación..." id="buscador-programacion">
+                  <button class="boton-buscar"><i class="fas fa-search"></i> Buscar</button>
                   <button class="boton-eliminar">Eliminar</button>
                 </div>
                 <div class="table-responsive bg-light p-3">
-                  <table id="tablaProgramacion" class="table tabla-mercedes">
+                  <table id="tablaProgramacion" class="pm-tabla">
                     <thead>
                       <tr>
-                        <th><input type="checkbox"></th>
+                        <th><input type="checkbox" id="checkAll"></th>
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Nº baño</th>

@@ -1,737 +1,140 @@
-/*
-Archivo: cliente_panel.js
-Descripción: Lógica del panel del cliente
-Acceso: Privado
-Proyecto: Portátiles Mercedes
-Última modificación: 2025-06-15
-*/
-// ==== Eventos principales ====
-function handleUnauthorized() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('rol');
-    localStorage.removeItem('nombre');
-    window.location.href = '/login';
+// Archivo: cliente_panel.js
+// Proyecto: Portátiles Mercedes
+
+// Función para limpiar credenciales
+function limpiarCredenciales() {
+  localStorage.clear();
+  window.location.href = '/login';
 }
 
+// Peticiones con autorización
 async function fetchConAuth(url, options = {}) {
-    const resp = await fetch(url, {
-        ...options,
-        headers: {
-            ...options.headers,
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
-        }
-    });
-    if (resp.status === 401) {
-        handleUnauthorized();
-        throw new Error('Unauthorized');
-    }
-    return resp;
+  const token = localStorage.getItem('access_token');
+  const resp = await fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  if (resp.status === 401) {
+    limpiarCredenciales();
+    throw new Error('Unauthorized');
+  }
+  return resp;
 }
 
-let alquileresCargados = [];
-let facturasCargadas = [];
-let ventasCargadas = [];
-let limpiezasCargadas = [];
-let comprobantesCargados = [];
-let programacionCargada = [];
-let tablaAlquileres;
-let tablaFacturas;
-let tablaVentas;
-let tablaLimpiezas;
-let tablaComprobantes;
-let tablaProgramacion;
-
+// Inicialización de tablas DataTables
+let tablas = {};
 function initTablas() {
-    tablaAlquileres = $('#tablaAlquileres').DataTable({
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-        paging: true,
-        searching: false,
-        ordering: true,
-        columns: [
-            { data: 'numero_bano' },
-            { data: 'cliente_nombre' },
-            { data: 'dni_cuit_cuil' },
-            { data: 'direccion' },
-            { data: 'fecha_inicio' },
-            { data: 'fecha_fin' },
-            { data: 'observaciones' }
-        ]
-    });
-
-    tablaFacturas = $('#tablaFacturasPendientes').DataTable({
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-        paging: true,
-        searching: false,
-        ordering: true,
-        columns: [
-            { data: 'fecha' },
-            { data: 'numero_factura' },
-            { data: 'dni_cuit_cuil' },
-            { data: 'razon_social' },
-            { data: 'nombre_cliente' },
-            { data: 'monto_adeudado' }
-        ]
-    });
-
-    tablaVentas = $('#tablaVentasCliente').DataTable({
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-        paging: true,
-        searching: false,
-        ordering: true,
-        columns: [
-            { data: 'fecha_operacion' },
-            { data: 'tipo_bano' },
-            { data: 'dni_cuit_cuil' },
-            { data: 'nombre_cliente' },
-            { data: 'forma_pago' },
-            { data: 'observaciones' }
-        ]
-    });
-
-    tablaLimpiezas = $('#tablaServicios').DataTable({
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-        paging: true,
-        searching: false,
-        ordering: true,
-        columns: [
-            { data: 'fecha_servicio' },
-            { data: 'numero_bano' },
-            { data: 'dni_cuit_cuil' },
-            { data: 'nombre_cliente' },
-            { data: 'tipo_servicio' },
-            { data: 'remito_url', render: data => `<a href="${data}" target="_blank">Ver</a>` },
-            { data: 'observaciones' }
-        ]
-    });
-
-    tablaProgramacion = $('#tablaProgramacion').DataTable({
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-        paging: true,
-        searching: false,
-        ordering: true,
-        columns: [
-            { data: 'fecha_limpieza' },
-            { data: 'hora_aprox' },
-            { data: 'numero_bano' },
-            { data: 'direccion' }
-        ]
-    });
-
-    tablaComprobantes = $('#tablaComprobantes').DataTable({
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-        paging: true,
-        searching: false,
-        ordering: true,
-        columns: [
-            { data: 'id', render: id => `<input type="checkbox" class="seleccion-comp" value="${id}">`, orderable: false },
-            { data: 'nombre_cliente' },
-            { data: 'dni_cuit_cuil' },
-            { data: 'numero_factura' },
-            { data: 'comprobante_url', render: d => `<a href="${d}" target="_blank">Ver</a>` },
-            { data: 'fecha_envio' }
-        ]
-    });
+  const opciones = {
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+  };
+  
+  tablas = {
+    alquileres: $('#tablaAlquileres').DataTable(opciones),
+    facturas: $('#tablaFacturasPendientes').DataTable(opciones),
+    ventas: $('#tablaVentasCliente').DataTable(opciones),
+    limpiezas: $('#tablaServicios').DataTable(opciones),
+    programacion: $('#tablaProgramacion').DataTable(opciones),
+    comprobantes: $('#tablaComprobantes').DataTable({
+      ...opciones,
+      columnDefs: [{ targets: 0, orderable: false }],
+    }),
+  };
 }
 
+// Funciones para cargar datos desde API y renderizar tablas
+async function cargarDatos(url, tabla, errorId, mensajeVacio) {
+  try {
+    const resp = await fetchConAuth(url);
+    if (!resp.ok) throw new Error('Error en petición');
+    const datos = await resp.json();
+    tabla.clear().rows.add(datos).draw();
+    if (datos.length === 0) {
+      document.getElementById(mensajeVacio).style.display = 'block';
+    } else {
+      document.getElementById(mensajeVacio).style.display = 'none';
+    }
+  } catch (error) {
+    console.error(`Error cargando ${url}`, error);
+    document.getElementById(errorId).style.display = 'block';
+  }
+}
+
+// Función para inicializar eventos de filtrado rápido
+function initBusquedaRapida(inputId, btnId, tablaKey, datos) {
+  document.getElementById(btnId).addEventListener('click', () => {
+    const q = document.getElementById(inputId).value.toLowerCase();
+    const filtrados = datos.filter(item =>
+      Object.values(item).some(val => String(val).toLowerCase().includes(q))
+    );
+    tablas[tablaKey].clear().rows.add(filtrados).draw();
+  });
+}
+
+// DOMContentLoaded
 document.addEventListener('DOMContentLoaded', async () => {
-    const token = localStorage.getItem('access_token');
-    if (!token) {
-        window.location.href = '/login';
-        return;
-    }
+  const token = localStorage.getItem('access_token');
+  if (!token) limpiarCredenciales();
 
-    try {
-        const ver = await fetch('/verificar_token', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ token: token })
-        });
-        if (!ver.ok) throw new Error('Token inválido');
-        const info = await ver.json();
-        if (info.status !== 'ok' || info.rol !== 'cliente') {
-            handleUnauthorized();
-            return;
-        }
-        const email = info.email;
-        window.emailCliente = email;
-        const datosCliRes = await fetch(`/info_datos_cliente?email=${encodeURIComponent(email)}`);
-        let nombre = email;
-        if (datosCliRes.ok) {
-            const datosCli = await datosCliRes.json();
-            nombre = datosCli.nombre || email;
-            window.dniCliente = datosCli.dni_cuit_cuil;
-            cargarDatosPersonales(email, datosCli);
-        } else {
-            cargarDatosPersonales(email);
-        }
-        document.getElementById('bienvenida').textContent = 'Panel de clientes';
-        initTablas();
-        cargarAlquileres(window.dniCliente);
-        cargarFacturas(window.dniCliente);
-        cargarVentas(window.dniCliente);
-        cargarDashboardDatos(window.dniCliente, email);
-        cargarLimpiezas(window.dniCliente);
-        cargarProgramacion();
-        cargarComprobantes(window.dniCliente);
-        cargarEmailsCliente(email);
-        prepararListenersFormulario();
-        initSecciones();
+  initTablas();
 
-        const buscAlq = document.getElementById('busquedaAlquileres');
-        const btnBuscAlq = document.getElementById('btnBuscarAlquiler');
-        function filtrarAlquileres() {
-            const texto = (buscAlq.value || '').toLowerCase();
-            const filtrados = alquileresCargados.filter(a =>
-                (a.cliente_nombre || '').toLowerCase().includes(texto) ||
-                (a.dni_cuit_cuil || '').toLowerCase().includes(texto) ||
-                (a.numero_bano || '').toLowerCase().includes(texto)
-            );
-            mostrarAlquileres(filtrados);
-            if (filtrados.length === 0) {
-                mostrarMensaje('mensajeAlquileres', 'No hay alquileres registrados', '');
-            } else {
-                mostrarMensaje('mensajeAlquileres', '', '');
-            }
-        }
-        buscAlq?.addEventListener('input', filtrarAlquileres);
-        btnBuscAlq?.addEventListener('click', filtrarAlquileres);
-
-        const buscFact = document.getElementById('busquedaFacturas');
-        const btnBuscFact = document.getElementById('btnBuscarFacturas');
-        function filtrarFacturas() {
-            const q = (buscFact.value || '').toLowerCase();
-            const filtradas = facturasCargadas.filter(f => (f.dni_cuit_cuil || '').toLowerCase().includes(q));
-            mostrarFacturas(filtradas);
-            if (filtradas.length === 0) {
-                mostrarMensaje('mensajeFacturas', 'No hay facturas registradas', '');
-            } else {
-                mostrarMensaje('mensajeFacturas', '', '');
-            }
-        }
-        buscFact?.addEventListener('input', filtrarFacturas);
-        btnBuscFact?.addEventListener('click', filtrarFacturas);
-
-        const buscVentas = document.getElementById('busquedaVentas');
-        const btnBuscVentas = document.getElementById('btnBuscarVentas');
-        function filtrarVentas() {
-            const texto = (buscVentas.value || '').toLowerCase();
-            const filtrados = ventasCargadas.filter(v =>
-                (v.nombre_cliente || '').toLowerCase().includes(texto) ||
-                (v.dni_cuit_cuil || '').toLowerCase().includes(texto)
-            );
-            mostrarVentas(filtrados);
-            if (filtrados.length === 0) {
-                mostrarMensaje('mensajeVentas', 'No hay ventas registradas', '');
-            } else {
-                mostrarMensaje('mensajeVentas', '', '');
-            }
-        }
-        buscVentas?.addEventListener('input', filtrarVentas);
-        btnBuscVentas?.addEventListener('click', filtrarVentas);
-
-        const buscServicios = document.getElementById('busquedaServicios');
-        const btnBuscServicios = document.getElementById('btnBuscarServicios');
-        function filtrarServicios() {
-            const texto = (buscServicios.value || '').toLowerCase();
-            const filtrados = limpiezasCargadas.filter(s =>
-                (s.nombre_cliente || '').toLowerCase().includes(texto) ||
-                (s.dni_cuit_cuil || '').toLowerCase().includes(texto) ||
-                (s.numero_bano || '').toLowerCase().includes(texto)
-            );
-            mostrarLimpiezas(filtrados);
-            if (filtrados.length === 0) {
-                mostrarMensaje('mensajeServicios', 'No hay servicios registrados', '');
-            } else {
-                mostrarMensaje('mensajeServicios', '', '');
-            }
-        }
-        buscServicios?.addEventListener('input', filtrarServicios);
-        btnBuscServicios?.addEventListener('click', filtrarServicios);
-    } catch (err) {
-        if (err.message === 'Unauthorized' || err.message === 'Token inválido') {
-            handleUnauthorized();
-        } else {
-            console.error(err);
-        }
-    }
-});
-// ==== Funciones auxiliares ====
-
-function mostrarMensaje(id, texto, tipo) {
-    const cont = document.getElementById(id);
-    if (!cont) return;
-    if (!texto) {
-        cont.style.display = 'none';
-        cont.textContent = '';
-        cont.classList.remove('alert-danger');
-        return;
-    }
-    cont.textContent = texto;
-    cont.classList.toggle('alert-danger', tipo === 'danger');
-    cont.style.display = 'block';
-}
-
-async function cargarAlquileres(dni_cuit_cuil) {
-    const mensajeError = document.getElementById('errorAlquileres');
-    try {
-        const resp = await fetchConAuth(`/alquileres_cliente?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
-        if (!resp.ok) throw new Error('Error consultando');
-        alquileresCargados = await resp.json();
-        mostrarAlquileres(alquileresCargados);
-        mensajeError?.classList.add('d-none');
-        if (alquileresCargados.length === 0) {
-            mostrarMensaje('mensajeAlquileres', 'No hay alquileres registrados', '');
-        } else {
-            mostrarMensaje('mensajeAlquileres', '', '');
-        }
-    } catch (err) {
-        console.error('Error al cargar alquileres:', err);
-        if (mensajeError) {
-            mensajeError.textContent = 'No se pudieron cargar los alquileres.';
-            mensajeError.classList.remove('d-none');
-        }
-    }
-}
-
-function mostrarAlquileres(lista) {
-    tablaAlquileres.clear();
-    tablaAlquileres.rows.add(lista).draw();
-}
-
-async function cargarFacturas(dni_cuit_cuil) {
-    const mensajeError = document.getElementById('errorFacturas');
-    try {
-        const resp = await fetchConAuth(`/facturas_pendientes_cliente?dni=${encodeURIComponent(dni_cuit_cuil)}`);
-        if (!resp.ok) throw new Error('Error consultando');
-        facturasCargadas = await resp.json();
-        mostrarFacturas(facturasCargadas);
-        mensajeError?.classList.add('d-none');
-        if (facturasCargadas.length === 0) {
-            mostrarMensaje('mensajeFacturas', 'No hay facturas registradas', '');
-        } else {
-            mostrarMensaje('mensajeFacturas', '', '');
-        }
-    } catch (err) {
-        console.error('Error cargando facturas:', err);
-        if (mensajeError) {
-            mensajeError.textContent = 'No se pudo cargar el listado.';
-            mensajeError.classList.remove('d-none');
-        }
-    }
-}
-
-function mostrarFacturas(lista) {
-    tablaFacturas.clear();
-    tablaFacturas.rows.add(lista).draw();
-}
-
-async function cargarVentas(dni_cuit_cuil) {
-    const mensajeError = document.getElementById('errorVentas');
-    try {
-        const resp = await fetchConAuth(`/ventas_cliente?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
-        if (!resp.ok) throw new Error('Error consultando');
-        ventasCargadas = await resp.json();
-        mostrarVentas(ventasCargadas);
-        mensajeError?.classList.add('d-none');
-        if (ventasCargadas.length === 0) {
-            mostrarMensaje('mensajeVentas', 'No hay ventas registradas', '');
-        } else {
-            mostrarMensaje('mensajeVentas', '', '');
-        }
-    } catch (err) {
-        console.error('Error al cargar ventas:', err);
-        if (mensajeError) {
-            mensajeError.textContent = 'No se pudo cargar el listado.';
-            mensajeError.classList.remove('d-none');
-        }
-    }
-}
-
-function mostrarVentas(lista) {
-    tablaVentas.clear();
-    tablaVentas.rows.add(lista).draw();
-}
-
-async function cargarLimpiezas(dni_cuit_cuil) {
-    const mensajeError = document.getElementById('errorServicios');
-    try {
-        const resp = await fetchConAuth(`/limpiezas_cliente?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
-        if (!resp.ok) throw new Error('Error consultando');
-        limpiezasCargadas = await resp.json();
-        mostrarLimpiezas(limpiezasCargadas);
-        mensajeError?.classList.add('d-none');
-        if (limpiezasCargadas.length === 0) {
-            mostrarMensaje('mensajeServicios', 'No hay servicios registrados', '');
-        } else {
-            mostrarMensaje('mensajeServicios', '', '');
-        }
-    } catch (err) {
-        console.error('Error al cargar servicios:', err);
-        if (mensajeError) {
-            mensajeError.textContent = 'No se pudo cargar el listado.';
-            mensajeError.classList.remove('d-none');
-        }
-    }
-}
-
-function mostrarLimpiezas(lista) {
-    tablaLimpiezas.clear();
-    tablaLimpiezas.rows.add(lista).draw();
-}
-
-async function cargarProgramacion() {
-    try {
-        const resp = await fetchConAuth('/cliente/api/limpiezas_programadas');
-        if (!resp.ok) throw new Error('Error consultando');
-        programacionCargada = await resp.json();
-        mostrarProgramacion(programacionCargada);
-    } catch (err) {
-        console.error('Error al cargar programacion:', err);
-    }
-}
-
-function mostrarProgramacion(lista) {
-    tablaProgramacion.clear();
-    tablaProgramacion.rows.add(lista).draw();
-}
-
-async function cargarComprobantes(dni_cuit_cuil) {
-    const contError = document.getElementById('msgComprobante');
-    try {
-        const resp = await fetchConAuth(`/api/comprobantes_pago?dni_cuit_cuil=${encodeURIComponent(dni_cuit_cuil)}`);
-        if (!resp.ok) throw new Error('Error consultando');
-        comprobantesCargados = await resp.json();
-        mostrarComprobantes(comprobantesCargados);
-        contError.classList.add('d-none');
-    } catch (err) {
-        console.error('Error cargando comprobantes:', err);
-        contError.textContent = 'No se pudo cargar el listado';
-        contError.classList.remove('d-none');
-    }
-}
-
-function mostrarComprobantes(lista) {
-    tablaComprobantes.clear();
-    tablaComprobantes.rows.add(lista).draw();
-}
-
-function renderEmails(lista) {
-    const tbody = document.querySelector('#tablaEmails tbody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    lista.forEach(e => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `<td>${e.fecha || ''}</td>` +
-                       `<td>${e.asunto || ''}</td>` +
-                       `<td>${e.estado || ''}</td>`;
-        tbody.appendChild(tr);
+  try {
+    const ver = await fetch('/verificar_token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
     });
-}
+    if (!ver.ok) limpiarCredenciales();
+    const info = await ver.json();
+    if (info.rol !== 'cliente') limpiarCredenciales();
 
-async function cargarEmailsCliente(email) {
-    try {
-        const resp = await fetchConAuth(`/emails_cliente?email=${encodeURIComponent(email)}`);
-        if (!resp.ok) throw new Error('Error');
-        const datos = await resp.json();
-        renderEmails(datos);
-    } catch (err) {
-        console.error('Error cargando emails:', err);
-    }
-}
+    const email = info.email;
+    const datosCliRes = await fetch(`/info_datos_cliente?email=${email}`);
+    const datosCli = datosCliRes.ok ? await datosCliRes.json() : {};
+    const dni = datosCli.dni_cuit_cuil;
 
-
-
-let datosOriginales = null;
-
-async function cargarDatosPersonales(email, datos = null) {
-    try {
-        let info = datos;
-        if (!info) {
-            const resp = await fetch(`/info_datos_cliente?email=${encodeURIComponent(email)}`);
-            if (!resp.ok) {
-                console.warn('No se encontraron datos personales');
-                return;
-            }
-            info = await resp.json();
-        }
-
-        datosOriginales = info;
-        document.getElementById("nombre").value = info.nombre || "";
-        document.getElementById("apellido").value = info.apellido || "";
-        document.getElementById("direccion").value = info.direccion || "";
-        document.getElementById("telefono").value = info.telefono || "";
-        document.getElementById("dni_cuit_cuil").value = info.dni_cuit_cuil || "";
-        document.getElementById("razon_social").value = info.razon_social || "";
-        document.getElementById("email").value = info.email || "";
-
-        document.getElementById("botonGuardarDatos").disabled = true;
-    } catch (err) {
-        console.error("\u274c Error cargando datos:", err);
-        alert('No se pudieron cargar sus datos personales');
-    }
-}
-
-function prepararListenersFormulario() {
-    const inputs = ["nombre", "apellido", "direccion", "telefono", "dni_cuit_cuil", "razon_social", "email"];
-    inputs.forEach(id => {
-        const el = document.getElementById(id);
-        if (el) {
-            el.addEventListener('input', () => {
-                document.getElementById('botonGuardarDatos').disabled = !hayCambios();
-            });
-        }
+    // Cargar datos personales automáticamente
+    Object.keys(datosCli).forEach(key => {
+      if (document.getElementById(key)) {
+        document.getElementById(key).value = datosCli[key];
+      }
     });
-}
 
-function hayCambios() {
-    if (!datosOriginales) return true;
-    const campos = ["nombre", "apellido", "direccion", "telefono", "dni_cuit_cuil", "razon_social", "email"];
-    return campos.some(c => (datosOriginales[c] || "") !== document.getElementById(c).value);
-}
+    // Cargar datos para tablas
+    cargarDatos(`/alquileres_cliente?dni_cuit_cuil=${dni}`, tablas.alquileres, 'errorAlquileres', 'mensajeAlquileres');
+    cargarDatos(`/facturas_pendientes_cliente?dni=${dni}`, tablas.facturas, 'errorFacturas', 'mensajeFacturas');
+    cargarDatos(`/ventas_cliente?dni_cuit_cuil=${dni}`, tablas.ventas, 'errorVentas', 'mensajeVentas');
+    cargarDatos(`/limpiezas_cliente?dni_cuit_cuil=${dni}`, tablas.limpiezas, 'errorServicios', 'mensajeServicios');
+    cargarDatos('/cliente/api/limpiezas_programadas', tablas.programacion, '', '');
+    cargarDatos(`/api/comprobantes_pago?dni_cuit_cuil=${dni}`, tablas.comprobantes, 'msgComprobante', '');
 
-function mostrarMensajeFormulario(mensaje, tipo) {
-    const contenedor = document.getElementById('mensajeFormDatos');
-    if (!contenedor) return;
-    contenedor.textContent = mensaje;
-    contenedor.classList.remove('alert-success', 'alert-danger');
-    contenedor.classList.add(tipo === 'success' ? 'alert-success' : 'alert-danger');
-    contenedor.style.display = 'block';
-}
+    // Inicialización búsqueda rápida (ejemplo para alquileres)
+    let alquileresData = (await fetchConAuth(`/alquileres_cliente?dni_cuit_cuil=${dni}`)).json();
+    initBusquedaRapida('busquedaAlquileres', 'btnBuscarAlquiler', 'alquileres', await alquileresData);
 
-async function guardarDatos(ev) {
-    if (ev) ev.preventDefault();
-    const datos = {
-        dni_cuit_cuil: document.getElementById("dni_cuit_cuil").value,
-        nombre: document.getElementById("nombre").value,
-        apellido: document.getElementById("apellido").value,
-        direccion: document.getElementById("direccion").value,
-        telefono: document.getElementById("telefono").value,
-        razon_social: document.getElementById("razon_social").value,
-        email: document.getElementById("email").value
-    };
-
-    const obligatorios = ['dni_cuit_cuil','nombre','apellido','direccion','telefono','email'];
-    for (const campo of obligatorios) {
-        if (!datos[campo]) {
-            alert('Completa el campo ' + campo);
-            return;
-        }
-    }
-
-    const response = await fetchConAuth('/guardar_datos_cliente', {
+    // Formulario guardar datos personales
+    document.getElementById('formDatos').addEventListener('submit', async e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const datos = Object.fromEntries(formData.entries());
+      const resp = await fetchConAuth('/guardar_datos_cliente', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos),
+      });
+      const resultado = await resp.json();
+      alert(resultado.mensaje || 'Datos actualizados correctamente.');
     });
 
-    const resultado = await response.json();
-    if (response.ok && resultado.mensaje) {
-        mostrarMensajeFormulario(resultado.mensaje, 'success');
-        datosOriginales = datos;
-        document.getElementById('botonGuardarDatos').disabled = true;
-    } else {
-        mostrarMensajeFormulario(resultado.error || 'Error al guardar datos', 'danger');
-    }
-}
+  } catch (err) {
+    console.error(err);
+    limpiarCredenciales();
+  }
 
-document.getElementById('formReporte').addEventListener('submit', enviarReporte);
-document.getElementById('formComprobante').addEventListener('submit', subirComprobante);
-const btnEliminarComprobantes = document.getElementById('btnEliminarComprobantes');
-
-function actualizarBotonComprobantes() {
-    const checks = document.querySelectorAll('#tablaComprobantes tbody .seleccion-comp:checked');
-    if (btnEliminarComprobantes) btnEliminarComprobantes.disabled = checks.length === 0;
-}
-
-$('#tablaComprobantes tbody').on('change', '.seleccion-comp', actualizarBotonComprobantes);
-
-btnEliminarComprobantes?.addEventListener('click', async () => {
-    const ids = Array.from(document.querySelectorAll('#tablaComprobantes tbody .seleccion-comp:checked')).map(c => c.value);
-    if (!ids.length || !confirm('¿Borrar comprobantes seleccionados?')) return;
-    try {
-        for (const id of ids) {
-            const resp = await fetch(`/api/comprobantes_pago/${id}?dni_cuit_cuil=${encodeURIComponent(window.dniCliente)}`, {
-                method: 'DELETE',
-                headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
-            });
-            if (!resp.ok) throw new Error('Error al borrar');
-        }
-        cargarComprobantes(window.dniCliente);
-    } catch (err) {
-        alert('No se pudieron borrar: ' + err.message);
-    } finally {
-        if (btnEliminarComprobantes) btnEliminarComprobantes.disabled = true;
-    }
+  document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
 });
-document.getElementById("formEmailCliente").addEventListener("submit", async function(e) {
-    e.preventDefault();
-    const destinatario = document.getElementById("destinatario").value.trim();
-    const asunto = document.getElementById("asunto").value.trim();
-    const mensaje = document.getElementById("mensaje").value.trim();
-    if (!asunto || !mensaje) {
-        document.getElementById("feedbackEmail").innerHTML = '<div class="alert alert-warning">Completa todos los campos.</div>';
-        return;
-    }
-    try {
-        let res = await fetch("/api/enviar_email_cliente", {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({destinatario, asunto, mensaje})
-        });
-        let data = await res.json();
-        if (res.ok) {
-            document.getElementById("feedbackEmail").innerHTML = '<div class="alert alert-success">¡Mensaje enviado!</div>';
-            document.getElementById("formEmailCliente").reset();
-        } else {
-            throw new Error(data.detail || "Error desconocido");
-        }
-    } catch (err) {
-        document.getElementById("feedbackEmail").innerHTML = '<div class="alert alert-danger">Error al enviar: ' + err.message + '</div>';
-    }
-});
-
-async function enviarReporte(ev) {
-    ev.preventDefault();
-    const datos = {
-        fecha: document.getElementById('fechaReporte').value,
-        nombre_persona: document.getElementById('nombrePersonaReporte').value,
-        motivo: document.getElementById('motivoReporte').value,
-        observaciones: document.getElementById('obsReporte').value
-    };
-    const cont = document.getElementById('msgReporte');
-    try {
-        const resp = await fetchConAuth('/cliente/reporte', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(datos)
-        });
-        if (resp.ok) {
-            cont.textContent = 'Reporte enviado correctamente';
-            cont.className = 'alert alert-success';
-            ev.target.reset();
-        } else {
-            const r = await resp.json();
-            cont.textContent = r.detail || 'Error al enviar reporte';
-            cont.className = 'alert alert-danger';
-        }
-    } catch (error) {
-        cont.textContent = 'Error de conexión al enviar el reporte';
-        cont.className = 'alert alert-danger';
-    }
-    cont.style.display = 'block';
-}
-
-async function subirComprobante(ev) {
-    ev.preventDefault();
-    const form = ev.target;
-    const formData = new FormData(form);
-    const msg = document.getElementById('msgComprobante');
-    try {
-        const resp = await fetch('/api/comprobantes_pago', {
-            method: 'POST',
-            headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') },
-            body: formData
-        });
-        const data = await resp.json();
-        if (resp.ok) {
-            msg.textContent = 'Comprobante cargado correctamente';
-            msg.className = 'alert alert-success';
-            form.reset();
-            cargarComprobantes(formData.get('dni_cuit_cuil'));
-        } else {
-            throw new Error(data.detail || 'Error');
-        }
-    } catch (err) {
-        msg.textContent = err.message;
-        msg.className = 'alert alert-danger';
-    }
-    msg.style.display = 'block';
-}
-
-
-
-async function cargarDashboardDatos(dni, email){
-    try{
-        const resp = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(email)}`);
-        if(!resp.ok) throw new Error("Error");
-        const data = await resp.json();
-        actualizarDashboard(data);
-    }catch(err){
-        console.error("Error cargando dashboard:", err);
-    }
-}
-
-function actualizarDashboard(data){
-    const f = data.facturas_pendientes || {cantidad:0,monto_total:0};
-    document.getElementById("dashFacturasCnt").textContent = f.cantidad;
-    document.getElementById("dashFacturasMonto").textContent = "$" + f.monto_total;
-    const estado = document.getElementById("dashMorosidad");
-    estado.textContent = data.moroso ? "Moroso" : "Al d\u00eda";
-    const box = document.getElementById("boxMorosidad");
-    if(data.moroso){
-        box.classList.remove("bg-success");
-        box.classList.add("bg-danger");
-    } else {
-        box.classList.add("bg-success");
-        box.classList.remove("bg-danger");
-    }
-    document.getElementById("dashAlquileres").textContent = data.alquileres || 0;
-    if(data.ultimo_comprobante){
-        document.getElementById("comprobanteThumb").src = data.ultimo_comprobante.comprobante_url;
-        document.getElementById("comprobanteFecha").textContent = data.ultimo_comprobante.fecha_envio || "";
-        document.getElementById("comprobanteThumb").classList.remove("d-none");
-        document.getElementById("comprobanteSinDatos").classList.add("d-none");
-    } else {
-        document.getElementById("comprobanteThumb").classList.add("d-none");
-        document.getElementById("comprobanteSinDatos").classList.remove("d-none");
-        document.getElementById("comprobanteFecha").textContent = "";
-    }
-    if(data.proxima_limpieza){
-        document.getElementById("limpiezaFecha").textContent = data.proxima_limpieza.fecha_servicio;
-        document.getElementById("limpiezaBano").textContent = `Ba\u00f1o ${data.proxima_limpieza.numero_bano}`;
-    } else {
-        document.getElementById("limpiezaFecha").textContent = "-";
-        document.getElementById("limpiezaBano").textContent = "Pr\u00f3xima limpieza";
-    }
-    if(data.emails){
-        renderEmails(data.emails);
-    }
-}
-
-function initSecciones(){
-    const sections = Array.from(document.querySelectorAll('#dashboard-resumen,[id^="seccion-"]'));
-    if(!sections.length) return;
-    const menuLinks = document.querySelectorAll('.nav-sidebar .nav-link[href^="#seccion-"]');
-    const allLinks = document.querySelectorAll('a[href^="#seccion-"]');
-    function mostrar(id){
-        sections.forEach(sec => {
-            sec.style.display = sec.id === id ? '' : 'none';
-        });
-        menuLinks.forEach(link => {
-            link.classList.toggle('active', link.getAttribute('href') === '#' + id);
-        });
-        const heading = document.getElementById('bienvenida');
-        const link = document.querySelector('a[href="#' + id + '"]');
-        if(heading){
-            if(link && link.textContent){
-                heading.textContent = link.textContent.trim();
-            } else if(id === 'dashboard-resumen'){
-                heading.textContent = 'Panel de clientes';
-            }
-        }
-    }
-    allLinks.forEach(link => {
-        link.addEventListener('click', ev => {
-            ev.preventDefault();
-            const id = link.getAttribute('href').substring(1);
-            mostrar(id);
-        });
-    });
-    mostrar(sections[0].id);
-}
-

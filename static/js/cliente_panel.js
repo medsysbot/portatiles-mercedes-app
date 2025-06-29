@@ -181,7 +181,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         initSecciones();
 
         const buscAlq = document.getElementById('busquedaAlquileres');
-        buscAlq?.addEventListener('input', () => {
+        const btnBuscAlq = document.getElementById('btnBuscarAlquiler');
+        function filtrarAlquileres() {
             const texto = (buscAlq.value || '').toLowerCase();
             const filtrados = alquileresCargados.filter(a =>
                 (a.cliente_nombre || '').toLowerCase().includes(texto) ||
@@ -194,7 +195,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 mostrarMensaje('mensajeAlquileres', '', '');
             }
-        });
+        }
+        buscAlq?.addEventListener('input', filtrarAlquileres);
+        btnBuscAlq?.addEventListener('click', filtrarAlquileres);
 
         const buscFact = document.getElementById('busquedaFacturas');
         const btnBuscFact = document.getElementById('btnBuscarFacturas');
@@ -212,7 +215,8 @@ document.addEventListener('DOMContentLoaded', async () => {
         btnBuscFact?.addEventListener('click', filtrarFacturas);
 
         const buscVentas = document.getElementById('busquedaVentas');
-        buscVentas?.addEventListener('input', () => {
+        const btnBuscVentas = document.getElementById('btnBuscarVentas');
+        function filtrarVentas() {
             const texto = (buscVentas.value || '').toLowerCase();
             const filtrados = ventasCargadas.filter(v =>
                 (v.nombre_cliente || '').toLowerCase().includes(texto) ||
@@ -224,7 +228,28 @@ document.addEventListener('DOMContentLoaded', async () => {
             } else {
                 mostrarMensaje('mensajeVentas', '', '');
             }
-        });
+        }
+        buscVentas?.addEventListener('input', filtrarVentas);
+        btnBuscVentas?.addEventListener('click', filtrarVentas);
+
+        const buscServicios = document.getElementById('busquedaServicios');
+        const btnBuscServicios = document.getElementById('btnBuscarServicios');
+        function filtrarServicios() {
+            const texto = (buscServicios.value || '').toLowerCase();
+            const filtrados = limpiezasCargadas.filter(s =>
+                (s.nombre_cliente || '').toLowerCase().includes(texto) ||
+                (s.dni_cuit_cuil || '').toLowerCase().includes(texto) ||
+                (s.numero_bano || '').toLowerCase().includes(texto)
+            );
+            mostrarLimpiezas(filtrados);
+            if (filtrados.length === 0) {
+                mostrarMensaje('mensajeServicios', 'No hay servicios registrados', '');
+            } else {
+                mostrarMensaje('mensajeServicios', '', '');
+            }
+        }
+        buscServicios?.addEventListener('input', filtrarServicios);
+        btnBuscServicios?.addEventListener('click', filtrarServicios);
     } catch (err) {
         if (err.message === 'Unauthorized' || err.message === 'Token inválido') {
             handleUnauthorized();

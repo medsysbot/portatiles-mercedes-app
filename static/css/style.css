@@ -152,6 +152,7 @@ body.panel-empleados {
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
+  background-color: transparent;
 }
 /* Evita que el fondo gris de AdminLTE tape la imagen */
 body.panel-admin .content-wrapper,
@@ -176,6 +177,12 @@ body.panel-empleados .card {
   background: rgba(30,30,30,0.75) !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+/* Contenedores principales transparentes en panel de empleados */
+body.panel-empleados .container,
+body.panel-empleados .container-fluid {
+  background: transparent !important;
 }
 
 /* 2025-07-10: unificación de colores en encabezados y etiquetas */

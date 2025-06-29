@@ -81,9 +81,9 @@ def imprimir_log_error():
     try:
         if os.path.isfile(log_path):
             with open(log_path, "r") as f:
-                print(f.read())
+                logger.error(f.read())
     except Exception as exc:  # pragma: no cover
-        print(f"No se pudo leer {log_path}: {exc}")
+        logger.error("No se pudo leer %s: %s", log_path, exc)
 
 imprimir_log_error()
 
@@ -205,12 +205,6 @@ async def login(datos: LoginInput, response: Response):
         verificacion = False
         if hashed_password:
             verificacion = pwd_context.verify(password, hashed_password)
-        # Debug: imprimir valores recibidos y hash antes de decidir
-        print(f"Email recibido: {email}")
-        print(f"Password recibido: {password}")
-        print(f"Rol recibido: {rol}")
-        print(f"Hash leído: {hashed_password}")
-        print(f"Resultado de pwd_context.verify: {verificacion}")
 
         if not hashed_password or not verificacion:
             logger.warning(f"Login fallido – contraseña incorrecta: {email}")
@@ -322,11 +316,9 @@ def registrar_cliente(
         # <!--
         # Eliminado envío y lógica de campos creado_en y actualizado_en porque ya no existen en la tabla usuarios.
         # -->
-        print("Datos a insertar en usuarios:", datos_insert)
         try:
             resp = supabase.table("usuarios").insert(datos_insert).execute()
         except Exception as e:  # pragma: no cover - debug supabase errors
-            print("Error al insertar en usuarios:", e)
             raise HTTPException(status_code=500, detail=str(e))
 
         if (
@@ -385,8 +377,6 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
             try:
                 enviar_email_recuperacion(email, token, base_url)
             except Exception as exc:  # pragma: no cover - dependencias externas
-                print("DEBUG ERROR EN ENVÍO EMAIL RECUPERACIÓN:")
-                print(traceback.format_exc())
                 logger.exception("Error enviando email de recuperación: %s", exc)
                 raise HTTPException(
                     status_code=500,
@@ -397,8 +387,6 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
     except HTTPException:
         raise
     except Exception as exc:  # pragma: no cover - dependencias externas
-        print("DEBUG ERROR EN /recuperar_password:")
-        print(traceback.format_exc())
         logger.error("Error en recuperar_password: %s", exc)
     return mensaje
 

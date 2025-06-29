@@ -23,19 +23,17 @@
       </li>
     </ul>
   </nav>
-  <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
+  <!-- Sidebar -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="/admin/panel" class="brand-link text-center">
       <span class="brand-text font-weight-light">Portátiles Mercedes</span>
     </a>
     <div class="sidebar">
       <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
+        <ul class="nav nav-pills nav-sidebar flex-column">
           <li class="nav-item"><a href="/admin/clientes" class="nav-link"><i class="nav-icon fas fa-users"></i><p>Clientes</p></a></li>
           <li class="nav-item"><a href="/admin/empleados" class="nav-link"><i class="nav-icon fas fa-user-cog"></i><p>Empleados</p></a></li>
-          <li class="nav-item"><a href="/admin/recursos_humanos" class="nav-link"><i class="nav-icon fas fa-users"></i><p>Recursos Humanos</p></a></li>
           <li class="nav-item"><a href="/admin/alquileres" class="nav-link"><i class="nav-icon fas fa-file-contract"></i><p>Alquileres</p></a></li>
           <li class="nav-item"><a href="/admin/ventas" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Ventas</p></a></li>
           <li class="nav-item"><a href="/admin/inventario_banos" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Inventario de baños</p></a></li>
@@ -44,18 +42,12 @@
           <li class="nav-item"><a href="/admin/reportes" class="nav-link"><i class="nav-icon fas fa-file-alt"></i><p>Reportes</p></a></li>
           <li class="nav-item"><a href="/admin/facturas_pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturas pendientes</p></a></li>
           <li class="nav-item"><a href="/admin/comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes</p></a></li>
-          <li class="nav-item"><a href="https://auth.afip.gob.ar/contribuyente_/login.xhtml" class="nav-link" target="_blank"><i class="nav-icon fas fa-file-invoice"></i><p>Facturación Online</p></a></li>
-          <li class="nav-item"><a href="/admin/morosos" class="nav-link"><i class="nav-icon fas fa-exclamation-triangle"></i><p>Morosos</p></a></li>
-          <li class="nav-item"><a href="/admin/emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
-          <li class="nav-item"><a href="/admin/ia/respuestas" class="nav-link"><i class="nav-icon fas fa-robot"></i><p>IA – Respuestas</p></a></li>
-          <li class="nav-item"><a href="/admin/ia/clasificados" class="nav-link"><i class="nav-icon fas fa-mail-bulk"></i><p>IA – Clasificados</p></a></li>
-          <li class="nav-item"><a href="/admin/graficos" class="nav-link"><i class="nav-icon fas fa-chart-line"></i><p>Gráficos</p></a></li>
         </ul>
       </nav>
     </div>
   </aside>
-  <!-- /.sidebar -->
 
+  <!-- Content -->
   <div class="content-wrapper pt-2">
     <section class="content">
       <div class="container-fluid">
@@ -63,144 +55,63 @@
           <img src="/app_publico/static/icons/logo-portatiles-2.png" alt="Administración" class="mb-2" width="80">
           <h1 class="titulo-panel mb-4 mt-0">Panel de administración</h1>
         </div>
-        {% block content %}
-<div class="row">
-  <div class="col-lg-3 col-6">
-    <div class="small-box bg-info">
-      <div class="inner">
-        <h3 id="totalClientes">{{ total_clientes }}</h3>
-        <p>Total Clientes</p>
-      </div>
-      <div class="icon"><i class="fas fa-users"></i></div>
-    </div>
-  </div>
-  <div class="col-lg-3 col-6">
-    <div class="small-box bg-success">
-      <div class="inner">
-        <h3 id="totalAlquileres">{{ total_alquileres }}</h3>
-        <p>Alquileres</p>
-      </div>
-      <div class="icon"><i class="fas fa-file-contract"></i></div>
-    </div>
-  </div>
-  <div class="col-lg-3 col-6">
-    <div class="small-box bg-warning">
-      <div class="inner">
-        <h3 id="totalVentas">{{ total_ventas }}</h3>
-        <p>Ventas</p>
-      </div>
-      <div class="icon"><i class="fas fa-shopping-cart"></i></div>
-    </div>
-  </div>
-  <div class="col-lg-3 col-6">
-    <div class="small-box bg-primary">
-      <div class="inner">
-        <h3 id="totalPendientes">{{ total_pendientes }}</h3>
-        <p>Pendientes</p>
-      </div>
-      <div class="icon"><i class="fas fa-clock"></i></div>
-    </div>
-  </div>
-  <div class="col-lg-3 col-6">
-    <div class="small-box bg-danger">
-      <div class="inner">
-        <h3 id="totalMorosos">{{ total_morosos }}</h3>
-        <p>Morosos</p>
-      </div>
-      <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
-    </div>
-  </div>
-</div>
-<div class="row mt-4">
-  <div class="col-md-6 col-12 mb-4">
-    <div class="card h-100">
-      <div class="card-header"><h3 class="card-title">Alquileres</h3></div>
-      <div class="card-body">
-        <canvas id="graficoAlquileres" class="grafico-panel"></canvas>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6 col-12 mb-4">
-    <div class="card h-100">
-      <div class="card-header"><h3 class="card-title">Ventas</h3></div>
-      <div class="card-body">
-        <canvas id="graficoVentas" class="grafico-panel"></canvas>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6 col-12 mb-4">
-    <div class="card h-100">
-      <div class="card-header"><h3 class="card-title">Gastos</h3></div>
-      <div class="card-body">
-        <canvas id="graficoGastos" class="grafico-panel"></canvas>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6 col-12 mb-4">
-    <div class="card h-100">
-      <div class="card-header"><h3 class="card-title">Ingresos</h3></div>
-      <div class="card-body">
-        <canvas id="graficoIngresos" class="grafico-panel"></canvas>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="row mt-4">
-  <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-header"><h3 class="card-title">Calendario</h3></div>
-      <div class="card-body">
-        <!-- Calendario mensual. Se agregarán eventos en futuras versiones -->
-        <div id="calendario"></div>
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header"><h3 class="card-title">Últimos emails</h3></div>
-      <div class="card-body p-0">
-        <div class="botones-acciones">
-          <input type="text" class="form-control" placeholder="Buscar email..." id="buscador-emails">
-          <button class="boton-buscar"><i class="fas fa-search"></i> Buscar</button>
-          <button class="boton-eliminar">Eliminar</button>
-        </div>
-        <div class="table-responsive bg-light p-3">
-        <table class="pm-tabla">
-          <thead>
-            <tr>
-              <th><input type="checkbox" id="checkAll"></th>
-              <th>Fecha y hora</th>
-              <th>Asunto</th>
-              <th>Destinatario</th>
-              <th>Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% if ultimos_emails %}
-              {% for e in ultimos_emails %}
-              <tr>
-                <td><input type="checkbox" class="check-item"></td>
-                <td>{{ e.fecha }}</td>
-                <td>{{ e.asunto }}</td>
-                <td>{{ e.email_destino }}</td>
-                <td>{{ e.estado }}</td>
-              </tr>
-              {% endfor %}
-            {% else %}
-              <tr>
-                <td colspan="5" class="text-center">No hay correos registrados</td>
-              </tr>
-            {% endif %}
-          </tbody>
-        </table>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Tabla de programación de limpiezas eliminada según solicitud 2025-07 -->
-{% endblock %}
+        <!-- Panel resumen -->
+        <div class="row">
+          <div class="col-lg-3 col-6">
+            <div class="small-box bg-info">
+              <div class="inner"><h3 id="totalClientes">{{ total_clientes }}</h3><p>Total Clientes</p></div>
+              <div class="icon"><i class="fas fa-users"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-6">
+            <div class="small-box bg-success">
+              <div class="inner"><h3 id="totalAlquileres">{{ total_alquileres }}</h3><p>Alquileres</p></div>
+              <div class="icon"><i class="fas fa-file-contract"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning">
+              <div class="inner"><h3 id="totalVentas">{{ total_ventas }}</h3><p>Ventas</p></div>
+              <div class="icon"><i class="fas fa-shopping-cart"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-3 col-6">
+            <div class="small-box bg-danger">
+              <div class="inner"><h3 id="totalMorosos">{{ total_morosos }}</h3><p>Morosos</p></div>
+              <div class="icon"><i class="fas fa-exclamation-triangle"></i></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gráficos -->
+        <div class="row mt-4">
+          <div class="col-md-6 mb-4">
+            <div class="card h-100"><div class="card-header"><h3 class="card-title">Alquileres</h3></div>
+              <div class="card-body"><canvas id="graficoAlquileres" class="grafico-panel"></canvas></div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card h-100"><div class="card-header"><h3 class="card-title">Ventas</h3></div>
+              <div class="card-body"><canvas id="graficoVentas" class="grafico-panel"></canvas></div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card h-100"><div class="card-header"><h3 class="card-title">Gastos</h3></div>
+              <div class="card-body"><canvas id="graficoGastos" class="grafico-panel"></canvas></div>
+            </div>
+          </div>
+          <div class="col-md-6 mb-4">
+            <div class="card h-100"><div class="card-header"><h3 class="card-title">Ingresos</h3></div>
+              <div class="card-body"><canvas id="graficoIngresos" class="grafico-panel"></canvas></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Calendario -->
+        <div class="card mb-4"><div class="card-header"><h3 class="card-title">Calendario</h3></div>
+          <div class="card-body"><div id="calendario"></div></div>
+        </div>
       </div>
     </section>
   </div>

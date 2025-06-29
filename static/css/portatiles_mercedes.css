@@ -1,67 +1,67 @@
-/* ====== Tablas de línea infinita Portátiles Mercedes ====== */
-table.pm-tabla {
-    width: 100%;
-    border-collapse: separate; /* Permite separación sin bordes */
-    border-spacing: 0;         /* Sin espacio entre celdas */
-    margin-top: 20px;
-    font-family: 'Roboto', sans-serif;
-    font-size: 14px;
-    color: #ffffff; /* Texto claro */
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
+/* Fondo corporativo fijo para paneles */
+body.panel-admin, body.panel-cliente, body.panel-empleados {
+    background-image: url('/static/imagenes/fondo-panel.png');
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
 }
 
-table.pm-tabla thead {
-    background-color: rgba(0, 0, 0, 0.8); /* Encabezado más opaco */
-    color: #ffffff;
-    text-align: center;
+/* Tablas línea infinita */
+.table, .dataTable, .tabla-mercedes {
+    width: 100% !important;
+    font-family: 'Nunito', Arial, sans-serif !important;
+    background: rgba(0,0,0,0.7) !important;
+    color: #fff !important;
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    border: none !important;
+}
+.table th, .table td, .dataTable th, .dataTable td {
+    border: none !important;
+    padding: 12px 16px !important;
+}
+.table tr:nth-child(even), .dataTable tr:nth-child(even) {
+    background-color: rgba(0, 0, 0, 0.4) !important;
+}
+.table tr:hover, .dataTable tr:hover {
+    background-color: rgba(32, 64, 96, 0.5) !important;
 }
 
-table.pm-tabla th, table.pm-tabla td {
-    padding: 12px 16px;
-    border: none; /* Sin bordes de celda */
-    vertical-align: middle;
-    word-wrap: break-word;
-}
-
-table.pm-tabla tr:nth-child(even) {
-    background-color: rgba(0, 0, 0, 0.4); /* Alternancia de filas */
-}
-
-table.pm-tabla tr:hover {
-    background-color: rgba(32, 64, 96, 0.5);
-    transition: background-color 0.2s ease;
-}
-
-table.pm-tabla thead th {
-    border-bottom: none; /* Sin línea bajo el encabezado */
-}
-
-/* Ajuste de select/input DataTables */
-.dataTables_wrapper .dataTables_length select,
-.dataTables_wrapper .dataTables_filter input {
-    background-color: rgba(0, 0, 0, 0.6);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 4px 8px;
-}
-
+/* Paginador gris oscuro semitransparente */
 .dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_paginate {
-    color: #ffffff;
+    background: rgba(20,20,20,0.6) !important;
+    padding: 0.5em 1em;
+    border-radius: 6px;
+    color: #fff !important;
 }
 
-/* Buscador y botones unificados en tablas */
-.buscador-tabla {
-    width: 300px !important;
+/* Campo de búsqueda y contenedor transparente */
+.dataTables_wrapper .dataTables_filter input[type="search"] {
     background: transparent !important;
     color: #fff !important;
     border: 1px solid #fff !important;
-    border-radius: 4px;
-    padding: 0.5em 0.75em;
 }
-.d-flex.gap-2 .btn {
+.d-flex.align-items-center .btn {
     margin-top: 0 !important;
 }
-.dataTables_wrapper .dataTables_filter {
-    margin-bottom: 0.5em;
+
+/* Botones personalizados */
+.boton-buscar {
+    background: rgba(0,0,0,0.85) !important;
+    color: #fff !important;
+}
+.boton-eliminar, .btn-danger {
+    background: #c0392b !important;
+    color: #fff !important;
+}
+
+/* Ícono en botón buscar (FontAwesome lupa) */
+.boton-buscar::before {
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    margin-right: 0.4em;
+    content: "\f002";
 }

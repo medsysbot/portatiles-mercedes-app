@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const tabla = document.getElementById('tablaEmpleados');
+  const tabla = document.getElementById('tabla-empleados');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
   const buscador = document.getElementById('busquedaEmpleado');
   const btnBuscar = document.getElementById('btnBuscarEmpleado');

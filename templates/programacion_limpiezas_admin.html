@@ -10,7 +10,7 @@
 <div class="container mt-4">
   <h2>Programar limpieza</h2>
   <button id="btnMostrarForm" class="btn btn-success mb-3"><i class="fas fa-broom"></i> Agregar limpieza</button>
-  <form id="formProgramacion" class="mb-4" style="display:none;">
+  <form id="formProgramacion" class="mb-4 d-none">
     <div class="form-row">
       <div class="form-group col-md-2">
         <label>Fecha</label>
@@ -43,9 +43,9 @@
     </div>
   </form>
 
-  <div id="mensajeProgramacion" class="alert mt-3" style="display:none"></div>
+  <div id="mensajeProgramacion" class="alert mt-3 d-none"></div>
   <div id="contenedorTabla" class="table-responsive bg-light p-3">
-    <table id="tablaProgramacion" class="table table-striped table-bordered" style="width:100%">
+    <table id="tablaProgramacion" class="table table-striped table-bordered">
       <thead>
         <tr>
           <th></th>

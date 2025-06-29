@@ -78,6 +78,7 @@ button.cerrar-sesion {
   background: rgba(0,0,0,0.7) !important; /* Unificación visual 2025-07 */
   color: #fff !important;
   border-collapse: collapse !important;
+  width: 100% !important; /* Ancho estándar para todas las tablas */
 }
 .table th, .table td,
 .dataTable th, .dataTable td {
@@ -276,3 +277,24 @@ table.dataTable,
     color: #fff !important;
     border: 1px solid #fff !important;
 }
+
+/* Contenedores con desplazamiento horizontal ligero */
+.scroll-x-light {
+    overflow-x: auto;
+    background-color: #f9f9f9;
+    padding: 1rem;
+}
+
+/* Estilos comunes para las pantallas de bienvenida */
+.saludo-splash {
+    text-align: center;
+    color: #fff;
+}
+
+.saludo-splash .linea-uno,
+.saludo-splash .linea-dos {
+    display: block;
+}
+
+/* Utilidades varias */
+.no-margin-top { margin-top: 0 !important; }

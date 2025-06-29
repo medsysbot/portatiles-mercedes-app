@@ -271,12 +271,6 @@ table.dataTable,
     color: #fff !important;
     border: 1px solid #fff !important;
 }
-.buscador-clientes {
-    width: 50% !important; /* Mismo ancho para buscadores */
-    background: transparent !important;
-    color: #fff !important;
-    border: 1px solid #fff !important;
-}
 
 /* Contenedores con desplazamiento horizontal ligero */
 .scroll-x-light {

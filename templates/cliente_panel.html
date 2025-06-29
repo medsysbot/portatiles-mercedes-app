@@ -19,7 +19,7 @@
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item">
-        <a href="/logout" id="btnLogout" class="btn btn-danger btn-sm">Cerrar sesión</a>
+        <a href="/logout" id="btnLogout" class="boton-cerrar-sesion">Cerrar sesión</a>
       </li>
     </ul>
   </nav>
@@ -48,7 +48,7 @@
   </aside>
   <!-- /.sidebar -->
 
-  <div class="content-wrapper pt-2">
+  <div class="content-wrapper">
     <section class="content">
       <div class="container-fluid">
         <h1 id="bienvenida" class="mb-4 mt-0 titulo-panel">Panel de clientes</h1><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
@@ -421,11 +421,14 @@
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/cliente_panel.js"></script>
 <script>
-  document.getElementById('btnLogout').addEventListener('click', () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('rol');
-  });
+  const btn = document.getElementById("btnLogout");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("usuario");
+      localStorage.removeItem("rol");
+    });
+  }
 </script>
 {% endblock %}
 

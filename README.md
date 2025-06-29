@@ -119,6 +119,13 @@ Se incorporaron campos de **apellido** y **observaciones** en el CRUD de cliente
 además de búsqueda en tiempo real por nombre, DNI o email. Esta sección ahora es
 accesible para usuarios con rol *Administrador* o *Empleado*.
 
+### Unificación visual de tablas 2025-07-05
+
+Se estandarizó el contenedor gris semitransparente en todas las tablas del panel
+de clientes, aplicando la misma regla `.card` que ya utilizan los paneles
+administrativo y de empleados. De esta manera se eliminan los recuadros blancos y
+se mantiene la homogeneidad visual en todo el sistema.
+
 ### Ubicación de plantillas públicas
 
 Los archivos HTML visibles para cualquier visitante se almacenan en

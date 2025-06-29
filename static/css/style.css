@@ -169,6 +169,15 @@ body.panel-empleados .card-title,
   color: #fff !important;
 }
 
+/* Contenedor gris para todas las tarjetas en paneles */
+body.panel-admin .card,
+body.panel-cliente .card,
+body.panel-empleados .card {
+  background: rgba(30,30,30,0.75) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
 /* 2025-07-10: unificación de colores en encabezados y etiquetas */
 body.panel-admin h1,
 body.panel-admin h2,

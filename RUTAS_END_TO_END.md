@@ -86,8 +86,10 @@ Mantener este archivo actualizado para soporte y desarrollo.
 
 - Unificación del estilo de todas las tablas con bordes verticales usando `table-bordered`.
 - En el panel de clientes se reemplazó el borrado individual de comprobantes por selección múltiple mediante casillas y un botón global.
+- Se homogeneizó el contenedor externo de las tablas del panel de clientes utilizando el mismo fondo gris semitransparente de las vistas administrativas.
 
 ### Historial reciente
 
 - 2025-06-13: migración total al panel administrativo moderno (`/admin/panel`). Ruta anterior `/panel_viejo` declarada obsoleta.
 - 2025-06-26: corregido enlace de recuperación de contraseña utilizando la URL base de la solicitud cuando `APP_URL` no está definida.
+- 2025-07-05: unificación visual de las tablas del panel de clientes con los paneles administrativo y de empleados.

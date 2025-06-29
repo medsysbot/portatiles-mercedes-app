@@ -1,0 +1,67 @@
+{% extends 'panel_admin.html' %}
+{% block title %}Gráficos{% endblock %}
+{% block description %}Panel con gráficos y estadísticas{% endblock %}
+{% block head_extra %}
+{{ super() }}
+{% endblock %}
+{% block content %}
+<h2 class="mt-0">Sección de Gráficos</h2>
+<form id="formGraficos" class="mb-4">
+  <div class="form-row">
+    <div class="col-md-4 mb-2">
+      <label for="dataset">Gráfico</label>
+      <select id="dataset" class="form-control">
+        <option value="alquileres">Alquileres</option>
+        <option value="ventas">Ventas</option>
+        <option value="gastos">Gastos</option>
+        <option value="ingresos">Ingresos</option>
+      </select>
+    </div>
+    <div class="col-md-8 mb-2">
+      <label for="valores">Datos (12 valores separados por coma)</label>
+      <input type="text" id="valores" class="form-control" placeholder="1,2,3,4...">
+    </div>
+  </div>
+  <button type="submit" class="btn btn-primary">Actualizar</button>
+</form>
+
+<div class="row">
+  <div class="col-md-6 col-12 mb-4">
+    <div class="card h-100">
+      <div class="card-header"><h3 class="card-title">Alquileres</h3></div>
+      <div class="card-body">
+        <canvas id="graficoAlquileres" class="grafico-panel"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-12 mb-4">
+    <div class="card h-100">
+      <div class="card-header"><h3 class="card-title">Ventas</h3></div>
+      <div class="card-body">
+        <canvas id="graficoVentas" class="grafico-panel"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-12 mb-4">
+    <div class="card h-100">
+      <div class="card-header"><h3 class="card-title">Gastos</h3></div>
+      <div class="card-body">
+        <canvas id="graficoGastos" class="grafico-panel"></canvas>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-12 mb-4">
+    <div class="card h-100">
+      <div class="card-header"><h3 class="card-title">Ingresos</h3></div>
+      <div class="card-body">
+        <canvas id="graficoIngresos" class="grafico-panel"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/chart.min.js"></script>
+<script src="/static/js/graficos_admin.js"></script>
+{% endblock %}

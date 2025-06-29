@@ -93,3 +93,4 @@ Mantener este archivo actualizado para soporte y desarrollo.
 - 2025-06-13: migración total al panel administrativo moderno (`/admin/panel`). Ruta anterior `/panel_viejo` declarada obsoleta.
 - 2025-06-26: corregido enlace de recuperación de contraseña utilizando la URL base de la solicitud cuando `APP_URL` no está definida.
 - 2025-07-05: unificación visual de las tablas del panel de clientes con los paneles administrativo y de empleados.
+- 2025-07-20: contenedores transparentes unificados en todas las tablas del panel de empleados.

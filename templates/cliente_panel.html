@@ -117,16 +117,16 @@
       <div class="card h-100">
         <div class="card-header"><h3 class="card-title">&Uacute;ltimos emails</h3></div>
         <div class="card-body p-0">
-          <div class="buscador-container px-3">
-            <input type="search" placeholder="Buscar email..." id="buscador-emails-cliente">
-            <button class="boton-buscar"><i class="fas fa-user"></i> Buscar</button>
+          <div class="botones-acciones">
+            <input type="text" class="form-control" placeholder="Buscar email..." id="buscador-emails-cliente">
+            <button class="boton-buscar"><i class="fas fa-search"></i> Buscar</button>
             <button class="boton-eliminar">Eliminar</button>
           </div>
           <div class="table-responsive bg-light p-3">
-          <table id="tablaEmails" class="table tabla-mercedes">
+          <table id="tablaEmails" class="pm-tabla">
             <thead>
               <tr>
-                <th><input type="checkbox"></th>
+                <th><input type="checkbox" id="checkAll"></th>
                 <th>Fecha</th>
                 <th>Asunto</th>
                 <th>Estado</th>
@@ -149,15 +149,16 @@
           <div class="card-body">
             <div id="errorAlquileres" class="alert alert-danger d-none"></div>
             <div id="mensajeAlquileres" class="alert mt-3 d-none"></div>
-            <div class="d-flex justify-content-between align-items-center my-3">
-              <input type="text" id="busquedaAlquileres" class="form-control buscador-tabla" placeholder="Buscar alquiler...">
-              <button id="btnBuscarAlquiler" class="btn btn-secondary ml-2">Buscar</button>
+            <div class="botones-acciones">
+              <input type="text" id="busquedaAlquileres" class="form-control" placeholder="Buscar alquiler...">
+              <button id="btnBuscarAlquiler" class="boton-buscar"><i class="fas fa-search"></i> Buscar</button>
+              <button class="boton-eliminar">Eliminar</button>
             </div>
             <div class="table-responsive bg-light p-3">
-              <table id="tablaAlquileres" class="table tabla-mercedes">
+              <table id="tablaAlquileres" class="pm-tabla">
                 <thead>
                   <tr>
-                    <th><input type="checkbox"></th>
+                    <th><input type="checkbox" id="checkAll"></th>
                     <th>N° Baño</th>
                     <th>Cliente</th>
                     <th>DNI / CUIT / CUIL</th>
@@ -224,15 +225,16 @@
           <div class="card-body">
             <div id="errorFacturas" class="alert alert-danger d-none"></div>
             <div id="mensajeFacturas" class="alert mt-3 d-none"></div>
-            <div class="d-flex justify-content-between align-items-center my-3">
-              <input type="text" id="busquedaFacturas" class="form-control buscador-tabla" placeholder="Buscar por DNI / CUIT / CUIL">
-              <button id="btnBuscarFacturas" class="btn btn-secondary ml-2">Buscar</button>
+            <div class="botones-acciones">
+              <input type="text" id="busquedaFacturas" class="form-control" placeholder="Buscar por DNI / CUIT / CUIL">
+              <button id="btnBuscarFacturas" class="boton-buscar"><i class="fas fa-search"></i> Buscar</button>
+              <button class="boton-eliminar">Eliminar</button>
             </div>
             <div class="table-responsive bg-light p-3">
-              <table id="tablaFacturasPendientes" class="table tabla-mercedes">
+              <table id="tablaFacturasPendientes" class="pm-tabla">
                 <thead>
                   <tr>
-                    <th><input type="checkbox"></th>
+                    <th><input type="checkbox" id="checkAll"></th>
                     <th>Fecha</th>
                     <th>Número factura</th>
                     <th>DNI / CUIT / CUIL</th>
@@ -277,10 +279,10 @@
             <div id="msgComprobante" class="alert mt-3 d-none"></div>
             <button id="btnEliminarComprobantes" class="btn btn-danger mb-2" disabled>Eliminar</button>
             <div class="table-responsive bg-light p-3">
-              <table id="tablaComprobantes" class="table tabla-mercedes">
+              <table id="tablaComprobantes" class="pm-tabla">
                 <thead>
                   <tr>
-                    <th><input type="checkbox"></th>
+                    <th><input type="checkbox" id="checkAll"></th>
                     <th>Nombre cliente</th>
                     <th>DNI / CUIT / CUIL</th>
                     <th>Número factura</th>
@@ -300,15 +302,16 @@
           <div class="card-body">
             <div id="errorVentas" class="alert alert-danger d-none"></div>
             <div id="mensajeVentas" class="alert mt-3 d-none"></div>
-            <div class="d-flex justify-content-between align-items-center my-3">
-              <input type="text" id="busquedaVentas" class="form-control buscador-tabla" placeholder="Buscar por cliente o DNI / CUIT / CUIL">
-              <button id="btnBuscarVentas" class="btn btn-secondary ml-2">Buscar</button>
+            <div class="botones-acciones">
+              <input type="text" id="busquedaVentas" class="form-control" placeholder="Buscar por cliente o DNI / CUIT / CUIL">
+              <button id="btnBuscarVentas" class="boton-buscar"><i class="fas fa-search"></i> Buscar</button>
+              <button class="boton-eliminar">Eliminar</button>
             </div>
             <div class="table-responsive bg-light p-3">
-              <table id="tablaVentasCliente" class="table tabla-mercedes">
+              <table id="tablaVentasCliente" class="pm-tabla">
                 <thead>
                   <tr>
-                    <th><input type="checkbox"></th>
+                    <th><input type="checkbox" id="checkAll"></th>
                     <th>Fecha</th>
                     <th>Tipo de baño</th>
                     <th>DNI / CUIT / CUIL</th>
@@ -329,15 +332,16 @@
           <div class="card-body">
             <div id="errorServicios" class="alert alert-danger d-none"></div>
             <div id="mensajeServicios" class="alert mt-3 d-none"></div>
-            <div class="d-flex justify-content-between align-items-center my-3">
-              <input type="text" id="busquedaServicios" class="form-control buscador-tabla" placeholder="Buscar servicio...">
-              <button id="btnBuscarServicios" class="btn btn-secondary ml-2">Buscar</button>
+            <div class="botones-acciones">
+              <input type="text" id="busquedaServicios" class="form-control" placeholder="Buscar servicio...">
+              <button id="btnBuscarServicios" class="boton-buscar"><i class="fas fa-search"></i> Buscar</button>
+              <button class="boton-eliminar">Eliminar</button>
             </div>
             <div class="table-responsive bg-light p-3">
-              <table id="tablaServicios" class="table tabla-mercedes">
+              <table id="tablaServicios" class="pm-tabla">
                 <thead>
                   <tr>
-                    <th><input type="checkbox"></th>
+                    <th><input type="checkbox" id="checkAll"></th>
                     <th>Fecha</th>
                     <th>Nº baño</th>
                     <th>DNI / CUIT / CUIL</th>
@@ -358,10 +362,10 @@
           <div class="card-header"><h3 class="card-title">Próximas limpiezas</h3></div>
           <div class="card-body">
             <div class="table-responsive bg-light p-3">
-              <table id="tablaProgramacion" class="table tabla-mercedes">
+              <table id="tablaProgramacion" class="pm-tabla">
                 <thead>
                   <tr>
-                    <th><input type="checkbox"></th>
+                    <th><input type="checkbox" id="checkAll"></th>
                     <th>Fecha</th>
                     <th>Hora</th>
                     <th>Nº baño</th>

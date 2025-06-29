@@ -1,86 +1,82 @@
-/* Fondo corporativo fijo para paneles */
+/* Imagen de fondo global para todos los paneles */
 body.panel-admin, body.panel-cliente, body.panel-empleados {
-    background-image: url('/static/imagenes/fondo-panel.png');
-    background-size: cover;
-    background-attachment: fixed;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-color: transparent;
+  background-image: url('/static/imagenes/fondo-panel.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: transparent;
 }
 
-/* Tablas unificadas */
-.tabla-mercedes {
-    width: 100%;
-    border-collapse: collapse;
-    background: rgba(0,0,0,0.7);
-    color: #fff;
-    border-radius: 6px;
-    font-family: 'Nunito', Arial, sans-serif;
+/* Tablas estilo línea infinita */
+table.pm-tabla {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-family: 'Nunito', Arial, sans-serif;
+  font-size: 14px;
+  color: #fff;
+  background-color: rgba(0, 0, 0, 0.6);
 }
-.tabla-mercedes th,
-.tabla-mercedes td {
-    border: none;
-    padding: 12px;
+table.pm-tabla thead {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  text-align: center;
 }
-.tabla-mercedes tr:nth-child(even) {
-    background-color: rgba(0,0,0,0.5);
+table.pm-tabla th, table.pm-tabla td {
+  padding: 12px 16px;
+  border: none;
+  word-wrap: break-word;
 }
-
-/* Buscador y botones */
-.buscador-container {
-    background: transparent;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
+table.pm-tabla tr:nth-child(even) {
+  background-color: rgba(0, 0, 0, 0.4);
 }
-.buscador-container input[type="search"] {
-    flex: 1;
-    background: transparent;
-    border: 1px solid #fff;
-    color: #fff;
-    padding: 0.5rem;
-}
-.boton-buscar {
-    background: rgba(0,0,0,0.9);
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-}
-.boton-eliminar {
-    background: #c0392b;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 0.5rem 1rem;
+table.pm-tabla tr:hover {
+  background-color: rgba(32, 64, 96, 0.5);
+  transition: background-color 0.2s ease;
 }
 
-/* Paginador gris oscuro semitransparente */
+/* Paginador y info en gris oscuro semitransparente */
 .dataTables_wrapper .dataTables_info,
 .dataTables_wrapper .dataTables_paginate {
-    background: rgba(20,20,20,0.6) !important;
-    padding: 0.5em 1em;
-    border-radius: 6px;
-    color: #fff !important;
+  background-color: rgba(50, 50, 50, 0.6);
+  padding: 0.5em;
+  border-radius: 6px;
 }
 
-/* Campo de búsqueda y contenedor transparente */
+/* Contenedor transparente para buscador y botones */
+.dataTables_wrapper .dataTables_filter,
+.botones-acciones {
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+/* Estilos unificados para botones */
+.boton-buscar {
+  background: #000 !important;
+  color: #fff !important;
+  border-radius: 6px;
+  padding: 0.5em 1em;
+}
+.boton-eliminar {
+  background: #c0392b !important;
+  color: #fff !important;
+  border-radius: 6px;
+  padding: 0.5em 1em;
+}
+
+/* Ajuste visual de inputs DataTables */
+.dataTables_wrapper .dataTables_length select,
 .dataTables_wrapper .dataTables_filter input[type="search"] {
-    background: transparent !important;
-    color: #fff !important;
-    border: 1px solid #fff !important;
+  background: transparent !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
 }
-.d-flex.align-items-center .btn {
-    margin-top: 0 !important;
-}
-/* Ícono en botón buscar (FontAwesome lupa) */
-.boton-buscar::before {
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    margin-right: 0.4em;
-    content: "\f002";
+
+/* Estilos checkbox */
+th input[type="checkbox"], td input[type="checkbox"] {
+  transform: scale(1.2);
+  cursor: pointer;
 }

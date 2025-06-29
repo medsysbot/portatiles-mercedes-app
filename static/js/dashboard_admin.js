@@ -2,128 +2,58 @@
 // Proyecto: Portátiles Mercedes
 
 function limpiarCredenciales() {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('usuario');
-  localStorage.removeItem('rol');
-}
-
-
-function obtenerLocal(key) {
-  const data = localStorage.getItem(key);
-  return data ? JSON.parse(data) : null;
-}
-
-function guardarLocal(key, data) {
-  localStorage.setItem(key, JSON.stringify(data));
+  localStorage.clear();
 }
 
 async function cargarGraficos(charts) {
   try {
-    let labels = obtenerLocal('graficoLabels');
-    let alquileres = obtenerLocal('graficoAlquileresData');
-    let ventas = obtenerLocal('graficoVentasData');
-    let gastos = obtenerLocal('graficoGastosData');
-    let ingresos = obtenerLocal('graficoIngresosData');
-    let totales = obtenerLocal('dashboardTotales');
+    const resp = await fetch('/admin/api/dashboard');
+    if (!resp.ok) throw new Error('Error consultando datos');
+    const {labels, alquileres, ventas, gastos, ingresos, totales} = await resp.json();
 
-    if (!labels || !alquileres || !ventas || !gastos || !ingresos || !totales) {
-      const resp = await fetch('/admin/api/dashboard');
-      if (!resp.ok) throw new Error('Error consultando datos');
-      const datos = await resp.json();
-      labels = labels || datos.labels;
-      alquileres = alquileres || datos.alquileres;
-      ventas = ventas || datos.ventas;
-      gastos = gastos || datos.gastos;
-      ingresos = ingresos || datos.ingresos;
-      totales = totales || datos.totales;
-      guardarLocal('graficoLabels', labels);
-      guardarLocal('graficoAlquileresData', alquileres);
-      guardarLocal('graficoVentasData', ventas);
-      guardarLocal('graficoGastosData', gastos);
-      guardarLocal('graficoIngresosData', ingresos);
-      guardarLocal('dashboardTotales', totales);
-    }
+    const opcionesGrafico = {
+      responsive: true,
+      aspectRatio: 2,
+      scales: { 
+        y: { suggestedMin: 0, suggestedMax: 10 },
+        x: { grid: { color: 'rgba(255,255,255,0.1)' } }
+      },
+      plugins: { legend: { labels: { color: '#ffffff' } } }
+    };
 
-  if (!charts.alquileres) {
-    charts.alquileres = new Chart(document.getElementById('graficoAlquileres').getContext('2d'), {
+    charts.alquileres = new Chart('graficoAlquileres', {
       type: 'bar',
       data: { labels, datasets: [{ label: 'Alquileres', data: alquileres, backgroundColor: 'rgba(60,141,188,0.9)' }] },
-      options: {
-        responsive: true,
-        aspectRatio: 2,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
+      options: opcionesGrafico
     });
-    charts.ventas = new Chart(document.getElementById('graficoVentas').getContext('2d'), {
+    charts.ventas = new Chart('graficoVentas', {
       type: 'bar',
       data: { labels, datasets: [{ label: 'Ventas', data: ventas, backgroundColor: 'rgba(40,167,69,0.9)' }] },
-      options: {
-        responsive: true,
-        aspectRatio: 2,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
+      options: opcionesGrafico
     });
-    charts.gastos = new Chart(document.getElementById('graficoGastos').getContext('2d'), {
+    charts.gastos = new Chart('graficoGastos', {
       type: 'line',
       data: { labels, datasets: [{ label: 'Gastos', data: gastos, borderColor: 'rgba(220,53,69,0.9)', fill: false }] },
-      options: {
-        responsive: true,
-        aspectRatio: 2,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
+      options: opcionesGrafico
     });
-    charts.ingresos = new Chart(document.getElementById('graficoIngresos').getContext('2d'), {
+    charts.ingresos = new Chart('graficoIngresos', {
       type: 'line',
       data: { labels, datasets: [{ label: 'Ingresos', data: ingresos, borderColor: 'rgba(0,123,255,0.9)', fill: false }] },
-      options: {
-        responsive: true,
-        aspectRatio: 2,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
+      options: opcionesGrafico
     });
-  } else {
-    charts.alquileres.data.labels = labels;
-    charts.alquileres.data.datasets[0].data = alquileres;
-    charts.alquileres.update();
 
-    charts.ventas.data.labels = labels;
-    charts.ventas.data.datasets[0].data = ventas;
-    charts.ventas.update();
-
-    charts.gastos.data.labels = labels;
-    charts.gastos.data.datasets[0].data = gastos;
-    charts.gastos.update();
-
-    charts.ingresos.data.labels = labels;
-    charts.ingresos.data.datasets[0].data = ingresos;
-    charts.ingresos.update();
-  }
-
-  if (totales) {
     document.getElementById('totalClientes').textContent = totales.clientes;
     document.getElementById('totalAlquileres').textContent = totales.alquileres;
     document.getElementById('totalVentas').textContent = totales.ventas;
     document.getElementById('totalPendientes').textContent = totales.pendientes;
     document.getElementById('totalMorosos').textContent = totales.morosos;
-  }
+
   } catch (err) {
-    console.error('Error actualizando gráficos:', err);
+    console.error('Error gráficos:', err);
   }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  const btnLogout = document.getElementById('btnLogout');
-  const charts = {};
-  const calendarioEl = document.getElementById('calendario');
-
-  btnLogout?.addEventListener('click', limpiarCredenciales);
-  cargarGraficos(charts);
-
-  if (calendarioEl && window.FullCalendar) {
-    const calendario = new FullCalendar.Calendar(calendarioEl, {
-      initialView: 'dayGridMonth',
-      height: 'auto'
-    });
-    calendario.render();
-  }
+  document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
+  cargarGraficos({});
 });

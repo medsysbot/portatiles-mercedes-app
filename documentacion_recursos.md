@@ -26,3 +26,8 @@ negro semitransparente y líneas blancas internas, sin borde exterior.
 Las reglas `.table`, `.dataTable` y `.table-responsive.bg-light` siguen
 vigentes, pero cualquier ajuste visual debe realizarse ahora a través de la
 clase `.tabla-mercedes` para asegurar la coherencia en todo el sistema.
+A partir de la unificación se retiraron todas las hojas de estilo de DataTables
+provenientes de CDN y cada panel (administrativo, empleados y clientes) utiliza
+exclusivamente `style.css` para las tablas. Esto evita variaciones de estilo y
+garantiza que todas las vistas compartan el mismo fondo negro semitransparente
+y las líneas blancas definidas.

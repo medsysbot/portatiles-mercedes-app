@@ -1,48 +1,51 @@
 // Archivo: static/js/dashboard_empleado.js
-// Panel resumen empleados – Portátiles Mercedes
+// Proyecto: Portátiles Mercedes
+
+function limpiarCredenciales() {
+  localStorage.clear();
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const headers = { Authorization: 'Bearer ' + localStorage.getItem('access_token') };
 
-  function contarSemana(items) {
-    const hoy = new Date();
-    const inicio = new Date(hoy);
-    inicio.setHours(0,0,0,0);
-    const fin = new Date(inicio);
-    fin.setDate(fin.getDate() + 7);
-    return items.filter(it => {
-      const f = new Date(it.fecha_limpieza || it.fecha_servicio);
-      return f >= inicio && f < fin;
-    }).length;
-  }
-
   async function cargarResumen() {
     try {
-      const [progRes, servRes, repRes] = await Promise.all([
+      const [limpiezas, servicios, reportes] = await Promise.all([
         fetch('/empleado/api/limpiezas_programadas', { headers }),
         fetch('/empleado/api/servicios_limpieza', { headers }),
         fetch('/empleado/api/reportes', { headers })
       ]);
-      const prog = progRes.ok ? await progRes.json() : [];
-      const serv = servRes.ok ? await servRes.json() : [];
-      const rep = repRes.ok ? await repRes.json() : [];
 
-      document.getElementById('cntLimpiezas').textContent = contarSemana(prog);
-      document.getElementById('cntComprobantes').textContent = serv.length;
-      document.getElementById('cntReportes').textContent = rep.length;
+      const limpiezasData = limpiezas.ok ? await limpiezas.json() : [];
+      const serviciosData = servicios.ok ? await servicios.json() : [];
+      const reportesData = reportes.ok ? await reportes.json() : [];
+
+      document.getElementById('cntLimpiezas').textContent = limpiezasData.length;
+      document.getElementById('cntComprobantes').textContent = serviciosData.length;
+      document.getElementById('cntReportes').textContent = reportesData.length;
+
     } catch (err) {
-      console.error('Error cargando dashboard:', err);
+      console.error('Error cargando dashboard empleado:', err);
     }
   }
 
   const calendarioEl = document.getElementById('calendario');
   if (calendarioEl && window.FullCalendar) {
-    const calendar = new FullCalendar.Calendar(calendarioEl, {
+    const calendario = new FullCalendar.Calendar(calendarioEl, {
       initialView: 'dayGridMonth',
-      height: 'auto'
+      height: 'auto',
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,listWeek'
+      },
+      locale: 'es'
     });
-    calendar.render();
+    calendario.render();
   }
 
   cargarResumen();
+
+  const btnLogout = document.getElementById('btnLogout');
+  btnLogout?.addEventListener('click', limpiarCredenciales);
 });

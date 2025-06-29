@@ -1,29 +1,30 @@
-/* ====== Tablas con fondo semi-transparente Portátiles Mercedes ====== */
+/* ====== Tablas de línea infinita Portátiles Mercedes ====== */
 table.pm-tabla {
     width: 100%;
-    border-collapse: collapse;
+    border-collapse: separate; /* Permite separación sin bordes */
+    border-spacing: 0;         /* Sin espacio entre celdas */
     margin-top: 20px;
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
     color: #ffffff; /* Texto claro */
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo negro con opacidad */
+    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
 }
 
 table.pm-tabla thead {
-    background-color: rgba(0, 0, 0, 0.8); /* Fondo más opaco para encabezado */
+    background-color: rgba(0, 0, 0, 0.8); /* Encabezado más opaco */
     color: #ffffff;
     text-align: center;
 }
 
 table.pm-tabla th, table.pm-tabla td {
     padding: 12px 16px;
-    border: 1px solid rgba(255, 255, 255, 0.2); /* Bordes sutiles */
+    border: none; /* Sin bordes de celda */
     vertical-align: middle;
     word-wrap: break-word;
 }
 
 table.pm-tabla tr:nth-child(even) {
-    background-color: rgba(0, 0, 0, 0.4); /* Alternancia más clara */
+    background-color: rgba(0, 0, 0, 0.4); /* Alternancia de filas */
 }
 
 table.pm-tabla tr:hover {
@@ -32,10 +33,10 @@ table.pm-tabla tr:hover {
 }
 
 table.pm-tabla thead th {
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    border-bottom: none; /* Sin línea bajo el encabezado */
 }
 
-/* Ajuste de elementos select y paginación */
+/* Ajuste de select/input DataTables */
 .dataTables_wrapper .dataTables_length select,
 .dataTables_wrapper .dataTables_filter input {
     background-color: rgba(0, 0, 0, 0.6);
@@ -48,4 +49,3 @@ table.pm-tabla thead th {
 .dataTables_wrapper .dataTables_paginate {
     color: #ffffff;
 }
-

@@ -3,6 +3,7 @@
 {% block description %}Listado y gestión del personal{% endblock %}
 {% block head_extra %}
 {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', path='/css/portatiles_mercedes.css') }}">
 {% endblock %}
 {% block content %}
 <h2 class="mb-3 mt-0">Administración de empleados</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
@@ -13,22 +14,29 @@
   <button id="btnEliminarSeleccionados" class="btn btn-danger ml-3" disabled>Eliminar</button>
 </div>
 <div class="table-responsive bg-light p-3">
-  <table id="tablaEmpleados" class="table pm-tabla table-striped table-bordered">
+  <table id="tabla-empleados" class="tabla-mercedes dataTable">
     <thead>
       <tr>
-        <th></th>
-        <th>Nombre</th>
+        <th>ID</th>
+        <th>Nombre completo</th>
+        <th>DNI</th>
+        <th>Teléfono</th>
         <th>Email</th>
-        <th>Rol</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
-      {% for u in empleados %}
+      {% for empleado in empleados %}
       <tr>
-        <td><input type="checkbox" class="fila-check" data-id="{{ u.id }}"></td>
-        <td>{{ u.nombre }}</td>
-        <td>{{ u.email }}</td>
-        <td>{{ u.rol }}</td>
+        <td>{{ empleado.id }}</td>
+        <td>{{ empleado.nombre }} {{ empleado.apellido }}</td>
+        <td>{{ empleado.dni }}</td>
+        <td>{{ empleado.telefono }}</td>
+        <td>{{ empleado.email }}</td>
+        <td>
+          <a href="/admin/empleados/editar/{{ empleado.id }}" class="btn btn-primary">Editar</a>
+          <button onclick="eliminarEmpleado({{ empleado.id }})" class="btn btn-danger">Eliminar</button>
+        </td>
       </tr>
       {% endfor %}
     </tbody>

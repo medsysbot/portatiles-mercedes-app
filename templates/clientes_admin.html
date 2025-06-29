@@ -3,6 +3,7 @@
 {% block description %}Listado y administración de clientes{% endblock %}
 {% block head_extra %}
 {{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', path='/css/portatiles_mercedes.css') }}">
 {% endblock %}
 {% block content %}
 <h2 class="mb-3 mt-0">Administración de clientes</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
@@ -22,20 +23,32 @@
   {% if not clientes %}
   <p>No hay clientes registrados</p>
   {% endif %}
-  <table id="tablaClientes" class="table pm-tabla table-striped table-bordered">
+  <table id="tabla-clientes" class="tabla-mercedes dataTable">
   <thead>
     <tr>
-      <th></th>
-      <th>DNI / CUIT / CUIL</th>
-      <th>Nombre</th>
-      <th>Apellido</th>
-      <th>Dirección</th>
+      <th>ID</th>
+      <th>Nombre completo</th>
+      <th>CUIT / CUIL</th>
       <th>Teléfono</th>
-      <th>Razón social</th>
       <th>Email</th>
+      <th>Acciones</th>
     </tr>
   </thead>
-  <tbody></tbody>
+  <tbody>
+    {% for cliente in clientes %}
+    <tr>
+      <td>{{ cliente.id }}</td>
+      <td>{{ cliente.nombre }} {{ cliente.apellido }}</td>
+      <td>{{ cliente.cuit_cuil }}</td>
+      <td>{{ cliente.telefono }}</td>
+      <td>{{ cliente.email }}</td>
+      <td>
+        <a href="/admin/clientes/editar/{{ cliente.id }}" class="btn btn-primary">Editar</a>
+        <button onclick="eliminarCliente({{ cliente.id }})" class="btn btn-danger">Eliminar</button>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
   </table>
 </div>
 {% endblock %}

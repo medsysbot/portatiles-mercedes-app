@@ -23,7 +23,7 @@ async function fetchConAuth(url) {
 let clientesCargados = [];
 
 document.addEventListener('DOMContentLoaded', () => {
-  const tabla = $('#tablaClientes').DataTable({
+  const tabla = $('#tabla-clientes').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
@@ -43,14 +43,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
   function actualizarBoton() {
-    const checks = document.querySelectorAll('#tablaClientes tbody .fila-check:checked');
+    const checks = document.querySelectorAll('#tabla-clientes tbody .fila-check:checked');
     if (btnEliminar) btnEliminar.disabled = checks.length === 0;
   }
 
-  $('#tablaClientes tbody').on('change', '.fila-check', actualizarBoton);
+  $('#tabla-clientes tbody').on('change', '.fila-check', actualizarBoton);
 
   btnEliminar?.addEventListener('click', async () => {
-    const ids = Array.from(document.querySelectorAll('#tablaClientes tbody .fila-check:checked')).map(c => c.dataset.id);
+    const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
     try {
       const resp = await fetch('/admin/api/clientes/eliminar', {

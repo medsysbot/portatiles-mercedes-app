@@ -1,198 +1,131 @@
-{% extends 'base_adminlte.html' %}
-{% block title %}Panel de clientes{% endblock %}
-{% block description %}Panel para que el cliente consulte sus servicios{% endblock %}
-{% block body_class %}hold-transition sidebar-mini layout-fixed panel-cliente fondo-panel{% endblock %}
+{% extends 'base_adminlte.html' %} {% block title %}Panel de clientes{% endblock %} {% block description %}Panel para que el cliente consulte sus servicios{% endblock %} {% block body_class %}hold-transition sidebar-mini layout-fixed panel-cliente{% endblock %} {% block head_extra %} {{ super() }} {% endblock %} {% block body %}
+	•	
+	•	Cerrar sesiÃ³n
+PortÃ¡tiles Mercedes
+	•	Datos personales
+	•	Alquileres
+	•	Facturas pendientes
+	•	Comprobantes
+	•	Ventas
+	•	Servicios de limpieza
+	•	ProgramaciÃ³n de limpiezas
+	•	Emails
+	•	Reportar
+Panel de clientes
+0
+Facturas pendientes
 
-{% block head_extra %}
-  {{ super() }}
-  <link rel="stylesheet" href="/static/css/portatiles_mercedes.css">
-{% endblock %}
+Ver facturas
+Al día
+Estado de cuenta
 
-{% block body %}
-<div class="wrapper fondo-panel">
-  <!-- Navbar -->
-  <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-    <ul class="navbar-nav">
-      <li class="nav-item"><a class="nav-link" data-widget="pushmenu" href="#"><i class="fas fa-bars"></i></a></li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><a href="/logout" class="boton-cerrar-sesion">Cerrar sesión</a></li>
-    </ul>
-  </nav>
+Detalle
+0
+Baños alquilados
 
-  <!-- Sidebar -->
-  <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="/panel_cliente" class="brand-link text-center">
-      <span class="brand-text font-weight-light">Portátiles Mercedes</span>
-    </a>
-    <div class="sidebar">
-      <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" role="menu">
-          <li class="nav-item"><a href="#seccion-datos-personales" class="nav-link"><i class="nav-icon fas fa-id-card"></i><p>Datos personales</p></a></li>
-          <li class="nav-item"><a href="#seccion-alquileres" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Alquileres</p></a></li>
-          <li class="nav-item"><a href="#seccion-facturas" class="nav-link"><i class="nav-icon fas fa-file-invoice"></i><p>Facturas pendientes</p></a></li>
-          <li class="nav-item"><a href="#seccion-comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes</p></a></li>
-          <li class="nav-item"><a href="#seccion-ventas" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Ventas</p></a></li>
-          <li class="nav-item"><a href="#seccion-limpiezas" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Limpiezas</p></a></li>
-          <li class="nav-item"><a href="#seccion-programacion" class="nav-link"><i class="nav-icon fas fa-calendar-alt"></i><p>Programación</p></a></li>
-          <li class="nav-item"><a href="#seccion-reportes" class="nav-link"><i class="nav-icon fas fa-flag"></i><p>Reportar</p></a></li>
-          <li class="nav-item"><a href="#seccion-emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
-        </ul>
-      </nav>
-    </div>
-  </aside>
+Ver baños
+-
+Próxima limpieza
 
-  <div class="content-wrapper fondo-panel">
-    <section class="content">
-      <div class="container-fluid">
-        <div class="text-center">
-          <img src="/app_publico/static/icons/registro-clientes.png" alt="Clientes" class="mb-2" width="80">
-        </div>
-        <h1 class="mb-4 mt-0 titulo-panel">Panel de clientes</h1>
+Servicios
+Último comprobante de pago
+Sin comprobantes subidos aún
 
-        <!-- DATOS PERSONALES -->
-        <div id="seccion-datos-personales" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Datos personales</h3></div>
-          <div class="card-body">
-            <form id="formDatos">
-              <div class="form-row">
-                <div class="form-group col-md-6"><label>Nombre</label><input type="text" class="form-control"></div>
-                <div class="form-group col-md-6"><label>Apellido</label><input type="text" class="form-control"></div>
-              </div>
-              <div class="form-row">
-                <div class="form-group col-md-6"><label>DNI / CUIT / CUIL</label><input type="text" class="form-control"></div>
-                <div class="form-group col-md-6"><label>Email</label><input type="email" class="form-control"></div>
-              </div>
-              <button type="submit" class="btn btn-primary">Guardar</button>
-            </form>
-          </div>
-        </div>
+Ver comprobantes
+Últimos emails
+Fecha
+Asunto
+Estado
 
-        <!-- ALQUILERES -->
-        <div id="seccion-alquileres" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Alquileres</h3></div>
-          <div class="card-body">
-            <div class="botones-acciones">
-              <input type="text" class="form-control" placeholder="Buscar alquiler...">
-              <button class="boton-buscar"><i class="fas fa-search"></i> Buscar</button>
-              <button class="boton-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </div>
-            <div class="table-responsive tabla-panel">
-              <table class="pm-tabla">
-                <thead><tr><th>#</th><th>Baño</th><th>Dirección</th><th>Inicio</th><th>Fin</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+Mis baÃ±os alquilados
 
-        <!-- FACTURAS PENDIENTES -->
-        <div id="seccion-facturas" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Facturas pendientes</h3></div>
-          <div class="card-body">
-            <div class="botones-acciones">
-              <input type="text" class="form-control" placeholder="Buscar factura...">
-              <button class="boton-buscar"><i class="fas fa-search"></i> Buscar</button>
-              <button class="boton-eliminar"><i class="fas fa-trash-alt"></i> Eliminar</button>
-            </div>
-            <div class="table-responsive tabla-panel">
-              <table class="pm-tabla">
-                <thead><tr><th>#</th><th>Fecha</th><th>Número</th><th>Monto</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
 
-        <!-- COMPROBANTES -->
-        <div id="seccion-comprobantes" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Comprobantes</h3></div>
-          <div class="card-body">
-            <div class="botones-acciones">
-              <button class="boton-agregar"><i class="fas fa-plus"></i> Subir comprobante</button>
-            </div>
-            <div class="table-responsive tabla-panel">
-              <table class="pm-tabla">
-                <thead><tr><th>#</th><th>Número factura</th><th>Comprobante</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+Buscar
+NÂ° BaÃ±o
+Cliente
+DNI / CUIT / CUIL
+DirecciÃ³n
+Fecha inicio
+Fecha fin
+Observaciones
 
-        <!-- VENTAS -->
-        <div id="seccion-ventas" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Ventas</h3></div>
-          <div class="card-body">
-            <div class="table-responsive tabla-panel">
-              <table class="pm-tabla">
-                <thead><tr><th>#</th><th>Fecha</th><th>Tipo baño</th><th>Monto</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+Datos personales
+Nombre
+Apellido
+DNI / CUIT / CUIL
+TelÃ©fono
+RazÃ³n social
+Email
+DirecciÃ³n
+Guardar
 
-        <!-- LIMPIEZAS -->
-        <div id="seccion-limpiezas" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Servicios de limpieza</h3></div>
-          <div class="card-body">
-            <div class="table-responsive tabla-panel">
-              <table class="pm-tabla">
-                <thead><tr><th>#</th><th>Fecha</th><th>Baño</th><th>Observaciones</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+Facturas pendientes
 
-        <!-- PROGRAMACIÓN -->
-        <div id="seccion-programacion" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Próximas limpiezas</h3></div>
-          <div class="card-body">
-            <div class="table-responsive tabla-panel">
-              <table class="pm-tabla">
-                <thead><tr><th>#</th><th>Fecha</th><th>Hora</th><th>Baño</th></tr></thead>
-                <tbody></tbody>
-              </table>
-            </div>
-          </div>
-        </div>
 
-        <!-- REPORTES -->
-        <div id="seccion-reportes" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Enviar reporte</h3></div>
-          <div class="card-body">
-            <form>
-              <div class="form-group"><label>Motivo</label><input type="text" class="form-control"></div>
-              <div class="form-group"><label>Observaciones</label><textarea class="form-control"></textarea></div>
-              <button type="submit" class="btn btn-primary">Enviar</button>
-            </form>
-          </div>
-        </div>
+Buscar
+Fecha
+NÃºmero factura
+DNI / CUIT / CUIL
+RazÃ³n social
+Nombre cliente
+Monto adeudado
 
-        <!-- EMAILS -->
-        <div id="seccion-emails" class="card mb-4">
-          <div class="card-header"><h3 class="card-title">Emails</h3></div>
-          <div class="card-body">
-            <form>
-              <div class="form-group"><label>Asunto</label><input type="text" class="form-control"></div>
-              <div class="form-group"><label>Mensaje</label><textarea class="form-control"></textarea></div>
-              <button type="submit" class="btn btn-primary">Enviar</button>
-            </form>
-          </div>
-        </div>
+Comprobantes de pago
+Nombre cliente
+DNI / CUIT / CUIL
+NÃºmero factura
+Archivo (PNG/JPG)
+Subir comprobante
 
-      </div>
-    </section>
-  </div>
-</div>
-{% endblock %}
+Eliminar
 
-{% block scripts %}
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="/cliente_panel.js"></script>
-<script>
-  document.getElementById("btnLogout").addEventListener("click", () => localStorage.clear());
-</script>
-{% endblock %}
+Nombre cliente
+DNI / CUIT / CUIL
+NÃºmero factura
+Comprobante
+Fecha
+
+Ventas
+
+
+Buscar
+Fecha
+Tipo de baÃ±o
+DNI / CUIT / CUIL
+Nombre cliente
+Forma de pago
+Observaciones
+
+Servicios de limpieza
+
+
+Buscar
+Fecha
+NÂº baÃ±o
+DNI / CUIT / CUIL
+Nombre cliente
+Tipo servicio
+Remito
+Observaciones
+
+PrÃ³ximas limpiezas
+Fecha
+Hora
+NÂº baÃ±o
+DirecciÃ³n
+
+Enviar reporte
+Fecha
+Nombre de quien reporta
+Motivo
+Observaciones
+Enviar
+
+Emails
+Tu mensaje serÃ¡ enviado directamente al Ã¡rea administrativa de PortÃ¡tiles Mercedes. Responderemos a la brevedad.
+Destinatario
+Motivo / Asunto
+Mensaje
+Enviar
+
+{% endblock %} {% block scripts %} {% endblock %}

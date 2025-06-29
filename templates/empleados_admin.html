@@ -3,15 +3,20 @@
 {% block description %}Listado y gestión del personal{% endblock %}
 {% block head_extra %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', path='/css/portatiles_mercedes.css') }}">
 {% endblock %}
 {% block content %}
 <h2 class="mb-3 mt-0">Administración de empleados</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
-<div class="d-flex justify-content-between align-items-center my-3">
-  <input type="text" id="busquedaEmpleado" class="form-control buscador-tabla" placeholder="Buscar por nombre o email">
-  <button id="btnBuscarEmpleado" class="btn btn-secondary ml-2">Buscar</button>
-  <a href="/admin/empleados/nuevo" class="btn btn-success ml-3"><i class="fas fa-user-plus"></i> Agregar empleado</a>
-  <button id="btnEliminarSeleccionados" class="btn btn-danger ml-3" disabled>Eliminar</button>
+<div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
+  <div class="dataTables_filter">
+    <label>
+      <input type="search" class="form-control form-control-sm buscador-tabla" placeholder="Buscar empleado">
+    </label>
+  </div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-dark">Buscar</button>
+    <button class="btn btn-dark">Agregar empleado</button>
+    <button class="btn btn-danger">Eliminar</button>
+  </div>
 </div>
 <div class="table-responsive bg-light p-3">
   <table id="tabla-empleados" class="tabla-mercedes dataTable">

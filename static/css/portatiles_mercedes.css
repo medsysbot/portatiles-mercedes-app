@@ -49,3 +49,19 @@ table.pm-tabla thead th {
 .dataTables_wrapper .dataTables_paginate {
     color: #ffffff;
 }
+
+/* Buscador y botones unificados en tablas */
+.buscador-tabla {
+    width: 300px !important;
+    background: transparent !important;
+    color: #fff !important;
+    border: 1px solid #fff !important;
+    border-radius: 4px;
+    padding: 0.5em 0.75em;
+}
+.d-flex.gap-2 .btn {
+    margin-top: 0 !important;
+}
+.dataTables_wrapper .dataTables_filter {
+    margin-bottom: 0.5em;
+}

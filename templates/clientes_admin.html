@@ -20,11 +20,11 @@
   {% if mensaje_error %}
   <div class="alert alert-danger">{{ mensaje_error }}</div>
   {% endif %}
-  <div id="mensajeClientes" class="alert mt-3" style="display:none"></div>
+  <div id="mensajeClientes" class="alert mt-3 d-none"></div>
   {% if not clientes %}
   <p>No hay clientes registrados</p>
   {% endif %}
-  <table id="tablaClientes" class="table table-striped table-bordered" style="width:100%;">
+  <table id="tablaClientes" class="table table-striped table-bordered">
   <thead>
     <tr>
       <th></th>

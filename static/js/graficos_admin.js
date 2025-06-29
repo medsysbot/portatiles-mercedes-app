@@ -1,9 +1,6 @@
-// Manejo de gráficos con carga manual de datos
+// Archivo: static/js/graficos_admin.js
+// Adaptado al diseño global de Portátiles Mercedes
 
-
-// Ejecutar una vez cargado el script. El archivo se incluye al final de la
-// plantilla, por lo que el DOM ya está disponible y no es necesario esperar a
-// `DOMContentLoaded`.
 function obtener(key) {
   const d = localStorage.getItem(key);
   return d ? JSON.parse(d) : null;
@@ -39,42 +36,36 @@ function guardar(key, data) {
     guardar('graficoIngresosData', ingresos);
   }
 
+  const opcionesGrafico = {
+    responsive: true,
+    aspectRatio: 2,
+    scales: { 
+      y: { suggestedMin: 0, suggestedMax: 10 },
+      x: { grid: { color: 'rgba(255,255,255,0.1)' } }
+    },
+    plugins: { legend: { labels: { color: '#ffffff' } } }
+  };
+
   const charts = {
     alquileres: new Chart(document.getElementById('graficoAlquileres').getContext('2d'), {
       type: 'bar',
       data: { labels, datasets: [{ label: 'Alquileres', data: alquileres, backgroundColor: 'rgba(60,141,188,0.9)' }] },
-      options: {
-        responsive: true,
-        aspectRatio: 2,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
+      options: opcionesGrafico
     }),
     ventas: new Chart(document.getElementById('graficoVentas').getContext('2d'), {
       type: 'bar',
       data: { labels, datasets: [{ label: 'Ventas', data: ventas, backgroundColor: 'rgba(40,167,69,0.9)' }] },
-      options: {
-        responsive: true,
-        aspectRatio: 2,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
+      options: opcionesGrafico
     }),
     gastos: new Chart(document.getElementById('graficoGastos').getContext('2d'), {
       type: 'line',
       data: { labels, datasets: [{ label: 'Gastos', data: gastos, borderColor: 'rgba(220,53,69,0.9)', fill: false }] },
-      options: {
-        responsive: true,
-        aspectRatio: 2,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
+      options: opcionesGrafico
     }),
     ingresos: new Chart(document.getElementById('graficoIngresos').getContext('2d'), {
       type: 'line',
       data: { labels, datasets: [{ label: 'Ingresos', data: ingresos, borderColor: 'rgba(0,123,255,0.9)', fill: false }] },
-      options: {
-        responsive: true,
-        aspectRatio: 2,
-        scales: { y: { suggestedMin: -7, suggestedMax: 7 } }
-      }
+      options: opcionesGrafico
     })
   };
 

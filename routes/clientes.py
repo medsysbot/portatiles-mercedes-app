@@ -35,5 +35,4 @@ async def obtener_clientes():
         return JSONResponse(content=clientes)
 
     except Exception as e:
-        print(f"❌ ERROR AL OBTENER CLIENTES: {e}")
         return JSONResponse(content={"detail": "Error al obtener clientes."}, status_code=500)

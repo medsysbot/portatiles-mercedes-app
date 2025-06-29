@@ -24,10 +24,6 @@ SMTP_SERVER = os.getenv("SMTP_SERVER")
 SMTP_PORT = os.getenv("SMTP_PORT")
 
 if not all([EMAIL_ORIGIN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
-    print(
-        "Advertencia: variables de correo no configuradas. "
-        "Las notificaciones por email est\u00e1n deshabilitadas."
-    )
     EMAIL_ORIGIN = EMAIL_PASSWORD = SMTP_SERVER = SMTP_PORT = None
 
 router = APIRouter()
@@ -37,10 +33,6 @@ def enviar_correo(destinatario: str, asunto: str, mensaje: str) -> None:
     """Envía un correo electrónico simple."""
 
     if not all([EMAIL_ORIGIN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
-        print(
-            "Advertencia: no se pudo enviar correo porque las variables de "
-            "SMTP no est\u00e1n configuradas."
-        )
         return
 
     msg = EmailMessage()

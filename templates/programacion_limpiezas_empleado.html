@@ -7,7 +7,14 @@
 {% block content %}
 <div class="container mt-4">
   <h2>Limpiezas programadas</h2>
+  <div id="errorProgramacion" class="alert alert-danger d-none"></div>
   <div id="mensajeProgramacion" class="alert mt-3 d-none"></div>
+
+  <div class="d-flex justify-content-between align-items-center my-3">
+    <input type="text" id="busquedaProgramacion" class="form-control buscador-tabla" placeholder="Buscar programación...">
+    <button id="btnBuscarProgramacion" class="btn btn-secondary ml-2">Buscar</button>
+  </div>
+
   <div class="table-responsive bg-light p-3">
   <table id="tablaProgramacion" class="table pm-tabla table-striped table-bordered">
     <thead>
@@ -25,6 +32,7 @@
   </div>
 </div>
 {% endblock %}
+
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/programacion_limpiezas_empleado.js?v=1"></script>

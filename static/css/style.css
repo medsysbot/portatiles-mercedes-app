@@ -79,10 +79,24 @@ button.cerrar-sesion {
   color: #fff !important;
   border-collapse: collapse !important;
   width: 100% !important; /* Ancho estándar para todas las tablas */
+  border: none !important; /* sin recuadro externo */
 }
 .table th, .table td,
 .dataTable th, .dataTable td {
   border: 1px solid #fff !important; /* Líneas blancas */
+}
+
+/* Clase unificada para todas las tablas */
+.tabla-mercedes {
+  background: rgba(0,0,0,0.7) !important;
+  color: #fff !important;
+  border-collapse: collapse !important;
+  width: 100% !important;
+  border: none !important; /* sin recuadro externo */
+}
+.tabla-mercedes th,
+.tabla-mercedes td {
+  border: 1px solid #fff !important;
 }
 
 @media (max-width: 600px) {
@@ -253,11 +267,6 @@ table.dataTable td, table.dataTable th {
     border: 1px solid #fff !important;
 }
 
-/* Borde externo para todas las tablas */
-table.dataTable,
-.table {
-    border: 1px solid #fff !important;
-}
 
 /* Input de búsqueda más compacto y botones alineados */
 .dataTables_wrapper .dataTables_filter input[type="search"] {

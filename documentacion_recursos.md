@@ -20,7 +20,9 @@ background: url('/app_publico/static/imagenes/portada-index.png');
 
 ## CSS global de tablas
 El archivo `/static/css/style.css` centraliza el estilo de las tablas.
-Las clases `.table`, `.dataTable` y `.table-responsive.bg-light` controlan la
-apariencia de todas las tablas en los paneles de administración, empleados y
-clientes. Cualquier ajuste futuro debe realizarse en estas reglas para
-mantener la coherencia visual en todo el sistema.
+Desde la unificación de julio 2025 se incorporó la clase `.tabla-mercedes`, que
+debe añadirse a todas las tablas de los paneles para mantener el mismo fondo
+negro semitransparente y líneas blancas internas, sin borde exterior.
+Las reglas `.table`, `.dataTable` y `.table-responsive.bg-light` siguen
+vigentes, pero cualquier ajuste visual debe realizarse ahora a través de la
+clase `.tabla-mercedes` para asegurar la coherencia en todo el sistema.

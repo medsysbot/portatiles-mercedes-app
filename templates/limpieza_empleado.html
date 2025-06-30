@@ -9,36 +9,38 @@
 {% block content %}
 <h2 class="mb-3 mt-0">Administración de servicios de limpieza</h2>
 
-<div class="d-flex justify-content-start align-items-center flex-wrap gap-2 my-3">
-  <input type="text" id="busquedaServicios" class="form-control buscador-tabla" style="max-width: 200px;" placeholder="Buscar...">
-  <button id="btnBuscarServicios" class="btn btn-secondary">Buscar</button>
-  <button id="btnEditarSeleccionados" class="btn btn-warning">Editar</button>
-  <button id="btnEliminarSeleccionados" class="btn btn-danger" disabled>Eliminar</button>
-  <a href="/admin/limpieza/nuevo" class="btn btn-primary"><i class="fas fa-broom"></i> Nuevo servicio</a>
-</div>
-
-<div class="bg-secondary bg-opacity-50 p-3 rounded">
-  <div class="table-responsive bg-dark bg-opacity-75 p-3 rounded">
-    <table id="tablaServicios" class="table table-striped table-bordered table-hover text-white">
-      <thead class="thead-dark">
-        <tr>
-          <th></th> <!-- Checkbox -->
-          <th>Fecha</th>
-          <th>Nº Baño</th>
-          <th>DNI / CUIT / CUIL</th>
-          <th>Nombre Cliente</th>
-          <th>Tipo Servicio</th>
-          <th>Estado</th>
-          <th>Remito</th>
-          <th>Observaciones</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+<div class="d-flex justify-content-between align-items-center flex-wrap my-3">
+  <div class="flex-grow-1 mr-2">
+    <input type="text" id="busquedaServicios" class="form-control buscador-tabla" placeholder="Buscar servicio...">
+  </div>
+  <div class="btn-group ml-auto">
+    <button id="btnBuscarServicios" class="btn btn-secondary">Buscar</button>
+    <button id="btnEditarSeleccionado" class="btn btn-info ml-2" disabled>Editar</button>
+    <button id="btnEliminarSeleccionados" class="btn btn-danger ml-2" disabled>Eliminar</button>
+    <a href="/empleado/limpieza/nuevo" class="btn btn-primary ml-2"><i class="fas fa-broom"></i> Nuevo servicio</a>
   </div>
 </div>
 
-<div class="bg-secondary bg-opacity-50 p-2 rounded mt-2 d-flex justify-content-between">
+<div class="table-responsive bg-dark bg-opacity-75 p-3 rounded">
+  <table id="tablaServicios" class="table table-striped table-bordered table-hover text-white">
+    <thead class="thead-dark">
+      <tr>
+        <th></th> <!-- Checkbox -->
+        <th>Fecha</th>
+        <th>Nº Baño</th>
+        <th>DNI / CUIT / CUIL</th>
+        <th>Nombre Cliente</th>
+        <th>Tipo Servicio</th>
+        <th>Estado</th>
+        <th>Remito</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+
+<div class="bg-dark bg-opacity-50 p-2 rounded mt-2 d-flex justify-content-between">
   <span id="infoServicios" class="text-white"></span>
   <div id="paginadoServicios" class="text-white"></div>
 </div>
@@ -49,5 +51,5 @@
 
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="/static/js/limpieza_admin.js"></script>
+<script src="/static/js/limpieza_empleado.js"></script>
 {% endblock %}

@@ -8,50 +8,12 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-  body, html {
-    font-family: 'Nunito', Arial, sans-serif !important;
-    color: #fff !important;
-    background: #121212 !important;
-  }
   .main-header.navbar {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
-    background: rgba(0,0,0,0.9) !important;
   }
-  .small-box {
-    margin-top: 1rem;
-    background: rgba(30,30,30,0.85) !important;
-    color: #fff !important;
-    border-radius: 8px;
-  }
-  .small-box .inner h3, .small-box .inner p {
-    color: #fff !important;
-  }
+  .small-box { margin-top: 1rem; }
   #map { width: 100%; height: 400px; }
-  .card {
-    background: rgba(30,30,30,0.85) !important;
-    color: #fff !important;
-  }
-  .card-title { color: #fff !important; }
-  .content-wrapper {
-    background: transparent !important;
-  }
-  .sidebar, .main-sidebar {
-    background: #171717 !important;
-    color: #fff !important;
-  }
-  .nav-sidebar .nav-link, .brand-link {
-    color: #fff !important;
-  }
-  .nav-sidebar .nav-link.active {
-    background: rgba(255,255,255,0.1) !important;
-  }
-  .btn, .btn-danger {
-    background: rgba(34,34,34,0.85) !important;
-    color: #fff !important;
-    border-radius: 8px !important;
-  }
-  .btn-danger { background: #c0392b !important; }
 </style>
 {{ super() }}
 {% endblock %}
@@ -172,6 +134,7 @@
   <script src="{{ url_for('static-private', path='/js/dashboard_empleado.js') }}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Inicializar mapa en Villa Mercedes
       const map = L.map('map').setView([-33.6757, -65.4574], 14);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
       L.marker([-33.6757, -65.4574]).addTo(map).bindPopup("Baño en Belgrano-Balcarce 1182");

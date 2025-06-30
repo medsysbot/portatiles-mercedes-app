@@ -1,7 +1,7 @@
 """
 ----------------------------------------------------------
 Archivo: routes/limpieza.py
-Descripción: Módulo de servicios de limpieza
+Descripción: Módulo de servicios de limpieza con estado
 Acceso: Privado
 Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
@@ -40,6 +40,7 @@ from routes.alertas import (
 
 
 router = APIRouter()
+TEMPLATES = Jinja2Templates(directory="templates")
 
 # ===== Supabase =====
 SUPABASE_URL = os.getenv("SUPABASE_URL")
@@ -48,23 +49,20 @@ supabase: Client | None = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+TABLA = "servicios_limpieza"
+BUCKET = "servicios-limpieza"
+
 # ===== Logging =====
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
-LOG_FILE = os.path.join(LOG_DIR, "servicios_limpieza.log")
 logger = logging.getLogger("servicios_limpieza")
 logger.setLevel(logging.INFO)
 if not logger.handlers:
-    handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+    handler = logging.FileHandler(os.path.join(LOG_DIR, "servicios_limpieza.log"), mode="a", encoding="utf-8")
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     logger.propagate = False
-
-
-TEMPLATES = Jinja2Templates(directory="templates")
-TABLA = "servicios_limpieza"
-BUCKET = "servicios-limpieza"
 
 
 class ServicioLimpiezaNuevo(BaseModel):
@@ -73,6 +71,7 @@ class ServicioLimpiezaNuevo(BaseModel):
     dni_cuit_cuil: str
     nombre_cliente: str
     tipo_servicio: str
+    estado: str
     observaciones: str | None = None
 
 
@@ -93,7 +92,6 @@ def _crear_pdf_desde_imagen(data: bytes, extension: str) -> bytes:
 
 def _enviar_correo(destino: str, asunto: str, mensaje: str, pdf: bytes, nombre: str) -> None:
     """Envía un correo al cliente con el PDF adjunto si es posible."""
-
     if not all([EMAIL_ORIGIN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
         logger.warning("Variables de SMTP no configuradas; email no enviado")
         return
@@ -110,7 +108,7 @@ def _enviar_correo(destino: str, asunto: str, mensaje: str, pdf: bytes, nombre: 
             smtp.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
             smtp.send_message(msg)
         logger.info("Correo enviado a %s", destino)
-    except Exception as exc:  # pragma: no cover - fallos externos
+    except Exception as exc:
         logger.error("Error enviando correo: %s", exc)
 
 
@@ -128,8 +126,9 @@ async def crear_servicio_limpieza(
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
     tipo_servicio: str = Form(...),
+    estado: str = Form(...),
     observaciones: str | None = Form(None),
-    remito: UploadFile = File(...),
+    remito: UploadFile | None = None,
 ):
     """Registra un servicio de limpieza y guarda el remito en Supabase."""
 
@@ -143,6 +142,7 @@ async def crear_servicio_limpieza(
         "dni_cuit_cuil": dni_cuit_cuil,
         "nombre_cliente": nombre_cliente,
         "tipo_servicio": tipo_servicio,
+        "estado": estado,
         "observaciones": observaciones,
     }
 
@@ -151,105 +151,72 @@ async def crear_servicio_limpieza(
     except ValidationError as exc:
         raise HTTPException(status_code=400, detail=str(exc))
 
-    imagen_bytes = await remito.read()
-    extension = Path(remito.filename).suffix.lower() or ".jpg"
-    pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
+    remito_url = None
+    if remito and remito.filename:
+        imagen_bytes = await remito.read()
+        extension = Path(remito.filename).suffix.lower() or ".jpg"
+        pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
 
-    fecha_archivo = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    nombre_pdf = f"remito_{numero_bano}_{fecha_archivo}.pdf"
+        fecha_archivo = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        nombre_pdf = f"remito_{numero_bano}_{fecha_archivo}.pdf"
 
-    bucket = supabase.storage.from_(BUCKET)
-    try:
-        bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
-        url = bucket.get_public_url(nombre_pdf)
-    except Exception as exc:  # pragma: no cover - errores de red
-        logger.exception("Error subiendo PDF a storage:")
-        raise HTTPException(status_code=500, detail=str(exc))
+        bucket = supabase.storage.from_(BUCKET)
+        try:
+            bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
+            remito_url = bucket.get_public_url(nombre_pdf)
+        except Exception as exc:
+            logger.exception("Error subiendo PDF a storage:")
+            raise HTTPException(status_code=500, detail=str(exc))
 
     datos_insert = servicio.model_dump()
     datos_insert["fecha_servicio"] = servicio.fecha_servicio.isoformat()
-    datos_insert["remito_url"] = url
+    if remito_url:
+        datos_insert["remito_url"] = remito_url
 
     try:
         res = supabase.table(TABLA).insert(datos_insert).execute()
         if getattr(res, "error", None):
             raise Exception(res.error.message)
-    except Exception as exc:  # pragma: no cover
+    except Exception as exc:
         logger.exception("Error guardando servicio en la base:")
         raise HTTPException(status_code=500, detail=str(exc))
 
-    # Obtener email del cliente si está registrado
-    email_cliente = None
-    try:
-        consulta = (
-            supabase.table("datos_personales_clientes")
-            .select("email")
-            .eq("dni_cuit_cuil", servicio.dni_cuit_cuil)
-            .maybe_single()
-            .execute()
-        )
-        if getattr(consulta, "data", None):
-            email_cliente = consulta.data.get("email")
-    except Exception as exc:  # pragma: no cover - fallos de conexión
-        logger.warning("No se pudo consultar email del cliente: %s", exc)
-
-    if email_cliente:
-        _enviar_correo(
-            email_cliente,
-            "Servicio de limpieza registrado",
-            "Se registró un nuevo servicio de limpieza.",
-            pdf_bytes,
-            nombre_pdf,
-        )
-
     if request.headers.get("content-type", "").startswith("application/json"):
-        return {"ok": True, "url": url}
+        return {"ok": True, "url": remito_url}
 
     return RedirectResponse("/admin/limpieza", status_code=303)
 
 
-@router.get("/admin/api/servicios_limpieza")
+@router.get("/empleado/api/servicios_limpieza")
 async def listar_servicios_limpieza():
     """Devuelve todos los servicios de limpieza registrados."""
-
     if not supabase:
         logger.warning("Supabase no configurado al listar servicios")
         return []
 
     try:
         result = supabase.table(TABLA).select("*").execute()
-    except Exception as exc:  # pragma: no cover - posibles fallos de conexión
+    except Exception as exc:
         logger.exception("Error consultando servicios de limpieza:")
         raise HTTPException(status_code=500, detail=str(exc))
 
     if getattr(result, "error", None):
-        logger.error("Error en consulta de servicios de limpieza: %s", result.error)
         raise HTTPException(status_code=500, detail=f"Error en consulta: {result.error.message}")
 
     datos = getattr(result, "data", None)
-    if not datos:
-        logger.warning("Consulta de servicios de limpieza sin datos")
-        return []
-
-    for registro in datos:
-        for key, value in registro.items():
-            if isinstance(value, str):
-                registro[key] = value.encode("utf-8", "replace").decode("utf-8")
-
     normalizados = []
-    for d in datos:
-        normalizados.append(
-            {
-                "id_servicio": d.get("id_servicio") or d.get("id"),
-                "fecha_servicio": d.get("fecha_servicio"),
-                "numero_bano": d.get("numero_bano"),
-                "dni_cuit_cuil": d.get("dni_cuit_cuil"),
-                "nombre_cliente": d.get("nombre_cliente"),
-                "tipo_servicio": d.get("tipo_servicio"),
-                "remito_url": d.get("remito_url"),
-                "observaciones": d.get("observaciones"),
-            }
-        )
+    for d in datos or []:
+        normalizados.append({
+            "id_servicio": d.get("id_servicio") or d.get("id"),
+            "fecha_servicio": d.get("fecha_servicio"),
+            "numero_bano": d.get("numero_bano"),
+            "dni_cuit_cuil": d.get("dni_cuit_cuil"),
+            "nombre_cliente": d.get("nombre_cliente"),
+            "tipo_servicio": d.get("tipo_servicio"),
+            "estado": d.get("estado"),
+            "remito_url": d.get("remito_url"),
+            "observaciones": d.get("observaciones"),
+        })
 
     return normalizados
 
@@ -258,15 +225,14 @@ class _IdLista(BaseModel):
     ids: list[int]
 
 
-@router.post("/admin/api/servicios_limpieza/eliminar")
-async def eliminar_servicios(payload: _IdLista):
-    """Elimina servicios de limpieza por ID."""
+@router.post("/empleado/api/servicios_limpieza/eliminar")
+async def eliminar_servicios_empleado(payload: _IdLista):
+    """Elimina servicios de limpieza por ID desde el panel de empleados."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:
         supabase.table(TABLA).delete().in_("id_servicio", payload.ids).execute()
-    except Exception as exc:  # pragma: no cover
+    except Exception as exc:
         logger.exception("Error eliminando servicios:")
         raise HTTPException(status_code=500, detail=str(exc))
     return {"ok": True}
-

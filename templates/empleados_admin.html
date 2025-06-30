@@ -1,70 +1,49 @@
-{% extends 'panel_admin.html' %}
-{% block title %}Empleados{% endblock %}
-{% block description %}Gestión de usuarios del sistema{% endblock %}
-{% block head_extra %}
-{{ super() }}
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-{% endblock %}
-{% block content %}
-<h2 class="mb-3 mt-0">Administración de empleados</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
+// Archivo: static/js/empleados_admin.js
+// Proyecto: Portátiles Mercedes
 
-<div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
-  <div class="mb-2 flex-grow-1">
-    <input type="text" id="busquedaEmpleado" class="form-control buscador-tabla" placeholder="Buscar empleado...">
-  </div>
-  <div class="d-flex flex-wrap gap-2">
-    <button class="btn btn-secondary" id="btnBuscarEmpleado" type="button">Buscar</button>
-    <a href="/admin/empleados/nuevo" class="btn btn-success"><i class="fas fa-user-plus"></i> Agregar empleado</a>
-    <button id="btnEliminarEmpleados" class="btn btn-danger" disabled>Eliminar</button>
-  </div>
-</div>
-
-<div class="table-responsive bg-light p-3">
-  {% if mensaje %}
-  <div class="alert alert-info mt-3">{{ mensaje }}</div>
-  {% endif %}
-  <div id="mensajeEmpleados" class="alert mt-3 d-none"></div>
-  {% if not empleados %}
-  <p>No hay empleados registrados</p>
-  {% endif %}
-  <table id="tabla-empleados" class="tabla-mercedes dataTable display">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Email</th>
-        <th>Contraseña inicial</th>
-        <th>Nombre completo</th>
-        <th>Rol</th>
-        <th>Estado</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for empleado in empleados %}
-      <tr>
-        <td><input type="checkbox" class="fila-check" data-id="{{ empleado.uuid }}"></td>
-        <td>{{ empleado.email }}</td>
-        <td>********</td>  <!-- No mostrar hash, solo indicar que existe -->
-        <td>{{ empleado.nombre }}</td>
-        <td>{{ empleado.rol }}</td>
-        <td>{{ 'Activo' if empleado.activo else 'Inactivo' }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-{% endblock %}
-
-{% block scripts %}
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script>
 document.addEventListener('DOMContentLoaded', () => {
-  const tabla = $('#tabla-empleados').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true
+  const tabla = document.getElementById('tabla-empleados');
+  const btnEliminar = document.getElementById('btnEliminarEmpleados');
+  const buscador = document.getElementById('busquedaEmpleado');
+  const btnBuscar = document.getElementById('btnBuscarEmpleado');
+
+  function actualizarBoton() {
+    const marcados = tabla.querySelectorAll('.fila-check:checked');
+    if (btnEliminar) btnEliminar.disabled = marcados.length === 0;
+  }
+
+  tabla.addEventListener('change', e => {
+    if (e.target.classList.contains('fila-check')) actualizarBoton();
+  });
+
+  function filtrarEmpleados() {
+    const q = (buscador?.value || '').toLowerCase();
+    tabla.querySelectorAll('tbody tr').forEach(tr => {
+      const texto = tr.textContent.toLowerCase();
+      tr.style.display = texto.includes(q) ? '' : 'none';
+    });
+  }
+
+  buscador?.addEventListener('input', filtrarEmpleados);
+  btnBuscar?.addEventListener('click', filtrarEmpleados);
+
+  btnEliminar?.addEventListener('click', async () => {
+    const ids = Array.from(tabla.querySelectorAll('.fila-check:checked')).map(c => c.dataset.id);
+    if (!ids.length || !confirm('¿Eliminar empleados seleccionados?')) return;
+    try {
+      const resp = await fetch('/admin/api/empleados/eliminar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        },
+        body: JSON.stringify({ ids })
+      });
+      if (!resp.ok) throw new Error('Error al eliminar empleados');
+      location.reload();
+    } catch (err) {
+      console.error('Error eliminando empleados:', err);
+      alert('Error eliminando registros');
+    }
   });
 });
-</script>
-<script src="/static/js/empleados_admin.js"></script>
-{% endblock %}

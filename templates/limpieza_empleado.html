@@ -4,21 +4,10 @@
 {% block head_extra %}
 {{ super() }}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-<style>
-  .table-container-custom {
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo semi-transparente */
-    border-radius: 0.5rem;
-    padding: 1rem;
-  }
-  .table-custom th,
-  .table-custom td {
-    background-color: rgba(50, 50, 50, 0.3); /* Fondo de celdas semi-transparente */
-  }
-</style>
 {% endblock %}
 
 {% block content %}
-<h2 class="mb-3 mt-0">Administración de servicios de limpieza</h2>
+<h2 class="mb-3 mt-0">Servicios de limpieza</h2>
 
 <div class="d-flex justify-content-between align-items-center flex-wrap my-3">
   <div class="flex-grow-1 mr-2">
@@ -32,8 +21,8 @@
   </div>
 </div>
 
-<div class="table-responsive table-container-custom">
-  <table id="tablaServicios" class="table table-striped table-bordered table-hover text-white table-custom">
+<div class="table-responsive bg-dark bg-opacity-75 p-3 rounded">
+  <table id="tablaServicios" class="table table-striped table-bordered table-hover text-white">
     <thead class="thead-dark">
       <tr>
         <th style="width: 40px;"></th> <!-- Checkbox -->
@@ -62,5 +51,5 @@
 
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="/static/js/limpieza_admin.js"></script>
+<script src="/static/js/limpieza_empleado.js"></script>
 {% endblock %}

@@ -30,19 +30,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   const calendarioEl = document.getElementById('calendario');
-  if (calendarioEl && window.FullCalendar) {
-    const calendario = new FullCalendar.Calendar(calendarioEl, {
-      initialView: 'dayGridMonth',
-      height: 'auto',
-      headerToolbar: {
-        start: '',                   // Sin flechas
-        center: 'title',             // Título del mes y año arriba
-        end: 'today,dayGridMonth,timeGridWeek,listWeek' // Botones a la derecha
-      },
-      locale: 'es'
-    });
-    calendario.render();
-  }
+if (calendarioEl && window.FullCalendar) {
+  const calendario = new FullCalendar.Calendar(calendarioEl, {
+    initialView: 'dayGridMonth',
+    height: 'auto',
+    headerToolbar: {
+      start: '',                                 // Sin flechas
+      center: 'title',                          // Título del mes y año al centro
+      end: 'today,dayGridMonth,timeGridWeek,listWeek' // Botones a la derecha
+    },
+    locale: 'es',
+    titleFormat: { year: 'numeric', month: 'long' } // 🔥 Quita el "D" y deja "Junio 2025"
+  });
+  calendario.render();
+}
 
   cargarResumen();
 

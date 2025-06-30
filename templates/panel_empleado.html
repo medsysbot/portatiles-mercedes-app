@@ -134,10 +134,10 @@
   <script src="{{ url_for('static-private', path='/js/dashboard_empleado.js') }}"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const map = L.map('map').setView([-34.609, -58.3816], 12); // Coord Buenos Aires por defecto
+      // Inicializar mapa en Villa Mercedes
+      const map = L.map('map').setView([-33.6757, -65.4574], 14);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
-      // Ejemplo marcador
-      L.marker([-34.609, -58.3816]).addTo(map).bindPopup("Ejemplo de baño registrado");
+      L.marker([-33.6757, -65.4574]).addTo(map).bindPopup("Baño en Belgrano-Balcarce 1182");
     });
   </script>
 {% endblock %}

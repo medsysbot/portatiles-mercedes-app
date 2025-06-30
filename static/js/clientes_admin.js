@@ -9,17 +9,6 @@ function handleUnauthorized() {
   window.location.href = '/login';
 }
 
-async function fetchConAuth(url) {
-  const resp = await fetch(url, {
-    headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') },
-  });
-  if (resp.status === 401) {
-    handleUnauthorized();
-    throw new Error('Unauthorized');
-  }
-  return resp;
-}
-
 let clientesCargados = [];
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -29,7 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
-      { data: 'dni_cuit_cuil', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
+      {
+        data: 'dni_cuit_cuil',
+        render: data => `<input type="checkbox" class="fila-check" value="${data}">`,
+        orderable: false
+      },
       { data: 'dni_cuit_cuil' },
       { data: 'nombre' },
       { data: 'apellido' },
@@ -50,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#tabla-clientes tbody').on('change', '.fila-check', actualizarBoton);
 
   btnEliminar?.addEventListener('click', async () => {
-    const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.dataset.id);
+    const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.value);
     if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
     try {
       const resp = await fetch('/admin/api/clientes/eliminar', {
@@ -78,21 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       console.error('❌ Error al cargar clientes:', error);
       mostrarMensaje('Error consultando la base de datos', 'danger');
-      // Solo borrar la tabla si está vacía desde el principio
-      if (clientesCargados.length === 0) {
-        tabla.clear().draw();
-      }
+      if (clientesCargados.length === 0) tabla.clear().draw();
     }
   }
 
   function mostrarClientes(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
-    if (lista.length === 0) {
-      mostrarMensaje('No hay clientes registrados', '');
-    } else {
-      mostrarMensaje('', '');
-    }
+    if (lista.length === 0) mostrarMensaje('No hay clientes registrados', '');
+    else mostrarMensaje('', '');
   }
 
   function filtrarClientes(texto) {
@@ -121,21 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const buscador = document.getElementById('busquedaCliente');
   const btnBuscar = document.getElementById('btnBuscarCliente');
-  if (buscador) {
-    buscador.addEventListener('input', () => {
-      filtrarClientes(buscador.value.trim());
-    });
-  }
-  if (btnBuscar) {
-    btnBuscar.addEventListener('click', () => {
-      filtrarClientes(buscador.value.trim());
-    });
-  }
+  if (buscador) buscador.addEventListener('input', () => filtrarClientes(buscador.value.trim()));
+  if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
 
-  obtenerClientes();  // solo una vez, al cargar
-
-  // Si existe un botón de refrescar manual
-  document.getElementById('btnClientes')?.addEventListener('click', () => {
-    obtenerClientes();
-  });
+  obtenerClientes();
 });

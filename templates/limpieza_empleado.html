@@ -1,4 +1,4 @@
-{% extends 'panel_admin.html' %}
+{% extends 'panel_empleado.html' %}
 {% block title %}Servicios de Limpieza{% endblock %}
 {% block description %}Listado de servicios de limpieza registrados{% endblock %}
 {% block head_extra %}
@@ -7,18 +7,19 @@
 {% endblock %}
 
 {% block content %}
-<h2 class="mb-3 mt-0">Administración de servicios de limpieza</h2>
+<h2 class="mb-3 mt-0">Servicios de limpieza realizados</h2>
 
 <div class="d-flex justify-content-between align-items-center my-3">
   <input type="text" id="busquedaServicios" class="form-control buscador-tabla" placeholder="Buscar servicio...">
   <button id="btnBuscarServicios" class="btn btn-secondary ml-2">Buscar</button>
-  <a href="/admin/limpieza/nuevo" class="btn btn-primary ml-3"><i class="fas fa-broom"></i> Agregar servicio</a>
+  <a href="/empleado/limpieza/nuevo" class="btn btn-primary ml-3"><i class="fas fa-broom"></i> Agregar servicio</a>
+  <button id="btnEditarSeleccionados" class="btn btn-warning ml-3" disabled>Editar estado / remito</button>
   <button id="btnEliminarSeleccionados" class="btn btn-danger ml-3" disabled>Eliminar</button>
 </div>
 
-<div class="table-responsive bg-dark bg-opacity-75 p-3 rounded">
+<div class="table-responsive p-3 rounded" style="background-color: rgba(0,0,0,0.75);">
   <table id="tablaServicios" class="table table-striped table-bordered table-hover text-white">
-    <thead class="thead-dark">
+    <thead style="background-color: rgba(128,128,128,0.5);">
       <tr>
         <th></th> <!-- Checkbox -->
         <th>Fecha</th>
@@ -26,7 +27,7 @@
         <th>DNI / CUIT / CUIL</th>
         <th>Nombre Cliente</th>
         <th>Tipo Servicio</th>
-        <th>Estado</th> <!-- Estado colocado ANTES de Remito, como espera el JS -->
+        <th>Estado</th>
         <th>Remito</th>
         <th>Observaciones</th>
       </tr>

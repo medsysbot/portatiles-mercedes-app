@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
       { data: 'tipo_servicio' },
-      { data: 'remito_url', render: data => `<a href="${data}" target="_blank">Ver</a>` },
+      { data: 'estado', render: e => e === 'completado' ? '<span class="badge badge-success">Completado</span>' : '<span class="badge badge-warning">Pendiente</span>' },
+      { data: 'remito_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : 'Sin remito' },
       { data: 'observaciones' }
     ]
   });
@@ -24,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const errorDiv = document.getElementById('errorServicios');
   const mensajeDiv = document.getElementById('mensajeServicios');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
-  const btnEditar = document.getElementById('btnEditarSeleccionados');
   let servicios = [];
 
   async function cargarServicios() {
@@ -53,13 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function actualizarBotones() {
+  function actualizarBoton() {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
     if (btnEliminar) btnEliminar.disabled = checks.length === 0;
-    if (btnEditar) btnEditar.disabled = checks.length !== 1; // solo habilitar si hay 1 seleccionado
   }
 
-  $('#tablaServicios tbody').on('change', '.fila-check', actualizarBotones);
+  $('#tablaServicios tbody').on('change', '.fila-check', actualizarBoton);
 
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaServicios tbody .fila-check:checked')).map(c => c.dataset.id);
@@ -78,13 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
-  });
-
-  btnEditar?.addEventListener('click', () => {
-    const seleccionado = document.querySelector('#tablaServicios tbody .fila-check:checked');
-    if (!seleccionado) return;
-    const id = seleccionado.dataset.id;
-    window.location.href = `/empleado/limpieza/editar/${id}`;
   });
 
   function mostrarMensaje(texto, tipo) {

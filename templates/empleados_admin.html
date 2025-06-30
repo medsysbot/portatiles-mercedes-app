@@ -6,50 +6,53 @@
 {% endblock %}
 {% block content %}
 <h2 class="mb-3 mt-0">Administración de empleados</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
-<div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
-  <div class="dataTables_filter">
-    <label>
-      <input type="search" class="form-control form-control-sm buscador-tabla" placeholder="Buscar empleado">
-    </label>
-  </div>
-  <div class="d-flex gap-2">
-    <button class="btn btn-dark">Buscar</button>
-    <button class="btn btn-dark">Agregar empleado</button>
-    <button class="btn btn-danger">Eliminar</button>
-  </div>
+
+<div class="d-flex justify-content-between align-items-center my-3">
+  <input type="text" id="busquedaEmpleado" class="form-control buscador-tabla" placeholder="Buscar empleado...">
+  <button class="btn btn-secondary ml-2" id="btnBuscarEmpleado" type="button">Buscar</button>
+  <a href="/admin/empleados/nuevo" class="btn btn-success ml-3"><i class="fas fa-user-plus"></i> Agregar empleado</a>
+  <button id="btnEliminarEmpleados" class="btn btn-danger ml-3" disabled>Eliminar</button>
 </div>
+
 <div class="table-responsive bg-light p-3">
+  {% if mensaje %}
+  <div class="alert alert-info mt-3">{{ mensaje }}</div>
+  {% endif %}
+  <div id="mensajeEmpleados" class="alert mt-3 d-none"></div>
+  {% if not empleados %}
+  <p>No hay empleados registrados</p>
+  {% endif %}
   <table id="tabla-empleados" class="tabla-mercedes dataTable">
     <thead>
       <tr>
-        <th>ID</th>
+        <th></th>
+        <th>DNI/CUIT/CUIL</th>
         <th>Nombre completo</th>
-        <th>DNI</th>
-        <th>Teléfono</th>
-        <th>Email</th>
-        <th>Acciones</th>
+        <th>Fecha de ingreso</th>
+        <th>Documento</th>
       </tr>
     </thead>
     <tbody>
       {% for empleado in empleados %}
       <tr>
-        <td>{{ empleado.id }}</td>
+        <td><input type="checkbox" class="fila-check" data-id="{{ empleado.dni_cuit_cuil }}"></td>
+        <td>{{ empleado.dni_cuit_cuil }}</td>
         <td>{{ empleado.nombre }} {{ empleado.apellido }}</td>
-        <td>{{ empleado.dni }}</td>
-        <td>{{ empleado.telefono }}</td>
-        <td>{{ empleado.email }}</td>
+        <td>{{ empleado.fecha_ingreso }}</td>
         <td>
-          <a href="/admin/empleados/editar/{{ empleado.id }}" class="btn btn-primary">Editar</a>
-          <button onclick="eliminarEmpleado({{ empleado.id }})" class="btn btn-danger">Eliminar</button>
+          {% if empleado.documento_url %}
+          <a href="{{ empleado.documento_url }}" target="_blank">
+            <img src="{{ empleado.documento_url }}" alt="Documento" class="img-thumbnail" style="max-height:60px;">
+          </a>
+          {% else %}
+          Sin documento
+          {% endif %}
         </td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
 </div>
-{% if mensaje %}
-<div class="alert alert-info mt-3">{{ mensaje }}</div>
-{% endif %}
 {% endblock %}
 
 {% block scripts %}

@@ -1,47 +1,48 @@
 {% extends 'panel_admin.html' %}
-{% block title %}Servicios de limpieza{% endblock %}
-{% block description %}Listado de servicios de limpieza{% endblock %}
-
+{% block title %}Nuevo Servicio de Limpieza{% endblock %}
+{% block description %}Formulario para registrar un servicio de limpieza{% endblock %}
 {% block head_extra %}
 {{ super() }}
 {% endblock %}
-
 {% block content %}
-<div class="container mt-4">
-  <h2>Servicios de limpieza registrados</h2>
-  <div id="errorServicios" class="alert alert-danger d-none"></div>
-  <div id="mensajeServicios" class="alert mt-3 d-none"></div>
-
-  <div class="d-flex justify-content-between align-items-center my-3 flex-wrap gap-2">
-    <input type="text" id="busquedaServicios" class="form-control buscador-tabla" placeholder="Buscar servicio...">
-    <button id="btnBuscarServicios" class="btn btn-secondary">Buscar</button>
-    <a href="/admin/limpieza/nuevo" class="btn btn-primary"><i class="fas fa-broom"></i> Agregar servicio de limpieza</a>
-    <button id="btnEditarRemito" class="btn btn-warning ml-2" disabled>Editar remito</button>
-    <button id="btnEliminarSeleccionados" class="btn btn-danger ml-2" disabled>Eliminar</button>
+<h2 class="mt-0">Nuevo Servicio de Limpieza</h2>
+<form method="post" enctype="multipart/form-data">
+  <div class="form-group">
+    <label>Fecha del servicio</label>
+    <input type="date" name="fecha_servicio" class="form-control" required>
   </div>
-
-  <div class="table-responsive bg-light p-3">
-    <table id="tablaServicios" class="table pm-tabla table-striped table-bordered">
-      <thead>
-        <tr>
-          <th></th>
-          <th>Fecha</th>
-          <th>Nº Baño</th>
-          <th>DNI / CUIT / CUIL</th>
-          <th>Cliente</th>
-          <th>Tipo Servicio</th>
-          <th>Estado</th>
-          <th>Remito</th>
-          <th>Observaciones</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+  <div class="form-group">
+    <label>Número del baño</label>
+    <input type="text" name="numero_bano" class="form-control" required>
   </div>
-</div>
-{% endblock %}
-
-{% block scripts %}
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="{{ url_for('static', path='/js/limpieza_admin.js') }}"></script>
+  <div class="form-group">
+    <label>DNI / CUIT / CUIL</label>
+    <input type="text" name="dni_cuit_cuil" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Nombre del cliente</label>
+    <input type="text" name="nombre_cliente" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Tipo de servicio</label>
+    <input type="text" name="tipo_servicio" class="form-control" required>
+  </div>
+  <div class="form-group">
+    <label>Observaciones</label>
+    <textarea name="observaciones" class="form-control" rows="3"></textarea>
+  </div>
+  <div class="form-group">
+    <label>Estado</label>
+    <select name="estado" class="form-control" required>
+      <option value="pendiente">Pendiente</option>
+      <option value="completo">Completo</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Remito (foto o imagen)</label>
+    <input type="file" name="remito" accept="image/*" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-primary">Registrar servicio</button>
+  <a href="/admin/limpieza" class="btn btn-secondary">Volver</a>
+</form>
 {% endblock %}

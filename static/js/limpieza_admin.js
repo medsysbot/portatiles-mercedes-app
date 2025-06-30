@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
       { data: 'tipo_servicio' },
-      { data: 'remito_url', render: data => `<a href="${data}" target="_blank">Ver</a>` },
+      { data: 'estado', render: e => e === 'completado' ? '<span class="badge badge-success">Completado</span>' : '<span class="badge badge-warning">Pendiente</span>' },
+      { data: 'remito_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : 'Sin remito' },
       { data: 'observaciones' }
     ]
   });
@@ -23,8 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaServicios');
   const errorDiv = document.getElementById('errorServicios');
   const mensajeDiv = document.getElementById('mensajeServicios');
-  let servicios = [];
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+  let servicios = [];
 
   async function cargarServicios() {
     try {
@@ -111,4 +112,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cargarServicios();
 });
-

@@ -1,44 +1,47 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Servicios de limpieza{% endblock %}
-{% block description %}Administración de las tareas de limpieza{% endblock %}
+{% block description %}Listado de servicios de limpieza{% endblock %}
+
 {% block head_extra %}
 {{ super() }}
 {% endblock %}
+
 {% block content %}
 <div class="container mt-4">
-  <h2>Servicios de limpieza</h2>
+  <h2>Servicios de limpieza registrados</h2>
   <div id="errorServicios" class="alert alert-danger d-none"></div>
   <div id="mensajeServicios" class="alert mt-3 d-none"></div>
 
-  <div class="d-flex justify-content-between align-items-center my-3">
+  <div class="d-flex justify-content-between align-items-center my-3 flex-wrap gap-2">
     <input type="text" id="busquedaServicios" class="form-control buscador-tabla" placeholder="Buscar servicio...">
-    <button id="btnBuscarServicios" class="btn btn-secondary ml-2">Buscar</button>
-    <a href="/admin/limpieza/nuevo" class="btn btn-primary ml-3"><i class="fas fa-broom"></i> Agregar servicio</a>
-    <button id="btnEliminarSeleccionados" class="btn btn-danger ml-3" disabled>Eliminar</button>
+    <button id="btnBuscarServicios" class="btn btn-secondary">Buscar</button>
+    <a href="/admin/limpieza/nuevo" class="btn btn-primary"><i class="fas fa-broom"></i> Agregar servicio de limpieza</a>
+    <button id="btnEditarRemito" class="btn btn-warning ml-2" disabled>Editar remito</button>
+    <button id="btnEliminarSeleccionados" class="btn btn-danger ml-2" disabled>Eliminar</button>
   </div>
 
   <div class="table-responsive bg-light p-3">
-  <table id="tablaServicios" class="table pm-tabla table-striped table-bordered">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Fecha</th>
-        <th>Nº baño</th>
-        <th>DNI / CUIT / CUIL</th>
-        <th>Nombre cliente</th>
-        <th>Tipo servicio</th>
-        <th>Remito</th>
-        <th>Observaciones</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <table id="tablaServicios" class="table pm-tabla table-striped table-bordered">
+      <thead>
+        <tr>
+          <th></th>
+          <th>Fecha</th>
+          <th>Nº Baño</th>
+          <th>DNI / CUIT / CUIL</th>
+          <th>Cliente</th>
+          <th>Tipo Servicio</th>
+          <th>Estado</th>
+          <th>Remito</th>
+          <th>Observaciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="/limpieza_admin.js"></script>
-<script src="{{ url_for('static-private', path='/js/limpieza_admin.js') }}"></script>
+<script src="{{ url_for('static', path='/js/limpieza_admin.js') }}"></script>
 {% endblock %}

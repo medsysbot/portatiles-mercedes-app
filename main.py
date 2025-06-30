@@ -105,14 +105,10 @@ import routes.facturas_pendientes as facturas_pendientes_module
 import routes.morosos as morosos_module
 from routes import admin_panel, empleado_panel, cliente_panel, ventas, limpieza, debito, reportes, programacion_limpiezas
 
-app = FastAPI()
-
-# Middleware para reconocer el esquema correcto detrás del proxy
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 
-# Middleware que reconoce el X-Forwarded-Proto de Railway
-app.add_middleware(ForwardedMiddleware, trusted_hosts="*")
+app = FastAPI()
 
 # Middleware que limita dominios válidos (ajusta tu dominio si lo tenés)
 app.add_middleware(
@@ -120,8 +116,9 @@ app.add_middleware(
     allowed_hosts=["portatiles-mercedes-app-production.up.railway.app", "*.portatilesmercedes.com", "localhost"]
 )
 
-# (Opcional) Forzar HTTPS → descomentar si querés forzar
+# Opcional: forzar HTTPS
 # app.add_middleware(HTTPSRedirectMiddleware)
+
 # Registrar manejador de excepciones para capturar tracebacks
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):

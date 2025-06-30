@@ -22,18 +22,17 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  const calendarioEl = document.getElementById('calendario');
-  if (calendarioEl && window.FullCalendar) {
-    const calendario = new FullCalendar.Calendar(calendarioEl, {
-      initialView: 'dayGridMonth',
-      height: 'auto',
-      headerToolbar: {
-        left: 'prev,next today', // Flechas y Today a la izquierda
-        center: 'title',         // Título al centro
-        right: 'dayGridMonth,timeGridWeek,listWeek' // Vistas a la derecha
-      },
-      locale: 'es'
-    });
+const calendario = new FullCalendar.Calendar(calendarioEl, {
+  initialView: 'dayGridMonth',
+  height: 'auto',
+  headerToolbar: {
+    start: 'title',                   // Primera línea: título solo arriba
+    center: '',                       // Sin nada en el centro de la barra de botones
+    end: 'prev,next today dayGridMonth,timeGridWeek,listWeek' // Segunda línea: flechas + Today + vistas
+  },
+  titleFormat: { year: 'numeric', month: 'long' }, // Muestra “junio 2025” sin “de”
+  locale: 'es'
+});
     calendario.render();
   }
 

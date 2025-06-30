@@ -1,6 +1,9 @@
+// Archivo: static/js/empleados_admin.js
+// Proyecto: Portátiles Mercedes
+
 document.addEventListener('DOMContentLoaded', () => {
   const tabla = document.getElementById('tabla-empleados');
-  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+  const btnEliminar = document.getElementById('btnEliminarEmpleados');
   const buscador = document.getElementById('busquedaEmpleado');
   const btnBuscar = document.getElementById('btnBuscarEmpleado');
 
@@ -26,14 +29,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(tabla.querySelectorAll('.fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    if (!ids.length || !confirm('¿Eliminar empleados seleccionados?')) return;
     try {
       const resp = await fetch('/admin/api/empleados/eliminar', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        },
         body: JSON.stringify({ ids })
       });
-      if (!resp.ok) throw new Error('Error al eliminar');
+      if (!resp.ok) throw new Error('Error al eliminar empleados');
       location.reload();
     } catch (err) {
       console.error('Error eliminando empleados:', err);

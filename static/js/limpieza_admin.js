@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarServicios() {
     try {
-      const resp = await fetch('/admin/api/servicios_limpieza', {
+      const resp = await fetch('/empleado/api/servicios_limpieza', {  // <-- Ruta corregida aquí
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error al consultar servicios');

@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const errorDiv = document.getElementById('errorServicios');
   const mensajeDiv = document.getElementById('mensajeServicios');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+  const btnEditar = document.getElementById('btnEditarSeleccionados');
   let servicios = [];
 
   async function cargarServicios() {
@@ -52,12 +53,13 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function actualizarBoton() {
+  function actualizarBotones() {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
     if (btnEliminar) btnEliminar.disabled = checks.length === 0;
+    if (btnEditar) btnEditar.disabled = checks.length !== 1; // solo habilitar si hay 1 seleccionado
   }
 
-  $('#tablaServicios tbody').on('change', '.fila-check', actualizarBoton);
+  $('#tablaServicios tbody').on('change', '.fila-check', actualizarBotones);
 
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaServicios tbody .fila-check:checked')).map(c => c.dataset.id);
@@ -76,6 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
+  });
+
+  btnEditar?.addEventListener('click', () => {
+    const seleccionado = document.querySelector('#tablaServicios tbody .fila-check:checked');
+    if (!seleccionado) return;
+    const id = seleccionado.dataset.id;
+    window.location.href = `/empleado/limpieza/editar/${id}`;
   });
 
   function mostrarMensaje(texto, tipo) {
@@ -111,4 +120,3 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cargarServicios();
 });
-

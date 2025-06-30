@@ -1,6 +1,6 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Nuevo Servicio de Limpieza{% endblock %}
-{% block description %}Formulario para registrar servicios de limpieza{% endblock %}
+{% block description %}Formulario para registrar un servicio de limpieza{% endblock %}
 {% block head_extra %}
 {{ super() }}
 {% endblock %}
@@ -12,7 +12,7 @@
     <input type="date" name="fecha_servicio" class="form-control" required>
   </div>
   <div class="form-group">
-    <label>Número de baño</label>
+    <label>Número del baño</label>
     <input type="text" name="numero_bano" class="form-control" required>
   </div>
   <div class="form-group">
@@ -28,21 +28,22 @@
     <input type="text" name="tipo_servicio" class="form-control" required>
   </div>
   <div class="form-group">
-    <label>Estado del servicio</label>
+    <label>Observaciones</label>
+    <textarea name="observaciones" class="form-control" rows="3"></textarea>
+  </div>
+  <div class="form-group">
+    <label>Estado</label>
     <select name="estado" class="form-control" required>
       <option value="pendiente">Pendiente</option>
-      <option value="completado">Completado</option>
+      <option value="completo">Completo</option>
     </select>
   </div>
   <div class="form-group">
-    <label>Remito (opcional)</label>
-    <input type="file" name="remito" class="form-control-file">
+    <label>Remito (foto o imagen)</label>
+    <input type="file" name="remito" accept="image/*" class="form-control">
   </div>
-  <div class="form-group">
-    <label>Observaciones</label>
-    <textarea name="observaciones" class="form-control"></textarea>
-  </div>
-  <button type="submit" class="btn btn-primary">Guardar servicio</button>
+  <button type="submit" class="btn btn-primary">Registrar servicio</button>
   <a href="/admin/limpieza" class="btn btn-secondary">Volver</a>
 </form>
 {% endblock %}
+

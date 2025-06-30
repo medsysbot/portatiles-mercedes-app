@@ -131,13 +131,13 @@
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="{{ url_for('static-private', path='/js/dashboard_empleado.js') }}"></script>
+  <script src="https://portatiles-mercedes-app-production.up.railway.app/static-private/js/dashboard_empleado.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // Inicializar mapa en Villa Mercedes
       const map = L.map('map').setView([-33.6757, -65.4574], 14);
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
-      L.marker([-33.6757, -65.4574]).addTo(map).bindPopup("Baño en Belgrano-Balcarce 1182");
+      L.marker([-33.6757, -65.4574]).addTo(map).bindPopup("Oficina, Belgrano-Balcarce 1182");
     });
   </script>
 {% endblock %}

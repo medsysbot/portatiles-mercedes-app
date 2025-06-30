@@ -1,3 +1,10 @@
+// Archivo: static/js/dashboard_empleado.js
+// Proyecto: Portátiles Mercedes
+
+function limpiarCredenciales() {
+  localStorage.clear();
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   const headers = { Authorization: 'Bearer ' + localStorage.getItem('access_token') };
 
@@ -22,19 +29,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-const calendario = new FullCalendar.Calendar(calendarioEl, {
-  initialView: 'dayGridMonth',
-  height: 'auto',
-  headerToolbar: {
-    start: 'title',                   // Primera línea: título solo arriba
-    center: '',                       // Sin nada en el centro de la barra de botones
-    end: 'prev,next today dayGridMonth,timeGridWeek,listWeek' // Segunda línea: flechas + Today + vistas
-  },
-  titleFormat: { year: 'numeric', month: 'long' }, // Muestra “junio 2025” sin “de”
-  locale: 'es'
-});
+  const calendarioEl = document.getElementById('calendario');
+  if (calendarioEl && window.FullCalendar) {
+    const calendario = new FullCalendar.Calendar(calendarioEl, {
+      initialView: 'dayGridMonth',
+      height: 'auto',
+      headerToolbar: {
+        left: 'prev,next today',      // Flechas + Today
+        right: 'dayGridMonth,timeGridWeek,listWeek' // Vistas
+      },
+      titleFormat: { year: 'numeric', month: 'long' }, // Título simple: Junio 2025
+      locale: 'es'
+    });
     calendario.render();
   }
+
+  // Inicializar mapa en Villa Mercedes
+  const map = L.map('map').setView([-33.6757, -65.4574], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { attribution: '© OpenStreetMap' }).addTo(map);
+  L.marker([-33.6757, -65.4574]).addTo(map).bindPopup("Villa Mercedes");
 
   cargarResumen();
 

@@ -110,7 +110,6 @@ app = FastAPI()
 # Middleware para reconocer el esquema correcto detrás del proxy
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
-from fastapi.middleware.forwarded import ForwardedMiddleware
 
 # Middleware que reconoce el X-Forwarded-Proto de Railway
 app.add_middleware(ForwardedMiddleware, trusted_hosts="*")

@@ -35,10 +35,17 @@ document.addEventListener('DOMContentLoaded', () => {
       initialView: 'dayGridMonth',
       height: 'auto',
       headerToolbar: {
-        left: 'prev,next today',      // Flechas + Today
-        right: 'dayGridMonth,timeGridWeek,listWeek' // Vistas
+        start: 'prev,next today',  // Flechas + Today en una línea
+        center: '',                // Título va arriba solo
+        end: 'dayGridMonth,timeGridWeek,listWeek' // Vistas
       },
-      titleFormat: { year: 'numeric', month: 'long' }, // Título simple: Junio 2025
+      titleFormat: { year: 'numeric', month: 'long' }, // "junio 2025"
+      buttonText: {
+        today: 'Hoy',
+        month: 'Mes',
+        week: 'Semana',
+        list: 'Lista'
+      },
       locale: 'es'
     });
     calendario.render();

@@ -3,41 +3,48 @@
 {% block description %}Formulario para dar de alta empleados{% endblock %}
 {% block head_extra %}
 {{ super() }}
+<style>
+  .form-container {
+    max-width: 600px; /* Ajusta el ancho total del formulario */
+    margin: 0 auto; /* Centra el formulario horizontalmente */
+  }
+  .input-group .form-control {
+    max-width: 500px; /* Limita el ancho del campo de contraseña */
+  }
+</style>
 {% endblock %}
 {% block content %}
-<h2 class="mt-0">Nuevo Empleado</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
-<form method="post">
-  <div class="form-group">
-    <label>Nombre completo</label>
-    <input type="text" name="nombre" class="form-control" required>
-  </div>
-  <div class="form-group">
-    <label>Email</label>
-    <input type="email" name="email" class="form-control" required>
-  </div>
-  <!--
-  Modificación: El alta de empleados requiere definir una contraseña inicial,
-  necesaria para autenticación y generación de token JWT.
-  -->
-  <div class="form-group">
-    <label for="password">Contraseña inicial</label>
-    <div class="input-group">
-      <input type="password" id="password" name="password" class="form-control" required minlength="6" autocomplete="new-password">
-      <div class="input-group-append">
-        <button class="btn btn-outline-secondary" type="button" id="togglePass"><i class="fas fa-eye"></i></button>
+<h2 class="mt-0">Nuevo Empleado</h2>
+<div class="form-container">
+  <form method="post">
+    <div class="form-group">
+      <label>Nombre completo</label>
+      <input type="text" name="nombre" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Contraseña inicial</label>
+      <div class="input-group">
+        <input type="password" id="password" name="password" class="form-control" required minlength="6" autocomplete="new-password">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button" id="togglePass"><i class="fas fa-eye"></i></button>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="form-group">
-    <label>Rol</label>
-    <select name="rol" class="form-control">
-      <option value="empleado">Empleado</option>
-      <option value="Administrador">Administrador</option>
-    </select>
-  </div>
-  <button type="submit" class="btn btn-primary">Crear usuario</button>
-  <a href="/admin/empleados" class="btn btn-secondary">Volver</a>
-</form>
+    <div class="form-group">
+      <label>Rol</label>
+      <select name="rol" class="form-control">
+        <option value="empleado">Empleado</option>
+        <option value="Administrador">Administrador</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Crear usuario</button>
+    <a href="/admin/empleados" class="btn btn-secondary">Volver</a>
+  </form>
+</div>
 {% endblock %}
 {% block scripts %}
 <script>

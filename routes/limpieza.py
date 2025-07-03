@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import logging
 import os
+import sys
 from datetime import date, datetime
 from pathlib import Path
 import tempfile
@@ -46,11 +47,19 @@ LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 logger = logging.getLogger("servicios_limpieza")
 logger.setLevel(logging.INFO)
+
 if not logger.handlers:
-    handler = logging.FileHandler(os.path.join(LOG_DIR, "servicios_limpieza.log"), mode="a", encoding="utf-8")
+    # Archivo local (opcional, pero Railway no lo verá)
+    handler_file = logging.FileHandler(os.path.join(LOG_DIR, "servicios_limpieza.log"), mode="a", encoding="utf-8")
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
+    handler_file.setFormatter(formatter)
+    logger.addHandler(handler_file)
+
+    # Consola para Railway
+    handler_console = logging.StreamHandler(sys.stdout)
+    handler_console.setFormatter(formatter)
+    logger.addHandler(handler_console)
+
     logger.propagate = False
 
 
@@ -170,6 +179,8 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
     remito: UploadFile | None = form_data.pop("remito", None)
+    logger.info("[DEBUG] remito: %s", f"filename={remito.filename}" if remito and remito.filename else "Ninguno recibido")
+
     if es_edicion and id_servicio is None:
         raise HTTPException(status_code=400, detail="ID de servicio faltante en edición")
 
@@ -180,7 +191,7 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         logger.exception("Error procesando datos del formulario:")
         raise HTTPException(status_code=400, detail=f"Error en datos: {exc}")
 
-    remito_url = None
+    remito_url = ""
     if isinstance(remito, UploadFile) and remito.filename:
         imagen_bytes = await remito.read()
         extension = Path(remito.filename).suffix.lower() or ".jpg"
@@ -199,7 +210,7 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
 
     datos = servicio.model_dump()
     datos["fecha_servicio"] = servicio.fecha_servicio.isoformat()
-    datos["remito_url"] = remito_url or ""  # Siempre guardar valor en el campo
+    datos["remito_url"] = remito_url
 
     if es_edicion:
         res = supabase.table(TABLA).update(datos).eq("id_servicio", id_servicio).execute()

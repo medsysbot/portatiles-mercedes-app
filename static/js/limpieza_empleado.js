@@ -2,7 +2,23 @@
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
-  let tabla;
+  const tabla = $('#tablaServicios').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+    columns: [
+      { data: 'id_servicio', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
+      { data: 'fecha_servicio' },
+      { data: 'numero_bano' },
+      { data: 'dni_cuit_cuil' },
+      { data: 'nombre_cliente' },
+      { data: 'tipo_servicio' },
+      { data: 'estado', render: e => e === 'completo' ? '<span class="badge badge-success">Completo</span>' : '<span class="badge badge-warning">Pendiente</span>' },
+      { data: 'remito_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : 'Sin remito' },
+      { data: 'observaciones' }
+    ]
+  });
 
   const btnBuscar = document.getElementById('btnBuscarServicios');
   const buscador = document.getElementById('busquedaServicios');
@@ -21,11 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       servicios = await resp.json();
       mostrarServicios(servicios);
       errorDiv.classList.add('d-none');
-      if (servicios.length === 0) {
-        mostrarMensaje('No hay servicios registrados', '');
-      } else {
-        mostrarMensaje('', '');
-      }
+      mostrarMensaje(servicios.length === 0 ? 'No hay servicios registrados' : '', '');
     } catch (err) {
       console.error('Error cargando servicios:', err);
       errorDiv.textContent = 'No se pudo cargar el listado.';
@@ -34,33 +46,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function mostrarServicios(lista) {
-    if ($.fn.dataTable.isDataTable('#tablaServicios')) {
-      tabla.destroy();
-      $('#tablaServicios tbody').empty();
-    }
-    tabla = $('#tablaServicios').DataTable({
-      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-      paging: true,
-      searching: false,
-      ordering: true,
-      data: lista,
-      columns: [
-        { data: 'id_servicio', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
-        { data: 'fecha_servicio' },
-        { data: 'numero_bano' },
-        { data: 'dni_cuit_cuil' },
-        { data: 'nombre_cliente' },
-        { data: 'tipo_servicio' },
-        { data: 'estado', render: e => e === 'completado' ? '<span class="badge badge-success">Completado</span>' : '<span class="badge badge-warning">Pendiente</span>' },
-        { data: 'remito_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : 'Sin remito' },
-        { data: 'observaciones' }
-      ]
-    });
+    tabla.clear();
+    tabla.rows.add(lista).draw();
   }
 
   function actualizarBotones() {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
-    const activo = checks.length === 1; // Editar solo habilitado si 1 seleccionado
+    const activo = checks.length === 1;
     if (btnEliminar) btnEliminar.disabled = checks.length === 0;
     if (btnEditar) btnEditar.disabled = !activo;
   }
@@ -91,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (checks.length !== 1) return alert('Debe seleccionar un único registro para editar');
     const id = checks[0].dataset.id;
     if (!id) return alert('ID de servicio no encontrado');
+    localStorage.setItem('pendiente_recarga', '1');
     window.location.href = `/empleado/limpieza/editar/${id}`;
   });
 
@@ -122,4 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnBuscar?.addEventListener('click', () => filtrarServicios(buscador.value.trim()));
 
   cargarServicios();
+
+  // Refrescar la tabla si venimos de una edición:
+  if (localStorage.getItem('pendiente_recarga')) {
+    localStorage.removeItem('pendiente_recarga');
+    cargarServicios();
+  }
 });

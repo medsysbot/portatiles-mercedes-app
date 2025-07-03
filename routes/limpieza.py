@@ -192,6 +192,10 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
     remito_url = ""
     if isinstance(remito, UploadFile) and remito.filename:
         imagen_bytes = await remito.read()
+        if not imagen_bytes:
+            logger.error("[ERROR] Archivo remito vacío, no se subirá al bucket")
+            raise HTTPException(status_code=400, detail="Archivo remito está vacío")
+
         extension = Path(remito.filename).suffix.lower() or ".jpg"
         pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
         nombre_pdf = f"remito_{servicio.numero_bano}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.pdf"

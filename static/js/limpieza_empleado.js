@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
     paging: true,
     searching: false,
     ordering: true,
-    destroy: true,
     columns: [
       { data: 'id_servicio', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'fecha_servicio' },
@@ -15,7 +14,15 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
       { data: 'tipo_servicio' },
-      { data: 'estado', render: e => e === 'completo' ? '<span class="badge badge-success">Completo</span>' : '<span class="badge badge-warning">Pendiente</span>' },
+      { 
+        data: 'estado',
+        render: e => {
+          if (!e) return '<span class="badge badge-secondary">Sin estado</span>';
+          return e.toLowerCase() === 'completo'
+            ? '<span class="badge badge-success">Completo</span>'
+            : '<span class="badge badge-warning">Pendiente</span>';
+        }
+      },
       { data: 'remito_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : 'Sin remito' },
       { data: 'observaciones' }
     ]
@@ -31,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarServicios() {
     try {
-      const resp = await fetch('/empleado/api/servicios_limpieza?' + new Date().getTime(), {
+      const resp = await fetch('/empleado/api/servicios_limpieza', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error al consultar servicios');

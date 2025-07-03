@@ -49,13 +49,11 @@ logger = logging.getLogger("servicios_limpieza")
 logger.setLevel(logging.INFO)
 
 if not logger.handlers:
-    # Archivo local (opcional, pero Railway no lo verá)
     handler_file = logging.FileHandler(os.path.join(LOG_DIR, "servicios_limpieza.log"), mode="a", encoding="utf-8")
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
     handler_file.setFormatter(formatter)
     logger.addHandler(handler_file)
 
-    # Consola para Railway
     handler_console = logging.StreamHandler(sys.stdout)
     handler_console.setFormatter(formatter)
     logger.addHandler(handler_console)
@@ -197,11 +195,16 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         extension = Path(remito.filename).suffix.lower() or ".jpg"
         pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
         nombre_pdf = f"remito_{servicio.numero_bano}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.pdf"
+
         bucket = supabase.storage.from_(BUCKET)
+        logger.info("[DEBUG] Subiendo remito a Supabase bucket=%s, nombre=%s", BUCKET, nombre_pdf)
         res_upload = bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
+        logger.info("[DEBUG] Respuesta upload: %s", res_upload)
+
         if getattr(res_upload, "error", None):
             logger.error("Error subiendo remito a Supabase: %s", res_upload.error.message)
             raise HTTPException(status_code=500, detail=f"Error subiendo remito: {res_upload.error.message}")
+
         remito_url = bucket.get_public_url(nombre_pdf)
         logger.info("Remito subido correctamente: %s", remito_url)
     elif es_edicion:

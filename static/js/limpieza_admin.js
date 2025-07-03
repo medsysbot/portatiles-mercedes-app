@@ -14,7 +14,16 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
       { data: 'tipo_servicio' },
-      { data: 'estado', render: e => e === 'completado' ? '<span class="badge badge-success">Completado</span>' : '<span class="badge badge-warning">Pendiente</span>' },
+      {
+        data: 'estado',
+        render: e => {
+          if (!e) return '<span class="badge badge-secondary">Sin estado</span>';
+          const est = e.toLowerCase();
+          if (est === 'completo') return '<span class="badge badge-success">Completo</span>';
+          if (est === 'pendiente') return '<span class="badge badge-warning">Pendiente</span>';
+          return `<span class="badge badge-info">${e}</span>`;
+        }
+      },
       { data: 'remito_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : 'Sin remito' },
       { data: 'observaciones' }
     ]
@@ -31,17 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
   async function cargarServicios() {
     try {
       const resp = await fetch('/admin/api/servicios_limpieza', {
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+        headers: { Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '') }
       });
       if (!resp.ok) throw new Error('Error al consultar servicios');
       servicios = await resp.json();
       mostrarServicios(servicios);
       errorDiv.classList.add('d-none');
-      if (servicios.length === 0) {
-        mostrarMensaje('No hay servicios registrados', '');
-      } else {
-        mostrarMensaje('', '');
-      }
+      mostrarMensaje(servicios.length === 0 ? 'No hay servicios registrados' : '', '');
     } catch (err) {
       console.error('Error cargando servicios:', err);
       errorDiv.textContent = 'No se pudo cargar el listado.';
@@ -56,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function actualizarBotones() {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
-    const activo = checks.length === 1; // Editar habilitado solo con 1 seleccionado
+    const activo = checks.length === 1;
     if (btnEliminar) btnEliminar.disabled = checks.length === 0;
     if (btnEditar) btnEditar.disabled = !activo;
   }
@@ -69,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await fetch('/admin/api/servicios_limpieza/eliminar', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '') },
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
@@ -87,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (checks.length !== 1) return alert('Debe seleccionar un único registro para editar');
     const id = checks[0].dataset.id;
     if (!id) return alert('ID de servicio no encontrado');
+    localStorage.setItem('pendiente_recarga', '1');
     window.location.href = `/admin/limpieza/editar/${id}`;
   });
 
@@ -118,4 +124,9 @@ document.addEventListener('DOMContentLoaded', () => {
   btnBuscar?.addEventListener('click', () => filtrarServicios(buscador.value.trim()));
 
   cargarServicios();
+
+  if (localStorage.getItem('pendiente_recarga')) {
+    localStorage.removeItem('pendiente_recarga');
+    cargarServicios();
+  }
 });

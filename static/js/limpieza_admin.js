@@ -25,11 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const errorDiv = document.getElementById('errorServicios');
   const mensajeDiv = document.getElementById('mensajeServicios');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+  const btnEditar = document.getElementById('btnEditarSeleccionado');
   let servicios = [];
 
   async function cargarServicios() {
     try {
-      const resp = await fetch('/empleado/api/servicios_limpieza', {  // <-- Ruta corregida aquí
+      const resp = await fetch('/admin/api/servicios_limpieza', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error al consultar servicios');
@@ -53,12 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function actualizarBoton() {
+  function actualizarBotones() {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
+    const activo = checks.length === 1; // Editar habilitado solo con 1 seleccionado
     if (btnEliminar) btnEliminar.disabled = checks.length === 0;
+    if (btnEditar) btnEditar.disabled = !activo;
   }
 
-  $('#tablaServicios tbody').on('change', '.fila-check', actualizarBoton);
+  $('#tablaServicios tbody').on('change', '.fila-check', actualizarBotones);
 
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaServicios tbody .fila-check:checked')).map(c => c.dataset.id);
@@ -75,8 +78,16 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error eliminando servicios:', err);
       mostrarMensaje('Error eliminando registros', 'danger');
     } finally {
-      if (btnEliminar) btnEliminar.disabled = true;
+      actualizarBotones();
     }
+  });
+
+  btnEditar?.addEventListener('click', () => {
+    const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
+    if (checks.length !== 1) return alert('Debe seleccionar un único registro para editar');
+    const id = checks[0].dataset.id;
+    if (!id) return alert('ID de servicio no encontrado');
+    window.location.href = `/admin/limpieza/editar/${id}`;
   });
 
   function mostrarMensaje(texto, tipo) {
@@ -100,11 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (s.numero_bano || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);
-    if (filtrados.length === 0) {
-      mostrarMensaje('No hay servicios registrados', '');
-    } else {
-      mostrarMensaje('', '');
-    }
+    mostrarMensaje(filtrados.length === 0 ? 'No hay servicios registrados' : '', '');
   }
 
   buscador?.addEventListener('input', () => filtrarServicios(buscador.value.trim()));

@@ -78,81 +78,19 @@ def _crear_pdf_desde_imagen(data: bytes, extension: str) -> bytes:
     return pdf_bytes
 
 
-# ========= ADMIN =========
-
-@router.get("/admin/limpieza/nuevo", response_class=HTMLResponse)
-async def form_nuevo_admin(request: Request):
-    return TEMPLATES.TemplateResponse("limpieza_form_admin.html", {"request": request})
-
-@router.post("/admin/limpieza/nuevo")
-async def crear_admin(
-    request: Request,
-    fecha_servicio: str = Form(...),
-    numero_bano: str = Form(...),
-    dni_cuit_cuil: str = Form(...),
-    nombre_cliente: str = Form(...),
-    tipo_servicio: str = Form(...),
-    estado: str = Form(...),
-    observaciones: str | None = Form(None),
-    remito: UploadFile | None = None,
-):
-    return await _procesar_alta_o_actualizacion(
-        request,
-        {
-            "fecha_servicio": fecha_servicio,
-            "numero_bano": numero_bano,
-            "dni_cuit_cuil": dni_cuit_cuil,
-            "nombre_cliente": nombre_cliente,
-            "tipo_servicio": tipo_servicio,
-            "estado": estado,
-            "observaciones": observaciones,
-            "remito": remito,
-        },
-        panel="admin",
-        es_edicion=False
-    )
-
-@router.get("/admin/limpieza/editar/{id_servicio}", response_class=HTMLResponse)
-async def form_editar_admin(request: Request, id_servicio: int):
-    servicio = await _obtener_servicio(id_servicio)
-    return TEMPLATES.TemplateResponse("limpieza_form_admin.html", {"request": request, "servicio": servicio})
-
-@router.post("/admin/limpieza/editar/{id_servicio}")
-async def actualizar_admin(
-    request: Request,
-    id_servicio: int,
-    fecha_servicio: str = Form(...),
-    numero_bano: str = Form(...),
-    dni_cuit_cuil: str = Form(...),
-    nombre_cliente: str = Form(...),
-    tipo_servicio: str = Form(...),
-    estado: str = Form(...),
-    observaciones: str | None = Form(None),
-    remito: UploadFile | None = None,
-):
-    return await _procesar_alta_o_actualizacion(
-        request,
-        {
-            "fecha_servicio": fecha_servicio,
-            "numero_bano": numero_bano,
-            "dni_cuit_cuil": dni_cuit_cuil,
-            "nombre_cliente": nombre_cliente,
-            "tipo_servicio": tipo_servicio,
-            "estado": estado,
-            "observaciones": observaciones,
-            "remito": remito,
-        },
-        panel="admin",
-        es_edicion=True,
-        id_servicio=id_servicio
-    )
-
-
-# ========= EMPLEADO =========
+# ========= FORMULARIOS =========
 
 @router.get("/empleado/limpieza/nuevo", response_class=HTMLResponse)
 async def form_nuevo_empleado(request: Request):
     return TEMPLATES.TemplateResponse("limpieza_form_empleado.html", {"request": request})
+
+@router.get("/empleado/limpieza/editar/{id_servicio}", response_class=HTMLResponse)
+async def form_editar_empleado(request: Request, id_servicio: int):
+    servicio = await _obtener_servicio(id_servicio)
+    return TEMPLATES.TemplateResponse("limpieza_form_empleado.html", {"request": request, "servicio": servicio})
+
+
+# ========= ACCIONES =========
 
 @router.post("/empleado/limpieza/nuevo")
 async def crear_empleado(
@@ -166,8 +104,7 @@ async def crear_empleado(
     remito: UploadFile | None = None,
 ):
     return await _procesar_alta_o_actualizacion(
-        request,
-        {
+        request, {
             "fecha_servicio": fecha_servicio,
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
@@ -176,20 +113,12 @@ async def crear_empleado(
             "estado": "pendiente",
             "observaciones": observaciones,
             "remito": remito,
-        },
-        panel="empleado",
-        es_edicion=False
+        }, panel="empleado", es_edicion=False
     )
-
-@router.get("/empleado/limpieza/editar/{id_servicio}", response_class=HTMLResponse)
-async def form_editar_empleado(request: Request, id_servicio: int):
-    servicio = await _obtener_servicio(id_servicio)
-    return TEMPLATES.TemplateResponse("limpieza_form_empleado.html", {"request": request, "servicio": servicio})
 
 @router.post("/empleado/limpieza/editar/{id_servicio}")
 async def actualizar_empleado(
-    request: Request,
-    id_servicio: int,
+    request: Request, id_servicio: int,
     fecha_servicio: str = Form(...),
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
@@ -200,8 +129,7 @@ async def actualizar_empleado(
     remito: UploadFile | None = None,
 ):
     return await _procesar_alta_o_actualizacion(
-        request,
-        {
+        request, {
             "fecha_servicio": fecha_servicio,
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
@@ -210,26 +138,20 @@ async def actualizar_empleado(
             "estado": estado,
             "observaciones": observaciones,
             "remito": remito,
-        },
-        panel="empleado",
-        es_edicion=True,
-        id_servicio=id_servicio
+        }, panel="empleado", es_edicion=True, id_servicio=id_servicio
     )
 
 
-# ========= API LISTADO EMPLEADO =========
+# ========= API LISTADO =========
 
 @router.get("/empleado/api/servicios_limpieza")
 async def api_listar_servicios_empleado():
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    
     res = supabase.table(TABLA).select("*").order("fecha_servicio", desc=True).execute()
-    
     if getattr(res, "error", None):
         logger.error("Error al obtener servicios: %s", res.error.message)
         raise HTTPException(status_code=500, detail=str(res.error.message))
-    
     return res.data or []
 
 
@@ -241,10 +163,7 @@ async def _obtener_servicio(id_servicio: int) -> dict:
     res = supabase.table(TABLA).select("*").eq("id_servicio", id_servicio).single().execute()
     if getattr(res, "error", None):
         raise HTTPException(status_code=500, detail=str(res.error.message))
-    servicio = res.data
-    if not servicio:
-        raise HTTPException(status_code=404, detail="Servicio no encontrado")
-    return servicio
+    return res.data
 
 async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, panel: str, es_edicion: bool, id_servicio: int | None = None):
     if not supabase:
@@ -270,6 +189,7 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         bucket = supabase.storage.from_(BUCKET)
         bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
         remito_url = bucket.get_public_url(nombre_pdf)
+        logger.info("Remito subido correctamente: %s", remito_url)
     elif es_edicion:
         servicio_existente = await _obtener_servicio(id_servicio)
         remito_url = servicio_existente.get("remito_url")

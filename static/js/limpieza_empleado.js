@@ -14,13 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
       { data: 'tipo_servicio' },
-      { 
+      {
         data: 'estado',
         render: e => {
           if (!e) return '<span class="badge badge-secondary">Sin estado</span>';
-          return e.toLowerCase() === 'completo'
-            ? '<span class="badge badge-success">Completo</span>'
-            : '<span class="badge badge-warning">Pendiente</span>';
+          const est = e.toLowerCase();
+          if (est === 'completo') return '<span class="badge badge-success">Completo</span>';
+          if (est === 'pendiente') return '<span class="badge badge-warning">Pendiente</span>';
+          return `<span class="badge badge-info">${e}</span>`;
         }
       },
       { data: 'remito_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : 'Sin remito' },

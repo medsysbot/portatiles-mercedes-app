@@ -11,13 +11,16 @@ from __future__ import annotations
 
 import logging
 import os
+import smtplib
 import sys
 from datetime import date, datetime
+from email.message import EmailMessage
 from pathlib import Path
 import tempfile
 
 from fastapi import (
     APIRouter,
+    File,
     Form,
     HTTPException,
     Request,
@@ -25,9 +28,17 @@ from fastapi import (
 )
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from fpdf import FPDF
 from supabase import Client, create_client
+
+# --- Si usas alertas, descomenta e incluye las variables SMTP ---
+# from routes.alertas import (
+#     EMAIL_ORIGIN,
+#     EMAIL_PASSWORD,
+#     SMTP_PORT,
+#     SMTP_SERVER,
+# )
 
 router = APIRouter()
 TEMPLATES = Jinja2Templates(directory="templates")
@@ -45,11 +56,11 @@ BUCKET = "servicios-limpieza"
 # ===== Logging =====
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOG_DIR, "servicios_limpieza.log")
 logger = logging.getLogger("servicios_limpieza")
 logger.setLevel(logging.INFO)
-
 if not logger.handlers:
-    handler_file = logging.FileHandler(os.path.join(LOG_DIR, "servicios_limpieza.log"), mode="a", encoding="utf-8")
+    handler_file = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
     handler_file.setFormatter(formatter)
     logger.addHandler(handler_file)
@@ -60,17 +71,17 @@ if not logger.handlers:
 
     logger.propagate = False
 
-
+# ===== Modelos =====
 class ServicioLimpiezaNuevo(BaseModel):
     fecha_servicio: date
     numero_bano: str
     dni_cuit_cuil: str
     nombre_cliente: str
     tipo_servicio: str
-    estado: str
+    estado: str = "pendiente"
     observaciones: str | None = None
 
-
+# ===== Utilidades =====
 def _crear_pdf_desde_imagen(data: bytes, extension: str) -> bytes:
     with tempfile.NamedTemporaryFile(delete=False, suffix=extension) as tmp:
         tmp.write(data)
@@ -84,9 +95,26 @@ def _crear_pdf_desde_imagen(data: bytes, extension: str) -> bytes:
     os.unlink(imagen_path)
     return pdf_bytes
 
+# # Opcional: Si necesitas envío de correo, reactiva esto:
+# def _enviar_correo(destino: str, asunto: str, mensaje: str, pdf: bytes, nombre: str) -> None:
+#     if not all([EMAIL_ORIGIN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
+#         logger.warning("Variables de SMTP no configuradas; email no enviado")
+#         return
+#     msg = EmailMessage()
+#     msg["From"] = EMAIL_ORIGIN
+#     msg["To"] = destino
+#     msg["Subject"] = asunto
+#     msg.set_content(f"{mensaje}\n\nAdjunto encontrará el remito de servicio.")
+#     msg.add_attachment(pdf, maintype="application", subtype="pdf", filename=nombre)
+#     try:
+#         with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
+#             smtp.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
+#             smtp.send_message(msg)
+#         logger.info("Correo enviado a %s", destino)
+#     except Exception as exc:
+#         logger.error("Error enviando correo: %s", exc)
 
 # ========= FORMULARIOS =========
-
 @router.get("/empleado/limpieza/nuevo", response_class=HTMLResponse)
 async def form_nuevo_empleado(request: Request):
     return TEMPLATES.TemplateResponse("limpieza_form_empleado.html", {"request": request})
@@ -96,9 +124,7 @@ async def form_editar_empleado(request: Request, id_servicio: int):
     servicio = await _obtener_servicio(id_servicio)
     return TEMPLATES.TemplateResponse("limpieza_form_empleado.html", {"request": request, "servicio": servicio})
 
-
 # ========= ACCIONES =========
-
 @router.post("/empleado/limpieza/nuevo")
 async def crear_empleado(
     request: Request,
@@ -107,8 +133,9 @@ async def crear_empleado(
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
     tipo_servicio: str = Form(...),
+    estado: str = Form("pendiente"),
     observaciones: str | None = Form(None),
-    remito: UploadFile | None = None,
+    remito: UploadFile = File(None),
 ):
     return await _procesar_alta_o_actualizacion(
         request, {
@@ -117,10 +144,10 @@ async def crear_empleado(
             "dni_cuit_cuil": dni_cuit_cuil,
             "nombre_cliente": nombre_cliente,
             "tipo_servicio": tipo_servicio,
-            "estado": "pendiente",
+            "estado": estado,
             "observaciones": observaciones,
             "remito": remito,
-        }, panel="empleado", es_edicion=False
+        }, es_edicion=False
     )
 
 @router.post("/empleado/limpieza/editar/{id_servicio}")
@@ -133,7 +160,7 @@ async def actualizar_empleado(
     tipo_servicio: str = Form(...),
     estado: str = Form(...),
     observaciones: str | None = Form(None),
-    remito: UploadFile | None = None,
+    remito: UploadFile = File(None),
 ):
     return await _procesar_alta_o_actualizacion(
         request, {
@@ -145,12 +172,10 @@ async def actualizar_empleado(
             "estado": estado,
             "observaciones": observaciones,
             "remito": remito,
-        }, panel="empleado", es_edicion=True, id_servicio=id_servicio
+        }, es_edicion=True, id_servicio=id_servicio
     )
 
-
 # ========= API LISTADO =========
-
 @router.get("/empleado/api/servicios_limpieza")
 async def api_listar_servicios_empleado():
     if not supabase:
@@ -161,9 +186,7 @@ async def api_listar_servicios_empleado():
         raise HTTPException(status_code=500, detail=str(res.error.message))
     return res.data or []
 
-
 # ========= UTILIDADES =========
-
 async def _obtener_servicio(id_servicio: int) -> dict:
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
@@ -172,16 +195,14 @@ async def _obtener_servicio(id_servicio: int) -> dict:
         raise HTTPException(status_code=500, detail=str(res.error.message))
     return res.data
 
-async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, panel: str, es_edicion: bool, id_servicio: int | None = None):
+async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, es_edicion: bool, id_servicio: int | None = None):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
     remito: UploadFile | None = form_data.pop("remito", None)
     logger.info("[DEBUG] remito: %s", f"filename={remito.filename}" if remito and remito.filename else "Ninguno recibido")
 
-    if es_edicion and id_servicio is None:
-        raise HTTPException(status_code=400, detail="ID de servicio faltante en edición")
-
+    # VALIDACIÓN Y NORMALIZACIÓN DE DATOS
     try:
         form_data["fecha_servicio"] = datetime.fromisoformat(form_data["fecha_servicio"]).date()
         servicio = ServicioLimpiezaNuevo(**form_data)
@@ -189,26 +210,25 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         logger.exception("Error procesando datos del formulario:")
         raise HTTPException(status_code=400, detail=f"Error en datos: {exc}")
 
+    # SUBIDA DE REMITO SI EXISTE
     remito_url = ""
     if isinstance(remito, UploadFile) and remito.filename:
         imagen_bytes = await remito.read()
-        logger.info("[DEBUG] Bytes leídos del remito: %d bytes", len(imagen_bytes))  # <--- parche para registrar tamaño
         extension = Path(remito.filename).suffix.lower() or ".jpg"
         pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
         nombre_pdf = f"remito_{servicio.numero_bano}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.pdf"
 
         bucket = supabase.storage.from_(BUCKET)
-        logger.info("[DEBUG] Subiendo remito a Supabase bucket=%s, nombre=%s", BUCKET, nombre_pdf)
-        res_upload = bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
-        logger.info("[DEBUG] Respuesta upload: %s", res_upload)
+        try:
+            bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
+            remito_url = bucket.get_public_url(nombre_pdf)
+            logger.info("Remito subido correctamente: %s", remito_url)
+        except Exception as exc:
+            logger.error("Error subiendo remito a Supabase: %s", exc)
+            raise HTTPException(status_code=500, detail=f"Error subiendo remito: {exc}")
 
-        if getattr(res_upload, "error", None):
-            logger.error("Error subiendo remito a Supabase: %s", res_upload.error.message)
-            raise HTTPException(status_code=500, detail=f"Error subiendo remito: {res_upload.error.message}")
-
-        remito_url = bucket.get_public_url(nombre_pdf)
-        logger.info("Remito subido correctamente: %s", remito_url)
     elif es_edicion:
+        # En edición: mantener el remito anterior si no se sube uno nuevo
         servicio_existente = await _obtener_servicio(id_servicio)
         remito_url = servicio_existente.get("remito_url") or ""
 
@@ -225,5 +245,5 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         logger.error("Error en Supabase: %s", res.error.message)
         raise HTTPException(status_code=500, detail=str(res.error.message))
 
-    logger.info("Operación %s completada correctamente para %s", "actualización" if es_edicion else "alta", panel)
-    return RedirectResponse(f"/{panel}/limpieza", status_code=303)
+    logger.info("Operación %s completada correctamente", "actualización" if es_edicion else "alta")
+    return RedirectResponse("/empleado/limpieza", status_code=303)

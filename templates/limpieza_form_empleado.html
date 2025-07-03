@@ -50,6 +50,6 @@
     <input type="file" name="remito" accept="image/*" class="form-control">
   </div>
   <button type="submit" class="btn btn-primary">{{ 'Actualizar servicio' if servicio else 'Registrar servicio' }}</button>
-  <a href="{{ '/admin/limpieza' if 'admin' in request.url.path else '/empleado/limpieza' }}" class="btn btn-secondary">Volver</a>
+  <a href="{{ '/empleado/limpieza' }}" class="btn btn-secondary">Volver</a>
 </form>
 {% endblock %}

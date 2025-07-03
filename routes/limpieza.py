@@ -238,10 +238,13 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
     if es_edicion and id_servicio is None:
         raise HTTPException(status_code=400, detail="ID de servicio faltante en edición")
 
+    # Convertir fecha_servicio a date antes de validar
     try:
+        form_data["fecha_servicio"] = datetime.fromisoformat(form_data["fecha_servicio"]).date()
         servicio = ServicioLimpiezaNuevo(**form_data)
-    except ValidationError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
+    except Exception as exc:
+        logger.exception("Error procesando datos del formulario:")
+        raise HTTPException(status_code=400, detail=f"Error en datos: {exc}")
 
     remito_url = None
     if remito and remito.filename:
@@ -264,7 +267,8 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         res = supabase.table(TABLA).insert(datos).execute()
 
     if getattr(res, "error", None):
+        logger.error("Error en Supabase: %s", res.error.message)
         raise HTTPException(status_code=500, detail=str(res.error.message))
 
-    destino = f"/{panel}/limpieza"
-    return RedirectResponse(destino, status_code=303)
+    logger.info("Operación %s completada correctamente para %s", "actualización" if es_edicion else "alta", panel)
+    return RedirectResponse(f"/{panel}/limpieza", status_code=303)

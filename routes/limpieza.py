@@ -187,17 +187,19 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
         nombre_pdf = f"remito_{servicio.numero_bano}_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}.pdf"
         bucket = supabase.storage.from_(BUCKET)
-        bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
+        res_upload = bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
+        if getattr(res_upload, "error", None):
+            logger.error("Error subiendo remito a Supabase: %s", res_upload.error.message)
+            raise HTTPException(status_code=500, detail=f"Error subiendo remito: {res_upload.error.message}")
         remito_url = bucket.get_public_url(nombre_pdf)
         logger.info("Remito subido correctamente: %s", remito_url)
     elif es_edicion:
         servicio_existente = await _obtener_servicio(id_servicio)
-        remito_url = servicio_existente.get("remito_url")
+        remito_url = servicio_existente.get("remito_url") or ""
 
     datos = servicio.model_dump()
     datos["fecha_servicio"] = servicio.fecha_servicio.isoformat()
-    if remito_url:
-        datos["remito_url"] = remito_url
+    datos["remito_url"] = remito_url or ""  # Siempre guardar valor en el campo
 
     if es_edicion:
         res = supabase.table(TABLA).update(datos).eq("id_servicio", id_servicio).execute()

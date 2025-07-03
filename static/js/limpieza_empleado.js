@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     paging: true,
     searching: false,
     ordering: true,
+    destroy: true,
     columns: [
       { data: 'id_servicio', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'fecha_servicio' },
@@ -30,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarServicios() {
     try {
-      const resp = await fetch('/empleado/api/servicios_limpieza', {
+      const resp = await fetch('/empleado/api/servicios_limpieza?' + new Date().getTime(), {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error al consultar servicios');
@@ -116,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cargarServicios();
 
-  // Refrescar la tabla si venimos de una edición:
   if (localStorage.getItem('pendiente_recarga')) {
     localStorage.removeItem('pendiente_recarga');
     cargarServicios();

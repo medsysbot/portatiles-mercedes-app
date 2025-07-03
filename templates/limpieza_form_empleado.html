@@ -1,19 +1,22 @@
 {% extends 'panel_empleado.html' %}
-{% block title %}Nuevo servicio de limpieza{% endblock %}
-{% block description %}Registro de limpiezas desde perfil empleado{% endblock %}
+{% block title %}Nuevo Servicio de Limpieza{% endblock %}
+{% block description %}Formulario para registrar un servicio de limpieza{% endblock %}
+{% block head_extra %}
+{{ super() }}
+{% endblock %}
 {% block content %}
-<h2 class="mt-0">Nuevo servicio de limpieza</h2>
+<h2 class="mt-0">Nuevo Servicio de Limpieza</h2>
 <form method="post" enctype="multipart/form-data">
   <div class="form-group">
     <label>Fecha del servicio</label>
     <input type="date" name="fecha_servicio" class="form-control" required>
   </div>
   <div class="form-group">
-    <label>Nº de baño</label>
+    <label>Número del baño</label>
     <input type="text" name="numero_bano" class="form-control" required>
   </div>
   <div class="form-group">
-    <label>DNI / CUIT / CUIL del cliente</label>
+    <label>DNI / CUIT / CUIL</label>
     <input type="text" name="dni_cuit_cuil" class="form-control" required>
   </div>
   <div class="form-group">
@@ -29,10 +32,17 @@
     <textarea name="observaciones" class="form-control" rows="3"></textarea>
   </div>
   <div class="form-group">
-    <label>Foto del remito (JPG o PNG)</label>
-    <input type="file" name="remito" accept="image/*" class="form-control" required>
+    <label>Estado</label>
+    <select name="estado" class="form-control" required>
+      <option value="pendiente">Pendiente</option>
+      <option value="completo">Completo</option>
+    </select>
   </div>
-  <button type="submit" class="btn btn-primary">Guardar</button>
+  <div class="form-group">
+    <label>Remito (foto o imagen)</label>
+    <input type="file" name="remito" accept="image/*" class="form-control">
+  </div>
+  <button type="submit" class="btn btn-primary">Registrar servicio</button>
   <a href="/empleado/limpieza" class="btn btn-secondary">Volver</a>
 </form>
 {% endblock %}

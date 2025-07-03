@@ -21,7 +21,6 @@ from fastapi import (
     HTTPException,
     Request,
     UploadFile,
-    Depends,
 )
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
@@ -96,25 +95,6 @@ def _crear_pdf_desde_imagen(data: bytes, extension: str) -> bytes:
     os.unlink(imagen_path)
     return pdf_bytes
 
-def _enviar_correo(destino: str, asunto: str, mensaje: str, pdf: bytes, nombre: str) -> None:
-    """Envía un correo al cliente con el PDF adjunto si es posible."""
-    if not all([EMAIL_ORIGIN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
-        logger.warning("Variables de SMTP no configuradas; email no enviado")
-        return
-    msg = EmailMessage()
-    msg["From"] = EMAIL_ORIGIN
-    msg["To"] = destino
-    msg["Subject"] = asunto
-    msg.set_content(f"{mensaje}\n\nAdjunto encontrará el remito de servicio.")
-    msg.add_attachment(pdf, maintype="application", subtype="pdf", filename=nombre)
-    try:
-        with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
-            smtp.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            smtp.send_message(msg)
-        logger.info("Correo enviado a %s", destino)
-    except Exception as exc:
-        logger.error("Error enviando correo: %s", exc)
-
 # =========== EMPLEADO: FORMULARIO Y CRUD =============
 
 @router.get("/empleado/limpieza/nuevo", response_class=HTMLResponse)
@@ -133,67 +113,29 @@ async def crear_servicio_limpieza_empleado(
     estado: str = Form(...),
     remito: UploadFile = File(None)
 ):
-    if not supabase:
-        logger.error("Supabase no configurado al registrar servicio")
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
-    datos_form = {
-        "fecha_servicio": fecha_servicio,
-        "numero_bano": numero_bano,
-        "dni_cuit_cuil": dni_cuit_cuil,
-        "nombre_cliente": nombre_cliente,
-        "tipo_servicio": tipo_servicio,
-        "observaciones": observaciones,
-        "estado": estado,
-    }
-    try:
-        servicio = ServicioLimpiezaNuevo(**datos_form)
-    except ValidationError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
-
-    remito_url = None
-    if remito and remito.filename:
-        imagen_bytes = await remito.read()
-        if not imagen_bytes:
-            logger.error(f"El archivo remito '{remito.filename}' está vacío.")
-            raise HTTPException(status_code=400, detail="El archivo remito está vacío o corrupto.")
-        extension = Path(remito.filename).suffix.lower() or ".jpg"
-        pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
-        fecha_archivo = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-        nombre_pdf = f"remito_{numero_bano}_{fecha_archivo}.pdf"
-        bucket = supabase.storage.from_(BUCKET)
-        try:
-            bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
-            remito_url = bucket.get_public_url(nombre_pdf)
-        except Exception as exc:
-            logger.exception("Error subiendo PDF a storage:")
-            raise HTTPException(status_code=500, detail=str(exc))
-    else:
-        logger.info("No se cargó remito en el alta de servicio.")
-
-    datos_insert = servicio.model_dump()
-    datos_insert["fecha_servicio"] = servicio.fecha_servicio.isoformat()
-    datos_insert["remito_url"] = remito_url
-
-    try:
-        res = supabase.table(TABLA).insert(datos_insert).execute()
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-    except Exception as exc:
-        logger.exception("Error guardando servicio en la base:")
-        raise HTTPException(status_code=500, detail=str(exc))
-
-    return RedirectResponse("/empleado/limpieza", status_code=303)
+    return await _procesar_servicio(
+        request=request,
+        form_data={
+            "fecha_servicio": fecha_servicio,
+            "numero_bano": numero_bano,
+            "dni_cuit_cuil": dni_cuit_cuil,
+            "nombre_cliente": nombre_cliente,
+            "tipo_servicio": tipo_servicio,
+            "observaciones": observaciones,
+            "estado": estado,
+            "remito": remito,
+        },
+        es_edicion=False,
+        id_servicio=None,
+        plantilla="limpieza_form_empleado.html",
+        redir="/empleado/limpieza"
+    )
 
 @router.get("/empleado/limpieza/editar/{id_servicio}", response_class=HTMLResponse)
 async def editar_servicio_limpieza_empleado(request: Request, id_servicio: int):
-    if not supabase:
-        logger.warning("Supabase no configurado al editar servicios")
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
-    result = supabase.table(TABLA).select("*").eq("id_servicio", id_servicio).maybe_single().execute()
-    if getattr(result, "error", None) or not getattr(result, "data", None):
-        raise HTTPException(status_code=404, detail="Servicio no encontrado")
-    servicio = result.data
-    return TEMPLATES.TemplateResponse("limpieza_form_empleado.html", {"request": request, "servicio": servicio})
+    return await _cargar_form_edicion(
+        request, id_servicio, plantilla="limpieza_form_empleado.html"
+    )
 
 @router.post("/empleado/limpieza/editar/{id_servicio}")
 async def actualizar_servicio_limpieza_empleado(
@@ -208,18 +150,138 @@ async def actualizar_servicio_limpieza_empleado(
     estado: str = Form(...),
     remito: UploadFile = File(None)
 ):
+    return await _procesar_servicio(
+        request=request,
+        form_data={
+            "fecha_servicio": fecha_servicio,
+            "numero_bano": numero_bano,
+            "dni_cuit_cuil": dni_cuit_cuil,
+            "nombre_cliente": nombre_cliente,
+            "tipo_servicio": tipo_servicio,
+            "observaciones": observaciones,
+            "estado": estado,
+            "remito": remito,
+        },
+        es_edicion=True,
+        id_servicio=id_servicio,
+        plantilla="limpieza_form_empleado.html",
+        redir="/empleado/limpieza"
+    )
+
+@router.get("/empleado/api/servicios_limpieza")
+async def listar_servicios_limpieza_empleado():
+    return await _listar_servicios()
+
+@router.post("/empleado/api/servicios_limpieza/eliminar")
+async def eliminar_servicios_empleado(payload: _IdLista):
+    return await _eliminar_servicios(payload)
+
+# =========== ADMIN: FORMULARIO Y CRUD =============
+
+@router.get("/admin/limpieza/nuevo", response_class=HTMLResponse)
+async def form_servicio_limpieza_admin(request: Request):
+    return TEMPLATES.TemplateResponse("limpieza_form_admin.html", {"request": request, "servicio": None})
+
+@router.post("/admin/limpieza/nuevo")
+async def crear_servicio_limpieza_admin(
+    request: Request,
+    fecha_servicio: str = Form(...),
+    numero_bano: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
+    nombre_cliente: str = Form(...),
+    tipo_servicio: str = Form(...),
+    observaciones: str | None = Form(None),
+    estado: str = Form(...),
+    remito: UploadFile = File(None)
+):
+    return await _procesar_servicio(
+        request=request,
+        form_data={
+            "fecha_servicio": fecha_servicio,
+            "numero_bano": numero_bano,
+            "dni_cuit_cuil": dni_cuit_cuil,
+            "nombre_cliente": nombre_cliente,
+            "tipo_servicio": tipo_servicio,
+            "observaciones": observaciones,
+            "estado": estado,
+            "remito": remito,
+        },
+        es_edicion=False,
+        id_servicio=None,
+        plantilla="limpieza_form_admin.html",
+        redir="/admin/limpieza"
+    )
+
+@router.get("/admin/limpieza/editar/{id_servicio}", response_class=HTMLResponse)
+async def editar_servicio_limpieza_admin(request: Request, id_servicio: int):
+    return await _cargar_form_edicion(
+        request, id_servicio, plantilla="limpieza_form_admin.html"
+    )
+
+@router.post("/admin/limpieza/editar/{id_servicio}")
+async def actualizar_servicio_limpieza_admin(
+    request: Request,
+    id_servicio: int,
+    fecha_servicio: str = Form(...),
+    numero_bano: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
+    nombre_cliente: str = Form(...),
+    tipo_servicio: str = Form(...),
+    observaciones: str | None = Form(None),
+    estado: str = Form(...),
+    remito: UploadFile = File(None)
+):
+    return await _procesar_servicio(
+        request=request,
+        form_data={
+            "fecha_servicio": fecha_servicio,
+            "numero_bano": numero_bano,
+            "dni_cuit_cuil": dni_cuit_cuil,
+            "nombre_cliente": nombre_cliente,
+            "tipo_servicio": tipo_servicio,
+            "observaciones": observaciones,
+            "estado": estado,
+            "remito": remito,
+        },
+        es_edicion=True,
+        id_servicio=id_servicio,
+        plantilla="limpieza_form_admin.html",
+        redir="/admin/limpieza"
+    )
+
+@router.get("/admin/api/servicios_limpieza")
+async def listar_servicios_limpieza_admin():
+    return await _listar_servicios()
+
+@router.post("/admin/api/servicios_limpieza/eliminar")
+async def eliminar_servicios_admin(payload: _IdLista):
+    return await _eliminar_servicios(payload)
+
+# ======== FUNCIONES AUXILIARES =========
+
+async def _cargar_form_edicion(request: Request, id_servicio: int, plantilla: str):
     if not supabase:
-        logger.error("Supabase no configurado al editar servicio")
+        logger.warning("Supabase no configurado al editar servicios")
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-    datos_update = {
-        "fecha_servicio": fecha_servicio,
-        "numero_bano": numero_bano,
-        "dni_cuit_cuil": dni_cuit_cuil,
-        "nombre_cliente": nombre_cliente,
-        "tipo_servicio": tipo_servicio,
-        "observaciones": observaciones,
-        "estado": estado,
-    }
+    result = supabase.table(TABLA).select("*").eq("id_servicio", id_servicio).maybe_single().execute()
+    if getattr(result, "error", None) or not getattr(result, "data", None):
+        raise HTTPException(status_code=404, detail="Servicio no encontrado")
+    servicio = result.data
+    return TEMPLATES.TemplateResponse(plantilla, {"request": request, "servicio": servicio})
+
+async def _procesar_servicio(request, form_data, es_edicion, id_servicio, plantilla, redir):
+    if not supabase:
+        logger.error("Supabase no configurado al registrar/editar servicio")
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+
+    remito: UploadFile | None = form_data.pop("remito", None)
+    try:
+        form_data["fecha_servicio"] = datetime.fromisoformat(form_data["fecha_servicio"]).date()
+        servicio = ServicioLimpiezaNuevo(**form_data)
+    except Exception as exc:
+        logger.exception("Error procesando datos del formulario:")
+        raise HTTPException(status_code=400, detail=f"Error en datos: {exc}")
+
     remito_url = None
     if remito and remito.filename:
         imagen_bytes = await remito.read()
@@ -229,28 +291,37 @@ async def actualizar_servicio_limpieza_empleado(
         extension = Path(remito.filename).suffix.lower() or ".jpg"
         pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
         fecha_archivo = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-        nombre_pdf = f"remito_{numero_bano}_{fecha_archivo}.pdf"
+        nombre_pdf = f"remito_{form_data['numero_bano']}_{fecha_archivo}.pdf"
         bucket = supabase.storage.from_(BUCKET)
         try:
             bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
             remito_url = bucket.get_public_url(nombre_pdf)
-            datos_update["remito_url"] = remito_url
         except Exception as exc:
             logger.exception("Error subiendo PDF a storage:")
             raise HTTPException(status_code=500, detail=str(exc))
+    elif es_edicion and id_servicio:
+        # Mantener el remito anterior si no se sube uno nuevo
+        result = supabase.table(TABLA).select("*").eq("id_servicio", id_servicio).maybe_single().execute()
+        remito_url = result.data.get("remito_url") if getattr(result, "data", None) else None
 
-    datos_update["fecha_servicio"] = date.fromisoformat(fecha_servicio).isoformat()
+    datos_insert = servicio.model_dump()
+    datos_insert["fecha_servicio"] = servicio.fecha_servicio.isoformat()
+    datos_insert["remito_url"] = remito_url
+
     try:
-        res = supabase.table(TABLA).update(datos_update).eq("id_servicio", id_servicio).execute()
+        if es_edicion and id_servicio:
+            res = supabase.table(TABLA).update(datos_insert).eq("id_servicio", id_servicio).execute()
+        else:
+            res = supabase.table(TABLA).insert(datos_insert).execute()
         if getattr(res, "error", None):
             raise Exception(res.error.message)
     except Exception as exc:
-        logger.exception("Error actualizando servicio en la base:")
+        logger.exception("Error guardando servicio en la base:")
         raise HTTPException(status_code=500, detail=str(exc))
-    return RedirectResponse("/empleado/limpieza", status_code=303)
 
-@router.get("/empleado/api/servicios_limpieza")
-async def listar_servicios_limpieza_empleado():
+    return RedirectResponse(redir, status_code=303)
+
+async def _listar_servicios():
     if not supabase:
         logger.warning("Supabase no configurado al listar servicios")
         return []
@@ -283,8 +354,7 @@ async def listar_servicios_limpieza_empleado():
         )
     return normalizados
 
-@router.post("/empleado/api/servicios_limpieza/eliminar")
-async def eliminar_servicios_empleado(payload: _IdLista):
+async def _eliminar_servicios(payload):
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     try:

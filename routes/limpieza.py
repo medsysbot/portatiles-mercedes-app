@@ -85,8 +85,32 @@ async def form_nuevo_admin(request: Request):
     return TEMPLATES.TemplateResponse("limpieza_form_admin.html", {"request": request})
 
 @router.post("/admin/limpieza/nuevo")
-async def crear_admin(request: Request, **form_data):
-    return await _procesar_alta_o_actualizacion(request, form_data, panel="admin", es_edicion=False)
+async def crear_admin(
+    request: Request,
+    fecha_servicio: str = Form(...),
+    numero_bano: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
+    nombre_cliente: str = Form(...),
+    tipo_servicio: str = Form(...),
+    estado: str = Form(...),
+    observaciones: str | None = Form(None),
+    remito: UploadFile | None = None,
+):
+    return await _procesar_alta_o_actualizacion(
+        request,
+        {
+            "fecha_servicio": fecha_servicio,
+            "numero_bano": numero_bano,
+            "dni_cuit_cuil": dni_cuit_cuil,
+            "nombre_cliente": nombre_cliente,
+            "tipo_servicio": tipo_servicio,
+            "estado": estado,
+            "observaciones": observaciones,
+            "remito": remito,
+        },
+        panel="admin",
+        es_edicion=False
+    )
 
 @router.get("/admin/limpieza/editar/{id_servicio}", response_class=HTMLResponse)
 async def form_editar_admin(request: Request, id_servicio: int):
@@ -94,8 +118,34 @@ async def form_editar_admin(request: Request, id_servicio: int):
     return TEMPLATES.TemplateResponse("limpieza_form_admin.html", {"request": request, "servicio": servicio})
 
 @router.post("/admin/limpieza/editar/{id_servicio}")
-async def actualizar_admin(request: Request, id_servicio: int, **form_data):
-    return await _procesar_alta_o_actualizacion(request, form_data, panel="admin", es_edicion=True, id_servicio=id_servicio)
+async def actualizar_admin(
+    request: Request,
+    id_servicio: int,
+    fecha_servicio: str = Form(...),
+    numero_bano: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
+    nombre_cliente: str = Form(...),
+    tipo_servicio: str = Form(...),
+    estado: str = Form(...),
+    observaciones: str | None = Form(None),
+    remito: UploadFile | None = None,
+):
+    return await _procesar_alta_o_actualizacion(
+        request,
+        {
+            "fecha_servicio": fecha_servicio,
+            "numero_bano": numero_bano,
+            "dni_cuit_cuil": dni_cuit_cuil,
+            "nombre_cliente": nombre_cliente,
+            "tipo_servicio": tipo_servicio,
+            "estado": estado,
+            "observaciones": observaciones,
+            "remito": remito,
+        },
+        panel="admin",
+        es_edicion=True,
+        id_servicio=id_servicio
+    )
 
 
 # ========= EMPLEADO =========
@@ -105,8 +155,31 @@ async def form_nuevo_empleado(request: Request):
     return TEMPLATES.TemplateResponse("limpieza_form_empleado.html", {"request": request})
 
 @router.post("/empleado/limpieza/nuevo")
-async def crear_empleado(request: Request, **form_data):
-    return await _procesar_alta_o_actualizacion(request, form_data, panel="empleado", es_edicion=False)
+async def crear_empleado(
+    request: Request,
+    fecha_servicio: str = Form(...),
+    numero_bano: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
+    nombre_cliente: str = Form(...),
+    tipo_servicio: str = Form(...),
+    observaciones: str | None = Form(None),
+    remito: UploadFile | None = None,
+):
+    return await _procesar_alta_o_actualizacion(
+        request,
+        {
+            "fecha_servicio": fecha_servicio,
+            "numero_bano": numero_bano,
+            "dni_cuit_cuil": dni_cuit_cuil,
+            "nombre_cliente": nombre_cliente,
+            "tipo_servicio": tipo_servicio,
+            "estado": "pendiente",
+            "observaciones": observaciones,
+            "remito": remito,
+        },
+        panel="empleado",
+        es_edicion=False
+    )
 
 @router.get("/empleado/limpieza/editar/{id_servicio}", response_class=HTMLResponse)
 async def form_editar_empleado(request: Request, id_servicio: int):
@@ -114,8 +187,34 @@ async def form_editar_empleado(request: Request, id_servicio: int):
     return TEMPLATES.TemplateResponse("limpieza_form_empleado.html", {"request": request, "servicio": servicio})
 
 @router.post("/empleado/limpieza/editar/{id_servicio}")
-async def actualizar_empleado(request: Request, id_servicio: int, **form_data):
-    return await _procesar_alta_o_actualizacion(request, form_data, panel="empleado", es_edicion=True, id_servicio=id_servicio)
+async def actualizar_empleado(
+    request: Request,
+    id_servicio: int,
+    fecha_servicio: str = Form(...),
+    numero_bano: str = Form(...),
+    dni_cuit_cuil: str = Form(...),
+    nombre_cliente: str = Form(...),
+    tipo_servicio: str = Form(...),
+    estado: str = Form(...),
+    observaciones: str | None = Form(None),
+    remito: UploadFile | None = None,
+):
+    return await _procesar_alta_o_actualizacion(
+        request,
+        {
+            "fecha_servicio": fecha_servicio,
+            "numero_bano": numero_bano,
+            "dni_cuit_cuil": dni_cuit_cuil,
+            "nombre_cliente": nombre_cliente,
+            "tipo_servicio": tipo_servicio,
+            "estado": estado,
+            "observaciones": observaciones,
+            "remito": remito,
+        },
+        panel="empleado",
+        es_edicion=True,
+        id_servicio=id_servicio
+    )
 
 
 # ========= UTILIDADES =========
@@ -138,9 +237,6 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
     remito: UploadFile = form_data.pop("remito", None)
     if es_edicion and id_servicio is None:
         raise HTTPException(status_code=400, detail="ID de servicio faltante en edición")
-
-    if panel == "empleado" and not es_edicion:
-        form_data["estado"] = "pendiente"
 
     try:
         servicio = ServicioLimpiezaNuevo(**form_data)

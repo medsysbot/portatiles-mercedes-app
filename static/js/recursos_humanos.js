@@ -1,6 +1,3 @@
-// Script: recursos_humanos.js
-// Proyecto: Portátiles Mercedes
-
 document.addEventListener('DOMContentLoaded', () => {
   const seccionDatos = document.getElementById('seccionDatos');
   const seccionSalarios = document.getElementById('seccionSalarios');
@@ -9,19 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnSalarios = document.getElementById('tabSalariosBtn');
   const btnAusencias = document.getElementById('tabAusenciasBtn');
 
+  // --- Manejo de pestañas con clase d-none (Bootstrap) ---
   function mostrar(seccion) {
-    seccionDatos.style.display = 'none';
-    seccionSalarios.style.display = 'none';
-    seccionAusencias.style.display = 'none';
-    seccion.style.display = 'block';
+    [seccionDatos, seccionSalarios, seccionAusencias].forEach(div => div.classList.add('d-none'));
+    seccion.classList.remove('d-none');
   }
 
   btnDatos.addEventListener('click', () => mostrar(seccionDatos));
   btnSalarios.addEventListener('click', () => mostrar(seccionSalarios));
   btnAusencias.addEventListener('click', () => mostrar(seccionAusencias));
 
-  mostrar(seccionDatos);
+  mostrar(seccionDatos); // Mostrar datos por defecto
 
+  // --- URLs de las APIs ---
   const urlDatos = esAdmin ? '/admin/api/empleados_datos_personales' : '/empleado/api/datos_personales';
   const urlDatosDel = '/admin/api/empleados_datos_personales/eliminar';
   const urlSalarios = esAdmin ? '/admin/api/empleados_salarios' : '/empleado/api/empleados_salarios';
@@ -29,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const urlAusencias = esAdmin ? '/admin/api/empleados_ausencias' : '/empleado/api/empleados_ausencias';
   const urlAusenciasDel = '/admin/api/empleados_ausencias/eliminar';
 
+  // --- DataTables ---
   const tablaDatos = $('#tablaDatos').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
@@ -94,6 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
+  // --- Botones de eliminación ---
   const btnEliminarDatos = document.getElementById('btnEliminarDatos');
   const btnEliminarSalarios = document.getElementById('btnEliminarSalarios');
   const btnEliminarAusencias = document.getElementById('btnEliminarAusencias');
@@ -109,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#tablaAusencias tbody').on('change', '.fila-check', () => actualizarBoton(tablaAusencias, btnEliminarAusencias));
   }
 
+  // --- Cargar datos tablas ---
   async function cargarDatos() {
     try {
       const resp = await fetch(urlDatos, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
@@ -136,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) { console.error('Error al cargar ausencias:', err); }
   }
 
+  // --- Acciones eliminar ---
   if (btnEliminarDatos) btnEliminarDatos.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaDatos tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
@@ -178,6 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) { alert('Error eliminando registros'); }
   });
 
+  // --- Inicialización ---
   cargarDatos();
   cargarSalarios();
   cargarAusencias();

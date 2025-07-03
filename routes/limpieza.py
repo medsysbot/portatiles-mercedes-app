@@ -11,15 +11,12 @@ from __future__ import annotations
 
 import logging
 import os
-import smtplib
 from datetime import date, datetime
-from email.message import EmailMessage
 from pathlib import Path
 import tempfile
 
 from fastapi import (
     APIRouter,
-    File,
     Form,
     HTTPException,
     Request,
@@ -142,7 +139,6 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
     if es_edicion and id_servicio is None:
         raise HTTPException(status_code=400, detail="ID de servicio faltante en edición")
 
-    # Asignar estado por defecto para empleados
     if panel == "empleado" and not es_edicion:
         form_data["estado"] = "pendiente"
 

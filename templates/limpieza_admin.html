@@ -3,7 +3,7 @@
 {% block description %}Listado y administración de servicios de limpieza{% endblock %}
 {% block head_extra %}
 {{ super() }}
-<link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', path='/css/style.css', _scheme='https') }}">
 {% endblock %}
 
 {% block content %}

@@ -1,14 +1,13 @@
 /* ================== CSS Global Panel Administrativo ================== */
-/* Fuente principal */
 body, html {
   font-family: 'Nunito', Arial, sans-serif !important;
-  color: #444444 !important;
+  color: #444 !important;
   background: #fafafa;
   min-height: 100vh;
   position: relative;
 }
 
-/* Botones estándar (gris/negro, transparentes) */
+/* Botones estándar */
 .btn,
 button[type="submit"],
 button[type="button"] {
@@ -21,13 +20,11 @@ button[type="button"] {
   border: none !important;
   margin-left: 0.5em;
   margin-top: 1em;
-  text-transform: none !important;
   white-space: nowrap !important;
   box-shadow: none !important;
   display: inline-block !important;
 }
 
-/* Botón especial "Cerrar sesión" */
 .boton-cerrar-sesion,
 .btn-danger,
 button.cerrar-sesion {
@@ -36,7 +33,6 @@ button.cerrar-sesion {
   font-weight: bold !important;
 }
 
-/* Todos los botones alineados siempre a la derecha en formularios */
 .form-footer,
 .form-actions,
 .form-group.buttons,
@@ -48,26 +44,213 @@ button.cerrar-sesion {
   margin-top: 1.5em;
 }
 
-/* Evitar saltos en los botones */
 .btn, button {
   white-space: nowrap !important;
   text-overflow: ellipsis;
   overflow: hidden;
 }
 
-/* Tablas administrativas - fondo negro semi-transparente y letras blancas */
-.table, .dataTable {
+/* Tablas administrativas */
+.table, .dataTable, table.pm-tabla {
   font-family: 'Nunito', Arial, sans-serif !important;
-  background: rgba(0,0,0,0.7) !important; /* Unificación visual 2025-07 */
+  background: rgba(0,0,0,0.7) !important;
   color: #fff !important;
   border-collapse: collapse !important;
-  width: 100% !important; /* Ancho estándar para todas las tablas */
-}
-.table th, .table td,
-.dataTable th, .dataTable td {
-  border: 1px solid #fff !important; /* Líneas blancas */
+  width: 100% !important;
 }
 
+.table th, .table td,
+.dataTable th, .dataTable td,
+table.pm-tabla th, table.pm-tabla td {
+  border: 1px solid #fff !important;
+}
+
+/* Sidebar */
+.main-sidebar, .sidebar, .sidebar-dark-primary,
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link,
+.sidebar-dark-primary .brand-link {
+  background: #171717 !important;
+  color: #fff !important;
+}
+
+.main-sidebar .nav-link, .sidebar .nav-link,
+.sidebar-dark-primary .nav-link, .sidebar-dark-primary .nav-link span,
+.sidebar-dark-primary .brand-link {
+  color: #fff !important;
+}
+
+.main-sidebar .nav-link.active, .sidebar .nav-link.active {
+  background: rgba(255,255,255,0.08) !important;
+  color: #fff !important;
+}
+
+.main-sidebar, .sidebar {
+  opacity: 1 !important;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.08);
+}
+
+/* Gráficos */
+.grafico-panel {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 1;
+}
+
+/* Miniaturas dashboard cliente */
+.dashboard-thumb { max-height: 100px; }
+
+/* Fondos paneles */
+body.panel-admin, body.panel-cliente, body.panel-empleados {
+  background-image: url('/static/imagenes/fondo-panel.png');
+  background-size: cover;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+}
+
+body.panel-admin .content-wrapper,
+body.panel-cliente .content-wrapper,
+body.panel-empleados .content-wrapper {
+  background-color: transparent !important;
+  overflow-y: auto;
+}
+
+/* Títulos principales */
+body.panel-admin .card-title,
+body.panel-cliente .card-title,
+body.panel-empleados .card-title,
+.titulo-panel {
+  color: #fff !important;
+}
+
+body.panel-admin .card,
+body.panel-cliente .card,
+body.panel-empleados .card {
+  background: rgba(30,30,30,0.75) !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+body.panel-empleados .container,
+body.panel-empleados .container-fluid {
+  background: transparent !important;
+}
+
+/* Títulos y etiquetas unificados */
+body.panel-admin h1, body.panel-admin h2,
+body.panel-empleados h1, body.panel-empleados h2,
+body.panel-cliente h1, body.panel-cliente h2,
+body.panel-admin label, body.panel-empleados label, body.panel-cliente label {
+  color: #fff !important;
+}
+
+/* DataTables */
+table.dataTable, .dataTables_wrapper .dataTables_paginate,
+.dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_filter {
+  background: transparent !important;
+  color: #fff !important;
+  border-radius: 6px;
+}
+
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input[type="search"] {
+  background: transparent !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+  color: #fff !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+  text-decoration: underline;
+  background: transparent !important;
+}
+
+table.dataTable tbody tr {
+  background: transparent !important;
+  color: #fff !important;
+}
+
+table.dataTable thead th {
+  background: transparent !important;
+  color: #fff !important;
+}
+
+table.dataTable td, table.dataTable th {
+  border: 1px solid #fff !important;
+}
+
+.dataTables_wrapper .dataTables_filter input[type="search"] {
+  width: 50% !important;
+  display: inline-block;
+  margin-right: 0.5em;
+}
+
+.table-responsive.bg-light {
+  background: rgba(0,0,0,0.7) !important;
+  color: #fff !important;
+}
+
+.d-flex.align-items-center .btn {
+  margin-top: 0 !important;
+}
+
+.buscador-tabla {
+  width: 50% !important;
+  background: transparent !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+}
+
+.scroll-x-light {
+  overflow-x: auto;
+  background-color: #f9f9f9;
+  padding: 1rem;
+}
+
+/* Splash de bienvenida */
+.saludo-splash {
+  text-align: center;
+  color: #fff;
+}
+
+.saludo-splash .linea-uno,
+.saludo-splash .linea-dos {
+  display: block;
+}
+
+.no-margin-top { margin-top: 0 !important; }
+
+/* Tablas portátiles Mercedes */
+table.pm-tabla thead {
+  background-color: rgba(0,0,0,0.8);
+  color: #fff;
+  text-align: center;
+}
+
+table.pm-tabla th, table.pm-tabla td {
+  padding: 12px 16px;
+  border: none;
+  word-wrap: break-word;
+}
+
+table.pm-tabla tr:nth-child(even) {
+  background-color: rgba(0,0,0,0.4);
+}
+
+table.pm-tabla tr:hover {
+  background-color: rgba(32,64,96,0.5);
+  transition: background-color 0.2s ease;
+}
+
+/* Responsive ajustes para móviles */
 @media (max-width: 600px) {
   .content-wrapper::before, .main-content::before {
     width: 80vw;
@@ -78,216 +261,3 @@ button.cerrar-sesion {
     padding: 0.65em 1.4em !important;
   }
 }
-
-/* Sidebar no se modifica */
-.main-sidebar, .sidebar {
-  background: inherit !important;
-}
-/* ================== SIDEBAR PORTÁTILES MERCEDES ================== */
-.main-sidebar,
-.sidebar,
-.sidebar-dark-primary,
-.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link,
-.sidebar-dark-primary .brand-link {
-  background: #171717 !important; /* negro puro */
-  color: #fff !important;
-}
-
-.main-sidebar .nav-link,
-.sidebar .nav-link,
-.sidebar-dark-primary .nav-link,
-.sidebar-dark-primary .nav-link span,
-.sidebar-dark-primary .brand-link {
-  color: #fff !important;
-}
-
-.main-sidebar .nav-link.active,
-.sidebar .nav-link.active {
-  background: rgba(255,255,255,0.08) !important;
-  color: #fff !important;
-}
-
-/* Evita transparencia accidental en sidebar */
-.main-sidebar,
-.sidebar {
-  opacity: 1 !important;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.08);
-}
-
-/* Proporción 2:1 para los gráficos del dashboard */
-.grafico-panel {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 2 / 1;
-}
-
-
-/* Miniaturas en el dashboard del cliente */
-.dashboard-thumb{max-height:100px;}
-
-/* Fondo exclusivo para el panel administrativo
-   Se aplica solo a la clase "panel-admin" para no afectar otros módulos */
-body.panel-admin,
-body.panel-cliente,
-body.panel-empleados {
-  background-image: url('/static/imagenes/fondo-panel.png');
-  background-size: cover;
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-color: transparent;
-}
-/* Evita que el fondo gris de AdminLTE tape la imagen */
-body.panel-admin .content-wrapper,
-body.panel-cliente .content-wrapper,
-body.panel-empleados .content-wrapper {
-  background-color: transparent !important;
-  overflow-y: auto;
-}
-
-/* Color blanco para títulos principales – Portátiles Mercedes */
-body.panel-admin .card-title,
-body.panel-cliente .card-title,
-body.panel-empleados .card-title,
-.titulo-panel {
-  color: #fff !important;
-}
-
-/* Contenedor gris para todas las tarjetas en paneles */
-body.panel-admin .card,
-body.panel-cliente .card,
-body.panel-empleados .card {
-  background: rgba(30,30,30,0.75) !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* Contenedores principales transparentes en panel de empleados */
-body.panel-empleados .container,
-body.panel-empleados .container-fluid {
-  background: transparent !important;
-}
-
-/* 2025-07-10: unificación de colores en encabezados y etiquetas */
-body.panel-admin h1,
-body.panel-admin h2,
-body.panel-empleados h1,
-body.panel-empleados h2,
-body.panel-cliente h1,
-body.panel-cliente h2,
-body.panel-admin label,
-body.panel-empleados label,
-body.panel-cliente label {
-  color: #fff !important;
-}
-/* === Unificación de tablas para todos los paneles === */
-table.dataTable,
-.dataTables_wrapper .dataTables_paginate,
-.dataTables_wrapper .dataTables_info,
-.dataTables_wrapper .dataTables_length,
-.dataTables_wrapper .dataTables_filter {
-    background: transparent !important;
-    color: #fff !important;
-    border-radius: 6px;
-}
-
-/* Inputs y selects de DataTables */
-.dataTables_wrapper .dataTables_length select,
-.dataTables_wrapper .dataTables_filter input[type="search"] {
-    background: transparent !important;
-    color: #fff !important;
-    border: 1px solid #fff !important;
-}
-
-/* Paginador */
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    color: #fff !important;
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-    text-decoration: underline;
-    background: transparent !important;
-}
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    text-decoration: underline;
-    background: transparent !important;
-}
-
-/* Filas y cabeceras */
-table.dataTable {
-    background: rgba(0,0,0,0.7) !important; /* Fondo unificado */
-    border-radius: 6px;
-    overflow: hidden;
-    box-shadow: none !important;
-    color: #fff !important;
-    border-collapse: collapse !important;
-}
-table.dataTable tbody tr {
-    background: transparent !important;
-    color: #fff !important;
-}
-table.dataTable thead th {
-    background: transparent !important;
-    color: #fff !important;
-}
-table.dataTable td, table.dataTable th {
-    border: 1px solid #fff !important;
-}
-
-/* Borde externo para todas las tablas */
-table.dataTable,
-.table {
-    border: 1px solid #fff !important;
-}
-
-/* Input de búsqueda más compacto y botones alineados */
-.dataTables_wrapper .dataTables_filter input[type="search"] {
-    width: 50% !important;
-    display: inline-block;
-    margin-right: 0.5em;
-}
-.dataTables_wrapper .dataTables_filter button {
-    height: calc(1.5em + 0.75rem + 2px);
-    margin-top: 0;
-}
-
-/* Correcciones visuales para tablas y botoneras en todos los paneles */
-.table-responsive.bg-light {
-    background: rgba(0,0,0,0.7) !important; /* fondo unificado */
-    color: #fff !important;
-}
-
-.d-flex.align-items-center .btn {
-    margin-top: 0 !important; /* botones alineados con el buscador */
-}
-
-/* Buscadores unificados en tablas */
-.buscador-tabla {
-    width: 50% !important; /* Ancho unificado 50% como en todas las tablas */
-    background: transparent !important;
-    color: #fff !important;
-    border: 1px solid #fff !important;
-}
-
-/* Contenedores con desplazamiento horizontal ligero */
-.scroll-x-light {
-    overflow-x: auto;
-    background-color: #f9f9f9;
-    padding: 1rem;
-}
-
-/* Estilos comunes para las pantallas de bienvenida */
-.saludo-splash {
-    text-align: center;
-    color: #fff;
-}
-
-.saludo-splash .linea-uno,
-.saludo-splash .linea-dos {
-    display: block;
-}
-
-/* Utilidades varias */
-.no-margin-top { margin-top: 0 !important; }

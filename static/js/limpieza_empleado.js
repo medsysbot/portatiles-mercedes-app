@@ -1,4 +1,4 @@
-// Archivo: static/js/limpieza_admin.js
+// Archivo: static/js/limpieza_empleado.js
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const errorDiv = document.getElementById('errorServicios');
   const mensajeDiv = document.getElementById('mensajeServicios');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
-  const btnEditar = document.getElementById('btnEditarSeleccionados');
+  const btnEditar = document.getElementById('btnEditarSeleccionado');
   let servicios = [];
 
   async function cargarServicios() {
@@ -56,8 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function actualizarBotones() {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
-    const activo = checks.length > 0;
-    if (btnEliminar) btnEliminar.disabled = !activo;
+    const activo = checks.length === 1; // Editar solo habilitado si 1 seleccionado
+    if (btnEliminar) btnEliminar.disabled = checks.length === 0;
     if (btnEditar) btnEditar.disabled = !activo;
   }
 
@@ -83,10 +83,11 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   btnEditar?.addEventListener('click', () => {
-    const ids = Array.from(document.querySelectorAll('#tablaServicios tbody .fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length) return alert('Seleccione un registro para editar');
-    console.log('Editar registros seleccionados:', ids);
-    // Aquí conectarías la lógica de edición (por ejemplo abrir un modal)
+    const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
+    if (checks.length !== 1) return alert('Debe seleccionar un único registro para editar');
+    const id = checks[0].dataset.id;
+    if (!id) return alert('ID de servicio no encontrado');
+    window.location.href = `/empleado/limpieza/editar/${id}`;
   });
 
   function mostrarMensaje(texto, tipo) {

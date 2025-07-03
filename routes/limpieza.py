@@ -1,4 +1,4 @@
-  """
+"""
 ----------------------------------------------------------
 Archivo: routes/limpieza.py
 Descripción: Gestión de servicios de limpieza (empleados y admin)

@@ -221,10 +221,6 @@ async def actualizar_empleado(
 
 @router.get("/empleado/api/servicios_limpieza")
 async def api_listar_servicios_empleado():
-    """
-    Endpoint que devuelve en JSON todos los servicios de limpieza para el panel del empleado.
-    Es usado por el JS para actualizar la tabla de servicios con datos frescos tras alta o edición.
-    """
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
     
@@ -254,7 +250,7 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
-    remito: UploadFile = form_data.pop("remito", None)
+    remito: UploadFile | None = form_data.pop("remito", None)
     if es_edicion and id_servicio is None:
         raise HTTPException(status_code=400, detail="ID de servicio faltante en edición")
 
@@ -266,7 +262,7 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         raise HTTPException(status_code=400, detail=f"Error en datos: {exc}")
 
     remito_url = None
-    if remito and remito.filename:
+    if isinstance(remito, UploadFile) and remito.filename:
         imagen_bytes = await remito.read()
         extension = Path(remito.filename).suffix.lower() or ".jpg"
         pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)

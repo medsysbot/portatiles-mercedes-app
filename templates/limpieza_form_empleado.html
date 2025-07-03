@@ -40,8 +40,8 @@
   <div class="form-group">
     <label>Estado</label>
     <select name="estado" class="form-control" required>
-      <option value="pendiente" {% if servicio and servicio.estado == 'pendiente' %}selected{% endif %}>Pendiente</option>
-      <option value="completo" {% if servicio and servicio.estado == 'completo' %}selected{% endif %}>Completo</option>
+      <option value="pendiente" {% if servicio and servicio.estado|lower == 'pendiente' %}selected{% endif %}>Pendiente</option>
+      <option value="completo" {% if servicio and servicio.estado|lower == 'completo' %}selected{% endif %}>Completo</option>
     </select>
   </div>
   <div class="form-group">

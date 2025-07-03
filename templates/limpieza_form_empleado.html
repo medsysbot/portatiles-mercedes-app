@@ -38,11 +38,9 @@
     <textarea name="observaciones" class="form-control" rows="3">{{ servicio.observaciones if servicio else '' }}</textarea>
   </div>
   <div class="form-group">
-    <label>Estado</label>
-    <select name="estado" class="form-control" required>
-      <option value="pendiente" {% if servicio and servicio.estado|lower == 'pendiente' %}selected{% endif %}>Pendiente</option>
-      <option value="completo" {% if servicio and servicio.estado|lower == 'completo' %}selected{% endif %}>Completo</option>
-    </select>
+    <label>Estado (escriba 'pendiente' o 'completo')</label>
+    <input type="text" name="estado" class="form-control" required
+           value="{{ servicio.estado if servicio else '' }}">
   </div>
   <div class="form-group">
     <label>Remito (foto o imagen)</label>

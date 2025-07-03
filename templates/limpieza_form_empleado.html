@@ -44,6 +44,9 @@
   </div>
   <div class="form-group">
     <label>Remito (foto o imagen)</label>
+    {% if servicio and servicio.remito_url %}
+      <p class="mb-2">Remito actual: <a href="{{ servicio.remito_url }}" target="_blank">Ver remito</a></p>
+    {% endif %}
     <input type="file" name="remito" accept="image/*" class="form-control">
   </div>
   <button type="submit" class="btn btn-primary">{{ 'Actualizar servicio' if servicio else 'Registrar servicio' }}</button>

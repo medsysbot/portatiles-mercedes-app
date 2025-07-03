@@ -217,6 +217,26 @@ async def actualizar_empleado(
     )
 
 
+# ========= API LISTADO EMPLEADO =========
+
+@router.get("/empleado/api/servicios_limpieza")
+async def api_listar_servicios_empleado():
+    """
+    Endpoint que devuelve en JSON todos los servicios de limpieza para el panel del empleado.
+    Es usado por el JS para actualizar la tabla de servicios con datos frescos tras alta o edición.
+    """
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    
+    res = supabase.table(TABLA).select("*").order("fecha_servicio", desc=True).execute()
+    
+    if getattr(res, "error", None):
+        logger.error("Error al obtener servicios: %s", res.error.message)
+        raise HTTPException(status_code=500, detail=str(res.error.message))
+    
+    return res.data or []
+
+
 # ========= UTILIDADES =========
 
 async def _obtener_servicio(id_servicio: int) -> dict:
@@ -238,7 +258,6 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
     if es_edicion and id_servicio is None:
         raise HTTPException(status_code=400, detail="ID de servicio faltante en edición")
 
-    # Convertir fecha_servicio a date antes de validar
     try:
         form_data["fecha_servicio"] = datetime.fromisoformat(form_data["fecha_servicio"]).date()
         servicio = ServicioLimpiezaNuevo(**form_data)

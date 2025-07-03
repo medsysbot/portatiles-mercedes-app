@@ -24,7 +24,7 @@ from fastapi import (
 )
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 from fpdf import FPDF
 from supabase import Client, create_client
 
@@ -270,6 +270,9 @@ async def _procesar_alta_o_actualizacion(request: Request, form_data: dict, pane
         bucket = supabase.storage.from_(BUCKET)
         bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
         remito_url = bucket.get_public_url(nombre_pdf)
+    elif es_edicion:
+        servicio_existente = await _obtener_servicio(id_servicio)
+        remito_url = servicio_existente.get("remito_url")
 
     datos = servicio.model_dump()
     datos["fecha_servicio"] = servicio.fecha_servicio.isoformat()

@@ -42,7 +42,19 @@ if not logger.handlers:
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-# Punto de entrada: renderiza el panel cliente como HTML completo
+# 🔹 NUEVO: Endpoint para renderizar el splash del cliente
+@router.get("/splash_cliente")
+async def splash_cliente(request: Request, nombre_usuario: str = Query(...)):
+    """
+    Renderiza el splash de bienvenida del cliente.
+    Espera el nombre del usuario como parámetro para personalizar el saludo.
+    """
+    return templates.TemplateResponse(
+        "splash_cliente.html",
+        {"request": request, "nombre_usuario": nombre_usuario},
+    )
+
+# 🔹 Renderiza el panel cliente como HTML completo
 @router.get("/panel_cliente")
 async def render_panel_cliente(request: Request):
     """Renderiza el panel de cliente como página HTML completa."""
@@ -228,4 +240,3 @@ async def enviar_email_cliente(data: dict = Body(...)):
     except Exception as e:
         logger.error("Error enviando email de cliente: %s", e)
         raise HTTPException(status_code=500, detail="Error enviando email")
-

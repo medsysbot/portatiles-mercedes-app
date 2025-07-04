@@ -1,0 +1,41 @@
+{% extends 'base_adminlte.html' %}
+{% block title %}Mis Compras{% endblock %}
+{% block description %}Listado de compras realizadas por el cliente{% endblock %}
+{% block head_extra %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{{ super() }}
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <h2>Mis compras</h2>
+  <div id="errorVentas" class="alert alert-danger d-none"></div>
+  <div id="mensajeVentas" class="alert mt-3 d-none"></div>
+
+  <div class="d-flex justify-content-between align-items-center my-3">
+    <input type="text" id="busquedaVentas" class="form-control buscador-tabla" placeholder="Buscar compra por DNI / CUIT / CUIL">
+    <button id="btnBuscarVentas" class="btn btn-secondary ml-2">Buscar</button>
+  </div>
+
+  <div class="table-responsive bg-light p-3">
+    <table id="tablaVentasCliente" class="table pm-tabla table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Tipo de baño</th>
+          <th>DNI / CUIT / CUIL</th>
+          <th>Nombre cliente</th>
+          <th>Forma de pago</th>
+          <th>Observaciones</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="/clientes_mis_compras.js?v=1"></script>
+{% endblock %}

@@ -1,11 +1,12 @@
 {% extends 'base_adminlte.html' %}
-{% block title %}Panel Cliente{% endblock %}
-{% block description %}Panel de gestión para clientes Portátiles Mercedes{% endblock %}
+{% block title %}Panel de Cliente{% endblock %}
+{% block description %}Panel para acceso a módulos de cliente{% endblock %}
 {% block body_class %}hold-transition sidebar-mini layout-fixed panel-cliente{% endblock %}
 
 {% block head_extra %}
-{{ super() }}
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
+  {{ super() }}
 {% endblock %}
 
 {% block body %}
@@ -27,21 +28,21 @@
   </nav>
   <!-- /.navbar -->
 
-  <!-- Main Sidebar Container -->
+  <!-- Sidebar -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
-    <a href="#" class="brand-link text-center">
+    <a href="/panel_cliente" class="brand-link text-center">
       <span class="brand-text font-weight-light">Portátiles Mercedes</span>
     </a>
     <div class="sidebar">
       <nav class="mt-2">
-        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-          <li class="nav-item"><a href="#datos-personales" class="nav-link"><i class="nav-icon fas fa-user"></i><p>Datos personales</p></a></li>
-          <li class="nav-item"><a href="#mis-alquileres" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Mis alquileres</p></a></li>
-          <li class="nav-item"><a href="#facturas-pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturas pendientes</p></a></li>
-          <li class="nav-item"><a href="#comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes de pago</p></a></li>
-          <li class="nav-item"><a href="#mis-compras" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Mis compras</p></a></li>
-          <li class="nav-item"><a href="#servicios-limpieza" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
-          <li class="nav-item"><a href="#emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
+        <ul class="nav nav-pills nav-sidebar flex-column" role="menu">
+          <li class="nav-item"><a href="#seccion-datos-personales" class="nav-link"><i class="nav-icon fas fa-id-card"></i><p>Datos personales</p></a></li>
+          <li class="nav-item"><a href="#seccion-alquileres" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Mis alquileres</p></a></li>
+          <li class="nav-item"><a href="#seccion-facturas-pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice"></i><p>Facturas pendientes</p></a></li>
+          <li class="nav-item"><a href="#seccion-comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes de pago</p></a></li>
+          <li class="nav-item"><a href="#seccion-ventas" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Mis compras</p></a></li>
+          <li class="nav-item"><a href="#seccion-limpiezas" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
+          <li class="nav-item"><a href="#seccion-emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
         </ul>
       </nav>
     </div>
@@ -51,17 +52,20 @@
   <div class="content-wrapper pt-3">
     <section class="content">
       <div class="container-fluid p-0">
-        {% block content %}
-          {% include 'clientes_datos.html' %}
-          {% include 'clientes_alquileres.html' %}
-          {% include 'clientes_facturas_pendientes.html' %}
-          {% include 'clientes_comprobantes.html' %}
-          {% include 'clientes_comprobantes_form.html' %}
-          {% include 'clientes_mis_compras.html' %}
-          {% include 'clientes_servicios_limpieza.html' %}
-          {% include 'clientes_emails.html' %}
-          {% include 'clientes_emails_lista.html' %}
-        {% endblock %}
+        
+        {% comment %} Incluye el resumen con tarjetas, calendario y últimos emails {% endcomment %}
+        {% include 'clientes_resumen.html' %}
+
+        {% include 'clientes_datos.html' %}
+        {% include 'clientes_alquileres.html' %}
+        {% include 'clientes_facturas_pendientes.html' %}
+        {% include 'clientes_comprobantes.html' %}
+        {% include 'clientes_comprobantes_form.html' %}
+        {% include 'clientes_mis_compras.html' %}
+        {% include 'clientes_servicios_limpieza.html' %}
+        {% include 'clientes_emails.html' %}
+        {% include 'clientes_emails_lista.html' %}
+
       </div>
     </section>
   </div>
@@ -80,4 +84,6 @@
   }
 </script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+<script src="/static/js/dashboard_cliente.js"></script>
 {% endblock %}

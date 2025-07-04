@@ -1,0 +1,42 @@
+<!-- 📄 clientes_servicios_limpieza.html :: Servicios de limpieza para el cliente -->
+{% extends 'base_adminlte.html' %}
+{% block title %}Mis servicios de limpieza{% endblock %}
+{% block description %}Historial y próximos servicios de limpieza de tus baños{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-3 mt-0">Mis servicios de limpieza</h2>
+
+<div class="d-flex flex-wrap justify-content-between align-items-center my-3">
+  <input type="text" id="busquedaServicios" class="form-control buscador-tabla mb-2" placeholder="Buscar servicio...">
+  <button class="btn btn-secondary ml-2 mb-2" id="btnBuscarServicios" type="button">Buscar</button>
+</div>
+
+<div class="table-responsive bg-light p-3">
+  <div id="mensajeServicios" class="alert mt-3 d-none"></div>
+  <div id="errorServicios" class="alert alert-danger d-none"></div>
+  <table id="tablaServicios" class="tabla-mercedes dataTable table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Nº Baño</th>
+        <th>DNI / CUIT / CUIL</th>
+        <th>Nombre Cliente</th>
+        <th>Tipo Servicio</th>
+        <th>Estado</th>
+        <th>Remito</th>
+        <th>Observaciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="/clientes_servicios_limpieza.js"></script>
+{% endblock %}

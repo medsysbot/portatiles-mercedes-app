@@ -1,0 +1,33 @@
+{% extends 'base_adminlte.html' %}
+{% block title %}Enviar Reporte{% endblock %}
+{% block description %}Formulario para enviar reportes al área administrativa{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <h2>Enviar Reporte</h2>
+  <form id="formReporte">
+    <div class="form-group">
+      <label for="fechaReporte">Fecha</label>
+      <input type="date" id="fechaReporte" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="nombrePersonaReporte">Nombre de quien reporta</label>
+      <input type="text" id="nombrePersonaReporte" class="form-control" placeholder="Nombre de quien reporta" required>
+    </div>
+    <div class="form-group">
+      <label for="motivoReporte">Motivo</label>
+      <input type="text" id="motivoReporte" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="obsReporte">Observaciones</label>
+      <textarea id="obsReporte" class="form-control" rows="3" required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+  </form>
+  <div id="msgReporte" class="alert mt-3 d-none"></div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/clientes_reportes.js"></script>
+{% endblock %}

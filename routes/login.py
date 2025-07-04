@@ -1,6 +1,125 @@
+"""
+----------------------------------------------------------
+Archivo: routes/login.py
+Descripción: Funciones de autenticación y registro de usuarios
+Acceso: Privado
+Proyecto: Portátiles Mercedes
+Última modificación: 2025-07-04
+----------------------------------------------------------
+"""
+
+import os
+import logging
+import traceback
+from fastapi import APIRouter, HTTPException, status, Form, Response, Request
+from pydantic import BaseModel
+from supabase import create_client, Client
+from passlib.context import CryptContext
+from jose import jwt, JWTError
+from datetime import datetime, timedelta, timezone
+import secrets
+import smtplib
+from email.message import EmailMessage
+from dotenv import load_dotenv
+from fastapi.responses import RedirectResponse
+
+load_dotenv()
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
+JWT_SECRET = os.getenv("JWT_SECRET")
+ALGORITHM = "HS256"
+JWT_EXP_MINUTES = 60
+
+faltantes = [
+    nombre
+    for nombre, valor in {
+        "SUPABASE_URL": SUPABASE_URL,
+        "SUPABASE_KEY": SUPABASE_KEY,
+        "JWT_SECRET": JWT_SECRET,
+    }.items()
+    if not valor
+]
+if faltantes:
+    raise RuntimeError(
+        "Faltan variables de entorno requeridas: " + ", ".join(faltantes)
+    )
+
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+EMAIL_ORIGEN = os.getenv("EMAIL_ORIGEN")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+SMTP_SERVER = os.getenv("SMTP_SERVER")
+SMTP_PORT = os.getenv("SMTP_PORT")
+APP_URL = os.getenv("APP_URL")
+
+LOG_DIR = "logs"
+os.makedirs(LOG_DIR, exist_ok=True)
+LOG_FILE = os.path.join(LOG_DIR, "login_events.log")
+logger = logging.getLogger("login_events")
+logger.setLevel(logging.INFO)
+if not logger.handlers:
+    handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
+    formatter = logging.Formatter(
+        "%(asctime)s [%(levelname)s] %(message)s"
+    )
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.propagate = False
+
+def imprimir_log_error():
+    log_path = os.path.join(LOG_DIR, "error_login.log")
+    try:
+        if os.path.isfile(log_path):
+            with open(log_path, "r") as f:
+                logger.error(f.read())
+    except Exception as exc:
+        logger.error("No se pudo leer %s: %s", log_path, exc)
+
+imprimir_log_error()
+
+def enviar_email_recuperacion(destino: str, token: str, base_url: str) -> None:
+    if not all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
+        logger.error("Variables SMTP faltantes - no se puede enviar correo")
+        raise Exception("SMTP no configurado")
+
+    enlace = f"{base_url}/reset_password?token={token}"
+    msg = EmailMessage()
+    msg["From"] = EMAIL_ORIGEN
+    msg["To"] = destino
+    msg["Subject"] = "Recuperar contraseña"
+    msg.set_content(
+        "Para restablecer tu contraseña hacé clic en el siguiente enlace:\n"
+        f"{enlace}\n\nSi no solicitaste este cambio podés ignorar este mensaje."
+    )
+
+    logger.info(
+        "Preparando email de recuperación | destino=%s token=%s url=%s",
+        destino,
+        token,
+        enlace,
+    )
+    with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
+        smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
+        smtp.send_message(msg)
+    logger.info("Correo de recuperación enviado a %s", destino)
+
+class LoginInput(BaseModel):
+    email: str
+    password: str
+    rol: str
+
+class RecuperarInput(BaseModel):
+    email: str
+
+class ResetInput(BaseModel):
+    token: str
+    password: str
+
+router = APIRouter()
+
 @router.post("/login")
 async def login(datos: LoginInput, response: Response):
-    """Autentica a un usuario y genera un token de acceso."""
     try:
         email = datos.email
         password = datos.password
@@ -69,20 +188,13 @@ async def login(datos: LoginInput, response: Response):
             "exp": datetime.utcnow() + timedelta(minutes=JWT_EXP_MINUTES),
         }
         token = jwt.encode(token_data, JWT_SECRET, algorithm=ALGORITHM)
-        response.set_cookie(key="access_token", value=token, httponly=True)
 
         logger.info(f"Login exitoso: {email}")
+        response.set_cookie(key="access_token", value=token, httponly=True)
 
-        # Nueva lógica: si es cliente, redirige al splash con nombre
         if usuario.get("rol", "").lower() == "cliente":
-            nombre_usuario = usuario.get("nombre", "Cliente")
-            response = Response(
-                status_code=303,  # redirect see-other
-                headers={"Location": f"/splash_cliente?nombre_usuario={nombre_usuario}"}
-            )
-            return response
+            return RedirectResponse(url="/splash_cliente", status_code=303)
 
-        # Para roles distintos de cliente, responde JSON como antes
         return {
             "access_token": token,
             "rol": usuario.get("rol"),
@@ -97,3 +209,7 @@ async def login(datos: LoginInput, response: Response):
             f.write(traceback.format_exc())
         imprimir_log_error()
         raise HTTPException(status_code=500, detail="Error interno en el servidor")
+
+# El resto de tus endpoints (verificar_token, registrar_cliente, recuperar_password, reset_password) van aquí.
+# No se incluyen completos porque no fueron modificados.
+             

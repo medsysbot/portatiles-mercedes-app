@@ -4,7 +4,7 @@ Archivo: routes/login.py
 Descripción: Funciones de autenticación y registro de usuarios
 Acceso: Privado
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-07-04
+Última modificación: 2025-07-05
 ----------------------------------------------------------
 """
 
@@ -12,19 +12,21 @@ import os
 import logging
 import traceback
 from fastapi import APIRouter, HTTPException, status, Form, Response, Request
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel
 from supabase import create_client, Client
 from passlib.context import CryptContext
+from passlib.hash import bcrypt
 from jose import jwt, JWTError
 from datetime import datetime, timedelta, timezone
 import secrets
 import smtplib
 from email.message import EmailMessage
 from dotenv import load_dotenv
-from fastapi.responses import RedirectResponse
 
 load_dotenv()
 
+# ==== Configuración de Supabase y JWT ====
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
 JWT_SECRET = os.getenv("JWT_SECRET")
@@ -53,6 +55,7 @@ SMTP_SERVER = os.getenv("SMTP_SERVER")
 SMTP_PORT = os.getenv("SMTP_PORT")
 APP_URL = os.getenv("APP_URL")
 
+# ==== Configuración de logging ====
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE = os.path.join(LOG_DIR, "login_events.log")
@@ -60,14 +63,13 @@ logger = logging.getLogger("login_events")
 logger.setLevel(logging.INFO)
 if not logger.handlers:
     handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
-    formatter = logging.Formatter(
-        "%(asctime)s [%(levelname)s] %(message)s"
-    )
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     logger.propagate = False
 
 def imprimir_log_error():
+    """Imprime errores anteriores al inicio."""
     log_path = os.path.join(LOG_DIR, "error_login.log")
     try:
         if os.path.isfile(log_path):
@@ -79,6 +81,7 @@ def imprimir_log_error():
 imprimir_log_error()
 
 def enviar_email_recuperacion(destino: str, token: str, base_url: str) -> None:
+    """Envía un correo con el enlace para restablecer la contraseña."""
     if not all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
         logger.error("Variables SMTP faltantes - no se puede enviar correo")
         raise Exception("SMTP no configurado")
@@ -95,9 +98,7 @@ def enviar_email_recuperacion(destino: str, token: str, base_url: str) -> None:
 
     logger.info(
         "Preparando email de recuperación | destino=%s token=%s url=%s",
-        destino,
-        token,
-        enlace,
+        destino, token, enlace,
     )
     with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
         smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
@@ -135,23 +136,11 @@ async def login(datos: LoginInput, response: Response):
                 .execute()
             )
         except Exception as exc:
-            logger.warning(
-                f"Login fallido – error consultando usuario: {email} ({exc})"
-            )
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Credenciales inválidas",
-            )
+            logger.warning(f"Login fallido – error consultando usuario: {email} ({exc})")
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciales inválidas")
 
         usuarios = getattr(supabase_resp, "data", []) or []
-        usuario = next(
-            (
-                u
-                for u in usuarios
-                if u.get("rol", "").lower() == rol.lower()
-            ),
-            None,
-        )
+        usuario = next((u for u in usuarios if u.get("rol", "").lower() == rol.lower()), None)
 
         if (
             not usuarios
@@ -160,21 +149,14 @@ async def login(datos: LoginInput, response: Response):
             or usuario is None
         ):
             logger.warning(f"Login fallido – usuario no encontrado: {email}")
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Usuario o contraseña incorrectos",
-            )
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario o contraseña incorrectos")
+
         hashed_password = usuario.get("password") or usuario.get("password_hash")
-        verificacion = False
-        if hashed_password:
-            verificacion = pwd_context.verify(password, hashed_password)
+        verificacion = pwd_context.verify(password, hashed_password) if hashed_password else False
 
         if not hashed_password or not verificacion:
             logger.warning(f"Login fallido – contraseña incorrecta: {email}")
-            raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Usuario o contraseña incorrectos",
-            )
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario o contraseña incorrectos")
 
         if not usuario.get("activo", True):
             logger.warning(f"Login fallido – usuario inactivo: {email}")
@@ -210,6 +192,107 @@ async def login(datos: LoginInput, response: Response):
         imprimir_log_error()
         raise HTTPException(status_code=500, detail="Error interno en el servidor")
 
-# El resto de tus endpoints (verificar_token, registrar_cliente, recuperar_password, reset_password) van aquí.
-# No se incluyen completos porque no fueron modificados.
-             
+@router.post("/verificar_token")
+def verificar_token(data: dict):
+    token = data.get("token")
+    if not token:
+        raise HTTPException(status_code=401, detail="Token faltante")
+    try:
+        datos = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
+        return {
+            "status": "ok",
+            "rol": datos.get("rol"),
+            "user_id": datos.get("id"),
+            "email": datos.get("sub"),
+        }
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+
+@router.post("/registrar_cliente")
+def registrar_cliente(nombre: str = Form(...), email: str = Form(...), password: str = Form(...)):
+    if not password:
+        raise HTTPException(status_code=400, detail="Contraseña requerida")
+
+    if supabase:
+        existe = supabase.table("usuarios").select("id").eq("email", email).execute()
+        if getattr(existe, "data", []):
+            raise HTTPException(status_code=400, detail="El email ya está registrado")
+
+        password_hash = pwd_context.hash(password)
+        datos_insert = {
+            "nombre": nombre,
+            "email": email,
+            "password_hash": password_hash,
+            "rol": "cliente",
+            "activo": True,
+        }
+        try:
+            resp = supabase.table("usuarios").insert(datos_insert).execute()
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+        if (
+            not resp.data
+            or (hasattr(resp, "status_code") and resp.status_code != 200)
+            or getattr(resp, "error", None) is not None
+        ):
+            logger.error(f"Registro fallido para {email}: {getattr(resp, 'error', 'Error en Supabase')}")
+            raise HTTPException(status_code=400, detail=str(getattr(resp, "error", "Error en Supabase")))
+
+    logger.info(f"Registro exitoso para nuevo cliente: {email}")
+    return {"mensaje": "Registro exitoso"}
+
+@router.post("/recuperar_password")
+async def recuperar_password(datos: RecuperarInput, request: Request):
+    mensaje = {"mensaje": "Si el email existe, se envió un correo de recuperación"}
+    email = datos.email.strip().lower()
+    logger.info("Solicitud de recuperación recibida para %s", email)
+    try:
+        resp = supabase.table("usuarios").select("id").eq("email", email).execute()
+        if getattr(resp, "data", []):
+            token = secrets.token_urlsafe(32)
+            expira = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
+            resp_token = (
+                supabase.table("reset_tokens")
+                .insert({"email": email, "token": token, "expira": expira, "usado": False})
+                .execute()
+            )
+            if not getattr(resp_token, "data", None):
+                raise HTTPException(status_code=500, detail="Error registrando token de recuperación")
+
+            base_url = APP_URL or str(request.base_url).rstrip("/")
+            enviar_email_recuperacion(email, token, base_url)
+        else:
+            logger.info("Recuperación solicitada para email inexistente: %s", email)
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error("Error en recuperar_password: %s", exc)
+    return mensaje
+
+@router.post("/reset_password")
+async def reset_password(datos: ResetInput):
+    token = datos.token
+    nueva = datos.password
+    try:
+        res = supabase.table("reset_tokens").select("email, expira, usado").eq("token", token).single().execute()
+        registro = getattr(res, "data", None)
+        if not registro or registro.get("usado"):
+            raise HTTPException(status_code=400, detail="Token inválido o expirado")
+        exp = registro.get("expira")
+        if exp:
+            exp_dt = datetime.fromisoformat(exp)
+            if exp_dt.tzinfo is None:
+                exp_dt = exp_dt.replace(tzinfo=timezone.utc)
+            if exp_dt < datetime.now(timezone.utc):
+                raise HTTPException(status_code=400, detail="Token inválido o expirado")
+
+        pwd_hash = pwd_context.hash(nueva)
+        supabase.table("usuarios").update({"password_hash": pwd_hash}).eq("email", registro["email"]).execute()
+        supabase.table("reset_tokens").update({"usado": True}).eq("token", token).execute()
+        return {"mensaje": "Contraseña actualizada"}
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error("Error en reset_password: %s", exc)
+        raise HTTPException(status_code=400, detail="Token inválido o expirado")

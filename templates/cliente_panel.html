@@ -35,15 +35,14 @@
     <div class="sidebar">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" role="menu">
-          <li class="nav-item"><a href="/cliente/datos" class="nav-link"><i class="nav-icon fas fa-id-card"></i><p>Datos personales</p></a></li>
-          <li class="nav-item"><a href="/cliente/alquileres" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Mis alquileres</p></a></li>
-          <li class="nav-item"><a href="/cliente/facturas" class="nav-link"><i class="nav-icon fas fa-file-invoice"></i><p>Facturas pendientes</p></a></li>
-          <li class="nav-item"><a href="/cliente/comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes de pago</p></a></li>
-          <li class="nav-item"><a href="/cliente/ventas" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Mis compras</p></a></li>
-          <li class="nav-item"><a href="/cliente/limpiezas" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
-          <li class="nav-item"><a href="/cliente/programacion_limpiezas" class="nav-link"><i class="nav-icon fas fa-calendar-alt"></i><p>Programación de limpiezas</p></a></li>
-          <li class="nav-item"><a href="/cliente/emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
-          <li class="nav-item"><a href="/cliente/reportes" class="nav-link"><i class="nav-icon fas fa-flag"></i><p>Reportar</p></a></li>
+          <li class="nav-item"><a href="#datos-personales" class="nav-link"><i class="nav-icon fas fa-id-card"></i><p>Datos personales</p></a></li>
+          <li class="nav-item"><a href="#mis-alquileres" class="nav-link"><i class="nav-icon fas fa-toilet"></i><p>Mis alquileres</p></a></li>
+          <li class="nav-item"><a href="#facturas-pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice"></i><p>Facturas pendientes</p></a></li>
+          <li class="nav-item"><a href="#comprobantes-pago" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes de pago</p></a></li>
+          <li class="nav-item"><a href="#mis-compras" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Mis compras</p></a></li>
+          <li class="nav-item"><a href="#servicios-limpieza" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
+          <li class="nav-item"><a href="#emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>Emails</p></a></li>
+          <li class="nav-item"><a href="#reportes" class="nav-link"><i class="nav-icon fas fa-flag"></i><p>Reportar</p></a></li>
         </ul>
       </nav>
     </div>
@@ -83,6 +82,18 @@
             </div>
           </div>
         </div>
+
+        <!-- Módulos externalizados -->
+        {% include 'cliente_datos.html' %}
+        {% include 'cliente_alquileres.html' %}
+        {% include 'cliente_facturas.html' %}
+        {% include 'cliente_comprobantes.html' %}
+        {% include 'cliente_miscompras.html' %}
+        {% include 'cliente_limpiezas.html' %}
+        {% include 'cliente_emails.html' %}
+        {% include 'cliente_emails_tabla.html' %}
+        {% include 'cliente_reportes.html' %}
+        {% include 'cliente_reportes_tabla.html' %}
       </div>
     </section>
   </div>

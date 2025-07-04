@@ -1,41 +1,54 @@
-<div id="seccion-datos-personales" class="card mb-4">
-  <div class="card-header"><h3 class="card-title">Datos personales</h3></div>
-  <div class="card-body">
-    <form id="formDatosCliente" onsubmit="guardarDatosCliente(event)">
-      <div class="form-group">
-        <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" name="nombre" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="apellido">Apellido</label>
-        <input type="text" id="apellido" name="apellido" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="dni_cuit_cuil">DNI / CUIT / CUIL</label>
-        <input type="text" id="dni_cuit_cuil" name="dni_cuit_cuil" class="form-control" readonly required>
-      </div>
-      <div class="form-group">
-        <label for="direccion">Dirección</label>
-        <input type="text" id="direccion" name="direccion" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="telefono">Teléfono</label>
-        <input type="text" id="telefono" name="telefono" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="razon_social">Razón social</label>
-        <input type="text" id="razon_social" name="razon_social" class="form-control" required>
-      </div>
-      <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" class="form-control" required>
-      </div>
-      <button type="submit" class="btn btn-primary">Guardar</button>
-      <div id="mensajeFormDatos" class="alert mt-3 d-none"></div>
-    </form>
+{% extends 'base_adminlte.html' %}
+{% block title %}Mis Datos Personales{% endblock %}
+{% block description %}Gestión de los datos personales del cliente{% endblock %}
+{% block head_extra %}
+{{ super() }}
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <h2>Mis Datos Personales</h2>
+  <div class="card mb-4">
+    <div class="card-header"><h3 class="card-title">Datos personales</h3></div>
+    <div class="card-body">
+      <form id="formDatosCliente" onsubmit="guardarDatosCliente(event)">
+        <div class="form-group">
+          <label for="nombre">Nombre</label>
+          <input type="text" id="nombre" name="nombre" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="apellido">Apellido</label>
+          <input type="text" id="apellido" name="apellido" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="dni_cuit_cuil">DNI / CUIT / CUIL</label>
+          <input type="text" id="dni_cuit_cuil" name="dni_cuit_cuil" class="form-control" readonly required>
+        </div>
+        <div class="form-group">
+          <label for="direccion">Dirección</label>
+          <input type="text" id="direccion" name="direccion" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="telefono">Teléfono</label>
+          <input type="text" id="telefono" name="telefono" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="razon_social">Razón social</label>
+          <input type="text" id="razon_social" name="razon_social" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Guardar</button>
+        <div id="mensajeFormDatos" class="alert mt-3 d-none"></div>
+      </form>
+    </div>
   </div>
 </div>
+{% endblock %}
 
+{% block scripts %}
 <script>
 async function guardarDatosCliente(ev) {
   ev.preventDefault();
@@ -71,3 +84,4 @@ async function guardarDatosCliente(ev) {
   msgDiv.classList.remove("d-none");
 }
 </script>
+{% endblock %}

@@ -87,8 +87,41 @@ function mostrarSeccionDesdeHash() {
   }
 }
 
-// Listener para los links del sidebar
-document.addEventListener('DOMContentLoaded', () => {
+// Funciones para cargar datos desde API y renderizar tablas
+async function cargarDatos(url, tabla, errorId, mensajeVacio) {
+  try {
+    const resp = await fetchConAuth(url);
+    if (!resp.ok) throw new Error('Error en petición');
+    const datos = await resp.json();
+    tabla.clear().rows.add(datos).draw();
+    if (mensajeVacio && document.getElementById(mensajeVacio)) {
+      if (datos.length === 0) {
+        document.getElementById(mensajeVacio).style.display = 'block';
+      } else {
+        document.getElementById(mensajeVacio).style.display = 'none';
+      }
+    }
+  } catch (error) {
+    console.error(`Error cargando ${url}`, error);
+    if (errorId && document.getElementById(errorId)) {
+      document.getElementById(errorId).style.display = 'block';
+    }
+  }
+}
+
+// Función para inicializar eventos de filtrado rápido
+function initBusquedaRapida(inputId, btnId, tablaKey, datos) {
+  document.getElementById(btnId).addEventListener('click', () => {
+    const q = document.getElementById(inputId).value.toLowerCase();
+    const filtrados = datos.filter(item =>
+      Object.values(item).some(val => String(val).toLowerCase().includes(q))
+    );
+    tablas[tablaKey].clear().rows.add(filtrados).draw();
+  });
+}
+
+// DOMContentLoaded
+document.addEventListener('DOMContentLoaded', async () => {
   // Oculta todas menos el dashboard al inicio
   ocultarTodasSecciones();
   document.getElementById('dashboard-resumen').style.display = 'block';
@@ -110,10 +143,65 @@ document.addEventListener('DOMContentLoaded', () => {
   // Mostrar la sección correcta al cargar la página
   mostrarSeccionDesdeHash();
 
-  // ... El resto de tu código EXISTENTE para cargar datos, manejar forms, etc ...
-  // (Pegar acá todo tu código JS original, sin la lógica de ocultar/secciones)
+  // ------ Lógica de Portátiles Mercedes: cargar datos, forms, tablas, etc ------
 
-  // ----- Copia aquí todo lo de DataTables, fetch, forms, etc -----
-  // ----- (desde la versión que me pasaste arriba) -----
-  // [PEGA EL RESTO DE TU JS ACÁ]
+  const token = localStorage.getItem('access_token');
+  if (!token) limpiarCredenciales();
+
+  try {
+    const ver = await fetch('/verificar_token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+    if (!ver.ok) limpiarCredenciales();
+    const info = await ver.json();
+    if (info.rol !== 'cliente') limpiarCredenciales();
+
+    const email = info.email;
+    const datosCliRes = await fetch(`/info_datos_cliente?email=${email}`);
+    const datosCli = datosCliRes.ok ? await datosCliRes.json() : {};
+    const dni = datosCli.dni_cuit_cuil;
+
+    // Cargar datos personales automáticamente
+    Object.keys(datosCli).forEach(key => {
+      if (document.getElementById(key)) {
+        document.getElementById(key).value = datosCli[key];
+      }
+    });
+
+    // Cargar datos para tablas
+    cargarDatos(`/alquileres_cliente?dni_cuit_cuil=${dni}`, tablas.alquileres, 'errorAlquileres', 'mensajeAlquileres');
+    cargarDatos(`/facturas_pendientes_cliente?dni=${dni}`, tablas.facturas, 'errorFacturas', 'mensajeFacturas');
+    cargarDatos(`/ventas_cliente?dni_cuit_cuil=${dni}`, tablas.ventas, 'errorVentas', 'mensajeVentas');
+    cargarDatos(`/limpiezas_cliente?dni_cuit_cuil=${dni}`, tablas.limpiezas, 'errorServicios', 'mensajeServicios');
+    cargarDatos('/cliente/api/limpiezas_programadas', tablas.programacion, '', '');
+    cargarDatos(`/api/comprobantes_pago?dni_cuit_cuil=${dni}`, tablas.comprobantes, 'msgComprobante', '');
+
+    // Inicialización búsqueda rápida (ejemplo para alquileres)
+    let alquileresData = (await fetchConAuth(`/alquileres_cliente?dni_cuit_cuil=${dni}`)).json();
+    initBusquedaRapida('busquedaAlquileres', 'btnBuscarAlquiler', 'alquileres', await alquileresData);
+
+    // Formulario guardar datos personales
+    document.getElementById('formDatos').addEventListener('submit', async e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const datos = Object.fromEntries(formData.entries());
+      const resp = await fetchConAuth('/guardar_datos_cliente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos),
+      });
+      const resultado = await resp.json();
+      alert(resultado.mensaje || 'Datos actualizados correctamente.');
+    });
+
+  } catch (err) {
+    console.error(err);
+    limpiarCredenciales();
+  }
+
+  document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
+
+  // [Opcional: podés agregar lógica para cargar emails, reportes, etc.]
 });

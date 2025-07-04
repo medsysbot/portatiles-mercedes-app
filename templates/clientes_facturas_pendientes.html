@@ -1,0 +1,41 @@
+{% extends 'base_adminlte.html' %}
+{% block title %}Mis Facturas Pendientes{% endblock %}
+{% block description %}Listado de facturas pendientes del cliente{% endblock %}
+{% block head_extra %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{{ super() }}
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+  <h2>Mis facturas pendientes</h2>
+  <div id="errorFacturas" class="alert alert-danger d-none"></div>
+  <div id="mensajeFacturas" class="alert mt-3 d-none"></div>
+
+  <div class="d-flex justify-content-between align-items-center my-3">
+    <input type="text" id="busquedaFacturas" class="form-control buscador-tabla" placeholder="Buscar por DNI / CUIT / CUIL">
+    <button id="btnBuscarFacturas" class="btn btn-secondary ml-2">Buscar</button>
+  </div>
+
+  <div class="table-responsive bg-light p-3">
+    <table id="tablaFacturasPendientes" class="table pm-tabla table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Número factura</th>
+          <th>DNI / CUIT / CUIL</th>
+          <th>Razón social</th>
+          <th>Nombre cliente</th>
+          <th>Monto adeudado</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="/clientes_facturas_pendientes.js?v=1"></script>
+{% endblock %}

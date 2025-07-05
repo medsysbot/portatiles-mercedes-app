@@ -87,3 +87,29 @@ def verificar_token(
             "Error inesperado en verificar_token: %s\n%s", exc, traceback.format_exc()
         )
         raise HTTPException(status_code=401, detail="Token inválido o expirado")
+
+# ...última línea de verificar_token...
+
+def get_current_user(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
+    JWT_SECRET = os.getenv("JWT_SECRET")
+    if not JWT_SECRET:
+        raise HTTPException(status_code=500, detail="JWT_SECRET no configurado")
+
+    token = None
+    if credentials is not None and credentials.scheme.lower() == "bearer":
+        token = credentials.credentials
+
+    if not token:
+        token = request.cookies.get("access_token")
+
+    if not token:
+        raise HTTPException(status_code=401, detail="Token faltante")
+
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        if not payload.get("dni_quit_quill"):
+            raise HTTPException(status_code=400, detail="Falta DNI/CUIT/CUIL en token")
+        return payload
+    except Exception as exc:
+        auth_logger.error("Error en get_current_user: %s\n%s", exc, traceback.format_exc())
+        raise HTTPException(status_code=401, detail="Token inválido o expirado")

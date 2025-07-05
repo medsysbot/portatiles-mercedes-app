@@ -52,6 +52,7 @@ router = APIRouter()
 
 @router.get("/cliente/panel")
 async def panel_cliente(request: Request, usuario: dict = Depends(get_current_user)):
+    print("Usuario autenticado:", usuario)
     return templates.TemplateResponse(
         "cliente_panel.html",
         {

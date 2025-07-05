@@ -126,4 +126,18 @@
     L.marker([-33.6757, -65.4574]).addTo(map).bindPopup("Villa Mercedes, San Luis");
   });
 </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const dni = localStorage.getItem("dni_cuit_cuil");
+    if (dni) {
+      document.querySelectorAll(".nav-link").forEach(link => {
+        const url = new URL(link.href, window.location.origin);
+        url.searchParams.set("dni_cuit_cuil", dni);
+        link.href = url.toString();
+      });
+    }
+  });
+</script>
+
 {% endblock %}

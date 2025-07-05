@@ -127,17 +127,4 @@
   });
 </script>
 
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const dni = localStorage.getItem("dni_cuit_cuil");
-    if (dni) {
-      document.querySelectorAll(".nav-link").forEach(link => {
-        const url = new URL(link.href, window.location.origin);
-        url.searchParams.set("dni", dni); // Cambiado aquí
-        link.href = url.toString();
-      });
-    }
-  });
-</script>
-
 {% endblock %}

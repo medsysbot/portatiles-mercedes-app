@@ -133,7 +133,7 @@
     if (dni) {
       document.querySelectorAll(".nav-link").forEach(link => {
         const url = new URL(link.href, window.location.origin);
-        url.searchParams.set("dni_cuit_cuil", dni);
+        url.searchParams.set("dni", dni); // Cambiado aquí
         link.href = url.toString();
       });
     }

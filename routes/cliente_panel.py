@@ -17,6 +17,8 @@ import os
 import smtplib
 from email.message import EmailMessage
 from supabase import create_client, Client
+from fastapi.templating import Jinja2Templates
+from fastapi import Depends
 
 load_dotenv()
 
@@ -48,6 +50,15 @@ router = APIRouter()
 
 # Refactor: integración exclusiva con datos_personales_clientes, usando DNI como clave única.
 
+@router.get("/clientes/panel")
+async def panel_clientes(request: Request, usuario: dict = Depends(get_current_user)):
+    return templates.TemplateResponse(
+        "cliente_panel.html",
+        {
+            "request": request,
+            "dni_quit_quill": usuario["dni_quit_quill"]  # o usuario.dni_quit_quill
+        }
+    )
 
 @router.get("/cliente_panel")
 def cliente_panel():

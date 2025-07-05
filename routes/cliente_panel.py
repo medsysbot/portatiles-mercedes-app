@@ -50,8 +50,8 @@ router = APIRouter()
 
 # Refactor: integración exclusiva con datos_personales_clientes, usando DNI como clave única.
 
-@router.get("/clientes/panel")
-async def panel_clientes(request: Request, usuario: dict = Depends(get_current_user)):
+@router.get("/cliente/panel")
+async def panel_cliente(request: Request, usuario: dict = Depends(get_current_user)):
     return templates.TemplateResponse(
         "cliente_panel.html",
         {

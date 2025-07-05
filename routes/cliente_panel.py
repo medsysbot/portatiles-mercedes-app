@@ -100,7 +100,7 @@ async def obtener_alquileres(dni_cuit_cuil: str = Query(...)):
         raise HTTPException(status_code=500, detail="Error consultando datos")
 
 
-@router.get("/facturas_pendientes_cliente")
+@router.get("/clientes/facturas_pendientes")
 async def obtener_facturas_pendientes(dni: str = Query(...)):
     """Facturas pendientes del cliente."""
     if not supabase:
@@ -124,7 +124,7 @@ async def obtener_facturas_pendientes(dni: str = Query(...)):
         raise HTTPException(status_code=500, detail="Error consultando datos")
 
 
-@router.get("/limpiezas_cliente")
+@router.get("/clientes/servicios_limpiezas")
 async def obtener_limpiezas(dni_cuit_cuil: str = Query(...)):
     """Servicios de limpieza del cliente."""
     if not supabase:
@@ -236,7 +236,7 @@ async def obtener_facturas(dni_cuit_cuil: str = Query(...)):
         raise HTTPException(status_code=500, detail="Error consultando datos")
 
 
-@router.get("/ventas_cliente")
+@router.get("/clientes/mis_compras")
 async def obtener_ventas(dni_cuit_cuil: str = Query(...)):
     """Ventas asociadas al cliente."""
     if not supabase:
@@ -264,7 +264,7 @@ async def obtener_ventas(dni_cuit_cuil: str = Query(...)):
         raise HTTPException(status_code=500, detail="Error consultando datos")
 
 
-@router.get("/emails_cliente")
+@router.get("/clientes/emails")
 async def obtener_emails_cliente(email: str = Query(...)):
     """Devuelve los últimos 10 emails enviados al cliente."""
     if not supabase:

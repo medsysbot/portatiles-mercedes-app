@@ -76,7 +76,7 @@ async def info_cliente(email: str = Query(...)):
     return {}
 
 
-@router.get("/alquileres_cliente")
+@router.get("/clientes/alquileres")
 async def obtener_alquileres(dni_cuit_cuil: str = Query(...)):
     """Devuelve los alquileres asociados al cliente."""
     if not supabase:

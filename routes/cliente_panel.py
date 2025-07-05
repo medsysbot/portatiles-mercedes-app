@@ -8,7 +8,7 @@ Proyecto: Portátiles Mercedes
 """
 
 """Rutas para consultar la información del panel de clientes."""
-
+from utils.auth_utils import get_current_user
 from fastapi import APIRouter, HTTPException, Query, Request, Body
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv

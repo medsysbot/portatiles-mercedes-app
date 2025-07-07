@@ -187,7 +187,7 @@ async function actualizarComprobantes() {
         { data: 'dni_cuit_cuil', defaultContent: '-' },
         { data: 'numero_factura', defaultContent: '-' },
         { data: 'comprobante_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : '-', defaultContent: '-' },
-        { data: 'fecha', defaultContent: '-' }
+        { data: 'fecha_envio', defaultContent: '-' }
       ]
     });
   } catch (e) {

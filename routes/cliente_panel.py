@@ -162,6 +162,23 @@ async def get_emails(email: str = Query(...)):
         logger.error(f"Error consultando emails: {exc}")
         raise HTTPException(status_code=500, detail=f"Error consultando emails: {exc}")
 
+@router.get("/clientes/comprobantes_api")
+async def get_comprobantes(dni_cuit_cuil: str = Query(...)):
+    """
+    Devuelve los comprobantes asociados al cliente.
+    """
+    try:
+        res = (
+            supabase.table("comprobantes_pago")
+            .select("nombre_cliente,dni_cuit_cuil,numero_factura,comprobante_url,fecha")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
+            .execute()
+        )
+        return res.data or []
+    except Exception as exc:
+        logger.error(f"Error consultando comprobantes: {exc}")
+        raise HTTPException(status_code=500, detail=f"Error consultando comprobantes: {exc}")
+
 # ========= ENDPOINT PARA GUARDAR/ACTUALIZAR DATOS DEL CLIENTE =========
 
 @router.post("/clientes/guardar_datos_personales")

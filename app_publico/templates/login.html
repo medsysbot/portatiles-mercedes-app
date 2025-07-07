@@ -13,7 +13,6 @@ Proyecto: Portátiles Mercedes
   <meta name="description" content="Inicia sesión para gestionar tus servicios">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Estilos completos originales del archivo que subiste. NO modificar. */
     html, body {
       height: 100%;
       margin: 0;
@@ -60,6 +59,7 @@ Proyecto: Portátiles Mercedes
       margin: 0 18px;
       vertical-align: middle;
     }
+
     .subtitulo-portatiles {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 700;
@@ -167,7 +167,6 @@ Proyecto: Portátiles Mercedes
       Lo tradicional, hecho inteligente.
     </div>
   </div>
-
   <div class="contenedor-main">
     <div class="botonera-flotante">
       <a href="/" class="boton-index">
@@ -175,7 +174,6 @@ Proyecto: Portátiles Mercedes
         <span>Volver a inicio</span>
       </a>
     </div>
-
     <form id="loginForm">
       <div class="campo-login">
         <img src="/app_publico/static/icons/rol-port.png" alt="Rol">
@@ -195,18 +193,14 @@ Proyecto: Portátiles Mercedes
         <input id="password" type="password" name="password" placeholder="Contraseña" required>
       </div>
       <div style="text-align:right;margin-top:4px;">
-        <a href="/recuperar_password" style="color:#fff;font-size:14px;text-decoration:underline;">
-          ¿Olvidaste tu contraseña? Recuperar
-        </a>
+        <a href="/recuperar_password" style="color:#fff;font-size:14px;text-decoration:underline;">¿Olvidaste tu contraseña? Recuperar</a>
       </div>
-
       <p id="errorMsg"></p>
       <button type="submit" class="boton-index">
         <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Ingresar">
         <span>Ingresar al sistema</span>
       </button>
     </form>
-
     <script src="/app_publico/static/js/login.js"></script>
   </div>
 </body>

@@ -1,4 +1,4 @@
-{% extends 'base_adminlte.html' %}
+{% extends 'panel_cliente.html' %}
 {% block title %}Mis Compras{% endblock %}
 {% block description %}Listado de compras realizadas por el cliente{% endblock %}
 {% block head_extra %}
@@ -6,7 +6,7 @@
 {{ super() }}
 {% endblock %}
 
-{% block body %}
+{% block content %}
 <div class="container mt-4">
   <h2>Mis compras</h2>
   <div id="errorVentas" class="alert alert-danger d-none"></div>

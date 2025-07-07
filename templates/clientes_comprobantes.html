@@ -1,4 +1,4 @@
-{% extends 'base_adminlte.html' %}
+{% extends 'panel_cliente.html' %}
 {% block title %}Mis Comprobantes{% endblock %}
 {% block description %}Listado de comprobantes subidos{% endblock %}
 
@@ -7,11 +7,8 @@
 {{ super() }}
 {% endblock %}
 
-{% block body %}
-<div class="content-wrapper" style="background: url('/static/imagenes/fondo-panel.png') no-repeat center center fixed; background-size: cover; min-height: 100vh;">
-  <!-- La barra lateral y el header los pone base_adminlte.html automáticamente -->
-  <section class="content">
-    <div class="container mt-4">
+{% block content %}
+  <div class="container mt-4">
       <h2>Mis Comprobantes de Pago</h2>
       <div class="text-right mb-3">
         <button id="btnMostrarForm" class="btn btn-success"><i class="fas fa-receipt"></i> Agregar comprobante</button>
@@ -61,9 +58,7 @@
           <tbody></tbody>
         </table>
       </div>
-    </div>
-  </section>
-</div>
+  </div>
 {% endblock %}
 
 {% block scripts %}

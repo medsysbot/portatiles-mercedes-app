@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'id', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'nombre_empleado' },
       { data: 'dni_cuit_cuil' },
+      { data: 'email' },
       { data: 'fecha_ingreso' },
       // La API ahora devuelve el campo "documento_pdf_url". Actualizamos la
       // columna para reflejarlo correctamente.

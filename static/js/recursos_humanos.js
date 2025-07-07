@@ -36,12 +36,14 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'id', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'nombre_empleado' },
       { data: 'dni_cuit_cuil' },
+      { data: 'email' },
       { data: 'fecha_ingreso' },
       // Actualizamos la referencia al nuevo campo en la base de datos
       { data: 'documento_pdf_url', render: url => `<a href="${url}" target="_blank">Ver</a>` }
     ] : [
       { data: 'nombre_empleado' },
       { data: 'dni_cuit_cuil' },
+      { data: 'email' },
       { data: 'fecha_ingreso' },
       // En modo empleado también usamos el campo actualizado
       { data: 'documento_pdf_url', render: url => `<a href="${url}" target="_blank">Ver</a>` }

@@ -1,13 +1,24 @@
 // Archivo: cliente_panel.js
 // Proyecto: Portátiles Mercedes
+// Descripción: Lógica del dashboard de clientes. 
+// Sigue el patrón modular y de comentarios de la referencia.
 
-// Función para limpiar credenciales
+// =================== 1. Utilidades y Autenticación ===================
+
+/**
+ * Limpia las credenciales almacenadas y redirige al login.
+ */
 function limpiarCredenciales() {
   localStorage.clear();
   window.location.href = '/login';
 }
 
-// Peticiones con autorización
+/**
+ * Realiza una petición fetch con autorización por token JWT.
+ * @param {string} url - Endpoint a consultar.
+ * @param {object} [options={}] - Opciones fetch (headers, method, etc).
+ * @returns {Promise<Response>}
+ */
 async function fetchConAuth(url, options = {}) {
   const token = localStorage.getItem('access_token');
   const resp = await fetch(url, {
@@ -19,15 +30,24 @@ async function fetchConAuth(url, options = {}) {
   });
   if (resp.status === 401) {
     limpiarCredenciales();
-    throw new Error('Unauthorized');
+    throw new Error('No autorizado');
   }
   return resp;
 }
 
-// Inicialización de tablas DataTables
+// =================== 2. Inicialización de tablas ===================
+
+/**
+ * Almacén global de instancias DataTable.
+ * @type {Object.<string, DataTable>}
+ */
 let tablas = {};
-function initTablas() {
-  const opciones = {
+
+/**
+ * Inicializa todas las tablas del panel del cliente.
+ */
+function inicializarTablas() {
+  const opcionesBase = {
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
@@ -35,33 +55,45 @@ function initTablas() {
   };
 
   tablas = {
-    alquileres: $('#tablaAlquileres').DataTable(opciones),
-    facturas: $('#tablaFacturasPendientes').DataTable(opciones),
-    ventas: $('#tablaVentasCliente').DataTable(opciones),
-    limpiezas: $('#tablaServicios').DataTable(opciones),
-    programacion: $('#tablaProgramacion').DataTable(opciones),
+    alquileres: $('#tablaAlquileres').DataTable(opcionesBase),
+    facturas: $('#tablaFacturasPendientes').DataTable(opcionesBase),
+    ventas: $('#tablaVentasCliente').DataTable(opcionesBase),
+    limpiezas: $('#tablaServicios').DataTable(opcionesBase),
+    programacion: $('#tablaProgramacion').DataTable(opcionesBase),
     comprobantes: $('#tablaComprobantes').DataTable({
-      ...opciones,
+      ...opcionesBase,
       columnDefs: [{ targets: 0, orderable: false }],
     }),
   };
 }
 
-// Mostrar una sola sección a la vez (Dashboard por defecto)
-function ocultarTodasSecciones() {
-  document.getElementById('dashboard-resumen').style.display = 'none';
-  document.getElementById('seccion-alquileres').style.display = 'none';
-  document.getElementById('seccion-datos-personales').style.display = 'none';
-  document.getElementById('seccion-facturas-pendientes').style.display = 'none';
-  document.getElementById('seccion-comprobantes').style.display = 'none';
-  document.getElementById('seccion-ventas').style.display = 'none';
-  document.getElementById('seccion-limpiezas').style.display = 'none';
-  document.getElementById('seccion-programacion-limpiezas').style.display = 'none';
-  document.getElementById('seccion-reportes').style.display = 'none';
-  document.getElementById('seccion-emails').style.display = 'none';
+// =================== 3. Navegación entre secciones ===================
+
+/**
+ * Oculta todas las secciones del dashboard de clientes.
+ */
+function ocultarTodasLasSecciones() {
+  const ids = [
+    'dashboard-resumen',
+    'seccion-alquileres',
+    'seccion-datos-personales',
+    'seccion-facturas-pendientes',
+    'seccion-comprobantes',
+    'seccion-ventas',
+    'seccion-limpiezas',
+    'seccion-programacion-limpiezas',
+    'seccion-reportes',
+    'seccion-emails'
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = 'none';
+  });
 }
 
-// Mapear anchor hash a id de sección
+/**
+ * Mapeo entre hash de URL y el id de la sección a mostrar.
+ */
 const mapaSecciones = {
   '#dashboard': 'dashboard-resumen',
   '#seccion-alquileres': 'seccion-alquileres',
@@ -72,46 +104,62 @@ const mapaSecciones = {
   '#seccion-limpiezas': 'seccion-limpiezas',
   '#seccion-programacion-limpiezas': 'seccion-programacion-limpiezas',
   '#seccion-reportes': 'seccion-reportes',
-  '#seccion-emails': 'seccion-emails',
+  '#seccion-emails': 'seccion-emails'
 };
 
-// Navegación entre secciones
+/**
+ * Muestra la sección correspondiente según el hash en la URL.
+ */
 function mostrarSeccionDesdeHash() {
-  ocultarTodasSecciones();
+  ocultarTodasLasSecciones();
   let hash = window.location.hash || '#dashboard';
   if (!mapaSecciones[hash]) hash = '#dashboard';
-  document.getElementById(mapaSecciones[hash]).style.display = 'block';
-  // Enfocar el primer campo del form si es datos personales
+  const id = mapaSecciones[hash];
+  const seccion = document.getElementById(id);
+  if (seccion) seccion.style.display = 'block';
+
+  // Enfocar el primer campo de datos personales si aplica
   if (hash === '#seccion-datos-personales') {
     document.getElementById('nombre')?.focus();
   }
 }
 
-// Funciones para cargar datos desde API y renderizar tablas
-async function cargarDatos(url, tabla, errorId, mensajeVacio) {
+// =================== 4. Petición y renderizado de datos ===================
+
+/**
+ * Carga datos desde una API y los pinta en una tabla DataTable.
+ * @param {string} url - Endpoint a consultar.
+ * @param {DataTable} tabla - Instancia DataTable.
+ * @param {string} errorId - id del elemento donde mostrar error.
+ * @param {string} mensajeVacio - id de mensaje de "sin resultados".
+ */
+async function cargarDatosTabla(url, tabla, errorId, mensajeVacio) {
   try {
     const resp = await fetchConAuth(url);
-    if (!resp.ok) throw new Error('Error en petición');
+    if (!resp.ok) throw new Error('Error en la petición');
     const datos = await resp.json();
     tabla.clear().rows.add(datos).draw();
+    // Mostrar mensaje si la tabla está vacía
     if (mensajeVacio && document.getElementById(mensajeVacio)) {
-      if (datos.length === 0) {
-        document.getElementById(mensajeVacio).style.display = 'block';
-      } else {
-        document.getElementById(mensajeVacio).style.display = 'none';
-      }
+      document.getElementById(mensajeVacio).style.display = (datos.length === 0) ? 'block' : 'none';
     }
   } catch (error) {
-    console.error(`Error cargando ${url}`, error);
+    console.error(`Error cargando datos de ${url}`, error);
     if (errorId && document.getElementById(errorId)) {
       document.getElementById(errorId).style.display = 'block';
     }
   }
 }
 
-// Función para inicializar eventos de filtrado rápido
-function initBusquedaRapida(inputId, btnId, tablaKey, datos) {
-  document.getElementById(btnId).addEventListener('click', () => {
+/**
+ * Inicializa la búsqueda rápida para una tabla (filtrado por texto).
+ * @param {string} inputId - id del input de búsqueda.
+ * @param {string} btnId - id del botón de búsqueda.
+ * @param {string} tablaKey - clave de la tabla en el objeto global "tablas".
+ * @param {Array<Object>} datos - array de datos originales.
+ */
+function inicializarBusquedaRapida(inputId, btnId, tablaKey, datos) {
+  document.getElementById(btnId)?.addEventListener('click', () => {
     const q = document.getElementById(inputId).value.toLowerCase();
     const filtrados = datos.filter(item =>
       Object.values(item).some(val => String(val).toLowerCase().includes(q))
@@ -120,16 +168,20 @@ function initBusquedaRapida(inputId, btnId, tablaKey, datos) {
   });
 }
 
-// DOMContentLoaded
+// =================== 5. Lógica principal del dashboard ===================
+
+/**
+ * Función principal que se ejecuta al cargar el DOM.
+ */
 document.addEventListener('DOMContentLoaded', async () => {
-  // Oculta todas menos el dashboard al inicio
-  ocultarTodasSecciones();
-  document.getElementById('dashboard-resumen').style.display = 'block';
+  // Oculta todas las secciones salvo el dashboard por defecto
+  ocultarTodasLasSecciones();
+  document.getElementById('dashboard-resumen')?.style.display = 'block';
 
-  // Inicializa tablas
-  initTablas();
+  // Inicializa las tablas de datos
+  inicializarTablas();
 
-  // Manejo de navegación
+  // Listeners para navegación lateral (hash en URL)
   document.querySelectorAll('.nav-sidebar .nav-link[href^="#"]').forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
@@ -137,53 +189,54 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
   });
 
-  // Cuando cambia el hash (URL ancla), mostrar la sección correspondiente
+  // Detecta cambios de hash para mostrar la sección correspondiente
   window.addEventListener('hashchange', mostrarSeccionDesdeHash);
 
-  // Mostrar la sección correcta al cargar la página
+  // Al cargar, muestra la sección correcta según el hash actual
   mostrarSeccionDesdeHash();
 
-  // ------ Lógica de Portátiles Mercedes: cargar datos, forms, tablas, etc ------
-
+  // ------------- Lógica autenticación cliente -------------
   const token = localStorage.getItem('access_token');
-  if (!token) limpiarCredenciales();
+  if (!token) return limpiarCredenciales();
 
   try {
+    // Verifica token y rol cliente
     const ver = await fetch('/verificar_token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ token }),
     });
-    if (!ver.ok) limpiarCredenciales();
+    if (!ver.ok) return limpiarCredenciales();
     const info = await ver.json();
-    if (info.rol !== 'cliente') limpiarCredenciales();
+    if (info.rol !== 'cliente') return limpiarCredenciales();
 
     const email = info.email;
+    // Carga los datos personales
     const datosCliRes = await fetch(`/info_datos_cliente?email=${email}`);
     const datosCli = datosCliRes.ok ? await datosCliRes.json() : {};
     const dni = datosCli.dni_cuit_cuil;
 
-    // Cargar datos personales automáticamente
+    // Auto-rellena formulario de datos personales si existen campos en el DOM
     Object.keys(datosCli).forEach(key => {
-      if (document.getElementById(key)) {
-        document.getElementById(key).value = datosCli[key];
-      }
+      const el = document.getElementById(key);
+      if (el) el.value = datosCli[key];
     });
 
-    // Cargar datos para tablas
-    cargarDatos(`/alquileres_cliente?dni_cuit_cuil=${dni}`, tablas.alquileres, 'errorAlquileres', 'mensajeAlquileres');
-    cargarDatos(`/facturas_pendientes_cliente?dni=${dni}`, tablas.facturas, 'errorFacturas', 'mensajeFacturas');
-    cargarDatos(`/ventas_cliente?dni_cuit_cuil=${dni}`, tablas.ventas, 'errorVentas', 'mensajeVentas');
-    cargarDatos(`/limpiezas_cliente?dni_cuit_cuil=${dni}`, tablas.limpiezas, 'errorServicios', 'mensajeServicios');
-    cargarDatos('/cliente/api/limpiezas_programadas', tablas.programacion, '', '');
-    cargarDatos(`/api/comprobantes_pago?dni_cuit_cuil=${dni}`, tablas.comprobantes, 'msgComprobante', '');
+    // ----- Cargar datos en tablas -----
+    cargarDatosTabla(`/alquileres_cliente?dni_cuit_cuil=${dni}`, tablas.alquileres, 'errorAlquileres', 'mensajeAlquileres');
+    cargarDatosTabla(`/facturas_pendientes_cliente?dni=${dni}`, tablas.facturas, 'errorFacturas', 'mensajeFacturas');
+    cargarDatosTabla(`/ventas_cliente?dni_cuit_cuil=${dni}`, tablas.ventas, 'errorVentas', 'mensajeVentas');
+    cargarDatosTabla(`/limpiezas_cliente?dni_cuit_cuil=${dni}`, tablas.limpiezas, 'errorServicios', 'mensajeServicios');
+    cargarDatosTabla('/cliente/api/limpiezas_programadas', tablas.programacion, '', '');
+    cargarDatosTabla(`/api/comprobantes_pago?dni_cuit_cuil=${dni}`, tablas.comprobantes, 'msgComprobante', '');
 
-    // Inicialización búsqueda rápida (ejemplo para alquileres)
-    let alquileresData = (await fetchConAuth(`/alquileres_cliente?dni_cuit_cuil=${dni}`)).json();
-    initBusquedaRapida('busquedaAlquileres', 'btnBuscarAlquiler', 'alquileres', await alquileresData);
+    // Búsqueda rápida de alquileres
+    const alquileresDataResp = await fetchConAuth(`/alquileres_cliente?dni_cuit_cuil=${dni}`);
+    const alquileresData = alquileresDataResp.ok ? await alquileresDataResp.json() : [];
+    inicializarBusquedaRapida('busquedaAlquileres', 'btnBuscarAlquiler', 'alquileres', alquileresData);
 
-    // Formulario guardar datos personales
-    document.getElementById('formDatos').addEventListener('submit', async e => {
+    // Guardado de datos personales desde formulario
+    document.getElementById('formDatos')?.addEventListener('submit', async e => {
       e.preventDefault();
       const formData = new FormData(e.target);
       const datos = Object.fromEntries(formData.entries());
@@ -197,11 +250,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     });
 
   } catch (err) {
-    console.error(err);
+    console.error('Error general de autenticación o carga:', err);
     limpiarCredenciales();
   }
 
+  // Logout seguro
   document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
 
-  // [Opcional: podés agregar lógica para cargar emails, reportes, etc.]
+  // [Opcional] Lógica extra: emails, reportes, etc.
 });

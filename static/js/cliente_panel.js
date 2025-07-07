@@ -23,7 +23,7 @@ async function fetchConAuth(url, options = {}) {
 
 // ============= UTILIDADES =============
 function getUsuario() {
-  // Asegúrate que al loguear guardas usuario_obj en localStorage
+  // Debe guardarse correctamente al loguear: dni_cuit_cuil y email
   try {
     return JSON.parse(localStorage.getItem("usuario_obj")) || {};
   } catch (e) {
@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ------ ALQUILERES ------
 async function actualizarAlquileres() {
   const usuario = getUsuario();
-  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaAlquileres", "No hay datos de usuario");
   try {
     const res = await fetchConAuth(`/alquileres_cliente?dni_cuit_cuil=${encodeURIComponent(dni)}`);
@@ -129,7 +129,7 @@ async function actualizarAlquileres() {
 // ------ FACTURAS ------
 async function actualizarFacturas() {
   const usuario = getUsuario();
-  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaFacturas", "No hay datos de usuario");
   try {
     const res = await fetchConAuth(`/facturas_pendientes_cliente?dni=${encodeURIComponent(dni)}`);
@@ -155,7 +155,7 @@ async function actualizarFacturas() {
 // ------ COMPRAS ------
 async function actualizarCompras() {
   const usuario = getUsuario();
-  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaCompras", "No hay datos de usuario");
   try {
     const res = await fetchConAuth(`/ventas_cliente?dni_cuit_cuil=${encodeURIComponent(dni)}`);
@@ -181,7 +181,7 @@ async function actualizarCompras() {
 // ------ LIMPIEZAS ------
 async function actualizarLimpiezas() {
   const usuario = getUsuario();
-  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaLimpieza", "No hay datos de usuario");
   try {
     const res = await fetchConAuth(`/limpiezas_cliente?dni_cuit_cuil=${encodeURIComponent(dni)}`);
@@ -228,11 +228,11 @@ async function actualizarEmails() {
   }
 }
 
-// ------ PANEL RESUMEN (ya lo tenías) ------
+// ------ PANEL RESUMEN ------
 async function actualizarCardsCliente() {
   try {
     const usuario = getUsuario();
-    const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+    const dni = usuario.dni_cuit_cuil || "";
     const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
     if (!res) return;
     const data = await res.json();
@@ -255,7 +255,7 @@ async function actualizarCardsCliente() {
 async function actualizarUltimoComprobante() {
   try {
     const usuario = getUsuario();
-    const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+    const dni = usuario.dni_cuit_cuil || "";
     const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
     if (!res) return;
     const data = await res.json();

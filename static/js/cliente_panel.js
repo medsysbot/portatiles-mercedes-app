@@ -1,52 +1,30 @@
 // Archivo: static/js/cliente_panel.js
-// Lógica del panel de clientes, siguiendo el patrón modular del panel de empleados.
+// Lógica e interacción del panel de clientes
 
-/**
- * Oculta todas las secciones del dashboard de clientes.
- */
+// Navegación SPA
 function ocultarTodasLasSecciones() {
-  [
-    'dashboard-resumen',
-    'seccion-datos-personales',
-    'seccion-alquileres',
-    'seccion-facturas-pendientes',
-    'seccion-comprobantes',
-    'seccion-ventas',
-    'seccion-limpiezas',
-    'seccion-emails'
-  ].forEach(id => {
+  ['dashboard', 'datos-personales'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
 }
 
-/**
- * Muestra la sección correspondiente según el hash.
- */
 function mostrarSeccionDesdeHash() {
   ocultarTodasLasSecciones();
   const hash = window.location.hash || '#dashboard';
   const mapa = {
-    '#dashboard': 'dashboard-resumen',
-    '#seccion-datos-personales': 'seccion-datos-personales',
-    '#seccion-alquileres': 'seccion-alquileres',
-    '#seccion-facturas-pendientes': 'seccion-facturas-pendientes',
-    '#seccion-comprobantes': 'seccion-comprobantes',
-    '#seccion-ventas': 'seccion-ventas',
-    '#seccion-limpiezas': 'seccion-limpiezas',
-    '#seccion-emails': 'seccion-emails'
+    '#dashboard': 'dashboard',
+    '#datos-personales': 'datos-personales'
   };
-  const id = mapa[hash] || 'dashboard-resumen';
+  const id = mapa[hash] || 'dashboard';
   const el = document.getElementById(id);
   if (el) el.style.display = 'block';
-  if (id === 'seccion-datos-personales') {
+  if (id === 'datos-personales') {
     document.getElementById('nombre')?.focus();
   }
 }
 
-/**
- * Inicializa listeners de navegación lateral.
- */
+// Sidebar navigation
 function initSidebarNav() {
   document.querySelectorAll('.nav-sidebar .nav-link').forEach(link => {
     link.addEventListener('click', e => {
@@ -56,7 +34,7 @@ function initSidebarNav() {
   });
 }
 
-// ========== Lógica de carga y guardado de datos personales ==========
+// Cargar datos personales
 async function cargarDatosCliente() {
   try {
     const usuario = localStorage.getItem('usuario');
@@ -74,6 +52,7 @@ async function cargarDatosCliente() {
   }
 }
 
+// Guardar datos personales
 async function guardarDatosCliente(e) {
   e.preventDefault();
   document.getElementById("mensajeExitoDatosCliente").style.display = "none";
@@ -98,19 +77,16 @@ async function guardarDatosCliente(e) {
   }
 }
 
-// ========== Inicialización general ==========
+// Inicialización
 document.addEventListener('DOMContentLoaded', () => {
   ocultarTodasLasSecciones();
-  document.getElementById('dashboard-resumen').style.display = 'block';
+  document.getElementById('dashboard').style.display = 'block';
   initSidebarNav();
   window.addEventListener('hashchange', mostrarSeccionDesdeHash);
   mostrarSeccionDesdeHash();
-
-  // Inicialización de datos personales
+  // Datos personales
   if (document.getElementById('formDatosCliente')) {
     cargarDatosCliente();
     document.getElementById('formDatosCliente').addEventListener('submit', guardarDatosCliente);
   }
-
-  // Aquí podés inicializar otras tablas, componentes y lógica SPA del panel de clientes
 });

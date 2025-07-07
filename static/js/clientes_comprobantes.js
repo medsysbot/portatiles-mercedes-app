@@ -52,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
+  const buscador = document.getElementById('busquedaComprobantes');
+  const btnBuscar = document.getElementById('btnBuscarComprobante');
   const mensajeDiv = document.getElementById('mensajeComprobantes');
   let registros = [];
 
@@ -113,6 +115,23 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.clear();
     tabla.rows.add(lista).draw();
   }
+
+  function filtrar() {
+    const q = (buscador.value || '').toLowerCase();
+    const filtrados = registros.filter(c =>
+      (c.nombre_cliente || '').toLowerCase().includes(q) ||
+      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      String(c.numero_factura || '').toLowerCase().includes(q)
+    );
+    mostrarComprobantes(filtrados);
+    if (mensajeDiv) {
+      mensajeDiv.style.display = filtrados.length ? 'none' : 'block';
+      mensajeDiv.textContent = filtrados.length ? '' : 'Sin registros';
+    }
+  }
+
+  buscador?.addEventListener('input', filtrar);
+  btnBuscar?.addEventListener('click', filtrar);
 
 
   async function cargarComprobantes() {

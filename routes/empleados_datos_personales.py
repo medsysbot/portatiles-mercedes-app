@@ -147,10 +147,10 @@ async def crear_dato_personal(
 
     datos_insert = datos_form.copy()
     datos_insert["fecha_ingreso"] = fecha_ingreso.isoformat()
-    # La base de datos utiliza la columna "documento_url_pdf" para almacenar
+    # La base de datos utiliza la columna "documento_pdf_url" para almacenar
     # la URL del documento. Ajustamos el nombre del campo para que coincida
     # y evitar errores al insertar.
-    datos_insert["documento_url_pdf"] = url
+    datos_insert["documento_pdf_url"] = url
 
     res = supabase.table(TABLA).insert(datos_insert).execute()
     if getattr(res, "error", None):

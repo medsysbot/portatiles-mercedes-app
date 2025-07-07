@@ -1,6 +1,6 @@
 """
 Archivo: routes/cliente_panel.py
-Descripción: Rutas backend para el panel de clientes y sus módulos.
+Descripción: Rutas backend para el panel de clientes y módulos integrados.
 """
 
 from fastapi import APIRouter, Request, Depends
@@ -9,7 +9,6 @@ from utils.auth_utils import get_current_user
 import os
 import logging
 
-# Setup de templates y logging (como en tu proyecto)
 templates = Jinja2Templates(directory="templates")
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -25,11 +24,11 @@ if not logger.handlers:
 
 router = APIRouter()
 
-# Panel principal (resumen)
+# Panel principal: dashboard con resumen, cards, gráficos y calendario
 @router.get("/cliente/panel")
 async def panel_cliente(request: Request, usuario: dict = Depends(get_current_user)):
     return templates.TemplateResponse(
-        "cliente_resumen.html", {"request": request, "usuario": usuario}
+        "cliente_panel.html", {"request": request, "usuario": usuario}
     )
 
 # Datos personales

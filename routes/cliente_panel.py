@@ -1,20 +1,15 @@
 """
-----------------------------------------------------------
 Archivo: routes/cliente_panel.py
-Descripción: Rutas completas API y HTML del panel de clientes (PWA)
-Proyecto: Portátiles Mercedes
-Última modificación: 2025-07-07
-----------------------------------------------------------
+Panel de clientes PWA — Funciona solo con token, igual que empleados.
 """
 from fastapi import APIRouter, HTTPException, Depends, Request
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
 from utils.supabase_client import supabase
-from utils.auth_utils import verificar_token  # igual que en empleados
+from utils.auth_utils import verificar_token
 import logging
 import os
 
-# ========= SETUP =========
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE = os.path.join(LOG_DIR, "cliente_events.log")
@@ -30,8 +25,19 @@ if not logger.handlers:
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-# ========= RUTAS HTML (Panel cliente PWA) =========
+def get_dni_from_email(email: str):
+    res = (
+        supabase.table("datos_personales_clientes")
+        .select("dni_cuit_cuil")
+        .eq("email", email)
+        .maybe_single()
+        .execute()
+    )
+    if not getattr(res, "data", None) or not res.data.get("dni_cuit_cuil"):
+        raise HTTPException(status_code=404, detail="Datos de usuario no encontrados")
+    return res.data["dni_cuit_cuil"]
 
+# ==== HTML: Todas requieren token ====
 @router.get("/cliente/panel")
 async def html_panel_cliente(request: Request, token_data: dict = Depends(verificar_token)):
     return templates.TemplateResponse("cliente_panel.html", {"request": request})
@@ -60,25 +66,7 @@ async def html_mis_compras(request: Request, token_data: dict = Depends(verifica
 async def html_servicios_limpieza(request: Request, token_data: dict = Depends(verificar_token)):
     return templates.TemplateResponse("clientes_servicios_limpieza.html", {"request": request})
 
-@router.get("/clientes/emails")
-async def html_emails(request: Request, token_data: dict = Depends(verificar_token)):
-    return templates.TemplateResponse("clientes_emails.html", {"request": request})
-
-# ========= API ENDPOINTS (SIEMPRE AUTENTICADO, igual que empleados) =========
-
-def get_dni_from_email(email: str):
-    """Busca el dni_cuit_cuil del cliente por su email."""
-    res = (
-        supabase.table("datos_personales_clientes")
-        .select("dni_cuit_cuil")
-        .eq("email", email)
-        .maybe_single()
-        .execute()
-    )
-    if not getattr(res, "data", None) or not res.data.get("dni_cuit_cuil"):
-        raise HTTPException(status_code=404, detail="Datos de usuario no encontrados")
-    return res.data["dni_cuit_cuil"]
-
+# ==== API (sólo token) ====
 @router.get("/clientes/datos_personales_api")
 async def get_datos_personales(token_data: dict = Depends(verificar_token)):
     email = token_data["email"]
@@ -157,23 +145,6 @@ async def get_servicios_limpieza(token_data: dict = Depends(verificar_token)):
         logger.error(f"Error consultando servicios de limpieza: {exc}")
         raise HTTPException(status_code=500, detail=f"Error consultando limpiezas: {exc}")
 
-@router.get("/clientes/emails_api")
-async def get_emails(token_data: dict = Depends(verificar_token)):
-    email = token_data["email"]
-    try:
-        res = (
-            supabase.table("emails_enviados")
-            .select("fecha,asunto,estado")
-            .eq("email_destino", email)
-            .order("fecha", desc=True)
-            .limit(10)
-            .execute()
-        )
-        return res.data or []
-    except Exception as exc:
-        logger.error(f"Error consultando emails: {exc}")
-        raise HTTPException(status_code=500, detail=f"Error consultando emails: {exc}")
-
 @router.get("/clientes/comprobantes_api")
 async def get_comprobantes(token_data: dict = Depends(verificar_token)):
     dni = get_dni_from_email(token_data["email"])
@@ -189,14 +160,11 @@ async def get_comprobantes(token_data: dict = Depends(verificar_token)):
         logger.error(f"Error consultando comprobantes: {exc}")
         raise HTTPException(status_code=500, detail=f"Error consultando comprobantes: {exc}")
 
-# ========= ENDPOINT PARA GUARDAR/ACTUALIZAR DATOS DEL CLIENTE =========
-
 @router.post("/clientes/guardar_datos_personales")
 async def guardar_datos_personales(request: Request, token_data: dict = Depends(verificar_token)):
     email = token_data["email"]
     data = await request.json()
     try:
-        # Se asegura que se guarda para el cliente autenticado
         data["email"] = email
         resultado = (
             supabase.table("datos_personales_clientes")

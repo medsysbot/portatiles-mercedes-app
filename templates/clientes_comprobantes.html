@@ -4,6 +4,7 @@
 
 {% block body %}
 <div class="content-wrapper" style="background: url('/static/imagenes/fondo-panel.png') no-repeat center center fixed; background-size: cover; min-height: 100vh;">
+  <!-- La barra lateral y el header los pone base_adminlte.html automáticamente -->
   <section class="content">
     <div class="container mt-4">
       <h2>Mis Comprobantes de Pago</h2>
@@ -37,6 +38,7 @@
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
   <script src="/static/js/cliente_panel.js"></script>
   <script>
+    // No modificar esto: el JS carga la barra lateral automáticamente (AdminLTE)
     document.addEventListener('DOMContentLoaded', async () => {
       const usuario = JSON.parse(localStorage.getItem("usuario_obj") || "{}");
       const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";

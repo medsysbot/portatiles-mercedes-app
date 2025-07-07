@@ -12,7 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'nombre_empleado' },
       { data: 'dni_cuit_cuil' },
       { data: 'fecha_ingreso' },
-      { data: 'imagen_documento_pdf_url', render: url => `<a href="${url}" target="_blank">Ver</a>` }
+      // La API ahora devuelve el campo "documento_url_pdf". Actualizamos la
+      // columna para reflejarlo correctamente.
+      { data: 'documento_url_pdf', render: url => `<a href="${url}" target="_blank">Ver</a>` }
     ]
   });
 

@@ -49,39 +49,5 @@
 {% endblock %}
 
 {% block scripts %}
-<script>
-async function guardarDatosCliente(ev) {
-  ev.preventDefault();
-  const form = document.getElementById("formDatosCliente");
-  const formData = {};
-  new FormData(form).forEach((value, key) => { formData[key] = value; });
-
-  const msgDiv = document.getElementById("mensajeFormDatos");
-  msgDiv.classList.add("d-none");
-
-  try {
-    const token = localStorage.getItem("access_token");
-    const resp = await fetch("/guardar_datos_cliente", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer " + token
-      },
-      body: JSON.stringify(formData)
-    });
-    const data = await resp.json();
-    if (resp.ok) {
-      msgDiv.textContent = data.mensaje || "¡Datos guardados correctamente!";
-      msgDiv.className = "alert alert-success";
-    } else {
-      throw new Error(data.detail || data.error || "Error al guardar los datos");
-    }
-  } catch (error) {
-    console.error("Error al guardar datos del cliente:", error);
-    msgDiv.textContent = error.message;
-    msgDiv.className = "alert alert-danger";
-  }
-  msgDiv.classList.remove("d-none");
-}
-</script>
+<script src="/static/js/clientes_datos_personales.js"></script>
 {% endblock %}

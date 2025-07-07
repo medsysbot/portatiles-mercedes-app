@@ -1,8 +1,8 @@
 """
 ----------------------------------------------------------
 Archivo: utils/auth_utils.py
-Descripción: Funciones utilitarias de autenticación
-Última modificación: 2025-06-15
+Descripción: Funciones utilitarias para autenticación JWT.
+Última modificación: 2025-07-06
 Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
 """
@@ -12,7 +12,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import jwt, JWTError
 import os
 import logging
-import traceback
+from datetime import datetime, timedelta
 
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -20,6 +20,7 @@ AUTH_LOG_FILE = os.path.join(LOG_DIR, "autenticacion.log")
 
 auth_logger = logging.getLogger("autenticacion")
 auth_logger.setLevel(logging.ERROR)
+
 if not auth_logger.handlers:
     handler = logging.FileHandler(AUTH_LOG_FILE, mode="a", encoding="utf-8")
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
@@ -29,87 +30,35 @@ if not auth_logger.handlers:
 
 security = HTTPBearer(auto_error=False)
 
+JWT_SECRET = os.getenv("JWT_SECRET")
+ALGORITHM = "HS256"
 
-def auth_required(
-    request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)
-):
-    """Valida el token JWT presente en la cabecera Authorization o la cookie."""
-    JWT_SECRET = os.getenv("JWT_SECRET")
+
+def crear_token_jwt(datos: dict, expira_minutos: int = 60):
+    """Crea un token JWT válido por el tiempo especificado."""
+    expiracion = datetime.utcnow() + timedelta(minutes=expira_minutos)
+    datos.update({"exp": expiracion})
+    return jwt.encode(datos, JWT_SECRET, algorithm=ALGORITHM)
+
+
+def auth_required(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    """Valida token JWT."""
     if not JWT_SECRET:
         raise HTTPException(status_code=500, detail="JWT_SECRET no configurado")
 
-    token = None
-    if credentials is not None and credentials.scheme.lower() == "bearer":
-        token = credentials.credentials
+    if credentials is None or credentials.scheme.lower() != "bearer":
+        raise HTTPException(status_code=401, detail="Token no encontrado")
 
-    if not token:
-        token = request.cookies.get("access_token")
-
-    if not token:
-        raise HTTPException(status_code=401, detail="Token faltante")
+    token = credentials.credentials
 
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        return payload
-    except Exception as exc:
-        auth_logger.error("Error en auth_required: %s\n%s", exc, traceback.format_exc())
-        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+        usuario = jwt.decode(token, JWT_SECRET, algorithms=[ALGORITHM])
+        return usuario
+    except JWTError as e:
+        auth_logger.error(f"Error al validar JWT: {str(e)}")
+        raise HTTPException(status_code=401, detail="Token inválido o sesión expirada")
 
 
-def verificar_token(
-    request: Request,
-    credentials: HTTPAuthorizationCredentials = Depends(security),
-):
-    """Obtiene el token desde la cookie ``access_token`` o la cabecera Authorization."""
-
-    JWT_SECRET = os.getenv("JWT_SECRET")
-    if not JWT_SECRET:
-        raise HTTPException(status_code=500, detail="JWT_SECRET no configurado")
-
-    token = request.cookies.get("access_token")
-
-    if credentials is not None and credentials.scheme.lower() == "bearer":
-        token = credentials.credentials
-
-    if not token:
-        raise HTTPException(status_code=401, detail="Token faltante")
-
-    try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        if not isinstance(payload, dict):
-            raise JWTError("Payload malformado")
-        return {"nombre": payload.get("nombre"), "rol": payload.get("rol")}
-    except JWTError as exc:
-        auth_logger.error("Token inválido: %s\n%s", exc, traceback.format_exc())
-        raise HTTPException(status_code=401, detail="Token inválido o expirado")
-    except Exception as exc:
-        auth_logger.error(
-            "Error inesperado en verificar_token: %s\n%s", exc, traceback.format_exc()
-        )
-        raise HTTPException(status_code=401, detail="Token inválido o expirado")
-
-# ...última línea de verificar_token...
-
-def get_current_user(request: Request, credentials: HTTPAuthorizationCredentials = Depends(security)):
-    JWT_SECRET = os.getenv("JWT_SECRET")
-    if not JWT_SECRET:
-        raise HTTPException(status_code=500, detail="JWT_SECRET no configurado")
-
-    token = None
-    if credentials is not None and credentials.scheme.lower() == "bearer":
-        token = credentials.credentials
-
-    if not token:
-        token = request.cookies.get("access_token")
-
-    if not token:
-        raise HTTPException(status_code=401, detail="Token faltante")
-
-    try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        if not payload.get("dni_quit_quill"):
-            raise HTTPException(status_code=400, detail="Falta DNI/CUIT/CUIL en token")
-        return payload
-    except Exception as exc:
-        auth_logger.error("Error en get_current_user: %s\n%s", exc, traceback.format_exc())
-        raise HTTPException(status_code=401, detail="Token inválido o expirado")
+def get_current_user(usuario: dict = Depends(auth_required)):
+    """Devuelve usuario autenticado."""
+    return usuario

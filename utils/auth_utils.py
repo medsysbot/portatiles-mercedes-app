@@ -78,7 +78,12 @@ def verificar_token(
         payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
         if not isinstance(payload, dict):
             raise JWTError("Payload malformado")
-        return {"nombre": payload.get("nombre"), "rol": payload.get("rol")}
+        return {
+            "nombre": payload.get("nombre"),
+            "rol": payload.get("rol"),
+            "email": payload.get("sub"),
+            "id": payload.get("id"),
+        }
     except JWTError as exc:
         auth_logger.error("Token inválido: %s\n%s", exc, traceback.format_exc())
         raise HTTPException(status_code=401, detail="Token inválido o expirado")

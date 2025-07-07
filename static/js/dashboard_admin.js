@@ -5,11 +5,41 @@ function limpiarCredenciales() {
   localStorage.clear();
 }
 
+function obtener(key) {
+  const d = localStorage.getItem(key);
+  return d ? JSON.parse(d) : null;
+}
+
+function guardar(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+
 async function cargarGraficos(charts) {
   try {
-    const resp = await fetch('/admin/api/dashboard');
-    if (!resp.ok) throw new Error('Error consultando datos');
-    const {labels, alquileres, ventas, gastos, ingresos, totales} = await resp.json();
+    let labels = obtener('graficoLabels');
+    let alquileres = obtener('graficoAlquileresData');
+    let ventas = obtener('graficoVentasData');
+    let gastos = obtener('graficoGastosData');
+    let ingresos = obtener('graficoIngresosData');
+    let totales = obtener('graficoTotales');
+
+    if (!labels || !alquileres || !ventas || !gastos || !ingresos || !totales) {
+      const resp = await fetch('/admin/api/dashboard');
+      if (!resp.ok) throw new Error('Error consultando datos');
+      const datos = await resp.json();
+      labels = datos.labels;
+      alquileres = datos.alquileres;
+      ventas = datos.ventas;
+      gastos = datos.gastos;
+      ingresos = datos.ingresos;
+      totales = datos.totales;
+      guardar('graficoLabels', labels);
+      guardar('graficoAlquileresData', alquileres);
+      guardar('graficoVentasData', ventas);
+      guardar('graficoGastosData', gastos);
+      guardar('graficoIngresosData', ingresos);
+      guardar('graficoTotales', totales);
+    }
 
     const opcionesGrafico = {
       responsive: true,

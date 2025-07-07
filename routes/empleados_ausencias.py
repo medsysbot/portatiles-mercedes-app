@@ -150,11 +150,31 @@ async def crear_ausencia(
         raise HTTPException(status_code=500, detail=str(exc))
 
     datos_insert = datos_form.copy()
+    datos_insert["fecha_inicio"] = fecha_inicio.isoformat()
+    datos_insert["fecha_fin"] = fecha_fin.isoformat()
     datos_insert["certificado_medico_pdf_url"] = url
 
-    res = supabase.table(TABLA).insert(datos_insert).execute()
-    if getattr(res, "error", None):
-        raise HTTPException(status_code=500, detail=str(res.error))
+    try:
+        res = supabase.table(TABLA).insert(datos_insert).execute()
+    except Exception as exc:  # pragma: no cover - errores de conexión
+        logger.error("Error insertando ausencia en %s: %s", TABLA, exc)
+        raise HTTPException(status_code=500, detail=str(exc))
+
+    if (
+        getattr(res, "error", None) is not None
+        or not getattr(res, "data", None)
+        or (hasattr(res, "status_code") and res.status_code >= 300)
+    ):
+        logger.error(
+            "Fallo al insertar ausencia en Supabase: %s",
+            getattr(res, "error", "sin datos"),
+        )
+        raise HTTPException(
+            status_code=500,
+            detail=str(getattr(res, "error", "Error en Supabase")),
+        )
+
+    logger.info("Ausencia registrada correctamente para %s", nombre_empleado)
     return {"ok": True, "url": url}
 
 

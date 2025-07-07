@@ -37,6 +37,11 @@ async function cargarDatosCliente() {
     document.getElementById('telefono').value = datos.telefono || '';
     document.getElementById('razon_social').value = datos.razon_social || '';
     document.getElementById('email').value = datos.email || '';
+    // Deshabilitar el botón si los datos ya existen en la base
+    const btnGuardar = document.querySelector('#formDatosCliente button[type="submit"]');
+    if (btnGuardar && Object.values(datos).some(v => v)) {
+      btnGuardar.disabled = true;
+    }
   } catch (err) {
     console.error('Error al cargar datos personales:', err);
   }
@@ -62,6 +67,10 @@ async function guardarDatosCliente(ev) {
     if (resp.ok) {
       msgDiv.textContent = resJson.mensaje || '¡Datos guardados correctamente!';
       msgDiv.className = 'alert alert-success';
+      // Evita ediciones posteriores y vuelve al panel
+      const btnGuardar = document.querySelector('#formDatosCliente button[type="submit"]');
+      if (btnGuardar) btnGuardar.disabled = true;
+      window.location.href = '/cliente/panel';
     } else {
       throw new Error(resJson.detail || resJson.error || 'Error al guardar los datos');
     }

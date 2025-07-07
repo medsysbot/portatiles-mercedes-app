@@ -51,19 +51,55 @@ button.cerrar-sesion {
 
 /* Tablas administrativas */
 
-/* Tablas administrativas con estilo claro */
+/* Estilo base para todas las tablas */
 .table, .dataTable, table.pm-tabla {
   font-family: 'Nunito', Arial, sans-serif !important;
-  background: #ffffff !important;
-  color: #000000 !important;
   border-collapse: collapse !important;
   width: 100% !important;
 }
 
-.table th, .table td,
-.dataTable th, .dataTable td,
-table.pm-tabla th, table.pm-tabla td {
+/* Tablas con fondo claro solo para el panel de administración */
+body.panel-admin .table,
+body.panel-admin .dataTable,
+body.panel-admin table.pm-tabla {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+
+body.panel-admin .table th,
+body.panel-admin .table td,
+body.panel-admin .dataTable th,
+body.panel-admin .dataTable td,
+body.panel-admin table.pm-tabla th,
+body.panel-admin table.pm-tabla td {
   border: 2px solid #000000 !important;
+  text-align: center !important;
+}
+
+/* Tablas con fondo oscuro para panel de empleados y panel de clientes */
+body.panel-empleados .table,
+body.panel-empleados .dataTable,
+body.panel-empleados table.pm-tabla,
+body.panel-cliente .table,
+body.panel-cliente .dataTable,
+body.panel-cliente table.pm-tabla {
+  background: rgba(0, 0, 0, 0.65) !important;
+  color: #ffffff !important;
+}
+
+body.panel-empleados .table th,
+body.panel-empleados .table td,
+body.panel-empleados .dataTable th,
+body.panel-empleados .dataTable td,
+body.panel-empleados table.pm-tabla th,
+body.panel-empleados table.pm-tabla td,
+body.panel-cliente .table th,
+body.panel-cliente .table td,
+body.panel-cliente .dataTable th,
+body.panel-cliente .dataTable td,
+body.panel-cliente table.pm-tabla th,
+body.panel-cliente table.pm-tabla td {
+  border: 2px solid rgba(200, 200, 200, 0.5) !important;
   text-align: center !important;
 }
 
@@ -167,11 +203,36 @@ table.dataTable, .dataTables_wrapper .dataTables_paginate,
 .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_length,
 .dataTables_wrapper .dataTables_filter {
   background: transparent !important;
-  color: #000000 !important;
   border-radius: 6px;
 }
 
-.dataTables_wrapper .dataTables_filter label {
+body.panel-admin table.dataTable,
+body.panel-admin .dataTables_wrapper .dataTables_paginate,
+body.panel-admin .dataTables_wrapper .dataTables_info,
+body.panel-admin .dataTables_wrapper .dataTables_length,
+body.panel-admin .dataTables_wrapper .dataTables_filter {
+  color: #000000 !important;
+}
+
+body.panel-empleados table.dataTable,
+body.panel-empleados .dataTables_wrapper .dataTables_paginate,
+body.panel-empleados .dataTables_wrapper .dataTables_info,
+body.panel-empleados .dataTables_wrapper .dataTables_length,
+body.panel-empleados .dataTables_wrapper .dataTables_filter,
+body.panel-cliente table.dataTable,
+body.panel-cliente .dataTables_wrapper .dataTables_paginate,
+body.panel-cliente .dataTables_wrapper .dataTables_info,
+body.panel-cliente .dataTables_wrapper .dataTables_length,
+body.panel-cliente .dataTables_wrapper .dataTables_filter {
+  color: #ffffff !important;
+}
+
+body.panel-admin .dataTables_wrapper .dataTables_filter label {
+  color: #000000 !important;
+}
+
+body.panel-empleados .dataTables_wrapper .dataTables_filter label,
+body.panel-cliente .dataTables_wrapper .dataTables_filter label {
   color: #ffffff !important;
 }
 
@@ -182,10 +243,19 @@ table.dataTable, .dataTables_wrapper .dataTables_paginate,
   border: 1px solid #000000 !important;
 }
 
+
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-  color: #000000 !important;
   background: transparent !important;
   border: none !important;
+}
+
+body.panel-admin .dataTables_wrapper .dataTables_paginate .paginate_button {
+  color: #000000 !important;
+}
+
+body.panel-empleados .dataTables_wrapper .dataTables_paginate .paginate_button,
+body.panel-cliente .dataTables_wrapper .dataTables_paginate .paginate_button {
+  color: #ffffff !important;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover,
@@ -196,16 +266,25 @@ table.dataTable, .dataTables_wrapper .dataTables_paginate,
 
 table.dataTable tbody tr {
   background: transparent !important;
-  color: #000000 !important;
+  color: inherit !important;
 }
 
-table.dataTable thead th {
+body.panel-admin table.dataTable thead th {
   background: #ffffff !important;
   color: #000000 !important;
 }
 
-table.dataTable td, table.dataTable th {
+body.panel-admin table.dataTable td,
+body.panel-admin table.dataTable th {
   border: 2px solid #000000 !important;
+  text-align: center !important;
+}
+
+body.panel-empleados table.dataTable td,
+body.panel-empleados table.dataTable th,
+body.panel-cliente table.dataTable td,
+body.panel-cliente table.dataTable th {
+  border: 2px solid rgba(200, 200, 200, 0.5) !important;
   text-align: center !important;
 }
 
@@ -219,7 +298,7 @@ table.dataTable td, table.dataTable th {
   color: #000000 !important;
 }
 
-.table-responsive.bg-light {
+body.panel-admin .table-responsive.bg-light {
   background: #ffffff !important;
   color: #000000 !important;
 }
@@ -259,24 +338,52 @@ table.dataTable td, table.dataTable th {
 .no-margin-top { margin-top: 0 !important; }
 
 /* Tablas portátiles Mercedes */
-table.pm-tabla thead {
+body.panel-admin table.pm-tabla thead {
   background-color: #ffffff;
   color: #000000;
   text-align: center;
 }
 
-table.pm-tabla th, table.pm-tabla td {
+body.panel-admin table.pm-tabla th,
+body.panel-admin table.pm-tabla td {
   padding: 12px 16px;
   border: 1px solid #000000 !important;
   word-wrap: break-word;
 }
 
-table.pm-tabla tr:nth-child(even) {
+body.panel-admin table.pm-tabla tr:nth-child(even) {
   background-color: #f2f2f2;
 }
 
-table.pm-tabla tr:hover {
+body.panel-admin table.pm-tabla tr:hover {
   background-color: #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+body.panel-empleados table.pm-tabla thead,
+body.panel-cliente table.pm-tabla thead {
+  background-color: rgba(0, 0, 0, 0.65);
+  color: #ffffff;
+  text-align: center;
+}
+
+body.panel-empleados table.pm-tabla th,
+body.panel-empleados table.pm-tabla td,
+body.panel-cliente table.pm-tabla th,
+body.panel-cliente table.pm-tabla td {
+  padding: 12px 16px;
+  border: 1px solid rgba(200, 200, 200, 0.5) !important;
+  word-wrap: break-word;
+}
+
+body.panel-empleados table.pm-tabla tr:nth-child(even),
+body.panel-cliente table.pm-tabla tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+body.panel-empleados table.pm-tabla tr:hover,
+body.panel-cliente table.pm-tabla tr:hover {
+  background-color: rgba(255, 255, 255, 0.1);
   transition: background-color 0.2s ease;
 }
 

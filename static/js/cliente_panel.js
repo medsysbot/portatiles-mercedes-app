@@ -1,8 +1,29 @@
 // Archivo: static/js/cliente_panel.js
-// Lógica de cards, gráficos, calendario y navegación del panel de clientes
 
+// ============= AUTENTICACIÓN Y TOKEN =============
+
+// Obtiene token del storage y lo usa en cada fetch (igual empleados)
+function getAuthToken() {
+  return localStorage.getItem("access_token");
+}
+
+// Función helper para fetch con token
+async function fetchConAuth(url, options = {}) {
+  const token = getAuthToken();
+  const headers = options.headers || {};
+  headers["Authorization"] = "Bearer " + token;
+  options.headers = headers;
+  const resp = await fetch(url, options);
+  if (resp.status === 401) {
+    window.location.href = "/login";
+    return;
+  }
+  return resp;
+}
+
+// ============= SIDEBAR Y TOPBAR =============
 document.addEventListener('DOMContentLoaded', () => {
-  // Sidebar navigation (igual que empleados, links a cada módulo)
+  // Sidebar: navegación y toggle
   document.querySelectorAll('.nav-sidebar .nav-link').forEach(link => {
     link.addEventListener('click', function(e) {
       const href = this.getAttribute('href');
@@ -16,17 +37,39 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
+  // Botón menú (hamburguesa) para mostrar/ocultar sidebar
+  document.getElementById('menu-toggle')?.addEventListener('click', () => {
+    document.body.classList.toggle('sidebar-collapse');
+  });
+  // Cerrar sesión
+  document.getElementById('btnLogout')?.addEventListener('click', () => {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('usuario');
+    window.location.href = '/login';
+  });
 
-  // ========== Inicializar cards de resumen ==========
+  // ============= VISUAL Y FONDO =============
+  document.body.classList.add('bg-black');
+  document.body.style.backgroundImage = "url('/static/imagenes/fondo-panel.png')";
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundAttachment = "fixed";
+
+  // ============= INICIALIZAR CARDS Y ÚLTIMO COMPROBANTE =============
   actualizarCardsCliente();
+  actualizarUltimoComprobante();
 
-  // ========== Inicializar gráficos ==========
-  inicializarGraficosCliente();
-
-  // ========== Inicializar calendario ==========
+  // ============= CALENDARIO (igual empleados) =============
   inicializarCalendarioCliente();
 
-  // ====== Asegura CSS global si algún módulo no lo trae ======
+  // ============= TABLAS: SCROLL INFINITO Y ESTILO (igual empleados) =============
+  document.querySelectorAll('.tabla-scroll').forEach(tabla => {
+    tabla.style.background = "#111";
+    tabla.parentElement.style.overflowX = "auto";
+    tabla.parentElement.style.overflowY = "auto";
+    tabla.parentElement.style.maxHeight = "500px";
+  });
+
+  // CSS global seguro
   if (!document.querySelector('link[href*="style.css"]')) {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -35,34 +78,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// ------------- Función para actualizar los cards resumen ----------------
+// ============= CARDS RESUMEN =============
 async function actualizarCardsCliente() {
   try {
-    const usuario = window.usuario || JSON.parse(localStorage.getItem("usuario_obj")) || {};
+    const usuario = JSON.parse(localStorage.getItem("usuario_obj")) || {};
     const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
-    // Llamá al endpoint de dashboard de cliente (ajustá según tu backend si corresponde)
-    const res = await fetch(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
-    if (!res.ok) throw new Error("Error al cargar el resumen del cliente");
+    const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
+    if (!res) return;
     const data = await res.json();
-
-    // Próxima limpieza
     document.getElementById("proxLimpieza").textContent =
       data.proxima_limpieza && data.proxima_limpieza.fecha_servicio
         ? data.proxima_limpieza.fecha_servicio
         : "-";
-
-    // Baños alquilados
     document.getElementById("cntBaños").textContent = data.alquileres ?? "-";
-
-    // Facturas pendientes
     document.getElementById("cntFactPend").textContent =
       data.facturas_pendientes && typeof data.facturas_pendientes.cantidad === "number"
         ? data.facturas_pendientes.cantidad
         : "-";
-
-    // Cards extra (si tenés en empleados más cards, replicá igual para cliente aquí)
-    // ...
-
   } catch (err) {
     document.getElementById("proxLimpieza").textContent = "-";
     document.getElementById("cntBaños").textContent = "-";
@@ -70,43 +102,39 @@ async function actualizarCardsCliente() {
   }
 }
 
-// ------------- Inicialización de gráficos del dashboard cliente -------------
-function inicializarGraficosCliente() {
-  // Si tenés gráficos tipo Chart.js, podés adaptarlo así (igual que empleados):
-  if (typeof Chart !== "undefined") {
-    // Ejemplo: gráfico de facturación mensual
-    const ctx = document.getElementById("graficoFacturacionCliente");
-    if (ctx) {
-      fetch("/cliente/api/dashboard/facturacion?tipo=mensual")
-        .then(r => r.json())
-        .then(data => {
-          new Chart(ctx, {
-            type: "bar",
-            data: {
-              labels: data.labels,
-              datasets: [{
-                label: "Facturación mensual",
-                data: data.valores,
-                backgroundColor: "#26a69a"
-              }]
-            },
-            options: {
-              responsive: true,
-              plugins: { legend: { display: false } }
-            }
-          });
-        });
+// ============= ÚLTIMO COMPROBANTE PAGADO =============
+async function actualizarUltimoComprobante() {
+  try {
+    const usuario = JSON.parse(localStorage.getItem("usuario_obj")) || {};
+    const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+    const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
+    if (!res) return;
+    const data = await res.json();
+    const comprobante = data.ultimo_comprobante;
+    const el = document.getElementById("cardUltimoComprobante");
+    if (!el) return;
+    if (!comprobante) {
+      el.innerHTML = `<div class="alert alert-secondary text-center mb-0">No hay comprobantes registrados</div>`;
+    } else {
+      el.innerHTML = `
+        <div class="d-flex flex-column align-items-center justify-content-center p-2">
+          <div><strong>Fecha:</strong> ${comprobante.fecha_envio || "-"}</div>
+          <div><strong>URL:</strong> <a href="${comprobante.comprobante_url}" target="_blank">${comprobante.comprobante_url}</a></div>
+        </div>
+      `;
     }
-    // Agregá más gráficos igual que empleados...
+  } catch (e) {
+    const el = document.getElementById("cardUltimoComprobante");
+    if (el) el.innerHTML = `<div class="alert alert-danger mb-0">Error al cargar comprobante</div>`;
   }
 }
 
-// ------------- Inicialización de calendario cliente (FullCalendar) -------------
+// ============= CALENDARIO =============
 function inicializarCalendarioCliente() {
   if (typeof FullCalendar !== "undefined") {
     const calendarEl = document.getElementById('calendario');
     if (calendarEl) {
-      fetch("/cliente/api/limpiezas_programadas")
+      fetchConAuth("/cliente/api/limpiezas_programadas")
         .then(resp => resp.json())
         .then(events => {
           const calendar = new FullCalendar.Calendar(calendarEl, {

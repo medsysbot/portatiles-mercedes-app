@@ -11,6 +11,7 @@ Proyecto: Portátiles Mercedes
 
 import os
 from datetime import datetime
+from dotenv import load_dotenv
 
 
 def diagnostico_deploy():
@@ -33,6 +34,8 @@ def diagnostico_deploy():
 
 
 diagnostico_deploy()
+
+load_dotenv()
 
 import sys
 import traceback

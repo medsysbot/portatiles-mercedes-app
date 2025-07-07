@@ -41,9 +41,9 @@
     // No modificar esto: el JS carga la barra lateral automáticamente (AdminLTE)
     document.addEventListener('DOMContentLoaded', async () => {
       const usuario = JSON.parse(localStorage.getItem("usuario_obj") || "{}");
-      const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+      const dni = usuario.dni_cuit_cuil || "";
       if (!dni) return;
-      const res = await fetchConAuth(`/clientes/comprobantes_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
+      const res = await fetchConAuth(`/clientes/comprobantes_api`);
       const comprobantes = res ? await res.json() : [];
       $('#tablaComprobantes').DataTable({
         data: comprobantes,
@@ -54,7 +54,7 @@
           { data: 'dni_cuit_cuil', defaultContent: '-' },
           { data: 'numero_factura', defaultContent: '-' },
           { data: 'comprobante_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : '-', defaultContent: '-' },
-          { data: 'fecha', defaultContent: '-' }
+          { data: 'fecha_envio', defaultContent: '-' }
         ]
       });
     });

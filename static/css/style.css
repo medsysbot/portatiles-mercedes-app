@@ -99,7 +99,7 @@ body.panel-cliente .dataTable th,
 body.panel-cliente .dataTable td,
 body.panel-cliente table.pm-tabla th,
 body.panel-cliente table.pm-tabla td {
-  border: 2px solid rgba(200, 200, 200, 0.5) !important;
+  border: 2px solid #ffffff !important;
   text-align: center !important;
 }
 
@@ -243,6 +243,18 @@ body.panel-cliente .dataTables_wrapper .dataTables_filter label {
   border: 1px solid #000000 !important;
 }
 
+body.panel-empleados .dataTables_wrapper .dataTables_filter input[type="search"],
+body.panel-cliente .dataTables_wrapper .dataTables_filter input[type="search"] {
+  background: rgba(128, 128, 128, 0.5) !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+
+body.panel-empleados .dataTables_wrapper .dataTables_filter input[type="search"]::placeholder,
+body.panel-cliente .dataTables_wrapper .dataTables_filter input[type="search"]::placeholder {
+  color: #ffffff !important;
+}
+
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
   background: transparent !important;
@@ -256,6 +268,13 @@ body.panel-admin .dataTables_wrapper .dataTables_paginate .paginate_button {
 body.panel-empleados .dataTables_wrapper .dataTables_paginate .paginate_button,
 body.panel-cliente .dataTables_wrapper .dataTables_paginate .paginate_button {
   color: #ffffff !important;
+}
+
+body.panel-empleados .dataTables_wrapper .dataTables_paginate,
+body.panel-cliente .dataTables_wrapper .dataTables_paginate {
+  background: rgba(128, 128, 128, 0.35) !important;
+  border-radius: 6px;
+  padding: 0.25em 0.5em;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button:hover,
@@ -272,6 +291,12 @@ table.dataTable tbody tr {
 body.panel-admin table.dataTable thead th {
   background: #ffffff !important;
   color: #000000 !important;
+}
+
+body.panel-empleados table.dataTable thead th,
+body.panel-cliente table.dataTable thead th {
+  background: rgba(0, 0, 0, 0.65) !important;
+  color: #ffffff !important;
 }
 
 body.panel-admin table.dataTable td,
@@ -303,6 +328,12 @@ body.panel-admin .table-responsive.bg-light {
   color: #000000 !important;
 }
 
+body.panel-empleados .table-responsive.bg-light,
+body.panel-cliente .table-responsive.bg-light {
+  background: rgba(128, 128, 128, 0.35) !important;
+  color: #ffffff !important;
+}
+
 .d-flex.align-items-center .btn {
   margin-top: 0 !important;
 }
@@ -314,8 +345,20 @@ body.panel-admin .table-responsive.bg-light {
   border: 1px solid #000000 !important;
 }
 
+body.panel-empleados .buscador-tabla,
+body.panel-cliente .buscador-tabla {
+  background: rgba(128, 128, 128, 0.5) !important;
+  color: #ffffff !important;
+  border: 1px solid #ffffff !important;
+}
+
 .buscador-tabla::placeholder {
   color: #000000 !important;
+}
+
+body.panel-empleados .buscador-tabla::placeholder,
+body.panel-cliente .buscador-tabla::placeholder {
+  color: #ffffff !important;
 }
 
 .scroll-x-light {
@@ -372,7 +415,7 @@ body.panel-empleados table.pm-tabla td,
 body.panel-cliente table.pm-tabla th,
 body.panel-cliente table.pm-tabla td {
   padding: 12px 16px;
-  border: 1px solid rgba(200, 200, 200, 0.5) !important;
+  border: 1px solid #ffffff !important;
   word-wrap: break-word;
 }
 

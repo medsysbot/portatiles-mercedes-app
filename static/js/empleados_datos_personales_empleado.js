@@ -11,7 +11,8 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'nombre_empleado' },
       { data: 'dni_cuit_cuil' },
       { data: 'fecha_ingreso' },
-      { data: 'imagen_documento_pdf_url', render: url => `<a href="${url}" target="_blank">Ver</a>` }
+      // Ajuste de nombre de campo para coincidir con la base de datos
+      { data: 'documento_url_pdf', render: url => `<a href="${url}" target="_blank">Ver</a>` }
     ]
   });
 

@@ -47,11 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   document.body.style.background = "#000";
 
-  // Menú lateral
-  document.querySelector('[data-widget="pushmenu"]')?.addEventListener('click', function (e) {
-    e.preventDefault();
-    document.body.classList.toggle('sidebar-collapse');
-  });
+  // Menú lateral: la lógica de AdminLTE ya maneja el pushmenu,
+  // por lo que no necesitamos código adicional aquí.
 
   document.querySelectorAll('.nav-sidebar .nav-link').forEach(link => {
     link.addEventListener('click', function(e) {

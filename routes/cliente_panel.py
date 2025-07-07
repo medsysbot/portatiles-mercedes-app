@@ -91,7 +91,9 @@ async def get_alquileres(token_data: dict = Depends(verificar_token)):
     try:
         res = (
             supabase.table("alquileres")
-            .select("numero_bano,cliente_nombre,direccion,fecha_inicio,fecha_fin,observaciones")
+            .select(
+                "numero_bano,cliente_nombre,dni_cuit_cuil,direccion,fecha_inicio,fecha_fin,observaciones"
+            )
             .eq("dni_cuit_cuil", dni)
             .execute()
         )
@@ -106,7 +108,9 @@ async def get_facturas_pendientes(token_data: dict = Depends(verificar_token)):
     try:
         res = (
             supabase.table("facturas_pendientes")
-            .select("fecha,numero_factura,razon_social,monto_adeudado")
+            .select(
+                "fecha,numero_factura,dni_cuit_cuil,razon_social,nombre_cliente,monto_adeudado"
+            )
             .eq("dni_cuit_cuil", dni)
             .execute()
         )
@@ -121,7 +125,9 @@ async def get_compras(token_data: dict = Depends(verificar_token)):
     try:
         res = (
             supabase.table("ventas")
-            .select("fecha_operacion,tipo_bano,forma_pago,observaciones")
+            .select(
+                "fecha_operacion,tipo_bano,dni_cuit_cuil,nombre_cliente,forma_pago,observaciones"
+            )
             .eq("dni_cuit_cuil", dni)
             .execute()
         )
@@ -136,7 +142,9 @@ async def get_servicios_limpieza(token_data: dict = Depends(verificar_token)):
     try:
         res = (
             supabase.table("servicios_limpieza")
-            .select("fecha_servicio,numero_bano,tipo_servicio,remito_url,observaciones")
+            .select(
+                "fecha_servicio,numero_bano,dni_cuit_cuil,nombre_cliente,tipo_servicio,remito_url,observaciones"
+            )
             .eq("dni_cuit_cuil", dni)
             .execute()
         )

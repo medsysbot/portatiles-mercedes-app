@@ -2,6 +2,11 @@
 {% block title %}Mis Comprobantes{% endblock %}
 {% block description %}Listado de comprobantes subidos{% endblock %}
 
+{% block head_extra %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{{ super() }}
+{% endblock %}
+
 {% block body %}
 <div class="content-wrapper" style="background: url('/static/imagenes/fondo-panel.png') no-repeat center center fixed; background-size: cover; min-height: 100vh;">
   <!-- La barra lateral y el header los pone base_adminlte.html automáticamente -->
@@ -9,13 +14,42 @@
     <div class="container mt-4">
       <h2>Mis Comprobantes de Pago</h2>
       <div class="text-right mb-3">
+        <button id="btnMostrarForm" class="btn btn-success"><i class="fas fa-receipt"></i> Agregar comprobante</button>
         <button id="btnEliminarComprobantes" class="btn btn-danger" disabled>Eliminar seleccionados</button>
       </div>
-      <div class="table-responsive bg-light p-3">
+
+      <form id="formComprobante" enctype="multipart/form-data" class="mb-3 d-none">
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="nombreComprobante">Nombre cliente</label>
+            <input type="text" id="nombreComprobante" name="nombre_cliente" class="form-control" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="dniComprobante">DNI / CUIT / CUIL</label>
+            <input type="text" id="dniComprobante" name="dni_cuit_cuil" class="form-control" required>
+          </div>
+          <div class="form-group col-md-4">
+            <label for="facturaComprobante">Número factura</label>
+            <input type="text" id="facturaComprobante" name="numero_factura" class="form-control" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="archivoComprobante">Archivo (PNG/JPG)</label>
+          <input type="file" id="archivoComprobante" name="archivo" accept="image/png,image/jpeg" class="form-control" required>
+        </div>
+        <div class="text-right">
+          <button type="submit" class="btn btn-primary">Enviar comprobante</button>
+          <button type="button" id="btnCancelarForm" class="btn btn-secondary">Cancelar</button>
+        </div>
+      </form>
+      <div id="msgComprobante" class="alert mt-3 d-none"></div>
+      <div id="errorComprobantes" class="alert alert-danger d-none"></div>
+      <div id="mensajeComprobantes" class="alert mt-3 d-none"></div>
+
+      <div id="contenedorTabla" class="table-responsive bg-light p-3">
         <table id="tablaComprobantes" class="table table-striped table-bordered">
           <thead>
             <tr>
-              <th></th>
               <th>Nombre cliente</th>
               <th>DNI / CUIT / CUIL</th>
               <th>Número factura</th>
@@ -32,31 +66,8 @@
 {% endblock %}
 
 {% block scripts %}
-  {{ super() }}
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
-  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-  <script src="/static/js/cliente_panel.js"></script>
-  <script>
-    // No modificar esto: el JS carga la barra lateral automáticamente (AdminLTE)
-    document.addEventListener('DOMContentLoaded', async () => {
-      const usuario = JSON.parse(localStorage.getItem("usuario_obj") || "{}");
-      const dni = usuario.dni_cuit_cuil || "";
-      if (!dni) return;
-      const res = await fetchConAuth(`/clientes/comprobantes_api`);
-      const comprobantes = res ? await res.json() : [];
-      $('#tablaComprobantes').DataTable({
-        data: comprobantes,
-        destroy: true,
-        columns: [
-          { data: null, defaultContent: '', orderable: false },
-          { data: 'nombre_cliente', defaultContent: '-' },
-          { data: 'dni_cuit_cuil', defaultContent: '-' },
-          { data: 'numero_factura', defaultContent: '-' },
-          { data: 'comprobante_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : '-', defaultContent: '-' },
-          { data: 'fecha_envio', defaultContent: '-' }
-        ]
-      });
-    });
-  </script>
+{{ super() }}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="/static/js/cliente_panel.js"></script>
+<script src="/clientes_comprobantes.js"></script>
 {% endblock %}

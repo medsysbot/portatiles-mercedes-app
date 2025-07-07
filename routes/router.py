@@ -136,6 +136,13 @@ async def obtener_clientes_comprobantes_form_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
+@router.get("/clientes_comprobantes.js")
+async def obtener_clientes_comprobantes_js():
+    """Script para listado y carga de comprobantes del cliente."""
+    js_path = PRIVATE_STATIC_DIR / "js" / "clientes_comprobantes.js"
+    return FileResponse(js_path, media_type="application/javascript")
+
+
 @router.get("/clientes_email.js")
 async def obtener_clientes_email_js():
     """Script para enviar emails desde el panel de cliente."""

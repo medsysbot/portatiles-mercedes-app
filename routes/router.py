@@ -14,7 +14,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Depends
-from utils.auth_utils import verificar_token
+from utils.auth_utils import auth_required
 
 from routes.ventas import router as ventas_router
 from routes.debito import router as debito_router
@@ -333,7 +333,7 @@ async def mostrar_login(request: Request):
 
 
 @router.get("/splash", response_class=HTMLResponse)
-async def splash(request: Request, token_data: dict = Depends(verificar_token)):
+async def splash(request: Request, token_data: dict = Depends(auth_required)):
     """Pantalla transitoria luego del login de administrador."""
     nombre_admin = token_data.get("nombre", "Administrador")
     return templates.TemplateResponse(
@@ -344,7 +344,7 @@ async def splash(request: Request, token_data: dict = Depends(verificar_token)):
 
 @router.get("/splash_empleado", response_class=HTMLResponse)
 def splash_empleado(
-    request: Request, token_data: dict = Depends(verificar_token)
+    request: Request, token_data: dict = Depends(auth_required)
 ):
     """Compatibilidad con la ruta antigua. Redirige al panel."""
     return RedirectResponse("/empleado/panel", status_code=302)
@@ -359,7 +359,7 @@ async def mostrar_admin_splash():
 
 
 @router.get("/splash_cliente", response_class=HTMLResponse)
-def splash_cliente(request: Request, token_data: dict = Depends(verificar_token)):
+def splash_cliente(request: Request, token_data: dict = Depends(auth_required)):
     """Pantalla de bienvenida transitoria para clientes."""
     nombre_usuario = token_data.get("nombre", "Cliente")
     return templates.TemplateResponse(
@@ -373,7 +373,7 @@ def splash_cliente(request: Request, token_data: dict = Depends(verificar_token)
 
 
 @router.get("/panel_cliente", response_class=HTMLResponse)
-def panel_cliente_view(request: Request, token_data: dict = Depends(verificar_token)):
+def panel_cliente_view(request: Request, token_data: dict = Depends(auth_required)):
     """Panel privado para clientes sin extensión HTML."""
     return templates.TemplateResponse("cliente_panel.html", {"request": request})
 

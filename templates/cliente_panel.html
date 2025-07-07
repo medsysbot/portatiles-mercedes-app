@@ -1,4 +1,4 @@
-{# Archivo: templates/cliente_panel.html #}
+<!-- Archivo: templates/cliente_panel.html -->
 {% extends 'base_adminlte.html' %}
 
 {% block title %}Panel de Cliente{% endblock %}
@@ -8,13 +8,11 @@
 {% block head_extra %}
   {{ super() }}
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 {% endblock %}
 
 {% block body %}
 <div class="wrapper">
-  <!-- Sidebar de navegación -->
+  <!-- Sidebar de navegación SPA (hash links) -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="#" class="brand-link text-center">
       <span class="brand-text font-weight-light">Portátiles Mercedes</span>
@@ -22,27 +20,20 @@
     <div class="sidebar">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-          <!-- Todos los enlaces usan hash para SPA -->
           <li class="nav-item"><a href="#dashboard" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i><p>Resumen</p></a></li>
-          <li class="nav-item"><a href="#seccion-datos-personales" class="nav-link"><i class="nav-icon fas fa-user"></i><p>Datos personales</p></a></li>
-          <li class="nav-item"><a href="#seccion-alquileres" class="nav-link"><i class="nav-icon fas fa-file-contract"></i><p>Mis alquileres</p></a></li>
-          <li class="nav-item"><a href="#seccion-facturas-pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturas pendientes</p></a></li>
-          <li class="nav-item"><a href="#seccion-comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes</p></a></li>
-          <li class="nav-item"><a href="#seccion-ventas" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Mis compras</p></a></li>
-          <li class="nav-item"><a href="#seccion-limpiezas" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
-          <li class="nav-item"><a href="#seccion-emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>E-mails</p></a></li>
+          <li class="nav-item"><a href="#datos-personales" class="nav-link"><i class="nav-icon fas fa-user"></i><p>Datos personales</p></a></li>
         </ul>
       </nav>
     </div>
   </aside>
 
-  <!-- Contenido principal en secciones SPA, siguiendo la estructura de empleados -->
+  <!-- Contenido principal con secciones SPA -->
   <main class="content-wrapper pt-3">
     <section class="content">
       <div class="container-fluid p-0">
 
-        <!-- Resumen principal -->
-        <section id="dashboard-resumen">
+        <!-- Sección resumen -->
+        <section id="dashboard" style="display:block;">
           <div class="row">
             <div class="col-lg-4 col-12">
               <div class="small-box bg-info">
@@ -72,55 +63,54 @@
               </div>
             </div>
           </div>
-          <div class="row mt-4">
-            <div class="col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-header"><h3 class="card-title">Calendario de servicios</h3></div>
-                <div class="card-body"><div id="calendario"></div></div>
-              </div>
+        </section>
+
+        <!-- Sección datos personales -->
+        <section id="datos-personales" style="display:none;">
+          <div class="card card-primary">
+            <div class="card-header">
+              <h3 class="card-title">Datos personales</h3>
             </div>
-            <div class="col-md-6 mb-4">
-              <div class="card h-100">
-                <div class="card-header"><h3 class="card-title">Ubicación</h3></div>
-                <div class="card-body"><div id="map"></div></div>
+            <form id="formDatosCliente" autocomplete="off">
+              <div class="card-body">
+                <div class="form-group">
+                  <label for="dni_cuit_cuil">DNI / CUIT / CUIL</label>
+                  <input type="text" class="form-control" id="dni_cuit_cuil" name="dni_cuit_cuil" required readonly>
+                </div>
+                <div class="form-group">
+                  <label for="nombre">Nombre</label>
+                  <input type="text" class="form-control" id="nombre" name="nombre" required>
+                </div>
+                <div class="form-group">
+                  <label for="apellido">Apellido</label>
+                  <input type="text" class="form-control" id="apellido" name="apellido" required>
+                </div>
+                <div class="form-group">
+                  <label for="direccion">Dirección</label>
+                  <input type="text" class="form-control" id="direccion" name="direccion">
+                </div>
+                <div class="form-group">
+                  <label for="telefono">Teléfono</label>
+                  <input type="text" class="form-control" id="telefono" name="telefono">
+                </div>
+                <div class="form-group">
+                  <label for="razon_social">Razón Social</label>
+                  <input type="text" class="form-control" id="razon_social" name="razon_social">
+                </div>
+                <div class="form-group">
+                  <label for="email">E-mail</label>
+                  <input type="email" class="form-control" id="email" name="email" required readonly>
+                </div>
               </div>
-            </div>
+              <div class="card-footer text-right">
+                <button type="submit" class="btn btn-success" id="btnGuardarDatos">
+                  <i class="fas fa-save"></i> Guardar Datos
+                </button>
+                <span class="text-success ml-3" id="mensajeExitoDatosCliente" style="display:none;">¡Datos guardados!</span>
+                <span class="text-danger ml-3" id="mensajeErrorDatosCliente" style="display:none;"></span>
+              </div>
+            </form>
           </div>
-        </section>
-
-        <!-- Sección: Datos personales -->
-        <section id="seccion-datos-personales" style="display:none;">
-          {% include 'components/form_datos_cliente.html' %}
-        </section>
-
-        <!-- Sección: Mis alquileres -->
-        <section id="seccion-alquileres" style="display:none;">
-          {% include 'components/tabla_alquileres_cliente.html' %}
-        </section>
-
-        <!-- Sección: Facturas pendientes -->
-        <section id="seccion-facturas-pendientes" style="display:none;">
-          {% include 'components/tabla_facturas_pendientes_cliente.html' %}
-        </section>
-
-        <!-- Sección: Comprobantes -->
-        <section id="seccion-comprobantes" style="display:none;">
-          {% include 'components/tabla_comprobantes_cliente.html' %}
-        </section>
-
-        <!-- Sección: Mis compras -->
-        <section id="seccion-ventas" style="display:none;">
-          {% include 'components/tabla_compras_cliente.html' %}
-        </section>
-
-        <!-- Sección: Servicios de limpieza -->
-        <section id="seccion-limpiezas" style="display:none;">
-          {% include 'components/tabla_limpiezas_cliente.html' %}
-        </section>
-
-        <!-- Sección: E-mails -->
-        <section id="seccion-emails" style="display:none;">
-          {% include 'components/tabla_emails_cliente.html' %}
         </section>
 
       </div>
@@ -130,8 +120,5 @@
 {% endblock %}
 
 {% block scripts %}
-  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="/static/js/cliente_panel.js"></script>
 {% endblock %}

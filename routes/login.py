@@ -4,19 +4,16 @@ Archivo: routes/login.py
 Descripción: Funciones de autenticación y registro de usuarios
 Acceso: Privado
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-06-15
+Última modificación: 2025-07-07
 ----------------------------------------------------------
 """
-"""Funciones de autenticación y registro de usuarios."""
-
 import os
 import logging
 import traceback
-from fastapi import APIRouter, HTTPException, status, Form, Response, Request
+from fastapi import APIRouter, HTTPException, status, Form, Response, Request, Body
 from pydantic import BaseModel
 from supabase import create_client, Client
 from passlib.context import CryptContext
-from passlib.hash import bcrypt
 from jose import jwt, JWTError
 from datetime import datetime, timedelta, timezone
 import secrets
@@ -26,8 +23,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ==== Configuración de Supabase ====
-# Configuración de Supabase y JWT
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
 JWT_SECRET = os.getenv("JWT_SECRET")
@@ -54,12 +49,8 @@ EMAIL_ORIGEN = os.getenv("EMAIL_ORIGEN")
 EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
 SMTP_SERVER = os.getenv("SMTP_SERVER")
 SMTP_PORT = os.getenv("SMTP_PORT")
-# URL base del aplicativo usada en enlaces de recuperación de contraseña
-# En producción se debe definir la variable de entorno APP_URL
-# (por ejemplo: https://mercedes-app-production.up.railway.app)
 APP_URL = os.getenv("APP_URL")
 
-# Configuración de logging
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE = os.path.join(LOG_DIR, "login_events.log")
@@ -75,21 +66,17 @@ if not logger.handlers:
     logger.propagate = False
 
 def imprimir_log_error():
-    """Imprime errores anteriores al inicio."""
-# ==== Lógica de validación ====
     log_path = os.path.join(LOG_DIR, "error_login.log")
     try:
         if os.path.isfile(log_path):
             with open(log_path, "r") as f:
                 logger.error(f.read())
-    except Exception as exc:  # pragma: no cover
+    except Exception as exc:
         logger.error("No se pudo leer %s: %s", log_path, exc)
 
 imprimir_log_error()
 
-
 def enviar_email_recuperacion(destino: str, token: str, base_url: str) -> None:
-    """Envía un correo con el enlace para restablecer la contraseña."""
     if not all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
         logger.error("Variables SMTP faltantes - no se puede enviar correo")
         raise Exception("SMTP no configurado")
@@ -117,7 +104,6 @@ def enviar_email_recuperacion(destino: str, token: str, base_url: str) -> None:
 
 class LoginInput(BaseModel):
     email: str
-    # IMPORTANTE: El campo debe llamarse "password" (sin ñ ni tilde) en todo el flujo
     password: str
     rol: str
 
@@ -129,34 +115,9 @@ class ResetInput(BaseModel):
     password: str
 
 router = APIRouter()
-# ==== Endpoints ====
 
 @router.post("/login")
 async def login(datos: LoginInput, response: Response):
-    """Autentica a un usuario y genera un token de acceso.
-
-    Parámetros
-    ----------
-    datos : LoginInput
-        Objeto con las credenciales enviadas por el cliente. Incluye
-        `email`, `password` y `rol`.
-
-    Retorna
-    -------
-    dict
-        Información del usuario junto con un token JWT si las
-        credenciales son correctas.
-
-    Errores
-    -------
-    HTTPException 401
-        Usuario o contraseña incorrectos.
-    HTTPException 403
-        El usuario existe pero se encuentra inactivo.
-    HTTPException 500
-# ==== Lógica de generación de token ====
-        Error interno al procesar la solicitud.
-    """
     try:
         email = datos.email
         password = datos.password
@@ -228,6 +189,27 @@ async def login(datos: LoginInput, response: Response):
 
         logger.info(f"Login exitoso: {email}")
         response.set_cookie(key="access_token", value=token, httponly=True)
+
+        # --- Solución para panel de clientes: incluir dni_cuit_cuil en la respuesta ---
+        if usuario.get("rol", "").lower() == "cliente":
+            datos_cli = (
+                supabase.table("datos_personales_clientes")
+                .select("dni_cuit_cuil, nombre")
+                .eq("email", usuario["email"])
+                .maybe_single()
+                .execute()
+            )
+            cli = getattr(datos_cli, "data", None)
+            return {
+                "access_token": token,
+                "usuario": {
+                    "dni_cuit_cuil": cli["dni_cuit_cuil"] if cli else None,
+                    "email": usuario["email"],
+                    "nombre": cli["nombre"] if cli else usuario.get("nombre", "")
+                }
+            }
+        # --- Fin solución clientes ---
+
         return {
             "access_token": token,
             "rol": usuario.get("rol"),
@@ -245,26 +227,6 @@ async def login(datos: LoginInput, response: Response):
 
 @router.post("/verificar_token")
 def verificar_token(data: dict):
-    """Valida un token JWT y extrae la información del usuario.
-
-    Parámetros
-    ----------
-    data : dict
-        Diccionario que debe contener la clave ``token`` con el
-        JWT emitido por el sistema.
-
-    Retorna
-    -------
-    dict
-        Estado de la verificación y datos básicos del usuario si el
-        token es válido.
-
-    Errores
-    -------
-    HTTPException 401
-        Cuando el token está ausente o es inválido.
-    """
-# ==== Lógica de registro ====
     token = data.get("token")
     if not token:
         raise HTTPException(status_code=401, detail="Token faltante")
@@ -285,12 +247,6 @@ def registrar_cliente(
     email: str = Form(...),
     password: str = Form(...),
 ):
-    """Registra un usuario final con rol ``cliente``.
-
-    Elimina la lógica antigua de direcciones y guarda la
-    contraseña de forma segura mediante ``bcrypt``.
-    """
-
     if not password:
         raise HTTPException(status_code=400, detail="Contraseña requerida")
 
@@ -304,21 +260,16 @@ def registrar_cliente(
             )
 
         password_hash = pwd_context.hash(password)
-        # El campo "activo" se agrega automáticamente en el backend,
-        # nunca es visible ni editable para el cliente.
         datos_insert = {
             "nombre": nombre,
             "email": email,
             "password_hash": password_hash,
             "rol": "cliente",
-            "activo": True,  # El campo "activo" se agrega automáticamente
+            "activo": True,
         }
-        # <!--
-        # Eliminado envío y lógica de campos creado_en y actualizado_en porque ya no existen en la tabla usuarios.
-        # -->
         try:
             resp = supabase.table("usuarios").insert(datos_insert).execute()
-        except Exception as e:  # pragma: no cover - debug supabase errors
+        except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
         if (
@@ -337,10 +288,8 @@ def registrar_cliente(
     logger.info(f"Registro exitoso para nuevo cliente: {email}")
     return {"mensaje": "Registro exitoso"}
 
-
 @router.post("/recuperar_password")
 async def recuperar_password(datos: RecuperarInput, request: Request):
-    """Inicia el proceso de recuperación de contraseña."""
     mensaje = {"mensaje": "Si el email existe, se envió un correo de recuperación"}
     email = datos.email.strip().lower()
     logger.info("Solicitud de recuperación recibida para %s", email)
@@ -376,7 +325,7 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
             base_url = APP_URL or str(request.base_url).rstrip("/")
             try:
                 enviar_email_recuperacion(email, token, base_url)
-            except Exception as exc:  # pragma: no cover - dependencias externas
+            except Exception as exc:
                 logger.exception("Error enviando email de recuperación: %s", exc)
                 raise HTTPException(
                     status_code=500,
@@ -386,14 +335,12 @@ async def recuperar_password(datos: RecuperarInput, request: Request):
             logger.info("Recuperación solicitada para email inexistente: %s", email)
     except HTTPException:
         raise
-    except Exception as exc:  # pragma: no cover - dependencias externas
+    except Exception as exc:
         logger.error("Error en recuperar_password: %s", exc)
     return mensaje
 
-
 @router.post("/reset_password")
 async def reset_password(datos: ResetInput):
-    """Actualiza la contraseña si el token es válido."""
     token = datos.token
     nueva = datos.password
     try:
@@ -410,14 +357,12 @@ async def reset_password(datos: ResetInput):
                 exp_dt = exp_dt.replace(tzinfo=timezone.utc)
             if exp_dt < datetime.now(timezone.utc):
                 raise HTTPException(status_code=400, detail="Token inválido o expirado")
-        
-
         pwd_hash = pwd_context.hash(nueva)
         supabase.table("usuarios").update({"password_hash": pwd_hash}).eq("email", registro["email"]).execute()
         supabase.table("reset_tokens").update({"usado": True}).eq("token", token).execute()
         return {"mensaje": "Contraseña actualizada"}
     except HTTPException:
         raise
-    except Exception as exc:  # pragma: no cover - dependencias externas
+    except Exception as exc:
         logger.error("Error en reset_password: %s", exc)
         raise HTTPException(status_code=400, detail="Token inválido o expirado")

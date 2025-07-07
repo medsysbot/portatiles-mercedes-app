@@ -1,18 +1,16 @@
-<!-- Archivo: templates/cliente_panel.html -->
+{# Archivo: templates/cliente_resumen.html #}
 {% extends 'base_adminlte.html' %}
 
 {% block title %}Panel de Cliente{% endblock %}
-{% block description %}Panel principal para la gestión de clientes en Portátiles Mercedes{% endblock %}
-{% block body_class %}hold-transition sidebar-mini layout-fixed admin-bg cliente_panel{% endblock %}
-
+{% block description %}Panel principal de cliente | Portátiles Mercedes{% endblock %}
 {% block head_extra %}
   {{ super() }}
-  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
 {% endblock %}
 
 {% block body %}
 <div class="wrapper">
-  <!-- Sidebar de navegación SPA (hash links) -->
+  <!-- Sidebar igual al panel de empleados, enlazando cada módulo -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="#" class="brand-link text-center">
       <span class="brand-text font-weight-light">Portátiles Mercedes</span>
@@ -20,99 +18,52 @@
     <div class="sidebar">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-          <li class="nav-item"><a href="#dashboard" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i><p>Resumen</p></a></li>
-          <li class="nav-item"><a href="#datos-personales" class="nav-link"><i class="nav-icon fas fa-user"></i><p>Datos personales</p></a></li>
+          <li class="nav-item"><a href="/cliente/panel" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i><p>Resumen</p></a></li>
+          <li class="nav-item"><a href="/clientes/datos_personales" class="nav-link"><i class="nav-icon fas fa-user"></i><p>Datos personales</p></a></li>
+          <li class="nav-item"><a href="/clientes/alquileres" class="nav-link"><i class="nav-icon fas fa-file-contract"></i><p>Mis alquileres</p></a></li>
+          <li class="nav-item"><a href="/clientes/facturas_pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturas pendientes</p></a></li>
+          <li class="nav-item"><a href="/clientes/comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes</p></a></li>
+          <li class="nav-item"><a href="/clientes/mis_compras" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Mis compras</p></a></li>
+          <li class="nav-item"><a href="/clientes/servicios_limpieza" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
+          <li class="nav-item"><a href="/clientes/emails" class="nav-link"><i class="nav-icon fas fa-envelope"></i><p>E-mails</p></a></li>
         </ul>
       </nav>
     </div>
   </aside>
-
-  <!-- Contenido principal con secciones SPA -->
   <main class="content-wrapper pt-3">
     <section class="content">
       <div class="container-fluid p-0">
-
-        <!-- Sección resumen -->
-        <section id="dashboard" style="display:block;">
-          <div class="row">
-            <div class="col-lg-4 col-12">
-              <div class="small-box bg-info">
-                <div class="inner text-center">
-                  <h3 id="proxLimpieza">-</h3>
-                  <p>Próxima limpieza</p>
-                </div>
-                <div class="icon"><i class="fas fa-calendar-day"></i></div>
+        <!-- Resumen del cliente (puede mostrar cards, info, gráficos, etc) -->
+        <div class="row">
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-info">
+              <div class="inner text-center">
+                <h3 id="proxLimpieza">-</h3>
+                <p>Próxima limpieza</p>
               </div>
-            </div>
-            <div class="col-lg-4 col-12">
-              <div class="small-box bg-success">
-                <div class="inner text-center">
-                  <h3 id="cntBaños">-</h3>
-                  <p>Baños alquilados</p>
-                </div>
-                <div class="icon"><i class="fas fa-toilet"></i></div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-12">
-              <div class="small-box bg-warning">
-                <div class="inner text-center">
-                  <h3 id="cntFactPend">-</h3>
-                  <p>Facturas pendientes</p>
-                </div>
-                <div class="icon"><i class="fas fa-file-invoice-dollar"></i></div>
-              </div>
+              <div class="icon"><i class="fas fa-calendar-day"></i></div>
             </div>
           </div>
-        </section>
-
-        <!-- Sección datos personales -->
-        <section id="datos-personales" style="display:none;">
-          <div class="card card-primary">
-            <div class="card-header">
-              <h3 class="card-title">Datos personales</h3>
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-success">
+              <div class="inner text-center">
+                <h3 id="cntBaños">-</h3>
+                <p>Baños alquilados</p>
+              </div>
+              <div class="icon"><i class="fas fa-toilet"></i></div>
             </div>
-            <form id="formDatosCliente" autocomplete="off">
-              <div class="card-body">
-                <div class="form-group">
-                  <label for="dni_cuit_cuil">DNI / CUIT / CUIL</label>
-                  <input type="text" class="form-control" id="dni_cuit_cuil" name="dni_cuit_cuil" required readonly>
-                </div>
-                <div class="form-group">
-                  <label for="nombre">Nombre</label>
-                  <input type="text" class="form-control" id="nombre" name="nombre" required>
-                </div>
-                <div class="form-group">
-                  <label for="apellido">Apellido</label>
-                  <input type="text" class="form-control" id="apellido" name="apellido" required>
-                </div>
-                <div class="form-group">
-                  <label for="direccion">Dirección</label>
-                  <input type="text" class="form-control" id="direccion" name="direccion">
-                </div>
-                <div class="form-group">
-                  <label for="telefono">Teléfono</label>
-                  <input type="text" class="form-control" id="telefono" name="telefono">
-                </div>
-                <div class="form-group">
-                  <label for="razon_social">Razón Social</label>
-                  <input type="text" class="form-control" id="razon_social" name="razon_social">
-                </div>
-                <div class="form-group">
-                  <label for="email">E-mail</label>
-                  <input type="email" class="form-control" id="email" name="email" required readonly>
-                </div>
-              </div>
-              <div class="card-footer text-right">
-                <button type="submit" class="btn btn-success" id="btnGuardarDatos">
-                  <i class="fas fa-save"></i> Guardar Datos
-                </button>
-                <span class="text-success ml-3" id="mensajeExitoDatosCliente" style="display:none;">¡Datos guardados!</span>
-                <span class="text-danger ml-3" id="mensajeErrorDatosCliente" style="display:none;"></span>
-              </div>
-            </form>
           </div>
-        </section>
-
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-warning">
+              <div class="inner text-center">
+                <h3 id="cntFactPend">-</h3>
+                <p>Facturas pendientes</p>
+              </div>
+              <div class="icon"><i class="fas fa-file-invoice-dollar"></i></div>
+            </div>
+          </div>
+        </div>
+        <!-- Podés agregar aquí más bloques de resumen, cards o gráficos igual que en empleados -->
       </div>
     </section>
   </main>

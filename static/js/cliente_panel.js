@@ -257,6 +257,6 @@ function mostrarUltimoComprobante(comprobantes) {
   panel.innerHTML = `
     <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
-    ${ultimo.comprobante_url ? `<a href="${ultimo.comprobante_url}" target="_blank" class="btn btn-primary btn-sm">Ver comprobante</a>` : ''}
+    ${ultimo.comprobante_url ? `<img src="${ultimo.comprobante_url}" alt="Comprobante" class="img-fluid mt-2" style="max-height:150px; object-fit:contain; width:100%;"/>` : ''}
   `;
 }

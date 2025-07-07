@@ -79,6 +79,11 @@ table.pm-tabla th, table.pm-tabla td {
   color: #fff !important;
 }
 
+/* Asegura que el texto de los ítems del menú lateral sea blanco */
+.nav-sidebar .nav-link p {
+  color: #fff !important;
+}
+
 .main-sidebar .nav-link.active, .sidebar .nav-link.active {
   background: rgba(255,255,255,0.08) !important;
   color: #fff !important;

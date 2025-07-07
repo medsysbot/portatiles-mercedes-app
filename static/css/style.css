@@ -101,6 +101,7 @@ table.pm-tabla th, table.pm-tabla td {
   width: 100%;
   height: auto;
   aspect-ratio: 2 / 1;
+  background-color: #ffffff;
 }
 
 /* Miniaturas dashboard cliente */

@@ -131,7 +131,6 @@ def admin_panel_view(request: Request):
         "total_ventas": _contar_total(VENTAS_TABLE),
         "total_pendientes": _contar_total("facturas_pendientes"),
         "total_morosos": _contar_total("morosos"),
-        "ultimos_emails": _ultimos_emails(),
     }
 
     return templates.TemplateResponse("panel_admin.html", contexto)

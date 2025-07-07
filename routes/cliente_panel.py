@@ -66,6 +66,11 @@ async def html_mis_compras(request: Request, token_data: dict = Depends(verifica
 async def html_servicios_limpieza(request: Request, token_data: dict = Depends(verificar_token)):
     return templates.TemplateResponse("clientes_servicios_limpieza.html", {"request": request})
 
+@router.get("/clientes/emails")
+async def html_clientes_emails(request: Request, token_data: dict = Depends(verificar_token)):
+    """Formulario para que el cliente envíe un email al área administrativa."""
+    return templates.TemplateResponse("clientes_emails.html", {"request": request})
+
 # ==== API (sólo token) ====
 @router.get("/clientes/datos_personales_api")
 async def get_datos_personales(token_data: dict = Depends(verificar_token)):

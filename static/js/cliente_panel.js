@@ -1,4 +1,4 @@
-// ============= AUTENTICACIÓN Y TOKEN =============
+// ============= AUTENTICACIÓN Y TOKEN (sólo token, igual empleados) =============
 function getAuthToken() {
   return localStorage.getItem("access_token");
 }
@@ -15,7 +15,7 @@ async function fetchConAuth(url, options = {}) {
   const resp = await fetch(url, options);
   if (resp.status === 401) {
     localStorage.clear();
-    window.location.href = "/login";
+    window.location.href = '/login';
     return;
   }
   return resp;
@@ -27,7 +27,6 @@ function showMsg(divId, msg, type="danger") {
 
 // ============= DETECTAR SECCIÓN Y CARGAR DATOS =============
 document.addEventListener('DOMContentLoaded', () => {
-  // Barra lateral, fondo, estilos globales
   document.body.classList.add('layout-fixed');
   if (document.querySelector('.content-wrapper')) {
     document.querySelector('.content-wrapper').style.backgroundImage = "url('/static/imagenes/fondo-panel.png')";
@@ -54,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.body.classList.toggle('sidebar-collapse');
   });
 
-  // Sidebar navigation
   document.querySelectorAll('.nav-sidebar .nav-link').forEach(link => {
     link.addEventListener('click', function(e) {
       const href = this.getAttribute('href');
@@ -69,22 +67,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Cerrar sesión
   document.getElementById('btnLogout')?.addEventListener('click', () => {
     localStorage.clear();
     window.location.href = '/login';
   });
 
-  // Detectar sección por ID o por URL
   if (document.getElementById('tablaAlquileres')) actualizarAlquileres();
   if (document.getElementById('tablaFacturas')) actualizarFacturas();
   if (document.getElementById('tablaCompras')) actualizarCompras();
   if (document.getElementById('tablaLimpieza')) actualizarLimpiezas();
-  if (document.getElementById('tablaEmails')) actualizarEmails();
   if (document.getElementById('tablaComprobantes')) actualizarComprobantes();
-  if (document.getElementById('proxLimpieza')) actualizarCardsCliente();
-  if (document.getElementById('panelUltimoComprobante')) actualizarUltimoComprobante();
-  if (document.getElementById('calendario')) inicializarCalendarioCliente();
 });
 
 // ------ ALQUILERES ------
@@ -180,7 +172,25 @@ async function actualizarLimpiezas() {
   }
 }
 
-// ------ EMAILS ------
-async function actualizarEmails() {
+// ------ COMPROBANTES ------
+async function actualizarComprobantes() {
   try {
-    const res = await fetchConAuth(`/clientes/emails
+    const res = await fetchConAuth(`/clientes/comprobantes_api`);
+    if (!res) return;
+    const comprobantes = await res.json();
+    $('#tablaComprobantes').DataTable({
+      data: comprobantes,
+      destroy: true,
+      columns: [
+        { data: null, defaultContent: '', orderable: false },
+        { data: 'nombre_cliente', defaultContent: '-' },
+        { data: 'dni_cuit_cuil', defaultContent: '-' },
+        { data: 'numero_factura', defaultContent: '-' },
+        { data: 'comprobante_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : '-', defaultContent: '-' },
+        { data: 'fecha', defaultContent: '-' }
+      ]
+    });
+  } catch (e) {
+    showMsg("tablaComprobantes", "Error al cargar comprobantes");
+  }
+}

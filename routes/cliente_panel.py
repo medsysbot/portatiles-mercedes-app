@@ -1,7 +1,7 @@
 """
 ----------------------------------------------------------
 Archivo: routes/cliente_panel.py
-Descripción: Rutas completas API y HTML del panel de clientes (PWA).
+Descripción: Rutas completas API, login y HTML del panel de clientes (PWA).
 Proyecto: Portátiles Mercedes
 Última modificación: 2025-07-07
 ----------------------------------------------------------
@@ -30,6 +30,46 @@ if not logger.handlers:
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+
+# ========= LOGIN DE CLIENTES (idéntico a empleados) =========
+
+@router.post("/clientes/login")
+async def login_cliente(data: dict = Body(...)):
+    """
+    Login para clientes. Devuelve access_token y los datos del usuario (incluyendo dni_cuit_cuil).
+    """
+    email = data.get("email", "").strip().lower()
+    password = data.get("password", "")
+
+    # Buscar al cliente en Supabase
+    cliente_resp = (
+        supabase.table("datos_personales_clientes")
+        .select("dni_cuit_cuil,nombre,email,hash_password")
+        .eq("email", email)
+        .single()
+        .execute()
+    )
+
+    cliente = getattr(cliente_resp, "data", None)
+    if not cliente:
+        raise HTTPException(status_code=401, detail="Usuario no encontrado")
+
+    # Validación de contraseña (ajustar según tu hash real)
+    if password != cliente.get("hash_password"):
+        raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+
+    # Generar token (acá deberías implementar JWT real)
+    access_token = "demo_token"  # <-- REEMPLAZÁ por JWT real en producción
+
+    # Devuelve SIEMPRE dni_cuit_cuil, email y nombre
+    return {
+        "access_token": access_token,
+        "usuario": {
+            "dni_cuit_cuil": cliente["dni_cuit_cuil"],
+            "email": cliente["email"],
+            "nombre": cliente["nombre"]
+        }
+    }
 
 # ========= RUTAS HTML (Panel cliente PWA) =========
 

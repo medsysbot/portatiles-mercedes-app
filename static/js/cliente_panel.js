@@ -102,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // ------ ALQUILERES ------
 async function actualizarAlquileres() {
   const usuario = getUsuario();
-  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaAlquileres", "No hay datos de usuario");
   try {
     const res = await fetchConAuth(`/clientes/alquileres_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
@@ -129,7 +129,7 @@ async function actualizarAlquileres() {
 // ------ FACTURAS ------
 async function actualizarFacturas() {
   const usuario = getUsuario();
-  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaFacturas", "No hay datos de usuario");
   try {
     const res = await fetchConAuth(`/clientes/facturas_pendientes_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
@@ -155,7 +155,7 @@ async function actualizarFacturas() {
 // ------ COMPRAS ------
 async function actualizarCompras() {
   const usuario = getUsuario();
-  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaCompras", "No hay datos de usuario");
   try {
     const res = await fetchConAuth(`/clientes/compras_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
@@ -181,7 +181,7 @@ async function actualizarCompras() {
 // ------ LIMPIEZAS ------
 async function actualizarLimpiezas() {
   const usuario = getUsuario();
-  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaLimpieza", "No hay datos de usuario");
   try {
     const res = await fetchConAuth(`/clientes/servicios_limpieza_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
@@ -231,7 +231,7 @@ async function actualizarEmails() {
 // ------ COMPROBANTES ------
 async function actualizarComprobantes() {
   const usuario = getUsuario();
-  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaComprobantes", "No hay datos de usuario");
   try {
     const res = await fetchConAuth(`/clientes/comprobantes_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
@@ -258,7 +258,7 @@ async function actualizarComprobantes() {
 async function actualizarCardsCliente() {
   try {
     const usuario = getUsuario();
-    const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+    const dni = usuario.dni_cuit_cuil || "";
     const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
     if (!res) return;
     const data = await res.json();
@@ -281,7 +281,7 @@ async function actualizarCardsCliente() {
 async function actualizarUltimoComprobante() {
   try {
     const usuario = getUsuario();
-    const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+    const dni = usuario.dni_cuit_cuil || "";
     const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
     if (!res) return;
     const data = await res.json();

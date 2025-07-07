@@ -29,6 +29,17 @@ function getUsuario() {
     return {};
   }
 }
+function guardarUsuario(usuario) {
+  // Guarda los campos necesarios para clientes igual que empleados
+  if (usuario && usuario.dni_cuit_cuil && usuario.email) {
+    localStorage.setItem("usuario_obj", JSON.stringify({
+      dni_cuit_cuil: usuario.dni_cuit_cuil,
+      email: usuario.email,
+      nombre: usuario.nombre || "",
+      // ...otros datos que necesites
+    }));
+  }
+}
 function showMsg(divId, msg, type="danger") {
   const el = document.getElementById(divId);
   if (el) el.innerHTML = `<div class="alert alert-${type} text-center mb-0">${msg}</div>`;

@@ -32,7 +32,7 @@ if (form) {
                         nombre: data.usuario.nombre
                     }));
                     localStorage.setItem("dni_cuit_cuil", data.usuario.dni_cuit_cuil);
-                    window.location.href = "/cliente/panel";
+                    window.location.href = "/splash_cliente";
                     return;
                 }
 
@@ -46,7 +46,7 @@ if (form) {
                     if (data.rol === "Administrador") {
                         window.location.href = "/splash";
                     } else {
-                        window.location.href = "/empleado/panel";
+                        window.location.href = "/splash_empleado";
                     }
                     return;
                 }
@@ -64,7 +64,7 @@ if (form) {
                             nombre: datos.nombre
                         }));
                         localStorage.setItem("dni_cuit_cuil", datos.dni_cuit_cuil);
-                        window.location.href = "/cliente/panel";
+                        window.location.href = "/splash_cliente";
                     } else {
                         if (errorEl) errorEl.textContent = "No se pudo recuperar los datos del cliente.";
                     }

@@ -1,6 +1,6 @@
 <!--
 Archivo: login.html
-Descripción: Formulario completo original de acceso al sistema
+Descripción: Formulario de acceso al sistema
 Acceso: Público
 Proyecto: Portátiles Mercedes
 Última modificación: 2025-06-16
@@ -13,14 +13,159 @@ Proyecto: Portátiles Mercedes
   <meta name="description" content="Inicia sesión para gestionar tus servicios">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <style>
-    /* (Estilos originales completos aquí, omito en este bloque por brevedad, úsalos tal cual están en el archivo original que tienes en el proyecto) */
+    /* Estilos completos originales del archivo que subiste. NO modificar. */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    body {
+      min-height: 100vh;
+      width: 100vw;
+      font-family: 'Nunito', Arial, sans-serif;
+      background: url('/app_publico/static/imagenes/fondo-login.png') no-repeat center center fixed;
+      background-size: cover;
+      position: relative;
+      overflow-x: hidden;
+    }
+    .contenedor-superior {
+      width: 100vw;
+      min-height: 180px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-top: 10px;
+      padding-bottom: 12px;
+      background: transparent;
+    }
+    .titulo-index {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 800;
+      font-size: 4.5vw;
+      color: #DEB460;
+      text-align: center;
+      margin-bottom: 6px;
+      line-height: 1.1;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+    .logo-portatiles {
+      height: 2.1em;
+      margin: 0 18px;
+      vertical-align: middle;
+    }
+    .subtitulo-portatiles {
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 700;
+      font-style: italic;
+      font-size: 2.2vw;
+      color: #545454;
+      text-align: center;
+      margin-top: 0.2em;
+      margin-bottom: 30px;
+      text-shadow: 0 1.5px 2.5px #fff;
+    }
+    .contenedor-main {
+      position: relative;
+      display: flex;
+      flex-direction: row;
+      width: 100vw;
+      box-sizing: border-box;
+      justify-content: center;
+      align-items: flex-start;
+      padding-bottom: 40px;
+      min-height: 60vh;
+    }
+    .botonera-flotante {
+      position: absolute;
+      left: 40px;
+      bottom: 180px;
+      min-width: 260px;
+      width: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 99;
+    }
+    .boton-index {
+      width: 260px;
+      min-width: 260px;
+      max-width: 260px;
+      height: 38px;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      font-style: italic;
+      background: rgba(0,0,0,0.58);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      transition: background .13s;
+      padding-left: 16px;
+      text-decoration: none;
+    }
+    .boton-index img {
+      width: 22px;
+      height: 22px;
+      display: inline-block;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 260px;
+      box-sizing: border-box;
+      color: #fff;
+      margin: 0;
+      margin-top: 60px;
+    }
+    .campo-login {
+      display: flex;
+      align-items: center;
+      background: rgba(0,0,0,0.58);
+      border-radius: 8px;
+      padding: 8px 12px;
+      box-sizing: border-box;
+    }
+    .campo-login img {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+    }
+    .campo-login input, .campo-login select {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 16px;
+      width: 100%;
+    }
+    #errorMsg {
+      color: red;
+      margin: 0;
+    }
   </style>
 </head>
 <body>
   <div class="contenedor-superior titulo-con-logo">
     <img src="/app_publico/static/icons/logo-portatiles-2.png" alt="Logo Portátiles Mercedes" class="logo-fondo-titulo">
-    <div class="titulo-index">Login</div>
-    <div class="subtitulo-portatiles">Lo tradicional, hecho inteligente.</div>
+    <div class="titulo-index">
+      Login
+    </div>
+    <div class="subtitulo-portatiles">
+      Lo tradicional, hecho inteligente.
+    </div>
   </div>
 
   <div class="contenedor-main">

@@ -1,29 +1,20 @@
 """
 ----------------------------------------------------------
 Archivo: routes/cliente_panel.py
-Descripción: Rutas completas para el panel de clientes, 
-incluye rutas API y rutas HTML de panel para navegación.
-Última modificación: 2025-07-07
+Descripción: Rutas completas API y HTML del panel de clientes (PWA).
 Proyecto: Portátiles Mercedes
+Última modificación: 2025-07-07
 ----------------------------------------------------------
 """
 
-from fastapi import APIRouter, HTTPException, Query, Request, Body, Depends
+from fastapi import APIRouter, HTTPException, Query, Request, Body
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
-from dotenv import load_dotenv
+from utils.supabase_client import supabase
 import logging
 import os
-import smtplib
-from email.message import EmailMessage
-from supabase import create_client, Client
 
-# ============ SETUP ============
-
-load_dotenv()
-url = os.getenv("SUPABASE_URL")
-key = os.getenv("SUPABASE_KEY")
-supabase = create_client(url, key) if url and key else None
+# ========= SETUP =========
 
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -40,7 +31,7 @@ if not logger.handlers:
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
-# ============ RUTAS HTML PARA PANEL DE CLIENTE ============
+# ========= RUTAS HTML (Panel cliente PWA) =========
 
 @router.get("/cliente/panel")
 async def html_panel_cliente(request: Request):
@@ -74,196 +65,89 @@ async def html_servicios_limpieza(request: Request):
 async def html_emails(request: Request):
     return templates.TemplateResponse("clientes_emails.html", {"request": request})
 
-# Puedes agregar más rutas HTML aquí según crezca tu menú lateral
+# ========= API ENDPOINTS (PWA Clientes) =========
 
-# ============ RUTAS API PANEL CLIENTE (originales) ============
-
-@router.get("/cliente_panel")
-def cliente_panel():
-    return {"msg": "Bienvenido"}
-
-@router.get("/info_cliente")
-async def info_cliente(email: str = Query(...)):
-    if supabase:
-        try:
-            resp = (
-                supabase.table("datos_personales_clientes")
-                .select("dni_cuit_cuil,nombre,apellido,direccion,telefono,razon_social,email")
-                .eq("email", email)
-                .single()
-                .execute()
-            )
-        except Exception as exc:
-            logger.error("Error consultando datos de cliente: %s", exc)
-            raise HTTPException(status_code=500, detail="Error consultando datos")
-        if getattr(resp, "data", None):
-            return resp.data
-        raise HTTPException(status_code=404, detail="Datos no encontrados")
-    logger.error("Cliente_panel supabase no configurado")
-    return {}
-
-@router.get("/alquileres_cliente")
-async def obtener_alquileres(dni_cuit_cuil: str = Query(...)):
-    if not supabase:
-        logger.warning("Supabase no configurado")
-        return []
+@router.get("/clientes/datos_personales_api")
+async def get_datos_personales(email: str = Query(...)):
+    """Devuelve los datos personales del cliente."""
     try:
-        res = (
-            supabase.table("alquileres")
-            .select(
-                "numero_bano,cliente_nombre,dni_cuit_cuil,direccion,fecha_inicio,fecha_fin,observaciones"
-            )
-            .eq("dni_cuit_cuil", dni_cuit_cuil)
-            .execute()
-        )
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        return res.data or []
-    except Exception as exc:
-        logger.error("Error consultando alquileres cliente: %s", exc)
-        raise HTTPException(status_code=500, detail="Error consultando datos")
-
-@router.get("/facturas_pendientes_cliente")
-async def obtener_facturas_pendientes(dni: str = Query(...)):
-    if not supabase:
-        logger.warning("Supabase no configurado")
-        return []
-    try:
-        res = (
-            supabase.table("facturas_pendientes")
-            .select(
-                "fecha,numero_factura,dni_cuit_cuil,razon_social,nombre_cliente,monto_adeudado"
-            )
-            .eq("dni_cuit_cuil", dni)
-            .execute()
-        )
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        return res.data or []
-    except Exception as exc:
-        logger.error("Error consultando facturas pendientes: %s", exc)
-        raise HTTPException(status_code=500, detail="Error consultando datos")
-
-@router.get("/limpiezas_cliente")
-async def obtener_limpiezas(dni_cuit_cuil: str = Query(...)):
-    if not supabase:
-        logger.warning("Supabase no configurado")
-        return []
-    try:
-        res = (
-            supabase.table("servicios_limpieza")
-            .select(
-                "fecha_servicio,numero_bano,dni_cuit_cuil,nombre_cliente,tipo_servicio,remito_url,observaciones"
-            )
-            .eq("dni_cuit_cuil", dni_cuit_cuil)
-            .execute()
-        )
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        data = res.data or []
-        for item in data:
-            item["dni_cuit_cuil"] = item.get("dni_cuit_cuil") or ""
-        return data
-    except Exception as exc:
-        logger.error("Error consultando limpiezas: %s", exc)
-        raise HTTPException(status_code=500, detail="Error consultando datos")
-
-@router.get("/info_datos_cliente")
-async def info_datos_cliente(email: str = Query(...)):
-    if not supabase:
-        logger.error("Supabase no configurado")
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
-    try:
-        result = (
+        resp = (
             supabase.table("datos_personales_clientes")
-            .select("*")
+            .select("dni_cuit_cuil,nombre,apellido,direccion,telefono,razon_social,email")
             .eq("email", email)
             .single()
             .execute()
         )
+        if getattr(resp, "data", None):
+            return resp.data
+        raise HTTPException(status_code=404, detail="Datos no encontrados")
     except Exception as exc:
-        logger.error("Error al consultar datos personales: %s", exc)
-        raise HTTPException(status_code=500, detail="Error consultando datos")
-    if getattr(result, "data", None):
-        return result.data
-    raise HTTPException(status_code=404, detail="Datos no encontrados")
+        logger.error(f"Error consultando datos de cliente: {exc}")
+        raise HTTPException(status_code=500, detail=f"Error consultando datos: {exc}")
 
-@router.post("/guardar_datos_cliente")
-async def guardar_datos_cliente(request: Request):
-    data = await request.json()
-    logger.info("Datos recibidos del cliente: %s", data)
-    data.pop("cuit", None)
-    try:
-        resultado = (
-            supabase.table("datos_personales_clientes")
-            .upsert(data, on_conflict="dni_cuit_cuil")
-            .execute()
-        )
-        logger.info("Respuesta Supabase: %s", resultado)
-        if getattr(resultado, "error", None) is None:
-            return JSONResponse(
-                content={"mensaje": "¡Datos guardados correctamente!"},
-                status_code=200,
-            )
-        logger.error("Error en Supabase: %s", resultado.error)
-        return JSONResponse(
-            content={"error": getattr(resultado.error, "message", str(resultado.error))},
-            status_code=400,
-        )
-    except Exception as e:
-        logger.error("Excepción al guardar datos: %s", str(e))
-        return JSONResponse(
-            content={"error": f"Error interno: {str(e)}"}, status_code=500
-        )
-
-@router.get("/facturas_cliente")
-async def obtener_facturas(dni_cuit_cuil: str = Query(...)):
-    if not supabase:
-        logger.warning("Supabase no configurado")
-        return []
+@router.get("/clientes/alquileres_api")
+async def get_alquileres(dni_cuit_cuil: str = Query(...)):
+    """Devuelve los alquileres asociados al cliente."""
     try:
         res = (
-            supabase.table("facturas")
-            .select("fecha,numero_factura,monto,estado")
+            supabase.table("alquileres")
+            .select("numero_bano,cliente_nombre,direccion,fecha_inicio,fecha_fin,observaciones")
             .eq("dni_cuit_cuil", dni_cuit_cuil)
             .execute()
         )
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
         return res.data or []
     except Exception as exc:
-        logger.error("Error consultando facturas: %s", exc)
-        raise HTTPException(status_code=500, detail="Error consultando datos")
+        logger.error(f"Error consultando alquileres: {exc}")
+        raise HTTPException(status_code=500, detail=f"Error consultando alquileres: {exc}")
 
-@router.get("/ventas_cliente")
-async def obtener_ventas(dni_cuit_cuil: str = Query(...)):
-    if not supabase:
-        logger.warning("Supabase no configurado")
-        return []
+@router.get("/clientes/facturas_pendientes_api")
+async def get_facturas_pendientes(dni_cuit_cuil: str = Query(...)):
+    """Devuelve las facturas pendientes del cliente."""
+    try:
+        res = (
+            supabase.table("facturas_pendientes")
+            .select("fecha,numero_factura,razon_social,monto_adeudado")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
+            .execute()
+        )
+        return res.data or []
+    except Exception as exc:
+        logger.error(f"Error consultando facturas pendientes: {exc}")
+        raise HTTPException(status_code=500, detail=f"Error consultando facturas: {exc}")
+
+@router.get("/clientes/compras_api")
+async def get_compras(dni_cuit_cuil: str = Query(...)):
+    """Devuelve las compras asociadas al cliente."""
     try:
         res = (
             supabase.table("ventas")
-            .select(
-                "fecha_operacion,tipo_bano,dni_cuit_cuil,nombre_cliente,forma_pago,observaciones"
-            )
+            .select("fecha_operacion,tipo_bano,forma_pago,observaciones")
             .eq("dni_cuit_cuil", dni_cuit_cuil)
             .execute()
         )
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        data = res.data or []
-        for item in data:
-            item["dni_cuit_cuil"] = item.get("dni_cuit_cuil") or ""
-        return data
+        return res.data or []
     except Exception as exc:
-        logger.error("Error consultando ventas: %s", exc)
-        raise HTTPException(status_code=500, detail="Error consultando datos")
+        logger.error(f"Error consultando compras: {exc}")
+        raise HTTPException(status_code=500, detail=f"Error consultando compras: {exc}")
 
-@router.get("/emails_cliente")
-async def obtener_emails_cliente(email: str = Query(...)):
-    if not supabase:
-        logger.warning("Supabase no configurado")
-        return []
+@router.get("/clientes/servicios_limpieza_api")
+async def get_servicios_limpieza(dni_cuit_cuil: str = Query(...)):
+    """Devuelve los servicios de limpieza asociados al cliente."""
+    try:
+        res = (
+            supabase.table("servicios_limpieza")
+            .select("fecha_servicio,numero_bano,tipo_servicio,remito_url,observaciones")
+            .eq("dni_cuit_cuil", dni_cuit_cuil)
+            .execute()
+        )
+        return res.data or []
+    except Exception as exc:
+        logger.error(f"Error consultando servicios de limpieza: {exc}")
+        raise HTTPException(status_code=500, detail=f"Error consultando limpiezas: {exc}")
+
+@router.get("/clientes/emails_api")
+async def get_emails(email: str = Query(...)):
+    """Devuelve los emails enviados al cliente."""
     try:
         res = (
             supabase.table("emails_enviados")
@@ -273,167 +157,35 @@ async def obtener_emails_cliente(email: str = Query(...)):
             .limit(10)
             .execute()
         )
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
         return res.data or []
     except Exception as exc:
-        logger.error("Error consultando emails cliente: %s", exc)
-        raise HTTPException(status_code=500, detail="Error consultando datos")
+        logger.error(f"Error consultando emails: {exc}")
+        raise HTTPException(status_code=500, detail=f"Error consultando emails: {exc}")
 
-@router.get("/cliente/api/dashboard")
-async def obtener_dashboard_cliente(
-    dni_cuit_cuil: str = Query(...),
-    email: str = Query(...),
-):
-    if not supabase:
-        logger.warning("Supabase no configurado")
-        return {}
+# ========= ENDPOINT PARA GUARDAR/ACTUALIZAR DATOS DEL CLIENTE =========
 
-    resultado = {
-        "facturas_pendientes": {"cantidad": 0, "monto_total": 0},
-        "moroso": False,
-        "alquileres": 0,
-        "ultimo_comprobante": None,
-        "proxima_limpieza": None,
-        "emails": [],
-    }
-
+@router.post("/clientes/guardar_datos_personales")
+async def guardar_datos_personales(request: Request):
+    """Guarda los datos personales del cliente."""
+    data = await request.json()
     try:
-        fact = (
-            supabase.table("facturas_pendientes")
-            .select("monto_adeudado")
-            .eq("dni_cuit_cuil", dni_cuit_cuil)
+        resultado = (
+            supabase.table("datos_personales_clientes")
+            .upsert(data, on_conflict="dni_cuit_cuil")
             .execute()
         )
-        datos = fact.data or []
-        resultado["facturas_pendientes"]["cantidad"] = len(datos)
-        total = sum(float(f.get("monto_adeudado") or 0) for f in datos)
-        resultado["facturas_pendientes"]["monto_total"] = total
-    except Exception as exc:
-        logger.error("Error facturas dashboard: %s", exc)
-
-    try:
-        mor = (
-            supabase.table("morosos")
-            .select("id")
-            .eq("dni_cuit_cuil", dni_cuit_cuil)
-            .maybe_single()
-            .execute()
+        if getattr(resultado, "error", None) is None:
+            return JSONResponse(
+                content={"mensaje": "¡Datos guardados correctamente!"},
+                status_code=200,
+            )
+        logger.error(f"Error guardando datos: {resultado.error}")
+        return JSONResponse(
+            content={"error": getattr(resultado.error, "message", str(resultado.error))},
+            status_code=400,
         )
-        if getattr(mor, "data", None):
-            resultado["moroso"] = True
-    except Exception as exc:
-        logger.error("Error morosidad dashboard: %s", exc)
-
-    try:
-        alq = (
-            supabase.table("alquileres")
-            .select("numero_bano")
-            .eq("dni_cuit_cuil", dni_cuit_cuil)
-            .execute()
-        )
-        resultado["alquileres"] = len(alq.data or [])
-        logger.info("Dashboard alquileres para %s: %s", dni_cuit_cuil, resultado["alquileres"])
-    except Exception as exc:
-        logger.error("Error alquileres dashboard: %s", exc)
-
-    try:
-        comp = (
-            supabase.table("comprobantes_pago")
-            .select("comprobante_url,fecha_envio")
-            .eq("dni_cuit_cuil", dni_cuit_cuil)
-            .order("fecha_envio", desc=True)
-            .limit(1)
-            .execute()
-        )
-        if comp.data:
-            resultado["ultimo_comprobante"] = comp.data[0]
-    except Exception as exc:
-        logger.error("Error comprobantes dashboard: %s", exc)
-
-    try:
-        from datetime import date
-        hoy = date.today().isoformat()
-        limp = (
-            supabase.table("servicios_limpieza")
-            .select("fecha_servicio,numero_bano")
-            .eq("dni_cuit_cuil", dni_cuit_cuil)
-            .gte("fecha_servicio", hoy)
-            .order("fecha_servicio")
-            .limit(1)
-            .execute()
-        )
-        if limp.data:
-            resultado["proxima_limpieza"] = limp.data[0]
-    except Exception as exc:
-        logger.error("Error limpiezas dashboard: %s", exc)
-
-    try:
-        emails = (
-            supabase.table("emails_enviados")
-            .select("fecha,asunto,estado")
-            .eq("email_destino", email)
-            .order("fecha", desc=True)
-            .limit(4)
-            .execute()
-        )
-        resultado["emails"] = emails.data or []
-    except Exception as exc:
-        logger.error("Error emails dashboard: %s", exc)
-
-    return resultado
-
-@router.post("/cliente/reporte")
-async def crear_reporte_cliente(request: Request):
-    datos = await request.json()
-    registro = {
-        "fecha": datos.get("fecha"),
-        "nombre_persona": datos.get("nombre_persona"),
-        "asunto": datos.get("motivo"),
-        "contenido": datos.get("observaciones"),
-    }
-    if "dni_cuit_cuil" in datos:
-        registro["dni_cuit_cuil"] = datos["dni_cuit_cuil"]
-    if not supabase:
-        logger.warning("Supabase no configurado")
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
-    try:
-        res = supabase.table("reportes").insert(registro).execute()
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        return {"ok": True}
-    except Exception as exc:
-        logger.error("Error guardando reporte cliente: %s", exc)
-        raise HTTPException(status_code=500, detail="Error guardando reporte")
-
-async def enviar_email(destino: str, asunto: str, cuerpo: str) -> None:
-    email_origen = os.getenv("EMAIL_ORIGEN")
-    email_pwd = os.getenv("EMAIL_PASSWORD")
-    smtp_server = os.getenv("SMTP_SERVER")
-    smtp_port = os.getenv("SMTP_PORT")
-    if not all([email_origen, email_pwd, smtp_server, smtp_port]):
-        raise Exception("SMTP no configurado")
-    msg = EmailMessage()
-    msg["From"] = email_origen
-    msg["To"] = destino
-    msg["Subject"] = asunto
-    msg.set_content(cuerpo)
-    with smtplib.SMTP_SSL(smtp_server, int(smtp_port)) as smtp:
-        smtp.login(email_origen, email_pwd)
-        smtp.send_message(msg)
-
-@router.post("/api/enviar_email_cliente")
-async def enviar_email_cliente(data: dict = Body(...)):
-    destinatario = data.get("destinatario", "").strip()
-    asunto = data.get("asunto", "").strip()
-    mensaje = data.get("mensaje", "").strip()
-    if not asunto or not mensaje:
-        raise HTTPException(status_code=400, detail="Motivo y mensaje obligatorios.")
-    if destinatario != "portatilesmercedes.bot@gmail.com":
-        raise HTTPException(status_code=400, detail="Destinatario no permitido.")
-    try:
-        await enviar_email(destinatario, asunto, mensaje)
-        return {"ok": True, "msg": "Mensaje enviado correctamente"}
     except Exception as e:
-        logger.error("Error enviando email de cliente: %s", e)
-        raise HTTPException(status_code=500, detail="Error enviando email")
+        logger.error(f"Excepción al guardar datos: {str(e)}")
+        return JSONResponse(
+            content={"error": f"Error interno: {str(e)}"}, status_code=500
+        )

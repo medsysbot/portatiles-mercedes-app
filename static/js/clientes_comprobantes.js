@@ -47,6 +47,26 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
+  const form = document.getElementById('formComprobante');
+  const msg = document.getElementById('msgComprobante');
+  const btnNuevo = document.getElementById('btnMostrarForm');
+  const contTabla = document.getElementById('contenedorTabla');
+  const btnCancelar = document.getElementById('btnCancelarForm');
+
+  if (form) form.style.display = 'none';
+
+  btnNuevo?.addEventListener('click', () => {
+    form.style.display = 'block';
+    contTabla.style.display = 'none';
+    btnNuevo.style.display = 'none';
+  });
+
+  btnCancelar?.addEventListener('click', () => {
+    form.style.display = 'none';
+    contTabla.style.display = 'block';
+    btnNuevo.style.display = 'inline-block';
+  });
+
   async function cargarComprobantes() {
     const dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {
@@ -75,6 +95,33 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
   }
+
+  form?.addEventListener('submit', async ev => {
+    ev.preventDefault();
+    msg.classList.add('d-none');
+    const datos = new FormData(form);
+    try {
+      const resp = await fetch('/api/comprobantes_pago', {
+        method: 'POST',
+        headers: { Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '') },
+        body: datos
+      });
+      const res = await resp.json();
+      if (resp.ok && res.ok) {
+        msg.textContent = 'Comprobante cargado correctamente';
+        msg.className = 'alert alert-success';
+        form.reset();
+        await cargarComprobantes();
+        btnCancelar?.click();
+      } else {
+        throw new Error(res.detail || 'Error al subir');
+      }
+    } catch (err) {
+      msg.textContent = err.message;
+      msg.className = 'alert alert-danger';
+    }
+    msg.classList.remove('d-none');
+  });
 
   cargarComprobantes();
 });

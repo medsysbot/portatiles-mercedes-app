@@ -1,6 +1,6 @@
 // ============= AUTENTICACIÓN Y TOKEN =============
 function getAuthToken() {
-  return localStorage.getItem("access_token") || localStorage.getItem("token");
+  return localStorage.getItem("access_token");
 }
 async function fetchConAuth(url, options = {}) {
   const token = getAuthToken();
@@ -19,26 +19,6 @@ async function fetchConAuth(url, options = {}) {
     return;
   }
   return resp;
-}
-
-// ============= UTILIDADES =============
-function getUsuario() {
-  try {
-    return JSON.parse(localStorage.getItem("usuario_obj")) || {};
-  } catch (e) {
-    return {};
-  }
-}
-function guardarUsuario(usuario) {
-  // Guarda los campos necesarios para clientes igual que empleados
-  if (usuario && usuario.dni_cuit_cuil && usuario.email) {
-    localStorage.setItem("usuario_obj", JSON.stringify({
-      dni_cuit_cuil: usuario.dni_cuit_cuil,
-      email: usuario.email,
-      nombre: usuario.nombre || "",
-      // ...otros datos que necesites
-    }));
-  }
 }
 function showMsg(divId, msg, type="danger") {
   const el = document.getElementById(divId);
@@ -102,21 +82,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('tablaLimpieza')) actualizarLimpiezas();
   if (document.getElementById('tablaEmails')) actualizarEmails();
   if (document.getElementById('tablaComprobantes')) actualizarComprobantes();
-  // Panel resumen
   if (document.getElementById('proxLimpieza')) actualizarCardsCliente();
   if (document.getElementById('panelUltimoComprobante')) actualizarUltimoComprobante();
   if (document.getElementById('calendario')) inicializarCalendarioCliente();
 });
 
-// ============= FUNCIONES DE CARGA POR SECCIÓN =============
-
 // ------ ALQUILERES ------
 async function actualizarAlquileres() {
-  const usuario = getUsuario();
-  const dni = usuario.dni_cuit_cuil || "";
-  if (!dni) return showMsg("tablaAlquileres", "No hay datos de usuario");
   try {
-    const res = await fetchConAuth(`/clientes/alquileres_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
+    const res = await fetchConAuth(`/clientes/alquileres_api`);
     if (!res) return;
     const datos = await res.json();
     let html = "<table class='table table-striped'><thead><tr><th>#Baño</th><th>Dirección</th><th>Desde</th><th>Hasta</th><th>Obs.</th></tr></thead><tbody>";
@@ -139,11 +113,8 @@ async function actualizarAlquileres() {
 
 // ------ FACTURAS ------
 async function actualizarFacturas() {
-  const usuario = getUsuario();
-  const dni = usuario.dni_cuit_cuil || "";
-  if (!dni) return showMsg("tablaFacturas", "No hay datos de usuario");
   try {
-    const res = await fetchConAuth(`/clientes/facturas_pendientes_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
+    const res = await fetchConAuth(`/clientes/facturas_pendientes_api`);
     if (!res) return;
     const datos = await res.json();
     let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>Nro</th><th>Razón social</th><th>Monto</th></tr></thead><tbody>";
@@ -165,11 +136,8 @@ async function actualizarFacturas() {
 
 // ------ COMPRAS ------
 async function actualizarCompras() {
-  const usuario = getUsuario();
-  const dni = usuario.dni_cuit_cuil || "";
-  if (!dni) return showMsg("tablaCompras", "No hay datos de usuario");
   try {
-    const res = await fetchConAuth(`/clientes/compras_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
+    const res = await fetchConAuth(`/clientes/compras_api`);
     if (!res) return;
     const datos = await res.json();
     let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>Tipo Baño</th><th>Forma de pago</th><th>Observaciones</th></tr></thead><tbody>";
@@ -191,11 +159,8 @@ async function actualizarCompras() {
 
 // ------ LIMPIEZAS ------
 async function actualizarLimpiezas() {
-  const usuario = getUsuario();
-  const dni = usuario.dni_cuit_cuil || "";
-  if (!dni) return showMsg("tablaLimpieza", "No hay datos de usuario");
   try {
-    const res = await fetchConAuth(`/clientes/servicios_limpieza_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
+    const res = await fetchConAuth(`/clientes/servicios_limpieza_api`);
     if (!res) return;
     const datos = await res.json();
     let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>#Baño</th><th>Tipo</th><th>Remito</th></tr></thead><tbody>";
@@ -217,120 +182,5 @@ async function actualizarLimpiezas() {
 
 // ------ EMAILS ------
 async function actualizarEmails() {
-  const usuario = getUsuario();
-  if (!usuario.email) return showMsg("tablaEmails", "No hay email de usuario");
   try {
-    const res = await fetchConAuth(`/clientes/emails_api?email=${encodeURIComponent(usuario.email)}`);
-    if (!res) return;
-    const datos = await res.json();
-    let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>Asunto</th><th>Estado</th></tr></thead><tbody>";
-    if (!datos.length) html += "<tr><td colspan='3' class='text-center'>Sin emails</td></tr>";
-    datos.forEach(em => {
-      html += `<tr>
-        <td>${em.fecha||"-"}</td>
-        <td>${em.asunto||"-"}</td>
-        <td>${em.estado||"-"}</td>
-      </tr>`;
-    });
-    html += "</tbody></table>";
-    document.getElementById("tablaEmails").innerHTML = html;
-  } catch (e) {
-    showMsg("tablaEmails", "Error al cargar emails");
-  }
-}
-
-// ------ COMPROBANTES ------
-async function actualizarComprobantes() {
-  const usuario = getUsuario();
-  const dni = usuario.dni_cuit_cuil || "";
-  if (!dni) return showMsg("tablaComprobantes", "No hay datos de usuario");
-  try {
-    const res = await fetchConAuth(`/clientes/comprobantes_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
-    if (!res) return;
-    const comprobantes = await res.json();
-    $('#tablaComprobantes').DataTable({
-      data: comprobantes,
-      destroy: true,
-      columns: [
-        { data: null, defaultContent: '', orderable: false },
-        { data: 'nombre_cliente', defaultContent: '-' },
-        { data: 'dni_cuit_cuil', defaultContent: '-' },
-        { data: 'numero_factura', defaultContent: '-' },
-        { data: 'comprobante_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : '-', defaultContent: '-' },
-        { data: 'fecha', defaultContent: '-' }
-      ]
-    });
-  } catch (e) {
-    showMsg("tablaComprobantes", "Error al cargar comprobantes");
-  }
-}
-
-// ------ PANEL RESUMEN ------
-async function actualizarCardsCliente() {
-  try {
-    const usuario = getUsuario();
-    const dni = usuario.dni_cuit_cuil || "";
-    const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
-    if (!res) return;
-    const data = await res.json();
-    document.getElementById("proxLimpieza").textContent =
-      data.proxima_limpieza && data.proxima_limpieza.fecha_servicio
-        ? data.proxima_limpieza.fecha_servicio
-        : "-";
-    document.getElementById("cntBaños").textContent = data.alquileres ?? "-";
-    document.getElementById("cntFactPend").textContent =
-      data.facturas_pendientes && typeof data.facturas_pendientes.cantidad === "number"
-        ? data.facturas_pendientes.cantidad
-        : "-";
-  } catch (err) {
-    document.getElementById("proxLimpieza").textContent = "-";
-    document.getElementById("cntBaños").textContent = "-";
-    document.getElementById("cntFactPend").textContent = "-";
-  }
-}
-
-async function actualizarUltimoComprobante() {
-  try {
-    const usuario = getUsuario();
-    const dni = usuario.dni_cuit_cuil || "";
-    const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
-    if (!res) return;
-    const data = await res.json();
-    const comprobante = data.ultimo_comprobante;
-    const el = document.getElementById("panelUltimoComprobante");
-    if (!el) return;
-    if (!comprobante) {
-      el.innerHTML = `<div class="alert alert-secondary text-center mb-0">No hay comprobantes registrados</div>`;
-    } else {
-      el.innerHTML = `
-        <div class="d-flex flex-column align-items-center justify-content-center p-2">
-          <div><strong>Fecha:</strong> ${comprobante.fecha_envio || "-"}</div>
-          <div><strong>URL:</strong> <a href="${comprobante.comprobante_url}" target="_blank">${comprobante.comprobante_url}</a></div>
-        </div>
-      `;
-    }
-  } catch (e) {
-    const el = document.getElementById("panelUltimoComprobante");
-    if (el) el.innerHTML = `<div class="alert alert-danger mb-0">Error al cargar comprobante</div>`;
-  }
-}
-
-// ------ CALENDARIO ------
-function inicializarCalendarioCliente() {
-  if (typeof FullCalendar !== "undefined") {
-    const calendarEl = document.getElementById('calendario');
-    if (calendarEl) {
-      fetchConAuth("/cliente/api/limpiezas_programadas")
-        .then(resp => resp.json())
-        .then(events => {
-          const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            locale: 'es',
-            events: events,
-            height: 400
-          });
-          calendar.render();
-        });
-    }
-  }
-}
+    const res = await fetchConAuth(`/clientes/emails

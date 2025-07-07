@@ -39,11 +39,14 @@ function guardar(key, data) {
   const opcionesGrafico = {
     responsive: true,
     aspectRatio: 2,
-    scales: { 
-      y: { suggestedMin: 0, suggestedMax: 10 },
-      x: { grid: { color: 'rgba(255,255,255,0.1)' } }
+    scales: {
+      y: { suggestedMin: 0, suggestedMax: 10, ticks: { color: '#000' } },
+      x: {
+        grid: { color: 'rgba(0,0,0,0.1)' },
+        ticks: { color: '#000' }
+      }
     },
-    plugins: { legend: { labels: { color: '#ffffff' } } }
+    plugins: { legend: { labels: { color: '#000' } } }
   };
 
   const charts = {

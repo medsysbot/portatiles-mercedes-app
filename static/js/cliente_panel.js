@@ -77,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('tablaCompras')) actualizarCompras();
   if (document.getElementById('tablaLimpieza')) actualizarLimpiezas();
   if (document.getElementById('tablaComprobantes')) actualizarComprobantes();
+  if (document.getElementById('proxLimpieza')) cargarResumen();
 });
 
 // ------ ALQUILERES ------
@@ -193,4 +194,72 @@ async function actualizarComprobantes() {
   } catch (e) {
     showMsg("tablaComprobantes", "Error al cargar comprobantes");
   }
+}
+
+// ------ RESUMEN (CARDS, CALENDARIO Y ÚLTIMO COMPROBANTE) ------
+async function cargarResumen() {
+  try {
+    const [alqRes, factRes, limpRes, compRes] = await Promise.all([
+      fetchConAuth('/clientes/alquileres_api'),
+      fetchConAuth('/clientes/facturas_pendientes_api'),
+      fetchConAuth('/cliente/api/limpiezas_programadas'),
+      fetchConAuth('/clientes/comprobantes_api')
+    ]);
+
+    const alquileres = alqRes ? await alqRes.json() : [];
+    const facturas = factRes ? await factRes.json() : [];
+    const limpiezas = limpRes ? await limpRes.json() : [];
+    const comprobantes = compRes ? await compRes.json() : [];
+
+    document.getElementById('cntBaños').textContent = alquileres.length;
+    document.getElementById('cntFactPend').textContent = facturas.length;
+
+    if (limpiezas.length) {
+      limpiezas.sort((a, b) => new Date(a.fecha_limpieza) - new Date(b.fecha_limpieza));
+      document.getElementById('proxLimpieza').textContent = limpiezas[0].fecha_limpieza || '-';
+    }
+
+    cargarCalendario(limpiezas);
+    mostrarUltimoComprobante(comprobantes);
+  } catch (err) {
+    console.error('Error cargando resumen:', err);
+  }
+}
+
+function cargarCalendario(eventos) {
+  const calendarioEl = document.getElementById('calendario');
+  if (!calendarioEl || !window.FullCalendar) return;
+
+  const eventosCal = (eventos || []).map(ev => ({
+    title: ev.numero_bano || '',
+    start: ev.fecha_limpieza
+  }));
+
+  const calendario = new FullCalendar.Calendar(calendarioEl, {
+    initialView: 'dayGridMonth',
+    height: 'auto',
+    headerToolbar: { start: '', center: 'title', end: 'today,dayGridMonth,timeGridWeek,listWeek' },
+    locale: 'es',
+    titleFormat: { year: 'numeric', month: 'long' },
+    events: eventosCal
+  });
+  calendario.render();
+}
+
+function mostrarUltimoComprobante(comprobantes) {
+  const panel = document.getElementById('panelUltimoComprobante');
+  if (!panel) return;
+
+  if (!comprobantes.length) {
+    panel.innerHTML = '<p class="text-center">Sin comprobantes</p>';
+    return;
+  }
+
+  comprobantes.sort((a, b) => new Date(b.fecha_envio) - new Date(a.fecha_envio));
+  const ultimo = comprobantes[0];
+  panel.innerHTML = `
+    <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
+    <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
+    ${ultimo.comprobante_url ? `<a href="${ultimo.comprobante_url}" target="_blank" class="btn btn-primary btn-sm">Ver comprobante</a>` : ''}
+  `;
 }

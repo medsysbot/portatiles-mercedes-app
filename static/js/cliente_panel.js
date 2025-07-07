@@ -1,29 +1,38 @@
-// Archivo: static/js/cliente_panel.js
+// static/js/cliente_panel.js
+// Copia exacta de la lógica de empleados, adaptada solo textos y endpoints si hace falta
 
 // ============= AUTENTICACIÓN Y TOKEN =============
-
-// Obtiene token del storage y lo usa en cada fetch (igual empleados)
 function getAuthToken() {
   return localStorage.getItem("access_token");
 }
-
-// Función helper para fetch con token
 async function fetchConAuth(url, options = {}) {
   const token = getAuthToken();
-  const headers = options.headers || {};
-  headers["Authorization"] = "Bearer " + token;
-  options.headers = headers;
+  if (!token) {
+    window.location.href = "/login";
+    return;
+  }
+  options.headers = {
+    ...(options.headers || {}),
+    "Authorization": "Bearer " + token
+  };
   const resp = await fetch(url, options);
   if (resp.status === 401) {
+    localStorage.clear();
     window.location.href = "/login";
     return;
   }
   return resp;
 }
 
-// ============= SIDEBAR Y TOPBAR =============
+// ============= LÓGICA PANEL =============
 document.addEventListener('DOMContentLoaded', () => {
-  // Sidebar: navegación y toggle
+  // Barra lateral plegable (igual empleados)
+  document.querySelector('[data-widget="pushmenu"]')?.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.body.classList.toggle('sidebar-collapse');
+  });
+
+  // Sidebar navigation
   document.querySelectorAll('.nav-sidebar .nav-link').forEach(link => {
     link.addEventListener('click', function(e) {
       const href = this.getAttribute('href');
@@ -37,31 +46,27 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
   });
-  // Botón menú (hamburguesa) para mostrar/ocultar sidebar
-  document.getElementById('menu-toggle')?.addEventListener('click', () => {
-    document.body.classList.toggle('sidebar-collapse');
-  });
+
   // Cerrar sesión
   document.getElementById('btnLogout')?.addEventListener('click', () => {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('usuario');
+    localStorage.clear();
     window.location.href = '/login';
   });
 
-  // ============= VISUAL Y FONDO =============
-  document.body.classList.add('bg-black');
-  document.body.style.backgroundImage = "url('/static/imagenes/fondo-panel.png')";
-  document.body.style.backgroundSize = "cover";
-  document.body.style.backgroundAttachment = "fixed";
+  // Fondo: barra superior blanca, barra lateral gris, imagen solo en contenido principal
+  document.querySelector('body').classList.add('layout-fixed');
+  document.querySelector('.content-wrapper').style.backgroundImage = "url('/static/imagenes/fondo-panel.png')";
+  document.querySelector('.content-wrapper').style.backgroundSize = "cover";
+  document.querySelector('.content-wrapper').style.backgroundAttachment = "fixed";
+  document.querySelector('.main-header').classList.add('bg-white');
+  document.querySelector('.main-header').classList.remove('navbar-dark');
+  document.querySelector('.main-header').classList.add('navbar-light');
+  document.querySelector('.main-sidebar').style.backgroundColor = "#23272b";
+  document.querySelector('.main-sidebar').style.minHeight = "100vh";
+  document.querySelector('.sidebar').style.minHeight = "calc(100vh - 57px)";
+  document.body.style.background = "#000";
 
-  // ============= INICIALIZAR CARDS Y ÚLTIMO COMPROBANTE =============
-  actualizarCardsCliente();
-  actualizarUltimoComprobante();
-
-  // ============= CALENDARIO (igual empleados) =============
-  inicializarCalendarioCliente();
-
-  // ============= TABLAS: SCROLL INFINITO Y ESTILO (igual empleados) =============
+  // Scroll infinito, igual empleados
   document.querySelectorAll('.tabla-scroll').forEach(tabla => {
     tabla.style.background = "#111";
     tabla.parentElement.style.overflowX = "auto";
@@ -69,13 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.parentElement.style.maxHeight = "500px";
   });
 
-  // CSS global seguro
-  if (!document.querySelector('link[href*="style.css"]')) {
-    const link = document.createElement('link');
-    link.rel = 'stylesheet';
-    link.href = '/static/css/style.css';
-    document.head.appendChild(link);
-  }
+  // Inicializar cards y calendario
+  actualizarCardsCliente();
+  actualizarUltimoComprobante();
+  inicializarCalendarioCliente();
 });
 
 // ============= CARDS RESUMEN =============
@@ -102,7 +104,7 @@ async function actualizarCardsCliente() {
   }
 }
 
-// ============= ÚLTIMO COMPROBANTE PAGADO =============
+// ============= ÚLTIMO COMPROBANTE AL LADO DEL CALENDARIO =============
 async function actualizarUltimoComprobante() {
   try {
     const usuario = JSON.parse(localStorage.getItem("usuario_obj")) || {};
@@ -111,7 +113,7 @@ async function actualizarUltimoComprobante() {
     if (!res) return;
     const data = await res.json();
     const comprobante = data.ultimo_comprobante;
-    const el = document.getElementById("cardUltimoComprobante");
+    const el = document.getElementById("panelUltimoComprobante");
     if (!el) return;
     if (!comprobante) {
       el.innerHTML = `<div class="alert alert-secondary text-center mb-0">No hay comprobantes registrados</div>`;
@@ -124,7 +126,7 @@ async function actualizarUltimoComprobante() {
       `;
     }
   } catch (e) {
-    const el = document.getElementById("cardUltimoComprobante");
+    const el = document.getElementById("panelUltimoComprobante");
     if (el) el.innerHTML = `<div class="alert alert-danger mb-0">Error al cargar comprobante</div>`;
   }
 }

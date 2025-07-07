@@ -1,6 +1,6 @@
 """
 Archivo: routes/cliente_panel.py
-Descripción: Rutas backend para el panel de clientes (idéntico empleados)
+Descripción: Panel de clientes, estructura y autenticación igual a empleados.
 """
 
 from fastapi import APIRouter, Request, Depends
@@ -10,6 +10,7 @@ import os
 import logging
 
 templates = Jinja2Templates(directory="templates")
+
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE = os.path.join(LOG_DIR, "cliente_panel.log")
@@ -24,14 +25,15 @@ if not logger.handlers:
 
 router = APIRouter()
 
+# Panel principal - igual a empleados
 @router.get("/cliente/panel")
 async def panel_cliente(request: Request, usuario: dict = Depends(get_current_user)):
-    logger.info(f"Cliente accede al panel: {usuario.get('email','')}")
+    logger.info(f"[CLIENTE_PANEL] Usuario accede: {usuario.get('email','-')} | Token: {usuario.get('token','-')}")
     return templates.TemplateResponse(
         "cliente_panel.html", {"request": request, "usuario": usuario}
     )
 
-# --- Módulos individuales (no se modifican, sólo referencia actual del ZIP) ---
+# Módulos (no cambiar nombres, solo garantizar acceso igual empleados)
 @router.get("/clientes/datos_personales")
 async def clientes_datos_personales(request: Request, usuario: dict = Depends(get_current_user)):
     return templates.TemplateResponse(

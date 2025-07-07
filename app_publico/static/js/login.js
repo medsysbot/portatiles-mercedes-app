@@ -31,6 +31,7 @@ if (form) {
                         email: data.usuario.email,
                         nombre: data.usuario.nombre
                     }));
+                    localStorage.setItem("dni_cuit_cuil", data.usuario.dni_cuit_cuil);
                     window.location.href = "/cliente/panel";
                     return;
                 }
@@ -62,6 +63,7 @@ if (form) {
                             email: datos.email,
                             nombre: datos.nombre
                         }));
+                        localStorage.setItem("dni_cuit_cuil", datos.dni_cuit_cuil);
                         window.location.href = "/cliente/panel";
                     } else {
                         if (errorEl) errorEl.textContent = "No se pudo recuperar los datos del cliente.";

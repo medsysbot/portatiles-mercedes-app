@@ -39,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
+      {
+        data: null,
+        orderable: false,
+        render: d => `<input type="checkbox" class="pm-check" data-id="${d.id}">`
+      },
       { data: 'nombre_cliente' },
       { data: 'dni_cuit_cuil' },
       { data: 'numero_factura' },
@@ -52,6 +57,40 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
   const btnCancelar = document.getElementById('btnCancelarForm');
+  const btnEliminar = document.getElementById('btnEliminarComprobantes');
+
+  function actualizarBtnEliminar() {
+    if (!btnEliminar) return;
+    const marcados = document.querySelectorAll('.pm-check:checked').length;
+    btnEliminar.disabled = marcados === 0;
+  }
+
+  document.addEventListener('change', ev => {
+    if (ev.target.matches('.pm-check')) actualizarBtnEliminar();
+  });
+
+  btnEliminar?.addEventListener('click', async () => {
+    const checks = document.querySelectorAll('.pm-check:checked');
+    if (!checks.length) return;
+    if (!confirm('¿Eliminar los comprobantes seleccionados?')) return;
+    let dni = localStorage.getItem('dni_cuit_cuil');
+    if (!dni) {
+      const usr = localStorage.getItem('usuario_obj');
+      if (usr) {
+        try { dni = JSON.parse(usr).dni_cuit_cuil; } catch (e) {}
+      }
+    }
+    for (const ch of checks) {
+      const id = ch.dataset.id;
+      try {
+        await fetchConAuth(`/api/comprobantes_pago/${id}?dni_cuit_cuil=${dni}`, {
+          method: 'DELETE'
+        });
+      } catch (e) { console.error('Error eliminando', e); }
+    }
+    await cargarComprobantes();
+    actualizarBtnEliminar();
+  });
 
   if (form) form.style.display = 'none';
 
@@ -68,7 +107,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarComprobantes() {
-    const dni = localStorage.getItem('dni_cuit_cuil');
+    let dni = localStorage.getItem('dni_cuit_cuil');
+    if (!dni) {
+      const usr = localStorage.getItem('usuario_obj');
+      if (usr) {
+        try {
+          dni = JSON.parse(usr).dni_cuit_cuil;
+        } catch (e) { /* ignore */ }
+      }
+    }
     if (!dni) {
       console.error('No se encontró DNI del cliente en localStorage');
       return;
@@ -79,6 +126,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const datos = await resp.json();
       tabla.clear();
       tabla.rows.add(datos).draw();
+      document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
+      actualizarBtnEliminar();
       const mensaje = document.getElementById('mensajeComprobantes');
       if (mensaje) {
         mensaje.style.display = datos.length ? 'none' : 'block';
@@ -113,6 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
         await cargarComprobantes();
         btnCancelar?.click();
+        actualizarBtnEliminar();
       } else {
         throw new Error(res.detail || 'Error al subir');
       }

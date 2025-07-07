@@ -52,6 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
+  const buscador = document.getElementById('busquedaComprobantes');
+  const btnBuscar = document.getElementById('btnBuscarComprobante');
+  const mensajeDiv = document.getElementById('mensajeComprobantes');
+  let registros = [];
+
   const form = document.getElementById('formComprobante');
   const msg = document.getElementById('msgComprobante');
   const btnNuevo = document.getElementById('btnMostrarForm');
@@ -106,6 +111,28 @@ document.addEventListener('DOMContentLoaded', () => {
     btnNuevo?.classList.remove('d-none');
   });
 
+  function mostrarComprobantes(lista) {
+    tabla.clear();
+    tabla.rows.add(lista).draw();
+  }
+
+  function filtrar() {
+    const q = (buscador.value || '').toLowerCase();
+    const filtrados = registros.filter(c =>
+      (c.nombre_cliente || '').toLowerCase().includes(q) ||
+      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      String(c.numero_factura || '').toLowerCase().includes(q)
+    );
+    mostrarComprobantes(filtrados);
+    if (mensajeDiv) {
+      mensajeDiv.style.display = filtrados.length ? 'none' : 'block';
+      mensajeDiv.textContent = filtrados.length ? '' : 'Sin registros';
+    }
+  }
+
+  buscador?.addEventListener('input', filtrar);
+  btnBuscar?.addEventListener('click', filtrar);
+
   async function cargarComprobantes() {
     let dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {
@@ -123,15 +150,13 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await fetchConAuth(`/api/comprobantes_pago?dni_cuit_cuil=${dni}`);
       if (!resp.ok) throw new Error('Error consultando comprobantes');
-      const datos = await resp.json();
-      tabla.clear();
-      tabla.rows.add(datos).draw();
+      registros = await resp.json();
+      mostrarComprobantes(registros);
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
-      const mensaje = document.getElementById('mensajeComprobantes');
-      if (mensaje) {
-        mensaje.style.display = datos.length ? 'none' : 'block';
-        mensaje.textContent = datos.length ? '' : 'Sin registros';
+      if (mensajeDiv) {
+        mensajeDiv.style.display = registros.length ? 'none' : 'block';
+        mensajeDiv.textContent = registros.length ? '' : 'Sin registros';
       }
       const errorDiv = document.getElementById('errorComprobantes');
       if (errorDiv) errorDiv.classList.add('d-none');

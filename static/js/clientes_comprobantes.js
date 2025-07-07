@@ -92,18 +92,18 @@ document.addEventListener('DOMContentLoaded', () => {
     actualizarBtnEliminar();
   });
 
-  if (form) form.style.display = 'none';
+  if (form) form.classList.add('d-none');
 
   btnNuevo?.addEventListener('click', () => {
-    form.style.display = 'block';
-    contTabla.style.display = 'none';
-    btnNuevo.style.display = 'none';
+    form?.classList.remove('d-none');
+    contTabla?.classList.add('d-none');
+    btnNuevo?.classList.add('d-none');
   });
 
   btnCancelar?.addEventListener('click', () => {
-    form.style.display = 'none';
-    contTabla.style.display = 'block';
-    btnNuevo.style.display = 'inline-block';
+    form?.classList.add('d-none');
+    contTabla?.classList.remove('d-none');
+    btnNuevo?.classList.remove('d-none');
   });
 
   async function cargarComprobantes() {

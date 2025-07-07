@@ -90,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('tablaCompras')) actualizarCompras();
   if (document.getElementById('tablaLimpieza')) actualizarLimpiezas();
   if (document.getElementById('tablaEmails')) actualizarEmails();
+  if (document.getElementById('tablaComprobantes')) actualizarComprobantes();
   // Panel resumen
   if (document.getElementById('proxLimpieza')) actualizarCardsCliente();
   if (document.getElementById('panelUltimoComprobante')) actualizarUltimoComprobante();
@@ -227,7 +228,33 @@ async function actualizarEmails() {
   }
 }
 
-// ------ PANEL RESUMEN (ya lo tenías) ------
+// ------ COMPROBANTES ------
+async function actualizarComprobantes() {
+  const usuario = getUsuario();
+  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
+  if (!dni) return showMsg("tablaComprobantes", "No hay datos de usuario");
+  try {
+    const res = await fetchConAuth(`/clientes/comprobantes_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
+    if (!res) return;
+    const comprobantes = await res.json();
+    $('#tablaComprobantes').DataTable({
+      data: comprobantes,
+      destroy: true,
+      columns: [
+        { data: null, defaultContent: '', orderable: false },
+        { data: 'nombre_cliente', defaultContent: '-' },
+        { data: 'dni_cuit_cuil', defaultContent: '-' },
+        { data: 'numero_factura', defaultContent: '-' },
+        { data: 'comprobante_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : '-', defaultContent: '-' },
+        { data: 'fecha', defaultContent: '-' }
+      ]
+    });
+  } catch (e) {
+    showMsg("tablaComprobantes", "Error al cargar comprobantes");
+  }
+}
+
+// ------ PANEL RESUMEN ------
 async function actualizarCardsCliente() {
   try {
     const usuario = getUsuario();

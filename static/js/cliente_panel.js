@@ -23,7 +23,6 @@ async function fetchConAuth(url, options = {}) {
 
 // ============= UTILIDADES =============
 function getUsuario() {
-  // Debe guardarse correctamente al loguear: dni_cuit_cuil y email
   try {
     return JSON.parse(localStorage.getItem("usuario_obj")) || {};
   } catch (e) {
@@ -102,10 +101,10 @@ document.addEventListener('DOMContentLoaded', () => {
 // ------ ALQUILERES ------
 async function actualizarAlquileres() {
   const usuario = getUsuario();
-  const dni = usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaAlquileres", "No hay datos de usuario");
   try {
-    const res = await fetchConAuth(`/alquileres_cliente?dni_cuit_cuil=${encodeURIComponent(dni)}`);
+    const res = await fetchConAuth(`/clientes/alquileres_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
     if (!res) return;
     const datos = await res.json();
     let html = "<table class='table table-striped'><thead><tr><th>#Baño</th><th>Dirección</th><th>Desde</th><th>Hasta</th><th>Obs.</th></tr></thead><tbody>";
@@ -129,10 +128,10 @@ async function actualizarAlquileres() {
 // ------ FACTURAS ------
 async function actualizarFacturas() {
   const usuario = getUsuario();
-  const dni = usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaFacturas", "No hay datos de usuario");
   try {
-    const res = await fetchConAuth(`/facturas_pendientes_cliente?dni=${encodeURIComponent(dni)}`);
+    const res = await fetchConAuth(`/clientes/facturas_pendientes_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
     if (!res) return;
     const datos = await res.json();
     let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>Nro</th><th>Razón social</th><th>Monto</th></tr></thead><tbody>";
@@ -155,10 +154,10 @@ async function actualizarFacturas() {
 // ------ COMPRAS ------
 async function actualizarCompras() {
   const usuario = getUsuario();
-  const dni = usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaCompras", "No hay datos de usuario");
   try {
-    const res = await fetchConAuth(`/ventas_cliente?dni_cuit_cuil=${encodeURIComponent(dni)}`);
+    const res = await fetchConAuth(`/clientes/compras_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
     if (!res) return;
     const datos = await res.json();
     let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>Tipo Baño</th><th>Forma de pago</th><th>Observaciones</th></tr></thead><tbody>";
@@ -181,10 +180,10 @@ async function actualizarCompras() {
 // ------ LIMPIEZAS ------
 async function actualizarLimpiezas() {
   const usuario = getUsuario();
-  const dni = usuario.dni_cuit_cuil || "";
+  const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
   if (!dni) return showMsg("tablaLimpieza", "No hay datos de usuario");
   try {
-    const res = await fetchConAuth(`/limpiezas_cliente?dni_cuit_cuil=${encodeURIComponent(dni)}`);
+    const res = await fetchConAuth(`/clientes/servicios_limpieza_api?dni_cuit_cuil=${encodeURIComponent(dni)}`);
     if (!res) return;
     const datos = await res.json();
     let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>#Baño</th><th>Tipo</th><th>Remito</th></tr></thead><tbody>";
@@ -209,7 +208,7 @@ async function actualizarEmails() {
   const usuario = getUsuario();
   if (!usuario.email) return showMsg("tablaEmails", "No hay email de usuario");
   try {
-    const res = await fetchConAuth(`/emails_cliente?email=${encodeURIComponent(usuario.email)}`);
+    const res = await fetchConAuth(`/clientes/emails_api?email=${encodeURIComponent(usuario.email)}`);
     if (!res) return;
     const datos = await res.json();
     let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>Asunto</th><th>Estado</th></tr></thead><tbody>";
@@ -228,11 +227,11 @@ async function actualizarEmails() {
   }
 }
 
-// ------ PANEL RESUMEN ------
+// ------ PANEL RESUMEN (ya lo tenías) ------
 async function actualizarCardsCliente() {
   try {
     const usuario = getUsuario();
-    const dni = usuario.dni_cuit_cuil || "";
+    const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
     const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
     if (!res) return;
     const data = await res.json();
@@ -255,7 +254,7 @@ async function actualizarCardsCliente() {
 async function actualizarUltimoComprobante() {
   try {
     const usuario = getUsuario();
-    const dni = usuario.dni_cuit_cuil || "";
+    const dni = usuario.dni_quit_quill || usuario.dni_cuit_cuil || "";
     const res = await fetchConAuth(`/cliente/api/dashboard?dni_cuit_cuil=${encodeURIComponent(dni)}&email=${encodeURIComponent(usuario.email)}`);
     if (!res) return;
     const data = await res.json();

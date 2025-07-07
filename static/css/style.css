@@ -376,6 +376,22 @@ body.panel-cliente .buscador-tabla::placeholder {
 .saludo-splash .linea-uno,
 .saludo-splash .linea-dos {
   display: block;
+  margin: 0;
+}
+
+.saludo-splash .linea-uno {
+  font-size: 3rem;
+  font-weight: 700;
+}
+
+.saludo-splash .linea-dos {
+  font-size: 4rem;
+  font-weight: 900;
+}
+
+@media (max-width: 600px) {
+  .saludo-splash .linea-uno { font-size: 6vw; }
+  .saludo-splash .linea-dos { font-size: 8vw; }
 }
 
 .no-margin-top { margin-top: 0 !important; }

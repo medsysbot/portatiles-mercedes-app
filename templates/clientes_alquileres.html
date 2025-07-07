@@ -1,4 +1,4 @@
-{% extends 'base_adminlte.html' %}
+{% extends 'panel_cliente.html' %}
 {% block title %}Mis Baños Alquilados{% endblock %}
 {% block description %}Visualización de baños alquilados por el cliente{% endblock %}
 {% block head_extra %}
@@ -6,8 +6,7 @@
 {{ super() }}
 {% endblock %}
 
-{% block body %}
-<div class="content-wrapper" style="background: url('/static/imagenes/fondo-panel.png') no-repeat center center fixed; background-size: cover; min-height: 100vh;">
+{% block content %}
 <div class="container mt-4">
   <h2>Mis baños alquilados</h2>
   <div id="errorAlquileres" class="alert alert-danger d-none"></div>

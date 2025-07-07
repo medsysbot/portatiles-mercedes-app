@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     columns: [
       { data: 'nombre_empleado' },
       { data: 'dni_cuit_cuil' },
+      { data: 'email' },
       { data: 'fecha_ingreso' },
       // Ajuste de nombre de campo para coincidir con la base de datos
       { data: 'documento_pdf_url', render: url => `<a href="${url}" target="_blank">Ver</a>` }

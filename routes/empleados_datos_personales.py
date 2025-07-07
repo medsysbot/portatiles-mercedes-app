@@ -36,7 +36,11 @@ os.makedirs(LOG_DIR, exist_ok=True)
 logger = logging.getLogger("empleados_datos_personales")
 logger.setLevel(logging.INFO)
 if not logger.handlers:
-    handler = logging.FileHandler(os.path.join(LOG_DIR, "empleados_datos_personales.log"), mode="a", encoding="utf-8")
+    handler = logging.FileHandler(
+        os.path.join(LOG_DIR, "empleados_datos_personales.log"),
+        mode="a",
+        encoding="utf-8",
+    )
     formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(message)s")
     handler.setFormatter(formatter)
     logger.addHandler(handler)
@@ -49,30 +53,41 @@ BUCKET = "empleados-datos-personales"
 class DatosEmpleado(BaseModel):
     nombre_empleado: str
     dni_cuit_cuil: str
+    email: str
     fecha_ingreso: date
 
 
 @router.get("/admin/empleados_datos_personales", response_class=HTMLResponse)
-async def empleados_datos_personales_admin(request: Request, usuario=Depends(auth_required)):
+async def empleados_datos_personales_admin(
+    request: Request, usuario=Depends(auth_required)
+):
     """Vista de administración de datos personales."""
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
-    return TEMPLATES.TemplateResponse("empleados_datos_personales_admin.html", {"request": request})
+    return TEMPLATES.TemplateResponse(
+        "empleados_datos_personales_admin.html", {"request": request}
+    )
 
 
 @router.get("/admin/empleados_datos_personales/nuevo", response_class=HTMLResponse)
 async def form_nuevo_dato(request: Request, usuario=Depends(auth_required)):
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
-    return TEMPLATES.TemplateResponse("empleados_datos_personales_form.html", {"request": request})
+    return TEMPLATES.TemplateResponse(
+        "empleados_datos_personales_form.html", {"request": request}
+    )
 
 
 @router.get("/empleado/datos_personales", response_class=HTMLResponse)
-async def empleados_datos_personales_empleado(request: Request, usuario=Depends(auth_required)):
+async def empleados_datos_personales_empleado(
+    request: Request, usuario=Depends(auth_required)
+):
     """Vista de datos personales para el empleado autenticado."""
     if usuario.get("rol") not in ("empleado", "Administrador"):
         raise HTTPException(status_code=403, detail="Acceso restringido")
-    return TEMPLATES.TemplateResponse("empleados_datos_personales_empleado.html", {"request": request})
+    return TEMPLATES.TemplateResponse(
+        "empleados_datos_personales_empleado.html", {"request": request}
+    )
 
 
 @router.get("/admin/api/empleados_datos_personales")
@@ -91,8 +106,8 @@ async def listar_datos_personales(usuario=Depends(auth_required)):
 async def listar_datos_personales_empleado(usuario=Depends(auth_required)):
     if not supabase:
         return []
-    filtro = usuario.get("nombre")
-    res = supabase.table(TABLA).select("*").eq("nombre_empleado", filtro).execute()
+    email = usuario.get("sub")
+    res = supabase.table(TABLA).select("*").eq("email", email).execute()
     if getattr(res, "error", None):
         raise HTTPException(status_code=500, detail=str(res.error))
     return res.data or []
@@ -102,6 +117,7 @@ async def listar_datos_personales_empleado(usuario=Depends(auth_required)):
 async def crear_dato_personal(
     nombre_empleado: str = Form(...),
     dni_cuit_cuil: str = Form(...),
+    email: str = Form(...),
     fecha_ingreso: date = Form(...),
     documento: UploadFile = File(...),
     usuario=Depends(auth_required),
@@ -114,6 +130,7 @@ async def crear_dato_personal(
     datos_form = {
         "nombre_empleado": nombre_empleado,
         "dni_cuit_cuil": dni_cuit_cuil,
+        "email": email,
         "fecha_ingreso": fecha_ingreso,
     }
     try:

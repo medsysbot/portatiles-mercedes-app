@@ -392,11 +392,15 @@ async def splash(request: Request, token_data: dict = Depends(verificar_token)):
 
 
 @router.get("/splash_empleado", response_class=HTMLResponse)
-def splash_empleado(
+async def splash_empleado(
     request: Request, token_data: dict = Depends(verificar_token)
 ):
-    """Compatibilidad con la ruta antigua. Redirige al panel."""
-    return RedirectResponse("/empleado/panel", status_code=302)
+    """Pantalla transitoria luego del login de empleado."""
+    nombre_empleado = token_data.get("nombre", "Empleado")
+    return templates.TemplateResponse(
+        "splash_empleado.html",
+        {"request": request, "nombre_usuario": nombre_empleado},
+    )
 
 
 @router.get("/admin_splash", response_class=HTMLResponse)

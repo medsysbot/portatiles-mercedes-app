@@ -3,6 +3,8 @@
 {% block title %}Panel de Cliente{% endblock %}
 {% block description %}Panel principal para clientes{% endblock %}
 
+{% block body_class %}hold-transition sidebar-mini layout-fixed admin-bg panel-cliente{% endblock %}
+
 {% block head_extra %}
   {{ super() }}
   <link rel="stylesheet" href="/static/css/style.css">
@@ -18,8 +20,6 @@
     }
     .nav-sidebar .nav-link.active { background-color: #222 !important; }
     .small-box, .card { border-radius: 12px; }
-    .table, .tabla-scroll { background-color: #111 !important; color: #fff !important; }
-    .dataTables_wrapper { background: #111 !important; }
   </style>
 {% endblock %}
 

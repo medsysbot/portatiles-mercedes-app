@@ -108,12 +108,23 @@ def _contar_total(tabla: str) -> int:
 
     2025-07-10: Ajuste de consulta para evitar errores cuando la tabla
     no posee campo ``id``. Se selecciona cualquier columna y se utiliza
-    ``count='exact'`` con ``head=True`` para obtener solo el total.
+    ``count='exact'``. Se consulta solo un registro para minimizar la
+    transferencia y se obtiene el total a partir de la cabecera devuelta.
     """
     if not supabase:
         return 0
     try:
-        resp = supabase.table(tabla).select("*", count="exact", head=True).execute()
+        # La opción ``head=True`` generaba problemas con algunos entornos de
+        # Supabase y devolvía ``None`` en ``count``. Para evitarlo realizamos
+        # una consulta mínima (limit 1) pero solicitando ``count='exact'``,
+        # lo que permite obtener el total real sin depender de un campo
+        # específico en la tabla.
+        resp = (
+            supabase.table(tabla)
+            .select("*", count="exact")
+            .limit(1)
+            .execute()
+        )
         return getattr(resp, "count", 0) or 0
     except Exception as exc:  # pragma: no cover - errores de conexión
         logger.error("Error contando registros en %s: %s", tabla, exc)

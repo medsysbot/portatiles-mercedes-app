@@ -1,5 +1,5 @@
-
-
+// Archivo: static/js/dashboard_admin.js
+// Proyecto: Portátiles Mercedes
 function limpiarCredenciales() {
   localStorage.clear();
 }

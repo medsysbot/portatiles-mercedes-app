@@ -51,7 +51,7 @@ if (form) {
                     return;
                 }
 
-                // Si es cliente y NO viene dni_cuit_cuil en la respuesta, lo busca por API
+                // Si es cliente y NO viene dni_cuit_cuil en la respuesta, intenta obtenerlo
                 fetch(`/clientes/datos_personales_api?email=${encodeURIComponent(email)}`, {
                     headers: { "Authorization": "Bearer " + data.access_token }
                 })
@@ -64,13 +64,20 @@ if (form) {
                             nombre: datos.nombre
                         }));
                         localStorage.setItem("dni_cuit_cuil", datos.dni_cuit_cuil);
-                        window.location.href = "/splash_cliente";
                     } else {
-                        if (errorEl) errorEl.textContent = "No se pudo recuperar los datos del cliente.";
+                        localStorage.setItem("usuario_obj", JSON.stringify({
+                            email: email,
+                            nombre: datos.nombre || ""
+                        }));
                     }
+                    window.location.href = "/splash_cliente";
                 })
                 .catch(() => {
-                    if (errorEl) errorEl.textContent = "Error al recuperar datos del cliente.";
+                    localStorage.setItem("usuario_obj", JSON.stringify({
+                        email: email,
+                        nombre: data.nombre || ""
+                    }));
+                    window.location.href = "/splash_cliente";
                 });
 
             } else {

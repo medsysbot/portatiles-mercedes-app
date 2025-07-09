@@ -45,11 +45,9 @@
 <body class="{% block body_class %}hold-transition sidebar-mini{% endblock %}">
   {% block body %}{% endblock %}
   <!-- Alerta personalizada global -->
-  <div id="alertaPersonalizada" class="alerta-overlay d-none">
-    <div class="alerta-contenido">
-      <img id="iconoAlerta" src="" alt="Alerta" class="alerta-icono" style="display:none;">
-      <span id="mensajeAlerta"></span>
-    </div>
+  <div id="alertaPersonalizada" class="alerta-personalizada d-none">
+    <img id="iconoAlertaPersonalizada" src="" alt="" class="icono-alerta">
+    <span id="mensajeAlertaPersonalizada"></span>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>

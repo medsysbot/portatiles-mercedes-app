@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarEmails(emailsCargados);
     } catch (err) {
       console.error('Error cargando emails:', err);
-      mostrarAlertaPersonalizada('error-datos', 'No se pudieron cargar los emails.');
     }
   }
 
@@ -76,12 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const res = await resp.json();
       if (!resp.ok || !res.ok) throw new Error(res.detail || 'Error al enviar');
-      mostrarAlertaPersonalizada('exito-datos', 'Correo enviado correctamente');
       form.reset();
       cargarEmails();
       btnCancelar.click();
     } catch (err) {
-      mostrarAlertaPersonalizada('error-datos', err.message);
     }
   });
 

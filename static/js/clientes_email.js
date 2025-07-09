@@ -14,10 +14,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const res = await resp.json();
       if (!resp.ok || !res.ok) throw new Error(res.detail || 'Error al enviar');
-      mostrarAlertaPersonalizada('exito-datos', 'Correo enviado correctamente');
       form.reset();
     } catch (err) {
-      mostrarAlertaPersonalizada('error-datos', err.message);
     }
   });
 });

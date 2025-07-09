@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarFacturas();
     } catch (err) {
       console.error('Error eliminando facturas:', err);
-      mostrarMensaje('Error eliminando registros', 'danger');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
@@ -64,9 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarFacturas(facturasCargadas);
       mensajeError?.classList.add('d-none');
       if (facturasCargadas.length === 0) {
-        mostrarMensaje('No hay facturas registradas', '');
       } else {
-        mostrarMensaje('', '');
       }
     } catch (err) {
       console.error('Error cargando facturas:', err);
@@ -82,8 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   btnNueva?.addEventListener('click', () => {
@@ -104,9 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarFacturas(filtradas);
     if (filtradas.length === 0) {
-      mostrarMensaje('No hay facturas registradas', '');
     } else {
-      mostrarMensaje('', '');
     }
   }
 

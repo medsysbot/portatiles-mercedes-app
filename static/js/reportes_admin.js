@@ -33,13 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarReportes(reportes);
       errorDiv.classList.add('d-none');
       if (reportes.length === 0) {
-        mostrarMensaje('No hay reportes registrados', 'error-datos');
       }
     } catch (err) {
       console.error('Error cargando reportes:', err);
       errorDiv.textContent = '';
       errorDiv.classList.add('d-none');
-      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -68,14 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarReportes();
     } catch (err) {
       console.error('Error eliminando reportes:', err);
-      mostrarMensaje('Error eliminando registros', 'danger');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarReportes(texto) {
@@ -86,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarReportes(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay reportes registrados', 'error-datos');
     }
   }
 

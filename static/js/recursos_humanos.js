@@ -169,7 +169,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('error');
       await cargarDatos();
-    } catch (e) { mostrarAlertaPersonalizada('error-datos', 'Error eliminando registros'); }
   });
 
   if (btnEliminarSalarios) btnEliminarSalarios.addEventListener('click', async () => {
@@ -183,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('error');
       await cargarSalarios();
-    } catch (e) { mostrarAlertaPersonalizada('error-datos', 'Error eliminando registros'); }
   });
 
   if (btnEliminarAusencias) btnEliminarAusencias.addEventListener('click', async () => {
@@ -197,7 +195,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('error');
       await cargarAusencias();
-    } catch (e) { mostrarAlertaPersonalizada('error-datos', 'Error eliminando registros'); }
   });
 
 

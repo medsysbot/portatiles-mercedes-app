@@ -21,7 +21,6 @@ async function fetchConAuth(url, options = {}) {
   return resp;
 }
 function showMsg(_, msg, tipo = "error-datos") {
-  mostrarAlertaPersonalizada(tipo, msg);
 }
 
 // ============= DETECTAR SECCIÓN Y CARGAR DATOS =============

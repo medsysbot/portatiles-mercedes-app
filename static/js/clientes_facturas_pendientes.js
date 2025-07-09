@@ -45,11 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
       registros = await resp.json();
       mostrarFacturas(registros);
       if (registros.length === 0) {
-        mostrarAlertaPersonalizada('error-datos', 'Sin registros');
       }
     } catch (err) {
       console.error('Error cargando facturas:', err);
-      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -65,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarFacturas(filtrados);
     if (filtrados.length === 0) {
-      mostrarAlertaPersonalizada('error-datos', 'Sin registros');
     }
   }
 

@@ -96,7 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await resp.json();
       if (resp.ok) {
-        mostrarAlertaPersonalizada('exito-datos', 'Comprobante cargado correctamente');
         form.reset();
         cargarComprobantes();
         btnCancelar.click();
@@ -104,7 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(data.detail || 'Error');
       }
     } catch (err) {
-      mostrarAlertaPersonalizada('error-datos', err.message);
     }
   });
 

@@ -46,11 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
       registros = await resp.json();
       mostrarAlquileres(registros);
       if (registros.length === 0) {
-        mostrarAlertaPersonalizada('error-datos', 'Sin registros');
       }
     } catch (err) {
       console.error('Error cargando alquileres:', err);
-      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -68,7 +66,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarAlquileres(filtrados);
     if (filtrados.length === 0) {
-      mostrarAlertaPersonalizada('error-datos', 'Sin registros');
     }
   }
 

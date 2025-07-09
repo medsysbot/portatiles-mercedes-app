@@ -34,9 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrar(alquileresCargados);
       mensajeError?.classList.add('d-none');
       if (alquileresCargados.length === 0) {
-        mostrarMensaje('No hay alquileres registrados', '');
       } else {
-        mostrarMensaje('', '');
       }
     } catch (err) {
       console.error('Error al cargar alquileres:', err);
@@ -52,8 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarAlquileres(texto) {
@@ -65,9 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrar(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay alquileres registrados', '');
     } else {
-      mostrarMensaje('', '');
     }
   }
 

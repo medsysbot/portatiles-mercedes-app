@@ -44,11 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
       servicios = await resp.json();
       mostrarServicios(servicios);
       if (servicios.length === 0) {
-        mostrarMensaje('No hay servicios registrados', 'error-datos');
       }
     } catch (err) {
       console.error('Error cargando servicios:', err);
-      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -79,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarServicios();
     } catch (err) {
       console.error('Error eliminando servicios:', err);
-      mostrarMensaje('Error eliminando registros', 'danger');
     } finally {
       actualizarBotones();
     }
@@ -87,15 +84,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnEditar?.addEventListener('click', () => {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
-    if (checks.length !== 1) return mostrarAlertaPersonalizada('error-datos', 'Debe seleccionar un único registro para editar');
     const id = checks[0].dataset.id;
-    if (!id) return mostrarAlertaPersonalizada('error-datos', 'ID de servicio no encontrado');
     localStorage.setItem('pendiente_recarga', '1');
     window.location.href = `/empleado/limpieza/editar/${id}`;
   });
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarServicios(texto) {
@@ -107,7 +100,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarServicios(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay servicios registrados', 'error-datos');
     }
   }
 

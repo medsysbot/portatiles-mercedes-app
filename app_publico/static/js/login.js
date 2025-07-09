@@ -13,7 +13,6 @@ if (form) {
         const errorEl = document.getElementById("errorMsg");
         if (errorEl) errorEl.textContent = "";
 
-        mostrarAlertaPersonalizada("enviando-mensaje", "Procesando ingreso...");
 
         fetch("/login", {
             method: "POST",
@@ -27,7 +26,6 @@ if (form) {
             if (res.ok && data.access_token) {
                 localStorage.setItem("access_token", data.access_token);
                 const finalizar = (url) => {
-                    mostrarAlertaPersonalizada("exito-datos", "Ingreso exitoso");
                     setTimeout(() => { window.location.href = url; }, 2600);
                 };
 
@@ -83,11 +81,9 @@ if (form) {
                 });
 
             } else {
-                mostrarAlertaPersonalizada("error-datos", data.detail || "Credenciales incorrectas.");
             }
         })
         .catch(() => {
-            mostrarAlertaPersonalizada("error-datos", "Error al iniciar sesión.");
         });
     });
 }

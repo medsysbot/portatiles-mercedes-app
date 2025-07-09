@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarVentas();
     } catch (err) {
       console.error('Error eliminando ventas:', err);
-      mostrarMensaje('Error eliminando registros', 'danger');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
@@ -61,11 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
       ventasCargadas = await resp.json();
       mostrarVentas(ventasCargadas);
       if (ventasCargadas.length === 0) {
-        mostrarMensaje('No hay ventas registradas', 'error-datos');
       }
     } catch (err) {
       console.error('Error al cargar ventas:', err);
-      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -74,8 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarVentas(texto) {
@@ -86,7 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarVentas(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay ventas registradas', 'error-datos');
     }
   }
 

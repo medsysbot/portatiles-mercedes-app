@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarAlquileres();
     } catch (err) {
       console.error('Error eliminando alquileres:', err);
-      mostrarMensaje('Error eliminando registros', 'danger');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
@@ -60,9 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarAlquileres(alquileresCargados);
       mensajeError?.classList.add('d-none');
       if (alquileresCargados.length === 0) {
-        mostrarMensaje('No hay alquileres registrados', '');
       } else {
-        mostrarMensaje('', '');
       }
     } catch (err) {
       console.error('Error al cargar alquileres:', err);
@@ -78,8 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarAlquileres(texto) {
@@ -91,9 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarAlquileres(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay alquileres registrados', '');
     } else {
-      mostrarMensaje('', '');
     }
   }
 

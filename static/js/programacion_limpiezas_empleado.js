@@ -34,11 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarDatos(datosOriginales);
       errorDiv?.classList.add('d-none');
       if (datosOriginales.length === 0) {
-        mostrarMensaje('No hay programaciones registradas');
       }
     } catch (err) {
       console.error('Error cargando programación:', err);
-      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -46,8 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.clear().rows.add(lista).draw();
   }
 
-  function mostrarMensaje(texto) {
-    if (texto) mostrarAlertaPersonalizada('error-datos', texto);
   }
 
   function filtrarDatos(texto) {
@@ -60,7 +56,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarDatos(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay resultados para la búsqueda');
     }
   }
 

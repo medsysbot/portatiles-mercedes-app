@@ -91,7 +91,20 @@ async def listar_ausencias(usuario=Depends(auth_required)):
 async def listar_ausencias_empleado(usuario=Depends(auth_required)):
     if not supabase:
         return []
-    res = supabase.table(TABLA).select("*").execute()
+    email = usuario.get("sub")
+    dni_res = (
+        supabase.table("empleados_datos_personales")
+        .select("dni_cuit_cuil")
+        .eq("email", email)
+        .single()
+        .execute()
+    )
+    if getattr(dni_res, "error", None):
+        raise HTTPException(status_code=500, detail=str(dni_res.error))
+    dni = dni_res.data.get("dni_cuit_cuil") if dni_res.data else None
+    if not dni:
+        return []
+    res = supabase.table(TABLA).select("*").eq("dni_cuit_cuil", dni).execute()
     if getattr(res, "error", None):
         raise HTTPException(status_code=500, detail=str(res.error))
     return res.data or []

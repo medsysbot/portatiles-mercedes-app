@@ -5,8 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnDatos = document.getElementById('tabDatosBtn');
   const btnSalarios = document.getElementById('tabSalariosBtn');
   const btnAusencias = document.getElementById('tabAusenciasBtn');
-  const buscador = document.getElementById('busquedaDniEmpleado');
-  const btnBuscar = document.getElementById('btnBuscarDniEmpleado');
 
   let datosCargados = [];
   let salariosCargados = [];
@@ -133,22 +131,13 @@ document.addEventListener('DOMContentLoaded', () => {
     tablaAusencias.rows.add(lista).draw();
   }
 
-  function aplicarFiltro() {
-    const q = (buscador?.value || '').toLowerCase();
-    const datosFil = datosCargados.filter(d => (d.dni_cuit_cuil || '').toLowerCase().includes(q));
-    const salariosFil = salariosCargados.filter(s => (s.dni_cuit_cuil || '').toLowerCase().includes(q));
-    const ausenciasFil = ausenciasCargados.filter(a => (a.dni_cuit_cuil || '').toLowerCase().includes(q));
-    mostrarDatos(datosFil);
-    mostrarSalarios(salariosFil);
-    mostrarAusencias(ausenciasFil);
-  }
 
   // --- Cargar datos tablas ---
   async function cargarDatos() {
     try {
       const resp = await fetch(urlDatos, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       datosCargados = await resp.json();
-      aplicarFiltro();
+      mostrarDatos(datosCargados);
     } catch (err) { console.error('Error al cargar datos personales:', err); }
   }
 
@@ -156,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await fetch(urlSalarios, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       salariosCargados = await resp.json();
-      aplicarFiltro();
+      mostrarSalarios(salariosCargados);
     } catch (err) { console.error('Error al cargar salarios:', err); }
   }
 
@@ -164,7 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await fetch(urlAusencias, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       ausenciasCargados = await resp.json();
-      aplicarFiltro();
+      mostrarAusencias(ausenciasCargados);
     } catch (err) { console.error('Error al cargar ausencias:', err); }
   }
 
@@ -211,8 +200,6 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (e) { alert('Error eliminando registros'); }
   });
 
-  buscador?.addEventListener('input', aplicarFiltro);
-  btnBuscar?.addEventListener('click', aplicarFiltro);
 
   // --- Inicialización ---
   cargarDatos();

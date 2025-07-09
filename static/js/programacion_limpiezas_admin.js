@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaProgramacion tbody .fila-check:checked')).map(c => parseInt(c.dataset.id));
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
+    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar registros seleccionados?');
     if (!ok) return;
     try {
       await fetch('/admin/api/limpiezas_programadas/eliminar', {

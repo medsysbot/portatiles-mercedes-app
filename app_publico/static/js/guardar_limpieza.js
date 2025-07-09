@@ -24,13 +24,13 @@ form.addEventListener('submit', async (e) => {
     });
     const resultado = await resp.json();
     if (resp.ok) {
-      mostrarAlertaPersonalizada('Limpieza registrada con éxito', 'exito-datos');
+      mostrarAlertaPersonalizada('exito-datos', 'Limpieza registrada con éxito');
       form.reset();
       fechaHoraInput.value = new Date().toISOString().slice(0, 16);
     } else {
-      mostrarAlertaPersonalizada('Error: ' + (resultado.detail || 'No se pudo guardar'), 'error-datos');
+      mostrarAlertaPersonalizada('error-datos', 'Error: ' + (resultado.detail || 'No se pudo guardar'));
     }
   } catch (_) {
-    mostrarAlertaPersonalizada('Error de conexión', 'error-datos');
+    mostrarAlertaPersonalizada('error-datos', 'Error de conexión');
   }
 });

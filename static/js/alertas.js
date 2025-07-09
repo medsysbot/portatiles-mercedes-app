@@ -1,6 +1,13 @@
 const colaAlertas = [];
 let alertaActiva = false;
 
+const ICONOS_ALERTA = {
+  exito: '/static/iconos/exito-datos.png',
+  error: '/static/iconos/error-datos.png',
+  enviando: '/static/iconos/enviando-mensaje.png',
+  registro: '/static/iconos/registro-ok.png'
+};
+
 function obtenerRutaIcono(nombre) {
   const iconos = {
     'email-incorrecto': 'email-incorrecto .png',
@@ -24,16 +31,17 @@ function obtenerRutaIcono(nombre) {
     'seleccionar-rol': 'seleccionar-rol.png',
     'verifique-contrasena': 'verifique-contrasena.png'
   };
+  if (ICONOS_ALERTA[nombre]) return ICONOS_ALERTA[nombre];
   const archivo = iconos[nombre] || nombre + '.png';
   return '/static/iconos/' + encodeURIComponent(archivo);
 }
 
-function mostrarAlertaPersonalizada(mensaje, tipoIcono) {
+function mostrarAlertaPersonalizada(tipoIcono, mensaje) {
   colaAlertas.push({ mensaje, tipoIcono });
   procesarCola();
 }
 
-function mostrarConfirmacionPersonalizada(mensaje, tipoIcono) {
+function mostrarConfirmacionPersonalizada(tipoIcono, mensaje) {
   return new Promise(resolve => {
     colaAlertas.push({ mensaje, tipoIcono, confirm: true, resolver: resolve });
     procesarCola();

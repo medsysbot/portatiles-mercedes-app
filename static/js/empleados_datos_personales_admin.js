@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaDatosPersonales tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
+    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar registros seleccionados?');
     if (!ok) return;
     try {
       const resp = await fetch('/admin/api/empleados_datos_personales/eliminar', {
@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarDatos();
     } catch (err) {
       console.error('Error eliminando datos personales:', err);
-      mostrarAlertaPersonalizada('Error eliminando registros','error-datos');
+      mostrarAlertaPersonalizada('error-datos', 'Error eliminando registros');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }

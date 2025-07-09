@@ -363,7 +363,9 @@ body.panel-cliente .buscador-tabla::placeholder {
 
 /* Ajuste de ancho para el buscador de comprobantes */
 #busquedaComprobantes {
-  width: 50% !important;
+  width: 30% !important;   /* <-- Cambia este valor para más o menos ancho */
+  min-width: 120px !important;
+  max-width: 400px;
 }
 
 /* Utilidad para eliminar margen izquierdo en botones específicos */

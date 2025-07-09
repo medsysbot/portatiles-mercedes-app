@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarReportes');
   const buscador = document.getElementById('busquedaReportes');
   const errorDiv = document.getElementById('errorReportes');
-  const mensajeDiv = document.getElementById('mensajeReportes');
   let reportes = [];
 
   async function cargarReportes() {
@@ -32,14 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarReportes(reportes);
       errorDiv.classList.add('d-none');
       if (reportes.length === 0) {
-        mostrarMensaje('No hay reportes registrados', '');
-      } else {
-        mostrarMensaje('', '');
+        mostrarMensaje('No hay reportes registrados', 'error-datos');
       }
     } catch (err) {
       console.error('Error cargando reportes:', err);
-      errorDiv.textContent = 'No se pudo cargar el listado.';
-      errorDiv.classList.remove('d-none');
+      errorDiv.textContent = '';
+      errorDiv.classList.add('d-none');
+      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -49,16 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function mostrarMensaje(texto, tipo) {
-    if (!mensajeDiv) return;
-    if (!texto) {
-      mensajeDiv.style.display = 'none';
-      mensajeDiv.textContent = '';
-      mensajeDiv.classList.remove('alert-danger');
-      return;
-    }
-    mensajeDiv.textContent = texto;
-    mensajeDiv.classList.toggle('alert-danger', tipo === 'danger');
-    mensajeDiv.style.display = 'block';
+    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarReportes(texto) {
@@ -69,9 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarReportes(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay reportes registrados', '');
-    } else {
-      mostrarMensaje('', '');
+      mostrarMensaje('No hay reportes registrados', 'error-datos');
     }
   }
 

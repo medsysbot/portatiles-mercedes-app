@@ -30,8 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(tabla.querySelectorAll('.fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar empleados seleccionados?');
-    if (!ok) return;
     try {
       const resp = await fetch('/admin/api/empleados/eliminar', {
         method: 'POST',

@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const form = document.getElementById('formProgramacion');
-  const mensajeDiv = document.getElementById('mensajeProgramacion');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
@@ -65,20 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error');
       form.reset();
-      mostrarMensaje('Limpieza programada', 'success');
+      mostrarAlertaPersonalizada('exito-datos', 'Limpieza programada');
       cargarDatos();
       btnCancelar.click();
     } catch (err) {
-      mostrarMensaje('Error guardando', 'danger');
+      mostrarAlertaPersonalizada('error-datos', 'Error guardando');
     }
   });
 
-  function mostrarMensaje(texto, tipo) {
-    if (!mensajeDiv) return;
-    mensajeDiv.textContent = texto;
-    mensajeDiv.className = 'alert alert-' + (tipo || 'info');
-    mensajeDiv.style.display = texto ? 'block' : 'none';
-  }
+  function mostrarMensaje() {}
 
   function actualizarBoton() {
     const checks = document.querySelectorAll('#tablaProgramacion tbody .fila-check:checked');
@@ -90,8 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaProgramacion tbody .fila-check:checked')).map(c => parseInt(c.dataset.id));
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar registros seleccionados?');
-    if (!ok) return;
     try {
       await fetch('/admin/api/limpiezas_programadas/eliminar', {
         method: 'POST',
@@ -100,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       cargarDatos();
     } catch (err) {
-      mostrarMensaje('Error al eliminar', 'danger');
+      mostrarAlertaPersonalizada('error-datos', 'Error al eliminar');
     }
   });
 

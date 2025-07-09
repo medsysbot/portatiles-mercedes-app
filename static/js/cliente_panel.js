@@ -20,9 +20,8 @@ async function fetchConAuth(url, options = {}) {
   }
   return resp;
 }
-function showMsg(divId, msg, type="danger") {
-  const el = document.getElementById(divId);
-  if (el) el.innerHTML = `<div class="alert alert-${type} text-center mb-0">${msg}</div>`;
+function showMsg(_, msg, tipo = "error-datos") {
+  mostrarAlertaPersonalizada(tipo, msg);
 }
 
 // ============= DETECTAR SECCIÓN Y CARGAR DATOS =============

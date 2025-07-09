@@ -3,11 +3,10 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('formComprobante');
-  const msg = document.getElementById('msgComprobante');
+
 
   form?.addEventListener('submit', async ev => {
     ev.preventDefault();
-    msg.classList.add('d-none');
     const datos = new FormData(form);
     try {
       const resp = await fetch('/api/comprobantes_pago', {
@@ -17,16 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const res = await resp.json();
       if (resp.ok && res.ok) {
-        msg.textContent = 'Comprobante cargado correctamente';
-        msg.className = 'alert alert-success';
+        mostrarAlertaPersonalizada('exito-datos', 'Comprobante cargado correctamente');
         form.reset();
       } else {
         throw new Error(res.detail || 'Error al subir');
       }
     } catch (err) {
-      msg.textContent = err.message;
-      msg.className = 'alert alert-danger';
+      mostrarAlertaPersonalizada('error-datos', err.message);
     }
-    msg.classList.remove('d-none');
   });
 });

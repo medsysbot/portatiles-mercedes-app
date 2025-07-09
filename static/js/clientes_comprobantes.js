@@ -54,11 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const buscador = document.getElementById('busquedaComprobantes');
   const btnBuscar = document.getElementById('btnBuscarComprobante');
-  const mensajeDiv = document.getElementById('mensajeComprobantes');
   let registros = [];
 
   const form = document.getElementById('formComprobante');
-  const msg = document.getElementById('msgComprobante');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
   const btnCancelar = document.getElementById('btnCancelarForm');
@@ -77,8 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const checks = document.querySelectorAll('.pm-check:checked');
     if (!checks.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar los comprobantes seleccionados?');
-    if (!ok) return;
     let dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {
       const usr = localStorage.getItem('usuario_obj');
@@ -125,9 +121,8 @@ document.addEventListener('DOMContentLoaded', () => {
       String(c.numero_factura || '').toLowerCase().includes(q)
     );
     mostrarComprobantes(filtrados);
-    if (mensajeDiv) {
-      mensajeDiv.style.display = filtrados.length ? 'none' : 'block';
-      mensajeDiv.textContent = filtrados.length ? '' : 'Sin registros';
+    if (filtrados.length === 0) {
+      mostrarAlertaPersonalizada('error-datos', 'Sin registros');
     }
   }
 
@@ -156,12 +151,9 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarComprobantes(registros);
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
-      if (mensajeDiv) {
-        mensajeDiv.style.display = registros.length ? 'none' : 'block';
-        mensajeDiv.textContent = registros.length ? '' : 'Sin registros';
+      if (registros.length === 0) {
+        mostrarAlertaPersonalizada('error-datos', 'Sin registros');
       }
-      const errorDiv = document.getElementById('errorComprobantes');
-      if (errorDiv) errorDiv.classList.add('d-none');
     } catch (err) {
       console.error('Error cargando comprobantes:', err);
       const div = document.getElementById('errorComprobantes');
@@ -174,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   form?.addEventListener('submit', async ev => {
     ev.preventDefault();
-    msg.classList.add('d-none');
     const datos = new FormData(form);
     try {
       const resp = await fetch('/api/comprobantes_pago', {
@@ -184,8 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const res = await resp.json();
       if (resp.ok && res.ok) {
-        msg.textContent = 'Comprobante cargado correctamente';
-        msg.className = 'alert alert-success';
+        mostrarAlertaPersonalizada('exito-datos', 'Comprobante cargado correctamente');
         form.reset();
         await cargarComprobantes();
         btnCancelar?.click();
@@ -194,10 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(res.detail || 'Error al subir');
       }
     } catch (err) {
-      msg.textContent = err.message;
-      msg.className = 'alert alert-danger';
+      mostrarAlertaPersonalizada('error-datos', err.message);
     }
-    msg.classList.remove('d-none');
   });
 
   cargarComprobantes();

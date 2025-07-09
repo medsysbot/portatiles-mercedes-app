@@ -3,8 +3,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const tabla = document.querySelector('#tablaEmails tbody');
-  const errorDiv = document.getElementById('errorEmails');
-  const mensajeDiv = document.getElementById('mensajeEmails');
   const form = document.getElementById('formEnviarEmail');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
@@ -49,11 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error al consultar emails');
       emailsCargados = await resp.json();
       mostrarEmails(emailsCargados);
-      errorDiv.classList.add('d-none');
     } catch (err) {
       console.error('Error cargando emails:', err);
-      errorDiv.textContent = 'No se pudieron cargar los emails.';
-      errorDiv.classList.remove('d-none');
+      mostrarAlertaPersonalizada('error-datos', 'No se pudieron cargar los emails.');
     }
   }
 
@@ -80,16 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const res = await resp.json();
       if (!resp.ok || !res.ok) throw new Error(res.detail || 'Error al enviar');
-      mensajeDiv.textContent = 'Correo enviado correctamente';
-      mensajeDiv.className = 'alert alert-success';
-      mensajeDiv.style.display = 'block';
+      mostrarAlertaPersonalizada('exito-datos', 'Correo enviado correctamente');
       form.reset();
       cargarEmails();
       btnCancelar.click();
     } catch (err) {
-      mensajeDiv.textContent = err.message;
-      mensajeDiv.className = 'alert alert-danger';
-      mensajeDiv.style.display = 'block';
+      mostrarAlertaPersonalizada('error-datos', err.message);
     }
   });
 

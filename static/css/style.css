@@ -489,6 +489,8 @@ body.panel-cliente table.pm-tabla tr:hover {
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 .alerta-contenido {
   background: rgba(24, 24, 24, 0.94);
@@ -508,11 +510,6 @@ body.panel-cliente table.pm-tabla tr:hover {
   width: 64px;
   height: 64px;
   margin-bottom: 0.8em;
-}
-.alerta-botones {
-  margin-top: 1em;
-  display: flex;
-  gap: 0.5em;
 }
 @media (max-width: 600px) {
   .alerta-contenido {

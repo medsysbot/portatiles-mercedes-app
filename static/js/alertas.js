@@ -41,12 +41,6 @@ function mostrarAlertaPersonalizada(tipoIcono, mensaje) {
   procesarCola();
 }
 
-function mostrarConfirmacionPersonalizada(tipoIcono, mensaje) {
-  return new Promise(resolve => {
-    colaAlertas.push({ mensaje, tipoIcono, confirm: true, resolver: resolve });
-    procesarCola();
-  });
-}
 
 function procesarCola() {
   if (alertaActiva || colaAlertas.length === 0) return;
@@ -62,27 +56,15 @@ function procesarCola() {
   texto.textContent = item.mensaje;
   overlay.classList.remove('d-none');
   overlay.style.display = 'flex';
-  if (item.confirm) {
-    botones.innerHTML =
-      '<button class="btn btn-primary btn-sm" id="alerta-si">Sí</button>' +
-      '<button class="btn btn-secondary btn-sm" id="alerta-no">No</button>';
-    const cerrar = val => {
-      overlay.classList.add('d-none');
-      overlay.style.display = 'none';
-      botones.innerHTML = '';
-      alertaActiva = false;
-      setTimeout(procesarCola, 500);
-      item.resolver(val);
-    };
-    document.getElementById('alerta-si').addEventListener('click', () => cerrar(true));
-    document.getElementById('alerta-no').addEventListener('click', () => cerrar(false));
-  } else {
-    botones.innerHTML = '';
+  overlay.style.opacity = '1';
+  botones.innerHTML = '';
+  setTimeout(() => {
+    overlay.style.opacity = '0';
     setTimeout(() => {
       overlay.classList.add('d-none');
       overlay.style.display = 'none';
       alertaActiva = false;
       setTimeout(procesarCola, 500);
-    }, 2500);
-  }
+    }, 300);
+  }, 2500);
 }

@@ -91,8 +91,7 @@ async def listar_salarios(usuario=Depends(auth_required)):
 async def listar_salarios_empleado(usuario=Depends(auth_required)):
     if not supabase:
         return []
-    filtro = usuario.get("nombre")
-    res = supabase.table(TABLA).select("*").eq("nombre_empleado", filtro).execute()
+    res = supabase.table(TABLA).select("*").execute()
     if getattr(res, "error", None):
         raise HTTPException(status_code=500, detail=str(res.error))
     return res.data or []

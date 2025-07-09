@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaAlquileres');
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
   const mensajeError = document.getElementById('errorAlquileres');
-  const mensajeInfo = document.getElementById('mensajeAlquileres');
 
   let alquileresCargados = [];
 
@@ -54,16 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function mostrarMensaje(texto, tipo) {
-    if (!mensajeInfo) return;
-    if (!texto) {
-      mensajeInfo.style.display = 'none';
-      mensajeInfo.textContent = '';
-      mensajeInfo.classList.remove('alert-danger');
-      return;
-    }
-    mensajeInfo.textContent = texto;
-    mensajeInfo.classList.toggle('alert-danger', tipo === 'danger');
-    mensajeInfo.style.display = 'block';
+    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarAlquileres(texto) {

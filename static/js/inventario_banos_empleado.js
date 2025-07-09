@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaInventario');
   const btnBuscar = document.getElementById('btnBuscarInventario');
   const mensajeError = document.getElementById('errorInventario');
-  const mensajeInfo = document.getElementById('mensajeInventario');
 
   let banosCargados = [];
 
@@ -51,16 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function mostrarMensaje(texto, tipo) {
-    if (!mensajeInfo) return;
-    if (!texto) {
-      mensajeInfo.style.display = 'none';
-      mensajeInfo.textContent = '';
-      mensajeInfo.classList.remove('alert-danger');
-      return;
-    }
-    mensajeInfo.textContent = texto;
-    mensajeInfo.classList.toggle('alert-danger', tipo === 'danger');
-    mensajeInfo.style.display = 'block';
+    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrar(texto) {

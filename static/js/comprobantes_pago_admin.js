@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   const form = document.getElementById('formComprobanteAdmin');
-  const msg = document.getElementById('msgComprobanteAdmin');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
   const btnCancelar = document.getElementById('btnCancelarForm');
@@ -97,8 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await resp.json();
       if (resp.ok) {
-        msg.textContent = 'Comprobante cargado correctamente';
-        msg.className = 'alert alert-success';
+        mostrarAlertaPersonalizada('exito-datos', 'Comprobante cargado correctamente');
         form.reset();
         cargarComprobantes();
         btnCancelar.click();
@@ -106,10 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(data.detail || 'Error');
       }
     } catch (err) {
-      msg.textContent = err.message;
-      msg.className = 'alert alert-danger';
+      mostrarAlertaPersonalizada('error-datos', err.message);
     }
-    msg.style.display = 'block';
   });
 
   cargarComprobantes();

@@ -45,8 +45,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.value);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar registros seleccionados?');
-    if (!ok) return;
     try {
       const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',
@@ -95,17 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function mostrarMensaje(texto, tipo) {
-    const cont = document.getElementById('mensajeClientes');
-    if (!cont) return;
-    if (!texto) {
-      cont.style.display = 'none';
-      cont.textContent = '';
-      cont.classList.remove('alert-danger');
-      return;
-    }
-    cont.textContent = texto;
-    cont.classList.toggle('alert-danger', tipo === 'danger');
-    cont.style.display = 'block';
+    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   const buscador = document.getElementById('busquedaCliente');

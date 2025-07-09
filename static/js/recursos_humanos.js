@@ -161,8 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnEliminarDatos) btnEliminarDatos.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaDatos tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
-    if (!ok) return;
     try {
       const resp = await fetch(urlDatosDel, {
         method: 'POST',
@@ -177,8 +175,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnEliminarSalarios) btnEliminarSalarios.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaSalarios tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
-    if (!ok) return;
     try {
       const resp = await fetch(urlSalariosDel, {
         method: 'POST',
@@ -193,8 +189,6 @@ document.addEventListener('DOMContentLoaded', () => {
   if (btnEliminarAusencias) btnEliminarAusencias.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaAusencias tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
-    if (!ok) return;
     try {
       const resp = await fetch(urlAusenciasDel, {
         method: 'POST',

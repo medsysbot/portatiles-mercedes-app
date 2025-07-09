@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaServicios');
   const btnBuscar = document.getElementById('btnBuscarServicios');
   const errorDiv = document.getElementById('errorServicios');
-  const mensajeDiv = document.getElementById('mensajeServicios');
 
   let registros = [];
 
@@ -47,13 +46,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 401) return handleUnauthorized();
       registros = await resp.json();
       mostrarServicios(registros);
-      errorDiv.classList.add('d-none');
-      mensajeDiv.style.display = registros.length ? 'none' : 'block';
-      mensajeDiv.textContent = registros.length ? '' : 'Sin registros';
+      if (registros.length === 0) {
+        mostrarAlertaPersonalizada('error-datos', 'Sin registros');
+      }
     } catch (err) {
       console.error('Error cargando servicios:', err);
-      errorDiv.textContent = 'No se pudo cargar el listado.';
-      errorDiv.classList.remove('d-none');
+      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -70,8 +68,9 @@ document.addEventListener('DOMContentLoaded', () => {
       (s.nombre_cliente || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);
-    mensajeDiv.style.display = filtrados.length ? 'none' : 'block';
-    mensajeDiv.textContent = filtrados.length ? '' : 'Sin registros';
+    if (filtrados.length === 0) {
+      mostrarAlertaPersonalizada('error-datos', 'Sin registros');
+    }
   }
 
   buscador?.addEventListener('input', filtrar);

@@ -6,7 +6,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaInventario');
   const btnBuscar = document.getElementById('btnBuscarInventario');
   const mensajeError = document.getElementById('errorInventario');
-  const mensajeInfo = document.getElementById('mensajeInventario');
 
   let banosCargados = [];
 
@@ -38,8 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaInventario tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar registros seleccionados?');
-    if (!ok) return;
     try {
       const resp = await fetch('/admin/api/inventario_banos/eliminar', {
         method: 'POST',
@@ -85,16 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function mostrarMensaje(texto, tipo) {
-    if (!mensajeInfo) return;
-    if (!texto) {
-      mensajeInfo.style.display = 'none';
-      mensajeInfo.textContent = '';
-      mensajeInfo.classList.remove('alert-danger');
-      return;
-    }
-    mensajeInfo.textContent = texto;
-    mensajeInfo.classList.toggle('alert-danger', tipo === 'danger');
-    mensajeInfo.style.display = 'block';
+    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   // Botón Agregar baño: navega al formulario de alta (NO modal)

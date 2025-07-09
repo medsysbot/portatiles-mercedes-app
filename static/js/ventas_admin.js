@@ -5,7 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaVentas');
   const btnBuscar = document.getElementById('btnBuscarVentas');
   const mensajeError = document.getElementById('errorVentas');
-  const mensajeInfo = document.getElementById('mensajeVentas');
 
   let ventasCargadas = [];
 
@@ -37,8 +36,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaVentas tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar registros seleccionados?');
-    if (!ok) return;
     try {
       const resp = await fetch('/admin/api/ventas/eliminar', {
         method: 'POST',
@@ -63,18 +60,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error consultando ventas');
       ventasCargadas = await resp.json();
       mostrarVentas(ventasCargadas);
-      mensajeError?.classList.add('d-none');
       if (ventasCargadas.length === 0) {
-        mostrarMensaje('No hay ventas registradas', '');
-      } else {
-        mostrarMensaje('', '');
+        mostrarMensaje('No hay ventas registradas', 'error-datos');
       }
     } catch (err) {
       console.error('Error al cargar ventas:', err);
-      if (mensajeError) {
-        mensajeError.textContent = 'No se pudo cargar el listado.';
-        mensajeError.classList.remove('d-none');
-      }
+      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -84,16 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function mostrarMensaje(texto, tipo) {
-    if (!mensajeInfo) return;
-    if (!texto) {
-      mensajeInfo.style.display = 'none';
-      mensajeInfo.textContent = '';
-      mensajeInfo.classList.remove('alert-danger');
-      return;
-    }
-    mensajeInfo.textContent = texto;
-    mensajeInfo.classList.toggle('alert-danger', tipo === 'danger');
-    mensajeInfo.style.display = 'block';
+    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarVentas(texto) {
@@ -104,9 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarVentas(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay ventas registradas', '');
-    } else {
-      mostrarMensaje('', '');
+      mostrarMensaje('No hay ventas registradas', 'error-datos');
     }
   }
 

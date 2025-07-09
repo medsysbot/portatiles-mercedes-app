@@ -21,7 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('buscador-programacion');
   const btnBuscar = document.getElementById('btnBuscarProgramacion');
   const errorDiv = document.getElementById('errorProgramacion');
-  const mensajeDiv = document.getElementById('mensajeProgramacion');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
   let datosOriginales = [];
 
@@ -35,14 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarDatos(datosOriginales);
       errorDiv?.classList.add('d-none');
       if (datosOriginales.length === 0) {
-        mostrarMensaje('No hay programaciones registradas', '');
-      } else {
-        mostrarMensaje('', '');
+        mostrarMensaje('No hay programaciones registradas');
       }
     } catch (err) {
       console.error('Error cargando programación:', err);
-      errorDiv.textContent = 'No se pudo cargar el listado.';
-      errorDiv.classList.remove('d-none');
+      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -50,17 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.clear().rows.add(lista).draw();
   }
 
-  function mostrarMensaje(texto, tipo) {
-    if (!mensajeDiv) return;
-    if (!texto) {
-      mensajeDiv.style.display = 'none';
-      mensajeDiv.textContent = '';
-      mensajeDiv.classList.remove('alert-danger');
-      return;
-    }
-    mensajeDiv.textContent = texto;
-    mensajeDiv.classList.toggle('alert-danger', tipo === 'danger');
-    mensajeDiv.style.display = 'block';
+  function mostrarMensaje(texto) {
+    if (texto) mostrarAlertaPersonalizada('error-datos', texto);
   }
 
   function filtrarDatos(texto) {
@@ -73,9 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarDatos(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay resultados para la búsqueda', '');
-    } else {
-      mostrarMensaje('', '');
+      mostrarMensaje('No hay resultados para la búsqueda');
     }
   }
 

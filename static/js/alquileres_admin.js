@@ -2,7 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaAlquileres');
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
   const mensajeError = document.getElementById('errorAlquileres');
-  const mensajeInfo = document.getElementById('mensajeAlquileres');
 
   let alquileresCargados = [];
 
@@ -35,8 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
     if (!seleccionados.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar registros seleccionados?');
-    if (!ok) return;
     try {
       const resp = await fetch('/admin/api/alquileres/eliminar', {
         method: 'POST',
@@ -82,16 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function mostrarMensaje(texto, tipo) {
-    if (!mensajeInfo) return;
-    if (!texto) {
-      mensajeInfo.style.display = 'none';
-      mensajeInfo.textContent = '';
-      mensajeInfo.classList.remove('alert-danger');
-      return;
-    }
-    mensajeInfo.textContent = texto;
-    mensajeInfo.classList.toggle('alert-danger', tipo === 'danger');
-    mensajeInfo.style.display = 'block';
+    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarAlquileres(texto) {

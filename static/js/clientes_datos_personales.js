@@ -49,7 +49,6 @@ async function guardarDatosCliente(ev) {
   new FormData(form).forEach((v, k) => { data[k] = v; });
 
   const msgDiv = document.getElementById('mensajeFormDatos');
-  msgDiv.classList.add('d-none');
 
   try {
     const resp = await fetchConAuth('/clientes/guardar_datos_personales', {
@@ -60,18 +59,15 @@ async function guardarDatosCliente(ev) {
     if (!resp) return;
     const resJson = await resp.json();
     if (resp.ok) {
-      msgDiv.textContent = resJson.mensaje || '¡Datos guardados correctamente!';
-      msgDiv.className = 'alert alert-success';
+      mostrarAlertaPersonalizada('exito-datos', resJson.mensaje || '¡Datos guardados correctamente!');
       window.location.href = '/cliente/panel';
     } else {
       throw new Error(resJson.detail || resJson.error || 'Error al guardar los datos');
     }
   } catch (error) {
     console.error('Error al guardar datos del cliente:', error);
-    msgDiv.textContent = error.message;
-    msgDiv.className = 'alert alert-danger';
+    mostrarAlertaPersonalizada('error-datos', error.message);
   }
-  msgDiv.classList.remove('d-none');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

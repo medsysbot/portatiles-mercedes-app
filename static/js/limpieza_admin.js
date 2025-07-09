@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarServicios');
   const buscador = document.getElementById('busquedaServicios');
   const errorDiv = document.getElementById('errorServicios');
-  const mensajeDiv = document.getElementById('mensajeServicios');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
   const btnEditar = document.getElementById('btnEditarSeleccionado');
   let servicios = [];
@@ -71,8 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaServicios tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar registros seleccionados?');
-    if (!ok) return;
     try {
       const resp = await fetch('/admin/api/servicios_limpieza/eliminar', {
         method: 'POST',
@@ -99,16 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function mostrarMensaje(texto, tipo) {
-    if (!mensajeDiv) return;
-    if (!texto) {
-      mensajeDiv.style.display = 'none';
-      mensajeDiv.textContent = '';
-      mensajeDiv.classList.remove('alert-danger');
-      return;
-    }
-    mensajeDiv.textContent = texto;
-    mensajeDiv.classList.toggle('alert-danger', tipo === 'danger');
-    mensajeDiv.style.display = 'block';
+    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarServicios(texto) {
@@ -119,7 +107,9 @@ document.addEventListener('DOMContentLoaded', () => {
       (s.numero_bano || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);
-    mostrarMensaje(filtrados.length === 0 ? 'No hay servicios registrados' : '', '');
+    if (filtrados.length === 0) {
+      mostrarMensaje('No hay servicios registrados', 'error-datos');
+    }
   }
 
   buscador?.addEventListener('input', () => filtrarServicios(buscador.value.trim()));

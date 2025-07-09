@@ -10,15 +10,11 @@
 {% block content %}
   <div class="container mt-4">
       <h2>Mis Comprobantes de Pago</h2>
-      <div class="d-flex flex-column align-items-start gap-2 mb-3">
-        <div class="d-flex align-items-center gap-2 w-100">
-          <input type="text" id="busquedaComprobantes" class="form-control buscador-tabla" placeholder="Buscar comprobante...">
-          <button id="btnBuscarComprobante" class="btn btn-secondary">Buscar</button>
-        </div>
-        <div class="d-flex align-items-center gap-2">
-          <button id="btnMostrarForm" class="btn btn-success"><i class="fas fa-receipt"></i> Agregar comprobante</button>
-          <button id="btnEliminarComprobantes" class="btn btn-danger" disabled>Eliminar seleccionados</button>
-        </div>
+      <div class="d-flex flex-wrap align-items-center mb-3 w-100">
+        <input type="text" id="busquedaComprobantes" class="form-control buscador-tabla" placeholder="Buscar comprobante...">
+        <button id="btnBuscarComprobante" class="btn btn-secondary no-margin-left">Buscar</button>
+        <button id="btnMostrarForm" class="btn btn-success ml-2"><i class="fas fa-receipt"></i> Agregar comprobante</button>
+        <button id="btnEliminarComprobantes" class="btn btn-danger ml-2" disabled>Eliminar seleccionados</button>
       </div>
 
       <form id="formComprobante" enctype="multipart/form-data" class="mb-3 d-none">

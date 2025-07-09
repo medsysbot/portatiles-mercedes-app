@@ -49,7 +49,7 @@ def setup_mock_supabase(monkeypatch, user):
 
 @pytest.fixture
 def client():
-    return TestClient(main.app)
+    return TestClient(main.app, base_url="http://localhost")
 
 
 def create_user():
@@ -294,4 +294,28 @@ def test_reset_password_expirado(monkeypatch, client):
     assert db.users[0]['password_hash'] == 'old'
     assert db.tokens[0]['usado'] is False
 
+
+
+def test_login_cliente_sin_dni(monkeypatch, client):
+    """Login de cliente debe funcionar aunque no tenga DNI registrado."""
+    db = InMemorySupabase()
+    user = {
+        'email': 'nuevo@test.com',
+        'password_hash': bcrypt.hash('abc123'),
+        'rol': 'cliente',
+        'activo': True,
+        'nombre': 'Nuevo Cliente'
+    }
+    db.users.append(user)
+    monkeypatch.setattr(login, 'supabase', db)
+
+    resp = client.post('/login', json={
+        'email': user['email'],
+        'password': 'abc123',
+        'rol': 'cliente'
+    })
+    assert resp.status_code == 200
+    data = resp.json()
+    assert data['usuario']['email'] == user['email']
+    assert data['usuario']['dni_cuit_cuil'] is None
 

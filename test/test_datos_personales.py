@@ -3,7 +3,7 @@ import main
 from fastapi.testclient import TestClient
 from routes import datos_personales
 
-client = TestClient(main.app)
+client = TestClient(main.app, base_url="http://localhost")
 
 class InMemoryQuery:
     def __init__(self, existing=None):

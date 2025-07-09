@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from routes import admin_panel
 import routes.alquileres as alquileres
 
-client = TestClient(main.app)
+client = TestClient(main.app, base_url="http://localhost")
 
 
 class InMemoryQuery:

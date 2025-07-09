@@ -3,7 +3,7 @@ from fastapi.testclient import TestClient
 from routes import cliente_panel
 import types
 
-client = TestClient(main.app)
+client = TestClient(main.app, base_url="http://localhost")
 
 
 class MockQuery:

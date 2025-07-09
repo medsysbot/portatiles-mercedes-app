@@ -3,7 +3,7 @@ import main
 from fastapi.testclient import TestClient
 import routes.facturas_pendientes as facturas_module
 
-client = TestClient(main.app)
+client = TestClient(main.app, base_url="http://localhost")
 
 class InMemoryQuery:
     def __init__(self, data):

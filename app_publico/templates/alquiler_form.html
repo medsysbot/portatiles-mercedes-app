@@ -19,6 +19,26 @@ Proyecto: Portátiles Mercedes
     <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.png">
     <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.png">
     <meta charset="UTF-8">
+    <link rel="preload" as="image" href="/static/iconos/email-incorrecto%20.png">
+    <link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
+    <link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
+    <link rel="preload" as="image" href="/static/iconos/enviando-reporte%20.png">
+    <link rel="preload" as="image" href="/static/iconos/error%20-mensaje.png">
+    <link rel="preload" as="image" href="/static/iconos/error-datos.png">
+    <link rel="preload" as="image" href="/static/iconos/error-informe%20-limpieza%20.png">
+    <link rel="preload" as="image" href="/static/iconos/error-registro%20.png">
+    <link rel="preload" as="image" href="/static/iconos/exito-datos%20.png">
+    <link rel="preload" as="image" href="/static/iconos/exito-informe%20.png">
+    <link rel="preload" as="image" href="/static/iconos/exito-mensaje.png">
+    <link rel="preload" as="image" href="/static/iconos/exito-registro.png">
+    <link rel="preload" as="image" href="/static/iconos/guardando-datos%20.png">
+    <link rel="preload" as="image" href="/static/iconos/password-error.png">
+    <link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
+    <link rel="preload" as="image" href="/static/iconos/registro-ok.png">
+    <link rel="preload" as="image" href="/static/iconos/reporte-error.png">
+    <link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
+    <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
+    <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Formulario para solicitar alquiler de baños portátiles">
     <title>Formulario de Alquiler - Portátiles Mercedes</title>
@@ -115,6 +135,7 @@ Proyecto: Portátiles Mercedes
             border-radius: 6px;
             font: inherit;
         }
+    <link rel="stylesheet" href="/static/css/style.css">
     </style>
 </head>
 <body>
@@ -152,6 +173,12 @@ Proyecto: Portátiles Mercedes
     </button>
 
 <!-- ==== Funciones auxiliares ==== -->
+    <div id="alerta-personalizada" class="alerta-personalizada" style="display:none;">
+        <img class="alerta-icono" alt="icono">
+        <span class="alerta-texto"></span>
+        <div class="alerta-botones"></div>
+    </div>
+    <script src="/static/js/alertas.js"></script>
     <script src="/app_publico/static/js/guardar_alquiler.js"></script>
     <script>
         document.getElementById('cerrarFormulario').addEventListener('click', () => {

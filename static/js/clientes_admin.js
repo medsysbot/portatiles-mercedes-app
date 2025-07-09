@@ -44,7 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.value);
-    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    if (!ids.length) return;
+    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
+    if (!ok) return;
     try {
       const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',

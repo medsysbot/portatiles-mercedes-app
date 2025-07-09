@@ -160,7 +160,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Acciones eliminar ---
   if (btnEliminarDatos) btnEliminarDatos.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaDatos tbody .fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    if (!ids.length) return;
+    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
+    if (!ok) return;
     try {
       const resp = await fetch(urlDatosDel, {
         method: 'POST',
@@ -169,12 +171,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('error');
       await cargarDatos();
-    } catch (e) { alert('Error eliminando registros'); }
+    } catch (e) { mostrarAlertaPersonalizada('Error eliminando registros','error-datos'); }
   });
 
   if (btnEliminarSalarios) btnEliminarSalarios.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaSalarios tbody .fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    if (!ids.length) return;
+    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
+    if (!ok) return;
     try {
       const resp = await fetch(urlSalariosDel, {
         method: 'POST',
@@ -183,12 +187,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('error');
       await cargarSalarios();
-    } catch (e) { alert('Error eliminando registros'); }
+    } catch (e) { mostrarAlertaPersonalizada('Error eliminando registros','error-datos'); }
   });
 
   if (btnEliminarAusencias) btnEliminarAusencias.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaAusencias tbody .fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    if (!ids.length) return;
+    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
+    if (!ok) return;
     try {
       const resp = await fetch(urlAusenciasDel, {
         method: 'POST',
@@ -197,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('error');
       await cargarAusencias();
-    } catch (e) { alert('Error eliminando registros'); }
+    } catch (e) { mostrarAlertaPersonalizada('Error eliminando registros','error-datos'); }
   });
 
 

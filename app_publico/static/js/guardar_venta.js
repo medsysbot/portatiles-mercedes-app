@@ -12,19 +12,29 @@ const form = document.getElementById('formVenta');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = Object.fromEntries(new FormData(form));
+  mostrarAlertaPersonalizada('guardando-datos', 'Guardando datos...');
+  let ok = false;
   try {
-    await fetch('/registrar_venta', {
+    const resp = await fetch('/registrar_venta', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(datos)
     });
+    ok = resp.ok;
+    if (ok) {
+      mostrarAlertaPersonalizada('exito-datos', 'Venta registrada con éxito');
+    } else {
+      mostrarAlertaPersonalizada('error-datos', 'Error al registrar la venta');
+    }
   } catch (_) {
-    // Ignorar errores, se cierra igualmente
+    mostrarAlertaPersonalizada('error-datos', 'Error al registrar la venta');
   }
 
-  if (window.opener) {
-    window.opener.location.href = '/ventas';
-    window.opener.focus();
-  }
-  window.close();
+  setTimeout(() => {
+    if (window.opener) {
+      window.opener.location.href = '/ventas';
+      window.opener.focus();
+    }
+    window.close();
+  }, 2600);
 });

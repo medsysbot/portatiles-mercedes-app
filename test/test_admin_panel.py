@@ -1,7 +1,7 @@
 import main
 from fastapi.testclient import TestClient
 
-client = TestClient(main.app)
+client = TestClient(main.app, base_url="http://localhost")
 
 
 def test_admin_panel_html():

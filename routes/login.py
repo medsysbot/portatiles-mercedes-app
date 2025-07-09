@@ -192,21 +192,25 @@ async def login(datos: LoginInput, response: Response):
 
         # --- Solución para panel de clientes: incluir dni_cuit_cuil en la respuesta ---
         if usuario.get("rol", "").lower() == "cliente":
-            datos_cli = (
-                supabase.table("datos_personales_clientes")
-                .select("dni_cuit_cuil, nombre")
-                .eq("email", usuario["email"])
-                .maybe_single()
-                .execute()
-            )
-            cli = getattr(datos_cli, "data", None)
+            try:
+                datos_cli = (
+                    supabase.table("datos_personales_clientes")
+                    .select("dni_cuit_cuil, nombre")
+                    .eq("email", usuario["email"])
+                    .maybe_single()
+                    .execute()
+                )
+                cli = getattr(datos_cli, "data", None)
+            except Exception as exc:
+                logger.error("Error obteniendo datos del cliente: %s", exc)
+                cli = None
             return {
                 "access_token": token,
                 "usuario": {
-                    "dni_cuit_cuil": cli["dni_cuit_cuil"] if cli else None,
+                    "dni_cuit_cuil": cli.get("dni_cuit_cuil") if isinstance(cli, dict) else None,
                     "email": usuario["email"],
-                    "nombre": cli["nombre"] if cli else usuario.get("nombre", "")
-                }
+                    "nombre": cli.get("nombre") if isinstance(cli, dict) else usuario.get("nombre", ""),
+                },
             }
         # --- Fin solución clientes ---
 
@@ -223,7 +227,7 @@ async def login(datos: LoginInput, response: Response):
         with open(os.path.join(LOG_DIR, "error_login.log"), "a") as f:
             f.write(traceback.format_exc())
         imprimir_log_error()
-        raise HTTPException(status_code=500, detail="Error interno en el servidor")
+        raise HTTPException(status_code=500, detail="Error interno del sistema. Contacte al administrador.")
 
 @router.post("/verificar_token")
 def verificar_token(data: dict):

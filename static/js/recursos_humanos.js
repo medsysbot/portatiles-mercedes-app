@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnDatos = document.getElementById('tabDatosBtn');
   const btnSalarios = document.getElementById('tabSalariosBtn');
   const btnAusencias = document.getElementById('tabAusenciasBtn');
+  const buscador = document.getElementById('busquedaDniEmpleado');
+  const btnBuscar = document.getElementById('btnBuscarDniEmpleado');
+
+  let datosCargados = [];
+  let salariosCargados = [];
+  let ausenciasCargados = [];
 
   // --- Manejo de pestañas con clase d-none (Bootstrap) ---
   function mostrar(seccion) {
@@ -112,31 +118,53 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#tablaAusencias tbody').on('change', '.fila-check', () => actualizarBoton(tablaAusencias, btnEliminarAusencias));
   }
 
+  function mostrarDatos(lista) {
+    tablaDatos.clear();
+    tablaDatos.rows.add(lista).draw();
+  }
+
+  function mostrarSalarios(lista) {
+    tablaSalarios.clear();
+    tablaSalarios.rows.add(lista).draw();
+  }
+
+  function mostrarAusencias(lista) {
+    tablaAusencias.clear();
+    tablaAusencias.rows.add(lista).draw();
+  }
+
+  function aplicarFiltro() {
+    const q = (buscador?.value || '').toLowerCase();
+    const datosFil = datosCargados.filter(d => (d.dni_cuit_cuil || '').toLowerCase().includes(q));
+    const salariosFil = salariosCargados.filter(s => (s.dni_cuit_cuil || '').toLowerCase().includes(q));
+    const ausenciasFil = ausenciasCargados.filter(a => (a.dni_cuit_cuil || '').toLowerCase().includes(q));
+    mostrarDatos(datosFil);
+    mostrarSalarios(salariosFil);
+    mostrarAusencias(ausenciasFil);
+  }
+
   // --- Cargar datos tablas ---
   async function cargarDatos() {
     try {
       const resp = await fetch(urlDatos, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
-      const datos = await resp.json();
-      tablaDatos.clear();
-      tablaDatos.rows.add(datos).draw();
+      datosCargados = await resp.json();
+      aplicarFiltro();
     } catch (err) { console.error('Error al cargar datos personales:', err); }
   }
 
   async function cargarSalarios() {
     try {
       const resp = await fetch(urlSalarios, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
-      const datos = await resp.json();
-      tablaSalarios.clear();
-      tablaSalarios.rows.add(datos).draw();
+      salariosCargados = await resp.json();
+      aplicarFiltro();
     } catch (err) { console.error('Error al cargar salarios:', err); }
   }
 
   async function cargarAusencias() {
     try {
       const resp = await fetch(urlAusencias, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
-      const datos = await resp.json();
-      tablaAusencias.clear();
-      tablaAusencias.rows.add(datos).draw();
+      ausenciasCargados = await resp.json();
+      aplicarFiltro();
     } catch (err) { console.error('Error al cargar ausencias:', err); }
   }
 
@@ -182,6 +210,9 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarAusencias();
     } catch (e) { alert('Error eliminando registros'); }
   });
+
+  buscador?.addEventListener('input', aplicarFiltro);
+  btnBuscar?.addEventListener('click', aplicarFiltro);
 
   // --- Inicialización ---
   cargarDatos();

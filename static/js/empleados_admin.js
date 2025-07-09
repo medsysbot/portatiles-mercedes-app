@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(tabla.querySelectorAll('.fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar empleados seleccionados?', 'error-datos');
+    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar empleados seleccionados?');
     if (!ok) return;
     try {
       const resp = await fetch('/admin/api/empleados/eliminar', {
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
       location.reload();
     } catch (err) {
       console.error('Error eliminando empleados:', err);
-      mostrarAlertaPersonalizada('Error eliminando registros','error-datos');
+      mostrarAlertaPersonalizada('error-datos', 'Error eliminando registros');
     }
   });
 });

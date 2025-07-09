@@ -17,6 +17,26 @@ Proyecto: Portátiles Mercedes
   <link rel="preload" as="image" href="/static/imagenes/fondo-panel.png">
   <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.png">
   <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.png">
+  <link rel="preload" as="image" href="/static/iconos/email-incorrecto%20.png">
+  <link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
+  <link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
+  <link rel="preload" as="image" href="/static/iconos/enviando-reporte%20.png">
+  <link rel="preload" as="image" href="/static/iconos/error%20-mensaje.png">
+  <link rel="preload" as="image" href="/static/iconos/error-datos.png">
+  <link rel="preload" as="image" href="/static/iconos/error-informe%20-limpieza%20.png">
+  <link rel="preload" as="image" href="/static/iconos/error-registro%20.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-datos%20.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-informe%20.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-mensaje.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-registro.png">
+  <link rel="preload" as="image" href="/static/iconos/guardando-datos%20.png">
+  <link rel="preload" as="image" href="/static/iconos/password-error.png">
+  <link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
+  <link rel="preload" as="image" href="/static/iconos/registro-ok.png">
+  <link rel="preload" as="image" href="/static/iconos/reporte-error.png">
+  <link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
+  <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
+  <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
   <meta charset="UTF-8">
   <title>Galería - Portátiles Mercedes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -298,5 +318,11 @@ Proyecto: Portátiles Mercedes
   <footer class="pie-pagina">
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
+  <div id="alerta-personalizada" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; background:rgba(0,0,0,0.85); color:#fff; border-radius:14px; box-shadow:0 2px 16px rgba(0,0,0,0.2); padding:2em 1.8em; max-width:380px; width:95vw; min-height:96px; text-align:left; display:flex; align-items:center;">
+    <img id="alerta-icono" src="" alt="icono" style="width:48px; height:48px; margin-right:1em; flex-shrink:0; filter:drop-shadow(0 2px 8px #0006);" />
+    <span id="alerta-mensaje" style="font-size:1.2rem; line-height:1.35;"></span>
+    <div class="alerta-botones"></div>
+  </div>
+  <script src="/static/js/alertas.js"></script>
 </body>
 </html>

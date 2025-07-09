@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const checks = document.querySelectorAll('.pm-check:checked');
     if (!checks.length) return;
-    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar los comprobantes seleccionados?', 'error-datos');
+    const ok = await mostrarConfirmacionPersonalizada('error-datos', '¿Eliminar los comprobantes seleccionados?');
     if (!ok) return;
     let dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {

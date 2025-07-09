@@ -24,10 +24,10 @@ form.addEventListener('submit', async (e) => {
     const resJson = await resp.json();
     ok = resp.ok && resJson.ok;
     if (!ok) {
-      mostrarAlertaPersonalizada(resJson.error || resJson.detail || 'Error al guardar', 'error-datos');
+      mostrarAlertaPersonalizada('error-datos', resJson.error || resJson.detail || 'Error al guardar');
     }
   } catch (_) {
-    mostrarAlertaPersonalizada('Error al guardar', 'error-datos');
+    mostrarAlertaPersonalizada('error-datos', 'Error al guardar');
   }
 
   if (window.opener) {

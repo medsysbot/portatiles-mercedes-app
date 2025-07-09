@@ -13,6 +13,8 @@ if (form) {
         const errorEl = document.getElementById("errorMsg");
         if (errorEl) errorEl.textContent = "";
 
+        mostrarAlertaPersonalizada("enviando-mensaje", "Procesando ingreso...");
+
         fetch("/login", {
             method: "POST",
             body: JSON.stringify(datos),
@@ -24,6 +26,10 @@ if (form) {
             const data = await res.json();
             if (res.ok && data.access_token) {
                 localStorage.setItem("access_token", data.access_token);
+                const finalizar = (url) => {
+                    mostrarAlertaPersonalizada("exito-datos", "Ingreso exitoso");
+                    setTimeout(() => { window.location.href = url; }, 2600);
+                };
 
                 if (data.usuario && data.usuario.dni_cuit_cuil) {
                     localStorage.setItem("usuario_obj", JSON.stringify({
@@ -32,7 +38,7 @@ if (form) {
                         nombre: data.usuario.nombre
                     }));
                     localStorage.setItem("dni_cuit_cuil", data.usuario.dni_cuit_cuil);
-                    window.location.href = "/splash_cliente";
+                    finalizar("/splash_cliente");
                     return;
                 }
 
@@ -43,11 +49,7 @@ if (form) {
                         rol: data.rol,
                         id: data.id || ""
                     }));
-                    if (data.rol === "Administrador") {
-                        window.location.href = "/splash";
-                    } else {
-                        window.location.href = "/splash_empleado";
-                    }
+                    finalizar(data.rol === "Administrador" ? "/splash" : "/splash_empleado");
                     return;
                 }
 
@@ -70,24 +72,22 @@ if (form) {
                             nombre: datos.nombre || ""
                         }));
                     }
-                    window.location.href = "/splash_cliente";
+                    finalizar("/splash_cliente");
                 })
                 .catch(() => {
                     localStorage.setItem("usuario_obj", JSON.stringify({
                         email: email,
                         nombre: data.nombre || ""
                     }));
-                    window.location.href = "/splash_cliente";
+                    finalizar("/splash_cliente");
                 });
 
             } else {
-                if (errorEl) {
-                    errorEl.textContent = data.detail || "Credenciales incorrectas.";
-                }
+                mostrarAlertaPersonalizada("error-datos", data.detail || "Credenciales incorrectas.");
             }
         })
-        .catch(error => {
-            if (errorEl) errorEl.textContent = "Error al iniciar sesión.";
+        .catch(() => {
+            mostrarAlertaPersonalizada("error-datos", "Error al iniciar sesión.");
         });
     });
 }

@@ -15,6 +15,7 @@ form.addEventListener('submit', async (e) => {
   const datos = Object.fromEntries(new FormData(form));
 
   let ok = false;
+  mostrarAlertaPersonalizada('guardando-datos', 'Guardando datos...');
   try {
     const resp = await fetch('/admin/alquileres/nuevo', {
       method: 'POST',
@@ -23,16 +24,20 @@ form.addEventListener('submit', async (e) => {
     });
     const resJson = await resp.json();
     ok = resp.ok && resJson.ok;
-    if (!ok) {
+    if (ok) {
+      mostrarAlertaPersonalizada('exito-datos', 'Alquiler registrado');
+    } else {
       mostrarAlertaPersonalizada('error-datos', resJson.error || resJson.detail || 'Error al guardar');
     }
   } catch (_) {
     mostrarAlertaPersonalizada('error-datos', 'Error al guardar');
   }
 
-  if (window.opener) {
-    window.opener.location.href = '/alquiler';
-    window.opener.focus();
-  }
-  window.close();
+  setTimeout(() => {
+    if (window.opener) {
+      window.opener.location.href = '/alquiler';
+      window.opener.focus();
+    }
+    window.close();
+  }, 2600);
 });

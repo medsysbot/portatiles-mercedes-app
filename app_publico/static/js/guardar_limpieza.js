@@ -17,6 +17,7 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = new FormData(form);
 
+  mostrarAlertaPersonalizada('guardando-datos', 'Guardando datos...');
   try {
     const resp = await fetch('/registrar_limpieza', {
       method: 'POST',

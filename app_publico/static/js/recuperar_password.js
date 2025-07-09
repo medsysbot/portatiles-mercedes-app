@@ -11,6 +11,7 @@ if (form) {
     e.preventDefault();
     msg.textContent = '';
     const email = document.getElementById('email').value;
+    mostrarAlertaPersonalizada('enviando-mensaje', 'Enviando email...');
     try {
       const resp = await fetch('/recuperar_password', {
         method: 'POST',
@@ -18,12 +19,14 @@ if (form) {
         body: JSON.stringify({ email })
       });
       const data = await resp.json();
-      msg.style.color = resp.ok ? 'green' : 'red';
-      msg.textContent = data.mensaje || data.detail || 'Solicitud procesada';
-      if (resp.ok) form.reset();
+      if (resp.ok) {
+        mostrarAlertaPersonalizada('exito-mensaje', data.mensaje || 'Solicitud procesada');
+        form.reset();
+      } else {
+        mostrarAlertaPersonalizada('error-mensaje', data.detail || 'Error al procesar');
+      }
     } catch (_) {
-      msg.style.color = 'red';
-      msg.textContent = 'Error al procesar la solicitud';
+      mostrarAlertaPersonalizada('error-mensaje', 'Error al procesar la solicitud');
     }
   });
 }

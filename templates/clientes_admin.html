@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 {% endblock %}
 {% block content %}
-<h2 class="mb-3 mt-0">Administración de clientes</h2>
+<h2 class="mb-3 mt-0">Administración de clientes</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
 
 <div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
   <div class="mb-2 flex-grow-1">
@@ -24,6 +24,9 @@
   <div class="alert alert-danger">{{ mensaje_error }}</div>
   {% endif %}
   <div id="mensajeClientes" class="alert mt-3 d-none"></div>
+  {% if not clientes %}
+  <p>No hay clientes registrados</p>
+  {% endif %}
   <table id="tabla-clientes" class="tabla-mercedes dataTable display">
     <thead>
       <tr>
@@ -37,7 +40,20 @@
         <th>Email</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+      {% for c in clientes %}
+      <tr>
+        <td><input type="checkbox" class="fila-check" value="{{ c.dni_cuit_cuil }}"></td>
+        <td>{{ c.dni_cuit_cuil }}</td>
+        <td>{{ c.nombre }}</td>
+        <td>{{ c.apellido }}</td>
+        <td>{{ c.direccion }}</td>
+        <td>{{ c.telefono }}</td>
+        <td>{{ c.razon_social }}</td>
+        <td>{{ c.email }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
   </table>
 </div>
 {% endblock %}

@@ -46,23 +46,23 @@ function procesarCola() {
   if (alertaActiva || colaAlertas.length === 0) return;
   const item = colaAlertas.shift();
   alertaActiva = true;
-  const overlay = document.getElementById('alertaPersonalizada');
-  const icono = document.getElementById('iconoAlerta');
-  const texto = document.getElementById('mensajeAlerta');
-  const botones = overlay.querySelector('.alerta-botones');
-  if (!overlay || !icono || !texto) return;
+  const contenedor = document.getElementById('alertaPersonalizada');
+  const icono = document.getElementById('iconoAlertaPersonalizada');
+  const texto = document.getElementById('mensajeAlertaPersonalizada');
+  const botones = contenedor.querySelector('.alerta-botones');
+  if (!contenedor || !icono || !texto) return;
   icono.src = obtenerRutaIcono(item.tipoIcono);
   icono.style.display = item.tipoIcono ? 'block' : 'none';
   texto.textContent = item.mensaje;
-  overlay.classList.remove('d-none');
-  overlay.style.display = 'flex';
-  overlay.style.opacity = '1';
-  botones.innerHTML = '';
+  contenedor.classList.remove('d-none');
+  contenedor.style.display = 'flex';
+  contenedor.style.opacity = '1';
+  if (botones) botones.innerHTML = '';
   setTimeout(() => {
-    overlay.style.opacity = '0';
+    contenedor.style.opacity = '0';
     setTimeout(() => {
-      overlay.classList.add('d-none');
-      overlay.style.display = 'none';
+      contenedor.classList.add('d-none');
+      contenedor.style.display = 'none';
       alertaActiva = false;
       setTimeout(procesarCola, 500);
     }, 300);

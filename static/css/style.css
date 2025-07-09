@@ -478,45 +478,44 @@ body.panel-cliente table.pm-tabla tr:hover {
 }
 
 /* ================= Alertas personalizadas ================= */
-.alerta-overlay {
-  display: none;
+.alerta-personalizada {
   position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  left: 50%;
+  top: 30%;
+  transform: translate(-50%, -50%);
   z-index: 9999;
-  justify-content: center;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.45);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.alerta-contenido {
-  background: rgba(24, 24, 24, 0.94);
+  background: rgba(0, 0, 0, 0.85);
   color: #fff;
   border-radius: 18px;
-  padding: 2.2em 2.5em;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0.4);
   text-align: center;
-  min-width: 260px;
-  max-width: 95vw;
-  margin: auto;
-  box-shadow: 0 2px 24px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 350px;
+  min-width: 220px;
+  min-height: 120px;
+  font-size: 1.15rem;
+  font-family: 'Nunito', Arial, sans-serif;
 }
-.alerta-icono {
-  width: 64px;
-  height: 64px;
-  margin-bottom: 0.8em;
+
+.icono-alerta {
+  width: 54px;
+  height: 54px;
+  margin-bottom: 18px;
 }
+
+.d-none {
+  display: none !important;
+}
+
 @media (max-width: 600px) {
-  .alerta-contenido {
+  .alerta-personalizada {
     padding: 1.1em 0.9em;
     min-width: 120px;
   }
-  .alerta-icono {
+  .icono-alerta {
     width: 36px;
     height: 36px;
   }

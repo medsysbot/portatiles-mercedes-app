@@ -361,6 +361,18 @@ body.panel-cliente .buscador-tabla::placeholder {
   color: #ffffff !important;
 }
 
+/* Utilidad para eliminar margen izquierdo en botones específicos */
+.no-margin-left {
+  margin-left: 0 !important;
+}
+
+/* En pantallas pequeñas, el buscador ocupa el ancho completo */
+@media (max-width: 768px) {
+  .buscador-tabla {
+    width: 100% !important;
+  }
+}
+
 .scroll-x-light {
   overflow-x: auto;
   background-color: #f9f9f9;

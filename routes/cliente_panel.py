@@ -26,6 +26,7 @@ router = APIRouter()
 templates = Jinja2Templates(directory="templates")
 
 def get_dni_from_email(email: str):
+    """Devuelve el DNI asociado al email o ``None`` si no existe."""
     res = (
         supabase.table("datos_personales_clientes")
         .select("dni_cuit_cuil")
@@ -33,9 +34,9 @@ def get_dni_from_email(email: str):
         .maybe_single()
         .execute()
     )
-    if not getattr(res, "data", None) or not res.data.get("dni_cuit_cuil"):
-        raise HTTPException(status_code=404, detail="Datos de usuario no encontrados")
-    return res.data["dni_cuit_cuil"]
+    if getattr(res, "data", None):
+        return res.data.get("dni_cuit_cuil") or None
+    return None
 
 # ==== HTML: Todas requieren token ====
 @router.get("/cliente/panel")
@@ -93,6 +94,8 @@ async def get_datos_personales(token_data: dict = Depends(verificar_token)):
 @router.get("/clientes/alquileres_api")
 async def get_alquileres(token_data: dict = Depends(verificar_token)):
     dni = get_dni_from_email(token_data["email"])
+    if not dni:
+        return []
     try:
         res = (
             supabase.table("alquileres")
@@ -110,6 +113,8 @@ async def get_alquileres(token_data: dict = Depends(verificar_token)):
 @router.get("/clientes/facturas_pendientes_api")
 async def get_facturas_pendientes(token_data: dict = Depends(verificar_token)):
     dni = get_dni_from_email(token_data["email"])
+    if not dni:
+        return []
     try:
         res = (
             supabase.table("facturas_pendientes")
@@ -127,6 +132,8 @@ async def get_facturas_pendientes(token_data: dict = Depends(verificar_token)):
 @router.get("/clientes/compras_api")
 async def get_compras(token_data: dict = Depends(verificar_token)):
     dni = get_dni_from_email(token_data["email"])
+    if not dni:
+        return []
     try:
         res = (
             supabase.table("ventas")
@@ -144,6 +151,8 @@ async def get_compras(token_data: dict = Depends(verificar_token)):
 @router.get("/clientes/servicios_limpieza_api")
 async def get_servicios_limpieza(token_data: dict = Depends(verificar_token)):
     dni = get_dni_from_email(token_data["email"])
+    if not dni:
+        return []
     try:
         res = (
             supabase.table("servicios_limpieza")
@@ -161,6 +170,8 @@ async def get_servicios_limpieza(token_data: dict = Depends(verificar_token)):
 @router.get("/clientes/comprobantes_api")
 async def get_comprobantes(token_data: dict = Depends(verificar_token)):
     dni = get_dni_from_email(token_data["email"])
+    if not dni:
+        return []
     try:
         res = (
             supabase.table("comprobantes_pago")

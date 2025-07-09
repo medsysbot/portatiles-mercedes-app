@@ -61,17 +61,23 @@ Proyecto: Portátiles Mercedes
                 });
                 const resultado = await resp.json();
                 if (resp.ok) {
-                    mostrarAlertaPersonalizada('exito-datos', resultado.mensaje);
+                    showAlert('exito-datos', resultado.mensaje);
                     form.reset();
                 } else {
-                    mostrarAlertaPersonalizada('error-datos', 'Error: ' + (resultado.detail || 'No se pudo activar'));
+                    showAlert('error-datos', 'Error: ' + (resultado.detail || 'No se pudo activar'));
                 }
             } catch (_) {
-                mostrarAlertaPersonalizada('error-datos', 'Error de conexión');
+                showAlert('error-datos', 'Error de conexión');
             }
         });
     </script>
-    <!-- Alerta personalizada global -->
+    <!-- ALERTA CENTRAL PERSONALIZADA -->
+    <div id="alert-manager" class="alert-container">
+      <div class="alert-box">
+        <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
+        <span id="alert-text" class="alert-message">Texto de alerta</span>
+      </div>
     </div>
+    <script src="/static/js/alertas.js"></script>
 </body>
 </html>

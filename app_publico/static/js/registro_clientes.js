@@ -36,11 +36,9 @@ form.addEventListener('submit', async (e) => {
     e.preventDefault();
     msg.textContent = '';
     if (password.value !== password2.value) {
-        mostrarAlertaPersonalizada('verifique-contrasena', 'Las contraseñas no coinciden.');
         return;
     }
     const datos = new FormData(form);
-    mostrarAlertaPersonalizada('registrando-usuario', 'Registrando usuario...');
     try {
         const resp = await fetch('/registrar_cliente', {
             method: 'POST',
@@ -48,14 +46,11 @@ form.addEventListener('submit', async (e) => {
         });
         const resultado = await resp.json();
         if (resp.ok) {
-            mostrarAlertaPersonalizada('registro-ok', 'Cuenta creada con éxito');
             form.reset();
             submitBtn.disabled = true;
         } else {
-            mostrarAlertaPersonalizada('error-registro', resultado.detail || 'Error al registrar');
         }
     } catch (_) {
-        mostrarAlertaPersonalizada('error-registro', 'Error de conexión');
     }
 });
 

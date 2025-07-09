@@ -85,7 +85,6 @@ from routes.router import router
 from routes.ventas import router as ventas_router
 from routes.limpieza import router as limpieza_router
 from routes.programacion_limpiezas import router as prog_limpieza_router
-from routes.alertas import router as alertas_router
 from routes.login import router as login_router, supabase as supabase_client
 from routes.admin_panel import router as admin_router
 from routes.empleado_panel import router as empleado_router
@@ -168,7 +167,6 @@ app.include_router(router)
 app.include_router(ventas_router)
 app.include_router(limpieza_router)
 app.include_router(prog_limpieza_router)
-app.include_router(alertas_router)
 app.include_router(login_router)
 app.include_router(admin_router)
 app.include_router(empleado_router)

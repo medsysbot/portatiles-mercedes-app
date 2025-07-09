@@ -122,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarComprobantes(filtrados);
     if (filtrados.length === 0) {
-      mostrarAlertaPersonalizada('error-datos', 'Sin registros');
     }
   }
 
@@ -152,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
       if (registros.length === 0) {
-        mostrarAlertaPersonalizada('error-datos', 'Sin registros');
       }
     } catch (err) {
       console.error('Error cargando comprobantes:', err);
@@ -175,7 +173,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const res = await resp.json();
       if (resp.ok && res.ok) {
-        mostrarAlertaPersonalizada('exito-datos', 'Comprobante cargado correctamente');
         form.reset();
         await cargarComprobantes();
         btnCancelar?.click();
@@ -184,7 +181,6 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(res.detail || 'Error al subir');
       }
     } catch (err) {
-      mostrarAlertaPersonalizada('error-datos', err.message);
     }
   });
 

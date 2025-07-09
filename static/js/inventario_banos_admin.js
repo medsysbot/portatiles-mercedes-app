@@ -47,7 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarTabla();
     } catch (err) {
       console.error('Error eliminando baños:', err);
-      mostrarMensaje('Error eliminando registros', 'danger');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
@@ -63,9 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarBanos(banosCargados);
       mensajeError?.classList.add('d-none');
       if (banosCargados.length === 0) {
-        mostrarMensaje('No hay baños registrados', '');
       } else {
-        mostrarMensaje('', '');
       }
     } catch (err) {
       console.error('Error cargando inventario:', err);
@@ -81,8 +78,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   // Botón Agregar baño: navega al formulario de alta (NO modal)
@@ -106,9 +101,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarBanos(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay baños registrados', '');
     } else {
-      mostrarMensaje('', '');
     }
   }
 

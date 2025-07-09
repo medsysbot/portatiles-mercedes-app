@@ -24,7 +24,6 @@ if (form) {
     e.preventDefault();
     if (!validar()) return;
     const token = document.getElementById('token').value;
-    mostrarAlertaPersonalizada('guardando-datos', 'Actualizando contraseña...');
     try {
       const resp = await fetch('/reset_password', {
         method: 'POST',
@@ -33,13 +32,10 @@ if (form) {
       });
       const data = await resp.json();
       if (resp.ok) {
-        mostrarAlertaPersonalizada('exito-datos', data.mensaje || 'Contraseña actualizada');
         form.reset();
       } else {
-        mostrarAlertaPersonalizada('error-datos', data.detail || 'Error al procesar');
       }
     } catch (_) {
-      mostrarAlertaPersonalizada('error-datos', 'Error al procesar la solicitud');
     }
   });
 }

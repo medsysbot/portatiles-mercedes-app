@@ -59,14 +59,12 @@ async function guardarDatosCliente(ev) {
     if (!resp) return;
     const resJson = await resp.json();
     if (resp.ok) {
-      mostrarAlertaPersonalizada('exito-datos', resJson.mensaje || '¡Datos guardados correctamente!');
       window.location.href = '/cliente/panel';
     } else {
       throw new Error(resJson.detail || resJson.error || 'Error al guardar los datos');
     }
   } catch (error) {
     console.error('Error al guardar datos del cliente:', error);
-    mostrarAlertaPersonalizada('error-datos', error.message);
   }
 }
 

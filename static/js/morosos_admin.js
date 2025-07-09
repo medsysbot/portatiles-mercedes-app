@@ -34,9 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarMorosos(morososCargados);
       mensajeError?.classList.add('d-none');
       if (morososCargados.length === 0) {
-        mostrarMensaje('No hay morosos registrados', '');
       } else {
-        mostrarMensaje('', '');
       }
     } catch (err) {
       console.error('Error cargando morosos:', err);
@@ -52,8 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrarMorosos(texto) {
@@ -63,9 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarMorosos(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay morosos registrados', '');
     } else {
-      mostrarMensaje('', '');
     }
   }
 

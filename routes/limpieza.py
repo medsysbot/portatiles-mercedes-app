@@ -28,17 +28,6 @@ from pydantic import BaseModel, ValidationError
 from fpdf import FPDF
 from supabase import Client, create_client
 
-# Si tienes variables para el mail, importa aquí
-try:
-    from routes.alertas import (
-        EMAIL_ORIGIN,
-        EMAIL_PASSWORD,
-        SMTP_PORT,
-        SMTP_SERVER,
-    )
-except ImportError:
-    EMAIL_ORIGIN = EMAIL_PASSWORD = SMTP_PORT = SMTP_SERVER = None
-
 router = APIRouter()
 
 # ===== Supabase =====

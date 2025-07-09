@@ -45,11 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
       registros = await resp.json();
       mostrarVentas(registros);
       if (registros.length === 0) {
-        mostrarAlertaPersonalizada('error-datos', 'Sin registros');
       }
     } catch (err) {
       console.error('Error cargando compras:', err);
-      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -65,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarVentas(filtrados);
     if (filtrados.length === 0) {
-      mostrarAlertaPersonalizada('error-datos', 'Sin registros');
     }
   }
 

@@ -12,7 +12,6 @@ const form = document.getElementById('formVenta');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = Object.fromEntries(new FormData(form));
-  mostrarAlertaPersonalizada('guardando-datos', 'Guardando datos...');
   let ok = false;
   try {
     const resp = await fetch('/registrar_venta', {
@@ -22,12 +21,9 @@ form.addEventListener('submit', async (e) => {
     });
     ok = resp.ok;
     if (ok) {
-      mostrarAlertaPersonalizada('exito-datos', 'Venta registrada con éxito');
     } else {
-      mostrarAlertaPersonalizada('error-datos', 'Error al registrar la venta');
     }
   } catch (_) {
-    mostrarAlertaPersonalizada('error-datos', 'Error al registrar la venta');
   }
 
   setTimeout(() => {

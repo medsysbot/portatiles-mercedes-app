@@ -66,7 +66,6 @@
 | GET | /admin/comprobantes | Listar y cargar comprobantes | HTML | Sí |
 | POST | /admin/comprobantes | Cargar comprobante de pago | JSON | Sí |
 | GET | /admin/api/comprobantes_pago | Listar comprobantes de pago | JSON | Sí |
-| POST | /ejecutar_alertas | Ejecuta manualmente las alertas programadas | JSON | Sí |
 
 ## SUPABASE
 

@@ -47,11 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
       registros = await resp.json();
       mostrarServicios(registros);
       if (registros.length === 0) {
-        mostrarAlertaPersonalizada('error-datos', 'Sin registros');
       }
     } catch (err) {
       console.error('Error cargando servicios:', err);
-      mostrarAlertaPersonalizada('error-datos', 'No se pudo cargar el listado.');
     }
   }
 
@@ -69,7 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrarServicios(filtrados);
     if (filtrados.length === 0) {
-      mostrarAlertaPersonalizada('error-datos', 'Sin registros');
     }
   }
 

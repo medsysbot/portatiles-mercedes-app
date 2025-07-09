@@ -17,7 +17,6 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = new FormData(form);
 
-  mostrarAlertaPersonalizada('guardando-datos', 'Guardando datos...');
   try {
     const resp = await fetch('/registrar_limpieza', {
       method: 'POST',
@@ -25,13 +24,10 @@ form.addEventListener('submit', async (e) => {
     });
     const resultado = await resp.json();
     if (resp.ok) {
-      mostrarAlertaPersonalizada('exito-datos', 'Limpieza registrada con éxito');
       form.reset();
       fechaHoraInput.value = new Date().toISOString().slice(0, 16);
     } else {
-      mostrarAlertaPersonalizada('error-datos', 'Error: ' + (resultado.detail || 'No se pudo guardar'));
     }
   } catch (_) {
-    mostrarAlertaPersonalizada('error-datos', 'Error de conexión');
   }
 });

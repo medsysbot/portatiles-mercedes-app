@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', () => {
       await obtenerClientes();
     } catch (err) {
       console.error('Error eliminando clientes:', err);
-      mostrarMensaje('Error eliminando registros', 'danger');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
@@ -70,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarClientes(clientesCargados);
     } catch (error) {
       console.error('❌ Error al cargar clientes:', error);
-      mostrarMensaje('Error consultando la base de datos', 'danger');
       if (clientesCargados.length === 0) tabla.clear().draw();
     }
   }
@@ -78,8 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function mostrarClientes(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
-    if (lista.length === 0) mostrarMensaje('No hay clientes registrados', '');
-    else mostrarMensaje('', '');
   }
 
   function filtrarClientes(texto) {
@@ -92,8 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
     mostrarClientes(filtrados);
   }
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   const buscador = document.getElementById('busquedaCliente');

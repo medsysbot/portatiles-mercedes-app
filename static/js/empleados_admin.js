@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
       location.reload();
     } catch (err) {
       console.error('Error eliminando empleados:', err);
-      mostrarAlertaPersonalizada('error-datos', 'Error eliminando registros');
     }
   });
 });

@@ -33,9 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrar(banosCargados);
       mensajeError.classList.add('d-none');
       if (banosCargados.length === 0) {
-        mostrarMensaje('No hay baños registrados', '');
       } else {
-        mostrarMensaje('', '');
       }
     } catch (err) {
       console.error('Error cargando inventario:', err);
@@ -49,8 +47,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  function mostrarMensaje(texto, tipo) {
-    if (texto) mostrarAlertaPersonalizada(tipo === 'danger' ? 'error-datos' : 'exito-datos', texto);
   }
 
   function filtrar(texto) {
@@ -62,9 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     );
     mostrar(filtrados);
     if (filtrados.length === 0) {
-      mostrarMensaje('No hay baños registrados', '');
     } else {
-      mostrarMensaje('', '');
     }
   }
 

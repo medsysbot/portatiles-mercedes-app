@@ -41,7 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarDatos();
     } catch (err) {
       console.error('Error eliminando datos personales:', err);
-      mostrarAlertaPersonalizada('error-datos', 'Error eliminando registros');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }

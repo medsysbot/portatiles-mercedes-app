@@ -64,15 +64,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error');
       form.reset();
-      mostrarAlertaPersonalizada('exito-datos', 'Limpieza programada');
       cargarDatos();
       btnCancelar.click();
     } catch (err) {
-      mostrarAlertaPersonalizada('error-datos', 'Error guardando');
     }
   });
 
-  function mostrarMensaje() {}
 
   function actualizarBoton() {
     const checks = document.querySelectorAll('#tablaProgramacion tbody .fila-check:checked');
@@ -92,7 +89,6 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       cargarDatos();
     } catch (err) {
-      mostrarAlertaPersonalizada('error-datos', 'Error al eliminar');
     }
   });
 

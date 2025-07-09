@@ -42,14 +42,20 @@
   <link rel="stylesheet" href="/static/css/style.css">
   {% endblock %}
 </head>
-<body class="{% block body_class %}hold-transition sidebar-mini{% endblock %}">
+  <body class="{% block body_class %}hold-transition sidebar-mini{% endblock %}">
   {% block body %}{% endblock %}
-  <!-- Alerta personalizada global -->
-  </div>
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.4/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
   {% block scripts %}{% endblock %}
+  <!-- ALERTA CENTRAL PERSONALIZADA -->
+  <div id="alert-manager" class="alert-container">
+    <div class="alert-box">
+      <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
+      <span id="alert-text" class="alert-message">Texto de alerta</span>
+    </div>
+  </div>
+  <script src="/static/js/alertas.js"></script>
 </body>
 </html>
 

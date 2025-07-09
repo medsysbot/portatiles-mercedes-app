@@ -318,11 +318,14 @@ Proyecto: Portátiles Mercedes
   <footer class="pie-pagina">
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
-  <div id="alerta-personalizada" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); z-index:9999; background:rgba(0,0,0,0.85); color:#fff; border-radius:14px; box-shadow:0 2px 16px rgba(0,0,0,0.2); padding:2em 1.8em; max-width:380px; width:95vw; min-height:96px; text-align:left; display:flex; align-items:center;">
-    <img id="alerta-icono" src="" alt="icono" style="width:48px; height:48px; margin-right:1em; flex-shrink:0; filter:drop-shadow(0 2px 8px #0006);" />
-    <span id="alerta-mensaje" style="font-size:1.2rem; line-height:1.35;"></span>
+  <!-- Alerta personalizada global -->
+<div id="alertaPersonalizada" class="alerta-overlay d-none">
+  <div class="alerta-contenido">
+    <img id="iconoAlerta" src="" alt="Alerta" class="alerta-icono" style="display:none;">
+    <span id="mensajeAlerta"></span>
     <div class="alerta-botones"></div>
   </div>
+</div>
   <script src="/static/js/alertas.js"></script>
 </body>
 </html>

@@ -52,43 +52,37 @@ function procesarCola() {
   if (alertaActiva || colaAlertas.length === 0) return;
   const item = colaAlertas.shift();
   alertaActiva = true;
-  const cont = document.getElementById('alerta-personalizada');
-  const icono = cont.querySelector('.alerta-icono');
-  const texto = cont.querySelector('.alerta-texto');
-  const botones = cont.querySelector('.alerta-botones');
+  const overlay = document.getElementById('alertaPersonalizada');
+  const icono = document.getElementById('iconoAlerta');
+  const texto = document.getElementById('mensajeAlerta');
+  const botones = overlay.querySelector('.alerta-botones');
+  if (!overlay || !icono || !texto) return;
   icono.src = obtenerRutaIcono(item.tipoIcono);
+  icono.style.display = item.tipoIcono ? 'block' : 'none';
   texto.textContent = item.mensaje;
-  cont.style.display = 'flex';
-  requestAnimationFrame(() => cont.classList.add('mostrar'));
+  overlay.classList.remove('d-none');
+  overlay.style.display = 'flex';
   if (item.confirm) {
     botones.innerHTML =
       '<button class="btn btn-primary btn-sm" id="alerta-si">Sí</button>' +
       '<button class="btn btn-secondary btn-sm" id="alerta-no">No</button>';
     const cerrar = val => {
-      cont.classList.remove('mostrar');
-      cont.classList.add('ocultar');
-      setTimeout(() => {
-        cont.classList.remove('ocultar');
-        cont.style.display = 'none';
-        botones.innerHTML = '';
-        alertaActiva = false;
-        setTimeout(procesarCola, 500);
-        item.resolver(val);
-      }, 300);
+      overlay.classList.add('d-none');
+      overlay.style.display = 'none';
+      botones.innerHTML = '';
+      alertaActiva = false;
+      setTimeout(procesarCola, 500);
+      item.resolver(val);
     };
     document.getElementById('alerta-si').addEventListener('click', () => cerrar(true));
     document.getElementById('alerta-no').addEventListener('click', () => cerrar(false));
   } else {
     botones.innerHTML = '';
     setTimeout(() => {
-      cont.classList.remove('mostrar');
-      cont.classList.add('ocultar');
-      setTimeout(() => {
-        cont.classList.remove('ocultar');
-        cont.style.display = 'none';
-        alertaActiva = false;
-        setTimeout(procesarCola, 500);
-      }, 300);
+      overlay.classList.add('d-none');
+      overlay.style.display = 'none';
+      alertaActiva = false;
+      setTimeout(procesarCola, 500);
     }, 2500);
   }
 }

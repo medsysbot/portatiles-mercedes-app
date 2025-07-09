@@ -361,6 +361,11 @@ body.panel-cliente .buscador-tabla::placeholder {
   color: #ffffff !important;
 }
 
+/* Ajuste de ancho para el buscador de comprobantes */
+#busquedaComprobantes {
+  width: 50% !important;
+}
+
 /* Utilidad para eliminar margen izquierdo en botones específicos */
 .no-margin-left {
   margin-left: 0 !important;

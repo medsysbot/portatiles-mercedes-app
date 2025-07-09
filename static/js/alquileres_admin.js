@@ -34,7 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnEliminar?.addEventListener('click', async () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
-    if (!seleccionados.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    if (!seleccionados.length) return;
+    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
+    if (!ok) return;
     try {
       const resp = await fetch('/admin/api/alquileres/eliminar', {
         method: 'POST',

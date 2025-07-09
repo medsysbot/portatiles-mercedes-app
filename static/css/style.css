@@ -476,3 +476,45 @@ body.panel-cliente table.pm-tabla tr:hover {
     padding: 0.65em 1.4em !important;
   }
 }
+
+/* ================= Alertas personalizadas ================= */
+.alerta-personalizada {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 90vw;
+  max-width: 400px;
+  padding: 1em 1.2em;
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+  border-radius: 8px;
+  display: none;
+  align-items: center;
+  gap: 0.7em;
+  z-index: 1050;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.alerta-personalizada.mostrar {
+  display: flex;
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.alerta-personalizada.ocultar {
+  opacity: 0;
+  transform: translate(-50%, -50%) scale(0.9);
+}
+.alerta-personalizada img.alerta-icono {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+}
+.alerta-personalizada .alerta-texto {
+  font-size: 1.1rem;
+  flex-grow: 1;
+}
+.alerta-botones {
+  display: flex;
+  gap: 0.5em;
+}

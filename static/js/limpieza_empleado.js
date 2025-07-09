@@ -70,7 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaServicios tbody .fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    if (!ids.length) return;
+    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
+    if (!ok) return;
     try {
       const resp = await fetch('/empleado/api/servicios_limpieza/eliminar', {
         method: 'POST',
@@ -89,9 +91,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnEditar?.addEventListener('click', () => {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
-    if (checks.length !== 1) return alert('Debe seleccionar un único registro para editar');
+    if (checks.length !== 1) return mostrarAlertaPersonalizada('Debe seleccionar un único registro para editar','error-datos');
     const id = checks[0].dataset.id;
-    if (!id) return alert('ID de servicio no encontrado');
+    if (!id) return mostrarAlertaPersonalizada('ID de servicio no encontrado','error-datos');
     localStorage.setItem('pendiente_recarga', '1');
     window.location.href = `/empleado/limpieza/editar/${id}`;
   });

@@ -29,7 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaAusencias tbody .fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length || !confirm('¿Eliminar registros seleccionados?')) return;
+    if (!ids.length) return;
+    const ok = await mostrarConfirmacionPersonalizada('¿Eliminar registros seleccionados?', 'error-datos');
+    if (!ok) return;
     try {
       const resp = await fetch('/admin/api/empleados_ausencias/eliminar', {
         method: 'POST',
@@ -40,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarDatos();
     } catch (err) {
       console.error('Error eliminando ausencias:', err);
-      alert('Error eliminando registros');
+      mostrarAlertaPersonalizada('Error eliminando registros','error-datos');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }

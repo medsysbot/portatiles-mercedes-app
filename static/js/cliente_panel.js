@@ -27,6 +27,10 @@ function showMsg(_, msg, tipo = "error-datos") {
   }
 }
 
+function limpiarCredenciales() {
+  localStorage.clear();
+}
+
 // ============= DETECTAR SECCIÓN Y CARGAR DATOS =============
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('layout-fixed');
@@ -66,10 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  document.getElementById('btnLogout')?.addEventListener('click', () => {
-    localStorage.clear();
-    window.location.href = '/login';
-  });
+document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
 
   if (document.getElementById('tablaAlquileres')) actualizarAlquileres();
   if (document.getElementById('tablaFacturas')) actualizarFacturas();

@@ -4,16 +4,15 @@
 
 let alertTimeout = null;
 
-// Definición de los iconos y mensajes para cada tipo de alerta
+// === ICONOS Y MENSAJES ===
 const ALERT_ICONS = {
-
-  "formulario-error":      { icon: "/static/iconos/formulario-error.png",      msg: "Error al cargar el formulario" },  
+  "formulario-error":      { icon: "/static/iconos/formulario-error.png",      msg: "Error al cargar el formulario" },
   "error-conexion":        { icon: "/static/iconos/error-conexion.png",        msg: "Error en la conexion" },
   "formulario-abierto":    { icon: "/static/iconos/formulario-abierto.png",    msg: "Formulario abierto" },
   "abriendo-formulario":   { icon: "/static/iconos/abriendo-formulario.png",   msg: "Abriendo formulario" },
-  "error-sesion":          { icon: "/static/iconos/error-sesion.png",          msg: "Error al iniciar sesion" }, 
-  "exito-sesion":          { icon: "/static/iconos/exito-sesion.png",          msg: "Sesion iniciada" },  
-  "inicio-sesion":         { icon: "/static/iconos/inicio-sesion.png",         msg: "Iniciando sesion" },  
+  "error-sesion":          { icon: "/static/iconos/error-sesion.png",          msg: "Error al iniciar sesion" },
+  "exito-sesion":          { icon: "/static/iconos/exito-sesion.png",          msg: "Sesion iniciada" },
+  "inicio-sesion":         { icon: "/static/iconos/inicio-sesion.png",         msg: "Iniciando sesion" },
   "email-incorrecto":      { icon: "/static/iconos/email-incorrecto.png",      msg: "E-mail incorrecto" },
   "enviando-informe":      { icon: "/static/iconos/enviando-informe.png",      msg: "Enviando informe..." },
   "enviando-mensaje":      { icon: "/static/iconos/enviando-mensaje.png",      msg: "Enviando mensaje..." },
@@ -36,26 +35,25 @@ const ALERT_ICONS = {
   "verifique-contrasena":  { icon: "/static/iconos/verifique-contrasena.png",  msg: "Verifique su contraseña" }
 };
 
+// === FUNCIÓN PRINCIPAL: mostrar alerta ===
 function showAlert(type, customMessage = null, duration = 2500) {
-  // Si vienen 4 argumentos se ignora el tercero para mantener compatibilidad
   if (arguments.length === 4) {
-    duration = arguments[3];
+    duration = arguments[3]; // compatibilidad con versiones viejas
   }
 
-  const alertBox = document.getElementById("alert-manager");
-  const alertIcon = document.getElementById("alert-icon");
-  const alertText = document.getElementById("alert-text");
+  const alertBox   = document.getElementById("alert-manager");
+  const alertIcon  = document.getElementById("alert-icon");
+  const alertText  = document.getElementById("alert-text");
 
   const info = ALERT_ICONS[type] || { icon: "", msg: "Alerta" };
 
-  // Mensaje por defecto según el tipo, o el personalizado si lo pasás
   alertIcon.src = info.icon;
   alertIcon.alt = type;
   alertText.textContent = customMessage || info.msg;
 
   alertBox.style.display = "flex";
-  clearTimeout(alertTimeout);
 
+  clearTimeout(alertTimeout);
   if (duration !== "infinito") {
     alertTimeout = setTimeout(() => {
       alertBox.style.display = "none";
@@ -63,6 +61,15 @@ function showAlert(type, customMessage = null, duration = 2500) {
   }
 }
 
+// === FUNCIÓN EXTENDIDA: mostrar y redirigir ===
+function showAlertAndRedirect(type, redirectUrl, customMessage = null, duration = 2500, delayAfter = 500) {
+  showAlert(type, customMessage, duration);
+  setTimeout(() => {
+    window.location.href = redirectUrl;
+  }, duration + delayAfter);
+}
+
+// === Al cargar: ocultar alerta por defecto ===
 document.addEventListener("DOMContentLoaded", () => {
   const box = document.getElementById("alert-manager");
   if (box) {

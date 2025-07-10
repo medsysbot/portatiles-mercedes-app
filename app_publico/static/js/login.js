@@ -15,7 +15,7 @@ if (form) {
 
         const start = Date.now();
         if (typeof showAlert === "function") {
-            showAlert('enviando-mensaje', 'Iniciando sesión...', false, 1600);
+            showAlert('inicio-sesion', 'Iniciando sesión...', false, 1600);
         }
 
         fetch("/login", {
@@ -31,7 +31,7 @@ if (form) {
             if (res.ok && data.access_token) {
                 setTimeout(() => {
                     if (typeof showAlert === "function") {
-                        showAlert('exito-datos', 'Ingreso correcto', false, 2600);
+                        showAlert('exito-sesion', 'Ingreso correcto', false, 2600);
                     }
                     localStorage.setItem("access_token", data.access_token);
                     const finalizar = (url) => {
@@ -92,7 +92,7 @@ if (form) {
             } else {
                 setTimeout(() => {
                     if (typeof showAlert === "function") {
-                        showAlert('error-datos', data.detail || 'Credenciales incorrectas', false, 2600);
+                        showAlert('error-sesion', data.detail || 'Credenciales incorrectas', false, 2600);
                     }
                 }, delay);
             }
@@ -101,7 +101,7 @@ if (form) {
             const delay = Math.max(0, 1600 - (Date.now() - start));
             setTimeout(() => {
                 if (typeof showAlert === "function") {
-                    showAlert('error-datos', 'Error de conexión', false, 2600);
+                    showAlert('error-sesion', 'Error de conexión', false, 2600);
                 }
             }, delay);
         });

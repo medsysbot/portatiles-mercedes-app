@@ -84,7 +84,6 @@ from fastapi.responses import RedirectResponse, JSONResponse
 from routes.router import router
 from routes.ventas import router as ventas_router
 from routes.limpieza import router as limpieza_router
-from routes.programacion_limpiezas import router as prog_limpieza_router
 from routes.login import router as login_router, supabase as supabase_client
 from routes.admin_panel import router as admin_router
 from routes.empleado_panel import router as empleado_router
@@ -105,7 +104,7 @@ import routes.inventario_banos as inventario_banos_module
 import routes.reportes as reportes_module
 import routes.facturas_pendientes as facturas_pendientes_module
 import routes.morosos as morosos_module
-from routes import admin_panel, empleado_panel, cliente_panel, ventas, limpieza, debito, reportes, programacion_limpiezas
+from routes import admin_panel, empleado_panel, cliente_panel, ventas, limpieza, debito, reportes
 
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
@@ -151,7 +150,6 @@ if os.getenv("ENABLE_SUPABASE") == "1":
     facturas_pendientes_module.supabase = supabase_client
     morosos_module.supabase = supabase_client
     empleado_panel.supabase = supabase_client
-    programacion_limpiezas.supabase = supabase_client
     import routes.empleados_datos_personales as edp_module
     import routes.empleados_salarios as es_module
     import routes.empleados_ausencias as ea_module
@@ -167,11 +165,10 @@ if os.getenv("ENABLE_SUPABASE") == "1":
 app.mount("/app_publico/static", StaticFiles(directory="app_publico/static"), name="static")
 app.mount("/static", StaticFiles(directory="static"), name="static-private")
 
-# Registrar las rutas definidas en el módulo router, incluido el formulario de limpieza
+# Registrar las rutas principales del sistema
 app.include_router(router)
 app.include_router(ventas_router)
 app.include_router(limpieza_router)
-app.include_router(prog_limpieza_router)
 app.include_router(login_router)
 app.include_router(admin_router)
 app.include_router(empleado_router)

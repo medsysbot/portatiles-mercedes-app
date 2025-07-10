@@ -103,8 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  }
-
   // Botón Agregar baño: navega al formulario de alta (NO modal)
   btnNuevo?.addEventListener('click', () => {
     window.location.href = '/admin/inventario_banos/nuevo';

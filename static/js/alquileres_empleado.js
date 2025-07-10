@@ -59,8 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  }
-
   function filtrarAlquileres(texto) {
     const q = texto.toLowerCase();
     const filtrados = alquileresCargados.filter(a =>

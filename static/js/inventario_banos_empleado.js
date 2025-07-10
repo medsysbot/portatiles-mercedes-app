@@ -58,8 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  }
-
   function filtrar(texto) {
     const q = texto.toLowerCase();
     const filtrados = banosCargados.filter(b =>

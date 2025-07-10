@@ -104,8 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  }
-
   btnNueva?.addEventListener('click', () => {
     window.location.href = '/admin/facturas_pendientes/nueva';
   });

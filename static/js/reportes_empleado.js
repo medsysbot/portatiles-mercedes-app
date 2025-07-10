@@ -60,8 +60,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tabla.rows.add(lista).draw();
   }
 
-  }
-
   function filtrarReportes(texto) {
     const q = texto.toLowerCase();
     const filtrados = reportes.filter(r =>

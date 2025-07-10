@@ -33,14 +33,10 @@ document.addEventListener('DOMContentLoaded', () => {
       morososCargados = await resp.json();
       mostrarMorosos(morososCargados);
       mensajeError?.classList.add('d-none');
-      if (morososCargados.length === 0) {
-      } else {
-      }
     } catch (err) {
       console.error('Error cargando morosos:', err);
-      if (mensajeError) {
-        mensajeError.textContent = 'No se pudo cargar el listado.';
-        mensajeError.classList.remove('d-none');
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
       }
     }
   }

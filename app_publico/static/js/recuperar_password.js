@@ -10,6 +10,9 @@ if (form) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     msg.textContent = '';
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-mensaje', 'Enviando email...', false, 1600);
+    }
     const email = document.getElementById('email').value;
     try {
       const resp = await fetch('/recuperar_password', {
@@ -20,9 +23,18 @@ if (form) {
       const data = await resp.json();
       if (resp.ok) {
         form.reset();
+        if (typeof showAlert === 'function') {
+          showAlert('exito-mensaje', data.mensaje || 'Correo enviado', false, 2600);
+        }
       } else {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', data.detail || 'Error al enviar', false, 2600);
+        }
       }
     } catch (_) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error de conexión', false, 2600);
+      }
     }
   });
 }

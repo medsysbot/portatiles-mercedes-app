@@ -46,10 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 401) return handleUnauthorized();
       registros = await resp.json();
       mostrarServicios(registros);
-      if (registros.length === 0) {
-      }
     } catch (err) {
       console.error('Error cargando servicios:', err);
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudieron cargar los servicios', false, 2600);
+      }
     }
   }
 

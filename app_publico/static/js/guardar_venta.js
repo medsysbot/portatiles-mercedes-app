@@ -12,6 +12,9 @@ const form = document.getElementById('formVenta');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = Object.fromEntries(new FormData(form));
+  if (typeof showAlert === 'function') {
+    showAlert('guardando-datos', 'Procesando venta...', false, 1600);
+  }
   let ok = false;
   try {
     const resp = await fetch('/registrar_venta', {
@@ -21,9 +24,18 @@ form.addEventListener('submit', async (e) => {
     });
     ok = resp.ok;
     if (ok) {
+      if (typeof showAlert === 'function') {
+        showAlert('exito-datos', 'Venta registrada', false, 2600);
+      }
     } else {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error al registrar venta', false, 2600);
+      }
     }
   } catch (_) {
+    if (typeof showAlert === 'function') {
+      showAlert('error-datos', 'Error de conexión', false, 2600);
+    }
   }
 
   setTimeout(() => {

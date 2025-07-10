@@ -32,13 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
       banosCargados = await resp.json();
       mostrar(banosCargados);
       mensajeError.classList.add('d-none');
-      if (banosCargados.length === 0) {
-      } else {
-      }
     } catch (err) {
       console.error('Error cargando inventario:', err);
-      mensajeError.textContent = 'No se pudo cargar el inventario.';
-      mensajeError.classList.remove('d-none');
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudo cargar el inventario', false, 2600);
+      }
     }
   }
 

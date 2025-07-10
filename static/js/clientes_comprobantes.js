@@ -154,10 +154,8 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (err) {
       console.error('Error cargando comprobantes:', err);
-      const div = document.getElementById('errorComprobantes');
-      if (div) {
-        div.textContent = 'No se pudo cargar el listado';
-        div.classList.remove('d-none');
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
       }
     }
   }
@@ -177,10 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
         await cargarComprobantes();
         btnCancelar?.click();
         actualizarBtnEliminar();
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Comprobante subido', false, 2600);
+        }
       } else {
         throw new Error(res.detail || 'Error al subir');
       }
     } catch (err) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error al subir comprobante', false, 2600);
+      }
     }
   });
 

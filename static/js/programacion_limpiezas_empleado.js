@@ -33,10 +33,11 @@ document.addEventListener('DOMContentLoaded', () => {
       datosOriginales = await resp.json();
       mostrarDatos(datosOriginales);
       errorDiv?.classList.add('d-none');
-      if (datosOriginales.length === 0) {
-      }
     } catch (err) {
       console.error('Error cargando programación:', err);
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudo cargar la programación', false, 2600);
+      }
     }
   }
 

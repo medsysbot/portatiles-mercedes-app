@@ -17,6 +17,10 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = new FormData(form);
 
+  if (typeof showAlert === 'function') {
+    showAlert('enviando-informe', 'Enviando datos...', false, 1600);
+  }
+
   try {
     const resp = await fetch('/registrar_limpieza', {
       method: 'POST',
@@ -26,8 +30,17 @@ form.addEventListener('submit', async (e) => {
     if (resp.ok) {
       form.reset();
       fechaHoraInput.value = new Date().toISOString().slice(0, 16);
+      if (typeof showAlert === 'function') {
+        showAlert('exito-informe', resultado.mensaje || 'Limpieza registrada', false, 2600);
+      }
     } else {
+      if (typeof showAlert === 'function') {
+        showAlert('error-informe-limpieza', resultado.detail || 'Error al registrar', false, 2600);
+      }
     }
   } catch (_) {
+    if (typeof showAlert === 'function') {
+      showAlert('error-datos', 'Error de conexión', false, 2600);
+    }
   }
 });

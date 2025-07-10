@@ -47,8 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
       errorDiv.classList.add('d-none');
     } catch (err) {
       console.error('Error cargando servicios:', err);
-      errorDiv.textContent = 'No se pudo cargar el listado.';
-      errorDiv.classList.remove('d-none');
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
+      }
     }
   }
 

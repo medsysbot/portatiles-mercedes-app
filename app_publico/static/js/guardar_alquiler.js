@@ -14,6 +14,10 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = Object.fromEntries(new FormData(form));
 
+  if (typeof showAlert === 'function') {
+    showAlert('guardando-datos', 'Registrando alquiler...', false, 1600);
+  }
+
   let ok = false;
   try {
     const resp = await fetch('/admin/alquileres/nuevo', {
@@ -24,9 +28,18 @@ form.addEventListener('submit', async (e) => {
     const resJson = await resp.json();
     ok = resp.ok && resJson.ok;
     if (ok) {
+      if (typeof showAlert === 'function') {
+        showAlert('exito-datos', 'Alquiler registrado', false, 2600);
+      }
     } else {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', resJson.detail || 'Error al registrar', false, 2600);
+      }
     }
   } catch (_) {
+    if (typeof showAlert === 'function') {
+      showAlert('error-datos', 'Error de conexión', false, 2600);
+    }
   }
 
   setTimeout(() => {

@@ -4,6 +4,7 @@
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaMorosos');
   const btnBuscar = document.getElementById('btnBuscarMorosos');
+  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
   const mensajeError = document.getElementById('errorMorosos');
 
   let morososCargados = [];
@@ -14,6 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
+      { data: 'id_moroso', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'id_moroso' },
       { data: 'fecha_facturacion' },
       { data: 'numero_factura' },
@@ -22,6 +24,33 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'nombre_cliente' },
       { data: 'monto_adeudado' }
     ]
+  });
+
+  function actualizarBoton() {
+    const checks = document.querySelectorAll('#tablaMorosos tbody .fila-check:checked');
+    if (btnEliminar) btnEliminar.disabled = checks.length === 0;
+  }
+
+  $('#tablaMorosos tbody').on('change', '.fila-check', actualizarBoton);
+
+  btnEliminar?.addEventListener('click', async () => {
+    const ids = Array.from(document.querySelectorAll('#tablaMorosos tbody .fila-check:checked')).map(c => c.dataset.id);
+    if (!ids.length) return;
+    try {
+      const resp = await fetch('/admin/api/morosos/eliminar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        body: JSON.stringify({ ids })
+      });
+      if (!resp.ok) throw new Error('Error al eliminar');
+      await cargarMorosos();
+    } catch (_) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error al eliminar morosos', false, 2500);
+      }
+    } finally {
+      if (btnEliminar) btnEliminar.disabled = true;
+    }
   });
 
   async function cargarMorosos() {
@@ -43,8 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function mostrarMorosos(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
-  }
-
   }
 
   function filtrarMorosos(texto) {

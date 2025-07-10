@@ -30,6 +30,16 @@ class InMemoryQuery:
         self.insert_data = data
         return self
 
+    def delete(self):
+        self.is_select = False
+        self.is_delete = True
+        return self
+
+    def in_(self, field, values):
+        self.delete_field = field
+        self.delete_values = values
+        return self
+
     def execute(self):
         if self.is_select:
             result = [d for d in self.data if all(d.get(k) == v for k, v in self.filters.items())]
@@ -39,6 +49,9 @@ class InMemoryQuery:
         if self.insert_data is not None:
             self.data.append(self.insert_data)
             return types.SimpleNamespace(data=[{"id": len(self.data)}], status_code=200, error=None)
+        if getattr(self, "is_delete", False):
+            self.data[:] = [d for d in self.data if d.get(self.delete_field) not in self.delete_values]
+            return types.SimpleNamespace(data=None, status_code=200, error=None)
         return types.SimpleNamespace(data=None, status_code=400, error="invalid")
 
 class MemoryDB:
@@ -75,3 +88,20 @@ def test_morosos_end_to_end(monkeypatch):
     assert len(lista) == 1
     assert lista[0]["numero_factura"] == "X001"
     assert lista[0]["dni_cuit_cuil"] == "20304567"
+
+
+def test_eliminar_morosos(monkeypatch):
+    datos = [
+        {
+            "id_moroso": 1,
+            "numero_factura": "X001",
+            "dni_cuit_cuil": "20304567",
+        }
+    ]
+    db = MemoryDB(datos)
+    monkeypatch.setattr(morosos_module, "supabase", db)
+
+    resp = client.post("/admin/api/morosos/eliminar", json={"ids": [1]})
+    assert resp.status_code == 200
+    assert resp.json()["ok"] is True
+    assert db.morosos == []

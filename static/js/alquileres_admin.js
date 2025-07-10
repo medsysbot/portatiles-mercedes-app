@@ -34,6 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
     if (!seleccionados.length) return;
+    const start = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('guardando-datos', 'Eliminando alquileres...', false, 1600);
+    }
     try {
       const resp = await fetch('/admin/api/alquileres/eliminar', {
         method: 'POST',
@@ -42,7 +46,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error al eliminar');
       await cargarAlquileres();
+      const delay = Math.max(0, 1600 - (Date.now() - start));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Alquileres eliminados', false, 2600);
+        }
+      }, delay);
     } catch (err) {
+      const delay = Math.max(0, 1600 - (Date.now() - start));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'Error al eliminar', false, 2600);
+        }
+      }, delay);
       console.error('Error eliminando alquileres:', err);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
@@ -50,6 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarAlquileres() {
+    const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-reporte', 'Cargando alquileres...', false, 1600);
+    }
     try {
       const resp = await fetch('/admin/api/alquileres', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -58,11 +78,20 @@ document.addEventListener('DOMContentLoaded', () => {
       alquileresCargados = await resp.json();
       mostrarAlquileres(alquileresCargados);
       mensajeError?.classList.add('d-none');
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Listado actualizado', false, 2600);
+        }
+      }, delay);
     } catch (err) {
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'No se pudieron cargar los alquileres', false, 2600);
+        }
+      }, delay);
       console.error('Error al cargar alquileres:', err);
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudieron cargar los alquileres', false, 2600);
-      }
     }
   }
 

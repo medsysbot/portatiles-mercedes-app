@@ -16,6 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarDatos() {
+    const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-reporte', 'Cargando datos...', false, 1600);
+    }
     try {
       const resp = await fetch('/cliente/api/limpiezas_programadas', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -23,7 +27,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const datos = await resp.json();
       tabla.clear();
       tabla.rows.add(datos).draw();
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Listado actualizado', false, 2600);
+        }
+      }, delay);
     } catch (err) {
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'Error al cargar datos', false, 2600);
+        }
+      }, delay);
       console.error(err);
     }
   }

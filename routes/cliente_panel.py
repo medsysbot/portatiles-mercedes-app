@@ -167,6 +167,29 @@ async def get_servicios_limpieza(token_data: dict = Depends(verificar_token)):
         logger.error(f"Error consultando servicios de limpieza: {exc}")
         raise HTTPException(status_code=500, detail=f"Error consultando limpiezas: {exc}")
 
+
+@router.get("/clientes/proxima_limpieza")
+async def get_proxima_limpieza(token_data: dict = Depends(verificar_token)):
+    """Devuelve la fecha más reciente de servicio de limpieza del cliente."""
+    dni = get_dni_from_email(token_data["email"])
+    if not dni:
+        return {"fecha_servicio": None}
+    try:
+        res = (
+            supabase.table("servicios_limpieza")
+            .select("fecha_servicio")
+            .eq("dni_cuit_cuil", dni)
+            .order("fecha_servicio", desc=True)
+            .limit(1)
+            .maybe_single()
+            .execute()
+        )
+        fecha = res.data.get("fecha_servicio") if getattr(res, "data", None) else None
+        return {"fecha_servicio": fecha}
+    except Exception as exc:
+        logger.error(f"Error consultando próxima limpieza: {exc}")
+        raise HTTPException(status_code=500, detail=f"Error consultando limpieza: {exc}")
+
 @router.get("/clientes/comprobantes_api")
 async def get_comprobantes(token_data: dict = Depends(verificar_token)):
     dni = get_dni_from_email(token_data["email"])

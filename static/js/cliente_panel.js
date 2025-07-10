@@ -199,18 +199,22 @@ async function actualizarComprobantes() {
 // ------ RESUMEN (CARDS, CALENDARIO Y ÚLTIMO COMPROBANTE) ------
 async function cargarResumen() {
   try {
-    const [alqRes, factRes, compRes] = await Promise.all([
+    const [alqRes, factRes, compRes, limpRes] = await Promise.all([
       fetchConAuth('/clientes/alquileres_api'),
       fetchConAuth('/clientes/facturas_pendientes_api'),
-      fetchConAuth('/clientes/comprobantes_api')
+      fetchConAuth('/clientes/comprobantes_api'),
+      fetchConAuth('/clientes/proxima_limpieza')
     ]);
 
     const alquileres = alqRes ? await alqRes.json() : [];
     const facturas = factRes ? await factRes.json() : [];
     const comprobantes = compRes ? await compRes.json() : [];
+    const limpieza = limpRes ? await limpRes.json() : { fecha_servicio: null };
 
     document.getElementById('cntBaños').textContent = alquileres.length;
     document.getElementById('cntFactPend').textContent = facturas.length;
+    const lblLimpieza = document.getElementById('fechaLimpieza');
+    if (lblLimpieza) lblLimpieza.textContent = limpieza.fecha_servicio || '-';
 
     mostrarUltimoComprobante(comprobantes);
   } catch (err) {

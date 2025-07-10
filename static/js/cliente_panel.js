@@ -20,7 +20,11 @@ async function fetchConAuth(url, options = {}) {
   }
   return resp;
 }
+// Requiere que la plantilla cargue /static/js/alertas.js para usar showAlert
 function showMsg(_, msg, tipo = "error-datos") {
+  if (typeof showAlert === 'function') {
+    showAlert(tipo, msg);
+  }
 }
 
 // ============= DETECTAR SECCIÓN Y CARGAR DATOS =============
@@ -217,7 +221,7 @@ async function cargarResumen() {
     cargarCalendario(limpiezas);
     mostrarUltimoComprobante(comprobantes);
   } catch (err) {
-    console.error('Error cargando resumen:', err);
+    showMsg(null, 'Error cargando resumen');
   }
 }
 

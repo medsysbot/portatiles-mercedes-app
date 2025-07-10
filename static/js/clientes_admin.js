@@ -1,5 +1,6 @@
 // Archivo: static/js/clientes_admin.js
 // Proyecto: Portátiles Mercedes
+// Requiere que la plantilla cargue /static/js/alertas.js para usar showAlert
 
 function handleUnauthorized() {
   localStorage.removeItem('access_token');
@@ -54,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error al eliminar');
       await obtenerClientes();
     } catch (err) {
-      console.error('Error eliminando clientes:', err);
+      showAlert('error-datos', 'Error eliminando clientes');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
@@ -64,11 +65,10 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await fetch('/clientes');
       const data = await resp.json();
-      console.log('✅ Clientes recibidos:', data);
       clientesCargados = data || [];
       mostrarClientes(clientesCargados);
     } catch (error) {
-      console.error('❌ Error al cargar clientes:', error);
+      showAlert('error-datos', 'Error al cargar clientes');
       if (clientesCargados.length === 0) tabla.clear().draw();
     }
   }

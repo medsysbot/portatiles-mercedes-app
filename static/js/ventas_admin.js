@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaVentas tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
+    if (typeof showAlert === 'function') {
+      showAlert('guardando-datos', 'Eliminando ventas...', false, 1600);
+    }
     try {
       const resp = await fetch('/admin/api/ventas/eliminar', {
         method: 'POST',
@@ -44,14 +47,23 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error al eliminar');
       await cargarVentas();
+      if (typeof showAlert === 'function') {
+        showAlert('exito-datos', 'Ventas eliminadas', false, 2600);
+      }
     } catch (err) {
       console.error('Error eliminando ventas:', err);
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error al eliminar ventas', false, 2600);
+      }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
   async function cargarVentas() {
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-reporte', 'Cargando ventas...', false, 1600);
+    }
     try {
       const resp = await fetch('/admin/api/ventas', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -59,7 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error consultando ventas');
       ventasCargadas = await resp.json();
       mostrarVentas(ventasCargadas);
-      if (ventasCargadas.length === 0) {
+      if (typeof showAlert === 'function') {
+        showAlert('exito-datos', 'Listado actualizado', false, 2600);
       }
     } catch (err) {
       console.error('Error al cargar ventas:', err);
@@ -72,8 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function mostrarVentas(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
-  }
-
   }
 
   function filtrarVentas(texto) {

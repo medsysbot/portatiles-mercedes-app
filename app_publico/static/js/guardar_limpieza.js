@@ -40,7 +40,7 @@ form.addEventListener('submit', async (e) => {
     }
   } catch (_) {
     if (typeof showAlert === 'function') {
-      showAlert('error-datos', 'Error de conexión', false, 2600);
+      showAlert('error-conexion', 'Error de conexión', false, 2600);
     }
   }
 });

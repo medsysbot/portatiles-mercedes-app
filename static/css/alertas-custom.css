@@ -1,67 +1,43 @@
-/* === ALERTAS PERSONALIZADAS COMPATIBLE === */
+/* === ALERTA CENTRAL OSCURA - PORTÁTILES MERCEDES === */
 /* Archivo: /static/css/alertas-custom.css */
 
-/* Contenedor general (inicialmente oculto) */
 #alert-manager.alert-container {
   position: fixed;
-  top: 20px;
-  right: 20px;
-  z-index: 9999;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  max-width: 320px;
-  font-family: 'Segoe UI', sans-serif;
-}
-
-/* Caja de alerta */
-.alert-box {
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 16px;
-  border-radius: 6px;
-  border: 1px solid transparent;
-  font-size: 15px;
-  background-color: #e9fbe7; /* Default: éxito */
-  border-color: #36b81f;
-  color: #246c15;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo pantalla oscuro */
+  z-index: 9999;
 }
 
-/* Ícono */
+/* Caja negra central */
+.alert-box {
+  background-color: rgba(0, 0, 0, 0.85); /* Caja negra semitransparente */
+  padding: 30px 32px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  max-width: 380px;
+  min-width: 260px;
+}
+
+/* Ícono centrado arriba */
 #alert-icon.alert-icon {
-  width: 22px;
-  height: 22px;
-  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
 }
 
-/* Mensaje */
+/* Mensaje centrado blanco */
 #alert-text.alert-message {
-  flex: 1;
-}
-
-/* === VARIANTES DE ESTADO (según JS le aplica clase a alert-box) === */
-
-.alert-box.exito {
-  background-color: #e9fbe7;
-  border-color: #36b81f;
-  color: #246c15;
-}
-
-.alert-box.error {
-  background-color: #fdecea;
-  border-color: #e03131;
-  color: #a01b1b;
-}
-
-.alert-box.info {
-  background-color: #eaf4fe;
-  border-color: #1c7ed6;
-  color: #0b4f94;
-}
-
-.alert-box.warning {
-  background-color: #fff8e5;
-  border-color: #e0a800;
-  color: #806000;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  color: #ffffff;
+  text-align: center;
+  line-height: 1.4;
 }

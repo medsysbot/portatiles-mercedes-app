@@ -29,6 +29,11 @@ const ALERT_ICONS = {
 };
 
 function showAlert(type, customMessage = null, duration = 2500) {
+  // Si vienen 4 argumentos se ignora el tercero para mantener compatibilidad
+  if (arguments.length === 4) {
+    duration = arguments[3];
+  }
+
   const alertBox = document.getElementById("alert-manager");
   const alertIcon = document.getElementById("alert-icon");
   const alertText = document.getElementById("alert-text");

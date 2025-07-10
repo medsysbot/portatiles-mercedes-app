@@ -58,14 +58,10 @@ document.addEventListener('DOMContentLoaded', () => {
       alquileresCargados = await resp.json();
       mostrarAlquileres(alquileresCargados);
       mensajeError?.classList.add('d-none');
-      if (alquileresCargados.length === 0) {
-      } else {
-      }
     } catch (err) {
       console.error('Error al cargar alquileres:', err);
-      if (mensajeError) {
-        mensajeError.textContent = 'No se pudieron cargar los alquileres.';
-        mensajeError.classList.remove('d-none');
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudieron cargar los alquileres', false, 2600);
       }
     }
   }

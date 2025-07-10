@@ -48,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (err) {
       console.error('Error cargando compras:', err);
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudieron cargar las compras', false, 2600);
+      }
     }
   }
 

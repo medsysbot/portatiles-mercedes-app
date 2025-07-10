@@ -62,14 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
       facturasCargadas = await resp.json();
       mostrarFacturas(facturasCargadas);
       mensajeError?.classList.add('d-none');
-      if (facturasCargadas.length === 0) {
-      } else {
-      }
     } catch (err) {
       console.error('Error cargando facturas:', err);
-      if (mensajeError) {
-        mensajeError.textContent = 'No se pudo cargar el listado.';
-        mensajeError.classList.remove('d-none');
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
       }
     }
   }

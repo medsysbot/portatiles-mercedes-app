@@ -12,6 +12,9 @@ if (form) {
 
         const errorEl = document.getElementById("errorMsg");
         if (errorEl) errorEl.textContent = "";
+        if (typeof showAlert === "function") {
+            showAlert('enviando-mensaje', 'Iniciando sesión...', false, 1600);
+        }
 
 
         fetch("/login", {
@@ -24,6 +27,9 @@ if (form) {
         .then(async res => {
             const data = await res.json();
             if (res.ok && data.access_token) {
+                if (typeof showAlert === "function") {
+                    showAlert('exito-datos', 'Ingreso correcto', false, 2600);
+                }
                 localStorage.setItem("access_token", data.access_token);
                 const finalizar = (url) => {
                     setTimeout(() => { window.location.href = url; }, 2600);
@@ -81,9 +87,15 @@ if (form) {
                 });
 
             } else {
+                if (typeof showAlert === "function") {
+                    showAlert('error-datos', data.detail || 'Credenciales incorrectas', false, 2600);
+                }
             }
         })
         .catch(() => {
+            if (typeof showAlert === "function") {
+                showAlert('error-datos', 'Error de conexión', false, 2600);
+            }
         });
     });
 }

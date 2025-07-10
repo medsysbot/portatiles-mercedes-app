@@ -48,8 +48,6 @@ async function guardarDatosCliente(ev) {
   const data = {};
   new FormData(form).forEach((v, k) => { data[k] = v; });
 
-  const msgDiv = document.getElementById('mensajeFormDatos');
-
   try {
     const resp = await fetchConAuth('/clientes/guardar_datos_personales', {
       method: 'POST',
@@ -65,6 +63,9 @@ async function guardarDatosCliente(ev) {
     }
   } catch (error) {
     console.error('Error al guardar datos del cliente:', error);
+    if (typeof showAlert === 'function') {
+      showAlert('error-datos', 'Error al guardar los datos', false, 2600);
+    }
   }
 }
 

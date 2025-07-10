@@ -32,12 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
       reportes = await resp.json();
       mostrarReportes(reportes);
       errorDiv.classList.add('d-none');
-      if (reportes.length === 0) {
-      }
     } catch (err) {
       console.error('Error cargando reportes:', err);
-      errorDiv.textContent = '';
-      errorDiv.classList.add('d-none');
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudieron cargar los reportes', false, 2600);
+      }
     }
   }
 

@@ -3,11 +3,18 @@ Archivo: login.html
 Descripción: Formulario de acceso al sistema
 Acceso: Público
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-06-16
+Última modificación: 2025-07-05
 -->
+<!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="stylesheet" href="/static/css/style.css">  
+  <meta charset="UTF-8">
+  <title>Login - Portátiles Mercedes</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Inicia sesión para gestionar tus servicios">
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+  <!-- PRELOAD DE ICONOS Y FONDOS -->
   <link rel="preload" as="image" href="/static/iconos/email-incorrecto.png">
   <link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
   <link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
@@ -27,7 +34,7 @@ Proyecto: Portátiles Mercedes
   <link rel="preload" as="image" href="/static/iconos/reporte-error.png">
   <link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
   <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-  <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png"> 
+  <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
   <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.png">
   <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-galeria.png">
   <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-info-bano.png">
@@ -39,14 +46,6 @@ Proyecto: Portátiles Mercedes
   <link rel="preload" as="image" href="/static/imagenes/fondo-panel.png">
   <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.png">
   <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-  <meta charset="UTF-8">
-  <title>Login - Portátiles Mercedes</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Inicia sesión para gestionar tus servicios">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <style>
     html, body {
       height: 100%;
@@ -94,7 +93,6 @@ Proyecto: Portátiles Mercedes
       margin: 0 18px;
       vertical-align: middle;
     }
-
     .subtitulo-portatiles {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 700;
@@ -155,16 +153,16 @@ Proyecto: Portátiles Mercedes
       height: 22px;
       display: inline-block;
     }
-      form {
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-        width: 260px;
-        box-sizing: border-box;
-        color: #fff;
-        margin: 0;
-        margin-top: 60px;
-      }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      width: 260px;
+      box-sizing: border-box;
+      color: #fff;
+      margin: 0;
+      margin-top: 60px;
+    }
     .campo-login {
       display: flex;
       align-items: center;
@@ -178,18 +176,18 @@ Proyecto: Portátiles Mercedes
       height: 20px;
       margin-right: 10px;
     }
-      .campo-login input, .campo-login select {
-        background: transparent;
-        border: none;
-        outline: none;
-        color: #fff;
-        font-size: 16px;
-        width: 100%;
-      }
-      #errorMsg {
-        color: red;
-        margin: 0;
-      }
+    .campo-login input, .campo-login select {
+      background: transparent;
+      border: none;
+      outline: none;
+      color: #fff;
+      font-size: 16px;
+      width: 100%;
+    }
+    #errorMsg {
+      color: red;
+      margin: 0;
+    }
     @media (max-width: 1100px) {
       .contenedor-main {
         flex-direction: column;
@@ -206,10 +204,10 @@ Proyecto: Portátiles Mercedes
         justify-content: center;
         gap: 12px;
       }
-        form {
-          margin: 0;
-          margin-top: 60px;
-        }
+      form {
+        margin: 0;
+        margin-top: 60px;
+      }
     }
     @media (max-width: 700px) {
       .botonera-flotante {
@@ -231,11 +229,11 @@ Proyecto: Portátiles Mercedes
       }
     }
     @media (max-width: 500px) {
-        .contenedor-superior {
-          min-height: 120px;
-          padding-top: 10px;
-          padding-bottom: 6px;
-        }
+      .contenedor-superior {
+        min-height: 120px;
+        padding-top: 10px;
+        padding-bottom: 6px;
+      }
       .titulo-index {
         font-size: 20px;
       }
@@ -248,8 +246,6 @@ Proyecto: Portátiles Mercedes
         margin-bottom: 10px;
       }
     }
-
-    /* ===== Logo de fondo para títulos ===== */
     .titulo-con-logo {
       position: relative;
       display: flex;
@@ -277,25 +273,23 @@ Proyecto: Portátiles Mercedes
 <body>
   <div class="contenedor-superior titulo-con-logo">
     <img src="/app_publico/static/icons/logo-portatiles-2.png" alt="Logo Portátiles Mercedes" class="logo-fondo-titulo">
-    <div class="titulo-index"><!-- Título principal sin logo, padding superior de 10px, alineado al centro. Mejora visual temporal. -->
+    <div class="titulo-index">
       Login
     </div>
-    <!-- Subtítulo institucional, solo en páginas públicas según estándar visual Portátiles Mercedes -->
     <div class="subtitulo-portatiles">
       Lo tradicional, hecho inteligente.
     </div>
   </div>
-<!-- ==== Sección principal ==== -->
+  <!-- ==== Sección principal ==== -->
   <div class="contenedor-main">
-<!-- ==== Botonera de navegación ==== -->
+    <!-- ==== Botonera de navegación ==== -->
     <div class="botonera-flotante">
-      <!-- Botón estandarizado: Volver a inicio según guía Portátiles Mercedes -->
       <a href="/" class="boton-index">
         <img src="/app_publico/static/icons/inicio.png" alt="Inicio">
         <span>Volver a inicio</span>
       </a>
     </div>
-<!-- ==== Formulario de login ==== -->
+    <!-- ==== Formulario de login ==== -->
     <form id="loginForm">
       <div class="campo-login">
         <img src="/app_publico/static/icons/rol-port.png" alt="Rol">
@@ -312,28 +306,27 @@ Proyecto: Portátiles Mercedes
       </div>
       <div class="campo-login">
         <img src="/app_publico/static/icons/password-port.png" alt="Contraseña">
-          <!-- IMPORTANTE: El campo debe llamarse "password" (sin ñ ni tilde) en todo el flujo -->
         <input id="password" type="password" name="password" placeholder="Contraseña" required>
       </div>
       <div style="text-align:right;margin-top:4px;">
         <a href="/recuperar_password" style="color:#fff;font-size:14px;text-decoration:underline;">¿Olvidaste tu contraseña? Recuperar</a>
       </div>
-<!-- ==== Sección de mensajes ==== -->
       <p id="errorMsg"></p>
       <button type="submit" class="boton-index">
         <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Ingresar">
         <span>Ingresar al sistema</span>
       </button>
-    </form>  
-    <script src="/static/js/alertas.js"></script>    
+    </form>
+    <!-- ALERTA CENTRAL PERSONALIZADA -->
+    <div id="alert-manager" class="alert-container" style="display: none;">
+      <div class="alert-box">
+        <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
+        <span id="alert-text" class="alert-message">Texto de alerta</span>
+      </div>
+    </div>
+    <!-- Scripts al final del contenedor-main -->
+    <script src="/static/js/alertas.js"></script>
     <script src="/app_publico/static/js/login.js"></script>
-</div>
-<!-- ALERTA CENTRAL PERSONALIZADA -->
-<div id="alert-manager" class="alert-container">
-  <div class="alert-box">
-    <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-    <span id="alert-text" class="alert-message">Texto de alerta</span>
   </div>
-</div>
 </body>
 </html>

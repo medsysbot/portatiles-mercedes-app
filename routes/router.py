@@ -121,27 +121,17 @@ async def obtener_clientes_compras_js():
     js_path = PRIVATE_STATIC_DIR / "js" / "clientes_mis_compras.js"
     return FileResponse(js_path, media_type="application/javascript")
 
-
 @router.get("/clientes_servicios_limpieza.js")
 async def obtener_clientes_limpieza_js():
     """Script para servicios de limpieza del cliente."""
     js_path = PRIVATE_STATIC_DIR / "js" / "clientes_servicios_limpieza.js"
     return FileResponse(js_path, media_type="application/javascript")
 
-
-@router.get("/clientes_comprobantes_form.js")
-async def obtener_clientes_comprobantes_form_js():
-    """Script para subir comprobantes de pago (cliente)."""
-    js_path = PRIVATE_STATIC_DIR / "js" / "clientes_comprobantes_form.js"
-    return FileResponse(js_path, media_type="application/javascript")
-
-
 @router.get("/clientes_comprobantes.js")
 async def obtener_clientes_comprobantes_js():
     """Script para listado y carga de comprobantes del cliente."""
     js_path = PRIVATE_STATIC_DIR / "js" / "clientes_comprobantes.js"
     return FileResponse(js_path, media_type="application/javascript")
-
 
 @router.get("/clientes_email.js")
 async def obtener_clientes_email_js():

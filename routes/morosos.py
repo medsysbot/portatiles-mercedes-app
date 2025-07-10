@@ -169,3 +169,20 @@ async def listar_morosos():
         )
 
     return normalizados
+
+
+class _IdLista(BaseModel):
+    ids: list[int]
+
+
+@router.post("/admin/api/morosos/eliminar")
+async def eliminar_morosos(payload: _IdLista):
+    """Elimina morosos por ID."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table(TABLA).delete().in_("id_moroso", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error eliminando morosos:")
+        raise HTTPException(status_code=500, detail=str(exc))
+    return {"ok": True}

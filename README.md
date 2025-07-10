@@ -106,6 +106,7 @@ Principales rutas disponibles:
 - `/admin/reportes` → `reportes_admin.html`
 - `/admin/facturacion` → `facturacion_admin.html`
 - `/admin/morosos` → `morosos_admin.html`
+- `/admin/api/morosos/eliminar` → elimina registros seleccionados
 - `/admin/emails` → `emails_admin.html`
 - `/admin/ia-respuestas` → `ia_respuestas_admin.html`
 - `/admin/bash-generator` → `bash_generator_admin.html`

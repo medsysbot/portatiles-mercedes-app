@@ -37,6 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarFacturas() {
+    const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-reporte', 'Cargando facturas...', false, 1600);
+    }
     try {
       const resp = await fetch('/clientes/facturas_pendientes_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -44,9 +48,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 401) return handleUnauthorized();
       registros = await resp.json();
       mostrarFacturas(registros);
-      if (registros.length === 0) {
-      }
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Listado actualizado', false, 2600);
+        }
+      }, delay);
     } catch (err) {
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
+        }
+      }, delay);
       console.error('Error cargando facturas:', err);
     }
   }

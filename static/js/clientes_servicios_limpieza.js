@@ -39,6 +39,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarServicios() {
+    const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-reporte', 'Cargando servicios...', false, 1600);
+    }
     try {
       const resp = await fetch('/clientes/servicios_limpieza_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -46,11 +50,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 401) return handleUnauthorized();
       registros = await resp.json();
       mostrarServicios(registros);
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Listado actualizado', false, 2600);
+        }
+      }, delay);
     } catch (err) {
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'No se pudieron cargar los servicios', false, 2600);
+        }
+      }, delay);
       console.error('Error cargando servicios:', err);
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudieron cargar los servicios', false, 2600);
-      }
     }
   }
 

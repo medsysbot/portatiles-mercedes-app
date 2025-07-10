@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarInventario() {
+    const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-reporte', 'Cargando inventario...', false, 1600);
+    }
     try {
       const resp = await fetch('/empleado/api/inventario_banos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -32,11 +36,20 @@ document.addEventListener('DOMContentLoaded', () => {
       banosCargados = await resp.json();
       mostrar(banosCargados);
       mensajeError.classList.add('d-none');
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Listado actualizado', false, 2600);
+        }
+      }, delay);
     } catch (err) {
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'No se pudo cargar el inventario', false, 2600);
+        }
+      }, delay);
       console.error('Error cargando inventario:', err);
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudo cargar el inventario', false, 2600);
-      }
     }
   }
 

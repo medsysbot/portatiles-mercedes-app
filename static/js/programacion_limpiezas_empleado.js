@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
   let datosOriginales = [];
 
   async function cargarDatos() {
+    const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-reporte', 'Cargando programación...', false, 1600);
+    }
     try {
       const resp = await fetch('/empleado/api/limpiezas_programadas', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -33,11 +37,20 @@ document.addEventListener('DOMContentLoaded', () => {
       datosOriginales = await resp.json();
       mostrarDatos(datosOriginales);
       errorDiv?.classList.add('d-none');
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Listado actualizado', false, 2600);
+        }
+      }, delay);
     } catch (err) {
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'No se pudo cargar la programación', false, 2600);
+        }
+      }, delay);
       console.error('Error cargando programación:', err);
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudo cargar la programación', false, 2600);
-      }
     }
   }
 

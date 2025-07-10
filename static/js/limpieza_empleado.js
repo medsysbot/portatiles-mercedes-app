@@ -121,8 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = `/empleado/limpieza/editar/${id}`;
   });
 
-  }
-
   function filtrarServicios(texto) {
     const q = texto.toLowerCase();
     const filtrados = servicios.filter(s =>

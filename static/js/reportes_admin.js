@@ -69,9 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
-  });
 
-  }
+  });
 
   function filtrarReportes(texto) {
     const q = texto.toLowerCase();

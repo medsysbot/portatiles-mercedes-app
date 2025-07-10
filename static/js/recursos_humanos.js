@@ -169,6 +169,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('error');
       await cargarDatos();
+    } catch (err) {
+      console.error('Error eliminando datos personales:', err);
+    }
   });
 
   if (btnEliminarSalarios) btnEliminarSalarios.addEventListener('click', async () => {
@@ -182,6 +185,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('error');
       await cargarSalarios();
+    } catch (err) {
+      console.error('Error eliminando salarios:', err);
+    }
   });
 
   if (btnEliminarAusencias) btnEliminarAusencias.addEventListener('click', async () => {
@@ -195,6 +201,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('error');
       await cargarAusencias();
+    } catch (err) {
+      console.error('Error eliminando ausencias:', err);
+    }
   });
 
 

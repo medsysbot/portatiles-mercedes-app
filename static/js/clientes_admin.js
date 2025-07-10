@@ -88,8 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
     mostrarClientes(filtrados);
   }
 
-  }
-
   const buscador = document.getElementById('busquedaCliente');
   const btnBuscar = document.getElementById('btnBuscarCliente');
   if (buscador) buscador.addEventListener('input', () => filtrarClientes(buscador.value.trim()));

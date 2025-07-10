@@ -32,10 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
       reportes = await resp.json();
       mostrarReportes(reportes);
       errorDiv.classList.add('d-none');
-    } catch (err) {
-      console.error('Error cargando reportes:', err);
+    } catch (_) {
       if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudieron cargar los reportes', false, 2600);
+        showAlert('error-datos', 'No se pudieron cargar los reportes', false, 2500);
       }
     }
   }
@@ -63,8 +62,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error al eliminar');
       await cargarReportes();
-    } catch (err) {
-      console.error('Error eliminando reportes:', err);
+    } catch (_) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error eliminando reportes', false, 2500);
+      }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }

@@ -1,4 +1,4 @@
-/* === ALERTA CENTRAL OSCURA - PORTÁTILES MERCEDES === */
+/* === ALERTA CENTRAL FINAL - PORTÁTILES MERCEDES === */
 /* Archivo: /static/css/alertas-custom.css */
 
 #alert-manager.alert-container {
@@ -10,34 +10,35 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.4); /* Fondo pantalla oscuro */
+  background-color: rgba(0, 0, 0, 0.4); /* Fondo de pantalla difuso */
   z-index: 9999;
 }
 
-/* Caja negra central */
+/* Caja central negra más grande y más transparente */
 .alert-box {
-  background-color: rgba(0, 0, 0, 0.85); /* Caja negra semitransparente */
-  padding: 30px 32px;
-  border-radius: 10px;
+  background-color: rgba(0, 0, 0, 0.4); /* MÁS TRANSPARENTE */
+  padding: 40px 50px; /* MÁS GRANDE */
+  border-radius: 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 18px;
-  max-width: 380px;
-  min-width: 260px;
+  gap: 24px;
+  max-width: 520px;
+  min-width: 320px;
 }
 
-/* Ícono centrado arriba */
+/* Ícono más grande y visible */
 #alert-icon.alert-icon {
-  width: 48px;
-  height: 48px;
+  width: 96px;  /* ANCHO GRANDE */
+  height: 96px; /* ALTO GRANDE */
 }
 
-/* Mensaje centrado blanco */
+/* Texto blanco centrado */
 #alert-text.alert-message {
   font-family: 'Segoe UI', sans-serif;
-  font-size: 16px;
+  font-size: 18px;
   color: #ffffff;
   text-align: center;
-  line-height: 1.4;
+  line-height: 1.5;
+  max-width: 100%;
 }

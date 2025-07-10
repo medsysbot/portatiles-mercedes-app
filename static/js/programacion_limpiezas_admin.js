@@ -48,14 +48,20 @@ document.addEventListener('DOMContentLoaded', () => {
       tabla.clear();
       tabla.rows.add(registros).draw();
       actualizarBoton();
-    } catch (err) {
-      console.error(err);
+    } catch (_) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error al cargar datos', false, 2500);
+      }
     }
   }
 
   form.addEventListener('submit', async ev => {
     ev.preventDefault();
     const data = Object.fromEntries(new FormData(form).entries());
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-mensaje', 'Enviando datos...', false, 2500);
+    }
+    await new Promise(r => setTimeout(r, 2500));
     try {
       const resp = await fetch('/admin/api/limpiezas_programadas/agregar', {
         method: 'POST',
@@ -66,7 +72,13 @@ document.addEventListener('DOMContentLoaded', () => {
       form.reset();
       cargarDatos();
       btnCancelar.click();
-    } catch (err) {
+      if (typeof showAlert === 'function') {
+        showAlert('exito-datos', 'Datos guardados correctamente', false, 2500);
+      }
+    } catch (_) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error al guardar', false, 2500);
+      }
     }
   });
 
@@ -81,6 +93,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaProgramacion tbody .fila-check:checked')).map(c => parseInt(c.dataset.id));
     if (!ids.length) return;
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-mensaje', 'Eliminando datos...', false, 2500);
+    }
+    await new Promise(r => setTimeout(r, 2500));
     try {
       await fetch('/admin/api/limpiezas_programadas/eliminar', {
         method: 'POST',
@@ -88,7 +104,13 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ ids })
       });
       cargarDatos();
-    } catch (err) {
+      if (typeof showAlert === 'function') {
+        showAlert('exito-datos', 'Datos eliminados', false, 2500);
+      }
+    } catch (_) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error al eliminar', false, 2500);
+      }
     }
   });
 

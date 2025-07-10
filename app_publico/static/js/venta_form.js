@@ -12,12 +12,12 @@ if (verFormularioBtn) {
   // ==== Eventos de UI ====
   verFormularioBtn.addEventListener('click', () => {
     if (typeof showAlert === 'function') {
-      showAlert('enviando-mensaje', 'Abriendo formulario...', false, 1600);
+      showAlert('abriendo-formulkario', 'Abriendo formulario...', false, 1600);
     }
     setTimeout(() => {
       window.open('/venta', '_blank');
       if (typeof showAlert === 'function') {
-        showAlert('exito-datos', 'Formulario abierto', false, 2600);
+        showAlert('formulario-abierto', 'Formulario abierto', false, 2600);
       }
     }, 1600);
   });

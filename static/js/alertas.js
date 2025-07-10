@@ -6,6 +6,9 @@ let alertTimeout = null;
 
 // Definición de los iconos y mensajes para cada tipo de alerta
 const ALERT_ICONS = {
+
+  "formulario-error":      { icon: "/static/iconos/formulario-error.png",      msg: "Error al cargar el formulario" },  
+  "error-conexion":        { icon: "/static/iconos/error-conexion.png",        msg: "Error en la conexion" },
   "formulario-abierto":    { icon: "/static/iconos/formulario-abierto.png",    msg: "Formulario abierto" },
   "abriendo-formulario":   { icon: "/static/iconos/abriendo-formulario.png",   msg: "Abriendo formulario" },
   "error-sesion":          { icon: "/static/iconos/error-sesion.png",          msg: "Error al iniciar sesion" }, 

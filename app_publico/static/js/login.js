@@ -12,10 +12,11 @@ if (form) {
 
         const errorEl = document.getElementById("errorMsg");
         if (errorEl) errorEl.textContent = "";
+
+        const start = Date.now();
         if (typeof showAlert === "function") {
             showAlert('enviando-mensaje', 'Iniciando sesión...', false, 1600);
         }
-
 
         fetch("/login", {
             method: "POST",
@@ -26,76 +27,83 @@ if (form) {
         })
         .then(async res => {
             const data = await res.json();
+            const delay = Math.max(0, 1600 - (Date.now() - start));
             if (res.ok && data.access_token) {
-                if (typeof showAlert === "function") {
-                    showAlert('exito-datos', 'Ingreso correcto', false, 2600);
-                }
-                localStorage.setItem("access_token", data.access_token);
-                const finalizar = (url) => {
-                    setTimeout(() => { window.location.href = url; }, 2600);
-                };
+                setTimeout(() => {
+                    if (typeof showAlert === "function") {
+                        showAlert('exito-datos', 'Ingreso correcto', false, 2600);
+                    }
+                    localStorage.setItem("access_token", data.access_token);
+                    const finalizar = (url) => {
+                        setTimeout(() => { window.location.href = url; }, 2600);
+                    };
 
-                if (data.usuario && data.usuario.dni_cuit_cuil) {
-                    localStorage.setItem("usuario_obj", JSON.stringify({
-                        dni_cuit_cuil: data.usuario.dni_cuit_cuil,
-                        email: data.usuario.email,
-                        nombre: data.usuario.nombre
-                    }));
-                    localStorage.setItem("dni_cuit_cuil", data.usuario.dni_cuit_cuil);
-                    finalizar("/splash_cliente");
-                    return;
-                }
-
-                if (data.rol && (data.rol === "empleado" || data.rol === "Empleado" || data.rol === "Administrador")) {
-                    localStorage.setItem("usuario_obj", JSON.stringify({
-                        email: data.email || email,
-                        nombre: data.nombre || "",
-                        rol: data.rol,
-                        id: data.id || ""
-                    }));
-                    finalizar(data.rol === "Administrador" ? "/splash" : "/splash_empleado");
-                    return;
-                }
-
-                // Si es cliente y NO viene dni_cuit_cuil en la respuesta, intenta obtenerlo
-                fetch(`/clientes/datos_personales_api?email=${encodeURIComponent(email)}`, {
-                    headers: { "Authorization": "Bearer " + data.access_token }
-                })
-                .then(r2 => r2.json())
-                .then(datos => {
-                    if (datos.dni_cuit_cuil) {
+                    if (data.usuario && data.usuario.dni_cuit_cuil) {
                         localStorage.setItem("usuario_obj", JSON.stringify({
-                            dni_cuit_cuil: datos.dni_cuit_cuil,
-                            email: datos.email,
-                            nombre: datos.nombre
+                            dni_cuit_cuil: data.usuario.dni_cuit_cuil,
+                            email: data.usuario.email,
+                            nombre: data.usuario.nombre
                         }));
-                        localStorage.setItem("dni_cuit_cuil", datos.dni_cuit_cuil);
-                    } else {
+                        localStorage.setItem("dni_cuit_cuil", data.usuario.dni_cuit_cuil);
+                        finalizar("/splash_cliente");
+                        return;
+                    }
+
+                    if (data.rol && (data.rol === "empleado" || data.rol === "Empleado" || data.rol === "Administrador")) {
+                        localStorage.setItem("usuario_obj", JSON.stringify({
+                            email: data.email || email,
+                            nombre: data.nombre || "",
+                            rol: data.rol,
+                            id: data.id || ""
+                        }));
+                        finalizar(data.rol === "Administrador" ? "/splash" : "/splash_empleado");
+                        return;
+                    }
+
+                    // Si es cliente y NO viene dni_cuit_cuil en la respuesta, intenta obtenerlo
+                    fetch(`/clientes/datos_personales_api?email=${encodeURIComponent(email)}`, {
+                        headers: { "Authorization": "Bearer " + data.access_token }
+                    })
+                    .then(r2 => r2.json())
+                    .then(datos => {
+                        if (datos.dni_cuit_cuil) {
+                            localStorage.setItem("usuario_obj", JSON.stringify({
+                                dni_cuit_cuil: datos.dni_cuit_cuil,
+                                email: datos.email,
+                                nombre: datos.nombre
+                            }));
+                            localStorage.setItem("dni_cuit_cuil", datos.dni_cuit_cuil);
+                        } else {
+                            localStorage.setItem("usuario_obj", JSON.stringify({
+                                email: email,
+                                nombre: datos.nombre || ""
+                            }));
+                        }
+                        finalizar("/splash_cliente");
+                    })
+                    .catch(() => {
                         localStorage.setItem("usuario_obj", JSON.stringify({
                             email: email,
-                            nombre: datos.nombre || ""
+                            nombre: data.nombre || ""
                         }));
-                    }
-                    finalizar("/splash_cliente");
-                })
-                .catch(() => {
-                    localStorage.setItem("usuario_obj", JSON.stringify({
-                        email: email,
-                        nombre: data.nombre || ""
-                    }));
-                    finalizar("/splash_cliente");
-                });
-
+                        finalizar("/splash_cliente");
+                    });
+                }, delay);
             } else {
-                if (typeof showAlert === "function") {
-                    showAlert('error-datos', data.detail || 'Credenciales incorrectas', false, 2600);
-                }
+                setTimeout(() => {
+                    if (typeof showAlert === "function") {
+                        showAlert('error-datos', data.detail || 'Credenciales incorrectas', false, 2600);
+                    }
+                }, delay);
             }
         })
         .catch(() => {
-            if (typeof showAlert === "function") {
-                showAlert('error-datos', 'Error de conexión', false, 2600);
-            }
+            const delay = Math.max(0, 1600 - (Date.now() - start));
+            setTimeout(() => {
+                if (typeof showAlert === "function") {
+                    showAlert('error-datos', 'Error de conexión', false, 2600);
+                }
+            }, delay);
         });
     });
 }

@@ -77,7 +77,7 @@ document.getElementById('btnLogout')?.addEventListener('click', limpiarCredencia
   if (document.getElementById('tablaCompras')) actualizarCompras();
   if (document.getElementById('tablaLimpieza')) actualizarLimpiezas();
   if (document.getElementById('tablaComprobantes')) actualizarComprobantes();
-  if (document.getElementById('proxLimpieza')) cargarResumen();
+  if (document.getElementById('cntBaños')) cargarResumen();
 });
 
 // ------ ALQUILERES ------
@@ -199,52 +199,25 @@ async function actualizarComprobantes() {
 // ------ RESUMEN (CARDS, CALENDARIO Y ÚLTIMO COMPROBANTE) ------
 async function cargarResumen() {
   try {
-    const [alqRes, factRes, limpRes, compRes] = await Promise.all([
+    const [alqRes, factRes, compRes] = await Promise.all([
       fetchConAuth('/clientes/alquileres_api'),
       fetchConAuth('/clientes/facturas_pendientes_api'),
-      fetchConAuth('/cliente/api/limpiezas_programadas'),
       fetchConAuth('/clientes/comprobantes_api')
     ]);
 
     const alquileres = alqRes ? await alqRes.json() : [];
     const facturas = factRes ? await factRes.json() : [];
-    const limpiezas = limpRes ? await limpRes.json() : [];
     const comprobantes = compRes ? await compRes.json() : [];
 
     document.getElementById('cntBaños').textContent = alquileres.length;
     document.getElementById('cntFactPend').textContent = facturas.length;
 
-    if (limpiezas.length) {
-      limpiezas.sort((a, b) => new Date(a.fecha_limpieza) - new Date(b.fecha_limpieza));
-      document.getElementById('proxLimpieza').textContent = limpiezas[0].fecha_limpieza || '-';
-    }
-
-    cargarCalendario(limpiezas);
     mostrarUltimoComprobante(comprobantes);
   } catch (err) {
     showMsg(null, 'Error cargando resumen');
   }
 }
 
-function cargarCalendario(eventos) {
-  const calendarioEl = document.getElementById('calendario');
-  if (!calendarioEl || !window.FullCalendar) return;
-
-  const eventosCal = (eventos || []).map(ev => ({
-    title: ev.numero_bano || '',
-    start: ev.fecha_limpieza
-  }));
-
-  const calendario = new FullCalendar.Calendar(calendarioEl, {
-    initialView: 'dayGridMonth',
-    height: 'auto',
-    headerToolbar: { start: '', center: 'title', end: 'today,dayGridMonth,timeGridWeek,listWeek' },
-    locale: 'es',
-    titleFormat: { year: 'numeric', month: 'long' },
-    events: eventosCal
-  });
-  calendario.render();
-}
 
 function mostrarUltimoComprobante(comprobantes) {
   const panel = document.getElementById('panelUltimoComprobante');

@@ -1,59 +1,67 @@
-/* === ALERTAS PERSONALIZADAS - PORTÁTILES MERCEDES === */
-/* Ruta: /static/css/alertas-custom.css */
+/* === ALERTAS PERSONALIZADAS COMPATIBLE === */
+/* Archivo: /static/css/alertas-custom.css */
 
-/* ALERTA BASE */
-.alerta-custom {
+/* Contenedor general (inicialmente oculto) */
+#alert-manager.alert-container {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 320px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Caja de alerta */
+.alert-box {
   display: flex;
   align-items: center;
-  justify-content: start;
-  padding: 12px 16px;
-  margin: 12px 0;
-  border-radius: 6px;
-  font-size: 15px;
-  font-family: 'Segoe UI', sans-serif;
-  border: 1px solid transparent;
   gap: 10px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 15px;
+  background-color: #e9fbe7; /* Default: éxito */
+  border-color: #36b81f;
+  color: #246c15;
 }
 
 /* Ícono */
-.alerta-custom .icono-alerta {
+#alert-icon.alert-icon {
   width: 22px;
   height: 22px;
   flex-shrink: 0;
 }
 
-/* Texto */
-.alerta-custom .mensaje {
+/* Mensaje */
+#alert-text.alert-message {
   flex: 1;
-  color: #333;
 }
 
-/* === VARIANTES === */
+/* === VARIANTES DE ESTADO (según JS le aplica clase a alert-box) === */
 
-/* Éxito */
-.alerta-exito {
+.alert-box.exito {
   background-color: #e9fbe7;
   border-color: #36b81f;
   color: #246c15;
 }
 
-/* Advertencia */
-.alerta-warning {
-  background-color: #fff8e5;
-  border-color: #e0a800;
-  color: #806000;
-}
-
-/* Error */
-.alerta-error {
+.alert-box.error {
   background-color: #fdecea;
   border-color: #e03131;
   color: #a01b1b;
 }
 
-/* Información */
-.alerta-info {
+.alert-box.info {
   background-color: #eaf4fe;
   border-color: #1c7ed6;
   color: #0b4f94;
+}
+
+.alert-box.warning {
+  background-color: #fff8e5;
+  border-color: #e0a800;
+  color: #806000;
 }

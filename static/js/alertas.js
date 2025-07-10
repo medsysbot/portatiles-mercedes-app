@@ -3,19 +3,19 @@
 let alertTimeout = null;
 
 const ALERT_ICONS = {
-  "email-incorrecto":        { icon: "/static/iconos/email-incorrecto.png", msg: "E-mail incorrecto" },
+  "email-incorrecto":        { icon: "/static/iconos/email-incorrecto%20.png", msg: "E-mail incorrecto" },
   "enviando-informe":        { icon: "/static/iconos/enviando-informe.png", msg: "Enviando informe..." },
   "enviando-mensaje":        { icon: "/static/iconos/enviando-mensaje.png", msg: "Enviando mensaje..." },
-  "enviando-reporte":        { icon: "/static/iconos/enviando-reporte.png", msg: "Enviando reporte..." },
-  "error-mensaje":           { icon: "/static/iconos/error-mensaje.png", msg: "Error al enviar mensaje" },
+  "enviando-reporte":        { icon: "/static/iconos/enviando-reporte%20.png", msg: "Enviando reporte..." },
+  "error-mensaje":           { icon: "/static/iconos/error%20-mensaje.png", msg: "Error al enviar mensaje" },
   "error-datos":             { icon: "/static/iconos/error-datos.png", msg: "Error en los datos" },
-  "error-informe-limpieza":  { icon: "/static/iconos/error-informe-limpieza.png", msg: "Error al enviar informe de limpieza" },
-  "error-registro":          { icon: "/static/iconos/error-registro.png", msg: "Error en el registro" },
-  "exito-datos":             { icon: "/static/iconos/exito-datos.png", msg: "Datos guardados correctamente" },
-  "exito-informe":           { icon: "/static/iconos/exito-informe.png", msg: "Informe enviado con éxito" },
+  "error-informe-limpieza":  { icon: "/static/iconos/error-informe%20-limpieza%20.png", msg: "Error al enviar informe de limpieza" },
+  "error-registro":          { icon: "/static/iconos/error-registro%20.png", msg: "Error en el registro" },
+  "exito-datos":             { icon: "/static/iconos/exito-datos%20.png", msg: "Datos guardados correctamente" },
+  "exito-informe":           { icon: "/static/iconos/exito-informe%20.png", msg: "Informe enviado con éxito" },
   "exito-mensaje":           { icon: "/static/iconos/exito-mensaje.png", msg: "Mensaje enviado correctamente" },
   "exito-registro":          { icon: "/static/iconos/exito-registro.png", msg: "Registro realizado con éxito" },
-  "guardando-datos":         { icon: "/static/iconos/guardando-datos.png", msg: "Guardando datos..." },
+  "guardando-datos":         { icon: "/static/iconos/guardando-datos%20.png", msg: "Guardando datos..." },
   "password-error":          { icon: "/static/iconos/password-error.png", msg: "Contraseña incorrecta" },
   "registrando-usuario":     { icon: "/static/iconos/registrando-usuario.png", msg: "Registrando usuario..." },
   "registro-ok":             { icon: "/static/iconos/registro-ok.png", msg: "Usuario registrado correctamente" },
@@ -44,3 +44,11 @@ function showAlert(type, customMessage = null, duration = 2500) {
     }, duration);
   }
 }
+
+// Mantener oculto el contenedor de alertas hasta que se dispare showAlert
+document.addEventListener("DOMContentLoaded", () => {
+  const box = document.getElementById("alert-manager");
+  if (box) {
+    box.style.display = "none";
+  }
+});

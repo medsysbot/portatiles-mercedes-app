@@ -134,13 +134,6 @@
       </div>
     </section>
   </div>
-<!-- ALERTA CENTRAL PERSONALIZADA -->
-<div id="alert-manager" class="alert-container">
-  <div class="alert-box">
-    <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-    <span id="alert-text" class="alert-message">Texto de alerta</span>
-  </div>
-</div>
 </div>
 {% endblock %}
 
@@ -160,7 +153,6 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://portatiles-mercedes-app-production.up.railway.app/static/js/dashboard_empleado.js"></script>
   <script>
-  <script src="/static/js/alertas.js"></script>
     document.addEventListener('DOMContentLoaded', () => {
       // Inicializar mapa en Villa Mercedes
       const map = L.map('map').setView([-33.6757, -65.4574], 14);

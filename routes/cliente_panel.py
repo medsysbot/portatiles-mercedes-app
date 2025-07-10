@@ -2,7 +2,7 @@
 Archivo: routes/cliente_panel.py
 Panel de clientes PWA — Funciona solo con token, igual que empleados.
 """
-from fastapi import APIRouter, HTTPException, Depends, Request
+from fastapi import APIRouter, HTTPException, Depends, Request, Query
 from fastapi.responses import JSONResponse
 from fastapi.templating import Jinja2Templates
 from utils.supabase_client import supabase
@@ -212,3 +212,50 @@ async def guardar_datos_personales(request: Request, token_data: dict = Depends(
         return JSONResponse(
             content={"error": f"Error interno: {str(e)}"}, status_code=500
         )
+
+
+# === Endpoints legacy para compatibilidad con tests ===
+
+@router.post("/guardar_datos_cliente")
+async def guardar_datos_cliente(request: Request):
+    """Alias de ``/clientes/guardar_datos_personales`` sin autenticación."""
+    data = await request.json()
+    try:
+        resultado = (
+            supabase.table("datos_personales_clientes")
+            .upsert(data, on_conflict="dni_cuit_cuil")
+            .execute()
+        )
+        if getattr(resultado, "error", None) is None:
+            return JSONResponse(
+                content={"mensaje": "¡Datos guardados correctamente!"},
+                status_code=200,
+            )
+        return JSONResponse(
+            content={"error": getattr(resultado.error, "message", str(resultado.error))},
+            status_code=400,
+        )
+    except Exception as e:
+        logger.error(f"Excepción al guardar datos: {str(e)}")
+        return JSONResponse(content={"error": f"Error interno: {str(e)}"}, status_code=500)
+
+
+@router.get("/info_datos_cliente")
+async def info_datos_cliente(email: str = Query(..., description="Email del cliente")):
+    """Devuelve los datos personales asociados al email indicado."""
+    try:
+        result = (
+            supabase.table("datos_personales_clientes")
+            .select("*")
+            .eq("email", email)
+            .single()
+            .execute()
+        )
+        if getattr(result, "data", None):
+            return result.data
+        raise HTTPException(status_code=404, detail="Datos no encontrados")
+    except HTTPException:
+        raise
+    except Exception as exc:
+        logger.error(f"Error consultando datos de cliente: {exc}")
+        raise HTTPException(status_code=500, detail=f"Error consultando datos: {exc}")

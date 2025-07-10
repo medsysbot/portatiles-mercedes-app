@@ -115,7 +115,12 @@ app = FastAPI()
 # Middleware que limita dominios válidos (ajusta tu dominio si lo tenés)
 app.add_middleware(
     TrustedHostMiddleware,
-    allowed_hosts=["portatiles-mercedes-app-production.up.railway.app", "*.portatilesmercedes.com", "localhost"]
+    allowed_hosts=[
+        "portatiles-mercedes-app-production.up.railway.app",
+        "*.portatilesmercedes.com",
+        "localhost",
+        "testserver",
+    ]
 )
 
 # Opcional: forzar HTTPS

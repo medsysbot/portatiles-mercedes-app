@@ -143,7 +143,7 @@ async def crear_factura(request: Request):
         id_factura = insercion.data[0].get("id_factura") or insercion.data[0].get("id")
     except Exception as exc:  # pragma: no cover
         logger.exception("Error guardando factura:")
-        return {"error": f"Error al guardar factura: {exc}"}
+        raise HTTPException(status_code=500, detail=f"Error al guardar factura: {exc}")
 
     if isinstance(archivo, UploadFile) and archivo.filename:
         contenido = await archivo.read()

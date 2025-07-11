@@ -35,10 +35,15 @@ class InMemoryQuery:
         return types.SimpleNamespace(data=None, status_code=400, error="invalid")
 
 class MemoryDB:
-    def __init__(self, data=None):
-        self.facturas = data or []
+    def __init__(self, facturas=None, clientes=None):
+        self.facturas = facturas or []
+        self.clientes = clientes or []
     def table(self, name):
-        return InMemoryQuery(self.facturas)
+        if name == facturas_module.TABLA:
+            return InMemoryQuery(self.facturas)
+        if name == "datos_personales_clientes":
+            return InMemoryQuery(self.clientes)
+        return InMemoryQuery([])
 
 
 def test_facturas_end_to_end(monkeypatch):
@@ -70,3 +75,18 @@ def test_facturas_end_to_end(monkeypatch):
     assert lista[0]["dni_cuit_cuil"] == "20304567"
     assert "factura_url" in lista[0]
     assert lista[0]["factura_url"] is None
+
+
+def test_buscar_clientes(monkeypatch):
+    clientes = [
+        {"dni_cuit_cuil": "1", "nombre": "Ana", "apellido": "G", "razon_social": "AG"},
+        {"dni_cuit_cuil": "2", "nombre": "Juan", "apellido": "P", "razon_social": "JP"},
+    ]
+    db = MemoryDB([], clientes)
+    monkeypatch.setattr(facturas_module, "supabase", db)
+    resp = client.get("/admin/api/clientes/busqueda?q=Ana")
+    assert resp.status_code == 200
+    data = resp.json()
+    assert "clientes" in data
+    assert len(data["clientes"]) == 1
+    assert data["clientes"][0]["dni_cuit_cuil"] == "1"

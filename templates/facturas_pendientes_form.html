@@ -3,9 +3,11 @@
 {% block description %}Registro de facturas pendientes{% endblock %}
 {% block head_extra %}
 {{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">Nueva factura pendiente</h2>
+<button type="button" id="btnBuscarCliente" class="btn btn-secondary mb-3">Buscar cliente</button>
 <form method="post">
   <div class="form-group">
     <label>Fecha</label>
@@ -38,4 +40,43 @@
   <button type="submit" class="btn btn-primary">Guardar</button>
   <a href="/admin/facturas_pendientes" class="btn btn-secondary">Volver</a>
 </form>
+
+<!-- Modal de selección de clientes -->
+<div class="modal fade" id="modalClientes" tabindex="-1" role="dialog" aria-labelledby="modalClientesLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalClientesLabel">Seleccionar cliente</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="filtroClientes" class="form-control mb-3" placeholder="Buscar...">
+        <div class="table-responsive">
+          <table id="tablaClientesBusqueda" class="table pm-tabla table-striped table-bordered">
+            <thead>
+              <tr>
+                <th></th>
+                <th>DNI / CUIT / CUIL</th>
+                <th>Nombre</th>
+                <th>Razón social</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnAgregarCliente" class="btn btn-primary" disabled>Agregar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="/static/js/facturas_pendientes_form.js"></script>
 {% endblock %}

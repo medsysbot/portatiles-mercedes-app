@@ -115,9 +115,16 @@ async def crear_factura(request: Request):
     datos["factura_url"] = None
 
     try:
-        insercion = supabase.table(TABLA).insert(datos).execute()
+        insercion = (
+            supabase.table(TABLA)
+            .insert(datos)
+            .select("id_factura")
+            .execute()
+        )
         if getattr(insercion, "error", None):
             raise Exception(insercion.error.message)
+        if not insercion.data:
+            raise Exception("Inserción sin datos devueltos")
         id_factura = insercion.data[0].get("id_factura") or insercion.data[0].get("id")
     except Exception as exc:  # pragma: no cover
         logger.exception("Error guardando factura:")
@@ -130,7 +137,11 @@ async def crear_factura(request: Request):
         nombre_arch = f"factura-{id_factura}{ext}"
         bucket = supabase.storage.from_(BUCKET)
         try:
-            bucket.upload(nombre_arch, contenido, {"content-type": archivo.content_type})
+            bucket.upload(
+                nombre_arch,
+                contenido,
+                {"content-type": archivo.content_type or "application/octet-stream"},
+            )
             factura_url = bucket.get_public_url(nombre_arch)
             supabase.table(TABLA).update({"factura_url": factura_url}).eq("id_factura", id_factura).execute()
         except Exception as exc:  # pragma: no cover

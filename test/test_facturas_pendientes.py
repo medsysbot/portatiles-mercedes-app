@@ -9,11 +9,13 @@ class InMemoryQuery:
     def __init__(self, data):
         self.data = data
         self.filters = {}
-        self.is_select = True
+        self.operation = "select"
         self.insert_data = None
+        self.update_data = None
+        self.select_called = False
 
     def select(self, *_):
-        self.is_select = True
+        self.select_called = True
         return self
 
     def eq(self, field, value):
@@ -21,17 +23,31 @@ class InMemoryQuery:
         return self
 
     def insert(self, data):
-        self.is_select = False
+        self.operation = "insert"
         self.insert_data = data
         return self
 
+    def update(self, data):
+        self.operation = "update"
+        self.update_data = data
+        return self
+
     def execute(self):
-        if self.is_select:
+        if self.operation == "select":
             result = [d for d in self.data if all(d.get(k) == v for k, v in self.filters.items())]
             return types.SimpleNamespace(data=result, status_code=200, error=None)
-        if self.insert_data is not None:
-            self.data.append(self.insert_data)
-            return types.SimpleNamespace(data=[{"id": len(self.data)}], status_code=200, error=None)
+        if self.operation == "insert" and self.insert_data is not None:
+            inserted_id = len(self.data) + 1
+            registro = self.insert_data.copy()
+            registro["id_factura"] = inserted_id
+            self.data.append(registro)
+            data_return = [{"id_factura": inserted_id}] if self.select_called else None
+            return types.SimpleNamespace(data=data_return, status_code=200, error=None)
+        if self.operation == "update" and self.update_data is not None:
+            for d in self.data:
+                if all(d.get(k) == v for k, v in self.filters.items()):
+                    d.update(self.update_data)
+            return types.SimpleNamespace(data=None, status_code=200, error=None)
         return types.SimpleNamespace(data=None, status_code=400, error="invalid")
 
 class MemoryDB:

@@ -7,7 +7,11 @@
 {% block content %}
 <div class="container mt-4">
   <h2>Comprobantes de pago</h2>
-  <button id="btnMostrarForm" class="btn btn-success mb-3"><i class="fas fa-receipt"></i> Agregar comprobante</button>
+  <div class="d-flex flex-wrap align-items-center my-3">
+    <input type="text" id="busquedaComprobantes" class="form-control buscador-tabla mb-2" placeholder="Buscar comprobante...">
+    <button id="btnBuscarComprobantes" class="btn btn-secondary ml-2 mb-2">Buscar</button>
+    <button id="btnMostrarForm" class="btn btn-success ml-2 mb-2"><i class="fas fa-receipt"></i> Agregar comprobante</button>
+  </div>
   <form id="formComprobanteAdmin" enctype="multipart/form-data" class="mb-3 d-none">
     <div class="form-row">
       <div class="form-group col-md-3">
@@ -29,7 +33,7 @@
     </div>
     <div class="text-right">
       <button type="submit" class="btn btn-primary">Guardar</button>
-      <button type="button" id="btnCancelarForm" class="btn btn-secondary">Cancelar</button>
+      <button type="button" id="btnCancelarForm" class="btn btn-secondary">Volver</button>
     </div>
   </form>
   <div id="contenedorTabla" class="table-responsive bg-light p-3">

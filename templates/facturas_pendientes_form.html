@@ -31,6 +31,10 @@
     <label>Monto adeudado</label>
     <input type="number" step="0.01" name="monto_adeudado" class="form-control" required>
   </div>
+  <div class="form-group">
+    <label for="facturaUpload">Subir factura (PDF, PNG o JPG):</label>
+    <input type="file" name="factura" id="facturaUpload" accept=".pdf, .png, .jpg, .jpeg">
+  </div>
   <button type="submit" class="btn btn-primary">Guardar</button>
   <a href="/admin/facturas_pendientes" class="btn btn-secondary">Volver</a>
 </form>

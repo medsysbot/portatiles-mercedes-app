@@ -119,7 +119,7 @@ async def get_facturas_pendientes(token_data: dict = Depends(verificar_token)):
         res = (
             supabase.table("facturas_pendientes")
             .select(
-                "fecha,numero_factura,dni_cuit_cuil,razon_social,nombre_cliente,monto_adeudado"
+                "fecha,numero_factura,dni_cuit_cuil,razon_social,nombre_cliente,monto_adeudado,factura_url"
             )
             .eq("dni_cuit_cuil", dni)
             .execute()

@@ -68,3 +68,5 @@ def test_facturas_end_to_end(monkeypatch):
     assert len(lista) == 1
     assert lista[0]["numero_factura"] == "F001"
     assert lista[0]["dni_cuit_cuil"] == "20304567"
+    assert "factura_url" in lista[0]
+    assert lista[0]["factura_url"] is None

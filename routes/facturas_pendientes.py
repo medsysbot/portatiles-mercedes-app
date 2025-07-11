@@ -150,10 +150,15 @@ async def crear_factura(request: Request):
         _validar_factura(archivo.filename, archivo.content_type or "", len(contenido))
         ext = os.path.splitext(archivo.filename)[1].lower()
         pdf_bytes = _convertir_a_pdf(contenido, ext)
-        nombre_pdf = f"factura-{id_factura}.pdf"
+        timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+        nombre_pdf = f"factura-{id_factura}-{timestamp}.pdf"
         bucket = supabase.storage.from_(BUCKET)
         try:
-            bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
+            bucket.upload(
+                nombre_pdf,
+                pdf_bytes,
+                {"content-type": "application/pdf", "x-upsert": "true"},
+            )
             factura_url = bucket.get_public_url(nombre_pdf)
             supabase.table(TABLA).update({"factura_url": factura_url}).eq("id_factura", id_factura).execute()
         except Exception as exc:  # pragma: no cover

@@ -14,7 +14,7 @@ from decimal import Decimal, DecimalException
 from dotenv import load_dotenv
 
 from fastapi import APIRouter, HTTPException, Request, UploadFile, Query
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from supabase import create_client, Client
@@ -112,31 +112,34 @@ async def crear_factura(request: Request):
     datos = factura.model_dump()
     datos["fecha"] = factura.fecha.isoformat()
     datos["monto_adeudado"] = float(factura.monto_adeudado)
-    factura_url = None
-    if isinstance(archivo, UploadFile) and archivo.filename:
-        contenido = await archivo.read()
-        _validar_factura(archivo.filename, archivo.content_type or "", len(contenido))
-        nombre_arch = f"factura_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}{os.path.splitext(archivo.filename)[1]}"
-        bucket = supabase.storage.from_(BUCKET)
-        try:
-            bucket.upload(nombre_arch, contenido, {"content-type": archivo.content_type})
-            factura_url = bucket.get_public_url(nombre_arch)
-        except Exception as exc:  # pragma: no cover
-            logger.exception("Error subiendo factura:")
-            raise HTTPException(status_code=500, detail=str(exc))
-    datos["factura_url"] = factura_url
+    datos["factura_url"] = None
 
     try:
-        result = supabase.table(TABLA).insert(datos).execute()
-        if getattr(result, "error", None):
-            raise Exception(result.error.message)
+        insercion = supabase.table(TABLA).insert(datos).execute()
+        if getattr(insercion, "error", None):
+            raise Exception(insercion.error.message)
+        id_factura = insercion.data[0].get("id_factura") or insercion.data[0].get("id")
     except Exception as exc:  # pragma: no cover
         logger.exception("Error guardando factura:")
         return {"error": f"Error al guardar factura: {exc}"}
 
+    if isinstance(archivo, UploadFile) and archivo.filename:
+        contenido = await archivo.read()
+        _validar_factura(archivo.filename, archivo.content_type or "", len(contenido))
+        ext = os.path.splitext(archivo.filename)[1]
+        nombre_arch = f"factura-{id_factura}{ext}"
+        bucket = supabase.storage.from_(BUCKET)
+        try:
+            bucket.upload(nombre_arch, contenido, {"content-type": archivo.content_type})
+            factura_url = bucket.get_public_url(nombre_arch)
+            supabase.table(TABLA).update({"factura_url": factura_url}).eq("id_factura", id_factura).execute()
+        except Exception as exc:  # pragma: no cover
+            logger.exception("Error subiendo factura:")
+            raise HTTPException(status_code=500, detail=str(exc))
+
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}
-    return {"ok": True}
+    return RedirectResponse("/admin/facturas_pendientes", status_code=303)
 
 
 @router.get("/admin/api/clientes/busqueda")

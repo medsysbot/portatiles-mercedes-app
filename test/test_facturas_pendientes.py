@@ -41,8 +41,7 @@ class InMemoryQuery:
             registro = self.insert_data.copy()
             registro["id_factura"] = inserted_id
             self.data.append(registro)
-            data_return = [{"id_factura": inserted_id}] if self.select_called else None
-            return types.SimpleNamespace(data=data_return, status_code=200, error=None)
+            return types.SimpleNamespace(data=[{"id_factura": inserted_id}], status_code=200, error=None)
         if self.operation == "update" and self.update_data is not None:
             for d in self.data:
                 if all(d.get(k) == v for k, v in self.filters.items()):

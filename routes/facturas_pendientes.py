@@ -115,12 +115,7 @@ async def crear_factura(request: Request):
     datos["factura_url"] = None
 
     try:
-        insercion = (
-            supabase.table(TABLA)
-            .insert(datos)
-            .select("id_factura")
-            .execute()
-        )
+        insercion = supabase.table(TABLA).insert(datos).execute()
         if getattr(insercion, "error", None):
             raise Exception(insercion.error.message)
         if not insercion.data:

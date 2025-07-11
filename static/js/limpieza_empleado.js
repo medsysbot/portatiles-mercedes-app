@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const btnBuscar = document.getElementById('btnBuscarServicios');
   const buscador = document.getElementById('busquedaServicios');
-  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
   const btnEditar = document.getElementById('btnEditarSeleccionado');
   let servicios = [];
 
@@ -74,45 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function actualizarBotones() {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
     const activo = checks.length === 1;
-    if (btnEliminar) btnEliminar.disabled = checks.length === 0;
     if (btnEditar) btnEditar.disabled = !activo;
   }
 
   $('#tablaServicios tbody').on('change', '.fila-check', actualizarBotones);
-
-  btnEliminar?.addEventListener('click', async () => {
-    const ids = Array.from(document.querySelectorAll('#tablaServicios tbody .fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length) return;
-    const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('guardando-datos', 'Eliminando servicios...', false, 1600);
-    }
-    try {
-      const resp = await fetch('/empleado/api/servicios_limpieza/eliminar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
-        body: JSON.stringify({ ids })
-      });
-      if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarServicios();
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Servicios eliminados', false, 2600);
-        }
-      }, delay);
-    } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al eliminar servicios', false, 2600);
-        }
-      }, delay);
-      console.error('Error eliminando servicios:', err);
-    } finally {
-      actualizarBotones();
-    }
-  });
 
   btnEditar?.addEventListener('click', () => {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');

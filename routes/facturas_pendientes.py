@@ -17,6 +17,8 @@ from fastapi import APIRouter, HTTPException, Request, UploadFile, Query
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
+from fpdf import FPDF
+import tempfile
 from supabase import create_client, Client
 
 load_dotenv()
@@ -54,6 +56,24 @@ def _validar_factura(nombre: str, content_type: str, tamano: int) -> None:
         raise HTTPException(status_code=400, detail="Tipo no permitido")
     if tamano > 2 * 1024 * 1024:
         raise HTTPException(status_code=400, detail="Archivo demasiado grande")
+
+
+def _convertir_a_pdf(data: bytes, extension: str) -> bytes:
+    """Convierte una imagen a PDF si es necesario y devuelve el contenido."""
+    if extension == ".pdf":
+        return data
+
+    with tempfile.NamedTemporaryFile(delete=False, suffix=extension) as tmp:
+        tmp.write(data)
+        tmp.flush()
+        imagen_path = tmp.name
+
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.image(imagen_path, x=10, y=10, w=190)
+    pdf_bytes = pdf.output(dest="S").encode("latin1")
+    os.unlink(imagen_path)
+    return pdf_bytes
 
 
 class FacturaPendiente(BaseModel):
@@ -128,16 +148,13 @@ async def crear_factura(request: Request):
     if isinstance(archivo, UploadFile) and archivo.filename:
         contenido = await archivo.read()
         _validar_factura(archivo.filename, archivo.content_type or "", len(contenido))
-        ext = os.path.splitext(archivo.filename)[1]
-        nombre_arch = f"factura-{id_factura}{ext}"
+        ext = os.path.splitext(archivo.filename)[1].lower()
+        pdf_bytes = _convertir_a_pdf(contenido, ext)
+        nombre_pdf = f"factura-{id_factura}.pdf"
         bucket = supabase.storage.from_(BUCKET)
         try:
-            bucket.upload(
-                nombre_arch,
-                contenido,
-                {"content-type": archivo.content_type or "application/octet-stream"},
-            )
-            factura_url = bucket.get_public_url(nombre_arch)
+            bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
+            factura_url = bucket.get_public_url(nombre_pdf)
             supabase.table(TABLA).update({"factura_url": factura_url}).eq("id_factura", id_factura).execute()
         except Exception as exc:  # pragma: no cover
             logger.exception("Error subiendo factura:")

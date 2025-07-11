@@ -20,6 +20,8 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from fpdf import FPDF
 from supabase import create_client, Client
+import smtplib
+from email.message import EmailMessage
 
 router = APIRouter()
 
@@ -44,6 +46,12 @@ if not logger.handlers:
 
 TEMPLATES = Jinja2Templates(directory="templates")
 VENTAS_TABLE = "ventas"
+
+# ==== Configuración de correo ====
+EMAIL_ORIGEN = os.getenv("EMAIL_ORIGEN")
+EMAIL_PASSWORD = os.getenv("EMAIL_PASSWORD")
+SMTP_SERVER = os.getenv("SMTP_SERVER")
+SMTP_PORT = os.getenv("SMTP_PORT")
 
 
 class VentaPublica(BaseModel):
@@ -95,6 +103,31 @@ async def registrar_venta(venta: VentaPublica):
         if venta.observaciones:
             pdf.multi_cell(0, 10, f"Observaciones: {venta.observaciones}")
         pdf.output(dest="S").encode("latin1")
+
+        if all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
+            try:
+                msg = EmailMessage()
+                msg["From"] = EMAIL_ORIGEN
+                msg["To"] = EMAIL_ORIGEN
+                msg["Subject"] = "Nueva venta registrada"
+                cuerpo = (
+                    f"Cliente: {venta.cliente_nombre}\n"
+                    f"DNI/CUIT/CUIL: {venta.dni_cuit_cuil}\n"
+                    f"Tipo de baño: {venta.tipo_bano}\n"
+                    f"Cantidad: {venta.cantidad}\n"
+                    f"Dirección: {venta.direccion_entrega}\n"
+                    f"Fecha: {venta.fecha_venta}\n"
+                    f"Observaciones: {venta.observaciones or ''}"
+                )
+                msg.set_content(cuerpo)
+                with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
+                    smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
+                    smtp.send_message(msg)
+                logger.info("Correo de venta enviado")
+            except Exception as exc:  # pragma: no cover - dependencias externas
+                logger.exception("Error enviando correo de venta: %s", exc)
+        else:
+            logger.warning("SMTP no configurado - no se envió correo")
 
         return {"mensaje": "Venta registrada"}
     except Exception as exc:  # pragma: no cover

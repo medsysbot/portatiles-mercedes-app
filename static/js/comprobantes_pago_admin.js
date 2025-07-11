@@ -52,6 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
   const btnCancelar = document.getElementById('btnCancelarForm');
+  const buscador = document.getElementById('busquedaComprobantes');
+  const btnBuscar = document.getElementById('btnBuscarComprobantes');
+  let registros = [];
 
   form.style.display = 'none';
 
@@ -67,16 +70,32 @@ document.addEventListener('DOMContentLoaded', () => {
     btnNuevo.style.display = 'inline-block';
   });
 
+  function mostrarComprobantes(lista) {
+    tabla.clear();
+    tabla.rows.add(lista).draw();
+  }
+
+  function filtrar() {
+    const q = (buscador.value || '').toLowerCase();
+    const filtrados = registros.filter(c =>
+      (c.nombre_cliente || '').toLowerCase().includes(q) ||
+      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      String(c.numero_factura || '').toLowerCase().includes(q)
+    );
+    mostrarComprobantes(filtrados);
+  }
+
+  buscador?.addEventListener('input', filtrar);
+  btnBuscar?.addEventListener('click', filtrar);
+
   async function cargarComprobantes() {
     try {
-      // Siempre enviamos el token en la cabecera Authorization
       const resp = await fetchConAuth('/admin/api/comprobantes_pago');
       if (!resp.ok) throw new Error('Error consultando');
-      const datos = await resp.json();
-      tabla.clear();
-      tabla.rows.add(datos).draw();
-      document.getElementById('mensajeComprobantes').style.display = datos.length ? 'none' : 'block';
-      document.getElementById('mensajeComprobantes').textContent = datos.length ? '' : 'Sin registros';
+      registros = await resp.json();
+      mostrarComprobantes(registros);
+      document.getElementById('mensajeComprobantes').style.display = registros.length ? 'none' : 'block';
+      document.getElementById('mensajeComprobantes').textContent = registros.length ? '' : 'Sin registros';
       document.getElementById('errorComprobantes').classList.add('d-none');
     } catch (err) {
       console.error('Error cargando comprobantes:', err);

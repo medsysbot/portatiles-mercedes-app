@@ -13,7 +13,7 @@ import os
 from decimal import Decimal, DecimalException
 from dotenv import load_dotenv
 
-from fastapi import APIRouter, HTTPException, Request, UploadFile
+from fastapi import APIRouter, HTTPException, Request, UploadFile, Query
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
@@ -136,6 +136,37 @@ async def crear_factura(request: Request):
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}
     return {"ok": True}
+
+
+@router.get("/admin/api/clientes/busqueda")
+async def buscar_clientes(q: str = Query("")):
+    """Busca clientes por DNI, CUIT/CUIL, nombre o razón social."""
+    if not supabase:
+        logger.warning("Supabase no configurado al buscar clientes")
+        return {"clientes": []}
+
+    try:
+        res = supabase.table("datos_personales_clientes").select("dni_cuit_cuil,nombre,apellido,razon_social").execute()
+        if getattr(res, "error", None):
+            raise Exception(res.error.message)
+        lista = res.data or []
+        q_low = q.lower()
+        filtrados = [
+            {
+                "dni_cuit_cuil": c.get("dni_cuit_cuil"),
+                "nombre": f"{c.get('nombre','')} {c.get('apellido','')}".strip(),
+                "razon_social": c.get("razon_social") or "",
+            }
+            for c in lista
+            if q_low in (c.get("dni_cuit_cuil") or "").lower()
+            or q_low in (c.get("nombre") or "").lower()
+            or q_low in (c.get("apellido") or "").lower()
+            or q_low in (c.get("razon_social") or "").lower()
+        ]
+        return {"clientes": filtrados}
+    except Exception as exc:
+        logger.exception("Error buscando clientes:")
+        raise HTTPException(status_code=500, detail=str(exc))
 
 
 @router.get("/admin/api/facturas_pendientes")

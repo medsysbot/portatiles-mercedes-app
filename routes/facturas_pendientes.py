@@ -7,13 +7,13 @@ Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
 """
 
-from datetime import date
+from datetime import date, datetime
 import logging
 import os
 from decimal import Decimal, DecimalException
 from dotenv import load_dotenv
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, UploadFile
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
@@ -43,6 +43,17 @@ if not logger.handlers:
 
 TEMPLATES = Jinja2Templates(directory="templates")
 TABLA = "facturas_pendientes"
+BUCKET = "factura"
+
+
+def _validar_factura(nombre: str, content_type: str, tamano: int) -> None:
+    ext = os.path.splitext(nombre)[1].lower()
+    if ext not in {".pdf", ".png", ".jpg", ".jpeg"}:
+        raise HTTPException(status_code=400, detail="Formato no permitido")
+    if content_type not in {"application/pdf", "image/png", "image/jpeg"}:
+        raise HTTPException(status_code=400, detail="Tipo no permitido")
+    if tamano > 2 * 1024 * 1024:
+        raise HTTPException(status_code=400, detail="Archivo demasiado grande")
 
 
 class FacturaPendiente(BaseModel):
@@ -52,6 +63,7 @@ class FacturaPendiente(BaseModel):
     razon_social: str
     nombre_cliente: str
     monto_adeudado: Decimal
+    factura_url: str | None = None
 
 
 @router.get("/admin/facturas_pendientes", response_class=HTMLResponse)
@@ -79,11 +91,13 @@ async def crear_factura(request: Request):
         logger.error("Supabase no configurado al crear factura")
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
+    archivo: UploadFile | None = None
     if request.headers.get("content-type", "").startswith("application/json"):
         datos_req = await request.json()
     else:
         form = await request.form()
         datos_req = dict(form)
+        archivo = form.get("factura")  # type: ignore[assignment]
     logger.info("Crear factura datos recibidos: %s", datos_req)
 
     try:
@@ -97,6 +111,19 @@ async def crear_factura(request: Request):
     datos = factura.model_dump()
     datos["fecha"] = factura.fecha.isoformat()
     datos["monto_adeudado"] = float(factura.monto_adeudado)
+    factura_url = None
+    if isinstance(archivo, UploadFile) and archivo.filename:
+        contenido = await archivo.read()
+        _validar_factura(archivo.filename, archivo.content_type or "", len(contenido))
+        nombre_arch = f"factura_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}{os.path.splitext(archivo.filename)[1]}"
+        bucket = supabase.storage.from_(BUCKET)
+        try:
+            bucket.upload(nombre_arch, contenido, {"content-type": archivo.content_type})
+            factura_url = bucket.get_public_url(nombre_arch)
+        except Exception as exc:  # pragma: no cover
+            logger.exception("Error subiendo factura:")
+            raise HTTPException(status_code=500, detail=str(exc))
+    datos["factura_url"] = factura_url
 
     try:
         result = supabase.table(TABLA).insert(datos).execute()

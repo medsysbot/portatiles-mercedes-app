@@ -22,7 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil' },
       { data: 'razon_social' },
       { data: 'nombre_cliente' },
-      { data: 'monto_adeudado' }
+      { data: 'monto_adeudado' },
+      { data: 'factura_url', render: d => d ? `<a href="${d}" target="_blank">Ver</a>` : '' }
     ]
   });
 

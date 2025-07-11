@@ -7,7 +7,6 @@
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">Nueva factura pendiente</h2>
-<button type="button" id="btnBuscarCliente" class="btn btn-secondary mb-3">Buscar cliente</button>
 <form method="post">
   <div class="form-group">
     <label>Fecha</label>
@@ -37,8 +36,11 @@
     <label for="facturaUpload">Subir factura (PDF, PNG o JPG):</label>
     <input type="file" name="factura" id="facturaUpload" accept=".pdf, .png, .jpg, .jpeg">
   </div>
-  <button type="submit" class="btn btn-primary">Guardar</button>
-  <a href="/admin/facturas_pendientes" class="btn btn-secondary">Volver</a>
+  <div class="botones-final-form">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="/admin/facturas_pendientes" class="btn btn-secondary">Volver</a>
+    <button type="button" id="btnBuscarCliente" class="btn btn-secondary">Buscar cliente</button>
+  </div>
 </form>
 
 <!-- Modal de selección de clientes -->

@@ -98,6 +98,7 @@ async def crear_factura(request: Request):
         form = await request.form()
         datos_req = dict(form)
         archivo = form.get("factura")  # type: ignore[assignment]
+        datos_req.pop("factura", None)
     logger.info("Crear factura datos recibidos: %s", datos_req)
 
     try:

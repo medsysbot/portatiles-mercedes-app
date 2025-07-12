@@ -345,6 +345,18 @@ body.panel-cliente .table-responsive.bg-light {
   border: 1px solid #000000 !important;
 }
 
+#filtroClientes,
+#filtroClientesAlquiler {
+  border: 2px solid #000000 !important;
+}
+
+body.panel-empleados #filtroClientes,
+body.panel-cliente #filtroClientes,
+body.panel-empleados #filtroClientesAlquiler,
+body.panel-cliente #filtroClientesAlquiler {
+  border: 2px solid #ffffff !important;
+}
+
 body.panel-empleados .buscador-tabla,
 body.panel-cliente .buscador-tabla {
   background: rgba(128, 128, 128, 0.5) !important;
@@ -420,6 +432,7 @@ body.panel-admin table.pm-tabla thead {
   background-color: #ffffff;
   color: #000000;
   text-align: center;
+  border-bottom: 2px solid #000000;
 }
 
 body.panel-admin table.pm-tabla th,
@@ -443,6 +456,7 @@ body.panel-cliente table.pm-tabla thead {
   background-color: rgba(0, 0, 0, 0.65);
   color: #ffffff;
   text-align: center;
+  border-bottom: 2px solid #ffffff;
 }
 
 body.panel-empleados table.pm-tabla th,

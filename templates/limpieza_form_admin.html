@@ -3,6 +3,7 @@
 {% block description %}Formulario para registrar o editar un servicio de limpieza{% endblock %}
 {% block head_extra %}
 {{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">{{ 'Editar Servicio de Limpieza' if servicio else 'Nuevo Servicio de Limpieza' }}</h2>
@@ -49,7 +50,46 @@
     {% endif %}
     <input type="file" name="remito" accept="image/*" class="form-control">
   </div>
-  <button type="submit" class="btn btn-primary">{{ 'Actualizar servicio' if servicio else 'Registrar servicio' }}</button>
-  <a href="{{ '/admin/limpieza' }}" class="btn btn-secondary">Volver</a>
+  <div class="botones-final-form">
+    <button type="submit" class="btn btn-primary">{{ 'Actualizar servicio' if servicio else 'Registrar servicio' }}</button>
+    <a href="{{ '/admin/limpieza' }}" class="btn btn-secondary">Volver</a>
+    <button type="button" id="btnBuscarClienteLimpieza" class="btn btn-secondary">Buscar cliente</button>
+  </div>
 </form>
+
+<!-- Modal de selección de clientes -->
+<div class="modal fade" id="modalClientesLimpieza" tabindex="-1" role="dialog" aria-labelledby="modalClientesLimpiezaLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalClientesLimpiezaLabel">Seleccionar cliente</h5>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="filtroClientesLimpieza" class="form-control mb-3" placeholder="Buscar...">
+        <div class="table-responsive">
+          <table id="tablaClientesLimpieza" class="table pm-tabla table-striped table-bordered">
+            <thead>
+              <tr>
+                <th></th>
+                <th>DNI / CUIT / CUIL</th>
+                <th>Nombre</th>
+                <th>Razón social</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnAgregarClienteLimpieza" class="btn btn-primary" disabled>Agregar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="/static/js/limpieza_form_admin.js"></script>
 {% endblock %}

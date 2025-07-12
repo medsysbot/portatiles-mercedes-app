@@ -169,7 +169,14 @@ async def crear_factura(request: Request):
     except Exception as exc:  # pragma: no cover
         logger.exception("Error guardando factura:")
         raise HTTPException(status_code=500, detail=f"Error al guardar factura: {exc}")
-            if isinstance(archivo, UploadFile) and archivo.filename:
+        try:
+            insercion = supabase.table(TABLA).insert(datos).execute()
+    if getattr(insercion, "error", None):
+        raise Exception(insercion.error.message)
+    if not insercion.data:
+        raise Exception("Inserción sin datos devueltos")
+    id_factura = insercion.data[0].get("id_factura") or insercion.data[0].get("id")
+    if isinstance(archivo, UploadFile) and archivo.filename:
         contenido = await archivo.read()
         _validar_factura(archivo.filename, archivo.content_type or "", len(contenido))
         ext = os.path.splitext(archivo.filename)[1].lower()
@@ -186,21 +193,18 @@ async def crear_factura(request: Request):
             )
             factura_url = bucket.get_public_url(nombre_pdf)
             logger.info(f"Factura URL generada: {factura_url}")
-
             actualizacion = supabase.table(TABLA).update(
                 {"factura_url": factura_url}
             ).eq("id_factura", id_factura).execute()
-
             if getattr(actualizacion, "error", None):
                 raise Exception(actualizacion.error.message)
             logger.info("URL guardada correctamente en la tabla.")
         except Exception as exc:  # pragma: no cover
             logger.exception("Error subiendo factura:")
             raise HTTPException(status_code=500, detail="Error al guardar la factura.")
-    
-    if request.headers.get("content-type", "").startswith("application/json"):
-        return {"ok": True}
-    return RedirectResponse("/admin/facturas_pendientes", status_code=303)
+except Exception as exc:  # pragma: no cover
+    logger.exception("Error guardando factura:")
+    raise HTTPException(status_code=500, detail=f"Error al guardar factura: {exc}")
 
 @router.get("/admin/api/clientes/busqueda")
 async def buscar_clientes(q: str = Query("")):

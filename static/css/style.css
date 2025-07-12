@@ -64,6 +64,7 @@ body.panel-admin .dataTable,
 body.panel-admin table.pm-tabla {
   background: #ffffff !important;
   color: #000000 !important;
+  border: 1px solid #000000 !important;
 }
 
 body.panel-admin .table th,
@@ -375,7 +376,7 @@ body.panel-cliente .buscador-tabla::placeholder {
 
 /* Ajuste de ancho para el buscador de comprobantes */
 #busquedaComprobantes {
-  width: 40% !important;   /* Aprovecha mejor el ancho disponible */
+  width: 60% !important;   /* Mayor equilibrio con los botones */
   min-width: 120px !important;
   max-width: 400px;
 }
@@ -456,17 +457,17 @@ body.panel-admin table.pm-tabla tr:hover {
 #modalClientes table.pm-tabla td,
 #modalClientesAlquiler table.pm-tabla th,
 #modalClientesAlquiler table.pm-tabla td {
-  border: 2px solid #000000 !important;
+  border: 1px solid #000000 !important;
 }
 
 #modalClientes table.pm-tabla thead,
 #modalClientesAlquiler table.pm-tabla thead {
-  border-bottom: 2px solid #000000;
+  border-bottom: 1px solid #000000;
 }
 
 #modalClientes .form-control,
 #modalClientesAlquiler .form-control {
-  border: 2px solid #000000 !important;
+  border: 1px solid #000000 !important;
 }
 
 body.panel-empleados table.pm-tabla thead,

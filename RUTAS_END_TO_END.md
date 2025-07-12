@@ -13,6 +13,7 @@
 | GET | /admin/bash-generator | Generador de Bash | bash_generator.html | Sí |
 | GET | /admin/mercadopago | Pagos (Mercado Pago) | admin_mercadopago.html | Sí |
 | GET | /admin/comprobantes | Comprobantes de pago (alta y listado) | comprobantes_pago_admin.html | Sí |
+| GET | /admin/comprobantes/nuevo | Alta de comprobante de pago | comprobantes_pago_admin.html | Sí |
 | GET | /cliente_panel | Panel de clientes | cliente_panel.html | Sí |
 | GET | /alquiler | Página para registrar alquileres | alquiler.html | Sí |
 | GET | /alquiler_form | Formulario de alquiler en nueva ventana | alquiler_form.html | Sí |
@@ -64,6 +65,7 @@
 | GET | /admin/ventas | Consulta de ventas | JSON | Sí |
 | GET | /admin/limpiezas | Consulta de limpiezas | JSON | Sí |
 | GET | /admin/comprobantes | Listar y cargar comprobantes | HTML | Sí |
+| GET | /admin/comprobantes/nuevo | Formulario alta de comprobante | HTML | Sí |
 | POST | /admin/comprobantes | Cargar comprobante de pago | JSON | Sí |
 | GET | /admin/api/comprobantes_pago | Listar comprobantes de pago | JSON | Sí |
 

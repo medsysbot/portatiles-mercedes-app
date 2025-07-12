@@ -54,20 +54,29 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCancelar = document.getElementById('btnCancelarForm');
   const buscador = document.getElementById('busquedaComprobantes');
   const btnBuscar = document.getElementById('btnBuscarComprobantes');
+  const esRutaNuevo = window.location.pathname.endsWith('/admin/comprobantes/nuevo');
   let registros = [];
 
   form.style.display = 'none';
 
-  btnNuevo.addEventListener('click', () => {
+  if (esRutaNuevo) {
     form.style.display = 'block';
     contTabla.style.display = 'none';
-    btnNuevo.style.display = 'none';
+    if (btnNuevo) btnNuevo.style.display = 'none';
+  }
+
+  btnNuevo.addEventListener('click', () => {
+    window.location.href = '/admin/comprobantes/nuevo';
   });
 
   btnCancelar.addEventListener('click', () => {
-    form.style.display = 'none';
-    contTabla.style.display = 'block';
-    btnNuevo.style.display = 'inline-block';
+    if (esRutaNuevo) {
+      window.location.href = '/admin/comprobantes';
+    } else {
+      form.style.display = 'none';
+      contTabla.style.display = 'block';
+      btnNuevo.style.display = 'inline-block';
+    }
   });
 
   function mostrarComprobantes(lista) {
@@ -115,11 +124,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await resp.json();
       if (resp.ok) {
-        form.reset();
-        cargarComprobantes();
-        btnCancelar.click();
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Comprobante agregado', false, 2600);
+        if (esRutaNuevo) {
+          if (typeof showAlert === 'function') {
+            showAlert('exito-datos', 'Comprobante agregado', false, 2600);
+          }
+          setTimeout(() => {
+            window.location.href = '/admin/comprobantes';
+          }, 1600);
+        } else {
+          form.reset();
+          cargarComprobantes();
+          btnCancelar.click();
+          if (typeof showAlert === 'function') {
+            showAlert('exito-datos', 'Comprobante agregado', false, 2600);
+          }
         }
       } else {
         throw new Error(data.detail || 'Error');

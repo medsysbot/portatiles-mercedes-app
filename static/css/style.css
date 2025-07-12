@@ -451,6 +451,24 @@ body.panel-admin table.pm-tabla tr:hover {
   transition: background-color 0.2s ease;
 }
 
+/* Ajustes para modales de selección de clientes */
+#modalClientes table.pm-tabla th,
+#modalClientes table.pm-tabla td,
+#modalClientesAlquiler table.pm-tabla th,
+#modalClientesAlquiler table.pm-tabla td {
+  border: 2px solid #000000 !important;
+}
+
+#modalClientes table.pm-tabla thead,
+#modalClientesAlquiler table.pm-tabla thead {
+  border-bottom: 2px solid #000000;
+}
+
+#modalClientes .form-control,
+#modalClientesAlquiler .form-control {
+  border: 2px solid #000000 !important;
+}
+
 body.panel-empleados table.pm-tabla thead,
 body.panel-cliente table.pm-tabla thead {
   background-color: rgba(0, 0, 0, 0.65);

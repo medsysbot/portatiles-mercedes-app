@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaServicios');
   const errorDiv = document.getElementById('errorServicios');
   const btnEditar = document.getElementById('btnEditarSeleccionado');
+  const btnEliminar = document.getElementById('btnEliminarServicios');
   let servicios = [];
 
   async function cargarServicios() {
@@ -68,12 +69,15 @@ document.addEventListener('DOMContentLoaded', () => {
   function mostrarServicios(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
+    actualizarBotones();
   }
 
   function actualizarBotones() {
     const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
-    const activo = checks.length === 1;
-    if (btnEditar) btnEditar.disabled = !activo;
+    const unoSeleccionado = checks.length === 1;
+    const algunoSeleccionado = checks.length > 0;
+    if (btnEditar) btnEditar.disabled = !unoSeleccionado;
+    if (btnEliminar) btnEliminar.disabled = !algunoSeleccionado;
   }
 
   $('#tablaServicios tbody').on('change', '.fila-check', actualizarBotones);
@@ -83,6 +87,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const id = checks[0].dataset.id;
     localStorage.setItem('pendiente_recarga', '1');
     window.location.href = `/admin/limpieza/editar/${id}`;
+  });
+
+  btnEliminar?.addEventListener('click', async () => {
+    const checks = document.querySelectorAll('#tablaServicios tbody .fila-check:checked');
+    const ids = Array.from(checks).map(c => c.dataset.id);
+    if (!ids.length) return;
+    if (!confirm('¿Estás seguro de eliminar los servicios seleccionados?')) return;
+    const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('guardando-datos', 'Eliminando servicios...', false, 1600);
+    }
+    try {
+      const resp = await fetch('/admin/api/servicios_limpieza/eliminar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '')
+        },
+        body: JSON.stringify({ ids })
+      });
+      if (!resp.ok) throw new Error('Error al eliminar');
+      await cargarServicios();
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Servicios eliminados', false, 2600);
+        }
+      }, delay);
+    } catch (err) {
+      const delay = Math.max(0, 1600 - (Date.now() - inicio));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'Error al eliminar servicios', false, 2600);
+        }
+      }, delay);
+      console.error('Error eliminando servicios:', err);
+    } finally {
+      if (btnEliminar) btnEliminar.disabled = true;
+      if (btnEditar) btnEditar.disabled = true;
+    }
   });
 
   function filtrarServicios(texto) {

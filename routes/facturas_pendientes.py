@@ -127,19 +127,7 @@ async def crear_factura(request: Request):
     datos["fecha"] = factura.fecha.isoformat()
     datos["monto_adeudado"] = float(factura.monto_adeudado)
     datos["factura_url"] = None
-
-    try:
-        insercion = supabase.table(TABLA).insert(datos).execute()
-        if getattr(insercion, "error", None):
-            raise Exception(insercion.error.message)
-        if not insercion.data:
-            raise Exception("Inserción sin datos devueltos")
-        id_factura = insercion.data[0].get("id_factura") or insercion.data[0].get("id")
-    except Exception as exc:  # pragma: no cover
-        logger.exception("Error guardando factura:")
-        raise HTTPException(status_code=500, detail=f"Error al guardar factura: {exc}")
-
-    # ✅ PARCHE INTEGRADO ACÁ
+    
     if isinstance(archivo, UploadFile) and archivo.filename:
         contenido = await archivo.read()
         _validar_factura(archivo.filename, archivo.content_type or "", len(contenido))
@@ -168,6 +156,17 @@ async def crear_factura(request: Request):
         except Exception as exc:  # pragma: no cover
             logger.exception("Error subiendo factura:")
             raise HTTPException(status_code=500, detail="Error al guardar la factura.")
+
+    try:
+        insercion = supabase.table(TABLA).insert(datos).execute()
+        if getattr(insercion, "error", None):
+            raise Exception(insercion.error.message)
+        if not insercion.data:
+            raise Exception("Inserción sin datos devueltos")
+        id_factura = insercion.data[0].get("id_factura") or insercion.data[0].get("id")
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error guardando factura:")
+        raise HTTPException(status_code=500, detail=f"Error al guardar factura: {exc}")
 
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}

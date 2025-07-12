@@ -136,26 +136,28 @@ async def crear_factura(request: Request):
         timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
         nombre_pdf = f"factura-{id_factura}-{timestamp}.pdf"
         bucket = supabase.storage.from_(BUCKET)
-        try:
-            logger.info(f"Subiendo archivo: {nombre_pdf}")
-            bucket.upload(
-                nombre_pdf,
-                pdf_bytes,
-                {"content-type": "application/pdf", "x-upsert": "true"},
-            )
-            factura_url = bucket.get_public_url(nombre_pdf)
-            logger.info(f"Factura URL generada: {factura_url}")
 
-            actualizacion = supabase.table(TABLA).update(
-                {"factura_url": factura_url}
-            ).eq("id_factura", id_factura).execute()
+    try:
+        logger.info(f"Subiendo archivo: {nombre_pdf}")
+        bucket.upload(
+            nombre_pdf,
+            pdf_bytes,
+            {"content-type": "application/pdf", "x-upsert": "true"},
+        )
+        factura_url = bucket.get_public_url(nombre_pdf)
+        logger.info(f"Factura URL generada: {factura_url}")
 
-            if getattr(actualizacion, "error", None):
-                raise Exception(actualizacion.error.message)
-            logger.info("URL guardada correctamente en la tabla.")
-        except Exception as exc:  # pragma: no cover
-            logger.exception("Error subiendo factura:")
-            raise HTTPException(status_code=500, detail="Error al guardar la factura.")
+        actualizacion = supabase.table(TABLA).update(
+            {"factura_url": factura_url}
+        ).eq("id_factura", id_factura).execute()
+
+        if getattr(actualizacion, "error", None):
+            raise Exception(actualizacion.error.message)
+        logger.info("URL guardada correctamente en la tabla.")
+    except Exception as exc:  # pragma: no cover
+        logger.exception("Error subiendo factura:")
+        raise HTTPException(status_code=500, detail="Error al guardar la factura.")
+        
 
     try:
         insercion = supabase.table(TABLA).insert(datos).execute()

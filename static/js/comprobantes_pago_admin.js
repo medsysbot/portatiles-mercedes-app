@@ -63,12 +63,16 @@ document.addEventListener('DOMContentLoaded', () => {
     form.classList.remove('d-none');
     contTabla.classList.add('d-none');
     btnNuevo?.classList.add('d-none');
+    buscador?.classList.add('d-none');
+    btnBuscar?.classList.add('d-none');
   }
 
   btnNuevo?.addEventListener('click', () => {
     form.classList.remove('d-none');
     contTabla.classList.add('d-none');
     btnNuevo.classList.add('d-none');
+    buscador?.classList.add('d-none');
+    btnBuscar?.classList.add('d-none');
   });
 
   btnCancelar?.addEventListener('click', () => {
@@ -78,6 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
       form.classList.add('d-none');
       contTabla.classList.remove('d-none');
       btnNuevo.classList.remove('d-none');
+      buscador?.classList.remove('d-none');
+      btnBuscar?.classList.remove('d-none');
     }
   });
 
@@ -135,10 +141,11 @@ document.addEventListener('DOMContentLoaded', () => {
           }, 1600);
         } else {
           form.reset();
-          cargarComprobantes();
+          await cargarComprobantes();
           if (typeof showAlert === 'function') {
             showAlert('exito-datos', 'Comprobante agregado', false, 2600);
           }
+          btnCancelar?.click();
         }
       } else {
         throw new Error(data.detail || 'Error');

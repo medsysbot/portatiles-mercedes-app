@@ -72,7 +72,7 @@ body.panel-admin .dataTable th,
 body.panel-admin .dataTable td,
 body.panel-admin table.pm-tabla th,
 body.panel-admin table.pm-tabla td {
-  border: 2px solid #000000 !important;
+  border: 1px solid #000000 !important;
   text-align: center !important;
 }
 
@@ -99,7 +99,7 @@ body.panel-cliente .dataTable th,
 body.panel-cliente .dataTable td,
 body.panel-cliente table.pm-tabla th,
 body.panel-cliente table.pm-tabla td {
-  border: 2px solid #ffffff !important;
+  border: 1px solid #ffffff !important;
   text-align: center !important;
 }
 
@@ -347,14 +347,14 @@ body.panel-cliente .table-responsive.bg-light {
 
 #filtroClientes,
 #filtroClientesAlquiler {
-  border: 2px solid #000000 !important;
+  border: 1px solid #000000 !important;
 }
 
 body.panel-empleados #filtroClientes,
 body.panel-cliente #filtroClientes,
 body.panel-empleados #filtroClientesAlquiler,
 body.panel-cliente #filtroClientesAlquiler {
-  border: 2px solid #ffffff !important;
+  border: 1px solid #ffffff !important;
 }
 
 body.panel-empleados .buscador-tabla,
@@ -375,7 +375,7 @@ body.panel-cliente .buscador-tabla::placeholder {
 
 /* Ajuste de ancho para el buscador de comprobantes */
 #busquedaComprobantes {
-  width: 30% !important;   /* <-- Cambia este valor para más o menos ancho */
+  width: 40% !important;   /* Aprovecha mejor el ancho disponible */
   min-width: 120px !important;
   max-width: 400px;
 }
@@ -432,7 +432,7 @@ body.panel-admin table.pm-tabla thead {
   background-color: #ffffff;
   color: #000000;
   text-align: center;
-  border-bottom: 2px solid #000000;
+  border-bottom: 1px solid #000000;
 }
 
 body.panel-admin table.pm-tabla th,
@@ -474,7 +474,7 @@ body.panel-cliente table.pm-tabla thead {
   background-color: rgba(0, 0, 0, 0.65);
   color: #ffffff;
   text-align: center;
-  border-bottom: 2px solid #ffffff;
+  border-bottom: 1px solid #ffffff;
 }
 
 body.panel-empleados table.pm-tabla th,
@@ -508,3 +508,7 @@ body.panel-cliente table.pm-tabla tr:hover {
     padding: 0.65em 1.4em !important;
   }
 }
+
+/* Oculta la X de cierre en modales de selección */
+.modal-header .close { display: none !important; }
+

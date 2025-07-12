@@ -29,6 +29,14 @@ async def comprobantes_admin_view(request: Request, usuario=Depends(auth_require
     return TEMPLATES.TemplateResponse("comprobantes_pago_admin.html", {"request": request})
 
 
+@router.get("/admin/comprobantes/nuevo", response_class=HTMLResponse)
+async def comprobante_admin_form(request: Request, usuario=Depends(auth_required)):
+    """Formulario independiente para cargar comprobantes desde el panel."""
+    if usuario.get("rol") != "Administrador":
+        raise HTTPException(status_code=403, detail="Acceso restringido")
+    return TEMPLATES.TemplateResponse("comprobantes_pago_admin.html", {"request": request})
+
+
 @router.post("/admin/comprobantes")
 async def agregar_comprobante_admin(
     nombre_cliente: str = Form(...),

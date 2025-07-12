@@ -57,25 +57,27 @@ document.addEventListener('DOMContentLoaded', () => {
   const esRutaNuevo = window.location.pathname.endsWith('/admin/comprobantes/nuevo');
   let registros = [];
 
-  form.style.display = 'none';
+  form.classList.add('d-none');
 
   if (esRutaNuevo) {
-    form.style.display = 'block';
-    contTabla.style.display = 'none';
-    if (btnNuevo) btnNuevo.style.display = 'none';
+    form.classList.remove('d-none');
+    contTabla.classList.add('d-none');
+    btnNuevo?.classList.add('d-none');
   }
 
-  btnNuevo.addEventListener('click', () => {
-    window.location.href = '/admin/comprobantes/nuevo';
+  btnNuevo?.addEventListener('click', () => {
+    form.classList.remove('d-none');
+    contTabla.classList.add('d-none');
+    btnNuevo.classList.add('d-none');
   });
 
-  btnCancelar.addEventListener('click', () => {
+  btnCancelar?.addEventListener('click', () => {
     if (esRutaNuevo) {
       window.location.href = '/admin/comprobantes';
     } else {
-      form.style.display = 'none';
-      contTabla.style.display = 'block';
-      btnNuevo.style.display = 'inline-block';
+      form.classList.add('d-none');
+      contTabla.classList.remove('d-none');
+      btnNuevo.classList.remove('d-none');
     }
   });
 
@@ -134,7 +136,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
           form.reset();
           cargarComprobantes();
-          btnCancelar.click();
           if (typeof showAlert === 'function') {
             showAlert('exito-datos', 'Comprobante agregado', false, 2600);
           }

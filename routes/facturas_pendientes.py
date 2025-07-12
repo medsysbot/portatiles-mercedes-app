@@ -129,7 +129,7 @@ async def crear_factura(request: Request):
         logger.exception("Error guardando factura:")
         raise HTTPException(status_code=500, detail=f"Error al guardar factura: {exc}")
 
-    if isinstance(archivo, UploadFile) and archivo.filename:
+    if archivo and getattr(archivo, "filename", None):
         try:
             contenido = await archivo.read()
             _validar_factura(archivo.filename, archivo.content_type or "", len(contenido))

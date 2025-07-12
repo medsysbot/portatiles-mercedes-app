@@ -76,15 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   btnCancelar?.addEventListener('click', () => {
-    if (esRutaNuevo) {
-      window.location.href = '/admin/comprobantes';
-    } else {
-      form.classList.add('d-none');
-      contTabla.classList.remove('d-none');
-      btnNuevo.classList.remove('d-none');
-      buscador?.classList.remove('d-none');
-      btnBuscar?.classList.remove('d-none');
-    }
+    window.location.href = '/admin/comprobantes';
   });
 
   function mostrarComprobantes(lista) {
@@ -132,21 +124,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const data = await resp.json();
       if (resp.ok) {
-        if (esRutaNuevo) {
-          if (typeof showAlert === 'function') {
-            showAlert('exito-datos', 'Comprobante agregado', false, 2600);
-          }
-          setTimeout(() => {
-            window.location.href = '/admin/comprobantes';
-          }, 1600);
-        } else {
-          form.reset();
-          await cargarComprobantes();
-          if (typeof showAlert === 'function') {
-            showAlert('exito-datos', 'Comprobante agregado', false, 2600);
-          }
-          btnCancelar?.click();
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Comprobante agregado', false, 2600);
         }
+        setTimeout(() => {
+          window.location.href = '/admin/comprobantes';
+        }, 1600);
       } else {
         throw new Error(data.detail || 'Error');
       }

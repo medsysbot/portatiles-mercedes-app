@@ -192,7 +192,12 @@ async def crear_factura(request: Request):
                     {"content-type": "application/pdf", "x-upsert": "true"},
                 )
                 factura_url = bucket.get_public_url(nombre_pdf)
-                logger.info(f"Factura URL generada: {factura_url}")
+                
+                except Exception as exc:  # pragma: no cover
+                    logger.exception("Error subiendo factura:")
+                    raise HTTPException(status_code=500, detail="Error al guardar la factura.")
+        
+                logger.info(f"Factura URL generada: {factura_url}")                
                 actualizacion = supabase.table(TABLA).update(
                     {"factura_url": factura_url}
                 ).eq("id_factura", id_factura).execute()

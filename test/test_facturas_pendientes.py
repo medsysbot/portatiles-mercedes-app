@@ -49,10 +49,33 @@ class InMemoryQuery:
             return types.SimpleNamespace(data=None, status_code=200, error=None)
         return types.SimpleNamespace(data=None, status_code=400, error="invalid")
 
+class FakeBucket:
+    def __init__(self):
+        self.files = {}
+
+    def upload(self, name, data, *_args, **_kwargs):
+        self.files[name] = data
+
+    def get_public_url(self, name):
+        return f"http://example.com/{name}"
+
+
+class FakeStorage:
+    def __init__(self):
+        self.buckets = {}
+
+    def from_(self, name):
+        if name not in self.buckets:
+            self.buckets[name] = FakeBucket()
+        return self.buckets[name]
+
+
 class MemoryDB:
     def __init__(self, facturas=None, clientes=None):
         self.facturas = facturas or []
         self.clientes = clientes or []
+        self.storage = FakeStorage()
+
     def table(self, name):
         if name == facturas_module.TABLA:
             return InMemoryQuery(self.facturas)
@@ -105,3 +128,53 @@ def test_buscar_clientes(monkeypatch):
     assert "clientes" in data
     assert len(data["clientes"]) == 1
     assert data["clientes"][0]["dni_cuit_cuil"] == "1"
+
+
+def _datos_factura():
+    return {
+        "fecha": "2025-01-01",
+        "numero_factura": "F001",
+        "dni_cuit_cuil": "20304567",
+        "razon_social": "Empresa SA",
+        "nombre_cliente": "Juan",
+        "monto_adeudado": "150.50",
+    }
+
+
+def test_crear_factura_con_pdf(monkeypatch):
+    db = MemoryDB([])
+    monkeypatch.setattr(facturas_module, "supabase", db)
+
+    datos = _datos_factura()
+    archivo = {"factura": ("archivo.pdf", b"%PDF-1.4 test", "application/pdf")}
+    resp = client.post(
+        "/admin/facturas_pendientes/nueva", data=datos, files=archivo,
+        follow_redirects=False
+    )
+
+    assert resp.status_code == 303
+    assert len(db.facturas) == 1
+    bucket = db.storage.from_(facturas_module.BUCKET)
+    nombre_archivo = next(iter(bucket.files))
+    assert nombre_archivo.startswith("factura-1-")
+    assert db.facturas[0]["factura_url"] == f"http://example.com/{nombre_archivo}"
+
+
+def test_crear_factura_con_imagen(monkeypatch):
+    db = MemoryDB([])
+    monkeypatch.setattr(facturas_module, "supabase", db)
+
+    datos = _datos_factura()
+    monkeypatch.setattr(facturas_module, "_convertir_a_pdf", lambda *_: b"%PDF-1.4")
+    archivo = {"factura": ("imagen.jpg", b"123", "image/jpeg")}
+    resp = client.post(
+        "/admin/facturas_pendientes/nueva", data=datos, files=archivo,
+        follow_redirects=False
+    )
+
+    assert resp.status_code == 303
+    bucket = db.storage.from_(facturas_module.BUCKET)
+    nombre_archivo = next(iter(bucket.files))
+    contenido = bucket.files[nombre_archivo]
+    assert contenido.startswith(b"%PDF")
+    assert db.facturas[0]["factura_url"] == f"http://example.com/{nombre_archivo}"

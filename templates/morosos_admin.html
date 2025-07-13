@@ -1,15 +1,18 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Morosos{% endblock %}
 {% block description %}Listado de clientes con pagos en mora{% endblock %}
+
 {% block head_extra %}
 {{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 {% endblock %}
+
 {% block content %}
 <div class="container mt-4">
   <h2 class="mb-3 mt-0">Morosos</h2>
 
-  <div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
-    <div class="mb-2 flex-grow-1">
+  <div id="contenedorControles" class="d-flex justify-content-between align-items-center my-3 flex-wrap">
+    <div class="mb-2 flex-grow-1" style="max-width: 320px;">
       <input type="text" id="busquedaMorosos" class="form-control buscador-tabla" placeholder="Buscar...">
     </div>
     <div class="d-flex flex-wrap gap-2">
@@ -20,21 +23,21 @@
   </div>
 
   <div class="table-responsive bg-light p-3">
-  <table id="tablaMorosos" class="table pm-tabla table-striped table-bordered">
-    <thead>
-      <tr>
-        <th></th>
-        <th>ID</th>
-        <th>Fecha facturación</th>
-        <th>Número factura</th>
-        <th>DNI / CUIT / CUIL</th>
-        <th>Razón social</th>
-        <th>Nombre cliente</th>
-        <th>Monto adeudado</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <table id="tablaMorosos" class="table pm-tabla table-striped table-bordered">
+      <thead>
+        <tr>
+          <th></th>
+          <th>ID</th>
+          <th>Fecha facturación</th>
+          <th>Número factura</th>
+          <th>DNI / CUIT / CUIL</th>
+          <th>Razón social</th>
+          <th>Nombre cliente</th>
+          <th>Monto adeudado</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
   </div>
 </div>
 {% endblock %}

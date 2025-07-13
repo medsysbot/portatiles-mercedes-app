@@ -40,10 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { data: 'nombre_cliente' },
       { data: 'dni_cuit_cuil' },
-      {
-        data: 'factura_url',
-        render: url => url ? `<a href="${url}" target="_blank">VER FACTURA</a>` : ''
-      },
+      { data: 'numero_de_factura' },
       {
         data: 'comprobante_url',
         render: url => url ? `<a href="${url}" target="_blank">VER PAGO</a>` : ''
@@ -69,33 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnEliminar = document.getElementById('btnEliminarComprobantes');
   const btnEditar = document.getElementById('btnEditarComprobante');
   const checkTodos = document.getElementById('checkTodosComprobantes');
-  const btnBuscarFactura = document.getElementById('btnBuscarFactura');
-  const btnUsarFactura = document.getElementById('btnUsarFactura');
-  const filtroFacturas = document.getElementById('filtroFacturas');
-  const facturaRef = document.getElementById('facturaReferencia');
-  let facturas = [];
 
   btnEditar?.classList.remove('d-none');
   btnEliminar?.classList.remove('d-none');
-  const tablaFacturas = $('#tablaFacturasBusqueda').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true,
-    columns: [
-      {
-        data: 'id_factura',
-        render: id => `<input type="checkbox" class="seleccion-factura" value="${id}">`,
-        orderable: false
-      },
-      { data: 'nombre_cliente' },
-      { data: 'dni_cuit_cuil' },
-      {
-        data: 'factura_url',
-        render: url => url ? `<a href="${url}" target="_blank">VER FACTURA</a>` : ''
-      }
-    ]
-  });
   let registros = [];
 
   function actualizarBotones() {
@@ -106,53 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnEliminar) btnEliminar.disabled = !alguno;
   }
 
-  async function cargarFacturas() {
-    try {
-      const resp = await fetchConAuth('/admin/api/facturas_pendientes');
-      if (!resp.ok) throw new Error('Error');
-      facturas = await resp.json();
-      tablaFacturas.clear().rows.add(facturas).draw();
-    } catch (err) {
-      console.error('Error cargando facturas pendientes:', err);
-    }
-  }
-
-  function filtrarFacturas() {
-    const q = (filtroFacturas.value || '').toLowerCase();
-    const filtradas = facturas.filter(f =>
-      (f.nombre_cliente || '').toLowerCase().includes(q) ||
-      (f.dni_cuit_cuil || '').toLowerCase().includes(q)
-    );
-    tablaFacturas.clear().rows.add(filtradas).draw();
-  }
-
-  btnBuscarFactura?.addEventListener('click', () => {
-    $('#modalFacturas').modal('show');
-    cargarFacturas();
-  });
-
-  filtroFacturas?.addEventListener('input', filtrarFacturas);
-
-  $('#tablaFacturasBusqueda tbody').on('change', '.seleccion-factura', function() {
-    $('#tablaFacturasBusqueda tbody .seleccion-factura').not(this).prop('checked', false);
-    if (btnUsarFactura) btnUsarFactura.disabled = !this.checked;
-  });
-
-  btnUsarFactura?.addEventListener('click', () => {
-    const seleccionado = document.querySelector('#tablaFacturasBusqueda tbody .seleccion-factura:checked');
-    if (!seleccionado) return;
-    const factura = facturas.find(f => String(f.id_factura || f.id) === seleccionado.value);
-    if (factura) {
-      document.getElementById('nombreAdmin').value = factura.nombre_cliente || '';
-      document.getElementById('dniAdmin').value = factura.dni_cuit_cuil || '';
-      if (facturaRef) {
-        facturaRef.innerHTML = factura.factura_url ? `<a href="${factura.factura_url}" target="_blank">VER FACTURA</a>` : '';
-      }
-    }
-    $('#modalFacturas').modal('hide');
-    seleccionado.checked = false;
-    if (btnUsarFactura) btnUsarFactura.disabled = true;
-  });
 
   function mostrarFormulario() {
     form.classList.remove('d-none');
@@ -220,7 +146,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const q = (buscador.value || '').toLowerCase();
     const filtrados = registros.filter(c =>
       (c.nombre_cliente || '').toLowerCase().includes(q) ||
-      (c.dni_cuit_cuil || '').toLowerCase().includes(q)
+      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (c.numero_de_factura || '').toLowerCase().includes(q)
     );
     tabla.clear().rows.add(filtrados).draw();
   }

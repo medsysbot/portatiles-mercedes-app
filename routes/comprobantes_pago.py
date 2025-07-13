@@ -35,7 +35,6 @@ def _validar_extension(nombre: str) -> None:
 async def subir_comprobante(
     nombre_cliente: str = Form(...),
     dni_cuit_cuil: str = Form(...),
-    numero_factura: str = Form(...),
     archivo: UploadFile = File(...),
     usuario=Depends(auth_required),
 ):
@@ -58,7 +57,6 @@ async def subir_comprobante(
     registro = {
         "nombre_cliente": nombre_cliente,
         "dni_cuit_cuil": dni_cuit_cuil,
-        "numero_factura": numero_factura,
         "comprobante_url": url,
         "fecha_envio": datetime.utcnow().isoformat(),
     }
@@ -85,7 +83,7 @@ async def listar_comprobantes(
         res = (
             supabase.table(TABLA)
             .select(
-                "id,nombre_cliente,dni_cuit_cuil,numero_factura,factura_url,comprobante_url,fecha_envio"
+                "id,nombre_cliente,dni_cuit_cuil,factura_url,comprobante_url,fecha_envio"
             )
             .eq("dni_cuit_cuil", dni_cuit_cuil)
             .order("fecha_envio", desc=True)

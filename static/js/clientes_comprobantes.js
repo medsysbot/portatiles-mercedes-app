@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { data: 'nombre_cliente' },
       { data: 'dni_cuit_cuil' },
-      { data: 'numero_factura' },
       {
         data: 'factura_url',
         render: d => d ? `<a href="${d}" target="_blank">VER FACTURA</a>` : ''
@@ -132,7 +131,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtrados = registros.filter(c =>
       (c.nombre_cliente || '').toLowerCase().includes(q) ||
       (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-      String(c.numero_factura || '').toLowerCase().includes(q) ||
       (c.factura_url || '').toLowerCase().includes(q) ||
       (c.comprobante_url || '').toLowerCase().includes(q)
     );

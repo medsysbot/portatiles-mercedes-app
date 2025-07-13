@@ -39,7 +39,7 @@ async def comprobante_admin_form(request: Request, usuario=Depends(auth_required
 async def agregar_comprobante_admin(
     nombre_cliente: str = Form(...),
     dni_cuit_cuil: str = Form(...),
-    factura: UploadFile = File(...),
+    factura: UploadFile | None = File(None),
     archivo: UploadFile = File(...),
     usuario=Depends(auth_required),
 ):
@@ -48,27 +48,49 @@ async def agregar_comprobante_admin(
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
-    _validar_extension(factura.filename)
+    if factura is not None and getattr(factura, "filename", None):
+        _validar_extension(factura.filename)
     _validar_extension(archivo.filename)
 
     fecha = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    ext_factura = os.path.splitext(factura.filename)[1]
+    ext_factura = (
+        os.path.splitext(factura.filename)[1] if factura and getattr(factura, "filename", None) else ""
+    )
     ext_comprobante = os.path.splitext(archivo.filename)[1]
 
-    nombre_factura = f"factura_{dni_cuit_cuil}_{fecha}{ext_factura}"
+    nombre_factura = (
+        f"factura_{dni_cuit_cuil}_{fecha}{ext_factura}"
+        if factura and getattr(factura, "filename", None)
+        else None
+    )
     nombre_comprobante = f"comprobante_{dni_cuit_cuil}_{fecha}{ext_comprobante}"
 
+    factura_url = None
     try:
         bucket_facturas = supabase.storage.from_("facturas")
         bucket_comprobantes = supabase.storage.from_("comprobantes-pago")
 
-        factura_data = await factura.read()
+        factura_data = await factura.read() if factura and getattr(factura, "filename", None) else None
         comprobante_data = await archivo.read()
 
-        bucket_facturas.upload(nombre_factura, factura_data, {"content-type": factura.content_type})
-        bucket_comprobantes.upload(nombre_comprobante, comprobante_data, {"content-type": archivo.content_type})
+        if factura_data is not None and nombre_factura:
+            bucket_facturas.upload(
+                nombre_factura,
+                factura_data,
+                {"content-type": factura.content_type},
+            )
 
-        factura_url = bucket_facturas.get_public_url(nombre_factura)
+        bucket_comprobantes.upload(
+            nombre_comprobante,
+            comprobante_data,
+            {"content-type": archivo.content_type},
+        )
+
+        factura_url = (
+            bucket_facturas.get_public_url(nombre_factura)
+            if factura_data is not None and nombre_factura
+            else None
+        )
         comprobante_url = bucket_comprobantes.get_public_url(nombre_comprobante)
 
         registro = {

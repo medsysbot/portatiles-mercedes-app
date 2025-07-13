@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const resp = await fetch(url, {
       ...options,
-      headers: { ...options.headers, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }
+      headers: { ...options.headers, Authorization: 'Bearer ' + token }
     });
     if (resp.status === 401) {
       handleUnauthorized();
@@ -73,18 +73,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarComprobantes');
   const btnEliminar = document.getElementById('btnEliminarComprobantes');
   const btnEditar = document.getElementById('btnEditarComprobante');
-  const checkTodos = document.getElementById('checkTodosComprobantes');
   let registros = [];
 
   function mostrarFormulario() {
     form.classList.remove('d-none');
     contTabla.classList.add('d-none');
-    contControles.remove();
+    contControles?.remove();
   }
 
   function ocultarFormulario() {
     form.classList.add('d-none');
-    location.reload();
+    location.href = '/admin/comprobantes_pago';
   }
 
   btnNuevo?.addEventListener('click', mostrarFormulario);
@@ -104,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
           showAlert('exito-datos', 'Comprobante agregado', false, 2600);
         }
         setTimeout(() => {
-          window.location.href = '/admin/comprobantes_pago';
+          location.href = '/admin/comprobantes_pago';
         }, 1600);
       } else {
         throw new Error(data.detail || 'Error');
@@ -142,50 +141,13 @@ document.addEventListener('DOMContentLoaded', () => {
   buscador?.addEventListener('input', filtrar);
   btnBuscar?.addEventListener('click', filtrar);
 
-  function actualizarEstadoEliminar() {
-    const seleccionados = document.querySelectorAll('.check-comprobante:checked');
-    btnEliminar.disabled = seleccionados.length === 0;
-    btnEliminar.classList.toggle('d-none', seleccionados.length === 0);
-  }
-
-  document.addEventListener('change', (e) => {
-    if (e.target.classList.contains('check-comprobante') || e.target === checkTodos) {
-      if (e.target === checkTodos) {
-        const todos = document.querySelectorAll('.check-comprobante');
-        todos.forEach(chk => chk.checked = checkTodos.checked);
-      }
-      actualizarEstadoEliminar();
-    }
+  // ✅ Conexión de botones Editar y Eliminar para futura implementación
+  btnEditar?.addEventListener('click', () => {
+    alert('Funcionalidad de edición aún no implementada');
   });
 
-  btnEliminar?.addEventListener('click', async () => {
-    const ids = Array.from(document.querySelectorAll('.check-comprobante:checked'))
-      .map(chk => parseInt(chk.value));
-
-    if (ids.length === 0) return;
-
-    const confirmar = confirm(`¿Eliminar ${ids.length} comprobante(s)?`);
-    if (!confirmar) return;
-
-    try {
-      const resp = await fetchConAuth('/admin/api/comprobantes_pago', {
-        method: 'DELETE',
-        body: JSON.stringify({ ids })
-      });
-      if (!resp.ok) throw new Error('Error eliminando');
-      await cargarComprobantes();
-      btnEliminar.disabled = true;
-      btnEliminar.classList.add('d-none');
-      checkTodos.checked = false;
-      if (typeof showAlert === 'function') {
-        showAlert('exito-datos', 'Comprobante(s) eliminado(s)', false, 2000);
-      }
-    } catch (err) {
-      console.error('Error al eliminar:', err);
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudo eliminar', false, 2600);
-      }
-    }
+  btnEliminar?.addEventListener('click', () => {
+    alert('Funcionalidad de eliminación aún no implementada');
   });
 
   cargarComprobantes();

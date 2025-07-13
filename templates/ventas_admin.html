@@ -8,11 +8,15 @@
 <div class="container mt-4">
   <h2>Administración de ventas</h2>
 
-  <div class="d-flex justify-content-between align-items-center my-3">
-    <input type="text" id="busquedaVentas" class="form-control buscador-tabla" placeholder="Buscar por cliente o DNI / CUIT / CUIL">
-    <button id="btnBuscarVentas" class="btn btn-secondary ml-2">Buscar</button>
-    <a href="/admin/ventas/nueva" class="btn btn-primary ml-3"><i class="fas fa-shopping-cart"></i> Agregar venta</a>
-    <button id="btnEliminarSeleccionados" class="btn btn-danger ml-3" disabled>Eliminar</button>
+  <div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
+    <div class="mb-2 flex-grow-1">
+      <input type="text" id="busquedaVentas" class="form-control buscador-tabla" placeholder="Buscar por cliente o DNI / CUIT / CUIL">
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button id="btnBuscarVentas" class="btn btn-secondary" type="button">Buscar</button>
+      <a href="/admin/ventas/nueva" class="btn btn-primary"><i class="fas fa-shopping-cart"></i> Agregar venta</a>
+      <button id="btnEliminarSeleccionados" class="btn btn-danger" disabled>Eliminar</button>
+    </div>
   </div>
 
   <div class="table-responsive bg-light p-3">

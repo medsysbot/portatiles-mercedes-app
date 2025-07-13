@@ -46,7 +46,7 @@
     <table id="tablaComprobantes" class="table pm-tabla table-striped table-bordered">
       <thead>
         <tr>
-          <th></th>
+          <th><input type="checkbox" id="checkTodosComprobantes"></th>
           <th>Nombre cliente</th>
           <th>DNI / CUIT / CUIL</th>
           <th>Número factura</th>
@@ -95,6 +95,39 @@
           alert("Error al guardar");
         }
       }).catch(() => alert("Error al enviar formulario"));
+    });
+
+    // ✅ Cargar tabla con datos de Supabase
+    const tabla = $('#tablaComprobantes').DataTable({
+      ajax: {
+        url: '/admin/api/comprobantes_pago',
+        dataSrc: ''
+      },
+      columns: [
+        {
+          data: 'id_comprobante',
+          render: id => `<input type="checkbox" class="check-comprobante" value="${id}">`,
+          orderable: false
+        },
+        { data: 'nombre_cliente' },
+        { data: 'dni_cuit_cuil' },
+        { data: 'numero_factura' },
+        {
+          data: 'comprobante_url',
+          render: url => url ? `<a href="${url}" target="_blank">Ver</a>` : ''
+        },
+        {
+          data: 'fecha_envio',
+          render: fecha => {
+            if (!fecha) return '';
+            const d = new Date(fecha);
+            return `${d.toLocaleDateString('es-AR')} ${d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}`;
+          }
+        }
+      ],
+      language: {
+        url: "https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
+      }
     });
   });
 </script>

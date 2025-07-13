@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaComprobantes');
   const btnBuscar = document.getElementById('btnBuscarComprobantes');
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
-  const esRutaNuevo = window.location.pathname.endsWith('/admin/comprobantes_pago/nuevo');
+  const esRutaNuevo = window.location.pathname.endsWith('/admin/comprobantes/nuevo');
   let registros = [];
 
   form.classList.add('d-none');
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   btnCancelar?.addEventListener('click', () => {
-    window.location.href = '/admin/comprobantes_pago';
+    window.location.href = '/admin/comprobantes';
   });
 
   function actualizarBoton() {
@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ev.preventDefault();
     const formData = new FormData(form);
     try {
-      const resp = await fetchConAuth('/admin/comprobantes_pago', {
+      const resp = await fetchConAuth('/admin/comprobantes', {
         method: 'POST',
         body: formData
       });
@@ -172,7 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
           showAlert('exito-datos', 'Comprobante agregado', false, 2600);
         }
         setTimeout(() => {
-          window.location.href = '/admin/comprobantes_pago';
+          window.location.href = '/admin/comprobantes';
         }, 1600);
       } else {
         throw new Error(data.detail || 'Error');

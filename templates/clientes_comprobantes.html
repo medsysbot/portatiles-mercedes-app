@@ -9,55 +9,55 @@
 
 {% block content %}
   <div class="container mt-4">
-      <h2>Mis Comprobantes de Pago</h2>
-      <div id="contenedorControles" class="d-flex flex-wrap align-items-center mb-3 w-100">
-        <input type="text" id="busquedaComprobantes" class="buscador-tabla form-control" placeholder="Buscar comprobante...">
-        <button id="btnBuscarComprobante" class="btn btn-secondary no-margin-left">Buscar</button>
-        <button id="btnMostrarForm" class="btn btn-success ml-2"><i class="fas fa-receipt"></i> Agregar comprobante</button>
-        <button id="btnEliminarComprobantes" class="btn btn-danger ml-2" disabled>Eliminar</button>
+    <h2>Mis Comprobantes de Pago</h2>
+
+    <div id="contenedorControles" class="d-flex flex-wrap align-items-center mb-3 w-100">
+      <input type="text" id="busquedaComprobantes" class="buscador-tabla form-control" placeholder="Buscar comprobante...">
+      <button id="btnBuscarComprobante" class="btn btn-secondary no-margin-left">Buscar</button>
+      <button id="btnMostrarForm" class="btn btn-success ml-2"><i class="fas fa-receipt"></i> Agregar comprobante</button>
+      <button id="btnEliminarComprobantes" class="btn btn-danger ml-2" disabled>Eliminar</button>
+    </div>
+
+    <form id="formComprobante" enctype="multipart/form-data" class="mb-3 d-none">
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="nombreComprobante">Nombre cliente</label>
+          <input type="text" id="nombreComprobante" name="nombre_cliente" class="form-control" required>
+        </div>
+        <div class="form-group col-md-4">
+          <label for="dniComprobante">DNI / CUIT / CUIL</label>
+          <input type="text" id="dniComprobante" name="dni_cuit_cuil" class="form-control" required>
+        </div>
       </div>
-
-      <form id="formComprobante" enctype="multipart/form-data" class="mb-3 d-none">
-        <div class="form-row">
-          <div class="form-group col-md-4">
-            <label for="nombreComprobante">Nombre cliente</label>
-            <input type="text" id="nombreComprobante" name="nombre_cliente" class="form-control" required>
-          </div>
-          <div class="form-group col-md-4">
-            <label for="dniComprobante">DNI / CUIT / CUIL</label>
-            <input type="text" id="dniComprobante" name="dni_cuit_cuil" class="form-control" required>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="archivoFactura">Factura (opcional, JPG/PNG)</label>
-          <input type="file" id="archivoFactura" name="factura" accept="image/png,image/jpeg" class="form-control">
-        </div>
-        <div class="form-group">
-          <label for="archivoComprobante">Comprobante de Pago (PNG/JPG)</label>
-          <input type="file" id="archivoComprobante" name="archivo" accept="image/png,image/jpeg" class="form-control" required>
-        </div>
-        <div class="text-right">
-          <button type="submit" class="btn btn-primary">Enviar comprobante</button>
-          <button type="button" id="btnCancelarForm" class="btn btn-secondary">Volver</button>
-        </div>
-      </form>
-
-
-        <div id="contenedorTabla" class="table-responsive bg-light p-3">
-          <table id="tablaComprobantes" class="table pm-tabla table-striped table-bordered">
-            <thead>
-              <tr>
-              <th></th>
-              <th>Nombre cliente</th>
-              <th>DNI / CUIT / CUIL</th>
-              <th>Factura</th>
-              <th>Comprobante</th>
-              <th>Fecha</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
+      <div class="form-group">
+        <label for="archivoFactura">Factura (opcional, JPG/PNG)</label>
+        <input type="file" id="archivoFactura" name="factura" accept="image/png,image/jpeg" class="form-control">
       </div>
+      <div class="form-group">
+        <label for="archivoComprobante">Comprobante de Pago (PNG/JPG)</label>
+        <input type="file" id="archivoComprobante" name="archivo" accept="image/png,image/jpeg" class="form-control" required>
+      </div>
+      <div class="text-right">
+        <button type="submit" class="btn btn-primary">Enviar comprobante</button>
+        <button type="button" id="btnCancelarForm" class="btn btn-secondary">Volver</button>
+      </div>
+    </form>
+
+    <div id="contenedorTabla" class="table-responsive bg-light p-3">
+      <table id="tablaComprobantes" class="table pm-tabla table-striped table-bordered">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Nombre cliente</th>
+            <th>DNI / CUIT / CUIL</th>
+            <th>Factura</th>
+            <th>Comprobante</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 {% endblock %}
 

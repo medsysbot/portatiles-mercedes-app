@@ -8,27 +8,22 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function handleUnauthorized() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('rol');
-    localStorage.removeItem('nombre');
+    localStorage.clear();
     window.location.href = '/login';
   }
 
   async function fetchConAuth(url, options = {}) {
     const token = localStorage.getItem('access_token');
-    if (!token) {
-      handleUnauthorized();
-      throw new Error('Token faltante');
-    }
+    if (!token) handleUnauthorized();
+
     const resp = await fetch(url, {
       ...options,
-      headers: { ...options.headers, Authorization: 'Bearer ' + token }
+      headers: {
+        ...options.headers,
+        Authorization: 'Bearer ' + token
+      }
     });
-    if (resp.status === 401) {
-      handleUnauthorized();
-      throw new Error('Unauthorized');
-    }
+    if (resp.status === 401) handleUnauthorized();
     return resp;
   }
 
@@ -141,13 +136,78 @@ document.addEventListener('DOMContentLoaded', () => {
   buscador?.addEventListener('input', filtrar);
   btnBuscar?.addEventListener('click', filtrar);
 
-  // ✅ Conexión de botones Editar y Eliminar para futura implementación
-  btnEditar?.addEventListener('click', () => {
-    alert('Funcionalidad de edición aún no implementada');
+  btnEliminar?.addEventListener('click', async () => {
+    const seleccionados = Array.from(document.querySelectorAll('.check-comprobante:checked'))
+      .map(chk => chk.value);
+
+    if (!seleccionados.length) {
+      alert('Seleccione al menos un comprobante');
+      return;
+    }
+
+    if (!confirm(`¿Eliminar ${seleccionados.length} comprobante(s)?`)) return;
+
+    try {
+      for (const id of seleccionados) {
+        const resp = await fetchConAuth(`/admin/api/comprobantes_pago/${id}`, {
+          method: 'DELETE'
+        });
+        if (!resp.ok) throw new Error('Error al eliminar');
+      }
+      if (typeof showAlert === 'function') {
+        showAlert('exito-datos', 'Eliminados correctamente', false, 2400);
+      }
+      cargarComprobantes();
+    } catch (err) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudo eliminar', false, 2600);
+      }
+    }
   });
 
-  btnEliminar?.addEventListener('click', () => {
-    alert('Funcionalidad de eliminación aún no implementada');
+  btnEditar?.addEventListener('click', async () => {
+    const seleccionado = document.querySelectorAll('.check-comprobante:checked');
+    if (seleccionado.length !== 1) {
+      alert('Seleccione exactamente un comprobante para editar');
+      return;
+    }
+
+    const id = seleccionado[0].value;
+    const registro = registros.find(r => String(r.id_comprobante) === id);
+    if (!registro) return;
+
+    // Prellenar formulario
+    document.getElementById('nombreAdmin').value = registro.nombre_cliente || '';
+    document.getElementById('dniAdmin').value = registro.dni_cuit_cuil || '';
+
+    mostrarFormulario();
+    form.dataset.editing = id;
+
+    // Al enviar, usar PUT
+    form.onsubmit = async ev => {
+      ev.preventDefault();
+      const datos = new FormData(form);
+      try {
+        const resp = await fetchConAuth(`/admin/api/comprobantes_pago/${id}`, {
+          method: 'PUT',
+          body: datos
+        });
+        if (resp.ok) {
+          if (typeof showAlert === 'function') {
+            showAlert('exito-datos', 'Comprobante actualizado', false, 2600);
+          }
+          setTimeout(() => {
+            location.href = '/admin/comprobantes_pago';
+          }, 1600);
+        } else {
+          throw new Error('Error actualizando');
+        }
+      } catch (err) {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'Error al editar', false, 2600);
+        }
+      }
+    };
   });
 
   cargarComprobantes();

@@ -1,10 +1,8 @@
-"""
-----------------------------------------------------------
-Archivo: routes/empleados_datos_personales.py
-Descripción: CRUD de datos personales de empleados
-Proyecto: Portátiles Mercedes
-----------------------------------------------------------
-"""
+# ----------------------------------------------------------
+# Archivo: routes/empleados_datos_personales.py
+# Descripción: CRUD de datos personales de empleados
+# Proyecto: Portátiles Mercedes
+# ----------------------------------------------------------
 
 from datetime import date
 import os
@@ -61,7 +59,6 @@ class DatosEmpleado(BaseModel):
 async def empleados_datos_personales_admin(
     request: Request, usuario=Depends(auth_required)
 ):
-    """Vista de administración de datos personales."""
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     return TEMPLATES.TemplateResponse(
@@ -82,7 +79,6 @@ async def form_nuevo_dato(request: Request, usuario=Depends(auth_required)):
 async def empleados_datos_personales_empleado(
     request: Request, usuario=Depends(auth_required)
 ):
-    """Vista de datos personales para el empleado autenticado."""
     if usuario.get("rol") not in ("empleado", "Administrador"):
         raise HTTPException(status_code=403, detail="Acceso restringido")
     return TEMPLATES.TemplateResponse(
@@ -118,7 +114,7 @@ async def crear_dato_personal(
     nombre_empleado: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     email: str = Form(...),
-    fecha_ingreso: date = Form(...),
+    fecha_ingreso: str = Form(...),
     documento: UploadFile = File(...),
     usuario=Depends(auth_required),
 ):
@@ -127,12 +123,18 @@ async def crear_dato_personal(
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
+    try:
+        fecha_dt = date.fromisoformat(fecha_ingreso)
+    except ValueError:
+        raise HTTPException(status_code=400, detail="Fecha inválida (formato esperado: YYYY-MM-DD)")
+
     datos_form = {
         "nombre_empleado": nombre_empleado,
         "dni_cuit_cuil": dni_cuit_cuil,
         "email": email,
-        "fecha_ingreso": fecha_ingreso,
+        "fecha_ingreso": fecha_dt,
     }
+
     try:
         DatosEmpleado(**datos_form)
     except ValidationError as exc:
@@ -163,10 +165,7 @@ async def crear_dato_personal(
         raise HTTPException(status_code=500, detail=str(exc))
 
     datos_insert = datos_form.copy()
-    datos_insert["fecha_ingreso"] = fecha_ingreso.isoformat()
-    # La base de datos utiliza la columna "documento_pdf_url" para almacenar
-    # la URL del documento. Ajustamos el nombre del campo para que coincida
-    # y evitar errores al insertar.
+    datos_insert["fecha_ingreso"] = fecha_dt.isoformat()
     datos_insert["documento_pdf_url"] = url
 
     res = supabase.table(TABLA).insert(datos_insert).execute()

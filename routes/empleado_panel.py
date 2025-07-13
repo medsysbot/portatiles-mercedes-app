@@ -8,6 +8,7 @@ Proyecto: Portátiles Mercedes
 
 from datetime import date
 from fastapi import APIRouter, HTTPException, Request, Form, File, UploadFile
+from utils.file_utils import obtener_tipo_archivo, imagen_a_pdf
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
@@ -179,20 +180,14 @@ async def crear_servicio_limpieza(
         raise HTTPException(status_code=400, detail=str(exc))
 
     imagen_bytes = await remito.read()
-    extension = Path(remito.filename).suffix.lower() or ".jpg"
-    from fpdf import FPDF
-    import tempfile
-
-    with tempfile.NamedTemporaryFile(delete=False, suffix=extension) as tmp:
-        tmp.write(imagen_bytes)
-        tmp.flush()
-        imagen_path = tmp.name
-
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.image(imagen_path, x=10, y=10, w=190)
-    pdf_bytes = pdf.output(dest="S").encode("latin1")
-    os.unlink(imagen_path)
+    mime = obtener_tipo_archivo(imagen_bytes)
+    if mime not in {"application/pdf", "image/png", "image/jpeg"}:
+        raise HTTPException(status_code=400, detail="Formato no permitido")
+    if mime == "application/pdf":
+        pdf_bytes = imagen_bytes
+    else:
+        extension = ".png" if mime == "image/png" else ".jpg"
+        pdf_bytes = imagen_a_pdf(imagen_bytes, extension)
 
     fecha_archivo = date.today().strftime("%Y%m%d%H%M%S")
     nombre_pdf = f"remito_{numero_bano}_{fecha_archivo}.pdf"

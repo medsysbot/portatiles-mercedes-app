@@ -15,7 +15,8 @@ from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 
 from utils.auth_utils import auth_required
-from routes.comprobantes_pago import supabase, _validar_extension, BUCKET, TABLA
+from routes.comprobantes_pago import supabase, BUCKET, TABLA
+from utils.file_utils import obtener_tipo_archivo
 
 router = APIRouter()
 TEMPLATES = Jinja2Templates(directory="templates")
@@ -48,19 +49,26 @@ async def agregar_comprobante_admin(
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
+    factura_data = None
+    factura_ext = ""
     if factura is not None and getattr(factura, "filename", None):
-        _validar_extension(factura.filename)
-    _validar_extension(archivo.filename)
+        factura_data = await factura.read()
+        mime_factura = obtener_tipo_archivo(factura_data)
+        if mime_factura not in {"application/pdf", "image/png", "image/jpeg"}:
+            raise HTTPException(status_code=400, detail="Formato no permitido")
+        factura_ext = ".pdf" if mime_factura == "application/pdf" else (".png" if mime_factura == "image/png" else ".jpg")
+
+    comprobante_data = await archivo.read()
+    mime_comprobante = obtener_tipo_archivo(comprobante_data)
+    if mime_comprobante not in {"application/pdf", "image/png", "image/jpeg"}:
+        raise HTTPException(status_code=400, detail="Formato no permitido")
+    ext_comprobante = ".pdf" if mime_comprobante == "application/pdf" else (".png" if mime_comprobante == "image/png" else ".jpg")
 
     fecha = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    ext_factura = (
-        os.path.splitext(factura.filename)[1] if factura and getattr(factura, "filename", None) else ""
-    )
-    ext_comprobante = os.path.splitext(archivo.filename)[1]
 
     nombre_factura = (
-        f"factura_{dni_cuit_cuil}_{fecha}{ext_factura}"
-        if factura and getattr(factura, "filename", None)
+        f"factura_{dni_cuit_cuil}_{fecha}{factura_ext}"
+        if factura_data is not None
         else None
     )
     nombre_comprobante = f"comprobante_{dni_cuit_cuil}_{fecha}{ext_comprobante}"
@@ -70,20 +78,17 @@ async def agregar_comprobante_admin(
         bucket_facturas = supabase.storage.from_("facturas")
         bucket_comprobantes = supabase.storage.from_("comprobantes-pago")
 
-        factura_data = await factura.read() if factura and getattr(factura, "filename", None) else None
-        comprobante_data = await archivo.read()
-
         if factura_data is not None and nombre_factura:
             bucket_facturas.upload(
                 nombre_factura,
                 factura_data,
-                {"content-type": factura.content_type},
+                {"content-type": mime_factura},
             )
 
         bucket_comprobantes.upload(
             nombre_comprobante,
             comprobante_data,
-            {"content-type": archivo.content_type},
+            {"content-type": mime_comprobante},
         )
 
         factura_url = (

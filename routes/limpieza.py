@@ -27,6 +27,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from fpdf import FPDF
 from supabase import Client, create_client
+from utils.file_utils import obtener_tipo_archivo, imagen_a_pdf
 
 router = APIRouter()
 
@@ -72,17 +73,7 @@ class _IdLista(BaseModel):
 
 def _crear_pdf_desde_imagen(data: bytes, extension: str) -> bytes:
     """Convierte la imagen recibida en un PDF y devuelve los bytes."""
-    with tempfile.NamedTemporaryFile(delete=False, suffix=extension) as tmp:
-        tmp.write(data)
-        tmp.flush()
-        imagen_path = tmp.name
-
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.image(imagen_path, x=10, y=10, w=190)
-    pdf_bytes = pdf.output(dest="S").encode("latin1")
-    os.unlink(imagen_path)
-    return pdf_bytes
+    return imagen_a_pdf(data, extension)
 
 # =========== EMPLEADO: FORMULARIO Y CRUD =============
 
@@ -277,8 +268,15 @@ async def _procesar_servicio(request, form_data, es_edicion, id_servicio, planti
         if not imagen_bytes:
             logger.error(f"El archivo remito '{remito.filename}' está vacío.")
             raise HTTPException(status_code=400, detail="El archivo remito está vacío o corrupto.")
-        extension = Path(remito.filename).suffix.lower() or ".jpg"
-        pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
+        mime = obtener_tipo_archivo(imagen_bytes)
+        if mime not in {"application/pdf", "image/png", "image/jpeg"}:
+            logger.error("Formato de remito no soportado")
+            raise HTTPException(status_code=400, detail="Formato no permitido")
+        if mime == "application/pdf":
+            pdf_bytes = imagen_bytes
+        else:
+            extension = ".png" if mime == "image/png" else ".jpg"
+            pdf_bytes = _crear_pdf_desde_imagen(imagen_bytes, extension)
         fecha_archivo = datetime.utcnow().strftime("%Y%m%d%H%M%S")
         nombre_pdf = f"remito_{form_data['numero_bano']}_{fecha_archivo}.pdf"
         bucket = supabase.storage.from_(BUCKET)

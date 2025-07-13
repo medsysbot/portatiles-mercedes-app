@@ -38,20 +38,13 @@ def _validar_archivo(data: bytes) -> str:
 async def subir_comprobante(
     nombre_cliente: str = Form(...),
     dni_cuit_cuil: str = Form(...),
-    factura: UploadFile | None = File(None),
+    numero_de_factura: str = Form(...),
     archivo: UploadFile = File(...),
     usuario=Depends(auth_required),
 ):
-    """Carga un comprobante de pago y registra la URL. La factura es opcional."""
+    """Carga un comprobante de pago y registra la URL."""
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
-
-    factura_data = None
-    factura_ext = ""
-    if factura is not None and getattr(factura, "filename", None):
-        factura_data = await factura.read()
-        mime_factura = _validar_archivo(factura_data)
-        factura_ext = ".pdf" if mime_factura == "application/pdf" else (".png" if mime_factura == "image/png" else ".jpg")
 
     contenido = await archivo.read()
     mime_archivo = _validar_archivo(contenido)
@@ -59,18 +52,8 @@ async def subir_comprobante(
     fecha = datetime.utcnow().strftime("%Y%m%d%H%M%S")
     nombre_archivo = f"{dni_cuit_cuil}_{fecha}{ext_archivo}"
 
-    bucket_facturas = supabase.storage.from_("facturas")
     bucket = supabase.storage.from_(BUCKET)
     try:
-        factura_url = None
-        if factura_data is not None:
-            nombre_factura = f"factura_{dni_cuit_cuil}_{fecha}{factura_ext}"
-            bucket_facturas.upload(
-                nombre_factura,
-                factura_data,
-                {"content-type": mime_factura},
-            )
-            factura_url = bucket_facturas.get_public_url(nombre_factura)
         bucket.upload(nombre_archivo, contenido, {"content-type": mime_archivo})
         url = bucket.get_public_url(nombre_archivo)
     except Exception as exc:
@@ -79,7 +62,7 @@ async def subir_comprobante(
     registro = {
         "nombre_cliente": nombre_cliente,
         "dni_cuit_cuil": dni_cuit_cuil,
-        "factura_url": factura_url,
+        "numero_de_factura": numero_de_factura,
         "comprobante_url": url,
         "fecha_envio": datetime.utcnow().isoformat(),
     }
@@ -106,7 +89,7 @@ async def listar_comprobantes(
         res = (
             supabase.table(TABLA)
             .select(
-                "id,nombre_cliente,dni_cuit_cuil,factura_url,comprobante_url,fecha_envio"
+                "id,nombre_cliente,dni_cuit_cuil,numero_de_factura,comprobante_url,fecha_envio"
             )
             .eq("dni_cuit_cuil", dni_cuit_cuil)
             .order("fecha_envio", desc=True)
@@ -130,7 +113,7 @@ async def eliminar_comprobante(id: int, dni_cuit_cuil: str = Query(...), usuario
     try:
         res = (
             supabase.table(TABLA)
-            .select("comprobante_url,factura_url,dni_cuit_cuil")
+            .select("comprobante_url,dni_cuit_cuil")
             .eq("id", id)
             .single()
             .execute()
@@ -143,13 +126,9 @@ async def eliminar_comprobante(id: int, dni_cuit_cuil: str = Query(...), usuario
         raise HTTPException(status_code=403, detail="Operación no permitida")
 
     bucket_comprobantes = supabase.storage.from_(BUCKET)
-    bucket_facturas = supabase.storage.from_("facturas")
     nombre_archivo = os.path.basename(datos["comprobante_url"])
-    nombre_factura = os.path.basename(datos.get("factura_url")) if datos.get("factura_url") else None
     try:
         bucket_comprobantes.remove(nombre_archivo)
-        if nombre_factura:
-            bucket_facturas.remove(nombre_factura)
         supabase.table(TABLA).delete().eq("id", id).execute()
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))

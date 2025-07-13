@@ -39,10 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { data: 'nombre_cliente' },
       { data: 'dni_cuit_cuil' },
-      {
-        data: 'factura_url',
-        render: d => d ? `<a href="${d}" target="_blank">VER FACTURA</a>` : ''
-      },
+      { data: 'numero_de_factura' },
       {
         data: 'comprobante_url',
         render: d => d ? `<a href="${d}" target="_blank">VER PAGO</a>` : ''
@@ -126,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtrados = registros.filter(c =>
       (c.nombre_cliente || '').toLowerCase().includes(q) ||
       (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-      (c.factura_url || '').toLowerCase().includes(q) ||
+      (c.numero_de_factura || '').toLowerCase().includes(q) ||
       (c.comprobante_url || '').toLowerCase().includes(q)
     );
     mostrarComprobantes(filtrados);

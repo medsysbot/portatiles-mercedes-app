@@ -8,54 +8,64 @@
 {% block content %}
 <h2 class="mt-0">{{ 'Editar Servicio de Limpieza' if servicio else 'Nuevo Servicio de Limpieza' }}</h2>
 
-<form method="post" enctype="multipart/form-data">
-  <div class="form-group">
-    <label>Fecha del servicio</label>
-    <input type="date" name="fecha_servicio" class="form-control" required
-           value="{{ servicio.fecha_servicio if servicio else '' }}">
-  </div>
-  <div class="form-group">
-    <label>Número del baño</label>
-    <input type="text" name="numero_bano" class="form-control" required
-           value="{{ servicio.numero_bano if servicio else '' }}">
-  </div>
-  <div class="form-group">
-    <label>DNI / CUIT / CUIL</label>
-    <input type="text" name="dni_cuit_cuil" class="form-control" required
-           value="{{ servicio.dni_cuit_cuil if servicio else '' }}">
-  </div>
-  <div class="form-group">
-    <label>Nombre del cliente</label>
-    <input type="text" name="nombre_cliente" class="form-control" required
-           value="{{ servicio.nombre_cliente if servicio else '' }}">
-  </div>
-  <div class="form-group">
-    <label>Tipo de servicio</label>
-    <input type="text" name="tipo_servicio" class="form-control" required
-           value="{{ servicio.tipo_servicio if servicio else '' }}">
-  </div>
-  <div class="form-group">
-    <label>Observaciones</label>
-    <textarea name="observaciones" class="form-control" rows="3">{{ servicio.observaciones if servicio else '' }}</textarea>
-  </div>
-  <div class="form-group">
-    <label>Estado (escriba 'pendiente' o 'completo')</label>
-    <input type="text" name="estado" class="form-control" required
-           value="{{ servicio.estado if servicio else '' }}">
-  </div>
-  <div class="form-group">
-    <label>Remito (foto o imagen)</label>
-    {% if servicio and servicio.remito_url %}
-      <p class="mb-2">Remito actual: <a href="{{ servicio.remito_url }}" target="_blank">Ver remito</a></p>
-    {% endif %}
-    <input type="file" name="remito" accept="image/*" class="form-control">
-  </div>
-  <div class="botones-final-form">
-    <button type="submit" class="btn btn-primary">{{ 'Actualizar servicio' if servicio else 'Registrar servicio' }}</button>
-    <a href="{{ '/admin/limpieza' }}" class="btn btn-secondary">Volver</a>
-    <button type="button" id="btnBuscarClienteLimpieza" class="btn btn-secondary">Buscar cliente</button>
-  </div>
-</form>
+<div class="pm-form-container">
+  <form method="post" enctype="multipart/form-data">
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label>Fecha del servicio</label>
+        <input type="date" name="fecha_servicio" class="form-control" required
+               value="{{ servicio.fecha_servicio if servicio else '' }}">
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label>Número del baño</label>
+        <input type="text" name="numero_bano" class="form-control" required
+               value="{{ servicio.numero_bano if servicio else '' }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label>DNI / CUIT / CUIL</label>
+        <input type="text" name="dni_cuit_cuil" class="form-control" required
+               value="{{ servicio.dni_cuit_cuil if servicio else '' }}">
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label>Nombre del cliente</label>
+        <input type="text" name="nombre_cliente" class="form-control" required
+               value="{{ servicio.nombre_cliente if servicio else '' }}">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label>Tipo de servicio</label>
+        <input type="text" name="tipo_servicio" class="form-control" required
+               value="{{ servicio.tipo_servicio if servicio else '' }}">
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label>Observaciones</label>
+        <textarea name="observaciones" class="form-control" rows="3">{{ servicio.observaciones if servicio else '' }}</textarea>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label>Estado (escriba 'pendiente' o 'completo')</label>
+        <input type="text" name="estado" class="form-control" required
+               value="{{ servicio.estado if servicio else '' }}">
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label>Remito (foto o imagen)</label>
+        {% if servicio and servicio.remito_url %}
+          <p class="mb-2">Remito actual: <a href="{{ servicio.remito_url }}" target="_blank">Ver remito</a></p>
+        {% endif %}
+        <input type="file" name="remito" accept="image/*" class="form-control">
+      </div>
+    </div>
+    <div class="botones-final-form">
+      <button type="submit" class="btn btn-primary">{{ 'Actualizar servicio' if servicio else 'Registrar servicio' }}</button>
+      <a href="{{ '/admin/limpieza' }}" class="btn btn-secondary">Volver</a>
+      <button type="button" id="btnBuscarClienteLimpieza" class="btn btn-secondary">Buscar cliente</button>
+    </div>
+  </form>
+</div>
 
 <!-- Modal de selección de clientes -->
 <div class="modal fade" id="modalClientesLimpieza" tabindex="-1" role="dialog" aria-labelledby="modalClientesLimpiezaLabel" aria-hidden="true">

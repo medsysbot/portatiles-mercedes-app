@@ -20,22 +20,26 @@
     </div>
   </div>
 
-  <form id="formComprobanteAdmin" enctype="multipart/form-data" class="mb-3 d-none">
-    <div class="form-group">
-      <label for="nombreAdmin">Nombre cliente</label>
-      <input type="text" class="form-control" id="nombreAdmin" name="nombre_cliente" required>
+  <form id="formComprobanteAdmin" enctype="multipart/form-data" class="mb-3 d-none pm-form-container">
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label for="nombreAdmin">Nombre cliente</label>
+        <input type="text" class="form-control" id="nombreAdmin" name="nombre_cliente" required>
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label for="dniAdmin">DNI / CUIT / CUIL</label>
+        <input type="text" class="form-control" id="dniAdmin" name="dni_cuit_cuil" required>
+      </div>
     </div>
-    <div class="form-group">
-      <label for="dniAdmin">DNI / CUIT / CUIL</label>
-      <input type="text" class="form-control" id="dniAdmin" name="dni_cuit_cuil" required>
-    </div>
-    <div class="form-group">
-      <label for="archivoFactura">Archivo factura (JPG/PNG)</label>
-      <input type="file" class="form-control" id="archivoFactura" name="factura" accept=".jpg,.jpeg,.png">
-    </div>
-    <div class="form-group">
-      <label for="archivoComprobante">Comprobante de pago (JPG/PNG)</label>
-      <input type="file" class="form-control" id="archivoComprobante" name="archivo" accept=".jpg,.jpeg,.png">
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label for="archivoFactura">Archivo factura (JPG/PNG)</label>
+        <input type="file" class="form-control" id="archivoFactura" name="factura" accept=".jpg,.jpeg,.png">
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label for="archivoComprobante">Comprobante de pago (JPG/PNG)</label>
+        <input type="file" class="form-control" id="archivoComprobante" name="archivo" accept=".jpg,.jpeg,.png">
+      </div>
     </div>
     <div class="text-right">
       <button type="submit" class="btn btn-primary">Guardar</button>

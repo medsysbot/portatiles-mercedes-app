@@ -7,45 +7,55 @@
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">Nuevo Alquiler</h2>
-<form method="post">
-  <div class="form-group">
-    <label>Nº Baño</label>
-    <input type="text" name="numero_bano" class="form-control" required>
-  </div>
-  <div class="form-group">
-    <label>Nombre cliente</label>
-    <input type="text" name="nombre_cliente" class="form-control" required>
-  </div>
-  <div class="form-group">
-    <label>DNI / CUIT / CUIL</label>
-    <input type="text" name="dni_cuit_cuil" class="form-control" required>
-  </div>
-  <div class="form-group">
-    <label>Razón social</label>
-    <input type="text" name="razon_social" class="form-control" required>
-  </div>
-  <div class="form-group">
-    <label>Dirección</label>
-    <input type="text" name="direccion" class="form-control">
-  </div>
-  <div class="form-group">
-    <label>Fecha inicio</label>
-    <input type="date" name="fecha_inicio" class="form-control" required>
-  </div>
-  <div class="form-group">
-    <label>Fecha fin</label>
-    <input type="date" name="fecha_fin" class="form-control">
-  </div>
-  <div class="form-group">
-    <label>Observaciones</label>
-    <textarea name="observaciones" class="form-control" rows="3"></textarea>
-  </div>
-  <div class="botones-final-form">
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a href="/admin/alquileres" class="btn btn-secondary">Volver</a>
-    <button type="button" id="btnBuscarClienteAlquiler" class="btn btn-secondary">Buscar cliente</button>
-  </div>
-</form>
+<div class="pm-form-container">
+  <form method="post">
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label>Nº Baño</label>
+        <input type="text" name="numero_bano" class="form-control" required>
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label>Nombre cliente</label>
+        <input type="text" name="nombre_cliente" class="form-control" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label>DNI / CUIT / CUIL</label>
+        <input type="text" name="dni_cuit_cuil" class="form-control" required>
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label>Razón social</label>
+        <input type="text" name="razon_social" class="form-control" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label>Dirección</label>
+        <input type="text" name="direccion" class="form-control">
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label>Fecha inicio</label>
+        <input type="date" name="fecha_inicio" class="form-control" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-md-6 mb-3">
+        <label>Fecha fin</label>
+        <input type="date" name="fecha_fin" class="form-control">
+      </div>
+      <div class="form-group col-md-6 mb-3">
+        <label>Observaciones</label>
+        <textarea name="observaciones" class="form-control" rows="3"></textarea>
+      </div>
+    </div>
+    <div class="botones-final-form">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <a href="/admin/alquileres" class="btn btn-secondary">Volver</a>
+      <button type="button" id="btnBuscarClienteAlquiler" class="btn btn-secondary">Buscar cliente</button>
+    </div>
+  </form>
+</div>
 
 <!-- Modal de selección de clientes -->
 <div class="modal fade" id="modalClientesAlquiler" tabindex="-1" role="dialog" aria-labelledby="modalClientesAlquilerLabel" aria-hidden="true">

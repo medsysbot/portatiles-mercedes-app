@@ -10,6 +10,7 @@ Proyecto: Portátiles Mercedes
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends, Query
 from supabase import Client, create_client
+from utils.file_utils import obtener_tipo_archivo
 import os
 from utils.auth_utils import auth_required
 
@@ -25,10 +26,12 @@ if SUPABASE_URL and SUPABASE_KEY:
 router = APIRouter()
 
 
-def _validar_extension(nombre: str) -> None:
-    ext = os.path.splitext(nombre)[1].lower()
-    if ext not in {".jpg", ".jpeg", ".png"}:
+def _validar_archivo(data: bytes) -> str:
+    """Valida y devuelve el tipo MIME real del archivo."""
+    mime = obtener_tipo_archivo(data)
+    if mime not in {"application/pdf", "image/png", "image/jpeg"}:
         raise HTTPException(status_code=400, detail="Formato no permitido")
+    return mime
 
 
 @router.post("/api/comprobantes_pago")
@@ -43,28 +46,32 @@ async def subir_comprobante(
     if not supabase:
         raise HTTPException(status_code=500, detail="Supabase no configurado")
 
+    factura_data = None
+    factura_ext = ""
     if factura is not None and getattr(factura, "filename", None):
-        _validar_extension(factura.filename)
-    _validar_extension(archivo.filename)
+        factura_data = await factura.read()
+        mime_factura = _validar_archivo(factura_data)
+        factura_ext = ".pdf" if mime_factura == "application/pdf" else (".png" if mime_factura == "image/png" else ".jpg")
+
+    contenido = await archivo.read()
+    mime_archivo = _validar_archivo(contenido)
+    ext_archivo = ".pdf" if mime_archivo == "application/pdf" else (".png" if mime_archivo == "image/png" else ".jpg")
     fecha = datetime.utcnow().strftime("%Y%m%d%H%M%S")
-    nombre_archivo = f"{dni_cuit_cuil}_{fecha}{os.path.splitext(archivo.filename)[1]}"
+    nombre_archivo = f"{dni_cuit_cuil}_{fecha}{ext_archivo}"
 
     bucket_facturas = supabase.storage.from_("facturas")
     bucket = supabase.storage.from_(BUCKET)
     try:
         factura_url = None
-        if factura is not None and getattr(factura, "filename", None):
-            contenido_factura = await factura.read()
-            nombre_factura = f"factura_{dni_cuit_cuil}_{fecha}{os.path.splitext(factura.filename)[1]}"
+        if factura_data is not None:
+            nombre_factura = f"factura_{dni_cuit_cuil}_{fecha}{factura_ext}"
             bucket_facturas.upload(
                 nombre_factura,
-                contenido_factura,
-                {"content-type": factura.content_type},
+                factura_data,
+                {"content-type": mime_factura},
             )
             factura_url = bucket_facturas.get_public_url(nombre_factura)
-
-        contenido = await archivo.read()
-        bucket.upload(nombre_archivo, contenido, {"content-type": archivo.content_type})
+        bucket.upload(nombre_archivo, contenido, {"content-type": mime_archivo})
         url = bucket.get_public_url(nombre_archivo)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))

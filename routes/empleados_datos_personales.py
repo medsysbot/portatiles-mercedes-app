@@ -16,6 +16,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from supabase import create_client, Client
 from fpdf import FPDF
+from utils.file_utils import obtener_tipo_archivo, imagen_a_pdf
 
 from utils.auth_utils import auth_required
 
@@ -141,19 +142,14 @@ async def crear_dato_personal(
         raise HTTPException(status_code=400, detail=str(exc))
 
     contenido = await documento.read()
-    extension = Path(documento.filename).suffix.lower()
-    if extension != ".pdf":
-        with tempfile.NamedTemporaryFile(delete=False, suffix=extension) as tmp:
-            tmp.write(contenido)
-            tmp.flush()
-            imagen_path = tmp.name
-        pdf = FPDF()
-        pdf.add_page()
-        pdf.image(imagen_path, x=10, y=10, w=190)
-        pdf_bytes = pdf.output(dest="S").encode("latin1")
-        os.unlink(imagen_path)
-    else:
+    mime = obtener_tipo_archivo(contenido)
+    if mime not in {"application/pdf", "image/png", "image/jpeg"}:
+        raise HTTPException(status_code=400, detail="Formato no permitido")
+    if mime == "application/pdf":
         pdf_bytes = contenido
+    else:
+        extension = ".png" if mime == "image/png" else ".jpg"
+        pdf_bytes = imagen_a_pdf(contenido, extension)
 
     fecha_arch = date.today().strftime("%Y%m%d%H%M%S")
     nombre_pdf = f"doc_{dni_cuit_cuil}_{fecha_arch}.pdf"

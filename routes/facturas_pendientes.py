@@ -17,6 +17,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from fpdf import FPDF
 import tempfile
+from utils.file_utils import obtener_tipo_archivo, imagen_a_pdf
 from supabase import create_client, Client
 
 load_dotenv()
@@ -45,28 +46,23 @@ TEMPLATES = Jinja2Templates(directory="templates")
 TABLA = "facturas_pendientes"
 BUCKET = "factura"
 
-def _validar_factura(nombre: str, content_type: str, tamano: int) -> None:
-    ext = os.path.splitext(nombre)[1].lower()
-    if ext not in {".pdf", ".png", ".jpg", ".jpeg"}:
+def _validar_factura(nombre: str, data: bytes) -> str:
+    """Valida y devuelve el tipo MIME real del archivo."""
+    mime = obtener_tipo_archivo(data)
+    if mime == "desconocido":
+        ext = os.path.splitext(nombre)[1].lower()
+        if ext == ".pdf":
+            mime = "application/pdf"
+        elif ext in {".png", ".jpg", ".jpeg"}:
+            mime = "image/png" if ext == ".png" else "image/jpeg"
+    if mime not in {"application/pdf", "image/png", "image/jpeg"}:
         raise HTTPException(status_code=400, detail="Formato no permitido")
-    if content_type not in {"application/pdf", "image/png", "image/jpeg"}:
-        raise HTTPException(status_code=400, detail="Tipo no permitido")
-    if tamano > 2 * 1024 * 1024:
-        raise HTTPException(status_code=400, detail="Archivo demasiado grande")
+    return mime
 
-def _convertir_a_pdf(data: bytes, extension: str) -> bytes:
-    if extension == ".pdf":
+def _convertir_a_pdf(data: bytes, mime: str, extension: str) -> bytes:
+    if mime == "application/pdf":
         return data
-    with tempfile.NamedTemporaryFile(delete=False, suffix=extension) as tmp:
-        tmp.write(data)
-        tmp.flush()
-        imagen_path = tmp.name
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.image(imagen_path, x=10, y=10, w=190)
-    pdf_bytes = pdf.output(dest="S").encode("latin1")
-    os.unlink(imagen_path)
-    return pdf_bytes
+    return imagen_a_pdf(data, extension)
 
 class FacturaPendiente(BaseModel):
     fecha: date
@@ -132,9 +128,9 @@ async def crear_factura(request: Request):
     if archivo and getattr(archivo, "filename", None):
         try:
             contenido = await archivo.read()
-            _validar_factura(archivo.filename, archivo.content_type or "", len(contenido))
-            ext = os.path.splitext(archivo.filename)[1].lower()
-            pdf_bytes = _convertir_a_pdf(contenido, ext)
+            mime = _validar_factura(archivo.filename, contenido)
+            ext = ".pdf" if mime == "application/pdf" else (".png" if mime == "image/png" else ".jpg")
+            pdf_bytes = _convertir_a_pdf(contenido, mime, ext)
             timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S")
             nombre_pdf = f"factura-{id_factura}-{timestamp}.pdf"
             bucket = supabase.storage.from_(BUCKET)

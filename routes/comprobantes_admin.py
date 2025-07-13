@@ -94,7 +94,9 @@ async def obtener_comprobantes_admin(usuario=Depends(auth_required)):
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     try:
-        res = supabase.table(TABLA).select("*").order("fecha_envio", desc=True).execute()
+        res = supabase.table(TABLA).select(
+            "id,nombre_cliente,dni_cuit_cuil,factura_url,comprobante_url,fecha_envio"
+        ).order("fecha_envio", desc=True).execute()
         if getattr(res, "error", None):
             raise Exception(res.error.message)
         return res.data
@@ -102,12 +104,12 @@ async def obtener_comprobantes_admin(usuario=Depends(auth_required)):
         raise HTTPException(status_code=500, detail=str(exc))
 
 
-@router.delete("/admin/api/comprobantes_pago/{id_comprobante}")
-async def eliminar_comprobante_admin(id_comprobante: int, usuario=Depends(auth_required)):
+@router.delete("/admin/api/comprobantes_pago/{id}")
+async def eliminar_comprobante_admin(id: int, usuario=Depends(auth_required)):
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     try:
-        res = supabase.table(TABLA).delete().eq("id_comprobante", id_comprobante).execute()
+        res = supabase.table(TABLA).delete().eq("id", id).execute()
         if getattr(res, "error", None):
             raise Exception(res.error.message)
         return {"ok": True}
@@ -115,12 +117,12 @@ async def eliminar_comprobante_admin(id_comprobante: int, usuario=Depends(auth_r
         raise HTTPException(status_code=500, detail=str(exc))
 
 
-@router.put("/admin/api/comprobantes_pago/{id_comprobante}")
+@router.put("/admin/api/comprobantes_pago/{id}")
 async def editar_comprobante_admin(
-    id_comprobante: int,
+    id: int,
     nombre_cliente: str = Form(...),
     dni_cuit_cuil: str = Form(...),
-    usuario=Depends(auth_required)
+    usuario=Depends(auth_required),
 ):
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
@@ -128,7 +130,7 @@ async def editar_comprobante_admin(
         res = supabase.table(TABLA).update({
             "nombre_cliente": nombre_cliente,
             "dni_cuit_cuil": dni_cuit_cuil,
-        }).eq("id_comprobante", id_comprobante).execute()
+        }).eq("id", id).execute()
         if getattr(res, "error", None):
             raise Exception(res.error.message)
         return {"ok": True}

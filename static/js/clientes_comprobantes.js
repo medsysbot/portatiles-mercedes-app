@@ -47,8 +47,22 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'nombre_cliente' },
       { data: 'dni_cuit_cuil' },
       { data: 'numero_factura' },
-      { data: 'comprobante_url', render: d => `<a href="${d}" target="_blank">Ver</a>` },
-      { data: 'fecha_envio' }
+      {
+        data: 'factura_url',
+        render: d => d ? `<a href="${d}" target="_blank">VER FACTURA</a>` : ''
+      },
+      {
+        data: 'comprobante_url',
+        render: d => d ? `<a href="${d}" target="_blank">VER PAGO</a>` : ''
+      },
+      {
+        data: 'fecha_envio',
+        render: fecha => {
+          if (!fecha) return '';
+          const f = new Date(fecha);
+          return `${f.toLocaleDateString('es-AR')} ${f.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}`;
+        }
+      }
     ]
   });
 
@@ -118,7 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtrados = registros.filter(c =>
       (c.nombre_cliente || '').toLowerCase().includes(q) ||
       (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-      String(c.numero_factura || '').toLowerCase().includes(q)
+      String(c.numero_factura || '').toLowerCase().includes(q) ||
+      (c.factura_url || '').toLowerCase().includes(q) ||
+      (c.comprobante_url || '').toLowerCase().includes(q)
     );
     mostrarComprobantes(filtrados);
     if (filtrados.length === 0) {

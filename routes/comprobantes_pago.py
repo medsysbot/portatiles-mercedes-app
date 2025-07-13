@@ -84,7 +84,9 @@ async def listar_comprobantes(
     try:
         res = (
             supabase.table(TABLA)
-            .select("id,nombre_cliente,dni_cuit_cuil,numero_factura,comprobante_url,fecha_envio")
+            .select(
+                "id,nombre_cliente,dni_cuit_cuil,numero_factura,factura_url,comprobante_url,fecha_envio"
+            )
             .eq("dni_cuit_cuil", dni_cuit_cuil)
             .order("fecha_envio", desc=True)
             .execute()

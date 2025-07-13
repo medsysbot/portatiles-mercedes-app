@@ -6,18 +6,15 @@ Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
 """
 
-from datetime import date
+from datetime import date, datetime
 import os
-import tempfile
 import logging
-from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request, Form, File, UploadFile, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from supabase import create_client, Client
-from fpdf import FPDF
 from utils.file_utils import obtener_tipo_archivo, imagen_a_pdf
 
 from utils.auth_utils import auth_required
@@ -148,11 +145,15 @@ async def crear_ausencia(
         extension = ".png" if mime == "image/png" else ".jpg"
         pdf_bytes = imagen_a_pdf(contenido, extension)
 
-    fecha_arch = date.today().strftime("%Y%m%d%H%M%S")
-    nombre_pdf = f"certificado_{dni_cuit_cuil}_{fecha_arch}.pdf"
+    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S%f")
+    nombre_pdf = f"certificado_{dni_cuit_cuil}_{timestamp}.pdf"
     bucket = supabase.storage.from_(BUCKET)
     try:
-        bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
+        bucket.upload(
+            nombre_pdf,
+            pdf_bytes,
+            {"content-type": "application/pdf", "x-upsert": "true"},
+        )
         url = bucket.get_public_url(nombre_pdf)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))

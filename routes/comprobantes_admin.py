@@ -21,7 +21,7 @@ router = APIRouter()
 TEMPLATES = Jinja2Templates(directory="templates")
 
 
-@router.get("/admin/comprobantes_pago", response_class=HTMLResponse)
+@router.get("/admin/comprobantes", response_class=HTMLResponse)
 async def comprobantes_admin_view(request: Request, usuario=Depends(auth_required)):
     """Muestra el listado de comprobantes de pago."""
     if usuario.get("rol") != "Administrador":
@@ -29,7 +29,7 @@ async def comprobantes_admin_view(request: Request, usuario=Depends(auth_require
     return TEMPLATES.TemplateResponse("comprobantes_pago_admin.html", {"request": request})
 
 
-@router.get("/admin/comprobantes_pago/nuevo", response_class=HTMLResponse)
+@router.get("/admin/comprobantes/nuevo", response_class=HTMLResponse)
 async def comprobante_admin_form(request: Request, usuario=Depends(auth_required)):
     """Formulario independiente para cargar comprobantes desde el panel."""
     if usuario.get("rol") != "Administrador":
@@ -37,7 +37,7 @@ async def comprobante_admin_form(request: Request, usuario=Depends(auth_required
     return TEMPLATES.TemplateResponse("comprobantes_pago_admin.html", {"request": request})
 
 
-@router.post("/admin/comprobantes_pago")
+@router.post("/admin/comprobantes")
 async def agregar_comprobante_admin(
     nombre_cliente: str = Form(...),
     dni_cuit_cuil: str = Form(...),

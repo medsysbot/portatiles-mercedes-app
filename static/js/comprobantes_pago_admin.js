@@ -42,11 +42,11 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil' },
       {
         data: 'factura_url',
-        render: url => url ? `<a href="${url}" target="_blank">VER FACTURA</a>` : '—'
+        render: url => url ? `<a href="${url}" target="_blank">VER FACTURA</a>` : ''
       },
       {
         data: 'comprobante_url',
-        render: url => url ? `<a href="${url}" target="_blank">VER PAGO</a>` : '—'
+        render: url => url ? `<a href="${url}" target="_blank">VER PAGO</a>` : ''
       },
       {
         data: 'fecha_envio',

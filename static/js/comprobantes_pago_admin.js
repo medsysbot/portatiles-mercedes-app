@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
-      { data: 'id_comprobante', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'nombre_cliente' },
       { data: 'dni_cuit_cuil' },
       { data: 'numero_factura' },
@@ -55,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCancelar = document.getElementById('btnCancelarForm');
   const buscador = document.getElementById('busquedaComprobantes');
   const btnBuscar = document.getElementById('btnBuscarComprobantes');
-  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
   const esRutaNuevo = window.location.pathname.endsWith('/admin/comprobantes/nuevo');
   let registros = [];
 
@@ -79,48 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnCancelar?.addEventListener('click', () => {
     window.location.href = '/admin/comprobantes';
-  });
-
-  function actualizarBoton() {
-    const checks = document.querySelectorAll('#tablaComprobantes tbody .fila-check:checked');
-    if (btnEliminar) btnEliminar.disabled = checks.length === 0;
-  }
-
-  $('#tablaComprobantes tbody').on('change', '.fila-check', actualizarBoton);
-
-  btnEliminar?.addEventListener('click', async () => {
-    const ids = Array.from(document.querySelectorAll('#tablaComprobantes tbody .fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length) return;
-    if (!confirm('¿Estás seguro que deseas eliminar estos comprobantes?')) return;
-    const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('guardando-datos', 'Eliminando comprobantes...', false, 1600);
-    }
-    try {
-      const resp = await fetchConAuth('/admin/api/comprobantes_pago/eliminar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ids })
-      });
-      if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarComprobantes();
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Comprobantes eliminados correctamente', false, 2600);
-        }
-      }, delay);
-    } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al eliminar comprobantes', false, 2600);
-        }
-      }, delay);
-      console.error('Error eliminando comprobantes:', err);
-    } finally {
-      if (btnEliminar) btnEliminar.disabled = true;
-    }
   });
 
   function mostrarComprobantes(lista) {

@@ -62,8 +62,9 @@
 
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="/static/js/comprobantes_pago_admin.js"></script>
 <script>
+  let tabla = null;
+
   document.addEventListener("DOMContentLoaded", () => {
     const form = document.getElementById("formComprobanteAdmin");
     const contenedorControles = document.getElementById("contenedorControles");
@@ -97,38 +98,40 @@
       }).catch(() => alert("Error al enviar formulario"));
     });
 
-    // ✅ Cargar tabla con datos de Supabase
-    const tabla = $('#tablaComprobantes').DataTable({
-      ajax: {
-        url: '/admin/api/comprobantes_pago',
-        dataSrc: ''
-      },
-      columns: [
-        {
-          data: 'id_comprobante',
-          render: id => `<input type="checkbox" class="check-comprobante" value="${id}">`,
-          orderable: false
+    // Inicializar solo si aún no fue creado
+    if (!$.fn.DataTable.isDataTable('#tablaComprobantes')) {
+      tabla = $('#tablaComprobantes').DataTable({
+        ajax: {
+          url: '/admin/api/comprobantes_pago',
+          dataSrc: ''
         },
-        { data: 'nombre_cliente' },
-        { data: 'dni_cuit_cuil' },
-        { data: 'numero_factura' },
-        {
-          data: 'comprobante_url',
-          render: url => url ? `<a href="${url}" target="_blank">Ver</a>` : ''
-        },
-        {
-          data: 'fecha_envio',
-          render: fecha => {
-            if (!fecha) return '';
-            const d = new Date(fecha);
-            return `${d.toLocaleDateString('es-AR')} ${d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}`;
+        columns: [
+          {
+            data: 'id_comprobante',
+            render: id => `<input type="checkbox" class="check-comprobante" value="${id}">`,
+            orderable: false
+          },
+          { data: 'nombre_cliente' },
+          { data: 'dni_cuit_cuil' },
+          { data: 'numero_factura' },
+          {
+            data: 'comprobante_url',
+            render: url => url ? `<a href="${url}" target="_blank">Ver</a>` : ''
+          },
+          {
+            data: 'fecha_envio',
+            render: fecha => {
+              if (!fecha) return '';
+              const d = new Date(fecha);
+              return `${d.toLocaleDateString('es-AR')} ${d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}`;
+            }
           }
+        ],
+        language: {
+          url: "https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
         }
-      ],
-      language: {
-        url: "https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
-      }
-    });
+      });
+    }
   });
 </script>
 {% endblock %}

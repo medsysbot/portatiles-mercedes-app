@@ -96,25 +96,6 @@ async def listar_comprobantes(
         raise HTTPException(status_code=500, detail=str(exc))
 
 
-@router.get("/admin/api/comprobantes_pago")
-async def listar_comprobantes_admin(usuario=Depends(auth_required)):
-    """Listado completo para administración."""
-    if usuario.get("rol") != "Administrador":
-        raise HTTPException(status_code=403, detail="Acceso restringido")
-    if not supabase:
-        raise HTTPException(status_code=500, detail="Supabase no configurado")
-    try:
-        res = (
-            supabase.table(TABLA)
-            .select("nombre_cliente,dni_cuit_cuil,numero_factura,comprobante_url,fecha_envio")
-            .order("fecha_envio", desc=True)
-            .execute()
-        )
-        if getattr(res, "error", None):
-            raise Exception(res.error.message)
-        return res.data or []
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=str(exc))
 
 
 @router.delete("/api/comprobantes_pago/{id}")

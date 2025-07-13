@@ -68,11 +68,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarComprobantes');
   const btnEliminar = document.getElementById('btnEliminarComprobantes');
   const btnEditar = document.getElementById('btnEditarComprobante');
+  const checkTodos = document.getElementById('checkTodosComprobantes');
   const btnBuscarFactura = document.getElementById('btnBuscarFactura');
   const btnUsarFactura = document.getElementById('btnUsarFactura');
   const filtroFacturas = document.getElementById('filtroFacturas');
   const facturaRef = document.getElementById('facturaReferencia');
   let facturas = [];
+
+  btnEditar?.classList.remove('d-none');
+  btnEliminar?.classList.remove('d-none');
   const tablaFacturas = $('#tablaFacturasBusqueda').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
@@ -93,6 +97,14 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
   let registros = [];
+
+  function actualizarBotones() {
+    const checks = document.querySelectorAll('.check-comprobante:checked');
+    const uno = checks.length === 1;
+    const alguno = checks.length > 0;
+    if (btnEditar) btnEditar.disabled = !uno;
+    if (btnEliminar) btnEliminar.disabled = !alguno;
+  }
 
   async function cargarFacturas() {
     try {
@@ -194,6 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error consultando');
       registros = await resp.json();
       tabla.clear().rows.add(registros).draw();
+      checkTodos?.checked = false;
+      actualizarBotones();
     } catch (err) {
       console.error('Error cargando comprobantes:', err);
       if (typeof showAlert === 'function') {
@@ -213,6 +227,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buscador?.addEventListener('input', filtrar);
   btnBuscar?.addEventListener('click', filtrar);
+
+  $('#tablaComprobantes tbody').on('change', '.check-comprobante', actualizarBotones);
+  checkTodos?.addEventListener('change', () => {
+    const val = checkTodos.checked;
+    document.querySelectorAll('.check-comprobante').forEach(c => {
+      c.checked = val;
+    });
+    actualizarBotones();
+  });
 
   btnEliminar?.addEventListener('click', async () => {
     const seleccionados = Array.from(document.querySelectorAll('.check-comprobante:checked'))
@@ -236,6 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
         showAlert('exito-datos', 'Eliminados correctamente', false, 2400);
       }
       cargarComprobantes();
+      actualizarBotones();
     } catch (err) {
       if (typeof showAlert === 'function') {
         showAlert('error-datos', 'No se pudo eliminar', false, 2600);
@@ -263,4 +287,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   cargarComprobantes();
+  actualizarBotones();
 });

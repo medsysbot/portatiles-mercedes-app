@@ -76,7 +76,7 @@ async def agregar_comprobante_admin(
     factura_url = None
     try:
         bucket_facturas = supabase.storage.from_("facturas")
-        bucket_comprobantes = supabase.storage.from_("comprobantes-pago")
+        bucket_comprobantes = supabase.storage.from_(BUCKET)
 
         if factura_data is not None and nombre_factura:
             bucket_facturas.upload(
@@ -133,9 +133,32 @@ async def obtener_comprobantes_admin(usuario=Depends(auth_required)):
 
 @router.delete("/admin/api/comprobantes_pago/{id}")
 async def eliminar_comprobante_admin(id: int, usuario=Depends(auth_required)):
+    """Elimina un comprobante y sus archivos asociados."""
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
+
     try:
+        res = (
+            supabase.table(TABLA)
+            .select("comprobante_url,factura_url")
+            .eq("id", id)
+            .single()
+            .execute()
+        )
+        datos = res.data
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+    if not datos:
+        raise HTTPException(status_code=404, detail="Registro no encontrado")
+
+    bucket_comprobantes = supabase.storage.from_(BUCKET)
+    bucket_facturas = supabase.storage.from_("facturas")
+    try:
+        if datos.get("comprobante_url"):
+            bucket_comprobantes.remove(os.path.basename(datos["comprobante_url"]))
+        if datos.get("factura_url"):
+            bucket_facturas.remove(os.path.basename(datos["factura_url"]))
         res = supabase.table(TABLA).delete().eq("id", id).execute()
         if getattr(res, "error", None):
             raise Exception(res.error.message)
@@ -149,15 +172,75 @@ async def editar_comprobante_admin(
     id: int,
     nombre_cliente: str = Form(...),
     dni_cuit_cuil: str = Form(...),
+    factura: UploadFile | None = File(None),
+    archivo: UploadFile | None = File(None),
     usuario=Depends(auth_required),
 ):
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+
     try:
-        res = supabase.table(TABLA).update({
-            "nombre_cliente": nombre_cliente,
-            "dni_cuit_cuil": dni_cuit_cuil,
-        }).eq("id", id).execute()
+        res = (
+            supabase.table(TABLA)
+            .select("factura_url,comprobante_url")
+            .eq("id", id)
+            .single()
+            .execute()
+        )
+        existente = res.data or {}
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+    factura_url = existente.get("factura_url")
+    comprobante_url = existente.get("comprobante_url")
+    bucket_facturas = supabase.storage.from_("facturas")
+    bucket_comprobantes = supabase.storage.from_(BUCKET)
+    fecha = datetime.utcnow().strftime("%Y%m%d%H%M%S")
+
+    if factura is not None and getattr(factura, "filename", None):
+        datos = await factura.read()
+        mime = obtener_tipo_archivo(datos)
+        if mime not in {"application/pdf", "image/png", "image/jpeg"}:
+            raise HTTPException(status_code=400, detail="Formato no permitido")
+        ext = ".pdf" if mime == "application/pdf" else (".png" if mime == "image/png" else ".jpg")
+        nombre_factura = f"factura_{dni_cuit_cuil}_{fecha}{ext}"
+        bucket_facturas.upload(nombre_factura, datos, {"content-type": mime})
+        if factura_url:
+            try:
+                bucket_facturas.remove(os.path.basename(factura_url))
+            except Exception:
+                pass
+        factura_url = bucket_facturas.get_public_url(nombre_factura)
+
+    if archivo is not None and getattr(archivo, "filename", None):
+        datos = await archivo.read()
+        mime = obtener_tipo_archivo(datos)
+        if mime not in {"application/pdf", "image/png", "image/jpeg"}:
+            raise HTTPException(status_code=400, detail="Formato no permitido")
+        ext = ".pdf" if mime == "application/pdf" else (".png" if mime == "image/png" else ".jpg")
+        nombre_comp = f"comprobante_{dni_cuit_cuil}_{fecha}{ext}"
+        bucket_comprobantes.upload(nombre_comp, datos, {"content-type": mime})
+        if comprobante_url:
+            try:
+                bucket_comprobantes.remove(os.path.basename(comprobante_url))
+            except Exception:
+                pass
+        comprobante_url = bucket_comprobantes.get_public_url(nombre_comp)
+
+    try:
+        res = (
+            supabase.table(TABLA)
+            .update({
+                "nombre_cliente": nombre_cliente,
+                "dni_cuit_cuil": dni_cuit_cuil,
+                "factura_url": factura_url,
+                "comprobante_url": comprobante_url,
+            })
+            .eq("id", id)
+            .execute()
+        )
         if getattr(res, "error", None):
             raise Exception(res.error.message)
         return {"ok": True}

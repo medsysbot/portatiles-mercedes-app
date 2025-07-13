@@ -26,14 +26,18 @@
       <label for="nombreAdmin">Nombre cliente</label>
       <input type="text" class="form-control" id="nombreAdmin" name="nombre_cliente" required>
     </div>
-    <div class="form-group">
-      <label for="dniAdmin">DNI / CUIT / CUIL</label>
-      <input type="text" class="form-control" id="dniAdmin" name="dni_cuit_cuil" required>
-    </div>
-    <div class="form-group">
-      <label for="numeroFacturaAdmin">Número de factura</label>
-      <input type="text" class="form-control" id="numeroFacturaAdmin" name="numero_de_factura" required>
-    </div>
+      <div class="form-group">
+        <label for="dniAdmin">DNI / CUIT / CUIL</label>
+        <input type="text" class="form-control" id="dniAdmin" name="dni_cuit_cuil" required>
+      </div>
+      <div class="form-group">
+        <label for="razonSocialAdmin">Razón social</label>
+        <input type="text" class="form-control" id="razonSocialAdmin" name="razon_social">
+      </div>
+      <div class="form-group">
+        <label for="numeroFacturaAdmin">Número de factura</label>
+        <input type="text" class="form-control" id="numeroFacturaAdmin" name="numero_de_factura" required>
+      </div>
     <div class="form-group">
       <label for="archivoComprobante">Comprobante de pago (PDF o imagen)</label>
       <input type="file" class="form-control" id="archivoComprobante" name="archivo" accept="application/pdf,image/png,image/jpeg">
@@ -51,6 +55,7 @@
           <th><input type="checkbox" id="checkTodosComprobantes"></th>
           <th>Nombre cliente</th>
           <th>DNI / CUIT / CUIL</th>
+          <th>Razón social</th>
           <th>Número de factura</th>
           <th>Comprobante</th>
           <th>Fecha envío</th>

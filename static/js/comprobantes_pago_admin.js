@@ -32,19 +32,20 @@ document.addEventListener('DOMContentLoaded', () => {
     paging: true,
     searching: false,
     ordering: true,
-    columns: [
-      {
-        data: 'id',
-        render: id => `<input type="checkbox" class="check-comprobante" value="${id}">`,
-        orderable: false
-      },
-      { data: 'nombre_cliente' },
-      { data: 'dni_cuit_cuil' },
-      { data: 'numero_de_factura' },
-      {
-        data: 'comprobante_url',
-        render: url => url ? `<a href="${url}" target="_blank">VER PAGO</a>` : ''
-      },
+      columns: [
+        {
+          data: 'id',
+          render: id => `<input type="checkbox" class="check-comprobante" value="${id}">`,
+          orderable: false
+        },
+        { data: 'nombre_cliente' },
+        { data: 'dni_cuit_cuil' },
+        { data: 'razon_social', defaultContent: '' },
+        { data: 'numero_de_factura' },
+        {
+          data: 'comprobante_url',
+          render: url => url ? `<a href="${url}" target="_blank">VER PAGO</a>` : ''
+        },
       {
         data: 'fecha_envio',
         render: fecha => {
@@ -144,11 +145,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrar() {
     const q = (buscador.value || '').toLowerCase();
-    const filtrados = registros.filter(c =>
-      (c.nombre_cliente || '').toLowerCase().includes(q) ||
-      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-      (c.numero_de_factura || '').toLowerCase().includes(q)
-    );
+      const filtrados = registros.filter(c =>
+        (c.nombre_cliente || '').toLowerCase().includes(q) ||
+        (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+        (c.razon_social || '').toLowerCase().includes(q) ||
+        (c.numero_de_factura || '').toLowerCase().includes(q)
+      );
     tabla.clear().rows.add(filtrados).draw();
   }
 
@@ -208,6 +210,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Prellenar formulario
     document.getElementById('nombreAdmin').value = registro.nombre_cliente || '';
     document.getElementById('dniAdmin').value = registro.dni_cuit_cuil || '';
+    document.getElementById('razonSocialAdmin').value = registro.razon_social || '';
+    document.getElementById('numeroFacturaAdmin').value = registro.numero_de_factura || '';
 
     mostrarFormulario();
     form.dataset.editing = id;

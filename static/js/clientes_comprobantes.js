@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { data: 'nombre_cliente' },
       { data: 'dni_cuit_cuil' },
+      { data: 'razon_social', defaultContent: '' },
       { data: 'numero_de_factura' },
       {
         data: 'comprobante_url',
@@ -120,12 +121,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrar() {
     const q = (buscador.value || '').toLowerCase();
-    const filtrados = registros.filter(c =>
-      (c.nombre_cliente || '').toLowerCase().includes(q) ||
-      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-      (c.numero_de_factura || '').toLowerCase().includes(q) ||
-      (c.comprobante_url || '').toLowerCase().includes(q)
-    );
+      const filtrados = registros.filter(c =>
+        (c.nombre_cliente || '').toLowerCase().includes(q) ||
+        (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+        (c.razon_social || '').toLowerCase().includes(q) ||
+        (c.numero_de_factura || '').toLowerCase().includes(q) ||
+        (c.comprobante_url || '').toLowerCase().includes(q)
+      );
     mostrarComprobantes(filtrados);
   }
 

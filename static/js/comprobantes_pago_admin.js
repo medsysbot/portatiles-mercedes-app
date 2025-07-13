@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const resp = await fetch(url, {
       ...options,
-      headers: { ...options.headers, Authorization: 'Bearer ' + token }
+      headers: { ...options.headers, Authorization: 'Bearer ' + token, 'Content-Type': 'application/json' }
     });
     if (resp.status === 401) {
       handleUnauthorized();
@@ -32,7 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
     return resp;
   }
 
-  // Inicialización DataTable
   const tabla = $('#tablaComprobantes').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
@@ -68,71 +67,38 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('formComprobanteAdmin');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
+  const contControles = document.getElementById('contenedorControles');
   const btnCancelar = document.getElementById('btnCancelarForm');
   const buscador = document.getElementById('busquedaComprobantes');
   const btnBuscar = document.getElementById('btnBuscarComprobantes');
-  const btnEditar = document.getElementById('btnEditarComprobante');
   const btnEliminar = document.getElementById('btnEliminarComprobantes');
+  const btnEditar = document.getElementById('btnEditarComprobante');
+  const checkTodos = document.getElementById('checkTodosComprobantes');
   let registros = [];
 
-  // Mostrar solo la tabla al inicio
-  form.classList.add('d-none');
-  contTabla.classList.remove('d-none');
-
-  btnNuevo?.addEventListener('click', () => {
+  function mostrarFormulario() {
     form.classList.remove('d-none');
     contTabla.classList.add('d-none');
-    btnNuevo.classList.add('d-none');
-    buscador?.classList.add('d-none');
-    btnBuscar?.classList.add('d-none');
-    btnEditar?.classList.add('d-none');
-    btnEliminar?.classList.add('d-none');
-  });
-
-  btnCancelar?.addEventListener('click', () => {
-    window.location.href = '/admin/comprobantes_pago';
-  });
-
-  // Filtrar comprobantes por texto
-  function filtrar() {
-    const q = (buscador.value || '').toLowerCase();
-    const filtrados = registros.filter(c =>
-      (c.nombre_cliente || '').toLowerCase().includes(q) ||
-      (c.dni_cuit_cuil || '').toLowerCase().includes(q)
-    );
-    mostrarComprobantes(filtrados);
-  }
-  buscador?.addEventListener('input', filtrar);
-  btnBuscar?.addEventListener('click', filtrar);
-
-  // Cargar registros desde la API
-  async function cargarComprobantes() {
-    try {
-      const resp = await fetchConAuth('/admin/api/comprobantes_pago');
-      if (!resp.ok) throw new Error('Error consultando');
-      registros = await resp.json();
-      mostrarComprobantes(registros);
-    } catch (err) {
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
-      }
-    }
+    contControles.remove();
   }
 
-  function mostrarComprobantes(lista) {
-    tabla.clear();
-    tabla.rows.add(lista).draw();
+  function ocultarFormulario() {
+    form.classList.add('d-none');
+    location.reload();
   }
 
-  // Envío de formulario
+  btnNuevo?.addEventListener('click', mostrarFormulario);
+  btnCancelar?.addEventListener('click', ocultarFormulario);
+
   form?.addEventListener('submit', async ev => {
     ev.preventDefault();
     const formData = new FormData(form);
     try {
-      const resp = await fetchConAuth('/admin/api/comprobantes_pago', {
+      const resp = await fetchConAuth('/admin/comprobantes', {
         method: 'POST',
         body: formData
       });
+      const data = await resp.json();
       if (resp.ok) {
         if (typeof showAlert === 'function') {
           showAlert('exito-datos', 'Comprobante agregado', false, 2600);
@@ -141,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
           window.location.href = '/admin/comprobantes_pago';
         }, 1600);
       } else {
-        throw new Error('Error al guardar');
+        throw new Error(data.detail || 'Error');
       }
     } catch (err) {
       if (typeof showAlert === 'function') {
@@ -150,10 +116,76 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Conexión del botón Editar (lógica futura, solo referencia)
-  btnEditar?.addEventListener('click', () => {
-    // Aquí deberías implementar la lógica de edición cuando esté disponible
-    alert('Funcionalidad de edición próximamente');
+  async function cargarComprobantes() {
+    try {
+      const resp = await fetchConAuth('/admin/api/comprobantes_pago');
+      if (!resp.ok) throw new Error('Error consultando');
+      registros = await resp.json();
+      tabla.clear().rows.add(registros).draw();
+    } catch (err) {
+      console.error('Error cargando comprobantes:', err);
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
+      }
+    }
+  }
+
+  function filtrar() {
+    const q = (buscador.value || '').toLowerCase();
+    const filtrados = registros.filter(c =>
+      (c.nombre_cliente || '').toLowerCase().includes(q) ||
+      (c.dni_cuit_cuil || '').toLowerCase().includes(q)
+    );
+    tabla.clear().rows.add(filtrados).draw();
+  }
+
+  buscador?.addEventListener('input', filtrar);
+  btnBuscar?.addEventListener('click', filtrar);
+
+  function actualizarEstadoEliminar() {
+    const seleccionados = document.querySelectorAll('.check-comprobante:checked');
+    btnEliminar.disabled = seleccionados.length === 0;
+    btnEliminar.classList.toggle('d-none', seleccionados.length === 0);
+  }
+
+  document.addEventListener('change', (e) => {
+    if (e.target.classList.contains('check-comprobante') || e.target === checkTodos) {
+      if (e.target === checkTodos) {
+        const todos = document.querySelectorAll('.check-comprobante');
+        todos.forEach(chk => chk.checked = checkTodos.checked);
+      }
+      actualizarEstadoEliminar();
+    }
+  });
+
+  btnEliminar?.addEventListener('click', async () => {
+    const ids = Array.from(document.querySelectorAll('.check-comprobante:checked'))
+      .map(chk => parseInt(chk.value));
+
+    if (ids.length === 0) return;
+
+    const confirmar = confirm(`¿Eliminar ${ids.length} comprobante(s)?`);
+    if (!confirmar) return;
+
+    try {
+      const resp = await fetchConAuth('/admin/api/comprobantes_pago', {
+        method: 'DELETE',
+        body: JSON.stringify({ ids })
+      });
+      if (!resp.ok) throw new Error('Error eliminando');
+      await cargarComprobantes();
+      btnEliminar.disabled = true;
+      btnEliminar.classList.add('d-none');
+      checkTodos.checked = false;
+      if (typeof showAlert === 'function') {
+        showAlert('exito-datos', 'Comprobante(s) eliminado(s)', false, 2000);
+      }
+    } catch (err) {
+      console.error('Error al eliminar:', err);
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'No se pudo eliminar', false, 2600);
+      }
+    }
   });
 
   cargarComprobantes();

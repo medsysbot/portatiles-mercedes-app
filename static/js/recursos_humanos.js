@@ -100,6 +100,49 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
+  // --- Búsquedas ---
+  const buscDatos = document.getElementById('busquedaDatos');
+  const btnBuscarDatos = document.getElementById('btnBuscarDatos');
+  const buscSalarios = document.getElementById('busquedaSalarios');
+  const btnBuscarSalarios = document.getElementById('btnBuscarSalarios');
+  const buscAusencias = document.getElementById('busquedaAusencias');
+  const btnBuscarAusencias = document.getElementById('btnBuscarAusencias');
+
+  function filtrarDatos() {
+    const q = (buscDatos?.value || '').toLowerCase();
+    const filtrados = datosCargados.filter(d =>
+      (d.nombre_empleado || '').toLowerCase().includes(q) ||
+      (d.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (d.email || '').toLowerCase().includes(q)
+    );
+    mostrarDatos(filtrados);
+  }
+  buscDatos?.addEventListener('input', filtrarDatos);
+  btnBuscarDatos?.addEventListener('click', filtrarDatos);
+
+  function filtrarSalarios() {
+    const q = (buscSalarios?.value || '').toLowerCase();
+    const filtrados = salariosCargados.filter(s =>
+      (s.nombre_empleado || '').toLowerCase().includes(q) ||
+      (s.dni_cuit_cuil || '').toLowerCase().includes(q)
+    );
+    mostrarSalarios(filtrados);
+  }
+  buscSalarios?.addEventListener('input', filtrarSalarios);
+  btnBuscarSalarios?.addEventListener('click', filtrarSalarios);
+
+  function filtrarAusencias() {
+    const q = (buscAusencias?.value || '').toLowerCase();
+    const filtrados = ausenciasCargados.filter(a =>
+      (a.nombre_empleado || '').toLowerCase().includes(q) ||
+      (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (a.tipo_ausencia || '').toLowerCase().includes(q)
+    );
+    mostrarAusencias(filtrados);
+  }
+  buscAusencias?.addEventListener('input', filtrarAusencias);
+  btnBuscarAusencias?.addEventListener('click', filtrarAusencias);
+
   // --- Botones de eliminación ---
   const btnEliminarDatos = document.getElementById('btnEliminarDatos');
   const btnEliminarSalarios = document.getElementById('btnEliminarSalarios');

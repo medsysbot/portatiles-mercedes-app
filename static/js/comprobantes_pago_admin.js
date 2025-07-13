@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function ocultarFormulario() {
     form.classList.add('d-none');
-    location.href = '/admin/comprobantes_pago';
+    location.href = '/admin/comprobantes';
   }
 
   btnNuevo?.addEventListener('click', mostrarFormulario);
@@ -104,7 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
           showAlert('exito-datos', isEdit ? 'Comprobante actualizado' : 'Comprobante agregado', false, 2600);
         }
         setTimeout(() => {
-          location.href = '/admin/comprobantes_pago';
+          location.href = '/admin/comprobantes';
         }, 1600);
       } else {
         throw new Error(data.detail || 'Error');

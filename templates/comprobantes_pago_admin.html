@@ -4,18 +4,21 @@
 {% block head_extra %}
 {{ super() }}
 {% endblock %}
+
 {% block content %}
 <div class="container mt-4">
   <h2>Comprobantes de pago</h2>
-  <div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
-    <div class="mb-2 flex-grow-1">
+  <div id="contenedorControles" class="d-flex justify-content-between align-items-center my-3 flex-wrap">
+    <div class="mb-2 flex-grow-1" style="max-width: 320px;">
       <input type="text" id="busquedaComprobantes" class="form-control buscador-tabla" placeholder="Buscar comprobante...">
     </div>
     <div class="d-flex flex-wrap gap-2">
       <button id="btnBuscarComprobantes" class="btn btn-secondary no-margin-left">Buscar</button>
       <button id="btnMostrarForm" class="btn btn-success"><i class="fas fa-receipt"></i> Agregar comprobante</button>
+      <button id="btnEliminarComprobantes" class="btn btn-danger d-none" disabled>Eliminar</button>
     </div>
   </div>
+
   <form id="formComprobanteAdmin" enctype="multipart/form-data" class="mb-3 d-none">
     <div class="form-row">
       <div class="form-group col-md-3">
@@ -40,10 +43,12 @@
       <button type="button" id="btnCancelarForm" class="btn btn-secondary">Volver</button>
     </div>
   </form>
+
   <div id="contenedorTabla" class="table-responsive bg-light p-3">
     <table id="tablaComprobantes" class="table pm-tabla table-striped table-bordered">
       <thead>
         <tr>
+          <th></th>
           <th>Nombre cliente</th>
           <th>DNI / CUIT / CUIL</th>
           <th>Número factura</th>
@@ -56,7 +61,42 @@
   </div>
 </div>
 {% endblock %}
+
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="/comprobantes_pago_admin.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("formComprobanteAdmin");
+    const contenedorControles = document.getElementById("contenedorControles");
+    const contenedorTabla = document.getElementById("contenedorTabla");
+    const btnMostrarForm = document.getElementById("btnMostrarForm");
+    const btnCancelarForm = document.getElementById("btnCancelarForm");
+
+    btnMostrarForm?.addEventListener("click", () => {
+      form.classList.remove("d-none");
+      contenedorControles.remove();
+      contenedorTabla.classList.add("d-none");
+    });
+
+    btnCancelarForm?.addEventListener("click", () => {
+      form.classList.add("d-none");
+      location.reload(); // para recargar controles
+    });
+
+    form?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const datos = new FormData(form);
+      fetch("/admin/api/comprobantes_pago", {
+        method: "POST",
+        body: datos
+      }).then(resp => {
+        if (resp.ok) {
+          location.href = "/admin/comprobantes_pago";
+        } else {
+          alert("Error al guardar");
+        }
+      }).catch(() => alert("Error al enviar formulario"));
+    });
+  });
+</script>
 {% endblock %}

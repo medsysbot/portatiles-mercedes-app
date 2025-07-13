@@ -151,20 +151,6 @@ PYTHONPATH=. pytest
 
 De esta manera `pytest` podrá resolver todos los imports de forma correcta.
 
-## Ajuste de la tabla `empleados_salarios`
-
-Para permitir múltiples registros de salario por empleado, se agregó el script
-[`sql/remove_unique_empleados_salarios.sql`](sql/remove_unique_empleados_salarios.sql)
-que elimina posibles restricciones `UNIQUE` sobre `dni_cuit_cuil` y campos
-relacionados. Ejecutá el script desde una terminal con `psql` o mediante el
-editor SQL de Supabase:
-
-```bash
-psql "$DATABASE_URL" -f sql/remove_unique_empleados_salarios.sql
-```
-
-Esto deja solo la clave primaria `id` como identificador único y habilita la
-carga de múltiples sueldos para un mismo empleado.
 
 ## 🔐 API de Login y Registro
 

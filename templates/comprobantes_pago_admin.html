@@ -14,6 +14,7 @@
     <div class="d-flex flex-wrap gap-2">
       <button id="btnBuscarComprobantes" class="btn btn-secondary no-margin-left">Buscar</button>
       <button id="btnMostrarForm" class="btn btn-success"><i class="fas fa-receipt"></i> Agregar comprobante</button>
+      <button id="btnEliminarComprobantes" class="btn btn-danger d-none" disabled>Eliminar</button>
     </div>
   </div>
   <form id="formComprobanteAdmin" enctype="multipart/form-data" class="mb-3 d-none">
@@ -44,6 +45,7 @@
     <table id="tablaComprobantes" class="table pm-tabla table-striped table-bordered">
       <thead>
         <tr>
+          <th></th>
           <th>Nombre cliente</th>
           <th>DNI / CUIT / CUIL</th>
           <th>Número factura</th>

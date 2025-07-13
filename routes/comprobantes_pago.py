@@ -9,6 +9,7 @@ Proyecto: Portátiles Mercedes
 
 from datetime import datetime
 from fastapi import APIRouter, HTTPException, UploadFile, File, Form, Depends, Query
+from pydantic import BaseModel
 from supabase import Client, create_client
 import os
 from utils.auth_utils import auth_required
@@ -106,7 +107,7 @@ async def listar_comprobantes_admin(usuario=Depends(auth_required)):
     try:
         res = (
             supabase.table(TABLA)
-            .select("nombre_cliente,dni_cuit_cuil,numero_factura,comprobante_url,fecha_envio")
+            .select("id,nombre_cliente,dni_cuit_cuil,numero_factura,comprobante_url,fecha_envio")
             .order("fecha_envio", desc=True)
             .execute()
         )
@@ -146,4 +147,22 @@ async def eliminar_comprobante(id: int, dni_cuit_cuil: str = Query(...), usuario
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
 
+    return {"ok": True}
+
+
+class _IdLista(BaseModel):
+    ids: list[int]
+
+
+@router.post("/admin/api/comprobantes/eliminar")
+async def eliminar_comprobantes_admin(payload: _IdLista, usuario=Depends(auth_required)):
+    """Elimina comprobantes seleccionados desde el panel admin."""
+    if usuario.get("rol") != "Administrador":
+        raise HTTPException(status_code=403, detail="Acceso restringido")
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    try:
+        supabase.table(TABLA).delete().in_("id", payload.ids).execute()
+    except Exception as exc:  # pragma: no cover - fallos externos
+        raise HTTPException(status_code=500, detail=str(exc))
     return {"ok": True}

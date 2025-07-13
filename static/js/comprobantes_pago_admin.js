@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ordering: true,
     columns: [
       {
-        data: 'id_comprobante',
+        data: 'id',
         render: id => `<input type="checkbox" class="check-comprobante" value="${id}">`,
         orderable: false
       },
@@ -87,15 +87,21 @@ document.addEventListener('DOMContentLoaded', () => {
   form?.addEventListener('submit', async ev => {
     ev.preventDefault();
     const formData = new FormData(form);
+    const isEdit = !!form.dataset.editing;
+    const url = isEdit
+      ? `/admin/api/comprobantes_pago/${form.dataset.editing}`
+      : '/admin/comprobantes';
+    const method = isEdit ? 'PUT' : 'POST';
+
     try {
-      const resp = await fetchConAuth('/admin/comprobantes', {
-        method: 'POST',
+      const resp = await fetchConAuth(url, {
+        method,
         body: formData
       });
       const data = await resp.json();
       if (resp.ok) {
         if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Comprobante agregado', false, 2600);
+          showAlert('exito-datos', isEdit ? 'Comprobante actualizado' : 'Comprobante agregado', false, 2600);
         }
         setTimeout(() => {
           location.href = '/admin/comprobantes_pago';
@@ -105,7 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } catch (err) {
       if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'Error al guardar comprobante', false, 2600);
+        showAlert('error-datos', isEdit ? 'Error al editar' : 'Error al guardar', false, 2600);
       }
     }
   });
@@ -173,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const id = seleccionado[0].value;
-    const registro = registros.find(r => String(r.id_comprobante) === id);
+    const registro = registros.find(r => String(r.id) === id);
     if (!registro) return;
 
     // Prellenar formulario
@@ -182,32 +188,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     mostrarFormulario();
     form.dataset.editing = id;
-
-    // Al enviar, usar PUT
-    form.onsubmit = async ev => {
-      ev.preventDefault();
-      const datos = new FormData(form);
-      try {
-        const resp = await fetchConAuth(`/admin/api/comprobantes_pago/${id}`, {
-          method: 'PUT',
-          body: datos
-        });
-        if (resp.ok) {
-          if (typeof showAlert === 'function') {
-            showAlert('exito-datos', 'Comprobante actualizado', false, 2600);
-          }
-          setTimeout(() => {
-            location.href = '/admin/comprobantes_pago';
-          }, 1600);
-        } else {
-          throw new Error('Error actualizando');
-        }
-      } catch (err) {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al editar', false, 2600);
-        }
-      }
-    };
   });
 
   cargarComprobantes();

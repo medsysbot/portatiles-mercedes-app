@@ -6,7 +6,7 @@ Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
 """
 
-from datetime import date
+from datetime import date, datetime
 import os
 import tempfile
 import logging
@@ -148,11 +148,15 @@ async def crear_salario(
         extension = ".png" if mime == "image/png" else ".jpg"
         pdf_bytes = imagen_a_pdf(contenido, extension)
 
-    fecha_arch = date.today().strftime("%Y%m%d%H%M%S")
-    nombre_pdf = f"recibo_{dni_cuit_cuil}_{fecha_arch}.pdf"
+    timestamp = datetime.utcnow().strftime("%Y%m%d%H%M%S%f")
+    nombre_pdf = f"recibo_{dni_cuit_cuil}_{timestamp}.pdf"
     bucket = supabase.storage.from_(BUCKET)
     try:
-        bucket.upload(nombre_pdf, pdf_bytes, {"content-type": "application/pdf"})
+        bucket.upload(
+            nombre_pdf,
+            pdf_bytes,
+            {"content-type": "application/pdf", "x-upsert": "true"},
+        )
         url = bucket.get_public_url(nombre_pdf)
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))

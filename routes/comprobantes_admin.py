@@ -41,6 +41,7 @@ async def agregar_comprobante_admin(
     nombre_cliente: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     numero_de_factura: str = Form(...),
+    razon_social: str | None = Form(None),
     archivo: UploadFile = File(...),
     usuario=Depends(auth_required),
 ):
@@ -71,6 +72,7 @@ async def agregar_comprobante_admin(
         registro = {
             "nombre_cliente": nombre_cliente,
             "dni_cuit_cuil": dni_cuit_cuil,
+            "razon_social": razon_social,
             "numero_de_factura": numero_de_factura,
             "comprobante_url": comprobante_url,
             "fecha_envio": datetime.utcnow().isoformat(),
@@ -94,7 +96,7 @@ async def obtener_comprobantes_admin(usuario=Depends(auth_required)):
         res = (
             supabase.table(TABLA)
             .select(
-                "id,nombre_cliente,dni_cuit_cuil,numero_de_factura,comprobante_url,fecha_envio"
+                "id,nombre_cliente,dni_cuit_cuil,razon_social,numero_de_factura,comprobante_url,fecha_envio"
             )
             .order("fecha_envio", desc=True)
             .execute()
@@ -145,6 +147,7 @@ async def editar_comprobante_admin(
     nombre_cliente: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     numero_de_factura: str = Form(...),
+    razon_social: str | None = Form(None),
     archivo: UploadFile | None = File(None),
     usuario=Depends(auth_required),
 ):
@@ -186,13 +189,14 @@ async def editar_comprobante_admin(
 
     try:
         res = (
-            supabase.table(TABLA)
-            .update({
-                "nombre_cliente": nombre_cliente,
-                "dni_cuit_cuil": dni_cuit_cuil,
-                "numero_de_factura": numero_de_factura,
-                "comprobante_url": comprobante_url,
-            })
+                supabase.table(TABLA)
+                .update({
+                    "nombre_cliente": nombre_cliente,
+                    "dni_cuit_cuil": dni_cuit_cuil,
+                    "razon_social": razon_social,
+                    "numero_de_factura": numero_de_factura,
+                    "comprobante_url": comprobante_url,
+                })
             .eq("id", id)
             .execute()
         )

@@ -8,11 +8,15 @@
 <div class="container mt-4">
   <h2>Inventario de baños</h2>
 
-  <div class="d-flex justify-content-between align-items-center my-3">
-    <input type="text" id="busquedaInventario" class="form-control buscador-tabla" placeholder="Buscar baño...">
-    <button id="btnBuscarInventario" class="btn btn-secondary ml-2">Buscar</button>
-    <button id="btnNuevoBano" class="btn btn-primary ml-3"><i class="fas fa-toilet"></i> Agregar baño</button>
-    <button id="btnEliminarSeleccionados" class="btn btn-danger ml-3" disabled>Eliminar</button>
+  <div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
+    <div class="mb-2 flex-grow-1">
+      <input type="text" id="busquedaInventario" class="form-control buscador-tabla" placeholder="Buscar baño...">
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button id="btnBuscarInventario" class="btn btn-secondary" type="button">Buscar</button>
+      <button id="btnNuevoBano" class="btn btn-primary"><i class="fas fa-toilet"></i> Agregar baño</button>
+      <button id="btnEliminarSeleccionados" class="btn btn-danger" disabled>Eliminar</button>
+    </div>
   </div>
   <div class="table-responsive bg-light p-3">
   <table id="tablaInventario" class="table pm-tabla table-striped table-bordered">

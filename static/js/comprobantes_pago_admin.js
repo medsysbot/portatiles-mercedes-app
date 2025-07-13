@@ -151,13 +151,19 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error consultando');
       registros = await resp.json();
       mostrarComprobantes(registros);
-      document.getElementById('mensajeComprobantes').style.display = registros.length ? 'none' : 'block';
-      document.getElementById('mensajeComprobantes').textContent = registros.length ? '' : 'Sin registros';
-      document.getElementById('errorComprobantes').classList.add('d-none');
+      const mensaje = document.getElementById('mensajeComprobantes');
+      if (mensaje) {
+        mensaje.style.display = registros.length ? 'none' : 'block';
+        mensaje.textContent = registros.length ? '' : 'Sin registros';
+      }
+      const errDiv = document.getElementById('errorComprobantes');
+      if (errDiv) errDiv.classList.add('d-none');
       btnEliminar?.classList.remove('d-none');
       btnEliminar?.disabled = true;
     } catch (err) {
       console.error('Error cargando comprobantes:', err);
+      const errDiv = document.getElementById('errorComprobantes');
+      if (errDiv) errDiv.classList.remove('d-none');
       if (typeof showAlert === 'function') {
         showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
       }

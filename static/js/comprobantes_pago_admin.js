@@ -40,7 +40,6 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
-      { data: 'id', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'nombre_cliente' },
       { data: 'dni_cuit_cuil' },
       { data: 'numero_factura' },
@@ -55,7 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCancelar = document.getElementById('btnCancelarForm');
   const buscador = document.getElementById('busquedaComprobantes');
   const btnBuscar = document.getElementById('btnBuscarComprobantes');
-  const btnEliminar = document.getElementById('btnEliminarComprobantes');
   const esRutaNuevo = window.location.pathname.endsWith('/admin/comprobantes/nuevo');
   let registros = [];
 
@@ -65,7 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
     form.classList.remove('d-none');
     contTabla.classList.add('d-none');
     btnNuevo?.classList.add('d-none');
-    btnEliminar?.classList.add('d-none');
     buscador?.classList.add('d-none');
     btnBuscar?.classList.add('d-none');
   }
@@ -74,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
     form.classList.remove('d-none');
     contTabla.classList.add('d-none');
     btnNuevo.classList.add('d-none');
-    btnEliminar?.classList.add('d-none');
     buscador?.classList.add('d-none');
     btnBuscar?.classList.add('d-none');
   });
@@ -86,8 +82,6 @@ document.addEventListener('DOMContentLoaded', () => {
   function mostrarComprobantes(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
-    document.querySelectorAll('#tablaComprobantes tbody .fila-check').forEach(c => (c.checked = false));
-    actualizarBtnEliminar();
   }
 
   function filtrar() {
@@ -100,48 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
     mostrarComprobantes(filtrados);
   }
 
-  function actualizarBtnEliminar() {
-    const marcados = document.querySelectorAll('#tablaComprobantes tbody .fila-check:checked').length;
-    if (btnEliminar) btnEliminar.disabled = marcados === 0;
-  }
-
-  $('#tablaComprobantes tbody').on('change', '.fila-check', actualizarBtnEliminar);
-
-  btnEliminar?.addEventListener('click', async () => {
-    const ids = Array.from(document.querySelectorAll('#tablaComprobantes tbody .fila-check:checked')).map(c => c.dataset.id);
-    if (!ids.length) return;
-    if (!confirm('¿Estás seguro de eliminar los comprobantes seleccionados?')) return;
-    const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('guardando-datos', 'Eliminando comprobantes...', false, 1600);
-    }
-    try {
-      const resp = await fetch('/admin/api/comprobantes/eliminar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
-        body: JSON.stringify({ ids })
-      });
-      if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarComprobantes();
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Comprobantes eliminados', false, 2600);
-        }
-      }, delay);
-    } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al eliminar', false, 2600);
-        }
-      }, delay);
-      console.error('Error eliminando comprobantes:', err);
-    } finally {
-      if (btnEliminar) btnEliminar.disabled = true;
-    }
-  });
-
   buscador?.addEventListener('input', filtrar);
   btnBuscar?.addEventListener('click', filtrar);
 
@@ -151,19 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error consultando');
       registros = await resp.json();
       mostrarComprobantes(registros);
-      const mensaje = document.getElementById('mensajeComprobantes');
-      if (mensaje) {
-        mensaje.style.display = registros.length ? 'none' : 'block';
-        mensaje.textContent = registros.length ? '' : 'Sin registros';
-      }
-      const errDiv = document.getElementById('errorComprobantes');
-      if (errDiv) errDiv.classList.add('d-none');
-      btnEliminar?.classList.remove('d-none');
-      btnEliminar?.disabled = true;
+      document.getElementById('mensajeComprobantes').style.display = registros.length ? 'none' : 'block';
+      document.getElementById('mensajeComprobantes').textContent = registros.length ? '' : 'Sin registros';
+      document.getElementById('errorComprobantes').classList.add('d-none');
     } catch (err) {
       console.error('Error cargando comprobantes:', err);
-      const errDiv = document.getElementById('errorComprobantes');
-      if (errDiv) errDiv.classList.remove('d-none');
       if (typeof showAlert === 'function') {
         showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
       }

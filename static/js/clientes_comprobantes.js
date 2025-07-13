@@ -108,20 +108,26 @@ document.addEventListener('DOMContentLoaded', () => {
     actualizarBtnEliminar();
   });
 
-  if (form) form.classList.add('d-none');
-
   btnNuevo?.addEventListener('click', () => {
     form?.classList.remove('d-none');
     contTabla?.classList.add('d-none');
+
+    // Ocultar controles
+    buscador?.classList.add('d-none');
+    btnBuscar?.classList.add('d-none');
     btnNuevo?.classList.add('d-none');
-    contControles?.classList.add('d-none');
+    btnEliminar?.classList.add('d-none');
   });
 
   btnCancelar?.addEventListener('click', () => {
     form?.classList.add('d-none');
     contTabla?.classList.remove('d-none');
+
+    // Restaurar controles
+    buscador?.classList.remove('d-none');
+    btnBuscar?.classList.remove('d-none');
     btnNuevo?.classList.remove('d-none');
-    contControles?.classList.remove('d-none');
+    btnEliminar?.classList.remove('d-none');
   });
 
   function mostrarComprobantes(lista) {
@@ -138,13 +144,10 @@ document.addEventListener('DOMContentLoaded', () => {
       (c.comprobante_url || '').toLowerCase().includes(q)
     );
     mostrarComprobantes(filtrados);
-    if (filtrados.length === 0) {
-    }
   }
 
   buscador?.addEventListener('input', filtrar);
   btnBuscar?.addEventListener('click', filtrar);
-
 
   async function cargarComprobantes() {
     let dni = localStorage.getItem('dni_cuit_cuil');
@@ -153,7 +156,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (usr) {
         try {
           dni = JSON.parse(usr).dni_cuit_cuil;
-        } catch (e) { /* ignore */ }
+        } catch (e) {}
       }
     }
     if (!dni) {
@@ -167,8 +170,6 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarComprobantes(registros);
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
-      if (registros.length === 0) {
-      }
     } catch (err) {
       console.error('Error cargando comprobantes:', err);
       if (typeof showAlert === 'function') {

@@ -2,34 +2,27 @@
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Verificar token, si falta redirigir a login
   if (!localStorage.getItem('access_token')) {
     window.location.href = '/login';
     return;
   }
 
   function handleUnauthorized() {
-    localStorage.removeItem('access_token');
-    localStorage.removeItem('usuario');
-    localStorage.removeItem('rol');
-    localStorage.removeItem('nombre');
+    localStorage.clear();
     window.location.href = '/login';
   }
 
   async function fetchConAuth(url, options = {}) {
     const token = localStorage.getItem('access_token');
-    if (!token) {
-      handleUnauthorized();
-      throw new Error('Token faltante');
-    }
+    if (!token) handleUnauthorized();
     const resp = await fetch(url, {
       ...options,
-      headers: { ...options.headers, Authorization: 'Bearer ' + token }
+      headers: {
+        ...options.headers,
+        Authorization: 'Bearer ' + token
+      }
     });
-    if (resp.status === 401) {
-      handleUnauthorized();
-      throw new Error('Unauthorized');
-    }
+    if (resp.status === 401) handleUnauthorized();
     return resp;
   }
 
@@ -67,14 +60,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const buscador = document.getElementById('busquedaComprobantes');
   const btnBuscar = document.getElementById('btnBuscarComprobante');
-  let registros = [];
-
   const form = document.getElementById('formComprobante');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
   const contControles = document.getElementById('contenedorControles');
   const btnCancelar = document.getElementById('btnCancelarForm');
   const btnEliminar = document.getElementById('btnEliminarComprobantes');
+  let registros = [];
 
   function actualizarBtnEliminar() {
     if (!btnEliminar) return;
@@ -89,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const checks = document.querySelectorAll('.pm-check:checked');
     if (!checks.length) return;
+
     let dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {
       const usr = localStorage.getItem('usuario_obj');
@@ -96,14 +89,18 @@ document.addEventListener('DOMContentLoaded', () => {
         try { dni = JSON.parse(usr).dni_cuit_cuil; } catch (e) {}
       }
     }
+
     for (const ch of checks) {
       const id = ch.dataset.id;
       try {
         await fetchConAuth(`/api/comprobantes_pago/${id}?dni_cuit_cuil=${dni}`, {
           method: 'DELETE'
         });
-      } catch (e) { console.error('Error eliminando', e); }
+      } catch (e) {
+        console.error('Error eliminando', e);
+      }
     }
+
     await cargarComprobantes();
     actualizarBtnEliminar();
   });
@@ -112,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
     form?.classList.remove('d-none');
     contTabla?.classList.add('d-none');
 
-    // Ocultar controles
     buscador?.classList.add('d-none');
     btnBuscar?.classList.add('d-none');
     btnNuevo?.classList.add('d-none');
@@ -123,7 +119,6 @@ document.addEventListener('DOMContentLoaded', () => {
     form?.classList.add('d-none');
     contTabla?.classList.remove('d-none');
 
-    // Restaurar controles
     buscador?.classList.remove('d-none');
     btnBuscar?.classList.remove('d-none');
     btnNuevo?.classList.remove('d-none');
@@ -154,9 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!dni) {
       const usr = localStorage.getItem('usuario_obj');
       if (usr) {
-        try {
-          dni = JSON.parse(usr).dni_cuit_cuil;
-        } catch (e) {}
+        try { dni = JSON.parse(usr).dni_cuit_cuil; } catch (e) {}
       }
     }
     if (!dni) {
@@ -189,15 +182,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const res = await resp.json();
       if (resp.ok && res.ok) {
-        form.reset();
-        await cargarComprobantes();
-        btnCancelar?.click();
-        actualizarBtnEliminar();
         if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Comprobante subido', false, 2600);
+          showAlert('exito-datos', 'Comprobante subido correctamente', false, 2600);
         }
+        setTimeout(() => {
+          location.href = '/clientes/comprobantes';
+        }, 1600);
       } else {
-        throw new Error(res.detail || 'Error al subir');
+        throw new Error(res.detail || 'Error al subir comprobante');
       }
     } catch (err) {
       if (typeof showAlert === 'function') {

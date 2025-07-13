@@ -43,6 +43,12 @@ button.cerrar-sesion {
   margin-top: 1.5em;
 }
 
+/* Contenedor unificado de formularios */
+.pm-form-container {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
 .btn, button {
   white-space: nowrap !important;
   text-overflow: ellipsis;

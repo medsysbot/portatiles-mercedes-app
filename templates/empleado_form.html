@@ -4,10 +4,6 @@
 {% block head_extra %}
 {{ super() }}
 <style>
-  .form-container {
-    max-width: 600px;
-    margin: 0 auto;
-  }
   .input-group .form-control {
     max-width: 500px;
   }
@@ -15,7 +11,7 @@
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">Nuevo Empleado</h2>
-<div class="form-container">
+<div class="pm-form-container">
   <form method="post">
     <div class="form-group">
       <label>Nombre completo</label>

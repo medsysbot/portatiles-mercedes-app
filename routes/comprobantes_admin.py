@@ -73,7 +73,7 @@ async def agregar_comprobante_admin(
     )
     nombre_comprobante = f"comprobante_{dni_cuit_cuil}_{fecha}{ext_comprobante}"
 
-    factura_url = None
+    factura_url = ""
     try:
         bucket_facturas = supabase.storage.from_("facturas")
         bucket_comprobantes = supabase.storage.from_(BUCKET)
@@ -94,7 +94,7 @@ async def agregar_comprobante_admin(
         factura_url = (
             bucket_facturas.get_public_url(nombre_factura)
             if factura_data is not None and nombre_factura
-            else None
+            else ""
         )
         comprobante_url = bucket_comprobantes.get_public_url(nombre_comprobante)
 
@@ -121,12 +121,17 @@ async def obtener_comprobantes_admin(usuario=Depends(auth_required)):
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     try:
-        res = supabase.table(TABLA).select(
-            "id,nombre_cliente,dni_cuit_cuil,factura_url,comprobante_url,fecha_envio"
-        ).order("fecha_envio", desc=True).execute()
+        res = (
+            supabase.table(TABLA)
+            .select(
+                "id,nombre_cliente,dni_cuit_cuil,factura_url,comprobante_url,fecha_envio"
+            )
+            .order("fecha_envio", desc=True)
+            .execute()
+        )
         if getattr(res, "error", None):
             raise Exception(res.error.message)
-        return res.data
+        return res.data or []
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
 
@@ -193,8 +198,8 @@ async def editar_comprobante_admin(
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc))
 
-    factura_url = existente.get("factura_url")
-    comprobante_url = existente.get("comprobante_url")
+    factura_url = existente.get("factura_url") or ""
+    comprobante_url = existente.get("comprobante_url") or ""
     bucket_facturas = supabase.storage.from_("facturas")
     bucket_comprobantes = supabase.storage.from_(BUCKET)
     fecha = datetime.utcnow().strftime("%Y%m%d%H%M%S")

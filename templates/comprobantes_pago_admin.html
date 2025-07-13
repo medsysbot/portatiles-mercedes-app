@@ -15,6 +15,7 @@
     <div class="d-flex flex-wrap gap-2">
       <button id="btnBuscarComprobantes" class="btn btn-secondary no-margin-left">Buscar</button>
       <button id="btnMostrarForm" class="btn btn-success"><i class="fas fa-receipt"></i> Agregar comprobante</button>
+      <button id="btnEditarComprobante" class="btn btn-warning d-none" disabled>Editar</button>
       <button id="btnEliminarComprobantes" class="btn btn-danger d-none" disabled>Eliminar</button>
     </div>
   </div>
@@ -29,12 +30,12 @@
       <input type="text" class="form-control" id="dniAdmin" name="dni_cuit_cuil" required>
     </div>
     <div class="form-group">
-      <label for="facturaAdmin">Número factura</label>
-      <input type="text" class="form-control" id="facturaAdmin" name="numero_factura" required>
+      <label for="archivoFactura">Archivo factura (PDF/PNG/JPG)</label>
+      <input type="file" class="form-control" id="archivoFactura" name="factura" accept=".pdf,.png,.jpg,.jpeg">
     </div>
     <div class="form-group">
-      <label for="archivoAdmin">Archivo (PNG/JPG/PDF)</label>
-      <input type="file" class="form-control" id="archivoAdmin" name="archivo" accept="image/png,image/jpeg,application/pdf" required>
+      <label for="archivoComprobante">Comprobante de pago (PDF/PNG/JPG)</label>
+      <input type="file" class="form-control" id="archivoComprobante" name="archivo" accept=".pdf,.png,.jpg,.jpeg">
     </div>
     <div class="text-right">
       <button type="submit" class="btn btn-primary">Guardar</button>
@@ -49,7 +50,7 @@
           <th><input type="checkbox" id="checkTodosComprobantes"></th>
           <th>Nombre cliente</th>
           <th>DNI / CUIT / CUIL</th>
-          <th>Número factura</th>
+          <th>Factura</th>
           <th>Comprobante</th>
           <th>Fecha envío</th>
         </tr>
@@ -62,76 +63,5 @@
 
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script>
-  let tabla = null;
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("formComprobanteAdmin");
-    const contenedorControles = document.getElementById("contenedorControles");
-    const contenedorTabla = document.getElementById("contenedorTabla");
-    const btnMostrarForm = document.getElementById("btnMostrarForm");
-    const btnCancelarForm = document.getElementById("btnCancelarForm");
-
-    btnMostrarForm?.addEventListener("click", () => {
-      form.classList.remove("d-none");
-      contenedorControles.remove();
-      contenedorTabla.classList.add("d-none");
-    });
-
-    btnCancelarForm?.addEventListener("click", () => {
-      form.classList.add("d-none");
-      location.reload();
-    });
-
-    form?.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const datos = new FormData(form);
-      fetch("/admin/api/comprobantes_pago", {
-        method: "POST",
-        body: datos
-      }).then(resp => {
-        if (resp.ok) {
-          location.href = "/admin/comprobantes_pago";
-        } else {
-          alert("Error al guardar");
-        }
-      }).catch(() => alert("Error al enviar formulario"));
-    });
-
-    // Inicializar solo si aún no fue creado
-    if (!$.fn.DataTable.isDataTable('#tablaComprobantes')) {
-      tabla = $('#tablaComprobantes').DataTable({
-        ajax: {
-          url: '/admin/api/comprobantes_pago',
-          dataSrc: ''
-        },
-        columns: [
-          {
-            data: 'id_comprobante',
-            render: id => `<input type="checkbox" class="check-comprobante" value="${id}">`,
-            orderable: false
-          },
-          { data: 'nombre_cliente' },
-          { data: 'dni_cuit_cuil' },
-          { data: 'numero_factura' },
-          {
-            data: 'comprobante_url',
-            render: url => url ? `<a href="${url}" target="_blank">Ver</a>` : ''
-          },
-          {
-            data: 'fecha_envio',
-            render: fecha => {
-              if (!fecha) return '';
-              const d = new Date(fecha);
-              return `${d.toLocaleDateString('es-AR')} ${d.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}`;
-            }
-          }
-        ],
-        language: {
-          url: "https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json"
-        }
-      });
-    }
-  });
-</script>
+<script src="/static/js/comprobantes_pago_admin.js"></script>
 {% endblock %}

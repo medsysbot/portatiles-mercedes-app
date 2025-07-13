@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('formComprobante');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
+  const contControles = document.getElementById('contenedorControles');
   const btnCancelar = document.getElementById('btnCancelarForm');
   const btnEliminar = document.getElementById('btnEliminarComprobantes');
 
@@ -113,12 +114,14 @@ document.addEventListener('DOMContentLoaded', () => {
     form?.classList.remove('d-none');
     contTabla?.classList.add('d-none');
     btnNuevo?.classList.add('d-none');
+    contControles?.classList.add('d-none');
   });
 
   btnCancelar?.addEventListener('click', () => {
     form?.classList.add('d-none');
     contTabla?.classList.remove('d-none');
     btnNuevo?.classList.remove('d-none');
+    contControles?.classList.remove('d-none');
   });
 
   function mostrarComprobantes(lista) {

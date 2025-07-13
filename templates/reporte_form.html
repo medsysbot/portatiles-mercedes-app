@@ -6,6 +6,7 @@
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">Nuevo Reporte</h2>
+<div class="pm-form-container">
 <form method="post">
   <div class="form-group">
     <label>Fecha</label>
@@ -23,7 +24,10 @@
     <label>Contenido</label>
     <textarea name="contenido" class="form-control" rows="4" required></textarea>
   </div>
-  <button type="submit" class="btn btn-primary">Guardar</button>
-  <a href="/admin/reportes" class="btn btn-secondary">Volver</a>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="/admin/reportes" class="btn btn-secondary">Volver</a>
+  </div>
 </form>
+</div>
 {% endblock %}

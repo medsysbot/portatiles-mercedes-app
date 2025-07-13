@@ -6,6 +6,7 @@
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">Nueva ausencia</h2>
+<div class="pm-form-container">
 <form method="post" enctype="multipart/form-data">
   <div class="form-group">
     <label>Nombre empleado</label>
@@ -31,7 +32,10 @@
     <label>Certificado médico (PDF o imagen)</label>
     <input type="file" name="certificado" class="form-control" accept="application/pdf,image/*" required>
   </div>
-  <button type="submit" class="btn btn-primary">Guardar</button>
-  <a href="/admin/empleados_ausencias" class="btn btn-secondary">Volver</a>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="/admin/empleados_ausencias" class="btn btn-secondary">Volver</a>
+  </div>
 </form>
+</div>
 {% endblock %}

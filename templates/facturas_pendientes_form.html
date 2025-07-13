@@ -9,41 +9,35 @@
 <h2 class="mt-0">Nueva factura pendiente</h2>
 <div class="pm-form-container">
   <form action="/admin/facturas_pendientes/nueva" method="post" enctype="multipart/form-data">
-    <div class="row">
-      <div class="form-group col-md-6 mb-3">
-        <label>Fecha</label>
-        <input type="date" name="fecha" class="form-control" required>
-      </div>
-      <div class="form-group col-md-6 mb-3">
-        <label>Número factura</label>
-        <input type="text" name="numero_factura" class="form-control" required>
-      </div>
+    <div class="form-group">
+      <label>Fecha</label>
+      <input type="date" name="fecha" class="form-control" required>
     </div>
-    <div class="row">
-      <div class="form-group col-md-6 mb-3">
-        <label>DNI / CUIT / CUIL</label>
-        <input type="text" name="dni_cuit_cuil" class="form-control" required>
-      </div>
-      <div class="form-group col-md-6 mb-3">
-        <label>Razón social</label>
-        <input type="text" name="razon_social" class="form-control" required>
-      </div>
+    <div class="form-group">
+      <label>Número factura</label>
+      <input type="text" name="numero_factura" class="form-control" required>
     </div>
-    <div class="row">
-      <div class="form-group col-md-6 mb-3">
-        <label>Nombre cliente</label>
-        <input type="text" name="nombre_cliente" class="form-control" required>
-      </div>
-      <div class="form-group col-md-6 mb-3">
-        <label>Monto adeudado</label>
-        <input type="number" step="0.01" name="monto_adeudado" class="form-control" required>
-      </div>
+    <div class="form-group">
+      <label>DNI / CUIT / CUIL</label>
+      <input type="text" name="dni_cuit_cuil" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label>Razón social</label>
+      <input type="text" name="razon_social" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label>Nombre cliente</label>
+      <input type="text" name="nombre_cliente" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label>Monto adeudado</label>
+      <input type="number" step="0.01" name="monto_adeudado" class="form-control" required>
     </div>
     <div class="form-group mb-3">
       <label for="facturaUpload">Subir factura (PDF, PNG o JPG):</label>
       <input type="file" name="factura" id="facturaUpload" accept=".pdf, .png, .jpg, .jpeg">
     </div>
-    <div class="botones-final-form">
+    <div class="form-actions">
       <button type="submit" class="btn btn-primary">Guardar</button>
       <a href="/admin/facturas_pendientes" class="btn btn-secondary">Volver</a>
       <button type="button" id="btnBuscarCliente" class="btn btn-secondary">Buscar cliente</button>

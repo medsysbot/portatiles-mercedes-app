@@ -7,7 +7,8 @@
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">{{ 'Editar' if cliente else 'Nuevo' }} Cliente</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
-<form method="post">
+<div class="pm-form-container">
+  <form method="post">
   <div class="form-group">
     <label>Nombre</label>
     <input type="text" name="nombre" class="form-control" value="{{ cliente.nombre if cliente else '' }}" required>
@@ -36,7 +37,10 @@
     <label>Email</label>
     <input type="email" name="email" class="form-control" value="{{ cliente.email if cliente else '' }}" required>
   </div>
-  <button type="submit" class="btn btn-primary">Guardar</button>
-  <a href="/admin/clientes" class="btn btn-secondary">Volver</a>
-</form>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="/admin/clientes" class="btn btn-secondary">Volver</a>
+  </div>
+  </form>
+</div>
 {% endblock %}

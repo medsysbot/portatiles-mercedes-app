@@ -6,6 +6,7 @@
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">Nuevo dato personal</h2>
+<div class="pm-form-container">
 <form method="post" enctype="multipart/form-data">
   <div class="form-group">
     <label>Nombre empleado</label>
@@ -27,7 +28,10 @@
     <label>Documento (PDF o imagen)</label>
     <input type="file" name="documento" class="form-control" accept="application/pdf,image/*" required>
   </div>
-  <button type="submit" class="btn btn-primary">Guardar</button>
-  <a href="/admin/empleados_datos_personales" class="btn btn-secondary">Volver</a>
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a href="/admin/empleados_datos_personales" class="btn btn-secondary">Volver</a>
+  </div>
 </form>
+</div>
 {% endblock %}

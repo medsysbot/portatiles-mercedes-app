@@ -108,21 +108,12 @@ document.addEventListener('DOMContentLoaded', () => {
   btnNuevo?.addEventListener('click', () => {
     form?.classList.remove('d-none');
     contTabla?.classList.add('d-none');
-
-    buscador?.classList.add('d-none');
-    btnBuscar?.classList.add('d-none');
-    btnNuevo?.classList.add('d-none');
-    btnEliminar?.classList.add('d-none');
+    contControles?.remove();  // Elimina todo el bloque como en administración
   });
 
   btnCancelar?.addEventListener('click', () => {
     form?.classList.add('d-none');
-    contTabla?.classList.remove('d-none');
-
-    buscador?.classList.remove('d-none');
-    btnBuscar?.classList.remove('d-none');
-    btnNuevo?.classList.remove('d-none');
-    btnEliminar?.classList.remove('d-none');
+    location.href = '/clientes/comprobantes';  // Refresca todo desde 0
   });
 
   function mostrarComprobantes(lista) {

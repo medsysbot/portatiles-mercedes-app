@@ -1,28 +1,31 @@
 // Archivo: static/js/ventas_admin.js
 // Proyecto: Portátiles Mercedes
 
+window.pmVentasAdminData = window.pmVentasAdminData || [];
+
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaVentas');
   const btnBuscar = document.getElementById('btnBuscarVentas');
   const mensajeError = document.getElementById('errorVentas');
 
-  let ventasCargadas = [];
-
-  const tabla = $('#tablaVentas').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true,
-    columns: [
-      { data: 'id_venta', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
-      { data: 'fecha_operacion' },
-      { data: 'tipo_bano' },
-      { data: 'dni_cuit_cuil' },
-      { data: 'nombre_cliente' },
-      { data: 'forma_pago' },
-      { data: 'observaciones' }
-    ]
-  });
+  const tabla = window.pmTablaVentasAdmin
+    ? window.pmTablaVentasAdmin
+    : $('#tablaVentas').DataTable({
+      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+      paging: true,
+      searching: false,
+      ordering: true,
+      columns: [
+        { data: 'id_venta', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
+        { data: 'fecha_operacion' },
+        { data: 'tipo_bano' },
+        { data: 'dni_cuit_cuil' },
+        { data: 'nombre_cliente' },
+        { data: 'forma_pago' },
+        { data: 'observaciones' }
+      ]
+    });
+  window.pmTablaVentasAdmin = tabla;
 
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
@@ -68,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error consultando ventas');
-      ventasCargadas = await resp.json();
-      mostrarVentas(ventasCargadas);
+      window.pmVentasAdminData = await resp.json();
+      mostrarVentas(window.pmVentasAdminData);
       endDataLoad(inicio, true);
     } catch (err) {
       endDataLoad(inicio, false);
@@ -84,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrarVentas(texto) {
     const q = texto.toLowerCase();
-    const filtrados = ventasCargadas.filter(v =>
+    const filtrados = window.pmVentasAdminData.filter(v =>
       (v.nombre_cliente || '').toLowerCase().includes(q) ||
       (v.dni_cuit_cuil || '').toLowerCase().includes(q)
     );
@@ -100,5 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
     filtrarVentas(buscador.value.trim());
   });
 
-  cargarVentas();
+  if (window.pmVentasAdminData.length === 0) {
+    cargarVentas();
+  } else {
+    mostrarVentas(window.pmVentasAdminData);
+  }
 });

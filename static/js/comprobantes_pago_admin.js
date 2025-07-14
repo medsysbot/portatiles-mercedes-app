@@ -1,6 +1,8 @@
 // Archivo: static/js/comprobantes_pago_admin.js
 // Proyecto: Portátiles Mercedes
 
+window.pmComprobantesAdminData = window.pmComprobantesAdminData || [];
+
 document.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem('access_token')) {
     window.location.href = '/login';
@@ -26,7 +28,9 @@ document.addEventListener('DOMContentLoaded', () => {
     return resp;
   }
 
-  const tabla = $('#tablaComprobantes').DataTable({
+  const tabla = window.pmTablaComprobantesAdmin
+    ? window.pmTablaComprobantesAdmin
+    : $('#tablaComprobantes').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
@@ -54,7 +58,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     ]
-  });
+    });
+  window.pmTablaComprobantesAdmin = tabla;
 
   const buscador = document.getElementById('busquedaComprobantes');
   const btnBuscar = document.getElementById('btnBuscarComprobante');
@@ -65,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCancelar = document.getElementById('btnCancelarForm');
   const btnEliminar = document.getElementById('btnEliminarComprobantes');
   const checkTodos = document.getElementById('checkTodosComprobantes');
-  let registros = [];
+  window.pmComprobantesAdminData = window.pmComprobantesAdminData || [];
 
   function actualizarBtnEliminar() {
     if (!btnEliminar) return;
@@ -114,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrar() {
     const q = (buscador.value || '').toLowerCase();
-    const filtrados = registros.filter(c =>
+    const filtrados = window.pmComprobantesAdminData.filter(c =>
       (c.nombre_cliente || '').toLowerCase().includes(q) ||
       (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (c.razon_social || '').toLowerCase().includes(q) ||
@@ -133,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await fetchConAuth('/admin/api/comprobantes_pago');
       if (!resp.ok) throw new Error('Error consultando comprobantes');
-      registros = await resp.json();
-      mostrarComprobantes(registros);
+      window.pmComprobantesAdminData = await resp.json();
+      mostrarComprobantes(window.pmComprobantesAdminData);
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
       endDataLoad(inicio, true);
@@ -177,5 +182,10 @@ document.addEventListener('DOMContentLoaded', () => {
     actualizarBtnEliminar();
   });
 
-  cargarComprobantes();
+  if (window.pmComprobantesAdminData.length === 0) {
+    cargarComprobantes();
+  } else {
+    mostrarComprobantes(window.pmComprobantesAdminData);
+    actualizarBtnEliminar();
+  }
 });

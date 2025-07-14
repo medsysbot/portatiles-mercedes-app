@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarClientes(texto = '') {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch(`/admin/api/clientes/busqueda?q=${encodeURIComponent(texto)}`);
       if (!resp.ok) throw new Error('Error');

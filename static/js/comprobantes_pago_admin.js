@@ -129,6 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarComprobantes() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetchConAuth('/admin/api/comprobantes_pago');
       if (!resp.ok) throw new Error('Error consultando comprobantes');

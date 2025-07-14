@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function obtenerClientes() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/clientes');
       const data = await resp.json();

@@ -25,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarInventario() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/empleado/api/inventario_banos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }

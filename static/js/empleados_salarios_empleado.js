@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarDatos() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/empleado/api/empleados_salarios', { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       const datos = await resp.json();

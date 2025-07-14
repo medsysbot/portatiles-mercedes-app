@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarFacturas() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/admin/api/facturas_pendientes', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }

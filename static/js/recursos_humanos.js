@@ -178,6 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Cargar datos tablas ---
   async function cargarDatos() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch(urlDatos, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       datosCargados = await resp.json();
@@ -191,6 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarSalarios() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch(urlSalarios, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       salariosCargados = await resp.json();
@@ -204,6 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarAusencias() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch(urlAusencias, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       ausenciasCargados = await resp.json();

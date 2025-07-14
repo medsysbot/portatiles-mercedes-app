@@ -11,31 +11,31 @@
   <form method="post">
   <div class="form-group">
     <label>Nombre</label>
-    <input type="text" name="nombre" class="form-control" value="{{ cliente.nombre if cliente else '' }}" required>
+    <input type="text" name="nombre" class="form-control" value="{{ cliente.nombre if cliente else '' }}">
   </div>
   <div class="form-group">
     <label>Apellido</label>
-    <input type="text" name="apellido" class="form-control" value="{{ cliente.apellido if cliente else '' }}" required>
+    <input type="text" name="apellido" class="form-control" value="{{ cliente.apellido if cliente else '' }}">
   </div>
   <div class="form-group">
     <label>DNI / CUIT / CUIL</label>
-    <input type="text" name="dni_cuit_cuil" class="form-control" value="{{ cliente.dni_cuit_cuil if cliente else '' }}" required>
+    <input type="text" name="dni_cuit_cuil" class="form-control" value="{{ cliente.dni_cuit_cuil if cliente else '' }}">
   </div>
   <div class="form-group">
     <label>Dirección</label>
-    <input type="text" name="direccion" class="form-control" value="{{ cliente.direccion if cliente else '' }}" required>
+    <input type="text" name="direccion" class="form-control" value="{{ cliente.direccion if cliente else '' }}">
   </div>
   <div class="form-group">
     <label>Teléfono</label>
-    <input type="text" name="telefono" class="form-control" value="{{ cliente.telefono if cliente else '' }}" required>
+    <input type="text" name="telefono" class="form-control" value="{{ cliente.telefono if cliente else '' }}">
   </div>
   <div class="form-group">
     <label>Razón social</label>
-    <input type="text" name="razon_social" class="form-control" value="{{ cliente.razon_social if cliente else '' }}" required>
+    <input type="text" name="razon_social" class="form-control" value="{{ cliente.razon_social if cliente else '' }}">
   </div>
   <div class="form-group">
     <label>Email</label>
-    <input type="email" name="email" class="form-control" value="{{ cliente.email if cliente else '' }}" required>
+    <input type="email" name="email" class="form-control" value="{{ cliente.email if cliente else '' }}">
   </div>
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Guardar</button>

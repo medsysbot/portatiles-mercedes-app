@@ -17,8 +17,17 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = new FormData(form);
 
+  for (const [_, valor] of datos.entries()) {
+    if (!valor) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-validacion', 'Complete todos los campos', false);
+      }
+      return;
+    }
+  }
+
   if (typeof showAlert === 'function') {
-    showAlert('enviando-informe', 'Enviando datos...', false, 1600);
+    showAlert('cargando-datos', 'Enviando datos...', false);
   }
 
   try {
@@ -31,16 +40,16 @@ form.addEventListener('submit', async (e) => {
       form.reset();
       fechaHoraInput.value = new Date().toISOString().slice(0, 16);
       if (typeof showAlert === 'function') {
-        showAlert('exito-informe', resultado.mensaje || 'Limpieza registrada', false, 2600);
+        showAlert('exito-datos', resultado.mensaje || 'Formulario enviado correctamente', false);
       }
     } else {
       if (typeof showAlert === 'function') {
-        showAlert('error-informe-limpieza', resultado.detail || 'Error al registrar', false, 2600);
+        showAlert('error-datos', resultado.detail || 'Error al enviar el formulario', false);
       }
     }
   } catch (_) {
     if (typeof showAlert === 'function') {
-      showAlert('error-conexion', 'Error de conexión', false, 2600);
+      showAlert('error-datos', 'Error al enviar el formulario', false);
     }
   }
 });

@@ -10,16 +10,23 @@ if (form) {
     const datos = { email, password };
     if (rol) datos.rol = rol;
 
+    if (!email.trim() || !password.trim()) {
+        if (typeof showAlert === "function") {
+            showAlert('error-validacion', 'Complete todos los campos', false);
+        }
+        return;
+    }
+
     if (!rol) {
         if (typeof showAlert === "function") {
-            showAlert('seleccionar-rol', 'Seleccione un rol para continuar', false, 2600);
+            showAlert('error-validacion', 'Seleccione un rol válido', false);
         }
         return;
     }
 
         const start = Date.now();
         if (typeof showAlert === "function") {
-            showAlert('inicio-sesion', 'Iniciando sesión...', false, 1600);
+            showAlert('cargando-datos', 'Enviando datos...', false);
         }
 
         fetch("/login", {
@@ -35,7 +42,7 @@ if (form) {
             if (res.ok && data.access_token) {
                 setTimeout(() => {
                     if (typeof showAlert === "function") {
-                        showAlert('exito-sesion', 'Ingreso correcto', false, 2600);
+                        showAlert('exito-datos', 'Formulario enviado correctamente', false);
                     }
                     localStorage.setItem("access_token", data.access_token);
                     const finalizar = (url) => {
@@ -96,7 +103,7 @@ if (form) {
             } else {
                 setTimeout(() => {
                     if (typeof showAlert === "function") {
-                        showAlert('error-sesion', data.detail || 'Credenciales incorrectas', false, 2600);
+                        showAlert('error-datos', data.detail || 'Error al enviar el formulario', false);
                     }
                 }, delay);
             }
@@ -105,7 +112,7 @@ if (form) {
             const delay = Math.max(0, 1600 - (Date.now() - start));
             setTimeout(() => {
                 if (typeof showAlert === "function") {
-                    showAlert('error-sesion', 'Error de conexión', false, 2600);
+                    showAlert('error-datos', 'Error al enviar el formulario', false);
                 }
             }, delay);
         });

@@ -263,18 +263,18 @@ Eliminado envío y lógica de campos creado_en y actualizado_en porque ya no exi
 -->
     <form id="registroForm" method="post" action="/registrar_cliente">
       <div class="campo-login">
-        <input type="text" name="nombre" placeholder="Nombre completo" required>
+        <input type="text" name="nombre" placeholder="Nombre completo">
       </div>
       <!-- Campo teléfono eliminado -->
       <div class="campo-login">
-        <input type="email" name="email" placeholder="Email" required>
+        <input type="email" name="email" placeholder="Email">
       </div>
       <div class="campo-login">
-        <input type="password" id="password" name="password" placeholder="Elige una contraseña" required minlength="6" autocomplete="new-password">
+        <input type="password" id="password" name="password" placeholder="Elige una contraseña" autocomplete="new-password">
       </div>
       <!-- Implementación de doble campo de contraseña según estándar Portátiles Mercedes -->
       <div class="campo-login">
-        <input type="password" id="password2" name="password2" placeholder="Verificar contraseña" required minlength="6" autocomplete="new-password">
+        <input type="password" id="password2" name="password2" placeholder="Verificar contraseña" autocomplete="new-password">
       </div>
 <!-- ==== Sección de mensajes ==== -->
       <button type="submit" class="boton-index">

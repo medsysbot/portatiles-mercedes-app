@@ -31,6 +31,16 @@ function limpiarCredenciales() {
   localStorage.clear();
 }
 
+// ======== Tablas persistentes ========
+let tablaAlquileres = null;
+let datosAlquileres = [];
+let tablaFacturas = null;
+let datosFacturas = [];
+let tablaCompras = null;
+let datosCompras = [];
+let tablaComprobantes = null;
+let datosComprobantes = [];
+
 // ============= DETECTAR SECCIÓN Y CARGAR DATOS =============
 document.addEventListener('DOMContentLoaded', () => {
   document.body.classList.add('layout-fixed');
@@ -85,22 +95,27 @@ async function actualizarAlquileres() {
   try {
     const res = await fetchConAuth(`/clientes/alquileres_api`);
     if (!res) return;
-    const datos = await res.json();
-    let html = "<table class='table table-striped'><thead><tr><th>#Baño</th><th>Dirección</th><th>Desde</th><th>Hasta</th><th>Obs.</th></tr></thead><tbody>";
-    if (!datos.length) html += "<tr><td colspan='5' class='text-center'>Sin alquileres</td></tr>";
-    datos.forEach(a => {
-      html += `<tr>
-        <td>${a.numero_bano||"-"}</td>
-        <td>${a.direccion||"-"}</td>
-        <td>${a.fecha_inicio||"-"}</td>
-        <td>${a.fecha_fin||"-"}</td>
-        <td>${a.observaciones||"-"}</td>
-      </tr>`;
-    });
-    html += "</tbody></table>";
-    document.getElementById("tablaAlquileres").innerHTML = html;
+    datosAlquileres = await res.json();
+
+    if (!tablaAlquileres) {
+      tablaAlquileres = $('#tablaAlquileres').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+          { data: 'numero_bano', defaultContent: '-' },
+          { data: 'direccion', defaultContent: '-' },
+          { data: 'fecha_inicio', defaultContent: '-' },
+          { data: 'fecha_fin', defaultContent: '-' },
+          { data: 'observaciones', defaultContent: '-' }
+        ]
+      });
+    }
+
+    tablaAlquileres.clear().rows.add(datosAlquileres).draw();
   } catch (e) {
-    showMsg("tablaAlquileres", "Error al cargar alquileres");
+    showMsg('tablaAlquileres', 'Error al cargar alquileres');
   }
 }
 
@@ -109,21 +124,26 @@ async function actualizarFacturas() {
   try {
     const res = await fetchConAuth(`/clientes/facturas_pendientes_api`);
     if (!res) return;
-    const datos = await res.json();
-    let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>Nro</th><th>Razón social</th><th>Monto</th></tr></thead><tbody>";
-    if (!datos.length) html += "<tr><td colspan='4' class='text-center'>Sin facturas pendientes</td></tr>";
-    datos.forEach(f => {
-      html += `<tr>
-        <td>${f.fecha||"-"}</td>
-        <td>${f.numero_factura||"-"}</td>
-        <td>${f.razon_social||"-"}</td>
-        <td>${f.monto_adeudado||"-"}</td>
-      </tr>`;
-    });
-    html += "</tbody></table>";
-    document.getElementById("tablaFacturas").innerHTML = html;
+    datosFacturas = await res.json();
+
+    if (!tablaFacturas) {
+      tablaFacturas = $('#tablaFacturas').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+          { data: 'fecha', defaultContent: '-' },
+          { data: 'numero_factura', defaultContent: '-' },
+          { data: 'razon_social', defaultContent: '-' },
+          { data: 'monto_adeudado', defaultContent: '-' }
+        ]
+      });
+    }
+
+    tablaFacturas.clear().rows.add(datosFacturas).draw();
   } catch (e) {
-    showMsg("tablaFacturas", "Error al cargar facturas");
+    showMsg('tablaFacturas', 'Error al cargar facturas');
   }
 }
 
@@ -132,21 +152,26 @@ async function actualizarCompras() {
   try {
     const res = await fetchConAuth(`/clientes/compras_api`);
     if (!res) return;
-    const datos = await res.json();
-    let html = "<table class='table table-striped'><thead><tr><th>Fecha</th><th>Tipo Baño</th><th>Forma de pago</th><th>Observaciones</th></tr></thead><tbody>";
-    if (!datos.length) html += "<tr><td colspan='4' class='text-center'>Sin compras</td></tr>";
-    datos.forEach(v => {
-      html += `<tr>
-        <td>${v.fecha_operacion||"-"}</td>
-        <td>${v.tipo_bano||"-"}</td>
-        <td>${v.forma_pago||"-"}</td>
-        <td>${v.observaciones||"-"}</td>
-      </tr>`;
-    });
-    html += "</tbody></table>";
-    document.getElementById("tablaCompras").innerHTML = html;
+    datosCompras = await res.json();
+
+    if (!tablaCompras) {
+      tablaCompras = $('#tablaCompras').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+          { data: 'fecha_operacion', defaultContent: '-' },
+          { data: 'tipo_bano', defaultContent: '-' },
+          { data: 'forma_pago', defaultContent: '-' },
+          { data: 'observaciones', defaultContent: '-' }
+        ]
+      });
+    }
+
+    tablaCompras.clear().rows.add(datosCompras).draw();
   } catch (e) {
-    showMsg("tablaCompras", "Error al cargar compras");
+    showMsg('tablaCompras', 'Error al cargar compras');
   }
 }
 
@@ -178,21 +203,28 @@ async function actualizarComprobantes() {
   try {
     const res = await fetchConAuth(`/clientes/comprobantes_api`);
     if (!res) return;
-    const comprobantes = await res.json();
-    $('#tablaComprobantes').DataTable({
-      data: comprobantes,
-      destroy: true,
-      columns: [
-        { data: null, defaultContent: '', orderable: false },
-        { data: 'nombre_cliente', defaultContent: '-' },
-        { data: 'dni_cuit_cuil', defaultContent: '-' },
-        { data: 'numero_factura', defaultContent: '-' },
-        { data: 'comprobante_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : '-', defaultContent: '-' },
-        { data: 'fecha_envio', defaultContent: '-' }
-      ]
-    });
+    datosComprobantes = await res.json();
+
+    if (!tablaComprobantes) {
+      tablaComprobantes = $('#tablaComprobantes').DataTable({
+        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+        paging: true,
+        searching: false,
+        ordering: true,
+        columns: [
+          { data: null, defaultContent: '', orderable: false },
+          { data: 'nombre_cliente', defaultContent: '-' },
+          { data: 'dni_cuit_cuil', defaultContent: '-' },
+          { data: 'numero_factura', defaultContent: '-' },
+          { data: 'comprobante_url', render: data => data ? `<a href="${data}" target="_blank">Ver</a>` : '-', defaultContent: '-' },
+          { data: 'fecha_envio', defaultContent: '-' }
+        ]
+      });
+    }
+
+    tablaComprobantes.clear().rows.add(datosComprobantes).draw();
   } catch (e) {
-    showMsg("tablaComprobantes", "Error al cargar comprobantes");
+    showMsg('tablaComprobantes', 'Error al cargar comprobantes');
   }
 }
 

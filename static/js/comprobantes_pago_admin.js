@@ -128,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnBuscar?.addEventListener('click', filtrar);
 
   async function cargarComprobantes() {
+    const inicio = startDataLoad();
     try {
       const resp = await fetchConAuth('/admin/api/comprobantes_pago');
       if (!resp.ok) throw new Error('Error consultando comprobantes');
@@ -135,11 +136,10 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarComprobantes(registros);
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error cargando comprobantes:', err);
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
-      }
     }
   }
 

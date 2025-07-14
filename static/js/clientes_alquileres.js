@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarAlquileres() {
+    const inicio = startDataLoad();
     try {
       const resp = await fetch('/clientes/alquileres_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -47,7 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarAlquileres(registros);
       if (registros.length === 0) {
       }
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error cargando alquileres:', err);
     }
   }

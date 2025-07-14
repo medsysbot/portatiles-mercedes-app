@@ -61,9 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarVentas() {
-    if (typeof showAlert === 'function') {
-      showAlert('enviando-reporte', 'Cargando ventas...', false, 1600);
-    }
+    const inicio = startDataLoad();
     try {
       const resp = await fetch('/admin/api/ventas', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -71,14 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error consultando ventas');
       ventasCargadas = await resp.json();
       mostrarVentas(ventasCargadas);
-      if (typeof showAlert === 'function') {
-        showAlert('exito-datos', 'Listado actualizado', false, 2600);
-      }
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error al cargar ventas:', err);
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
-      }
     }
   }
 

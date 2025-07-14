@@ -135,6 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
   btnBuscar?.addEventListener('click', filtrar);
 
   async function cargarComprobantes() {
+    const inicio = startDataLoad();
     let dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {
       const usr = localStorage.getItem('usuario_obj');
@@ -153,11 +154,10 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarComprobantes(registros);
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error cargando comprobantes:', err);
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
-      }
     }
   }
 

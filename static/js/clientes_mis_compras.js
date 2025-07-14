@@ -37,10 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarVentas() {
-    const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('enviando-reporte', 'Cargando compras...', false, 1600);
-    }
+    const inicio = startDataLoad();
     try {
       const resp = await fetch('/clientes/compras_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -48,19 +45,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 401) return handleUnauthorized();
       registros = await resp.json();
       mostrarVentas(registros);
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Listado actualizado', false, 2600);
-        }
-      }, delay);
+      endDataLoad(inicio, true);
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'No se pudieron cargar las compras', false, 2600);
-        }
-      }, delay);
+      endDataLoad(inicio, false);
       console.error('Error cargando compras:', err);
     }
   }

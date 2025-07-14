@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!seleccionados.length) return;
     const start = Date.now();
     if (typeof showAlert === 'function') {
-      showAlert('guardando-datos', 'Eliminando alquileres...', false, 1600);
+      showAlert('borrando', 'Eliminando alquileres...', false, 1600);
     }
     try {
       const resp = await fetch('/admin/api/alquileres/eliminar', {
@@ -56,14 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
         if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Alquileres eliminados', false, 2600);
+          showAlert('borrado-exito', 'Alquileres eliminados', false, 2600);
         }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
         if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al eliminar', false, 2600);
+          showAlert('borrado-error', 'Error al eliminar', false, 2600);
         }
       }, delay);
       console.error('Error eliminando alquileres:', err);

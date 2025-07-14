@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ids.length) return;
     const start = Date.now();
     if (typeof showAlert === 'function') {
-      showAlert('guardando-datos', 'Eliminando facturas...', false, 1600);
+      showAlert('borrando', 'Eliminando facturas...', false, 1600);
     }
     try {
       const resp = await fetch('/admin/api/facturas_pendientes/eliminar', {
@@ -61,14 +61,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
         if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Facturas eliminadas', false, 2600);
+          showAlert('borrado-exito', 'Facturas eliminadas', false, 2600);
         }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
         if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al eliminar facturas', false, 2600);
+          showAlert('borrado-error', 'Error al eliminar facturas', false, 2600);
         }
       }, delay);
       console.error('Error eliminando facturas:', err);

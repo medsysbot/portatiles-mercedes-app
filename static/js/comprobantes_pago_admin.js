@@ -86,19 +86,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const checks = document.querySelectorAll('.pm-check:checked');
     if (!checks.length) return;
 
-    for (const ch of checks) {
-      const id = ch.dataset.id;
-      try {
+    const start = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('borrando', 'Eliminando comprobantes...', false, 1600);
+    }
+
+    try {
+      for (const ch of checks) {
+        const id = ch.dataset.id;
         await fetchConAuth(`/admin/api/comprobantes_pago/${id}`, {
           method: 'DELETE'
         });
-      } catch (e) {
-        console.error('Error eliminando', e);
       }
-    }
 
-    await cargarComprobantes();
-    actualizarBtnEliminar();
+      await cargarComprobantes();
+      actualizarBtnEliminar();
+      const delay = Math.max(0, 1600 - (Date.now() - start));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-exito', 'Comprobantes eliminados', false, 2600);
+        }
+      }, delay);
+    } catch (e) {
+      const delay = Math.max(0, 1600 - (Date.now() - start));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-error', 'Error eliminando comprobantes', false, 2600);
+        }
+      }, delay);
+      console.error('Error eliminando', e);
+    }
   });
 
   btnNuevo?.addEventListener('click', () => {

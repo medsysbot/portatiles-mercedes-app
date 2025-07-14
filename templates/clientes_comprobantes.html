@@ -64,14 +64,21 @@
             <th>Fecha</th>
           </tr>
         </thead>
-        <tbody></tbody>
+      <tbody></tbody>
       </table>
     </div>
   </div>
+<div id="alert-manager" class="alert-container" style="display:none;">
+  <div class="alert-box">
+    <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon">
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
 {% endblock %}
 
 {% block scripts %}
   {{ super() }}
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
   <script src="/clientes_comprobantes.js"></script>
+  <script src="/static/js/alertas.js"></script>
 {% endblock %}

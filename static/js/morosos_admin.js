@@ -44,6 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaMorosos tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
+    const start = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('borrando', 'Eliminando morosos...', false, 1600);
+    }
     try {
       const resp = await fetch('/admin/api/morosos/eliminar', {
         method: 'POST',
@@ -52,9 +56,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error al eliminar');
       await cargarMorosos();
+      const delay = Math.max(0, 1600 - (Date.now() - start));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-exito', 'Morosos eliminados', false, 2600);
+        }
+      }, delay);
     } catch (_) {
       if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'Error al eliminar morosos', false, 2500);
+        showAlert('borrado-error', 'Error al eliminar morosos', false, 2500);
       }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;

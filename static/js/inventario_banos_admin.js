@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarTabla() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/admin/api/inventario_banos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }

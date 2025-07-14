@@ -67,6 +67,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarAlquileres() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/admin/api/alquileres', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }

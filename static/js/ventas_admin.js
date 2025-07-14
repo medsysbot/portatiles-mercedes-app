@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarVentas() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/admin/api/ventas', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }

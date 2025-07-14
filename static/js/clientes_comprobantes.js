@@ -136,6 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarComprobantes() {
     const inicio = startDataLoad();
+    await dataLoadDelay();
     let dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {
       const usr = localStorage.getItem('usuario_obj');

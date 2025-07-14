@@ -33,6 +33,7 @@ const ALERT_ICONS = {
   "reporte-exito":         { icon: "/static/iconos/reporte-exito.png",         msg: "Reporte enviado con éxito" },
   "seleccionar-rol":       { icon: "/static/iconos/seleccionar-rol.png",       msg: "Seleccione un rol para continuar" },
   "info-cargando":         { icon: "/static/iconos/enviando-reporte.png",      msg: "Cargando datos..." },
+  "cargando-datos":        { icon: "/static/iconos/enviando-reporte.png",      msg: "Cargando datos, por favor espere..." },
   "verifique-contrasena":  { icon: "/static/iconos/verifique-contrasena.png",  msg: "Verifique su contraseña" }
 };
 
@@ -73,9 +74,16 @@ function showAlertAndRedirect(type, redirectUrl, customMessage = null, duration 
 // === UTILIDADES PARA CARGA DE DATOS ===
 function startDataLoad() {
   if (typeof showAlert === 'function') {
-    showAlert('info-cargando', 'Cargando datos...', true);
+    showAlert('cargando-datos', 'Cargando datos, por favor espere...', true);
   }
   return Date.now();
+}
+
+function dataLoadDelay() {
+  return new Promise(resolve => {
+    const tiempo = Math.floor(Math.random() * 301) + 500; // 500-800 ms
+    setTimeout(resolve, tiempo);
+  });
 }
 
 function endDataLoad(inicio, ok = true) {

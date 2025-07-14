@@ -96,4 +96,4 @@ document.addEventListener("DOMContentLoaded", () => {
   if (box) {
     box.style.display = "none";
   }
-
+});

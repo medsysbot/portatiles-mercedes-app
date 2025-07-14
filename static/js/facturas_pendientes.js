@@ -2,6 +2,28 @@
 // Proyecto: Portátiles Mercedes
 
 window.pmFacturasPendAdminData = window.pmFacturasPendAdminData || [];
+let tablaFacturas = null;
+
+function inicializarTablaFacturas() {
+  if (tablaFacturas) return;
+  tablaFacturas = $('#tablaFacturas').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+    columns: [
+      { data: 'id_factura', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
+      { data: 'id_factura' },
+      { data: 'fecha' },
+      { data: 'numero_factura' },
+      { data: 'dni_cuit_cuil' },
+      { data: 'razon_social' },
+      { data: 'nombre_cliente' },
+      { data: 'monto_adeudado' },
+      { data: 'factura_url', render: d => d ? `<a href="${d}" target="_blank">Ver</a>` : '' }
+    ]
+  });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const btnNueva = document.getElementById('btnNuevaFactura');
@@ -9,26 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarFacturas');
   const mensajeError = document.getElementById('errorFacturas');
 
-  const tabla = window.pmTablaFacturasAdmin
-    ? window.pmTablaFacturasAdmin
-    : $('#tablaFacturas').DataTable({
-      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-      paging: true,
-      searching: false,
-      ordering: true,
-      columns: [
-        { data: 'id_factura', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
-        { data: 'id_factura' },
-        { data: 'fecha' },
-        { data: 'numero_factura' },
-        { data: 'dni_cuit_cuil' },
-        { data: 'razon_social' },
-        { data: 'nombre_cliente' },
-        { data: 'monto_adeudado' },
-        { data: 'factura_url', render: d => d ? `<a href="${d}" target="_blank">Ver</a>` : '' }
-      ]
-    });
-  window.pmTablaFacturasAdmin = tabla;
+  inicializarTablaFacturas();
+  const tabla = tablaFacturas;
 
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 

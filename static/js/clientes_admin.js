@@ -11,31 +11,35 @@ function handleUnauthorized() {
 }
 
 window.pmClientesAdminData = window.pmClientesAdminData || [];
+let tablaClientes = null;
+
+function inicializarTablaClientes() {
+  if (tablaClientes) return;
+  tablaClientes = $('#tabla-clientes').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+    columns: [
+      {
+        data: 'dni_cuit_cuil',
+        render: data => `<input type="checkbox" class="fila-check" value="${data}">`,
+        orderable: false
+      },
+      { data: 'dni_cuit_cuil' },
+      { data: 'nombre' },
+      { data: 'apellido' },
+      { data: 'direccion' },
+      { data: 'telefono' },
+      { data: 'razon_social' },
+      { data: 'email' }
+    ]
+  });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-  const tabla = window.pmTablaClientesAdmin
-    ? window.pmTablaClientesAdmin
-    : $('#tabla-clientes').DataTable({
-      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-      paging: true,
-      searching: false,
-      ordering: true,
-      columns: [
-        {
-          data: 'dni_cuit_cuil',
-          render: data => `<input type="checkbox" class="fila-check" value="${data}">`,
-          orderable: false
-        },
-        { data: 'dni_cuit_cuil' },
-        { data: 'nombre' },
-        { data: 'apellido' },
-        { data: 'direccion' },
-        { data: 'telefono' },
-        { data: 'razon_social' },
-        { data: 'email' }
-      ]
-    });
-  window.pmTablaClientesAdmin = tabla;
+  inicializarTablaClientes();
+  const tabla = tablaClientes;
 
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
@@ -76,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (error) {
       endDataLoad(inicio, false);
       if (window.pmClientesAdminData.length === 0) tabla.clear().draw();
-  }
+    }
   }
 
   function mostrarClientes(lista) {

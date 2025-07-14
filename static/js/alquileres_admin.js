@@ -1,29 +1,33 @@
 window.pmAlquileresAdminData = window.pmAlquileresAdminData || [];
+let tablaAlquileres = null;
+
+function inicializarTablaAlquileres() {
+  if (tablaAlquileres) return;
+  tablaAlquileres = $('#tablaAlquileres').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+    columns: [
+      { data: 'numero_bano', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
+      { data: 'numero_bano' },
+      { data: 'cliente_nombre' },
+      { data: 'dni_cuit_cuil' },
+      { data: 'direccion' },
+      { data: 'fecha_inicio' },
+      { data: 'fecha_fin' },
+      { data: 'observaciones' }
+    ]
+  });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaAlquileres');
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
   const mensajeError = document.getElementById('errorAlquileres');
 
-  const tabla = window.pmTablaAlquileresAdmin
-    ? window.pmTablaAlquileresAdmin
-    : $('#tablaAlquileres').DataTable({
-      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-      paging: true,
-      searching: false,
-      ordering: true,
-      columns: [
-        { data: 'numero_bano', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
-        { data: 'numero_bano' },
-        { data: 'cliente_nombre' },
-        { data: 'dni_cuit_cuil' },
-        { data: 'direccion' },
-        { data: 'fecha_inicio' },
-        { data: 'fecha_fin' },
-        { data: 'observaciones' }
-      ]
-    });
-  window.pmTablaAlquileresAdmin = tabla;
+  inicializarTablaAlquileres();
+  const tabla = tablaAlquileres;
 
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 

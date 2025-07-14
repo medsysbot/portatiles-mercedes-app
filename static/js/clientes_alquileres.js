@@ -10,6 +10,26 @@ function handleUnauthorized() {
 }
 
 window.pmClientesAlquileresData = window.pmClientesAlquileresData || [];
+let tablaClientesAlquileres = null;
+
+function inicializarTablaClientesAlquileres() {
+  if (tablaClientesAlquileres) return;
+  tablaClientesAlquileres = $('#tablaAlquileres').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+    columns: [
+      { data: 'numero_bano', defaultContent: '-' },
+      { data: 'cliente_nombre', defaultContent: '-' },
+      { data: 'dni_cuit_cuil', defaultContent: '-' },
+      { data: 'direccion', defaultContent: '-' },
+      { data: 'fecha_inicio', defaultContent: '-' },
+      { data: 'fecha_fin', defaultContent: '-' },
+      { data: 'observaciones', defaultContent: '-' }
+    ]
+  });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem('access_token')) {
@@ -21,24 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
   const errorDiv = document.getElementById('errorAlquileres');
 
-  const tabla = window.pmTablaClientesAlquileres
-    ? window.pmTablaClientesAlquileres
-    : $('#tablaAlquileres').DataTable({
-      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-      paging: true,
-      searching: false,
-      ordering: true,
-      columns: [
-        { data: 'numero_bano', defaultContent: '-' },
-        { data: 'cliente_nombre', defaultContent: '-' },
-        { data: 'dni_cuit_cuil', defaultContent: '-' },
-        { data: 'direccion', defaultContent: '-' },
-        { data: 'fecha_inicio', defaultContent: '-' },
-        { data: 'fecha_fin', defaultContent: '-' },
-        { data: 'observaciones', defaultContent: '-' }
-      ]
-    });
-  window.pmTablaClientesAlquileres = tabla;
+  inicializarTablaClientesAlquileres();
+  const tabla = tablaClientesAlquileres;
 
   async function cargarAlquileres() {
     const inicio = startDataLoad();

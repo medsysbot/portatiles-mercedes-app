@@ -181,6 +181,19 @@ document.addEventListener('DOMContentLoaded', () => {
   form?.addEventListener('submit', async ev => {
     ev.preventDefault();
     const datos = new FormData(form);
+
+    for (const [_, v] of datos.entries()) {
+      if (!v) {
+        if (typeof showAlert === 'function') {
+          showAlert('error-validacion', 'Complete todos los campos', false);
+        }
+        return;
+      }
+    }
+
+    if (typeof showAlert === 'function') {
+      showAlert('cargando-datos', 'Enviando datos...', false);
+    }
     try {
       const resp = await fetch('/api/comprobantes_pago', {
         method: 'POST',
@@ -190,17 +203,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await resp.json();
       if (resp.ok && res.ok) {
         if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Comprobante subido correctamente', false, 2600);
+          showAlert('exito-datos', 'Formulario enviado correctamente', false);
         }
         setTimeout(() => {
           location.href = '/clientes/comprobantes';
-        }, 1600);
+        }, 1500);
       } else {
         throw new Error(res.detail || 'Error al subir comprobante');
       }
     } catch (err) {
       if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'Error al subir comprobante', false, 2600);
+        showAlert('error-datos', 'Error al enviar el formulario', false);
       }
     }
   });

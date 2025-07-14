@@ -12,8 +12,18 @@ const form = document.getElementById('formVenta');
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const datos = Object.fromEntries(new FormData(form));
+
+  for (const valor of Object.values(datos)) {
+    if (!valor.trim()) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-validacion', 'Complete todos los campos', false);
+      }
+      return;
+    }
+  }
+
   if (typeof showAlert === 'function') {
-    showAlert('enviando-reporte', 'Procesando venta...', false, 1600);
+    showAlert('cargando-datos', 'Enviando datos...', false);
   }
   let ok = false;
   try {
@@ -25,16 +35,16 @@ form.addEventListener('submit', async (e) => {
     ok = resp.ok;
     if (ok) {
       if (typeof showAlert === 'function') {
-        showAlert('reporte-exito', 'Venta registrada', false, 2600);
+        showAlert('exito-datos', 'Formulario enviado correctamente', false);
       }
     } else {
       if (typeof showAlert === 'function') {
-        showAlert('reporte-error', 'Error al registrar venta', false, 2600);
+        showAlert('error-datos', 'Error al enviar el formulario', false);
       }
     }
   } catch (_) {
     if (typeof showAlert === 'function') {
-      showAlert('error-conexion', 'Error de conexión', false, 2600);
+      showAlert('error-datos', 'Error al enviar el formulario', false);
     }
   }
 

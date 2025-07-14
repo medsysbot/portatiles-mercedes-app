@@ -1,26 +1,29 @@
+window.pmAlquileresAdminData = window.pmAlquileresAdminData || [];
+
 document.addEventListener('DOMContentLoaded', () => {
   const buscador = document.getElementById('busquedaAlquileres');
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
   const mensajeError = document.getElementById('errorAlquileres');
 
-  let alquileresCargados = [];
-
-  const tabla = $('#tablaAlquileres').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true,
-    columns: [
-      { data: 'numero_bano', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
-      { data: 'numero_bano' },
-      { data: 'cliente_nombre' },
-      { data: 'dni_cuit_cuil' },
-      { data: 'direccion' },
-      { data: 'fecha_inicio' },
-      { data: 'fecha_fin' },
-      { data: 'observaciones' }
-    ]
-  });
+  const tabla = window.pmTablaAlquileresAdmin
+    ? window.pmTablaAlquileresAdmin
+    : $('#tablaAlquileres').DataTable({
+      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+      paging: true,
+      searching: false,
+      ordering: true,
+      columns: [
+        { data: 'numero_bano', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
+        { data: 'numero_bano' },
+        { data: 'cliente_nombre' },
+        { data: 'dni_cuit_cuil' },
+        { data: 'direccion' },
+        { data: 'fecha_inicio' },
+        { data: 'fecha_fin' },
+        { data: 'observaciones' }
+      ]
+    });
+  window.pmTablaAlquileresAdmin = tabla;
 
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
@@ -73,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error consultando alquileres');
-      alquileresCargados = await resp.json();
-      mostrarAlquileres(alquileresCargados);
+      window.pmAlquileresAdminData = await resp.json();
+      mostrarAlquileres(window.pmAlquileresAdminData);
       mensajeError?.classList.add('d-none');
       endDataLoad(inicio, true);
     } catch (err) {
@@ -90,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrarAlquileres(texto) {
     const q = texto.toLowerCase();
-    const filtrados = alquileresCargados.filter(a =>
+    const filtrados = window.pmAlquileresAdminData.filter(a =>
       (a.cliente_nombre || '').toLowerCase().includes(q) ||
       (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (a.numero_bano || '').toLowerCase().includes(q)
@@ -108,5 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
     filtrarAlquileres(buscador.value.trim());
   });
 
-  cargarAlquileres();
+  if (window.pmAlquileresAdminData.length === 0) {
+    cargarAlquileres();
+  } else {
+    mostrarAlquileres(window.pmAlquileresAdminData);
+  }
 });

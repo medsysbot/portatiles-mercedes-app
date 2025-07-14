@@ -10,29 +10,32 @@ function handleUnauthorized() {
   window.location.href = '/login';
 }
 
-let clientesCargados = [];
+window.pmClientesAdminData = window.pmClientesAdminData || [];
 
 document.addEventListener('DOMContentLoaded', () => {
-  const tabla = $('#tabla-clientes').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true,
-    columns: [
-      {
-        data: 'dni_cuit_cuil',
-        render: data => `<input type="checkbox" class="fila-check" value="${data}">`,
-        orderable: false
-      },
-      { data: 'dni_cuit_cuil' },
-      { data: 'nombre' },
-      { data: 'apellido' },
-      { data: 'direccion' },
-      { data: 'telefono' },
-      { data: 'razon_social' },
-      { data: 'email' }
-    ]
-  });
+  const tabla = window.pmTablaClientesAdmin
+    ? window.pmTablaClientesAdmin
+    : $('#tabla-clientes').DataTable({
+      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+      paging: true,
+      searching: false,
+      ordering: true,
+      columns: [
+        {
+          data: 'dni_cuit_cuil',
+          render: data => `<input type="checkbox" class="fila-check" value="${data}">`,
+          orderable: false
+        },
+        { data: 'dni_cuit_cuil' },
+        { data: 'nombre' },
+        { data: 'apellido' },
+        { data: 'direccion' },
+        { data: 'telefono' },
+        { data: 'razon_social' },
+        { data: 'email' }
+      ]
+    });
+  window.pmTablaClientesAdmin = tabla;
 
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
@@ -67,13 +70,13 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await fetch('/clientes');
       const data = await resp.json();
-      clientesCargados = data || [];
-      mostrarClientes(clientesCargados);
+      window.pmClientesAdminData = data || [];
+      mostrarClientes(window.pmClientesAdminData);
       endDataLoad(inicio, true);
     } catch (error) {
       endDataLoad(inicio, false);
-      if (clientesCargados.length === 0) tabla.clear().draw();
-    }
+      if (window.pmClientesAdminData.length === 0) tabla.clear().draw();
+  }
   }
 
   function mostrarClientes(lista) {
@@ -83,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrarClientes(texto) {
     const q = texto.toLowerCase();
-    const filtrados = clientesCargados.filter(c =>
+    const filtrados = window.pmClientesAdminData.filter(c =>
       (c.nombre || '').toLowerCase().includes(q) ||
       (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (c.email || '').toLowerCase().includes(q)
@@ -96,5 +99,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (buscador) buscador.addEventListener('input', () => filtrarClientes(buscador.value.trim()));
   if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
 
-  obtenerClientes();
+  if (window.pmClientesAdminData.length === 0) {
+    obtenerClientes();
+  } else {
+    mostrarClientes(window.pmClientesAdminData);
+  }
 });

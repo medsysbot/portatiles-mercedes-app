@@ -5,7 +5,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6); /* más oscuro que antes */
+  background-color: rgba(0, 0, 0, 0.75); /* más oscuro */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -14,27 +14,33 @@
 
 /* Contenedor de la alerta */
 #alertaContenido {
-  background-color: rgba(0, 0, 0, 0.8); /* menos transparente */
-  border-radius: 10px;
-  padding: 30px 40px;
+  background-color: rgba(0, 0, 0, 0.85); /* menos transparente */
+  border-radius: 12px;
+  padding: 32px 48px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  max-width: 90%;
-  box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
+  max-width: 92%;
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+  transition: all 0.3s ease;
 }
 
 /* Ícono de alerta (más grande) */
 #alertaContenido img {
-  width: 120px;  /* antes era 80px */
+  width: 120px;  /* aumentado un 50% respecto al tamaño original */
   height: auto;
-  margin-bottom: 20px;
+  margin-bottom: 18px;
+  filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
 }
 
 /* Texto del mensaje */
 #alertaContenido p {
-  color: #fff;
+  color: #ffffff;
   font-size: 18px;
+  font-weight: 400;
   margin: 0;
+  padding: 0;
+  line-height: 1.5;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.4);
 }

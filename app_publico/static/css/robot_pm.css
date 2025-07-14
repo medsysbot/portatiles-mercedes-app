@@ -1,0 +1,74 @@
+#robot-pm-widget {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 9999;
+  animation: levitar 6s ease-in-out infinite;
+}
+
+#robot-pm-img {
+  width: 120px;
+  height: auto;
+  animation: parpadeoOjos 8s steps(1) infinite;
+}
+
+/* Flotación suave */
+@keyframes levitar {
+  0%, 100% { transform: translateY(0px); }
+  50%      { transform: translateY(-10px); }
+}
+
+/* Parpadeo simple (simula cambio de imagen si se usa sprites) */
+@keyframes parpadeoOjos {
+  0%, 97%, 100% { opacity: 1; }
+  98%, 99%      { opacity: 0.3; }
+}
+
+/* Giro ocasional */
+@keyframes giroRapido {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Subida rápida */
+@keyframes subidaRapida {
+  0%   { transform: translateY(0); }
+  20%  { transform: translateY(-100px); }
+  40%  { transform: translateY(-150px); }
+  60%  { transform: translateY(-100px); }
+  100% { transform: translateY(0); }
+}
+
+
+#robot-pm-globito {
+  position: absolute;
+  bottom: 130px;
+  right: 0;
+  background: #222;
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 220px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  font-family: 'Segoe UI', sans-serif;
+  animation: aparecer 1s ease-out;
+}
+
+/* Flechita del globito */
+#robot-pm-globito::after {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  right: 30px;
+  border-width: 10px;
+  border-style: solid;
+  border-color: #222 transparent transparent transparent;
+}
+
+/* Animación de entrada */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

@@ -1,51 +1,27 @@
+/* === Posicionamiento general del widget === */
 #robot-pm-widget {
   position: fixed;
-  top: 100px;         /* Subido para que quede por arriba del contenido */
-  left: 40px;         /* Ajustalo si lo querés más o menos pegado al borde */
+  bottom: 30px;
+  left: 40px;
   z-index: 9999;
-  animation: levitar 6s ease-in-out infinite;
-  pointer-events: none; /* Para que no interfiera con clics */
+  animation: subidaLenta 90s ease-in-out infinite;
+  pointer-events: none; /* No interfiere con clics */
 }
 
+/* Imagen del robot (ligeramente más grande) */
 #robot-pm-img {
-  width: 120px;
+  width: 130px;
   height: auto;
-  animation: parpadeoOjos 8s steps(1) infinite;
+  animation: parpadeoOjos 8s steps(1) infinite, levitar 6s ease-in-out infinite;
 }
 
-/* Flotación suave */
-@keyframes levitar {
-  0%, 100% { transform: translateY(0px); }
-  50%      { transform: translateY(-10px); }
-}
-
-/* Parpadeo simple (simula cambio de imagen si se usa sprites) */
-@keyframes parpadeoOjos {
-  0%, 97%, 100% { opacity: 1; }
-  98%, 99%      { opacity: 0.3; }
-}
-
-/* Giro ocasional */
-@keyframes giroRapido {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-/* Subida rápida */
-@keyframes subidaRapida {
-  0%   { transform: translateY(0); }
-  20%  { transform: translateY(-100px); }
-  40%  { transform: translateY(-150px); }
-  60%  { transform: translateY(-100px); }
-  100% { transform: translateY(0); }
-}
-
+/* Globito del mensaje */
 #robot-pm-globito {
   position: absolute;
   bottom: 130px;
   left: 20px;
-  background: #222;
-  color: #fff;
+  background: #fff;
+  color: #111;
   font-size: 14px;
   padding: 10px 15px;
   border-radius: 20px;
@@ -66,12 +42,26 @@
   left: 30px;
   border-width: 10px;
   border-style: solid;
-  border-color: #222 transparent transparent transparent;
+  border-color: #fff transparent transparent transparent;
 }
 
+/* === Animaciones === */
 
-/* Animación de entrada */
-@keyframes aparecer {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* Flotación suave */
+@keyframes levitar {
+  0%, 100% { transform: translateY(0px); }
+  50%     { transform: translateY(-10px); }
+}
+
+/* Parpadeo de ojos (simula cambio de imagen o brillo) */
+@keyframes parpadeoOjos {
+  0%, 97%, 100% { opacity: 1; }
+  98%, 99%      { opacity: 0.3; }
+}
+
+/* Subida cíclica a lo alto y bajada lenta */
+@keyframes subidaLenta {
+  0%, 100%   { bottom: 30px; }
+  5%         { bottom: 250px; }  /* Puedes ajustar esta altura si querés */
+  10%        { bottom: 30px; }
 }

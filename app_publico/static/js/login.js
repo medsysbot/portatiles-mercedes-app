@@ -39,7 +39,7 @@ if (form) {
             if (res.ok && data.access_token) {
                 setTimeout(() => {
                     if (typeof showAlert === "function") {
-                        showAlert('exito-datos', 'Inicio de sesión exitoso', false, 2600);
+                        showAlert('inicio-sesion', 'Inicio de sesión exitoso', false, 2600);
                     }
                     localStorage.setItem("access_token", data.access_token);
                     const finalizar = (url) => {

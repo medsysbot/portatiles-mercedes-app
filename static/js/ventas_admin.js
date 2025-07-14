@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ids = Array.from(document.querySelectorAll('#tablaVentas tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
     if (typeof showAlert === 'function') {
-      showAlert('guardando-datos', 'Eliminando ventas...', false, 1600);
+      showAlert('borrando', 'Eliminando ventas...', false, 1600);
     }
     try {
       const resp = await fetch('/admin/api/ventas/eliminar', {
@@ -51,12 +51,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error al eliminar');
       await cargarVentas();
       if (typeof showAlert === 'function') {
-        showAlert('exito-datos', 'Ventas eliminadas', false, 2600);
+        showAlert('borrado-exito', 'Ventas eliminadas', false, 2600);
       }
     } catch (err) {
       console.error('Error eliminando ventas:', err);
       if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'Error al eliminar ventas', false, 2600);
+        showAlert('borrado-error', 'Error al eliminar ventas', false, 2600);
       }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;

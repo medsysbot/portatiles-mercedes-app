@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ids.length) return;
     const inicio = Date.now();
     if (typeof showAlert === 'function') {
-      showAlert('guardando-datos', 'Eliminando baños...', false, 1600);
+      showAlert('borrando', 'Eliminando baños...', false, 1600);
     }
     try {
       const resp = await fetch('/admin/api/inventario_banos/eliminar', {
@@ -52,14 +52,14 @@ document.addEventListener('DOMContentLoaded', () => {
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
         if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Baños eliminados', false, 2600);
+          showAlert('borrado-exito', 'Baños eliminados', false, 2600);
         }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
         if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al eliminar baños', false, 2600);
+          showAlert('borrado-error', 'Error al eliminar baños', false, 2600);
         }
       }, delay);
       console.error('Error eliminando baños:', err);

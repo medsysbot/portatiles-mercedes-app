@@ -32,6 +32,9 @@ const ALERT_ICONS = {
   "reporte-error":         { icon: "/static/iconos/reporte-error.png",         msg: "Error al enviar reporte" },
   "reporte-exito":         { icon: "/static/iconos/reporte-exito.png",         msg: "Reporte enviado con éxito" },
   "seleccionar-rol":       { icon: "/static/iconos/seleccionar-rol.png",       msg: "Seleccione un rol para continuar" },
+  "borrando":              { icon: "/static/iconos/borrado.png",              msg: "Eliminando registros..." },
+  "borrado-exito":         { icon: "/static/iconos/borrado-exito.png",         msg: "Registros eliminados" },
+  "borrado-error":         { icon: "/static/iconos/borrado-error.png",         msg: "Error al eliminar" },
   "info-cargando":         { icon: "/static/iconos/enviando-reporte.png",      msg: "Cargando datos..." },
   "cargando-datos":        { icon: "/static/iconos/enviando-reporte.png",      msg: "Cargando datos, por favor espere..." },
   "verifique-contrasena":  { icon: "/static/iconos/verifique-contrasena.png",  msg: "Verifique su contraseña" }

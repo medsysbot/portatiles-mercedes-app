@@ -53,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.value);
     if (!ids.length) return;
+    const start = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('borrando', 'Eliminando clientes...', false, 1600);
+    }
     try {
       const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',
@@ -61,8 +65,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error al eliminar');
       await obtenerClientes();
+      const delay = Math.max(0, 1600 - (Date.now() - start));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-exito', 'Clientes eliminados', false, 2600);
+        }
+      }, delay);
     } catch (err) {
-      showAlert('error-datos', 'Error eliminando clientes');
+      const delay = Math.max(0, 1600 - (Date.now() - start));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-error', 'Error eliminando clientes', false, 2600);
+        }
+      }, delay);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }

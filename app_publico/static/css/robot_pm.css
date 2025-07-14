@@ -2,7 +2,7 @@
 #robot-pm-widget {
   position: fixed;
   bottom: 30px;
-  left: 40px;
+  right: 50px;
   z-index: 9999;
   animation: subidaLenta 90s ease-in-out infinite;
   pointer-events: none; /* No interfiere con clics */
@@ -18,7 +18,7 @@
 /* Globito del mensaje */
 #robot-pm-globito {
   position: absolute;
-  bottom: 130px;
+  bottom: 200px;
   left: 20px;
   background: #fff;
   color: #111;

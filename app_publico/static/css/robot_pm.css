@@ -1,9 +1,10 @@
 #robot-pm-widget {
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  top: 100px;         /* Subido para que quede por arriba del contenido */
+  left: 40px;         /* Ajustalo si lo querés más o menos pegado al borde */
   z-index: 9999;
   animation: levitar 6s ease-in-out infinite;
+  pointer-events: none; /* Para que no interfiera con clics */
 }
 
 #robot-pm-img {

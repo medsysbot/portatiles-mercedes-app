@@ -49,6 +49,7 @@ function showAlert(type, customMessage = null, duration = 2500) {
   const info = ALERT_ICONS[type] || { icon: "", msg: "Alerta" };
   alertIcon.src = info.icon;
   alertIcon.alt = type;
+  alertIcon.style.display = info.icon ? "block" : "none";
   alertText.textContent = customMessage || info.msg;
   alertBox.style.display = "flex";
   clearTimeout(alertTimeout);

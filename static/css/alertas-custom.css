@@ -1,7 +1,8 @@
 /* === ALERTA CENTRAL - AJUSTE FINAL === */
 /* Archivo: /static/css/alertas-custom.css */
 
-#alert-manager.alert-container {
+/* Contenedor general de alertas */
+.alert-container {
   position: fixed;
   top: 0;
   left: 0;
@@ -12,6 +13,11 @@
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.55); /* ✅ Más opaco */
   z-index: 9999;
+}
+
+/* Manager principal utiliza la clase anterior */
+#alert-manager {
+  display: none;
 }
 
 .alert-box {

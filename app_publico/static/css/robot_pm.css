@@ -39,11 +39,10 @@
   100% { transform: translateY(0); }
 }
 
-
 #robot-pm-globito {
   position: absolute;
   bottom: 130px;
-  right: 0;
+  left: 20px;
   background: #222;
   color: #fff;
   font-size: 14px;
@@ -54,6 +53,8 @@
   box-shadow: 0 4px 10px rgba(0,0,0,0.3);
   font-family: 'Segoe UI', sans-serif;
   animation: aparecer 1s ease-out;
+  opacity: 0.95;
+  z-index: 99999;
 }
 
 /* Flechita del globito */
@@ -61,11 +62,12 @@
   content: "";
   position: absolute;
   bottom: -10px;
-  right: 30px;
+  left: 30px;
   border-width: 10px;
   border-style: solid;
   border-color: #222 transparent transparent transparent;
 }
+
 
 /* Animación de entrada */
 @keyframes aparecer {

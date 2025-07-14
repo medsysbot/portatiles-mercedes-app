@@ -19,6 +19,7 @@ const ALERT_ICONS = {
   "enviando-reporte":      { icon: "/static/iconos/enviando-reporte.png",      msg: "Enviando reporte..." },
   "error-mensaje":         { icon: "/static/iconos/error-mensaje.png",         msg: "Error al enviar mensaje" },
   "error-datos":           { icon: "/static/iconos/error-datos.png",           msg: "Error en los datos" },
+  "error-validacion":     { icon: "/static/iconos/formulario-error.png",     msg: "Validación incorrecta" },
   "error-informe-limpieza":{ icon: "/static/iconos/error-informe-limpieza.png",msg: "Error al enviar informe de limpieza" },
   "error-registro":        { icon: "/static/iconos/error-registro.png",        msg: "Error en el registro" },
   "exito-datos":           { icon: "/static/iconos/exito-datos.png",           msg: "Datos guardados correctamente" },

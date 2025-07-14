@@ -1,37 +1,34 @@
 const form = document.getElementById("loginForm") || document.getElementById("form-login");
 if (form) {
-    form.addEventListener("submit", function (e) {
+    form.addEventListener("submit", async function (e) {
         e.preventDefault();
 
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
         const rol = document.getElementById("rol") ? document.getElementById("rol").value.trim() : "";
 
-    const datos = { email, password };
-    if (rol) datos.rol = rol;
-
-    if (!email.trim() || !password.trim()) {
-        if (typeof showAlert === "function") {
-            showAlert('error-validacion', 'Complete todos los campos', false);
+        if (!email || !password) {
+            if (typeof showAlert === "function") {
+                showAlert('error-validacion', 'Complete todos los campos', false, 2600);
+            }
+            return;
         }
-        return;
-    }
 
-    if (!rol) {
-        if (typeof showAlert === "function") {
-            showAlert('error-validacion', 'Seleccione un rol válido', false);
+        if (!rol) {
+            if (typeof showAlert === "function") {
+                showAlert('error-validacion', 'Seleccione un rol válido', false, 2600);
+            }
+            return;
         }
-        return;
-    }
 
         const start = Date.now();
         if (typeof showAlert === "function") {
-            showAlert('cargando-datos', 'Enviando datos...', false);
+            showAlert('inicio-sesion', 'Iniciando sesión...', false, 'infinito');
         }
 
         fetch("/login", {
             method: "POST",
-            body: JSON.stringify(datos),
+            body: JSON.stringify({ email, password, rol }),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -42,7 +39,7 @@ if (form) {
             if (res.ok && data.access_token) {
                 setTimeout(() => {
                     if (typeof showAlert === "function") {
-                        showAlert('exito-datos', 'Formulario enviado correctamente', false);
+                        showAlert('exito-datos', 'Inicio de sesión exitoso', false, 2600);
                     }
                     localStorage.setItem("access_token", data.access_token);
                     const finalizar = (url) => {
@@ -103,7 +100,12 @@ if (form) {
             } else {
                 setTimeout(() => {
                     if (typeof showAlert === "function") {
-                        showAlert('error-datos', data.detail || 'Error al enviar el formulario', false);
+                        const msg = (data.detail || '').toLowerCase();
+                        if (msg.includes('credenciales')) {
+                            showAlert('password-error', 'Usuario o contraseña incorrectos', false, 2600);
+                        } else {
+                            showAlert('error-sesion', 'Error en la sesión', false, 2600);
+                        }
                     }
                 }, delay);
             }
@@ -112,7 +114,7 @@ if (form) {
             const delay = Math.max(0, 1600 - (Date.now() - start));
             setTimeout(() => {
                 if (typeof showAlert === "function") {
-                    showAlert('error-datos', 'Error al enviar el formulario', false);
+                    showAlert('error-conexion', 'Error de conexión', false, 2600);
                 }
             }, delay);
         });

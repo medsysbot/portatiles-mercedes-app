@@ -7,11 +7,15 @@ if (form) {
         const password = document.getElementById("password").value;
         const rol = document.getElementById("rol") ? document.getElementById("rol").value.trim() : "";
 
-        const datos = { email, password };
-        if (rol) datos.rol = rol;
+    const datos = { email, password };
+    if (rol) datos.rol = rol;
 
-        const errorEl = document.getElementById("errorMsg");
-        if (errorEl) errorEl.textContent = "";
+    if (!rol) {
+        if (typeof showAlert === "function") {
+            showAlert('seleccionar-rol', 'Seleccione un rol para continuar', false, 2600);
+        }
+        return;
+    }
 
         const start = Date.now();
         if (typeof showAlert === "function") {

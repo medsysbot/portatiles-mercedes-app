@@ -1,15 +1,11 @@
 // Archivo: static/js/morosos_admin.js
 // Proyecto: Portátiles Mercedes
 
-document.addEventListener('DOMContentLoaded', () => {
-  const buscador = document.getElementById('busquedaMorosos');
-  const btnBuscar = document.getElementById('btnBuscarMorosos');
-  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
-  const mensajeError = document.getElementById('errorMorosos');
+let tablaMorosos = null;
 
-  let morososCargados = [];
-
-  const tabla = $('#tablaMorosos').DataTable({
+function inicializarTablaMorosos() {
+  if (tablaMorosos) return;
+  tablaMorosos = $('#tablaMorosos').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
@@ -25,6 +21,18 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'monto_adeudado' }
     ]
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const buscador = document.getElementById('busquedaMorosos');
+  const btnBuscar = document.getElementById('btnBuscarMorosos');
+  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+  const mensajeError = document.getElementById('errorMorosos');
+
+  let morososCargados = [];
+
+  inicializarTablaMorosos();
+  const tabla = tablaMorosos;
 
   function actualizarBoton() {
     const checks = document.querySelectorAll('#tablaMorosos tbody .fila-check:checked');

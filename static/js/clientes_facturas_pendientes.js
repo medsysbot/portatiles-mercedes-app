@@ -10,6 +10,26 @@ function handleUnauthorized() {
 }
 
 window.pmFacturasPendientesData = window.pmFacturasPendientesData || [];
+let tablaFacturasPendientes = null;
+
+function inicializarTablaFacturasPendientes() {
+  if (tablaFacturasPendientes) return;
+  tablaFacturasPendientes = $('#tablaFacturasPendientes').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+    columns: [
+      { data: 'fecha', defaultContent: '-' },
+      { data: 'numero_factura', defaultContent: '-' },
+      { data: 'dni_cuit_cuil', defaultContent: '-' },
+      { data: 'razon_social', defaultContent: '-' },
+      { data: 'nombre_cliente', defaultContent: '-' },
+      { data: 'monto_adeudado', defaultContent: '-' },
+      { data: 'factura_url', render: d => d ? `<a href="${d}" target="_blank">Ver</a>` : '', defaultContent: '' }
+    ]
+  });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem('access_token')) {
@@ -21,24 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarFacturas');
   const errorDiv = document.getElementById('errorFacturas');
 
-  const tabla = window.pmTablaFactPend
-    ? window.pmTablaFactPend
-    : $('#tablaFacturasPendientes').DataTable({
-      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-      paging: true,
-      searching: false,
-      ordering: true,
-      columns: [
-        { data: 'fecha', defaultContent: '-' },
-        { data: 'numero_factura', defaultContent: '-' },
-        { data: 'dni_cuit_cuil', defaultContent: '-' },
-        { data: 'razon_social', defaultContent: '-' },
-        { data: 'nombre_cliente', defaultContent: '-' },
-        { data: 'monto_adeudado', defaultContent: '-' },
-        { data: 'factura_url', render: d => d ? `<a href="${d}" target="_blank">Ver</a>` : '', defaultContent: '' }
-      ]
-    });
-  window.pmTablaFactPend = tabla;
+  inicializarTablaFacturasPendientes();
+  const tabla = tablaFacturasPendientes;
 
   async function cargarFacturas() {
     const inicio = startDataLoad();

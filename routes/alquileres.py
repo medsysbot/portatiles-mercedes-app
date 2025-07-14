@@ -10,7 +10,7 @@ Proyecto: Portátiles Mercedes
 
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import RedirectResponse
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel, ValidationError, Field, ConfigDict
 from datetime import date
 from supabase import create_client, Client
 from postgrest.exceptions import APIError
@@ -56,12 +56,14 @@ class AlquilerNuevo(BaseModel):
     """Datos necesarios para crear un alquiler."""
 
     numero_bano: str
-    cliente_nombre: str
+    cliente_nombre: str = Field(alias="nombre_cliente")
     dni_cuit_cuil: str
     direccion: str | None = None
     fecha_inicio: date
     fecha_fin: date | None = None
     observaciones: str | None = None
+
+    model_config = ConfigDict(populate_by_name=True)
 
 
 # ==== Endpoint POST ====

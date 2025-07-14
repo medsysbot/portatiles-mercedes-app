@@ -1,9 +1,7 @@
-// ╔════════════════════════════════════╗
-// ║   ALERTAS PERSONALIZADAS PORTÁTILES MERCEDES   ║
+// ╔════════════════════════════════════╗ 
+// ║ALERTAS PERSONALIZADAS PORTÁTILES MERCEDES   ║
 // ╚════════════════════════════════════╝
-
 let alertTimeout = null;
-
 // === ICONOS Y MENSAJES ===
 const ALERT_ICONS = {
   "formulario-error":      { icon: "/static/iconos/formulario-error.png",      msg: "Error al cargar el formulario" },
@@ -40,25 +38,19 @@ const ALERT_ICONS = {
   "cargando-datos":        { icon: "/static/iconos/enviando-reporte.png",      msg: "Cargando datos, por favor espere..." },
   "verifique-contrasena":  { icon: "/static/iconos/verifique-contrasena.png",  msg: "Verifique su contraseña" }
 };
-
 // === FUNCIÓN PRINCIPAL: mostrar alerta ===
 function showAlert(type, customMessage = null, duration = 2500) {
   if (arguments.length === 4) {
     duration = arguments[3]; // compatibilidad con versiones viejas
   }
-
   const alertBox   = document.getElementById("alert-manager");
   const alertIcon  = document.getElementById("alert-icon");
   const alertText  = document.getElementById("alert-text");
-
   const info = ALERT_ICONS[type] || { icon: "", msg: "Alerta" };
-
   alertIcon.src = info.icon;
   alertIcon.alt = type;
   alertText.textContent = customMessage || info.msg;
-
   alertBox.style.display = "flex";
-
   clearTimeout(alertTimeout);
   if (duration !== "infinito") {
     alertTimeout = setTimeout(() => {
@@ -66,7 +58,6 @@ function showAlert(type, customMessage = null, duration = 2500) {
     }, duration);
   }
 }
-
 // === FUNCIÓN EXTENDIDA: mostrar y redirigir ===
 function showAlertAndRedirect(type, redirectUrl, customMessage = null, duration = 2500, delayAfter = 500) {
   showAlert(type, customMessage, duration);
@@ -74,7 +65,6 @@ function showAlertAndRedirect(type, redirectUrl, customMessage = null, duration 
     window.location.href = redirectUrl;
   }, duration + delayAfter);
 }
-
 // === UTILIDADES PARA CARGA DE DATOS ===
 function startDataLoad() {
   if (typeof showAlert === 'function') {
@@ -82,14 +72,12 @@ function startDataLoad() {
   }
   return Date.now();
 }
-
 function dataLoadDelay() {
   return new Promise(resolve => {
     const tiempo = Math.floor(Math.random() * 301) + 500; // 500-800 ms
     setTimeout(resolve, tiempo);
   });
 }
-
 function endDataLoad(inicio, ok = true) {
   const delay = Math.max(0, 600 - (Date.now() - inicio));
   setTimeout(() => {
@@ -102,11 +90,10 @@ function endDataLoad(inicio, ok = true) {
     }
   }, delay);
 }
-
 // === Al cargar: ocultar alerta por defecto ===
 document.addEventListener("DOMContentLoaded", () => {
   const box = document.getElementById("alert-manager");
   if (box) {
     box.style.display = "none";
   }
-});
+

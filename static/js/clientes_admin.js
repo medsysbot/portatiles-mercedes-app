@@ -62,13 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function obtenerClientes() {
+    const inicio = startDataLoad();
     try {
       const resp = await fetch('/clientes');
       const data = await resp.json();
       clientesCargados = data || [];
       mostrarClientes(clientesCargados);
+      endDataLoad(inicio, true);
     } catch (error) {
-      showAlert('error-datos', 'Error al cargar clientes');
+      endDataLoad(inicio, false);
       if (clientesCargados.length === 0) tabla.clear().draw();
     }
   }

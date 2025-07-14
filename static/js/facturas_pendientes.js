@@ -71,10 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarFacturas() {
-    const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('enviando-reporte', 'Cargando facturas...', false, 1600);
-    }
+    const inicio = startDataLoad();
     try {
       const resp = await fetch('/admin/api/facturas_pendientes', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -83,19 +80,9 @@ document.addEventListener('DOMContentLoaded', () => {
       facturasCargadas = await resp.json();
       mostrarFacturas(facturasCargadas);
       mensajeError?.classList.add('d-none');
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Listado actualizado', false, 2600);
-        }
-      }, delay);
+      endDataLoad(inicio, true);
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
-        }
-      }, delay);
+      endDataLoad(inicio, false);
       console.error('Error cargando facturas:', err);
     }
   }

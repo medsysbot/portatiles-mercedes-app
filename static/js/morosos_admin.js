@@ -54,6 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarMorosos() {
+    const inicio = startDataLoad();
     try {
       const resp = await fetch('/admin/api/morosos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -62,10 +63,9 @@ document.addEventListener('DOMContentLoaded', () => {
       morososCargados = await resp.json();
       mostrarMorosos(morososCargados);
       mensajeError?.classList.add('d-none');
+      endDataLoad(inicio, true);
     } catch (_) {
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudo cargar el listado', false, 2500);
-      }
+      endDataLoad(inicio, false);
     }
   }
 

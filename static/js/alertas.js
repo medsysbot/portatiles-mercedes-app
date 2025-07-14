@@ -32,6 +32,7 @@ const ALERT_ICONS = {
   "reporte-error":         { icon: "/static/iconos/reporte-error.png",         msg: "Error al enviar reporte" },
   "reporte-exito":         { icon: "/static/iconos/reporte-exito.png",         msg: "Reporte enviado con éxito" },
   "seleccionar-rol":       { icon: "/static/iconos/seleccionar-rol.png",       msg: "Seleccione un rol para continuar" },
+  "info-cargando":         { icon: "/static/iconos/enviando-reporte.png",      msg: "Cargando datos..." },
   "verifique-contrasena":  { icon: "/static/iconos/verifique-contrasena.png",  msg: "Verifique su contraseña" }
 };
 
@@ -67,6 +68,27 @@ function showAlertAndRedirect(type, redirectUrl, customMessage = null, duration 
   setTimeout(() => {
     window.location.href = redirectUrl;
   }, duration + delayAfter);
+}
+
+// === UTILIDADES PARA CARGA DE DATOS ===
+function startDataLoad() {
+  if (typeof showAlert === 'function') {
+    showAlert('info-cargando', 'Cargando datos...', true);
+  }
+  return Date.now();
+}
+
+function endDataLoad(inicio, ok = true) {
+  const delay = Math.max(0, 600 - (Date.now() - inicio));
+  setTimeout(() => {
+    if (typeof showAlert === 'function') {
+      if (ok) {
+        showAlert('exito-datos', 'Datos cargados correctamente', false, 2600);
+      } else {
+        showAlert('error-datos', 'No se pudieron cargar los datos', false, 2600);
+      }
+    }
+  }, delay);
 }
 
 // === Al cargar: ocultar alerta por defecto ===

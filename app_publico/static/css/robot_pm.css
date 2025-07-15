@@ -97,7 +97,7 @@
 /* Ajuste final de los ojos */
 #robotOjos {
     position: absolute;
-    top: 72px;
+    top: 240px;
     left: 0;
     right: 0;
     display: flex;

@@ -94,6 +94,20 @@
     justify-content: center;
     width: 100%;
 }
+
+#robotOjos {
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    z-index: 20;
+    transform: translateX(-8px);
+    animation: flotacion 3s ease-in-out infinite; /* 👈 MISMA animación que PM */
+}
+
 /* Ajuste final de los ojos */
 #robotOjos {
     position: absolute;
@@ -112,15 +126,23 @@
 
 .ojo-derecho {
     transform: translateX(9px);
+
 }
 .ojo-led {
-    width: 18px;
-    height: 18px;
+    width: 26px;  /* 🔧 más grandes */
+    height: 15px;
     background-color: #00ffcc;
-    border-radius: 4px;
-    overflow: hidden;
     position: relative;
+    z-index: 2;
+    margin: 0;
+    clip-path: polygon(
+        25% 0%, 75% 0%,
+        100% 50%,
+        75% 100%, 25% 100%,
+        0% 50%
+    );  /* 👈 HEXÁGONO */
     box-shadow: 0 0 6px #00ffcc;
+    overflow: hidden;
 }
 
 .parpado {

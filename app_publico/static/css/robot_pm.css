@@ -10,7 +10,7 @@
 
 /* Robot al doble de tamaño (antes ~120px) */
 #robot-pm-img {
-    width: 220px;
+    width: 320px;
     height: auto;
     animation: flotacion 3s ease-in-out infinite;
 }

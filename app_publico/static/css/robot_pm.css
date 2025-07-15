@@ -106,7 +106,13 @@
     z-index: 20;
     transform: translateX(8px);  /* Ajuste fino hacia la izquierda */
 }
+.ojo-izquierdo {
+    transform: translateX(4px);
+}
 
+.ojo-derecho {
+    transform: translateX(-3px);
+}
 .ojo-led {
     width: 18px;
     height: 18px;

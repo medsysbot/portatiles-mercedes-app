@@ -96,7 +96,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function filtrarMorosos(texto) {
     const q = texto.toLowerCase();
     const filtrados = morososCargados.filter(m =>
-      (m.dni_cuit_cuil || '').toLowerCase().includes(q)
+      (m.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (m.razon_social || '').toLowerCase().includes(q) ||
+      (m.nombre_cliente || '').toLowerCase().includes(q) ||
+      (m.numero_factura || '').toLowerCase().includes(q)
     );
     mostrarMorosos(filtrados);
     if (filtrados.length === 0) {

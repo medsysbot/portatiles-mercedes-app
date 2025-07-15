@@ -69,7 +69,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function filtrar() {
     const q = (buscador.value || '').toLowerCase();
     const filtrados = window.pmFacturasPendientesData.filter(f =>
-      (f.dni_cuit_cuil || '').toLowerCase().includes(q)
+      (f.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (f.razon_social || '').toLowerCase().includes(q) ||
+      (f.nombre_cliente || '').toLowerCase().includes(q) ||
+      (f.numero_factura || '').toLowerCase().includes(q)
     );
     mostrarFacturas(filtrados);
     if (filtrados.length === 0) {

@@ -9,7 +9,7 @@
 }
 
 #robot-pm-img {
-    width: 220px;
+    width: 228px;
     height: auto;
     animation: flotacion 3s ease-in-out infinite;
 }
@@ -87,7 +87,7 @@
 }
 #robotOjos {
     position: absolute;
-    top: 135px;
+    top: 195px;
     display: flex;
     gap: 24px;
     z-index: 20;

@@ -107,11 +107,11 @@
     transform: translateX(8px);  /* Ajuste fino hacia la izquierda */
 }
 .ojo-izquierdo {
-    transform: translateX(4px);
+    transform: translateX(5px);
 }
 
 .ojo-derecho {
-    transform: translateX(-3px);
+    transform: translateX(5px);
 }
 .ojo-led {
     width: 18px;

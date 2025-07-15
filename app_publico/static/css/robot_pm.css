@@ -1,7 +1,7 @@
 robot-pm-widget {
     position: fixed;
     bottom: 320px;
-    right: 180px;
+    left: 180px;
     z-index: 999;
     display: flex;
     flex-direction: column;
@@ -23,7 +23,7 @@ robot-pm-widget {
     border-radius: 16px;
     font-size: 16px;
     font-weight: 600;
-    max-width: 260px;
+    max-width: 160px;
     margin-bottom: 12px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     text-align: center;

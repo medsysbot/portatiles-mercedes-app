@@ -8,29 +8,29 @@
     align-items: center;
 }
 
-/* Agrandar robot */
+/* Robot al doble de tamaño (antes ~120px) */
 #robot-pm-img {
-    width: 120px;
+    width: 220px;
     height: auto;
     animation: flotacion 3s ease-in-out infinite;
 }
 
-/* Globo de mensaje estilizado */
+/* Globo de mensaje bien visible */
 #robot-globo {
     background-color: #ffffff;
     color: #000000;
-    padding: 12px 18px;
+    padding: 14px 22px;
     border-radius: 16px;
-    font-size: 15px;
-    font-weight: 500;
-    max-width: 220px;
-    margin-bottom: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    font-weight: 600;
+    max-width: 260px;
+    margin-bottom: 14px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     text-align: center;
     position: relative;
 }
 
-/* Eliminamos la flechita */
+/* Eliminamos la flechita del globo */
 #robot-globo::after {
     content: none;
 }
@@ -38,6 +38,6 @@
 /* Flotación suave */
 @keyframes flotacion {
     0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
+    50% { transform: translateY(-12px); }
     100% { transform: translateY(0); }
 }

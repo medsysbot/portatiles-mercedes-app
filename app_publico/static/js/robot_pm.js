@@ -1,14 +1,28 @@
-function animarRobot() {
+function animarRobotFlotacionConstante() {
     const robot = document.getElementById("robot-pm-img");
     if (!robot) return;
 
     robot.animate([
-        { transform: "translateY(0px)" },
-        { transform: "translateY(-10px)" },
-        { transform: "translateY(0px)" }
+        { transform: "translateY(0)" },
+        { transform: "translateY(-12px)" },
+        { transform: "translateY(0)" }
     ], {
         duration: 3000,
         iterations: Infinity
+    });
+}
+
+function animacionSubidaYCaida() {
+    const robot = document.getElementById("robot-pm-img");
+    if (!robot) return;
+
+    robot.animate([
+        { transform: "translateY(0)" },
+        { transform: "translateY(-100vh)" }, // Sale rápido hacia arriba
+        { transform: "translateY(0)" }       // Vuelve suavemente
+    ], {
+        duration: 2200,
+        easing: "ease-in-out"
     });
 }
 
@@ -17,14 +31,13 @@ function reproducirSaludo() {
     if (!audio) return;
 
     audio.play().then(() => {
-        console.log("Audio reproducido automáticamente.");
-    }).catch((error) => {
-        console.warn("Autoplay bloqueado. Esperando clic del usuario...");
+        console.log("✅ Audio reproducido automáticamente.");
+    }).catch(() => {
         document.addEventListener("click", () => {
             audio.play().then(() => {
-                console.log("Audio reproducido tras clic.");
+                console.log("✅ Audio reproducido tras clic.");
             }).catch(err => {
-                console.error("No se pudo reproducir el audio tras clic:", err);
+                console.error("❌ No se pudo reproducir el audio tras clic:", err);
             });
         }, { once: true });
     });
@@ -43,7 +56,12 @@ function parpadear() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    animarRobot();
+    animarRobotFlotacionConstante();
     reproducirSaludo();
     parpadear();
+
+    // Lanzar subida/captura cada 15 segundos
+    setInterval(() => {
+        animacionSubidaYCaida();
+    }, 15000);
 });

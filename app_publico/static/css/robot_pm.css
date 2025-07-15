@@ -1,67 +1,43 @@
-/* === Posicionamiento general del widget === */
 #robot-pm-widget {
-  position: fixed;
-  bottom: 30px;
-  right: 50px;
-  z-index: 9999;
-  animation: subidaLenta 90s ease-in-out infinite;
-  pointer-events: none; /* No interfiere con clics */
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Imagen del robot (ligeramente más grande) */
+/* Agrandar robot */
 #robot-pm-img {
-  width: 130px;
-  height: auto;
-  animation: parpadeoOjos 8s steps(1) infinite, levitar 6s ease-in-out infinite;
+    width: 120px;
+    height: auto;
+    animation: flotacion 3s ease-in-out infinite;
 }
 
-/* Globito del mensaje */
-#robot-pm-globito {
-  position: absolute;
-  bottom: 170px;
-  left: 20px;
-  background: #fff;
-  color: #111;
-  font-size: 14px;
-  padding: 10px 15px;
-  border-radius: 20px;
-  max-width: 220px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-  font-family: 'Segoe UI', sans-serif;
-  animation: aparecer 1s ease-out;
-  opacity: 0.95;
-  z-index: 99999;
+/* Globo de mensaje estilizado */
+#robot-globo {
+    background-color: #ffffff;
+    color: #000000;
+    padding: 12px 18px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    max-width: 220px;
+    margin-bottom: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    position: relative;
 }
 
-/* Flechita del globito */
-#robot-pm-globito::after {
-  content: "";
-  position: absolute;
-  bottom: -10px;
-  left: 30px;
-  border-width: 10px;
-  border-style: solid;
-  border-color: #fff transparent transparent transparent;
+/* Eliminamos la flechita */
+#robot-globo::after {
+    content: none;
 }
-
-/* === Animaciones === */
 
 /* Flotación suave */
-@keyframes levitar {
-  0%, 100% { transform: translateY(0px); }
-  50%     { transform: translateY(-10px); }
-}
-
-/* Parpadeo de ojos (simula cambio de imagen o brillo) */
-@keyframes parpadeoOjos {
-  0%, 97%, 100% { opacity: 1; }
-  98%, 99%      { opacity: 0.3; }
-}
-
-/* Subida cíclica a lo alto y bajada lenta */
-@keyframes subidaLenta {
-  0%, 100%   { bottom: 30px; }
-  5%         { bottom: 250px; }  /* Puedes ajustar esta altura si querés */
-  10%        { bottom: 30px; }
+@keyframes flotacion {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0); }
 }

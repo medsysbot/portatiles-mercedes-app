@@ -1,7 +1,7 @@
 robot-pm-widget {
     position: fixed;
-    bottom: 120px;
-    right: 80px;
+    bottom: 320px;
+    right: 180px;
     z-index: 999;
     display: flex;
     flex-direction: column;

@@ -1,22 +1,49 @@
-// Archivo: /app_publico/static/js/robot_pm.js
+function animarRobot() {
+    const robot = document.getElementById("robot-pm-img");
+    if (!robot) return;
+
+    robot.animate([
+        { transform: "translateY(0px)" },
+        { transform: "translateY(-10px)" },
+        { transform: "translateY(0px)" }
+    ], {
+        duration: 3000,
+        iterations: Infinity
+    });
+}
+
+function reproducirSaludo() {
+    const audio = document.getElementById("audioBienvenida");
+    if (!audio) return;
+
+    audio.play().then(() => {
+        console.log("Audio reproducido automáticamente.");
+    }).catch((error) => {
+        console.warn("Autoplay bloqueado. Esperando clic del usuario...");
+        document.addEventListener("click", () => {
+            audio.play().then(() => {
+                console.log("Audio reproducido tras clic.");
+            }).catch(err => {
+                console.error("No se pudo reproducir el audio tras clic:", err);
+            });
+        }, { once: true });
+    });
+}
+
+function parpadear() {
+    const ojos = document.getElementById("robotOjos");
+    if (!ojos) return;
+
+    setInterval(() => {
+        ojos.style.visibility = "hidden";
+        setTimeout(() => {
+            ojos.style.visibility = "visible";
+        }, 150);
+    }, 4000);
+}
+
 document.addEventListener("DOMContentLoaded", () => {
-  const robot = document.getElementById("robot-pm-img");
-
-  if (!robot) return;
-
-  // Movimiento ocasional (subida rápida o giro)
-  const movimientos = ["giro", "subida"];
-  setInterval(() => {
-    const mov = movimientos[Math.floor(Math.random() * movimientos.length)];
-    if (mov === "giro") {
-      robot.style.animation = "giroRapido 1s linear";
-    } else {
-      robot.style.animation = "subidaRapida 1.8s ease-in-out";
-    }
-
-    // Restaurar la animación original al terminar
-    setTimeout(() => {
-      robot.style.animation = "levitar 6s ease-in-out infinite, parpadeoOjos 8s steps(1) infinite";
-    }, 1800);
-  }, 10000); // Cada 10 segundos
+    animarRobot();
+    reproducirSaludo();
+    parpadear();
 });

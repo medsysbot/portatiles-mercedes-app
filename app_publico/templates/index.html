@@ -365,6 +365,24 @@ Proyecto: Portátiles Mercedes
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
   <!-- Alerta personalizada global -->
+  <div id="robot-pm-widget">
+    <div id="robot-globo">
+        <span>¡Hola! Soy PM 😊</span>
+        <div class="robot-globo-punta"></div>
+    </div>
+
+    <div id="robot-estela">
+        <div class="fuego fuego1"></div>
+        <div class="fuego fuego2"></div>
+    </div>
+
+    <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
+    <div id="robotOjos"></div>
+
+    <audio id="audioBienvenida" autoplay>
+        <source src="/app_publico/static/audio/robot_pm_bienvenida.mp3" type="audio/mpeg">
+        Tu navegador no soporta el audio.
+    </audio>
 </div>
   <!-- ALERTA CENTRAL PERSONALIZADA -->
   <div id="alert-manager" class="alert-container">
@@ -373,16 +391,7 @@ Proyecto: Portátiles Mercedes
       <span id="alert-text" class="alert-message">Texto de alerta</span>
     </div>
   </div>
-  <!-- === Robot Asistente Portátiles Mercedes === -->
-  <div id="robot-pm-widget">
-    <div id="robot-globo">¡Hola! Soy PM 😊</div>
-    <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
-    <div id="robotOjos"></div>
-    <audio id="audioBienvenida" autoplay>
-        <source src="/app_publico/static/audio/robot_pm_bienvenida.mp3" type="audio/mpeg">
-        Tu navegador no soporta el audio.
-    </audio>
-</div>
+  <!-- === Robot Asistente Portátiles Mercedes === -->div>
   <!-- === Fin del widget === -->
   <script src="app_publico/static/js/robot_pm.js"></script>
   <script src="/static/js/alertas.js"></script>

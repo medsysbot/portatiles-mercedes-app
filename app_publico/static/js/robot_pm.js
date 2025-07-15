@@ -1,22 +1,32 @@
-// Archivo: /app_publico/static/js/robot_pm.js
-document.addEventListener("DOMContentLoaded", () => {
-  const robot = document.getElementById("robot-pm-img");
+function animacionSubidaYCaida() {
+    const contenedor = document.getElementById("robot-pm-widget");
+    const estela = document.getElementById("robot-estela");
 
-  if (!robot) return;
+    if (!contenedor || !estela) return;
 
-  // Movimiento ocasional (subida rápida o giro)
-  const movimientos = ["giro", "subida"];
-  setInterval(() => {
-    const mov = movimientos[Math.floor(Math.random() * movimientos.length)];
-    if (mov === "giro") {
-      robot.style.animation = "giroRapido 1s linear";
-    } else {
-      robot.style.animation = "subidaRapida 1.8s ease-in-out";
-    }
+    // 🔥 Mostrar estela
+    estela.style.opacity = "1";
 
-    // Restaurar la animación original al terminar
+    // Subida rápida
+    contenedor.animate([
+        { transform: "translateY(0)" },
+        { transform: "translateY(-100vh)" }
+    ], {
+        duration: 400,
+        easing: "ease-in"
+    });
+
+    // Bajada suave
     setTimeout(() => {
-      robot.style.animation = "levitar 6s ease-in-out infinite, parpadeoOjos 8s steps(1) infinite";
-    }, 1800);
-  }, 10000); // Cada 10 segundos
-});
+        contenedor.animate([
+            { transform: "translateY(-100vh)" },
+            { transform: "translateY(0)" }
+        ], {
+            duration: 3000,
+            easing: "ease-out"
+        });
+
+        // 🔥 Ocultar estela cuando baja
+        estela.style.opacity = "0";
+    }, 400);
+}

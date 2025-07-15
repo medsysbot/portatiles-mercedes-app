@@ -1,4 +1,4 @@
-#robot-pm-widget {
+robot-pm-widget {
     position: fixed;
     bottom: 20px;
     right: 20px;
@@ -36,8 +36,3 @@
 }
 
 /* Animación flotante (solo en el robot, no afecta subida principal) */
-@keyframes flotacion {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
-    100% { transform: translateY(0); }
-}

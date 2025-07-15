@@ -5,8 +5,7 @@ robot-pm-widget {
     z-index: 999;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    transform: rotate(-45deg);
+    align-items: center;   
 }
 
 /* Robot más grande */
@@ -30,6 +29,21 @@ robot-pm-widget {
     text-align: center;
     position: relative;
 }
+
+.robot-globo-punta {
+    position: absolute;
+    bottom: -12px;
+    right: 35px;        /* ✅ alineada para el lado izquierdo del widget */
+    left: auto;
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    border-right: 3px solid #000000;
+    border-bottom: 3px solid #000000;
+    transform: rotate(-45deg); /* ✅ inclina la punta hacia la derecha */
+    z-index: -1;
+}
+
 
 /* Quitamos la flechita */
 #robot-globo::after {

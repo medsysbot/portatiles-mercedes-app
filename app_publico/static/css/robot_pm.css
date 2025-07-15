@@ -104,7 +104,7 @@
     justify-content: center;
     gap: 24px;
     z-index: 20;
-    transform: translateX(20px);  /* Ajuste fino hacia la izquierda */
+    transform: translateX(25px);  /* Ajuste fino hacia la izquierda */
 }
 .ojo-izquierdo {
     transform: translateX(9px);

@@ -85,3 +85,39 @@
     50% { transform: translateY(-12px); }
     100% { transform: translateY(0); }
 }
+#robotOjos {
+    position: absolute;
+    top: 66px;
+    display: flex;
+    gap: 24px;
+    z-index: 20;
+    justify-content: center;
+    width: 100%;
+}
+
+.ojo-led {
+    width: 18px;
+    height: 18px;
+    background-color: #00ffcc;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 6px #00ffcc;
+}
+
+.parpado {
+    position: absolute;
+    top: -100%;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #111;
+    animation: cerrarOjo 6s infinite;
+}
+
+@keyframes cerrarOjo {
+    0%, 97%, 100% { top: -100%; }
+    98% { top: 0; }
+    99% { top: -100%; }
+}
+

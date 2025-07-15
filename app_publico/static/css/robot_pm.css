@@ -9,7 +9,7 @@
 }
 
 #robot-pm-img {
-    width: 228px;
+    width: 237px;
     height: auto;
     animation: flotacion 3s ease-in-out infinite;
 }
@@ -93,6 +93,18 @@
     z-index: 20;
     justify-content: center;
     width: 100%;
+}
+/* Ajuste final de los ojos */
+#robotOjos {
+    position: absolute;
+    top: 72px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    z-index: 20;
+    transform: translateX(8px);  /* Ajuste fino hacia la izquierda */
 }
 
 .ojo-led {

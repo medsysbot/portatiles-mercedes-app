@@ -87,7 +87,7 @@
 }
 #robotOjos {
     position: absolute;
-    top: 240px;
+    top: 340px;
     display: flex;
     gap: 24px;
     z-index: 20;

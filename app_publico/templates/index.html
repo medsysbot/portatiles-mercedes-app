@@ -374,14 +374,14 @@ Proyecto: Portátiles Mercedes
     </div>
   </div>
   <!-- === Robot Asistente Portátiles Mercedes === -->
-  <div id="robot-pm-widget">
-    <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Asistente PM">
-    <div id="robot-pm-globito">Próximamente podré ayudarte</div>
-  </div>
-  <audio id="pm-audio" autoplay>
-    <source src="/static/audio/robot_pm_bienvenida.mp3" type="audio/mpeg">
-    Tu navegador no soporta audio HTML5.
-  </audio>
+  <div id="robotWidget">
+    <img id="robotPM" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
+    <div id="robotOjos"></div> <!-- opcional para parpadeo -->
+    <audio id="audioBienvenida" autoplay>
+        <source src="/app_publico/static/audio/robot_pm_bienvenida.mp3" type="audio/mpeg">
+        Tu navegador no soporta el audio.
+    </audio>
+</div>
   <!-- === Fin del widget === -->
   <script src="/static/js/robot_pm.js"></script>
   <script src="/static/js/alertas.js"></script>

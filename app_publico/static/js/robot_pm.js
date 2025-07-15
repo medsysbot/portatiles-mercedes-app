@@ -13,32 +13,37 @@ function animarRobotFlotacionConstante() {
 }
 
 function animacionSubidaYCaida() {
-    const robot = document.getElementById("robot-pm-img");
-    if (!robot) return;
+    const contenedor = document.getElementById("robot-pm-widget");
+    if (!contenedor) return;
 
-    robot.animate([
+    // Subida rápida
+    contenedor.animate([
         { transform: "translateY(0)" },
-        { transform: "translateY(-100vh)" }, // Sale rápido hacia arriba
-        { transform: "translateY(0)" }       // Vuelve suavemente
+        { transform: "translateY(-100vh)" }
     ], {
-        duration: 2200,
-        easing: "ease-in-out"
+        duration: 400,
+        easing: "ease-in"
     });
+
+    // Bajada lenta (empezamos justo después)
+    setTimeout(() => {
+        contenedor.animate([
+            { transform: "translateY(-100vh)" },
+            { transform: "translateY(0)" }
+        ], {
+            duration: 3000, // 👈 bien despacito
+            easing: "ease-out"
+        });
+    }, 400);
 }
 
 function reproducirSaludo() {
     const audio = document.getElementById("audioBienvenida");
     if (!audio) return;
 
-    audio.play().then(() => {
-        console.log("✅ Audio reproducido automáticamente.");
-    }).catch(() => {
+    audio.play().catch(() => {
         document.addEventListener("click", () => {
-            audio.play().then(() => {
-                console.log("✅ Audio reproducido tras clic.");
-            }).catch(err => {
-                console.error("❌ No se pudo reproducir el audio tras clic:", err);
-            });
+            audio.play();
         }, { once: true });
     });
 }
@@ -60,8 +65,8 @@ document.addEventListener("DOMContentLoaded", () => {
     reproducirSaludo();
     parpadear();
 
-    // Lanzar subida/captura cada 15 segundos
+    // Subida cada 75 segundos (1 minuto y 15 segundos)
     setInterval(() => {
         animacionSubidaYCaida();
-    }, 15000);
+    }, 75000);
 });

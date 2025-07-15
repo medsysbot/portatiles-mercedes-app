@@ -108,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtrados = window.pmClientesAdminData.filter(c =>
       (c.nombre || '').toLowerCase().includes(q) ||
       (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (c.razon_social || '').toLowerCase().includes(q) ||
       (c.email || '').toLowerCase().includes(q)
     );
     mostrarClientes(filtrados);

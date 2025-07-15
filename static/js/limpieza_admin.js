@@ -134,6 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtrados = servicios.filter(s =>
       (s.nombre_cliente || '').toLowerCase().includes(q) ||
       (s.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (s.razon_social || '').toLowerCase().includes(q) ||
       (s.numero_bano || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);

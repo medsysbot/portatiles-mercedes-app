@@ -114,7 +114,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function filtrarFacturas(texto) {
     const q = texto.toLowerCase();
     const filtradas = window.pmFacturasPendAdminData.filter(f =>
-      (f.dni_cuit_cuil || '').toLowerCase().includes(q)
+      (f.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (f.razon_social || '').toLowerCase().includes(q) ||
+      (f.nombre_cliente || '').toLowerCase().includes(q) ||
+      (f.numero_factura || '').toLowerCase().includes(q)
     );
     mostrarFacturas(filtradas);
     if (filtradas.length === 0) {

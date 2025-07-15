@@ -97,14 +97,14 @@
 /* Ajuste final de los ojos */
 #robotOjos {
     position: absolute;
-    top: 240px;
+    top: 230px;
     left: 0;
     right: 0;
     display: flex;
     justify-content: center;
     gap: 24px;
     z-index: 20;
-    transform: translateX(10px);  /* Ajuste fino hacia la izquierda */
+    transform: translateX(14px);  /* Ajuste fino hacia la izquierda */
 }
 .ojo-izquierdo {
     transform: translateX(9px);

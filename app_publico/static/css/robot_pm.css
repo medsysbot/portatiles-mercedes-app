@@ -113,7 +113,7 @@
 
 #robotOjos {
     position: absolute;
-    top: 72px;  /* 🔧 Ajustalo si hace falta que bajen o suban más */
+    top: 220px;  /* 🔧 Ajustalo si hace falta que bajen o suban más */
     left: 0;
     right: 0;
     display: flex;

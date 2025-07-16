@@ -97,16 +97,16 @@
     justify-content: center;
     gap: 0px;
     z-index: 20;
-    transform: translateX(208px);
+    transform: translateX(28px);
     animation: flotacion 3s ease-in-out infinite;
 }
 
 .ojo-izquierdo {
-    transform: translateX(-234px);
+    transform: translateX(24px);
 }
 
 .ojo-derecho {
-    transform: translateX(234px);
+    transform: translateX(24px);
 }
 
 

@@ -95,18 +95,18 @@
     right: 0;
     display: flex;
     justify-content: center;
-    gap: 0px;
+    gap: 3px;
     z-index: 20;
-    transform: translateX(28px);
+    transform: translateX(-8px);
     animation: flotacion 3s ease-in-out infinite;
 }
 
 .ojo-izquierdo {
-    transform: translateX(24px);
+    transform: translateX(-8px);
 }
 
 .ojo-derecho {
-    transform: translateX(24px);
+    transform: translateX(-8px);
 }
 
 

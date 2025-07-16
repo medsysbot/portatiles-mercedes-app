@@ -125,11 +125,11 @@
 }
 
 .ojo-izquierdo {
-    transform: translateX(34px);
+    transform: translateX(-234px);
 }
 
 .ojo-derecho {
-    transform: translateX(34px);
+    transform: translateX(234px);
 }
 
 

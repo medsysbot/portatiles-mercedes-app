@@ -103,9 +103,9 @@
     right: 0;
     display: flex;
     justify-content: center;
-    gap: 24px;
+    gap: 54px;
     z-index: 20;
-    transform: translateX(58px);
+    transform: translateX(108px);
     animation: flotacion 3s ease-in-out infinite; /* 👈 MISMA animación que PM */
 }
 

@@ -100,7 +100,7 @@
     position: absolute;
     top: 72px;
     left: 0;
-    right: 0;
+    right: 80;
     display: flex;
     justify-content: center;
     gap: 54px;

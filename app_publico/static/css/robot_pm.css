@@ -118,9 +118,9 @@
     right: 0;
     display: flex;
     justify-content: center;
-    gap: 28px;
+    gap: 18px;
     z-index: 20;
-    transform: translateX(-8px);
+    transform: translateX(18px);
     animation: flotacion 3s ease-in-out infinite;
 }
 

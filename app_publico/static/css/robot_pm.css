@@ -82,7 +82,7 @@
 
 @keyframes flotacion {
     0% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+    50% { transform: translateY(12px); }
     100% { transform: translateY(0); }
 }
 #robotOjos {
@@ -100,10 +100,10 @@
     position: absolute;
     top: 72px;
     left: 0;
-    right: 80;
+    right: 0;
     display: flex;
     justify-content: center;
-    gap: 54px;
+    gap: 34px;
     z-index: 20;
     transform: translateX(108px);
     animation: flotacion 3s ease-in-out infinite; /* 👈 MISMA animación que PM */

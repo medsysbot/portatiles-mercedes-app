@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'numero_bano' },
       { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
+      { data: 'razon_social' },
       { data: 'tipo_servicio' },
       {
         data: 'estado',
@@ -90,6 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtrados = servicios.filter(s =>
       (s.nombre_cliente || '').toLowerCase().includes(q) ||
       (s.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (s.razon_social || '').toLowerCase().includes(q) ||
       (s.numero_bano || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);

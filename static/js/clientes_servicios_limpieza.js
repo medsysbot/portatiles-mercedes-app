@@ -31,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'numero_bano', defaultContent: '-' },
       { data: 'dni_cuit_cuil', defaultContent: '-' },
       { data: 'nombre_cliente', defaultContent: '-' },
+      { data: 'razon_social', defaultContent: '-' },
       { data: 'tipo_servicio', defaultContent: '-' },
       { data: 'estado', defaultContent: '-' },
       { data: 'remito_url', render: d => d ? `<a href="${d}" target="_blank">Ver</a>` : '-', defaultContent: '-' },
@@ -77,7 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const filtrados = registros.filter(s =>
       (s.numero_bano || '').toLowerCase().includes(q) ||
       (s.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-      (s.nombre_cliente || '').toLowerCase().includes(q)
+      (s.nombre_cliente || '').toLowerCase().includes(q) ||
+      (s.razon_social || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);
     if (filtrados.length === 0) {

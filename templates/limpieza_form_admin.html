@@ -27,6 +27,10 @@
       <input type="text" name="nombre_cliente" class="form-control" required value="{{ servicio.nombre_cliente if servicio else '' }}">
     </div>
     <div class="form-group">
+      <label>Razón social</label>
+      <input type="text" name="razon_social" class="form-control" value="{{ servicio.razon_social if servicio else '' }}">
+    </div>
+    <div class="form-group">
       <label>Tipo de servicio</label>
       <input type="text" name="tipo_servicio" class="form-control" required value="{{ servicio.tipo_servicio if servicio else '' }}">
     </div>

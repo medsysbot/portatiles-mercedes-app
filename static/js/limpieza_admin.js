@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'numero_bano' },
       { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
+      { data: 'razon_social' },
       { data: 'tipo_servicio' },
       {
         data: 'estado',

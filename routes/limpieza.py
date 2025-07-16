@@ -1,7 +1,8 @@
 """
 ----------------------------------------------------------
 Archivo: routes/limpieza.py
-Descripción: Gestión de servicios de limpieza (empleados y admin)
+Descripción: Gestión de servicios de limpieza (empleados y admin).
+Incluye el campo opcional "razon_social" para cada servicio.
 Proyecto: Portátiles Mercedes
 ----------------------------------------------------------
 """
@@ -62,6 +63,7 @@ class ServicioLimpiezaNuevo(BaseModel):
     numero_bano: str
     dni_cuit_cuil: str
     nombre_cliente: str
+    razon_social: str | None = None
     tipo_servicio: str
     observaciones: str | None = None
     estado: str
@@ -88,6 +90,7 @@ async def crear_servicio_limpieza_empleado(
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
+    razon_social: str | None = Form(None),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
     estado: str = Form(...),
@@ -100,6 +103,7 @@ async def crear_servicio_limpieza_empleado(
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
             "nombre_cliente": nombre_cliente,
+            "razon_social": razon_social,
             "tipo_servicio": tipo_servicio,
             "observaciones": observaciones,
             "estado": estado,
@@ -125,6 +129,7 @@ async def actualizar_servicio_limpieza_empleado(
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
+    razon_social: str | None = Form(None),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
     estado: str = Form(...),
@@ -137,6 +142,7 @@ async def actualizar_servicio_limpieza_empleado(
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
             "nombre_cliente": nombre_cliente,
+            "razon_social": razon_social,
             "tipo_servicio": tipo_servicio,
             "observaciones": observaciones,
             "estado": estado,
@@ -169,6 +175,7 @@ async def crear_servicio_limpieza_admin(
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
+    razon_social: str | None = Form(None),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
     estado: str = Form(...),
@@ -181,6 +188,7 @@ async def crear_servicio_limpieza_admin(
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
             "nombre_cliente": nombre_cliente,
+            "razon_social": razon_social,
             "tipo_servicio": tipo_servicio,
             "observaciones": observaciones,
             "estado": estado,
@@ -206,6 +214,7 @@ async def actualizar_servicio_limpieza_admin(
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
+    razon_social: str | None = Form(None),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
     estado: str = Form(...),
@@ -218,6 +227,7 @@ async def actualizar_servicio_limpieza_admin(
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
             "nombre_cliente": nombre_cliente,
+            "razon_social": razon_social,
             "tipo_servicio": tipo_servicio,
             "observaciones": observaciones,
             "estado": estado,
@@ -333,6 +343,7 @@ async def _listar_servicios():
                 "numero_bano": d.get("numero_bano"),
                 "dni_cuit_cuil": d.get("dni_cuit_cuil"),
                 "nombre_cliente": d.get("nombre_cliente"),
+                "razon_social": d.get("razon_social"),
                 "tipo_servicio": d.get("tipo_servicio"),
                 "estado": d.get("estado"),
                 "remito_url": d.get("remito_url"),

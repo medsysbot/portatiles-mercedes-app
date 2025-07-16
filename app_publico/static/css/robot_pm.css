@@ -99,8 +99,8 @@
 #robotOjos {
     position: absolute;
     top: 72px;
-    left: 0;
-    right: 0;
+    left: 12;
+    right: 12;
     display: flex;
     justify-content: center;
     gap: 24px;
@@ -125,8 +125,8 @@
 }
 
 .ojo-led {
-    width: 32px;     /* ✅ Más grandes */
-    height: 32px;
+    width: 22px;     /* ✅ Más grandes */
+    height: 22px;
     background-color: #00ffcc;
     border-radius: 50%;  /* 👈 Hace que sean bien redondos */
     overflow: hidden;

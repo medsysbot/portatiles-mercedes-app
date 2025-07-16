@@ -120,7 +120,7 @@
     justify-content: center;
     gap: 18px;
     z-index: 20;
-    transform: translateX(18px);
+    transform: translateX(38px);
     animation: flotacion 3s ease-in-out infinite;
 }
 

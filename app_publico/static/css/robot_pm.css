@@ -95,6 +95,7 @@
     width: 100%;
 }
 
+
 #robotOjos {
     position: absolute;
     top: 72px;
@@ -109,42 +110,31 @@
 }
 
 /* Ajuste final de los ojos */
+
 #robotOjos {
     position: absolute;
-    top: 220px;
+    top: 72px;  /* 🔧 Ajustalo si hace falta que bajen o suban más */
     left: 0;
     right: 0;
     display: flex;
     justify-content: center;
-    gap: 24px;
+    gap: 28px;
     z-index: 20;
-    transform: translateX(25px);  /* Ajuste fino hacia la izquierda */
-}
-.ojo-izquierdo {
-    transform: translateX(9px);
+    transform: translateX(-8px);
+    animation: flotacion 3s ease-in-out infinite;
 }
 
-.ojo-derecho {
-    transform: translateX(9px);
-
-}
 .ojo-led {
-    width: 26px;  /* 🔧 más grandes */
-    height: 15px;
+    width: 32px;     /* ✅ Más grandes */
+    height: 32px;
     background-color: #00ffcc;
-    position: relative;
-    z-index: 2;
-    margin: 0;
-    clip-path: polygon(
-        25% 0%, 75% 0%,
-        100% 50%,
-        75% 100%, 25% 100%,
-        0% 50%
-    );  /* 👈 HEXÁGONO */
-    box-shadow: 0 0 6px #00ffcc;
+    border-radius: 50%;  /* 👈 Hace que sean bien redondos */
     overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 8px #00ffcc;
 }
 
+/* Párpado que baja y sube */
 .parpado {
     position: absolute;
     top: -100%;

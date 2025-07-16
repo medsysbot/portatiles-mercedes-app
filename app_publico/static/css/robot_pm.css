@@ -124,6 +124,15 @@
     animation: flotacion 3s ease-in-out infinite;
 }
 
+.ojo-izquierdo {
+    transform: translateX(34px);
+}
+
+.ojo-derecho {
+    transform: translateX(34px);
+}
+
+
 .ojo-led {
     width: 22px;     /* ✅ Más grandes */
     height: 22px;

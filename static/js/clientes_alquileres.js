@@ -1,83 +1,72 @@
-// Archivo: static/js/clientes_alquileres.js
-// Proyecto: Portátiles Mercedes
-
-function handleUnauthorized() {
-  localStorage.removeItem('access_token');
-  localStorage.removeItem('usuario');
-  localStorage.removeItem('rol');
-  localStorage.removeItem('nombre');
-  window.location.href = '/login';
-}
-
-window.pmClientesAlquileresData = window.pmClientesAlquileresData || [];
-let tablaClientesAlquileres = null;
-
-function inicializarTablaClientesAlquileres() {
-  if (tablaClientesAlquileres) return;
-  tablaClientesAlquileres = $('#tablaAlquileres').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true,
-    columns: [
-      { data: 'numero_bano', defaultContent: '-' },
-      { data: 'cliente_nombre', defaultContent: '-' },
-      { data: 'dni_cuit_cuil', defaultContent: '-' },
-      { data: 'direccion', defaultContent: '-' },
-      { data: 'fecha_inicio', defaultContent: '-' },
-      { data: 'fecha_fin', defaultContent: '-' },
-      { data: 'observaciones', defaultContent: '-' }
-    ]
-  });
-}
+// Archivo: static/js/alquileres_cliente.js
+// Proyecto: Portátiles Mercedes – Panel Clientes
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (!localStorage.getItem('access_token')) {
-    window.location.href = '/login';
-    return;
-  }
-
   const buscador = document.getElementById('busquedaAlquileres');
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
+  const mensajeError = document.getElementById('errorAlquileres');
 
-  inicializarTablaClientesAlquileres();
-  const tabla = tablaClientesAlquileres;
+  window.pmAlquileresClienteData = window.pmAlquileresClienteData || [];
+  let tablaAlquileres = null;
 
-  async function cargarAlquileres() {
+  function inicializarTabla() {
+    if (tablaAlquileres) return;
+    tablaAlquileres = $('#tablaAlquileres').DataTable({
+      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+      paging: true,
+      searching: false,
+      ordering: true,
+      columns: [
+        { data: 'numero_bano' },
+        { data: 'cliente_nombre' },
+        { data: 'dni_cuit_cuil' },
+        { data: 'direccion' },
+        { data: 'fecha_inicio' },
+        { data: 'fecha_fin' },
+        { data: 'observaciones' }
+      ]
+    });
+  }
+
+  async function obtenerDatos() {
     try {
-      const resp = await fetch('/clientes/alquileres_api', {
+      const resp = await fetch('/clientes/api/alquileres', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
-      if (resp.status === 401) return handleUnauthorized();
-      window.pmClientesAlquileresData = await resp.json();
-      mostrarAlquileres(window.pmClientesAlquileresData);
+      if (!resp.ok) throw new Error('Error consultando alquileres');
+      const data = await resp.json();
+      window.pmAlquileresClienteData = data || [];
+      mostrarDatos(window.pmAlquileresClienteData);
+      mensajeError?.classList.add('d-none');
     } catch (err) {
-      console.error('Error cargando alquileres:', err);
-      if (window.pmClientesAlquileresData.length === 0) tabla.clear().draw();
+      console.error('Error al cargar alquileres:', err);
+      if (!window.pmAlquileresClienteData.length) tablaAlquileres?.clear().draw();
     }
   }
 
-  function mostrarAlquileres(lista) {
-    tabla.clear();
-    tabla.rows.add(lista).draw();
+  function mostrarDatos(lista) {
+    tablaAlquileres.clear();
+    tablaAlquileres.rows.add(lista).draw();
   }
 
-  function filtrar() {
-    const q = (buscador.value || '').toLowerCase();
-    const filtrados = window.pmClientesAlquileresData.filter(a =>
+  function filtrarDatos(texto) {
+    const q = texto.toLowerCase();
+    const filtrados = window.pmAlquileresClienteData.filter(a =>
+      (a.numero_bano || '').toLowerCase().includes(q) ||
       (a.cliente_nombre || '').toLowerCase().includes(q) ||
       (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-      (String(a.numero_bano || '')).toLowerCase().includes(q)
+      (a.direccion || '').toLowerCase().includes(q)
     );
-    mostrarAlquileres(filtrados);
+    mostrarDatos(filtrados);
   }
 
-  buscador?.addEventListener('input', filtrar);
-  btnBuscar?.addEventListener('click', filtrar);
+  buscador?.addEventListener('input', () => filtrarDatos(buscador.value.trim()));
+  btnBuscar?.addEventListener('click', () => filtrarDatos(buscador.value.trim()));
 
-  if (window.pmClientesAlquileresData.length === 0) {
-    cargarAlquileres();
+  inicializarTabla();
+  if (window.pmAlquileresClienteData.length === 0) {
+    obtenerDatos();
   } else {
-    mostrarAlquileres(window.pmClientesAlquileresData);
+    mostrarDatos(window.pmAlquileresClienteData);
   }
 });

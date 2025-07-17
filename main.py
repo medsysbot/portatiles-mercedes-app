@@ -204,7 +204,8 @@ async def general_exception_handler(request: Request, exc: Exception):
     str(exc),
     traceback.format_exc()
 )
- return JSONResponse(status_code=500, content={"detail": "Error interno del sistema"})
+    
+return JSONResponse(status_code=500, content={"detail": "Error interno del sistema"})
 
 # Inyectar el cliente de Supabase global en todos los módulos solo si está habilitado
 if os.getenv("ENABLE_SUPABASE") == "1":

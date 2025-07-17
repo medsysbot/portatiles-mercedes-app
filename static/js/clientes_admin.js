@@ -37,7 +37,7 @@ function inicializarTablaClientes() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   inicializarTablaClientes();
   const tabla = tablaClientes;
 
@@ -53,44 +53,75 @@ document.addEventListener('DOMContentLoaded', async () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.value);
     if (!ids.length) return;
+    const start = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('borrando', 'Eliminando clientes...', false, 1600);
+    }
     try {
-      await showAlert('borrando', 'Eliminando clientes...', true, 2600);
       const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + localStorage.getItem('access_token')
-        },
+        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
-
-      await showAlert('borrado-exito', 'Clientes eliminados', true, 2600);
-
-      await obtenerClientes();  // Esta ya tiene los alert internos
+      await obtenerClientes();
+      const delay = Math.max(0, 1600 - (Date.now() - start));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-exito', 'Clientes eliminados', false, 2600);
+        }
+      }, delay);
     } catch (err) {
-      await showAlert('borrado-error', 'Error eliminando clientes', true, 2600);
+      const delay = Math.max(0, 1600 - (Date.now() - start));
+      setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-error', 'Error eliminando clientes', false, 2600);
+        }
+      }, delay);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
   async function obtenerClientes() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
-      await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
       const resp = await fetch('/clientes');
       const data = await resp.json();
       window.pmClientesAdminData = data || [];
       mostrarClientes(window.pmClientesAdminData);
-      await showAlert('exito-datos', 'Clientes cargados correctamente', true, 2600);
+      endDataLoad(inicio, true);
     } catch (error) {
-      await showAlert('error-datos', 'Error al cargar clientes', true, 2600);
+      endDataLoad(inicio, false);
       if (window.pmClientesAdminData.length === 0) tabla.clear().draw();
     }
   }
 
+  function mostrarClientes(lista) {
+    tabla.clear();
+    tabla.rows.add(lista).draw();
+  }
+
+  function filtrarClientes(texto) {
+    const q = texto.toLowerCase();
+    const filtrados = window.pmClientesAdminData.filter(c =>
+      (c.nombre || '').toLowerCase().includes(q) ||
+      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (c.razon_social || '').toLowerCase().includes(q) ||
+      (c.email || '').toLowerCase().includes(q)
+    );
+    mostrarClientes(filtrados);
+  }
+
+  const buscador = document.getElementById('busquedaCliente');
+  const btnBuscar = document.getElementById('btnBuscarCliente');
+  if (buscador) buscador.addEventListener('input', () => filtrarClientes(buscador.value.trim()));
+  if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
+
   if (window.pmClientesAdminData.length === 0) {
-    await obtenerClientes();
+    obtenerClientes();
   } else {
     mostrarClientes(window.pmClientesAdminData);
   }
+});

@@ -1,8 +1,8 @@
 function animarRobotFlotacionConstante() {
-    const robot = document.getElementById("robot-pm-img");
-    if (!robot) return;
+    const contenedor = document.getElementById("robot-pm-widget");
+    if (!contenedor) return;
 
-    robot.animate([
+    contenedor.animate([
         { transform: "translateY(0)" },
         { transform: "translateY(-12px)" },
         { transform: "translateY(0)" }
@@ -30,7 +30,7 @@ function animacionSubidaYCaida() {
         easing: "ease-in"
     });
 
-    // Bajada suave
+    // Bajada suave y ocultar estela
     setTimeout(() => {
         contenedor.animate([
             { transform: "translateY(-100vh)" },
@@ -40,7 +40,6 @@ function animacionSubidaYCaida() {
             easing: "ease-out"
         });
 
-        // 🔥 Ocultar estela
         estela.style.opacity = "0";
     }, 400);
 }

@@ -81,6 +81,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!checks.length) return;
 
     const start = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('borrando', 'Eliminando comprobantes...', false, 1600);
+    }
 
     let dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {
@@ -101,10 +104,16 @@ document.addEventListener('DOMContentLoaded', () => {
       actualizarBtnEliminar();
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-exito', 'Comprobantes eliminados', false, 2600);
+        }
       }, delay);
     } catch (e) {
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-error', 'Error eliminando comprobantes', false, 2600);
+        }
       }, delay);
       console.error('Error eliminando', e);
     }
@@ -142,6 +151,8 @@ document.addEventListener('DOMContentLoaded', () => {
   btnBuscar?.addEventListener('click', filtrar);
 
   async function cargarComprobantes() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     let dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {
       const usr = localStorage.getItem('usuario_obj');
@@ -160,7 +171,9 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarComprobantes(registros);
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error cargando comprobantes:', err);
     }
   }
@@ -171,10 +184,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (const [_, v] of datos.entries()) {
       if (!v) {
+        if (typeof showAlert === 'function') {
+          showAlert('error-validacion', 'Complete todos los campos', false);
+        }
         return;
       }
     }
 
+    if (typeof showAlert === 'function') {
+      showAlert('cargando-datos', 'Enviando datos...', false);
+    }
     try {
       const resp = await fetch('/api/comprobantes_pago', {
         method: 'POST',
@@ -183,6 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const res = await resp.json();
       if (resp.ok && res.ok) {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Formulario enviado correctamente', false);
+        }
         setTimeout(() => {
           location.href = '/clientes/comprobantes';
         }, 1500);
@@ -190,6 +212,9 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(res.detail || 'Error al subir comprobante');
       }
     } catch (err) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error al enviar el formulario', false);
+      }
     }
   });
 

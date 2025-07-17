@@ -47,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const ids = Array.from(document.querySelectorAll('#tablaFacturas tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
     const start = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('borrando', 'Eliminando facturas...', false, 1600);
+    }
     try {
       const resp = await fetch('/admin/api/facturas_pendientes/eliminar', {
         method: 'POST',
@@ -57,10 +60,16 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarFacturas();
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-exito', 'Facturas eliminadas', false, 2600);
+        }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-error', 'Error al eliminar facturas', false, 2600);
+        }
       }, delay);
       console.error('Error eliminando facturas:', err);
     } finally {
@@ -69,6 +78,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarFacturas() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/admin/api/facturas_pendientes', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -77,7 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
       window.pmFacturasPendAdminData = await resp.json();
       mostrarFacturas(window.pmFacturasPendAdminData);
       mensajeError?.classList.add('d-none');
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error cargando facturas:', err);
     }
   }

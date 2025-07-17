@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabla = tablaClientesAlquileres;
 
   async function cargarAlquileres() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/clientes/alquileres_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -54,7 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarAlquileres(window.pmClientesAlquileresData);
       if (window.pmClientesAlquileresData.length === 0) {
       }
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error cargando alquileres:', err);
     }
   }

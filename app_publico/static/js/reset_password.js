@@ -24,6 +24,9 @@ if (form) {
     e.preventDefault();
     if (!validar()) return;
     const token = document.getElementById('token').value;
+    if (typeof showAlert === 'function') {
+      showAlert('guardando-datos', 'Actualizando contraseña...', false, 1600);
+    }
     try {
       const resp = await fetch('/reset_password', {
         method: 'POST',
@@ -33,9 +36,18 @@ if (form) {
       const data = await resp.json();
       if (resp.ok) {
         form.reset();
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', data.mensaje || 'Contraseña actualizada', false, 2600);
+        }
       } else {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', data.detail || 'Error al actualizar', false, 2600);
+        }
       }
     } catch (_) {
+      if (typeof showAlert === 'function') {
+        showAlert('error-datos', 'Error de conexión', false, 2600);
+      }
     }
   });
 }

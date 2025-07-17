@@ -39,6 +39,9 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaVentas tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
+    if (typeof showAlert === 'function') {
+      showAlert('borrando', 'Eliminando ventas...', false, 1600);
+    }
     try {
       const resp = await fetch('/admin/api/ventas/eliminar', {
         method: 'POST',
@@ -47,14 +50,22 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error al eliminar');
       await cargarVentas();
+      if (typeof showAlert === 'function') {
+        showAlert('borrado-exito', 'Ventas eliminadas', false, 2600);
+      }
     } catch (err) {
       console.error('Error eliminando ventas:', err);
+      if (typeof showAlert === 'function') {
+        showAlert('borrado-error', 'Error al eliminar ventas', false, 2600);
+      }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
   async function cargarVentas() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/admin/api/ventas', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -62,7 +73,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error consultando ventas');
       window.pmVentasAdminData = await resp.json();
       mostrarVentas(window.pmVentasAdminData);
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error al cargar ventas:', err);
     }
   }

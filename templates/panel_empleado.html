@@ -127,6 +127,14 @@
 </div>
 {% endblock %}
 
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
+{% block scripts %}
   <script>
     const btn = document.getElementById("btnLogout");
     if (btn) {
@@ -149,4 +157,5 @@
       L.marker([-33.6757, -65.4574]).addTo(map).bindPopup("Oficina, Belgrano-Balcarce 1182");
     });
   </script>
+  <script src="/static/js/alertas.js"></script>
 {% endblock %}

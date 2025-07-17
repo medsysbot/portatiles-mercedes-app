@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarVentas() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/clientes/compras_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -44,7 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 401) return handleUnauthorized();
       registros = await resp.json();
       mostrarVentas(registros);
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error cargando compras:', err);
     }
   }

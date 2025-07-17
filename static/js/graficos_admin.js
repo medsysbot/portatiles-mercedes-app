@@ -23,10 +23,16 @@ function guardar(key, data) {
 
   if (!labels || !alquileres || !ventas || !gastos || !ingresos) {
     const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-reporte', 'Cargando datos...', false, 1600);
+    }
     const resp = await fetch('/admin/api/dashboard');
     const datos = await resp.json();
     const delay = Math.max(0, 1600 - (Date.now() - inicio));
     setTimeout(() => {
+      if (typeof showAlert === 'function') {
+        showAlert('exito-datos', 'Datos cargados', false, 2600);
+      }
     }, delay);
     labels = labels || datos.labels;
     alquileres = alquileres || datos.alquileres;

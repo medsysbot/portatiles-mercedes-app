@@ -41,8 +41,6 @@ import sys
 import traceback
 import logging
 import os
-os.makedirs("logs", exist_ok=True)
-from pathlib import Path
 
 
 def excepthook(type, value, tb):
@@ -52,41 +50,21 @@ def excepthook(type, value, tb):
 
 sys.excepthook = excepthook
 
-# Configuración de logging para eventos de login
-LOG_DIR = Path("logs")
-LOG_DIR.mkdir(exist_ok=True)
-LOG_FILE = LOG_DIR / "login_events.log"
+# Configuración de logging para imprimir todo por consola
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    stream=sys.stdout,
+)
 
 login_logger = logging.getLogger("login_events")
 login_logger.setLevel(logging.INFO)
-if not login_logger.handlers:
-    file_handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
-    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    file_handler.setFormatter(formatter)
-    login_logger.addHandler(file_handler)
-    login_logger.propagate = False
 
-# Logger para registrar tracebacks de errores generales
-ERROR_LOG_FILE = LOG_DIR / "errores_backend.log"
 error_logger = logging.getLogger("errores_backend")
 error_logger.setLevel(logging.ERROR)
-if not error_logger.handlers:
-    err_handler = logging.FileHandler(ERROR_LOG_FILE, mode="a", encoding="utf-8")
-    err_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    err_handler.setFormatter(err_formatter)
-    error_logger.addHandler(err_handler)
-    error_logger.propagate = False
 
-# Logger para errores detallados de endpoints
-SYSTEM_ERROR_LOG_FILE = LOG_DIR / "errores_sistema.log"
 system_error_logger = logging.getLogger("errores_sistema")
 system_error_logger.setLevel(logging.ERROR)
-if not system_error_logger.handlers:
-    sys_handler = logging.FileHandler(SYSTEM_ERROR_LOG_FILE, mode="a", encoding="utf-8")
-    sys_formatter = logging.Formatter("%(asctime)s - %(message)s")
-    sys_handler.setFormatter(sys_formatter)
-    system_error_logger.addHandler(sys_handler)
-    system_error_logger.propagate = False
 
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles

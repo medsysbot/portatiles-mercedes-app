@@ -24,8 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarInventario() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch('/empleado/api/inventario_banos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -34,9 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
       banosCargados = await resp.json();
       mostrar(banosCargados);
       mensajeError.classList.add('d-none');
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error cargando inventario:', err);
     }
   }

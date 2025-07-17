@@ -19,16 +19,10 @@ form.addEventListener('submit', async (e) => {
 
   for (const [_, valor] of datos.entries()) {
     if (!valor) {
-      if (typeof showAlert === 'function') {
-        showAlert('error-validacion', 'Complete todos los campos', false);
-      }
       return;
     }
   }
 
-  if (typeof showAlert === 'function') {
-    showAlert('cargando-datos', 'Enviando datos...', false);
-  }
 
   try {
     const resp = await fetch('/registrar_limpieza', {
@@ -39,17 +33,8 @@ form.addEventListener('submit', async (e) => {
     if (resp.ok) {
       form.reset();
       fechaHoraInput.value = new Date().toISOString().slice(0, 16);
-      if (typeof showAlert === 'function') {
-        showAlert('exito-datos', resultado.mensaje || 'Formulario enviado correctamente', false);
-      }
     } else {
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', resultado.detail || 'Error al enviar el formulario', false);
-      }
     }
   } catch (_) {
-    if (typeof showAlert === 'function') {
-      showAlert('error-datos', 'Error al enviar el formulario', false);
-    }
   }
 });

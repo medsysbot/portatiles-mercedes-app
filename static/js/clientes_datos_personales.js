@@ -38,9 +38,6 @@ async function cargarDatosCliente() {
     document.getElementById('razon_social').value = datos.razon_social || '';
     document.getElementById('email').value = datos.email || '';
   } catch (_) {
-    if (typeof showAlert === 'function') {
-      showAlert('error-datos', 'Error al obtener datos', false, 2500);
-    }
   }
 }
 
@@ -50,9 +47,6 @@ async function guardarDatosCliente(ev) {
   const data = {};
   new FormData(form).forEach((v, k) => { data[k] = v; });
 
-  if (typeof showAlert === 'function') {
-    showAlert('enviando-mensaje', 'Enviando datos...', false, 2500);
-  }
   await new Promise(r => setTimeout(r, 2500));
 
   try {
@@ -64,18 +58,12 @@ async function guardarDatosCliente(ev) {
     if (!resp) return;
     const resJson = await resp.json();
     if (resp.ok) {
-      if (typeof showAlert === 'function') {
-        showAlert('exito-datos', 'Datos guardados correctamente', false, 2500);
-      }
       await new Promise(r => setTimeout(r, 2500));
       window.location.href = '/cliente/panel';
     } else {
       throw new Error(resJson.detail || resJson.error || 'Error al guardar los datos');
     }
   } catch (error) {
-    if (typeof showAlert === 'function') {
-      showAlert('error-datos', 'Error al guardar los datos', false, 2500);
-    }
   }
 }
 

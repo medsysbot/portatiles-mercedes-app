@@ -84,16 +84,21 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function obtenerClientes() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
+      if (typeof showAlert === 'function') {
+        await showAlert('cargando-datos', 'Cargando clientes...', true);
+      }
       const resp = await fetch('/clientes');
       const data = await resp.json();
       window.pmClientesAdminData = data || [];
       mostrarClientes(window.pmClientesAdminData);
-      endDataLoad(inicio, true);
+      if (typeof showAlert === 'function') {
+        await showAlert('exito-datos', 'Clientes cargados', true);
+      }
     } catch (error) {
-      endDataLoad(inicio, false);
+      if (typeof showAlert === 'function') {
+        await showAlert('error-datos', 'Error al cargar clientes', true);
+      }
       if (window.pmClientesAdminData.length === 0) tabla.clear().draw();
     }
   }

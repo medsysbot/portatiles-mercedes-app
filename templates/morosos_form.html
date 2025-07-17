@@ -3,6 +3,7 @@
 {% block description %}Registro de cliente moroso{% endblock %}
 {% block head_extra %}
 {{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">Nuevo moroso</h2>
@@ -35,8 +36,40 @@
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Guardar</button>
     <a href="/admin/morosos" class="btn btn-secondary">Volver</a>
+    <button type="button" id="btnBuscarClienteMoroso" class="btn btn-secondary">Buscar cliente</button>
   </div>
 </form>
+</div>
+
+<!-- Modal de selección de clientes -->
+<div class="modal fade" id="modalClientesMoroso" tabindex="-1" role="dialog" aria-labelledby="modalClientesMorosoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalClientesMorosoLabel">Seleccionar cliente</h5>
+      </div>
+      <div class="modal-body">
+        <input type="text" id="filtroClientesMoroso" class="form-control mb-3" placeholder="Buscar...">
+        <div class="table-responsive">
+          <table id="tablaClientesMoroso" class="table pm-tabla table-striped table-bordered">
+            <thead>
+              <tr>
+                <th></th>
+                <th>DNI / CUIT / CUIL</th>
+                <th>Nombre</th>
+                <th>Razón social</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" id="btnAgregarClienteMoroso" class="btn btn-primary" disabled>Agregar</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
 </div>
 {% endblock %}
 
@@ -50,5 +83,7 @@
 
 {% block scripts %}
   {{ super() }}
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="/static/js/morosos_form.js"></script>
   <script src="/static/js/alertas.js"></script>
 {% endblock %}

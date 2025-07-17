@@ -70,7 +70,62 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCancelar = document.getElementById('btnCancelarForm');
   const btnEliminar = document.getElementById('btnEliminarComprobantes');
   const checkTodos = document.getElementById('checkTodosComprobantes');
+  const btnBuscarCliente = document.getElementById('btnBuscarClienteComprobante');
+  const btnAgregarCliente = document.getElementById('btnAgregarClienteComprobante');
+  const filtroClientes = document.getElementById('filtroClientesComprobante');
   window.pmComprobantesAdminData = window.pmComprobantesAdminData || [];
+  let clientesModal = [];
+  let tablaClientes = null;
+
+  async function cargarClientesModal(texto = '') {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
+    try {
+      const resp = await fetch(`/admin/api/clientes/busqueda?q=${encodeURIComponent(texto)}`);
+      if (!resp.ok) throw new Error('Error');
+      const data = await resp.json();
+      clientesModal = data.clientes || [];
+      tablaClientes.clear();
+      tablaClientes.rows.add(clientesModal).draw();
+      endDataLoad(inicio, true);
+    } catch (err) {
+      endDataLoad(inicio, false);
+      console.error('Error al buscar clientes', err);
+    }
+  }
+
+  function abrirModalClientes() {
+    tablaClientes = $('#tablaClientesComprobante').DataTable({
+      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+      paging: true,
+      searching: false,
+      ordering: true,
+      columns: [
+        { data: 'dni_cuit_cuil', render: d => `<input type="checkbox" class="seleccion-cliente" value="${d}">`, orderable: false },
+        { data: 'nombre' },
+        { data: 'dni_cuit_cuil' },
+        { data: 'razon_social' }
+      ]
+    });
+
+    cargarClientesModal('');
+
+    filtroClientes?.addEventListener('input', () => {
+      cargarClientesModal(filtroClientes.value.trim());
+    });
+
+    $('#tablaClientesComprobante tbody').on('change', '.seleccion-cliente', function() {
+      $('#tablaClientesComprobante tbody .seleccion-cliente').not(this).prop('checked', false);
+      if (btnAgregarCliente) btnAgregarCliente.disabled = !this.checked;
+    });
+
+    $('#modalClientesComprobante').on('hidden.bs.modal', function() {
+      $('#tablaClientesComprobante').DataTable().destroy();
+      this.remove();
+    });
+
+    $('#modalClientesComprobante').modal('show');
+  }
 
   function actualizarBtnEliminar() {
     if (!btnEliminar) return;
@@ -165,6 +220,22 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Error cargando comprobantes:', err);
     }
   }
+
+  btnBuscarCliente?.addEventListener('click', abrirModalClientes);
+
+  btnAgregarCliente?.addEventListener('click', () => {
+    const seleccionado = document.querySelector('#tablaClientesComprobante tbody .seleccion-cliente:checked');
+    if (!seleccionado) return;
+    const cliente = clientesModal.find(c => c.dni_cuit_cuil == seleccionado.value);
+    if (cliente) {
+      document.querySelector('input[name="dni_cuit_cuil"]').value = cliente.dni_cuit_cuil;
+      document.querySelector('input[name="nombre_cliente"]').value = cliente.nombre;
+      document.querySelector('input[name="razon_social"]').value = cliente.razon_social;
+    }
+    $('#modalClientesComprobante').modal('hide');
+    seleccionado.checked = false;
+    if (btnAgregarCliente) btnAgregarCliente.disabled = true;
+  });
 
   form?.addEventListener('submit', async ev => {
     ev.preventDefault();

@@ -44,8 +44,40 @@
     <div class="form-actions">
       <button type="submit" class="btn btn-primary">Guardar</button>
       <button type="button" id="btnCancelarForm" class="btn btn-secondary">Volver</button>
+      <button type="button" id="btnBuscarClienteComprobante" class="btn btn-secondary">Buscar cliente</button>
     </div>
   </form>
+
+  <!-- Modal de selección de clientes -->
+  <div class="modal fade" id="modalClientesComprobante" tabindex="-1" role="dialog" aria-labelledby="modalClientesComprobanteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalClientesComprobanteLabel">Seleccionar cliente</h5>
+        </div>
+        <div class="modal-body">
+          <input type="text" id="filtroClientesComprobante" class="form-control mb-3" placeholder="Buscar...">
+          <div class="table-responsive">
+            <table id="tablaClientesComprobante" class="table pm-tabla table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Nombre</th>
+                  <th>DNI / CUIT / CUIL</th>
+                  <th>Razón social</th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="btnAgregarClienteComprobante" class="btn btn-primary" disabled>Agregar</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div id="contenedorTabla" class="table-responsive bg-light p-3">
     <table id="tablaComprobantes" class="table pm-tabla table-striped table-bordered">

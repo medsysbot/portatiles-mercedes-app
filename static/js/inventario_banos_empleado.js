@@ -24,8 +24,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarInventario() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch('/empleado/api/inventario_banos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -33,11 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error al consultar inventario');
       banosCargados = await resp.json();
       mostrar(banosCargados);
-      mensajeError.classList.add('d-none');
-      endDataLoad(inicio, true);
+      mensajeError?.classList.add('d-none');
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error cargando inventario:', err);
+      mensajeError?.classList.remove('d-none');
     }
   }
 
@@ -54,9 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
       (b.estado || '').toLowerCase().includes(q)
     );
     mostrar(filtrados);
-    if (filtrados.length === 0) {
-    } else {
-    }
   }
 
   buscador?.addEventListener('input', () => filtrar(buscador.value.trim()));

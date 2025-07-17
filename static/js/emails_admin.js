@@ -3,25 +3,13 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   window.pmEmailsAdminData = window.pmEmailsAdminData || [];
-  const tabla = $('#tablaEmails').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true,
-    columns: [
-      { data: 'fecha' },
-      { data: 'remitente' },
-      { data: 'asunto' },
-      { data: 'cuerpo', render: c => (c || '').slice(0, 100) }
-    ]
-  });
+  const tbody = document.querySelector('#tablaEmails tbody');
   const form = document.getElementById('formEnviarEmail');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
   const btnCancelar = document.getElementById('btnCancelarForm');
   const buscador = document.getElementById('busquedaEmail');
   const btnBuscar = document.getElementById('btnBuscarEmail');
-  let emailsCargados = [];
 
   form.classList.add('d-none');
 
@@ -38,20 +26,30 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   function mostrarDatos(lista) {
-    tabla.clear();
-    tabla.rows.add(lista).draw();
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    lista.forEach(e => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${e.fecha}</td>
+        <td>${e.remitente}</td>
+        <td>${e.asunto}</td>
+        <td>${(e.cuerpo || '').slice(0, 100)}</td>`;
+      tbody.appendChild(tr);
+    });
   }
 
   async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/emails', {
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+        headers: { Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '') }
       });
       if (!resp.ok) throw new Error('Error al consultar emails');
       window.pmEmailsAdminData = await resp.json();
       mostrarDatos(window.pmEmailsAdminData);
     } catch (err) {
       console.error('Error cargando emails:', err);
+      if (!window.pmEmailsAdminData.length && tbody) tbody.innerHTML = '';
     }
   }
 
@@ -61,18 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
       (e.remitente || '').toLowerCase().includes(q) ||
       (e.asunto || '').toLowerCase().includes(q)
     );
-      mostrarDatos(filtrados);
+    mostrarDatos(filtrados);
   }
 
   buscador?.addEventListener('input', filtrarEmails);
   btnBuscar?.addEventListener('click', filtrarEmails);
 
+  form?.addEventListener('submit', async ev => {
     ev.preventDefault();
     const datos = new FormData(form);
     try {
       const resp = await fetch('/admin/emails/enviar', {
         method: 'POST',
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        headers: { Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '') },
         body: datos
       });
       const res = await resp.json();
@@ -81,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
       obtenerDatos();
       btnCancelar.click();
     } catch (err) {
+      console.error('Error enviando email:', err);
     }
   });
 

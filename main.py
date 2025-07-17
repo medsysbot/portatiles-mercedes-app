@@ -97,14 +97,6 @@ def registrar_error_supabase(ruta, usuario, detalle, stacktrace):
         print("[LOG] Error guardando error en Supabase:", exc)
 # ==== FIN BLOQUE ====
 
-
-
-
-
-
-
-
-
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, JSONResponse
@@ -153,7 +145,6 @@ app.add_middleware(
 
 # Opcional: forzar HTTPS
 # app.add_middleware(HTTPSRedirectMiddleware)
-
 # Registrar manejador de excepciones para capturar tracebacks
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
@@ -173,12 +164,12 @@ async def http_exception_handler(request: Request, exc: HTTPException):
     )
 
     registrar_error_supabase(
-    request.url.path,
-    user,
-    exc.detail,
-    traceback.format_exc()
-)
-return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+        request.url.path,
+        user,
+        exc.detail,
+        traceback.format_exc()
+    )
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 
 @app.exception_handler(Exception)
@@ -199,12 +190,12 @@ async def general_exception_handler(request: Request, exc: Exception):
     )
 
     registrar_error_supabase(
-    request.url.path,
-    user,
-    str(exc),
-    traceback.format_exc()
-)
-return JSONResponse(status_code=500, content={"detail": "Error interno del sistema"})
+        request.url.path,
+        user,
+        str(exc),
+        traceback.format_exc()
+    )
+    return JSONResponse(status_code=500, content={"detail": "Error interno del sistema"})
 
 # Inyectar el cliente de Supabase global en todos los módulos solo si está habilitado
 if os.getenv("ENABLE_SUPABASE") == "1":

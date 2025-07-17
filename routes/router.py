@@ -256,11 +256,6 @@ async def obtener_dashboard_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
-@router.get("/registro_clientes.js")
-async def obtener_registro_js():
-    """Script del formulario de registro de clientes."""
-    js_path = PUBLIC_STATIC_DIR / "js" / "registro_clientes.js"
-    return FileResponse(js_path, media_type="application/javascript")
 
 
 @router.get("/alquiler", response_class=HTMLResponse)
@@ -326,12 +321,6 @@ async def mostrar_galeria():
     return HTMLResponse(content=html_contenido)
 
 
-@router.get("/registro_clientes", response_class=HTMLResponse)
-async def mostrar_registro_clientes():
-    """Página para registrar nuevos clientes."""
-    html_path = TEMPLATES_DIR / "registro_clientes.html"
-    html_contenido = html_path.read_text(encoding="utf-8")
-    return HTMLResponse(content=html_contenido)
 
 
 @router.get("/recuperar_password", response_class=HTMLResponse)

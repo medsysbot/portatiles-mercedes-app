@@ -69,7 +69,7 @@ function showAlertAndRedirect(type, redirectUrl, customMessage = null, duration 
 // === UTILIDADES PARA CARGA DE DATOS ===
 function startDataLoad() {
   if (typeof showAlert === 'function') {
-    showAlert('cargando-datos', 'Cargando datos, por favor espere...', true);
+    showAlert('cargando-datos', 'Cargando datos...', false);
   }
   return Date.now();
 }

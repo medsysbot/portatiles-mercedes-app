@@ -37,7 +37,7 @@ function inicializarTablaClientes() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   inicializarTablaClientes();
   const tabla = tablaClientes;
 
@@ -116,11 +116,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarCliente');
   if (buscador) buscador.addEventListener('input', () => filtrarClientes(buscador.value.trim()));
   if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
-
   if (window.pmClientesAdminData.length === 0) {
-    obtenerClientes();
-  } else {
-    mostrarClientes(window.pmClientesAdminData);
+  obtenerClientes();
+} else {
+  if (typeof showAlert === 'function') {
+    await showAlert('cargando-datos', 'Cargando clientes...', true);
+    await showAlert('exito-datos', 'Clientes cargados', true);
   }
+  mostrarClientes(window.pmClientesAdminData);
+}
+
 });
 

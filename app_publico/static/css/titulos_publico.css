@@ -1,0 +1,8 @@
+.titulo-publico {
+    color: #ffcc00;
+    text-shadow:
+        -0.8px -0.8px 0 #000,
+         0.8px -0.8px 0 #000,
+        -0.8px  0.8px 0 #000,
+         0.8px  0.8px 0 #000;
+}

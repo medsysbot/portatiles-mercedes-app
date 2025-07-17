@@ -284,6 +284,7 @@ Proyecto: Portátiles Mercedes
       </a>
     </div>
     <!-- ==== Formulario de login ==== -->
+    <div id="div_login" style="display:flex; flex-direction:column; align-items:center;">
     <form id="loginForm">
       <div class="campo-login">
         <img src="/app_publico/static/icons/usuario-port.png" alt="Usuario">
@@ -318,9 +319,11 @@ Proyecto: Portátiles Mercedes
         <span>Registrarse</span>
       </button>
     </form>
+    </div>
 
     <!-- ==== Formulario de registro ==== -->
-    <form id="registroForm" style="display:none;">
+    <div id="div_registro" style="display:none; flex-direction:column; align-items:center;">
+    <form id="registroForm">
       <div class="campo-login">
         <input id="reg_nombre" type="text" name="nombre" placeholder="Nombre completo">
       </div>
@@ -338,6 +341,7 @@ Proyecto: Portátiles Mercedes
         <span>Crear cuenta</span>
       </button>
     </form>
+    </div>
     </div>
     <script src="/app_publico/static/js/alquiler_form.js"></script>
     <!-- ALERTA CENTRAL PERSONALIZADA -->

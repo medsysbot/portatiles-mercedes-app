@@ -5,6 +5,8 @@
 
 const loginForm = document.getElementById('loginForm');
 const registroForm = document.getElementById('registroForm');
+const divLogin = document.getElementById('div_login');
+const divRegistro = document.getElementById('div_registro');
 const btnAcceder = document.getElementById('btnAcceder');
 const btnIngresar = document.getElementById('btnIngresar');
 const btnRegistrarse = document.getElementById('btnRegistrarse');
@@ -14,18 +16,21 @@ function mostrarLoginInicial() {
     campoRol.style.display = 'none';
     btnIngresar.style.display = 'none';
     btnAcceder.style.display = 'block';
-    registroForm.style.display = 'none';
+    divRegistro.style.display = 'none';
+    divLogin.style.display = 'flex';
 }
 
 function mostrarLoginConRol() {
     campoRol.style.display = 'flex';
     btnAcceder.style.display = 'none';
     btnIngresar.style.display = 'block';
-    registroForm.style.display = 'none';
+    divRegistro.style.display = 'none';
+    divLogin.style.display = 'flex';
 }
 
 function mostrarRegistro() {
-    registroForm.style.display = 'flex';
+    divRegistro.style.display = 'flex';
+    divLogin.style.display = 'none';
     campoRol.style.display = 'none';
     btnAcceder.style.display = 'none';
     btnIngresar.style.display = 'none';

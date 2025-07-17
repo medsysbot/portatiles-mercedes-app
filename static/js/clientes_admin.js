@@ -64,9 +64,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
+
       await showAlert('borrado-exito', 'Clientes eliminados', true, 2600);
-      await showAlert('cargando-datos', 'Actualizando clientes...', true, 2600);
-      await obtenerClientes();
+
+      await obtenerClientes();  // Esta ya tiene los alert internos
     } catch (err) {
       await showAlert('borrado-error', 'Error eliminando clientes', true, 2600);
     } finally {
@@ -88,32 +89,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   }
 
-  function mostrarClientes(lista) {
-    tabla.clear();
-    tabla.rows.add(lista).draw();
-  }
-
-  function filtrarClientes(texto) {
-    const q = texto.toLowerCase();
-    const filtrados = window.pmClientesAdminData.filter(c =>
-      (c.nombre || '').toLowerCase().includes(q) ||
-      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-      (c.razon_social || '').toLowerCase().includes(q) ||
-      (c.email || '').toLowerCase().includes(q)
-    );
-    mostrarClientes(filtrados);
-  }
-
-  const buscador = document.getElementById('busquedaCliente');
-  const btnBuscar = document.getElementById('btnBuscarCliente');
-  if (buscador) buscador.addEventListener('input', () => filtrarClientes(buscador.value.trim()));
-  if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
-
   if (window.pmClientesAdminData.length === 0) {
     await obtenerClientes();
   } else {
-    await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
     mostrarClientes(window.pmClientesAdminData);
-    await showAlert('exito-datos', 'Clientes cargados correctamente', true, 2600);
   }
-});

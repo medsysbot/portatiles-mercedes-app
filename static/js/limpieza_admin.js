@@ -38,10 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let servicios = [];
 
   async function cargarServicios() {
-    const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('enviando-reporte', 'Cargando servicios...', false, 1600);
-    }
     try {
       const resp = await fetch('/admin/api/servicios_limpieza', {
         headers: { Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '') }
@@ -50,19 +46,8 @@ document.addEventListener('DOMContentLoaded', () => {
       servicios = await resp.json();
       mostrarServicios(servicios);
       errorDiv.classList.add('d-none');
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Listado actualizado', false, 2600);
-        }
-      }, delay);
+      
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'No se pudo cargar el listado', false, 2600);
-        }
-      }, delay);
       console.error('Error cargando servicios:', err);
     }
   }
@@ -96,9 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!ids.length) return;
     if (!confirm('¿Estás seguro de eliminar los servicios seleccionados?')) return;
     const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('guardando-datos', 'Eliminando servicios...', false, 1600);
-    }
     try {
       const resp = await fetch('/admin/api/servicios_limpieza/eliminar', {
         method: 'POST',
@@ -110,19 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error al eliminar');
       await cargarServicios();
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Servicios eliminados', false, 2600);
-        }
-      }, delay);
+      
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al eliminar servicios', false, 2600);
-        }
-      }, delay);
       console.error('Error eliminando servicios:', err);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;

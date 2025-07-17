@@ -39,9 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaVentas tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    if (typeof showAlert === 'function') {
-      showAlert('borrando', 'Eliminando ventas...', false, 1600);
-    }
     try {
       const resp = await fetch('/admin/api/ventas/eliminar', {
         method: 'POST',
@@ -49,38 +46,29 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarVentas();
-      if (typeof showAlert === 'function') {
-        showAlert('borrado-exito', 'Ventas eliminadas', false, 2600);
-      }
+      await obtenerDatos();
     } catch (err) {
       console.error('Error eliminando ventas:', err);
-      if (typeof showAlert === 'function') {
-        showAlert('borrado-error', 'Error al eliminar ventas', false, 2600);
-      }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
-  async function cargarVentas() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
+  async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/ventas', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error consultando ventas');
       window.pmVentasAdminData = await resp.json();
-      mostrarVentas(window.pmVentasAdminData);
-      endDataLoad(inicio, true);
+      mostrarDatos(window.pmVentasAdminData);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error al cargar ventas:', err);
+      if (!window.pmVentasAdminData.length) tabla.clear().draw();
     }
   }
 
-  function mostrarVentas(lista) {
+  function mostrarDatos(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
   }
@@ -91,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (v.nombre_cliente || '').toLowerCase().includes(q) ||
       (v.dni_cuit_cuil || '').toLowerCase().includes(q)
     );
-    mostrarVentas(filtrados);
+    mostrarDatos(filtrados);
     if (filtrados.length === 0) {
     }
   }
@@ -104,8 +92,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (window.pmVentasAdminData.length === 0) {
-    cargarVentas();
+    obtenerDatos();
   } else {
-    mostrarVentas(window.pmVentasAdminData);
+    mostrarDatos(window.pmVentasAdminData);
   }
 });

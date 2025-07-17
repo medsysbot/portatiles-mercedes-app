@@ -177,44 +177,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Cargar datos tablas ---
   async function cargarDatos() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch(urlDatos, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       datosCargados = await resp.json();
       mostrarDatos(datosCargados);
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error al cargar datos personales:', err);
+      if (!datosCargados.length) tablaDatos.clear().draw();
     }
   }
 
   async function cargarSalarios() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch(urlSalarios, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       salariosCargados = await resp.json();
       mostrarSalarios(salariosCargados);
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error al cargar salarios:', err);
+      if (!salariosCargados.length) tablaSalarios.clear().draw();
     }
   }
 
   async function cargarAusencias() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch(urlAusencias, { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       ausenciasCargados = await resp.json();
       mostrarAusencias(ausenciasCargados);
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error al cargar ausencias:', err);
+      if (!ausenciasCargados.length) tablaAusencias.clear().draw();
     }
   }
 

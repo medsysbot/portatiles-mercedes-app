@@ -41,10 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
     if (!seleccionados.length) return;
-    const start = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('borrando', 'Eliminando alquileres...', false, 1600);
-    }
     try {
       const resp = await fetch('/admin/api/alquileres/eliminar', {
         method: 'POST',
@@ -52,45 +48,30 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ ids: seleccionados })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarAlquileres();
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('borrado-exito', 'Alquileres eliminados', false, 2600);
-        }
-      }, delay);
+      await obtenerDatos();
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('borrado-error', 'Error al eliminar', false, 2600);
-        }
-      }, delay);
       console.error('Error eliminando alquileres:', err);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
-  async function cargarAlquileres() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
+  async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/alquileres', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error consultando alquileres');
       window.pmAlquileresAdminData = await resp.json();
-      mostrarAlquileres(window.pmAlquileresAdminData);
+      mostrarDatos(window.pmAlquileresAdminData);
       mensajeError?.classList.add('d-none');
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error al cargar alquileres:', err);
+      if (!window.pmAlquileresAdminData.length) tabla.clear().draw();
     }
   }
 
-  function mostrarAlquileres(lista) {
+  function mostrarDatos(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
   }
@@ -102,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (a.numero_bano || '').toLowerCase().includes(q)
     );
-    mostrarAlquileres(filtrados);
+    mostrarDatos(filtrados);
     if (filtrados.length === 0) {
     } else {
     }
@@ -116,8 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (window.pmAlquileresAdminData.length === 0) {
-    cargarAlquileres();
+    obtenerDatos();
   } else {
-    mostrarAlquileres(window.pmAlquileresAdminData);
+    mostrarDatos(window.pmAlquileresAdminData);
   }
 });

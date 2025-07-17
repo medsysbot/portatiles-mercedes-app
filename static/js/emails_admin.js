@@ -2,7 +2,19 @@
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
-  const tabla = document.querySelector('#tablaEmails tbody');
+  window.pmEmailsAdminData = window.pmEmailsAdminData || [];
+  const tabla = $('#tablaEmails').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+    columns: [
+      { data: 'fecha' },
+      { data: 'remitente' },
+      { data: 'asunto' },
+      { data: 'cuerpo', render: c => (c || '').slice(0, 100) }
+    ]
+  });
   const form = document.getElementById('formEnviarEmail');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
@@ -25,28 +37,19 @@ document.addEventListener('DOMContentLoaded', () => {
     btnNuevo.classList.remove('d-none');
   });
 
-  function mostrarEmails(lista) {
-    tabla.innerHTML = '';
-    lista.forEach(e => {
-      const fila = document.createElement('tr');
-      fila.innerHTML = `
-        <td>${e.fecha}</td>
-        <td>${e.remitente}</td>
-        <td>${e.asunto}</td>
-        <td>${(e.cuerpo || '').slice(0, 100)}</td>
-      `;
-      tabla.appendChild(fila);
-    });
+  function mostrarDatos(lista) {
+    tabla.clear();
+    tabla.rows.add(lista).draw();
   }
 
-  async function cargarEmails() {
+  async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/emails', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error al consultar emails');
-      emailsCargados = await resp.json();
-      mostrarEmails(emailsCargados);
+      window.pmEmailsAdminData = await resp.json();
+      mostrarDatos(window.pmEmailsAdminData);
     } catch (err) {
       console.error('Error cargando emails:', err);
     }
@@ -54,17 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrarEmails() {
     const q = (buscador?.value || '').toLowerCase();
-    const filtrados = emailsCargados.filter(e =>
+    const filtrados = window.pmEmailsAdminData.filter(e =>
       (e.remitente || '').toLowerCase().includes(q) ||
       (e.asunto || '').toLowerCase().includes(q)
     );
-    mostrarEmails(filtrados);
+      mostrarDatos(filtrados);
   }
 
   buscador?.addEventListener('input', filtrarEmails);
   btnBuscar?.addEventListener('click', filtrarEmails);
 
-  form.addEventListener('submit', async ev => {
     ev.preventDefault();
     const datos = new FormData(form);
     try {
@@ -76,11 +78,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await resp.json();
       if (!resp.ok || !res.ok) throw new Error(res.detail || 'Error al enviar');
       form.reset();
-      cargarEmails();
+      obtenerDatos();
       btnCancelar.click();
     } catch (err) {
     }
   });
 
-  cargarEmails();
+  if (window.pmEmailsAdminData.length === 0) {
+    obtenerDatos();
+  } else {
+    mostrarDatos(window.pmEmailsAdminData);
+  }
 });

@@ -228,7 +228,7 @@ def admin_clientes_page(
         "hay_mas": False,
         "query_str": q or "",
     }
-    return templates.TemplateResponse("clientes_admin.html", context)
+    return templates.TemplateResponse("clientes_admin.html", con)
 
 
 @router.get("/admin/clientes/nuevo", response_class=HTMLResponse)

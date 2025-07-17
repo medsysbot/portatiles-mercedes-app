@@ -174,12 +174,11 @@ registroForm?.addEventListener('submit', async (e) => {
         const resultado = await resp.json();
         if (resp.ok) {
             registroForm.reset();
+            loginForm.reset();
             if (typeof showAlert === 'function') {
                 showAlert('exito-datos', 'Cuenta creada', false);
             }
-            document.getElementById('email').value = email;
-            document.getElementById('password').value = pass1;
-            mostrarLoginConRol();
+            mostrarLoginInicial();
         } else if (typeof showAlert === 'function') {
             showAlert('error-datos', resultado.detail || 'Error al enviar el formulario', false);
         }

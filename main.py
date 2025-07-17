@@ -41,6 +41,7 @@ import sys
 import traceback
 import logging
 import os
+os.makedirs("logs", exist_ok=True)
 from pathlib import Path
 
 

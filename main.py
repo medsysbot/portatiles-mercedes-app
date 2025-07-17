@@ -66,6 +66,45 @@ error_logger.setLevel(logging.ERROR)
 system_error_logger = logging.getLogger("errores_sistema")
 system_error_logger.setLevel(logging.ERROR)
 
+system_error_logger = logging.getLogger("errores_sistema")
+system_error_logger.setLevel(logging.ERROR)
+
+# ==== BLOQUE REGISTRO DE ERRORES EN SUPABASE ====
+import uuid
+from supabase import create_client
+
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
+supabase_error_log = None
+if SUPABASE_URL and SUPABASE_KEY:
+    supabase_error_log = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+def registrar_error_supabase(ruta, usuario, detalle, stacktrace):
+    """Guarda un error en la tabla errores_app_portatiles"""
+    if not supabase_error_log:
+        print("[LOG] Supabase no configurado para registrar errores")
+        return
+    try:
+        supabase_error_log.table("errores_app_portatiles").insert({
+            "id": str(uuid.uuid4()),
+            "ruta": ruta,
+            "usuario": usuario or "N/A",
+            "detalle": detalle or "",
+            "stacktrace": stacktrace or "",
+            "fecha": datetime.utcnow().isoformat()
+        }).execute()
+    except Exception as exc:
+        print("[LOG] Error guardando error en Supabase:", exc)
+# ==== FIN BLOQUE ====
+
+
+
+
+
+
+
+
+
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, JSONResponse
@@ -132,7 +171,14 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         user,
         exc.detail,
     )
-    return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+
+    registrar_error_supabase(
+    request.url.path,
+    user,
+    exc.detail,
+    traceback.format_exc()
+)
+return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
 
 @app.exception_handler(Exception)
@@ -151,7 +197,14 @@ async def general_exception_handler(request: Request, exc: Exception):
         user,
         str(exc),
     )
-    return JSONResponse(status_code=500, content={"detail": "Error interno del sistema"})
+
+    registrar_error_supabase(
+    request.url.path,
+    user,
+    str(exc),
+    traceback.format_exc()
+)
+ return JSONResponse(status_code=500, content={"detail": "Error interno del sistema"})
 
 # Inyectar el cliente de Supabase global en todos los módulos solo si está habilitado
 if os.getenv("ENABLE_SUPABASE") == "1":

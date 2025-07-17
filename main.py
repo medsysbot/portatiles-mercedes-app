@@ -76,6 +76,17 @@ if not error_logger.handlers:
     error_logger.addHandler(err_handler)
     error_logger.propagate = False
 
+# Logger para errores detallados de endpoints
+SYSTEM_ERROR_LOG_FILE = LOG_DIR / "errores_sistema.log"
+system_error_logger = logging.getLogger("errores_sistema")
+system_error_logger.setLevel(logging.ERROR)
+if not system_error_logger.handlers:
+    sys_handler = logging.FileHandler(SYSTEM_ERROR_LOG_FILE, mode="a", encoding="utf-8")
+    sys_formatter = logging.Formatter("%(asctime)s - %(message)s")
+    sys_handler.setFormatter(sys_formatter)
+    system_error_logger.addHandler(sys_handler)
+    system_error_logger.propagate = False
+
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, JSONResponse
@@ -135,7 +146,33 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         exc.detail,
         traceback.format_exc(),
     )
+    user = request.cookies.get("access_token", "N/A")
+    system_error_logger.error(
+        "%s | %s | %s",
+        request.url.path,
+        user,
+        exc.detail,
+    )
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Registra cualquier excepción no manejada."""
+    error_logger.error(
+        "Excepción en %s: %s\n%s",
+        request.url.path,
+        exc,
+        traceback.format_exc(),
+    )
+    user = request.cookies.get("access_token", "N/A")
+    system_error_logger.error(
+        "%s | %s | %s",
+        request.url.path,
+        user,
+        str(exc),
+    )
+    return JSONResponse(status_code=500, content={"detail": "Error interno del sistema"})
 
 # Inyectar el cliente de Supabase global en todos los módulos solo si está habilitado
 if os.getenv("ENABLE_SUPABASE") == "1":

@@ -9,9 +9,9 @@
 }
 
 #robot-pm-img {
-    width: 160px;
+    width: 140px;
     height: auto;
-    animation: flotacion 3s ease-in-out infinite;
+    animation: flotacion 0s ease-in-out infinite;
 }
 
 #robot-globo {

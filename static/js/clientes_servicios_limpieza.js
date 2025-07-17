@@ -9,19 +9,12 @@ function handleUnauthorized() {
   window.location.href = '/login';
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (!localStorage.getItem('access_token')) {
-    window.location.href = '/login';
-    return;
-  }
+window.pmServiciosLimpiezaData = window.pmServiciosLimpiezaData || [];
+let tablaServicios = null;
 
-  const buscador = document.getElementById('busquedaServicios');
-  const btnBuscar = document.getElementById('btnBuscarServicios');
-  const errorDiv = document.getElementById('errorServicios');
-
-  let registros = [];
-
-  const tabla = $('#tablaServicios').DataTable({
+function inicializarTablaServicios() {
+  if (tablaServicios) return;
+  tablaServicios = $('#tablaServicios').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
@@ -38,33 +31,32 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'observaciones', defaultContent: '-' }
     ]
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!localStorage.getItem('access_token')) {
+    window.location.href = '/login';
+    return;
+  }
+
+  const buscador = document.getElementById('busquedaServicios');
+  const btnBuscar = document.getElementById('btnBuscarServicios');
+  const errorDiv = document.getElementById('errorServicios');
+
+  inicializarTablaServicios();
+  const tabla = tablaServicios;
 
   async function cargarServicios() {
-    const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('enviando-reporte', 'Cargando servicios...', false, 1600);
-    }
     try {
       const resp = await fetch('/clientes/servicios_limpieza_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (resp.status === 401) return handleUnauthorized();
-      registros = await resp.json();
-      mostrarServicios(registros);
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Listado actualizado', false, 2600);
-        }
-      }, delay);
+      window.pmServiciosLimpiezaData = await resp.json();
+      mostrarServicios(window.pmServiciosLimpiezaData);
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'No se pudieron cargar los servicios', false, 2600);
-        }
-      }, delay);
       console.error('Error cargando servicios:', err);
+      if (window.pmServiciosLimpiezaData.length === 0) tabla.clear().draw();
     }
   }
 
@@ -75,15 +67,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrar() {
     const q = (buscador.value || '').toLowerCase();
-    const filtrados = registros.filter(s =>
+    const filtrados = window.pmServiciosLimpiezaData.filter(s =>
       (s.numero_bano || '').toLowerCase().includes(q) ||
       (s.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (s.nombre_cliente || '').toLowerCase().includes(q) ||
       (s.razon_social || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);
-    if (filtrados.length === 0) {
-    }
   }
 
   buscador?.addEventListener('input', filtrar);

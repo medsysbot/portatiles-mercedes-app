@@ -9,19 +9,12 @@ function handleUnauthorized() {
   window.location.href = '/login';
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (!localStorage.getItem('access_token')) {
-    window.location.href = '/login';
-    return;
-  }
+window.pmClientesComprasData = window.pmClientesComprasData || [];
+let tablaVentasCliente = null;
 
-  const buscador = document.getElementById('busquedaVentas');
-  const btnBuscar = document.getElementById('btnBuscarVentas');
-  const errorDiv = document.getElementById('errorVentas');
-
-  let registros = [];
-
-  const tabla = $('#tablaVentasCliente').DataTable({
+function inicializarTablaVentasCliente() {
+  if (tablaVentasCliente) return;
+  tablaVentasCliente = $('#tablaVentasCliente').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
@@ -35,21 +28,32 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'observaciones', defaultContent: '-' }
     ]
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!localStorage.getItem('access_token')) {
+    window.location.href = '/login';
+    return;
+  }
+
+  const buscador = document.getElementById('busquedaVentas');
+  const btnBuscar = document.getElementById('btnBuscarVentas');
+  const errorDiv = document.getElementById('errorVentas');
+
+  inicializarTablaVentasCliente();
+  const tabla = tablaVentasCliente;
 
   async function cargarVentas() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch('/clientes/compras_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (resp.status === 401) return handleUnauthorized();
-      registros = await resp.json();
-      mostrarVentas(registros);
-      endDataLoad(inicio, true);
+      window.pmClientesComprasData = await resp.json();
+      mostrarVentas(window.pmClientesComprasData);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error cargando compras:', err);
+      if (window.pmClientesComprasData.length === 0) tabla.clear().draw();
     }
   }
 
@@ -60,12 +64,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrar() {
     const q = (buscador.value || '').toLowerCase();
-    const filtrados = registros.filter(v =>
+    const filtrados = window.pmClientesComprasData.filter(v =>
       (v.dni_cuit_cuil || '').toLowerCase().includes(q)
     );
     mostrarVentas(filtrados);
-    if (filtrados.length === 0) {
-    }
   }
 
   buscador?.addEventListener('input', filtrar);

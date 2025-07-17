@@ -53,13 +53,13 @@ loginForm?.addEventListener('submit', async (e) => {
 
     if (!email || !password) {
         if (typeof showAlert === 'function') {
-            showAlert('error-validacion', 'Complete todos los campos', false, 2600);
+            showAlert('error-secion', 'Complete todos los campos', false, 2600);
         }
         return;
     }
     if (!rol) {
         if (typeof showAlert === 'function') {
-            showAlert('error-validacion', 'Seleccione un rol válido', false, 2600);
+            showAlert('seleccionar-rol', 'Seleccione un rol válido', false, 2600);
         }
         return;
     }
@@ -80,7 +80,7 @@ loginForm?.addEventListener('submit', async (e) => {
         if (res.ok && data.access_token) {
             setTimeout(() => {
                 if (typeof showAlert === 'function') {
-                    showAlert('inicio-sesion', 'Inicio de sesión exitoso', false, 2600);
+                    showAlert('exito-sesion', 'Inicio de sesión exitoso', false, 2600);
                 }
                 localStorage.setItem('access_token', data.access_token);
                 const finalizar = (url) => setTimeout(() => { window.location.href = url; }, 2600);

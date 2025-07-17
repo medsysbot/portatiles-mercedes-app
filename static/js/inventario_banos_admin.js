@@ -38,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const ids = Array.from(document.querySelectorAll('#tablaInventario tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
     const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('borrando', 'Eliminando baños...', false, 1600);
+    }
     try {
       const resp = await fetch('/admin/api/inventario_banos/eliminar', {
         method: 'POST',
@@ -48,10 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarTabla();
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-exito', 'Baños eliminados', false, 2600);
+        }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('borrado-error', 'Error al eliminar baños', false, 2600);
+        }
       }, delay);
       console.error('Error eliminando baños:', err);
     } finally {
@@ -60,6 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarTabla() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/admin/api/inventario_banos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -68,7 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
       banosCargados = await resp.json();
       mostrarBanos(banosCargados);
       mensajeError?.classList.add('d-none');
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error cargando inventario:', err);
     }
   }

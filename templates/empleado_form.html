@@ -49,6 +49,14 @@
   </form>
 </div>
 {% endblock %}
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
+{% block scripts %}
 <script>
   const toggle = document.getElementById('togglePass');
   if (toggle) {
@@ -62,4 +70,5 @@
     });
   }
 </script>
+  <script src="/static/js/alertas.js"></script>
 {% endblock %}

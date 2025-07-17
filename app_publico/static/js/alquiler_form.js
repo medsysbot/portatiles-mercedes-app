@@ -11,8 +11,14 @@ const verFormularioBtn = document.getElementById('toggleFormulario');
 if (verFormularioBtn) {
   // ==== Eventos de UI ====
   verFormularioBtn.addEventListener('click', () => {
+    if (typeof showAlert === 'function') {
+      showAlert('abriendo-formulario', 'Abriendo formulario...', false, 1600);
+    }
     setTimeout(() => {
       window.open('/alquiler_form', '_blank');
+      if (typeof showAlert === 'function') {
+        showAlert('formulario-abierto', 'Formulario abierto', false, 2600);
+      }
     }, 1600);
   });
 }

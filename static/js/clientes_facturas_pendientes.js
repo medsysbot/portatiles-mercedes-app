@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabla = tablaFacturasPendientes;
 
   async function cargarFacturas() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/clientes/facturas_pendientes_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -52,7 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 401) return handleUnauthorized();
       window.pmFacturasPendientesData = await resp.json();
       mostrarFacturas(window.pmFacturasPendientesData);
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error cargando facturas:', err);
     }
   }

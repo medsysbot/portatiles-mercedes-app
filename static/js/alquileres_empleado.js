@@ -25,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargar() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/empleado/api/alquileres', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -33,7 +35,9 @@ document.addEventListener('DOMContentLoaded', () => {
       alquileresCargados = await resp.json();
       mostrar(alquileresCargados);
       mensajeError?.classList.add('d-none');
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error al cargar alquileres:', err);
     }
   }

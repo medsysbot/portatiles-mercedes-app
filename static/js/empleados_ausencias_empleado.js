@@ -18,12 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarDatos() {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch('/empleado/api/empleados_ausencias', { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       const datos = await resp.json();
       tabla.clear();
       tabla.rows.add(datos).draw();
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error al cargar ausencias:', err);
     }
   }

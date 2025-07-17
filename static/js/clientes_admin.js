@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!ids.length) return;
     try {
       if (typeof showAlert === 'function') {
-        await showAlert('borrando', 'Eliminando clientes...', 1600);
+        await showAlert('borrando', 'Eliminando clientes...', true, 2600);
       }
       const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',
@@ -65,11 +65,13 @@ document.addEventListener('DOMContentLoaded', async () => {
       if (!resp.ok) throw new Error('Error al eliminar');
       await obtenerClientes();
       if (typeof showAlert === 'function') {
-        await showAlert('borrado-exito', 'Clientes eliminados', 2600);
+        await showAlert('borrado-exito', 'Clientes eliminados', true, 2600);
+        await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
+        await showAlert('exito-datos', 'Clientes actualizados', true, 2600);
       }
     } catch (err) {
       if (typeof showAlert === 'function') {
-        await showAlert('borrado-error', 'Error eliminando clientes', 2600);
+        await showAlert('borrado-error', 'Error eliminando clientes', true, 2600);
       }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
@@ -79,18 +81,18 @@ document.addEventListener('DOMContentLoaded', async () => {
   async function obtenerClientes() {
     try {
       if (typeof showAlert === 'function') {
-        await showAlert('cargando-datos', 'Cargando clientes...', 1600);
+        await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
       }
       const resp = await fetch('/clientes');
       const data = await resp.json();
       window.pmClientesAdminData = data || [];
       mostrarClientes(window.pmClientesAdminData);
       if (typeof showAlert === 'function') {
-        await showAlert('exito-datos', 'Clientes cargados', 2600);
+        await showAlert('exito-datos', 'Clientes cargados', true, 2600);
       }
     } catch (error) {
       if (typeof showAlert === 'function') {
-        await showAlert('error-datos', 'Error al cargar clientes', 2600);
+        await showAlert('error-datos', 'Error al cargar clientes', true, 2600);
       }
       if (window.pmClientesAdminData.length === 0) tabla.clear().draw();
     }
@@ -120,8 +122,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   obtenerClientes();
 } else {
   if (typeof showAlert === 'function') {
-    await showAlert('cargando-datos', 'Cargando clientes...', true);
-    await showAlert('exito-datos', 'Clientes cargados', true);
+    await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
+    await showAlert('exito-datos', 'Clientes cargados', true, 2600);
   }
   mostrarClientes(window.pmClientesAdminData);
 }

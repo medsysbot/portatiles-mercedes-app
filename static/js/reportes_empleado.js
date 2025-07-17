@@ -23,9 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarReportes() {
     const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('enviando-reporte', 'Cargando reportes...', false, 1600);
-    }
     try {
       const resp = await fetch('/empleado/api/reportes', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -38,16 +35,10 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Listado actualizado', false, 2600);
-        }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al cargar reportes', false, 2600);
-        }
       }, delay);
       console.error('Error cargando reportes:', err);
       errorDiv.textContent = '';

@@ -1,6 +1,5 @@
 // Archivo: static/js/clientes_admin.js
 // Proyecto: Portátiles Mercedes
-// Requiere que la plantilla cargue /static/js/alertas.js para usar showAlert
 
 function handleUnauthorized() {
   localStorage.removeItem('access_token');
@@ -54,9 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.value);
     if (!ids.length) return;
     const start = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('borrando', 'Eliminando clientes...', false, 1600);
-    }
     try {
       const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',
@@ -67,16 +63,10 @@ document.addEventListener('DOMContentLoaded', () => {
       await obtenerClientes();
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('borrado-exito', 'Clientes eliminados', false, 2600);
-        }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('borrado-error', 'Error eliminando clientes', false, 2600);
-        }
       }, delay);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
@@ -84,16 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function obtenerClientes() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch('/clientes');
       const data = await resp.json();
       window.pmClientesAdminData = data || [];
       mostrarClientes(window.pmClientesAdminData);
-      endDataLoad(inicio, true);
     } catch (error) {
-      endDataLoad(inicio, false);
       if (window.pmClientesAdminData.length === 0) tabla.clear().draw();
     }
   }

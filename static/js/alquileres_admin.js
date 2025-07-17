@@ -42,9 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
     if (!seleccionados.length) return;
     const start = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('borrando', 'Eliminando alquileres...', false, 1600);
-    }
     try {
       const resp = await fetch('/admin/api/alquileres/eliminar', {
         method: 'POST',
@@ -55,16 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarAlquileres();
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('borrado-exito', 'Alquileres eliminados', false, 2600);
-        }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - start));
       setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('borrado-error', 'Error al eliminar', false, 2600);
-        }
       }, delay);
       console.error('Error eliminando alquileres:', err);
     } finally {
@@ -73,8 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarAlquileres() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch('/admin/api/alquileres', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -83,9 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
       window.pmAlquileresAdminData = await resp.json();
       mostrarAlquileres(window.pmAlquileresAdminData);
       mensajeError?.classList.add('d-none');
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error al cargar alquileres:', err);
     }
   }

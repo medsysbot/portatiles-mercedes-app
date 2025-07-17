@@ -31,9 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const ids = Array.from(document.querySelectorAll('#tablaAusencias tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
     const inicio = Date.now();
-    if (typeof showAlert === 'function') {
-      showAlert('guardando-datos', 'Eliminando ausencias...', false, 1600);
-    }
     try {
       const resp = await fetch('/admin/api/empleados_ausencias/eliminar', {
         method: 'POST',
@@ -44,16 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarDatos();
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('exito-datos', 'Ausencias eliminadas', false, 2600);
-        }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
-        if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al eliminar ausencias', false, 2600);
-        }
       }, delay);
       console.error('Error eliminando ausencias:', err);
     } finally {
@@ -62,16 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function cargarDatos() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch('/admin/api/empleados_ausencias', { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       const datos = await resp.json();
       tabla.clear();
       tabla.rows.add(datos).draw();
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error al cargar ausencias:', err);
     }
   }

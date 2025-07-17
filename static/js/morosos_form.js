@@ -7,8 +7,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let tabla = null;
 
   async function cargarClientes(texto = '') {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch(`/admin/api/clientes/busqueda?q=${encodeURIComponent(texto)}`);
       if (!resp.ok) throw new Error('Error');
@@ -16,9 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
       clientes = data.clientes || [];
       tabla.clear();
       tabla.rows.add(clientes).draw();
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error al buscar clientes', err);
     }
   }

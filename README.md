@@ -73,7 +73,6 @@ Para agregarlos o actualizarlos en el futuro:
 ### Assets recientes
 
 - **login.js**: maneja el inicio de sesión y almacena el token en `localStorage`.
-- **registro_clientes.js**: envía el formulario de registro de clientes de forma asíncrona.
 - **AdminLTE 3.2**: cargado desde CDN junto con jQuery 3.6 y Bootstrap 4.6.
 - **Flujo de administración**: tras el inicio de sesión, se muestra un splash (`/splash`) durante unos segundos y luego se redirige automáticamente al tablero en `/admin/panel`.
 - Se eliminó el panel administrativo antiguo y su hoja de estilos, consolidando todo en la plantilla moderna AdminLTE.
@@ -134,7 +133,6 @@ Los archivos HTML visibles para cualquier visitante se almacenan en
 
 - `index.html` (página de bienvenida o *landing*).
 - `login.html`.
-- `registro_clientes.html`.
 - `informacion-banos.html`.
 
 Esto facilita mantener separadas las plantillas públicas de las privadas y

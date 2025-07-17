@@ -40,6 +40,7 @@ Proyecto: Portátiles Mercedes
   <link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
   <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
   <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
+  <link rel="preload" as="image" href="/app_publico/static/icons/registro-clientes.png">
   <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.png">
   <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-galeria.png">
   <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-info-bano.png">
@@ -281,6 +282,14 @@ Proyecto: Portátiles Mercedes
     <!-- ==== Formulario de login ==== -->
     <form id="loginForm">
       <div class="campo-login">
+        <img src="/app_publico/static/icons/usuario-port.png" alt="Usuario">
+        <input id="email" type="email" name="email" placeholder="Email">
+      </div>
+      <div class="campo-login">
+        <img src="/app_publico/static/icons/password-port.png" alt="Contraseña">
+        <input id="password" type="password" name="password" placeholder="Contraseña">
+      </div>
+      <div id="campo-rol" class="campo-login" style="display:none;">
         <img src="/app_publico/static/icons/rol-port.png" alt="Rol">
         <select name="rol" id="rol">
           <option value="" disabled selected>Seleccionar rol</option>
@@ -289,20 +298,40 @@ Proyecto: Portátiles Mercedes
           <option value="cliente">Cliente</option>
         </select>
       </div>
-      <div class="campo-login">
-        <img src="/app_publico/static/icons/usuario-port.png" alt="Usuario">
-        <input id="email" type="email" name="email" placeholder="Email">
-      </div>
-      <div class="campo-login">
-        <img src="/app_publico/static/icons/password-port.png" alt="Contraseña">
-        <input id="password" type="password" name="password" placeholder="Contraseña">
-      </div>
       <div style="text-align:right;margin-top:4px;">
         <a href="/recuperar_password" style="color:#fff;font-size:14px;text-decoration:underline;">¿Olvidaste tu contraseña? Recuperar</a>
       </div>
-        <button type="submit" class="boton-index">
+      <button type="button" id="btnAcceder" class="boton-index">
+        <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Acceder">
+        <span>Acceder</span>
+      </button>
+      <button type="submit" id="btnIngresar" class="boton-index" style="display:none;">
         <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Ingresar">
-        <span>Ingresar al sistema</span>
+        <span>Ingresar</span>
+      </button>
+      <button type="button" id="btnRegistrarse" class="boton-index">
+        <img src="/app_publico/static/icons/registro-clientes.png" alt="Registrarse">
+        <span>Registrarse</span>
+      </button>
+    </form>
+
+    <!-- ==== Formulario de registro ==== -->
+    <form id="registroForm" style="display:none;">
+      <div class="campo-login">
+        <input id="reg_nombre" type="text" name="nombre" placeholder="Nombre completo">
+      </div>
+      <div class="campo-login">
+        <input id="reg_email" type="email" name="email" placeholder="Email">
+      </div>
+      <div class="campo-login">
+        <input id="reg_password" type="password" name="password" placeholder="Elige una contraseña" autocomplete="new-password">
+      </div>
+      <div class="campo-login">
+        <input id="reg_password2" type="password" name="password2" placeholder="Confirmar contraseña" autocomplete="new-password">
+      </div>
+      <button type="submit" class="boton-index">
+        <img src="/app_publico/static/icons/registro-clientes.png" alt="Crear cuenta">
+        <span>Crear cuenta</span>
       </button>
     </form>
     </div>

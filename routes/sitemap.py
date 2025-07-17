@@ -27,7 +27,6 @@ def sitemap_xml() -> Response:
         {"loc": f"{BASE_URL}/contacto", "priority": 0.7},
         {"loc": f"{BASE_URL}/politica-privacidad", "priority": 0.6},
         {"loc": f"{BASE_URL}/galeria", "priority": 0.6},
-        {"loc": f"{BASE_URL}/registro_clientes", "priority": 0.5},
         {"loc": f"{BASE_URL}/informacion-banos.html", "priority": 0.5},
         {"loc": f"{BASE_URL}/alquiler", "priority": 0.5},
         {"loc": f"{BASE_URL}/limpieza", "priority": 0.5},

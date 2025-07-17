@@ -7,7 +7,6 @@ documentacion_recursos.md,/static/icons/...,/app_publico/static/icons/...
 app_publico/static/css/LandingPage.css,/static/imagenes/,/app_publico/static/imagenes/
 app_publico/templates/index.html,/static/,/app_publico/static/
 app_publico/templates/login.html,/static/,/app_publico/static/
-app_publico/templates/registro_clientes.html,/static/,/app_publico/static/
 app_publico/templates/servicios.html,/static/,/app_publico/static/
 app_publico/templates/informacion-banos.html,/static/,/app_publico/static/
 app_publico/templates/galeria.html,/static/,/app_publico/static/

@@ -39,14 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const buscador = document.getElementById('busquedaFacturas');
   const btnBuscar = document.getElementById('btnBuscarFacturas');
-  const errorDiv = document.getElementById('errorFacturas');
 
   inicializarTablaFacturasPendientes();
   const tabla = tablaFacturasPendientes;
 
   async function cargarFacturas() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch('/clientes/facturas_pendientes_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -54,10 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 401) return handleUnauthorized();
       window.pmFacturasPendientesData = await resp.json();
       mostrarFacturas(window.pmFacturasPendientesData);
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error cargando facturas:', err);
+      if (window.pmFacturasPendientesData.length === 0) tabla.clear().draw();
     }
   }
 
@@ -75,8 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
       (f.numero_factura || '').toLowerCase().includes(q)
     );
     mostrarFacturas(filtrados);
-    if (filtrados.length === 0) {
-    }
   }
 
   buscador?.addEventListener('input', filtrar);

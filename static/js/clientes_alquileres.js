@@ -39,14 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const buscador = document.getElementById('busquedaAlquileres');
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
-  const errorDiv = document.getElementById('errorAlquileres');
 
   inicializarTablaClientesAlquileres();
   const tabla = tablaClientesAlquileres;
 
   async function cargarAlquileres() {
-    const inicio = startDataLoad();
-    await dataLoadDelay();
     try {
       const resp = await fetch('/clientes/alquileres_api', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -54,12 +51,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (resp.status === 401) return handleUnauthorized();
       window.pmClientesAlquileresData = await resp.json();
       mostrarAlquileres(window.pmClientesAlquileresData);
-      if (window.pmClientesAlquileresData.length === 0) {
-      }
-      endDataLoad(inicio, true);
     } catch (err) {
-      endDataLoad(inicio, false);
       console.error('Error cargando alquileres:', err);
+      if (window.pmClientesAlquileresData.length === 0) tabla.clear().draw();
     }
   }
 
@@ -76,8 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
       (String(a.numero_bano || '')).toLowerCase().includes(q)
     );
     mostrarAlquileres(filtrados);
-    if (filtrados.length === 0) {
-    }
   }
 
   buscador?.addEventListener('input', filtrar);

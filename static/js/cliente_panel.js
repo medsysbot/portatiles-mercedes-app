@@ -20,11 +20,9 @@ async function fetchConAuth(url, options = {}) {
   }
   return resp;
 }
-// Requiere que la plantilla cargue /static/js/alertas.js para usar showAlert
-function showMsg(_, msg, tipo = "error-datos") {
-  if (typeof showAlert === 'function') {
-    showAlert(tipo, msg);
-  }
+// Mensajes de error simples en consola
+function showMsg(_, msg) {
+  console.error(msg);
 }
 
 function limpiarCredenciales() {

@@ -174,11 +174,13 @@ def admin_bash_generator_view(request: Request):
 
 # Secciones del panel
 @router.get("/admin/clientes", response_class=HTMLResponse)
-def admin_clientes_page(request: Request):  
-    q: str | None = Query(None, description="Búsqueda por nombre, email o DNI"),
+def admin_clientes_page(
+    request: Request,
+    q: str = Query(None, description="Búsqueda por nombre, email o DNI"),
     page: int = Query(1, gt=0)
-
+):  
     """Administración de clientes con filtros y paginación."""
+    # Seguridad básica JWT
     usuario = "desconocido"
     rol_usuario = "desconocido"
     token = request.cookies.get("access_token")
@@ -192,23 +194,16 @@ def admin_clientes_page(request: Request):
             usuario = payload.get("nombre", "desconocido")
             rol_usuario = payload.get("rol", "desconocido")
         except JWTError:
-            logger.warning("Token inválido al acceder a /admin/clientes")
-    logger.info(
-        "==> Consulta de clientes recibida, usuario: %s, rol: %s",
-        usuario,
-        rol_usuario,
-    )
+            pass
+
     try:
-        logger.info("==> Iniciando consulta a clientes en la base de datos")
         clientes = obtener_clientes_db()
-        logger.info("==> Datos recuperados: %d registros", len(clientes))
-    except Exception as e:  # pragma: no cover - debug
-        logger.exception("🔥 Error al consultar clientes en la base de datos:")
+    except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error al consultar clientes: {str(e)}")
-    mensaje_error = None
+    
     if clientes is None:
-        mensaje_error = "Error consultando la base de datos"
         clientes = []
+
     if q and clientes:
         q_low = q.lower()
         clientes = [
@@ -222,7 +217,7 @@ def admin_clientes_page(request: Request):
     contexto = {
         "request": request,
         "clientes": clientes,
-        "mensaje_error": mensaje_error,
+        "mensaje_error": None,
         "pagina_actual": page,
         "hay_mas": False,
         "query_str": q or "",

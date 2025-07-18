@@ -70,28 +70,20 @@ system_error_logger = logging.getLogger("errores_sistema")
 system_error_logger.setLevel(logging.ERROR)
 
 # ==== BLOQUE REGISTRO DE ERRORES EN SUPABASE ====
-import uuid
-from supabase import create_client
-
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
-supabase_error_log = None
-if SUPABASE_URL and SUPABASE_KEY:
-    supabase_error_log = create_client(SUPABASE_URL, SUPABASE_KEY)
-
-def registrar_error_supabase(ruta, usuario, detalle, stacktrace):
-    """Guarda un error en la tabla errores_app_portatiles"""
+def registrar_error_supabase(endpoint, usuario, rol, detalle_error, mensaje, request_data, ip_cliente):
+    """Guarda un error en la tabla logs_errores"""
     if not supabase_error_log:
         print("[LOG] Supabase no configurado para registrar errores")
         return
     try:
-        supabase_error_log.table("errores_app_portatiles").insert({
-            "id": str(uuid.uuid4()),
-            "ruta": ruta,
+        supabase_error_log.table("logs_errores").insert({
+            "endpoint": endpoint,
             "usuario": usuario or "N/A",
-            "detalle": detalle or "",
-            "stacktrace": stacktrace or "",
-            "fecha": datetime.utcnow().isoformat()
+            "rol": rol or "N/A",
+            "detalle_error": detalle_error or "",
+            "mensaje": mensaje or "",
+            "request_data": request_data or {},
+            "ip_cliente": ip_cliente or ""
         }).execute()
     except Exception as exc:
         print("[LOG] Error guardando error en Supabase:", exc)
@@ -146,9 +138,11 @@ app.add_middleware(
 # Opcional: forzar HTTPS
 # app.add_middleware(HTTPSRedirectMiddleware)
 # Registrar manejador de excepciones para capturar tracebacks
+# ========================= HANDLERS PARA LOGS DE ERRORES =========================
+
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
-    """Registra el traceback completo antes de responder."""
+    """Registra el traceback y el error en Supabase antes de responder."""
     error_logger.error(
         "Error en %s: %s\n%s",
         request.url.path,
@@ -156,25 +150,20 @@ async def http_exception_handler(request: Request, exc: HTTPException):
         traceback.format_exc(),
     )
     user = request.cookies.get("access_token", "N/A")
-    system_error_logger.error(
-        "%s | %s | %s",
-        request.url.path,
-        user,
-        exc.detail,
-    )
-
     registrar_error_supabase(
-        request.url.path,
-        user,
-        exc.detail,
-        traceback.format_exc()
+        endpoint=request.url.path,
+        usuario=user,
+        rol=None,
+        detalle_error=str(exc.detail),
+        mensaje="HTTPException",
+        request_data=None,
+        ip_cliente=request.client.host if request.client else ""
     )
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
 
-
 @app.exception_handler(Exception)
 async def general_exception_handler(request: Request, exc: Exception):
-    """Registra cualquier excepción no manejada."""
+    """Registra cualquier excepción no manejada en Supabase."""
     error_logger.error(
         "Excepción en %s: %s\n%s",
         request.url.path,
@@ -182,18 +171,14 @@ async def general_exception_handler(request: Request, exc: Exception):
         traceback.format_exc(),
     )
     user = request.cookies.get("access_token", "N/A")
-    system_error_logger.error(
-        "%s | %s | %s",
-        request.url.path,
-        user,
-        str(exc),
-    )
-
     registrar_error_supabase(
-        request.url.path,
-        user,
-        str(exc),
-        traceback.format_exc()
+        endpoint=request.url.path,
+        usuario=user,
+        rol=None,
+        detalle_error=str(exc),
+        mensaje="Exception",
+        request_data=None,
+        ip_cliente=request.client.host if request.client else ""
     )
     return JSONResponse(status_code=500, content={"detail": "Error interno del sistema"})
 

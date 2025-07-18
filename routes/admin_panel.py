@@ -175,6 +175,7 @@ def admin_bash_generator_view(request: Request):
 # Secciones del panel
 @router.get("/admin/clientes", response_class=HTMLResponse)
 def admin_clientes_page(
+    raise Exception("Error de prueba para logger Supabase")
     request: Request,
     q: str | None = Query(None, description="Búsqueda por nombre, email o DNI"),
     page: int = Query(1, gt=0),

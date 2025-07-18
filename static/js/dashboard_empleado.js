@@ -43,6 +43,7 @@ async function cargarResumenEmpleado() {
   } catch (e) {
     document.getElementById('cntComprobantes').textContent = '0';
     document.getElementById('cntReportes').textContent = '0';
+    document.getElementById('cntServiciosRealizados').textContent = servicios.length;
     console.error('Error cargando dashboard empleado:', e);
   }
 }

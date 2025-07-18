@@ -39,9 +39,9 @@ def get_dni_from_email(email: str):
     return None
 
 # ==== HTML: Todas requieren token ====
-@router.get("/cliente/panel")
+@router.get("/panel/cliente")
 async def html_panel_cliente(request: Request, token_data: dict = Depends(verificar_token)):
-    return templates.TemplateResponse("cliente_panel.html", {"request": request})
+    return templates.TemplateResponse("panel_cliente.html", {"request": request})
 
 @router.get("/clientes/datos_personales")
 async def html_datos_personales(request: Request, token_data: dict = Depends(verificar_token)):

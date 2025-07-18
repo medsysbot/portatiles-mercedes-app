@@ -162,7 +162,7 @@ async def buscar_clientes(q: str = Query("")):
         logger.warning("Supabase no configurado al buscar clientes")
         return {"clientes": []}
     try:
-        res = supabase.table("datos_personales_clientes").select("dni_cuit_cuil,nombre,apellido,razon_social").execute()
+        res = supabase.table("datos_personales_clientes").select("dni_cuit_cuil,nombre,apellido,razon_social,direccion").execute()
         if getattr(res, "error", None):
             raise Exception(res.error.message)
         lista = res.data or []
@@ -172,12 +172,14 @@ async def buscar_clientes(q: str = Query("")):
                 "dni_cuit_cuil": c.get("dni_cuit_cuil"),
                 "nombre": f"{c.get('nombre','')} {c.get('apellido','')}".strip(),
                 "razon_social": c.get("razon_social") or "",
+                "direccion": c.get("direccion") or "",
             }
             for c in lista
             if q_low in (c.get("dni_cuit_cuil") or "").lower()
             or q_low in (c.get("nombre") or "").lower()
             or q_low in (c.get("apellido") or "").lower()
             or q_low in (c.get("razon_social") or "").lower()
+            or q_low in (c.get("direccion") or "").lower()
         ]
         return {"clientes": filtrados}
     except Exception as exc:

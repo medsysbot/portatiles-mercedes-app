@@ -52,11 +52,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const seleccionado = document.querySelector('#tablaClientesLimpieza tbody .seleccion-cliente:checked');
     if (!seleccionado) return;
     const cliente = clientes.find(c => c.dni_cuit_cuil == seleccionado.value);
-    if (cliente) {
-      document.querySelector('input[name="dni_cuit_cuil"]').value = cliente.dni_cuit_cuil;
-      document.querySelector('input[name="nombre_cliente"]').value = cliente.nombre;
-      document.querySelector('input[name="razon_social"]').value = cliente.razon_social;
-    }
+      if (cliente) {
+        document.querySelector('input[name="dni_cuit_cuil"]').value = cliente.dni_cuit_cuil;
+        document.querySelector('input[name="nombre_cliente"]').value = cliente.nombre;
+        document.querySelector('input[name="razon_social"]').value = cliente.razon_social;
+        document.querySelector('input[name="direccion"]').value = cliente.direccion || '';
+      }
     $('#modalClientesLimpieza').modal('hide');
     seleccionado.checked = false;
     if (btnAgregar) btnAgregar.disabled = true;

@@ -63,6 +63,7 @@ class ServicioLimpiezaNuevo(BaseModel):
     numero_bano: str
     dni_cuit_cuil: str
     nombre_cliente: str
+    direccion: str | None = None
     razon_social: str | None = None
     tipo_servicio: str
     observaciones: str | None = None
@@ -90,6 +91,7 @@ async def crear_servicio_limpieza_empleado(
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
+    direccion: str | None = Form(None),
     razon_social: str | None = Form(None),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
@@ -103,6 +105,7 @@ async def crear_servicio_limpieza_empleado(
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
             "nombre_cliente": nombre_cliente,
+            "direccion": direccion,
             "razon_social": razon_social,
             "tipo_servicio": tipo_servicio,
             "observaciones": observaciones,
@@ -129,6 +132,7 @@ async def actualizar_servicio_limpieza_empleado(
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
+    direccion: str | None = Form(None),
     razon_social: str | None = Form(None),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
@@ -142,6 +146,7 @@ async def actualizar_servicio_limpieza_empleado(
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
             "nombre_cliente": nombre_cliente,
+            "direccion": direccion,
             "razon_social": razon_social,
             "tipo_servicio": tipo_servicio,
             "observaciones": observaciones,
@@ -175,6 +180,7 @@ async def crear_servicio_limpieza_admin(
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
+    direccion: str | None = Form(None),
     razon_social: str | None = Form(None),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
@@ -188,6 +194,7 @@ async def crear_servicio_limpieza_admin(
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
             "nombre_cliente": nombre_cliente,
+            "direccion": direccion,
             "razon_social": razon_social,
             "tipo_servicio": tipo_servicio,
             "observaciones": observaciones,
@@ -214,6 +221,7 @@ async def actualizar_servicio_limpieza_admin(
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
+    direccion: str | None = Form(None),
     razon_social: str | None = Form(None),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
@@ -227,6 +235,7 @@ async def actualizar_servicio_limpieza_admin(
             "numero_bano": numero_bano,
             "dni_cuit_cuil": dni_cuit_cuil,
             "nombre_cliente": nombre_cliente,
+            "direccion": direccion,
             "razon_social": razon_social,
             "tipo_servicio": tipo_servicio,
             "observaciones": observaciones,
@@ -344,6 +353,7 @@ async def _listar_servicios():
                 "dni_cuit_cuil": d.get("dni_cuit_cuil"),
                 "nombre_cliente": d.get("nombre_cliente"),
                 "razon_social": d.get("razon_social"),
+                "direccion": d.get("direccion"),
                 "tipo_servicio": d.get("tipo_servicio"),
                 "estado": d.get("estado"),
                 "remito_url": d.get("remito_url"),

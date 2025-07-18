@@ -56,6 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('input[name="dni_cuit_cuil"]').value = c.dni_cuit_cuil;
     document.querySelector('input[name="nombre_cliente"]').value = c.nombre;
     document.querySelector('input[name="razon_social"]').value = c.razon_social || '';
+    document.querySelector('input[name="direccion"]').value = c.direccion || '';
     $('#modalClientesLimpieza').modal('hide');
   }
 

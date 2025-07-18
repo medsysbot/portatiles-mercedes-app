@@ -157,7 +157,7 @@ async def get_servicios_limpieza(token_data: dict = Depends(verificar_token)):
         res = (
             supabase.table("servicios_limpieza")
             .select(
-                "fecha_servicio,numero_bano,dni_cuit_cuil,nombre_cliente,razon_social,tipo_servicio,remito_url,observaciones"
+                "fecha_servicio,numero_bano,dni_cuit_cuil,nombre_cliente,razon_social,direccion,tipo_servicio,remito_url,observaciones,estado"
             )
             .eq("dni_cuit_cuil", dni)
             .execute()

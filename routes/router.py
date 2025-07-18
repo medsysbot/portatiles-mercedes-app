@@ -388,7 +388,7 @@ def splash_cliente(request: Request, token_data: dict = Depends(verificar_token)
 @router.get("/panel_cliente", response_class=HTMLResponse)
 def panel_cliente_view(request: Request, token_data: dict = Depends(verificar_token)):
     """Panel privado para clientes sin extensión HTML."""
-    return templates.TemplateResponse("cliente_panel.html", {"request": request})
+    return templates.TemplateResponse("panel_cliente.html", {"request": request})
 
 
 @router.get("/panel_cliente.html", response_class=HTMLResponse)

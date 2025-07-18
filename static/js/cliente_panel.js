@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         window.location.href = href;
       }
-      if (href && href === '/cliente/panel') {
+      if (href && href === '/panel/cliente') {
         e.preventDefault();
         window.location.href = href;
       }

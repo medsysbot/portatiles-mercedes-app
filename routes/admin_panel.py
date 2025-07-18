@@ -489,7 +489,7 @@ def admin_facturas_page(request: Request):
     )
 
 
-@router.get("panel/cliente"}
+@router.get("panel/cliente")
 def cliente_panel():
     return {"msg": "Bienvenido"}
 

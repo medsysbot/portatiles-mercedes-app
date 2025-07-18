@@ -176,7 +176,7 @@ def admin_bash_generator_view(request: Request):
 @router.get("/admin/clientes", response_class=HTMLResponse)
 def admin_clientes_page(request: Request):  
     q: str | None = Query(None, description="Búsqueda por nombre, email o DNI"),
-    page: int = Query(1, gt=0),
+    page: int = Query(1, gt=0)
 
     """Administración de clientes con filtros y paginación."""
     usuario = "desconocido"

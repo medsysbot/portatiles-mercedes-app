@@ -391,10 +391,10 @@ def panel_cliente_view(request: Request, token_data: dict = Depends(verificar_to
     return templates.TemplateResponse("cliente_panel.html", {"request": request})
 
 
-@router.get("/cliente_panel.html", response_class=HTMLResponse)
+@router.get("/panel_cliente.html", response_class=HTMLResponse)
 async def mostrar_panel_cliente():
     """Panel privado para clientes."""
-    html_path = TEMPLATES_DIR / "cliente_panel.html"
+    html_path = TEMPLATES_DIR / "panel_cliente.html"
     html_contenido = html_path.read_text(encoding="utf-8")
     return HTMLResponse(content=html_contenido)
 

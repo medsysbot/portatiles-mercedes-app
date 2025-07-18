@@ -2,7 +2,6 @@
 
 {% block title %}Panel de Cliente{% endblock %}
 {% block description %}Panel principal para clientes | Portátiles Mercedes{% endblock %}
-
 {% block body_class %}hold-transition sidebar-mini layout-fixed admin-bg panel-cliente{% endblock %}
 
 {% block head_extra %}
@@ -86,7 +85,9 @@
   <div class="content-wrapper pt-3">
     <section class="content">
       <div class="container-fluid p-0" style="min-height: 100vh;">
-        <!-- Panel resumen cliente – Portátiles Mercedes -->
+        {% block content %}
+        <!-- Tarjetas y resumen SOLO en el panel principal -->
+        {% if request.url.path == "/cliente/panel" %}
         <div class="row">
           <div class="col-lg-4 col-12">
             <div class="small-box bg-success">
@@ -116,7 +117,6 @@
             </div>
           </div>
         </div>
-        <!-- Vista previa del último comprobante de pago -->
         <div class="row mt-4">
           <div class="col-md-12">
             <div class="card bg-light">
@@ -124,13 +124,14 @@
                 <h5 class="card-title mb-2">Último comprobante de pago</h5>
                 <div id="preview-comprobante" class="p-2">
                   <span class="text-muted">No hay comprobante registrado.</span>
-                  <!-- El JS actualiza esto con link o preview si existe -->
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {% block content %}{% endblock %}
+        {% endif %}
+        <!-- Acá se insertan los módulos secundarios -->
+        {% endblock %}
       </div>
     </section>
   </div>

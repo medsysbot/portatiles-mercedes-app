@@ -8,6 +8,7 @@
 {% block head_extra %}
   {{ super() }}
   <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
   <!-- Precarga solo íconos realmente usados por el panel -->
   <link rel="preload" as="image" href="/static/iconos/email-incorrecto.png">
@@ -72,7 +73,7 @@
           <li class="nav-item"><a href="/cliente/panel" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i><p>Resumen</p></a></li>
           <li class="nav-item"><a href="/clientes/datos_personales" class="nav-link"><i class="nav-icon fas fa-user"></i><p>Datos personales</p></a></li>
           <li class="nav-item"><a href="/clientes/alquileres" class="nav-link"><i class="nav-icon fas fa-file-contract"></i><p>Mis alquileres</p></a></li>
-          <li class="nav-item"><a href="/clientes/facturas_pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturas pendientes</p></a></li>
+          <li class="nav-item"><a href="/clientes/facturas_pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturas</p></a></li>
           <li class="nav-item"><a href="/clientes/comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes</p></a></li>
           <li class="nav-item"><a href="/clientes/mis_compras" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Mis compras</p></a></li>
           <li class="nav-item"><a href="/clientes/servicios_limpieza" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
@@ -83,54 +84,56 @@
   </aside>
 
   <div class="content-wrapper pt-3">
-  <section class="content">
-    <div class="container-fluid p-0" style="min-height: 100vh;">
-      <div class="row mb-4">
-        <!-- Tarjeta Próxima limpieza -->
-        <div class="col-md-4 mb-3">
-          <div class="card bg-success text-white shadow">
-            <div class="card-body">
-              <h5 class="card-title mb-2">Próxima limpieza</h5>
-              <h3 class="mb-0" id="card-proxima-limpieza">--/--/----</h3>
+    <section class="content">
+      <div class="container-fluid p-0" style="min-height: 100vh;">
+        <!-- Panel resumen cliente – Portátiles Mercedes -->
+        <div class="row">
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-success">
+              <div class="inner text-center">
+                <h3 id="card-proxima-limpieza">--/--/----</h3>
+                <p>Próxima limpieza</p>
+              </div>
+              <div class="icon"><i class="fas fa-broom"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-primary">
+              <div class="inner text-center">
+                <h3 id="card-banos-alquilados">0</h3>
+                <p>Baños alquilados</p>
+              </div>
+              <div class="icon"><i class="fas fa-toilet"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-info">
+              <div class="inner text-center">
+                <h3 id="card-ultima-factura">--/--/----</h3>
+                <p>Última factura</p>
+              </div>
+              <div class="icon"><i class="fas fa-file-invoice-dollar"></i></div>
             </div>
           </div>
         </div>
-        <!-- Tarjeta Baños alquilados -->
-        <div class="col-md-4 mb-3">
-          <div class="card bg-primary text-white shadow">
-            <div class="card-body">
-              <h5 class="card-title mb-2">Baños alquilados</h5>
-              <h3 class="mb-0" id="card-banos-alquilados">0</h3>
-            </div>
-          </div>
-        </div>
-        <!-- Tarjeta Última factura -->
-        <div class="col-md-4 mb-3">
-          <div class="card bg-info text-white shadow">
-            <div class="card-body">
-              <h5 class="card-title mb-2">Última factura</h5>
-              <h3 class="mb-0" id="card-ultima-factura">--/--/----</h3>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Vista previa del último comprobante de pago -->
-      <div class="row mb-4">
-        <div class="col-md-12">
-          <div class="card bg-light">
-            <div class="card-body">
-              <h5 class="card-title mb-2">Último comprobante de pago</h5>
-              <div id="preview-comprobante">
-                <span class="text-muted">No hay comprobante registrado.</span>
-                <!-- El JS actualiza esto con link o preview si existe -->
+        <!-- Vista previa del último comprobante de pago -->
+        <div class="row mt-4">
+          <div class="col-md-12">
+            <div class="card bg-light">
+              <div class="card-body">
+                <h5 class="card-title mb-2">Último comprobante de pago</h5>
+                <div id="preview-comprobante" class="p-2">
+                  <span class="text-muted">No hay comprobante registrado.</span>
+                  <!-- El JS actualiza esto con link o preview si existe -->
+                </div>
               </div>
             </div>
           </div>
         </div>
+        {% block content %}{% endblock %}
       </div>
-      {% block content %}{% endblock %}
-    </div>
-  </section>
+    </section>
+  </div>
 </div>
 {% endblock %}
 
@@ -144,6 +147,6 @@
 
 {% block scripts %}
   {{ super() }}
-<script src="/static/js/chart.min.js"></script>
-<script src="/static/js/cliente_panel.js"></script>
+  <script src="/static/js/chart.min.js"></script>
+  <script src="/static/js/cliente_panel.js"></script>
 {% endblock %}

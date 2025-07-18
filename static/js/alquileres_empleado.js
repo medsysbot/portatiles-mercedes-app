@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function obtenerAlquileres() {
     try {
-      const resp = await fetch('/cliente/api/alquileres', {
+      const resp = await fetch('/empleado/api/alquileres', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error consultando alquileres');

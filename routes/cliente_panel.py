@@ -100,7 +100,7 @@ async def get_alquileres(token_data: dict = Depends(verificar_token)):
         res = (
             supabase.table("alquileres")
             .select(
-                "numero_bano,cliente_nombre,dni_cuit_cuil,direccion,fecha_inicio,fecha_fin,observaciones"
+                "numero_bano,cliente_nombre,razon_social,dni_cuit_cuil,direccion,fecha_inicio,fecha_fin,observaciones"
             )
             .eq("dni_cuit_cuil", dni)
             .execute()

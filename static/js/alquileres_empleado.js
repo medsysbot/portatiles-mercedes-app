@@ -15,6 +15,7 @@ function inicializarTablaAlquileres() {
     columns: [
       { data: 'numero_bano' },
       { data: 'cliente_nombre' },
+      { data: 'razon_social' },
       { data: 'dni_cuit_cuil' },
       { data: 'direccion' },
       { data: 'fecha_inicio' },
@@ -51,6 +52,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const q = texto.toLowerCase();
     const filtrados = window.pmAlquileresClienteData.filter(a =>
       (a.cliente_nombre || '').toLowerCase().includes(q) ||
+      (a.razon_social || '').toLowerCase().includes(q) ||
       (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (a.numero_bano || '').toLowerCase().includes(q)
     );

@@ -189,6 +189,7 @@ async def listar_alquileres():
             {
                 "numero_bano": item.get("numero_bano"),
                 "cliente_nombre": item.get("cliente_nombre") or item.get("cliente"),
+                "razon_social": item.get("razon_social"),
                 "dni_cuit_cuil": item.get("dni_cuit_cuil"),
                 "direccion": item.get("direccion"),
                 "fecha_inicio": item.get("fecha_inicio")

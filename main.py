@@ -10,6 +10,9 @@ Proyecto: Portátiles Mercedes
 """Aplicación principal de Portátiles Mercedes."""
 
 import os
+
+# Instancia de Supabase para registro de errores
+supabase_error_log = None
 from datetime import datetime
 from dotenv import load_dotenv
 

@@ -178,7 +178,7 @@ def admin_clientes_page(request: Request):
     raise Exception("Error de prueba para logger Supabase")
     q: str | None = Query(None, description="Búsqueda por nombre, email o DNI"),
     page: int = Query(1, gt=0),
-):
+
     """Administración de clientes con filtros y paginación."""
     usuario = "desconocido"
     rol_usuario = "desconocido"

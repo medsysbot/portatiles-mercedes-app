@@ -100,7 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
         { data: 'dni_cuit_cuil', render: d => `<input type="checkbox" class="seleccion-cliente" value="${d}">`, orderable: false },
         { data: 'nombre' },
         { data: 'dni_cuit_cuil' },
-        { data: 'razon_social' }
+        { data: 'razon_social' },
+        { data: 'direccion' }
       ]
     });
 
@@ -203,6 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('input[name="dni_cuit_cuil"]').value = cliente.dni_cuit_cuil;
       document.querySelector('input[name="nombre_cliente"]').value = cliente.nombre;
       document.querySelector('input[name="razon_social"]').value = cliente.razon_social;
+      const inputDir = document.querySelector('input[name="direccion"]');
+      if (inputDir) inputDir.value = cliente.direccion || '';
     }
     $('#modalClientesComprobante').modal('hide');
     seleccionado.checked = false;

@@ -9,7 +9,8 @@ Proyecto: Portátiles Mercedes
 """
 
 from fastapi import APIRouter, HTTPException, Request
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError, Field, ConfigDict
 from datetime import date
 from supabase import create_client, Client
@@ -39,6 +40,8 @@ if not logger.handlers:
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     logger.propagate = False
+
+TEMPLATES = Jinja2Templates(directory="templates")
 
 # ==== Configuración de correo ====
 EMAIL_ORIGEN = os.getenv("EMAIL_ORIGEN")
@@ -213,4 +216,64 @@ async def eliminar_alquileres(payload: _IdLista):
         logger.exception("Error eliminando alquileres:")
         raise HTTPException(status_code=500, detail=str(exc))
     return {"ok": True}
+
+
+@router.get("/admin/alquileres/editar/{numero_bano}", response_class=HTMLResponse)
+async def form_editar_alquiler(request: Request, numero_bano: str):
+    """Carga el formulario de edición para un alquiler."""
+    if not supabase:
+        raise HTTPException(status_code=500, detail="Supabase no configurado")
+    result = (
+        supabase.table(ALQUILERES_TABLE)
+        .select("*")
+        .eq("numero_bano", numero_bano)
+        .maybe_single()
+        .execute()
+    )
+    if getattr(result, "error", None) or not getattr(result, "data", None):
+        raise HTTPException(status_code=404, detail="Alquiler no encontrado")
+    alquiler = result.data
+    return TEMPLATES.TemplateResponse(
+        "alquiler_form_admin.html", {"request": request, "alquiler": alquiler}
+    )
+
+
+@router.post("/admin/alquileres/editar/{numero_bano}")
+async def actualizar_alquiler(request: Request, numero_bano: str):
+    """Actualiza un alquiler existente."""
+    if not supabase:
+        return {"error": "Supabase no configurado"}
+
+    if request.headers.get("content-type", "").startswith("application/json"):
+        datos = await request.json()
+    else:
+        form = await request.form()
+        datos = dict(form)
+
+    try:
+        alquiler = AlquilerNuevo(**datos)
+    except ValidationError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+    datos_update = alquiler.model_dump()
+    if datos_update.get("fecha_inicio"):
+        datos_update["fecha_inicio"] = alquiler.fecha_inicio.isoformat()
+    if datos_update.get("fecha_fin"):
+        datos_update["fecha_fin"] = alquiler.fecha_fin.isoformat()
+
+    try:
+        resp = (
+            supabase.table(ALQUILERES_TABLE)
+            .update(datos_update)
+            .eq("numero_bano", numero_bano)
+            .execute()
+        )
+        if getattr(resp, "error", None):
+            raise Exception(resp.error.message)
+    except Exception as exc:
+        return {"error": f"Error al actualizar alquiler: {exc}"}
+
+    if request.headers.get("content-type", "").startswith("application/json"):
+        return {"ok": True}
+    return RedirectResponse("/admin/alquileres", status_code=303)
 

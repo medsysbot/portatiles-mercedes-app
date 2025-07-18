@@ -30,13 +30,22 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabla = tablaAlquileres;
 
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+  const btnEditar = document.getElementById('btnEditarSeleccionado');
 
-  function actualizarBoton() {
+  function actualizarBotones() {
     const marcados = document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked');
     if (btnEliminar) btnEliminar.disabled = marcados.length === 0;
+    if (btnEditar) btnEditar.disabled = marcados.length !== 1;
   }
 
-  $('#tablaAlquileres tbody').on('change', '.fila-check', actualizarBoton);
+  $('#tablaAlquileres tbody').on('change', '.fila-check', actualizarBotones);
+
+  btnEditar?.addEventListener('click', () => {
+    const seleccionado = document.querySelector('#tablaAlquileres tbody .fila-check:checked');
+    if (!seleccionado) return;
+    const id = seleccionado.dataset.id;
+    window.location.href = `/admin/alquileres/editar/${id}`;
+  });
 
   btnEliminar?.addEventListener('click', async () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);

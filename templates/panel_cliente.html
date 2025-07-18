@@ -83,12 +83,54 @@
   </aside>
 
   <div class="content-wrapper pt-3">
-    <section class="content">
-      <div class="container-fluid p-0" style="min-height: 100vh;">
-        {% block content %}{% endblock %}
+  <section class="content">
+    <div class="container-fluid p-0" style="min-height: 100vh;">
+      <div class="row mb-4">
+        <!-- Tarjeta Próxima limpieza -->
+        <div class="col-md-4 mb-3">
+          <div class="card bg-success text-white shadow">
+            <div class="card-body">
+              <h5 class="card-title mb-2">Próxima limpieza</h5>
+              <h3 class="mb-0" id="card-proxima-limpieza">--/--/----</h3>
+            </div>
+          </div>
+        </div>
+        <!-- Tarjeta Baños alquilados -->
+        <div class="col-md-4 mb-3">
+          <div class="card bg-primary text-white shadow">
+            <div class="card-body">
+              <h5 class="card-title mb-2">Baños alquilados</h5>
+              <h3 class="mb-0" id="card-banos-alquilados">0</h3>
+            </div>
+          </div>
+        </div>
+        <!-- Tarjeta Última factura -->
+        <div class="col-md-4 mb-3">
+          <div class="card bg-info text-white shadow">
+            <div class="card-body">
+              <h5 class="card-title mb-2">Última factura</h5>
+              <h3 class="mb-0" id="card-ultima-factura">--/--/----</h3>
+            </div>
+          </div>
+        </div>
       </div>
-    </section>
-  </div>
+      <!-- Vista previa del último comprobante de pago -->
+      <div class="row mb-4">
+        <div class="col-md-12">
+          <div class="card bg-light">
+            <div class="card-body">
+              <h5 class="card-title mb-2">Último comprobante de pago</h5>
+              <div id="preview-comprobante">
+                <span class="text-muted">No hay comprobante registrado.</span>
+                <!-- El JS actualiza esto con link o preview si existe -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% block content %}{% endblock %}
+    </div>
+  </section>
 </div>
 {% endblock %}
 

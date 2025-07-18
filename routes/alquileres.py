@@ -271,7 +271,8 @@ async def actualizar_alquiler(request: Request, numero_bano: str):
         if getattr(resp, "error", None):
             raise Exception(resp.error.message)
     except Exception as exc:
-        return {"error": f"Error al actualizar alquiler: {exc}"}
+        logging.error(f"Error al actualizar alquiler: {exc}")
+        return {"error": "Error al actualizar alquiler."}
 
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}

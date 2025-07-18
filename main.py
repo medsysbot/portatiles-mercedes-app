@@ -100,7 +100,7 @@ from routes.limpieza import router as limpieza_router
 from routes.login import router as login_router, supabase as supabase_client
 from routes.admin_panel import router as admin_router
 from routes.empleado_panel import router as empleado_router
-from routes.cliente_panel import router as cliente_router
+from routes.panel_cliente import router as cliente_router
 from routes.datos_personales import router as datos_personales_router
 from routes.alquileres import router as alquileres_router
 from routes.reportes import router as reportes_router
@@ -185,7 +185,7 @@ async def general_exception_handler(request: Request, exc: Exception):
 # Inyectar el cliente de Supabase global en todos los módulos solo si está habilitado
 if os.getenv("ENABLE_SUPABASE") == "1":
     admin_panel.supabase = supabase_client
-    cliente_panel.supabase = supabase_client
+    panel_cliente.supabase = supabase_client
     ventas.supabase = supabase_client
     limpieza.supabase = supabase_client
     debito.supabase = supabase_client

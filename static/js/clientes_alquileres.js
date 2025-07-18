@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     columns: [
       { data: 'numero_bano', defaultContent: '-' },
       { data: 'cliente_nombre', defaultContent: '-' },
+      { data: 'razon_social', defaultContent: '-' },
       { data: 'dni_cuit_cuil', defaultContent: '-' },
       { data: 'direccion', defaultContent: '-' },
       { data: 'fecha_inicio', defaultContent: '-' },
@@ -61,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const q = (buscador.value || '').toLowerCase();
     const filtrados = registros.filter(a =>
       (a.cliente_nombre || '').toLowerCase().includes(q) ||
+      (a.razon_social || '').toLowerCase().includes(q) ||
       (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (String(a.numero_bano || '')).toLowerCase().includes(q)
     );

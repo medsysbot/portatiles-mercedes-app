@@ -17,7 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil', render: d => `<input type="checkbox" class="seleccion-cliente" value="${d}">`, orderable: false },
       { data: 'dni_cuit_cuil' },
       { data: 'nombre' },
-      { data: 'razon_social' }
+      { data: 'razon_social' },
+      { data: 'direccion' }
     ]
   });
 

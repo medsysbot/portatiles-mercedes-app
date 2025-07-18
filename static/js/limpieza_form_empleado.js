@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'nombre' },
       { data: 'dni_cuit_cuil' },
       { data: 'razon_social' },
+      { data: 'direccion' },
       { data: null, defaultContent: '<button class="btn btn-primary btn-sm seleccionar">Seleccionar</button>', orderable: false }
     ]
   });

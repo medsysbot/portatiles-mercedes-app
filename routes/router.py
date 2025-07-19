@@ -57,7 +57,7 @@ router.include_router(ventas_router)
 # Incluir las rutas del módulo de débito automático
 router.include_router(debito_router)
 #app.include_router(comprobantes_pago_router)
-app.include_router(comprobantes_pago_router)
+router.include_router(comprobantes_pago_router)
 router.include_router(cliente_router)
 router.include_router(admin_router)
 router.include_router(login_router)

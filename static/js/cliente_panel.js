@@ -78,6 +78,7 @@ function mostrarUltimoComprobanteCliente(comprobantes) {
   panel.innerHTML = `
     <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
+    <p class="mb-1"><strong>DNI/CUIT/CUIL:</strong> ${ultimo.dni_cuit_cuil || '-'}</p>
     ${archivoHTML || '<span class="text-muted">No hay comprobante disponible.</span>'}
   `;
 }

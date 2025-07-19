@@ -546,3 +546,14 @@ body.panel-empleados #campoBuscarRecursos::placeholder {
   color: #fff !important;
   opacity: 1 !important;
 }
+
+/* Vistas previas de facturas y comprobantes en panel de cliente */
+#preview-factura img,
+#preview-factura embed,
+#preview-comprobante img,
+#preview-comprobante embed {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}

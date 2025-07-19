@@ -1,126 +1,101 @@
-// Archivo: static/js/cliente_panel.js
-// Proyecto: Portátiles Mercedes
-
-// --------- Limpieza de credenciales ----------
-function limpiarCredenciales() {
-  localStorage.clear();
-  window.location.href = '/login';
+function getAuthToken() {
+  const token = localStorage.getItem("token") || localStorage.getItem("access_token");
+  if (!token || token.length < 10) {
+    console.warn("Token ausente o inválido:", token);
+    window.location.href = "/login";
+    return null;
+  }
+  return token;
 }
 
-// --------- Fetch con autorización ----------
 async function fetchConAuth(url, options = {}) {
-  const token = localStorage.getItem('access_token');
-  if (!token) limpiarCredenciales();
-  const resp = await fetch(url, {
-    ...options,
-    headers: {
-      ...options.headers,
-      'Authorization': `Bearer ${token}`,
-    },
-  });
+  const token = getAuthToken();
+  if (!token) {
+    window.location.href = "/login";
+    return;
+  }
+
+  options.headers = {
+    ...(options.headers || {}),
+    "Authorization": "Bearer " + token
+  };
+
+  const resp = await fetch(url, options);
   if (resp.status === 401) {
-    limpiarCredenciales();
-    throw new Error('Unauthorized');
+    localStorage.clear();
+    window.location.href = "/login";
   }
   return resp;
 }
 
-// --------- Inicialización DataTables ---------
-let tablas = {};
-function initTablas() {
-  // Destruir instancias previas si existen
-  ['tablaAlquileres', 'tablaFacturasPendientes', 'tablaVentasCliente', 'tablaServicios', 'tablaProgramacion', 'tablaComprobantes'].forEach(id => {
-    if ($.fn.DataTable.isDataTable('#' + id)) {
-      $('#' + id).DataTable().clear().destroy();
-    }
-  });
+document.getElementById('btnLogout')?.addEventListener('click', () => {
+  localStorage.clear();
+});
 
-  const opciones = {
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true,
-    responsive: true
-  };
-
-  tablas = {
-    alquileres: $('#tablaAlquileres').DataTable({ ...opciones, columns: [
-      { data: 'numero_bano' }, { data: 'direccion' }, { data: 'fecha_inicio' }, { data: 'fecha_fin' }, { data: 'observaciones' }
-    ]}),
-    facturas: $('#tablaFacturasPendientes').DataTable({ ...opciones, columns: [
-      { data: 'numero_factura' }, { data: 'fecha' }, { data: 'monto' }, { data: 'factura_url', render: d => d ? `<a href="${d}" target="_blank">VER FACTURA</a>` : '-' }
-    ]}),
-    ventas: $('#tablaVentasCliente').DataTable(opciones),
-    limpiezas: $('#tablaServicios').DataTable(opciones),
-    programacion: $('#tablaProgramacion').DataTable(opciones),
-    comprobantes: $('#tablaComprobantes').DataTable({ 
-      ...opciones,
-      columns: [
-        { data: 'nombre_cliente' },
-        { data: 'dni_cuit_cuil' },
-        { data: 'razon_social' },
-        { data: 'numero_de_factura' },
-        { data: 'comprobante_url', render: d => d ? `<a href="${d}" target="_blank">VER PAGO</a>` : '-' },
-        { data: 'fecha_envio' }
-      ]
-    }),
-  };
-}
-
-// --------- Render archivo (factura/comprobante) ---------
+// Mostrar archivo (PDF, imagen o enlace)
 function renderArchivo(url) {
   if (!url) return '<span class="text-muted">No disponible</span>';
   if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
-    return `<img src="${url}" alt="Archivo" style="max-width:100%; max-height:180px; border-radius:8px; box-shadow:0 2px 8px #0002;">`;
+    return `<img src="${url}" alt="Archivo" style="max-width:100%; max-height:180px; border-radius:8px; box-shadow: 2px 2px 4px rgba(0,0,0,0.2);">`;
   }
   if (url.match(/\.pdf$/i)) {
-    return `<embed src="${url}" type="application/pdf" width="100%" height="180px" style="border-radius:8px; box-shadow:0 2px 8px #0002;" />`;
+    return `<embed src="${url}" type="application/pdf" width="100%" height="180px" style="border-radius:8px;">`;
   }
   return `<a href="${url}" target="_blank" class="btn btn-link">Ver archivo</a>`;
 }
 
-// --------- Resumen: Factura y Comprobante ---------
+// Mostrar última factura
 function mostrarUltimaFactura(facturas) {
   const panel = document.getElementById('preview-factura');
   if (!panel) return;
   if (!facturas.length) {
-    panel.innerHTML = `<span class="text-muted">No hay factura registrada.</span>`;
+    panel.innerHTML = '<span class="text-muted">No hay factura registrada.</span>';
     return;
   }
+
   facturas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
   const ultima = facturas[0];
+  const archivoHTML = renderArchivo(ultima.factura_url);
+
   panel.innerHTML = `
-    <p class="mb-1"><strong>Nro:</strong> ${ultima.numero_factura || '-'}</p>
-    <p class="mb-1"><strong>Fecha:</strong> ${ultima.fecha || '-'}</p>
-    ${renderArchivo(ultima.factura_url)}
+    <p class="mb-1"><strong>Nro:</strong> ${ultima.numero_factura || '--'}</p>
+    <p class="mb-1"><strong>Fecha:</strong> ${ultima.fecha || '--'}</p>
+    ${archivoHTML || '<span class="text-muted">No disponible</span>'}
   `;
 }
 
+// Mostrar último comprobante del cliente
 function mostrarUltimoComprobanteCliente(comprobantes) {
   const panel = document.getElementById('preview-comprobante');
   if (!panel) return;
-  if (!comprobantes.length) {
-    panel.innerHTML = `<span class="text-muted">No hay comprobante registrado.</span>`;
+
+  if (!comprobantes || !comprobantes.length) {
+    panel.innerHTML = '<span class="text-muted">No hay comprobante registrado.</span>';
     return;
   }
+
   comprobantes.sort((a, b) => new Date(b.fecha_envio) - new Date(a.fecha_envio));
-  const ultimo = comprobantes[0];
+  const ultimo = comprobantes.find(c => c.comprobante_url?.trim() !== '');
+
+  const archivoHTML = renderArchivo(ultimo?.comprobante_url || '');
+
   panel.innerHTML = `
-    <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_de_factura || '-'}</p>
-    <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
-    ${renderArchivo(ultimo.comprobante_url)}
+    <p class="mb-1"><strong>Factura:</strong> ${ultimo?.numero_de_factura || '--'}</p>
+    <p class="mb-1"><strong>Fecha:</strong> ${ultimo?.fecha_envio || '--'}</p>
+    ${archivoHTML || '<span class="text-muted">No disponible</span>'}
   `;
 }
 
-// --------- Carga el resumen principal ---------
+// Cargar resumen del cliente
 async function cargarResumenCliente() {
   try {
     const [alqRes, factRes, compRes, limpRes] = await Promise.all([
       fetchConAuth('/clientes/alquileres_api'),
       fetchConAuth('/clientes/facturas_pendientes_api'),
-      fetchConAuth('/clientes/comprobantes_api'),
+      fetchConAuth('/clientes/comprobantes_pago'),
       fetchConAuth('/clientes/proxima_limpieza')
     ]);
+
     const alquileres = alqRes ? await alqRes.json() : [];
     const facturas = factRes ? await factRes.json() : [];
     const comprobantes = compRes ? await compRes.json() : [];
@@ -139,26 +114,20 @@ async function cargarResumenCliente() {
 
     mostrarUltimaFactura(facturas);
     mostrarUltimoComprobanteCliente(comprobantes);
+
   } catch (err) {
     document.getElementById('card-proxima-limpieza').textContent = '--/--/----';
     document.getElementById('card-banos-alquilados').textContent = '0';
     document.getElementById('card-ultima-factura').textContent = '--/--/----';
-    document.getElementById('preview-factura').innerHTML = `<span class="text-muted">No hay factura registrada.</span>`;
-    document.getElementById('preview-comprobante').innerHTML = `<span class="text-muted">No hay comprobante registrado.</span>`;
-    console.error('Error cargando resumen', err);
+    document.getElementById('preview-factura').innerHTML = '<span class="text-muted">No hay factura registrada.</span>';
+    document.getElementById('preview-comprobante').innerHTML = '<span class="text-muted">No hay comprobante registrado.</span>';
+    console.error('Error cargando resumen:', err);
   }
 }
 
-// --------- DOMContentLoaded principal ---------
-document.addEventListener('DOMContentLoaded', async () => {
-  // Inicializar tablas
-  initTablas();
-
-  // Cargar resumen tarjetas
+// Ejecutar al cargar DOM
+document.addEventListener('DOMContentLoaded', () => {
   if (document.getElementById('card-proxima-limpieza')) {
     cargarResumenCliente();
   }
-
-  // ... aquí seguirías con otros inicializadores y listeners, como logout ...
-  document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
 });

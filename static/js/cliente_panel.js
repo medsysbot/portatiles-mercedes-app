@@ -61,19 +61,23 @@ function mostrarUltimaFactura(facturas) {
 
 function mostrarUltimoComprobanteCliente(comprobantes) {
   const panel = document.getElementById('preview-comprobante');
-  if (!panel) return;
-  if (!comprobantes.length) {
-    panel.innerHTML = `<span class="text-muted">No hay comprobante registrado.</span>`;
+  if (!comprobantes || comprobantes.length === 0) {
+    panel.innerHTML = '<span class="text-muted">No hay comprobante registrado.</span>';
     return;
   }
-  comprobantes.sort((a, b) => new Date(b.fecha_envio) - new Date(a.fecha_envio));
+
   const ultimo = comprobantes[0];
-  const archivoHTML = renderArchivo(ultimo.comprobante_url, 'VER PAGO');
+
+  let archivoHTML = '';
+  if (ultimo.comprobante_url) {
+    archivoHTML = `<a href="${ultimo.comprobante_url}" target="_blank" style="color: #0bf; text-decoration: underline;">VER COMPROBANTE</a>`;
+  }
+
   panel.innerHTML = `
     <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
     <p class="mb-1"><strong>DNI/CUIT/CUIL:</strong> ${ultimo.dni_cuit_cuil || '-'}</p>
-    ${archivoHTML || '<span class="text-muted">No hay archivo disponible.</span>'}
+    ${archivoHTML || '<span class="text-muted">No hay comprobante disponible.</span>'}
   `;
 }
 

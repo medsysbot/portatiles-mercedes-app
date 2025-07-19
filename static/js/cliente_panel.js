@@ -1,7 +1,7 @@
-// ============= AUTENTICACIÓN Y TOKEN =============
 function getAuthToken() {
-  return localStorage.getItem("access_token");
+  return localStorage.getItem("token");
 }
+
 async function fetchConAuth(url, options = {}) {
   const token = getAuthToken();
   if (!token) {
@@ -21,52 +21,19 @@ async function fetchConAuth(url, options = {}) {
   return resp;
 }
 
-// Destruir credenciales al hacer logout
 document.getElementById('btnLogout')?.addEventListener('click', () => {
-    localStorage.clear();
+  localStorage.clear();
 });
 
-// ------ ALQUILERES ------
-async function actualizarAlquileres() {
-  try {
-    const res = await fetchConAuth(`/clientes/alquileres_api`);
-    if (!res) return;
-    datosAlquileres = await res.json();
-
-    if ($.fn.DataTable.isDataTable('#tablaAlquileres')) {
-      $('#tablaAlquileres').DataTable().destroy();
-    }
-    $('#tablaAlquileres').DataTable({
-      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-      paging: true,
-      searching: true,
-      ordering: true,
-      columns: [
-        { data: 'numero_bano', defaultContent: '-' },
-        { data: 'direccion', defaultContent: '-' },
-        { data: 'fecha_inicio', defaultContent: '-' },
-        { data: 'fecha_fin', defaultContent: '-' },
-        { data: 'observaciones', defaultContent: '-' }
-      ]
-    });
-    tablaAlquileres = $('#tablaAlquileres').DataTable();
-    tablaAlquileres.clear().rows.add(datosAlquileres).draw();
-  } catch (e) {
-    showMsg('tablaAlquileres', 'Error al cargar alquileres');
-=======
-// ============= RESUMEN PANEL CLIENTE =============
-function renderArchivo(url, texto = 'VER ARCHIVO') {
-  if (!url) return null;
-  if (url.endsWith('.jpg') || url.endsWith('.png')) {
-    return `
-      <a href="${url}" target="_blank" style="display:block; color:#0bf; text-decoration:underline; margin-bottom:5px;">${texto}</a>
-      <a href="${url}" target="_blank">
-        <img src="${url}" alt="${texto}" style="max-width:150px; border:1px solid #ccc; border-radius:4px;">
-      </a>
-    `;
-  } else {
-    return `<a href="${url}" target="_blank" style="color:#0bf; text-decoration:underline;">${texto}</a>`;
+function renderArchivo(url) {
+  if (!url) return '<span class="text-muted">No disponible</span>';
+  if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
+    return `<img src="${url}" alt="Archivo" style="max-width:100%; max-height:180px; border-radius:8px; box-shadow:0 2px 8px #0002;">`;
   }
+  if (url.match(/\.pdf$/i)) {
+    return `<embed src="${url}" type="application/pdf" width="100%" height="180px" style="border-radius:8px; box-shadow:0 2px 8px #0002;" />`;
+  }
+  return `<a href="${url}" target="_blank" class="btn btn-link">Ver archivo</a>`;
 }
 
 function mostrarUltimaFactura(facturas) {
@@ -77,35 +44,29 @@ function mostrarUltimaFactura(facturas) {
     return;
   }
   facturas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-  const ultimo = facturas[0];
-  const archivoHTML = renderArchivo(ultimo.factura_url, 'VER FACTURA');
+  const ultima = facturas[0];
+  const archivoHTML = renderArchivo(ultima.factura_url);
   panel.innerHTML = `
-    <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
-    <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha || '-'}</p>
-    <p class="mb-1"><strong>DNI/CUIT/CUIL:</strong> ${ultimo.dni_cuit_cuil || '-'}</p>
-    ${archivoHTML || '<span class="text-muted">No hay archivo disponible.</span>'}
+    <p class="mb-1"><strong>Nro:</strong> ${ultima.numero_factura || '-'}</p>
+    <p class="mb-1"><strong>Fecha:</strong> ${ultima.fecha || '-'}</p>
+    ${archivoHTML || '<span class="text-muted">No disponible</span>'}
   `;
 }
 
 function mostrarUltimoComprobanteCliente(comprobantes) {
   const panel = document.getElementById('preview-comprobante');
-  if (!comprobantes || comprobantes.length === 0) {
-    panel.innerHTML = '<span class="text-muted">No hay comprobante registrado.</span>';
+  if (!panel) return;
+  if (!comprobantes.length) {
+    panel.innerHTML = `<span class="text-muted">No hay comprobante registrado.</span>`;
     return;
   }
-
+  comprobantes.sort((a, b) => new Date(b.fecha_envio) - new Date(a.fecha_envio));
   const ultimo = comprobantes[0];
-
-  let archivoHTML = '';
-  if (ultimo.comprobante_url) {
-    archivoHTML = `<a href="${ultimo.comprobante_url}" target="_blank" style="color: #0bf; text-decoration: underline;">VER COMPROBANTE</a>`;
-  }
-
+  const archivoHTML = renderArchivo(ultimo.comprobante_url);
   panel.innerHTML = `
     <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
-    <p class="mb-1"><strong>DNI/CUIT/CUIL:</strong> ${ultimo.dni_cuit_cuil || '-'}</p>
-    ${archivoHTML || '<span class="text-muted">No hay comprobante disponible.</span>'}
+    ${archivoHTML || '<span class="text-muted">No disponible</span>'}
   `;
 }
 

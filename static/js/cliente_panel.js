@@ -93,22 +93,23 @@ async function actualizarAlquileres() {
     if (!res) return;
     datosAlquileres = await res.json();
 
-    if (!tablaAlquileres) {
-      tablaAlquileres = $('#tablaAlquileres').DataTable({
-        language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-        paging: true,
-        searching: false,
-        ordering: true,
-        columns: [
-          { data: 'numero_bano', defaultContent: '-' },
-          { data: 'direccion', defaultContent: '-' },
-          { data: 'fecha_inicio', defaultContent: '-' },
-          { data: 'fecha_fin', defaultContent: '-' },
-          { data: 'observaciones', defaultContent: '-' }
-        ]
-      });
+    if ($.fn.DataTable.isDataTable('#tablaAlquileres')) {
+      $('#tablaAlquileres').DataTable().destroy();
     }
-
+    $('#tablaAlquileres').DataTable({
+      language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+      paging: true,
+      searching: true,
+      ordering: true,
+      columns: [
+        { data: 'numero_bano', defaultContent: '-' },
+        { data: 'direccion', defaultContent: '-' },
+        { data: 'fecha_inicio', defaultContent: '-' },
+        { data: 'fecha_fin', defaultContent: '-' },
+        { data: 'observaciones', defaultContent: '-' }
+      ]
+    });
+    tablaAlquileres = $('#tablaAlquileres').DataTable();
     tablaAlquileres.clear().rows.add(datosAlquileres).draw();
   } catch (e) {
     showMsg('tablaAlquileres', 'Error al cargar alquileres');

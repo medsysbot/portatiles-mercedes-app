@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
-  const btnBuscar = document.getElementById('btnBuscarReportes');
-  const buscador = document.getElementById('busquedaReportes');
+  const btnBuscar = document.getElementById('btnBuscar');
+  const buscador = document.getElementById('campoBuscar');
   const errorDiv = document.getElementById('errorReportes');
   let reportes = [];
 

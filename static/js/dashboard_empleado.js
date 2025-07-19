@@ -38,12 +38,17 @@ async function cargarResumenEmpleado() {
     ]);
     const servicios = servRes ? await servRes.json() : [];
     const reportes = repRes ? await repRes.json() : [];
+    const realizados = servicios.filter(s =>
+      ["Completado", "Finalizado"].includes((s.estado || "").trim())
+    );
+
     document.getElementById('cntComprobantes').textContent = servicios.length;
     document.getElementById('cntReportes').textContent = reportes.length;
+    document.getElementById('cntServiciosRealizados').textContent = realizados.length;
   } catch (e) {
     document.getElementById('cntComprobantes').textContent = '0';
     document.getElementById('cntReportes').textContent = '0';
-    document.getElementById('cntServiciosRealizados').textContent = servicios.length;
+    document.getElementById('cntServiciosRealizados').textContent = '0';
     console.error('Error cargando dashboard empleado:', e);
   }
 }

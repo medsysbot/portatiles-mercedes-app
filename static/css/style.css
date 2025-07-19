@@ -547,6 +547,39 @@ body.panel-empleados #campoBuscarRecursos::placeholder {
   opacity: 1 !important;
 }
 
+/* Ajustes de ancho para los buscadores de Recursos Humanos */
+body.panel-empleados #busquedaDatos,
+body.panel-empleados #busquedaSalarios,
+body.panel-empleados #busquedaAusencias,
+body.panel-empleados #busquedaDatos:focus,
+body.panel-empleados #busquedaSalarios:focus,
+body.panel-empleados #busquedaAusencias:focus {
+  width: 170px !important;
+  max-width: 200px !important;
+  min-width: 100px;
+  background: rgba(128,128,128,0.5) !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+  font-size: 1em !important;
+  transition: width 0.2s;
+}
+
+@media (max-width: 600px) {
+  body.panel-empleados #busquedaDatos,
+  body.panel-empleados #busquedaSalarios,
+  body.panel-empleados #busquedaAusencias {
+    width: 50vw !important;
+    max-width: 170px !important;
+  }
+}
+
+body.panel-empleados #busquedaDatos::placeholder,
+body.panel-empleados #busquedaSalarios::placeholder,
+body.panel-empleados #busquedaAusencias::placeholder {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
 /* Vistas previas de facturas y comprobantes en panel de cliente */
 #preview-factura img,
 #preview-factura embed,

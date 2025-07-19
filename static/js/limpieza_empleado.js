@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
-  const btnBuscar = document.getElementById('btnBuscarServicios');
-  const buscador = document.getElementById('busquedaServicios');
+  const btnBuscar = document.getElementById('btnBuscar');
+  const buscador = document.getElementById('campoBuscar');
   const btnEditar = document.getElementById('btnEditarSeleccionado');
   let servicios = [];
 

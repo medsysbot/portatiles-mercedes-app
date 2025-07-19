@@ -60,8 +60,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // --- Eventos de búsqueda ---
-  const buscador = document.getElementById('busquedaAlquileres');
-  const btnBuscar = document.getElementById('btnBuscarAlquiler');
+  const buscador = document.getElementById('campoBuscar');
+  const btnBuscar = document.getElementById('btnBuscar');
   if (buscador) buscador.addEventListener('input', () => filtrarAlquileres(buscador.value.trim()));
   if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarAlquileres(buscador.value.trim()));
 

@@ -512,3 +512,16 @@ body.panel-cliente table.pm-tabla tr:hover {
 /* Oculta la X de cierre en modales de selección */
 .modal-header .close { display: none !important; }
 
+#campoBuscar {
+  width: 70% !important;
+  max-width: 210px !important;
+  min-width: 120px;
+  display: inline-block;
+}
+@media (max-width: 600px) {
+  #campoBuscar {
+    width: 55vw !important;
+    max-width: 180px !important;
+  }
+}
+

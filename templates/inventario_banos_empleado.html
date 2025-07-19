@@ -8,9 +8,11 @@
 <div class="container mt-4">
   <h2>Inventario de baños</h2>
 
-  <div class="d-flex justify-content-between align-items-center my-3">
-    <input type="text" id="busquedaInventario" class="form-control buscador-tabla" placeholder="Buscar...">
-    <button id="btnBuscarInventario" class="btn btn-secondary ml-2">Buscar</button>
+  <div class="d-flex align-items-center justify-content-between mb-3" style="gap: 8px;">
+    <input type="text" id="campoBuscar" class="form-control" style="max-width: 210px;" placeholder="Buscar...">
+    <div>
+      <button id="btnBuscar" class="btn btn-dark ml-2">Buscar</button>
+    </div>
   </div>
   <div class="table-responsive bg-light p-3">
   <table id="tablaInventario" class="table pm-tabla table-striped table-bordered">

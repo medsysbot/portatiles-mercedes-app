@@ -2,8 +2,8 @@
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buscador = document.getElementById('busquedaInventario');
-  const btnBuscar = document.getElementById('btnBuscarInventario');
+  const buscador = document.getElementById('campoBuscar');
+  const btnBuscar = document.getElementById('btnBuscar');
   const mensajeError = document.getElementById('errorInventario');
 
   let banosCargados = [];

@@ -27,15 +27,16 @@ document.getElementById('btnLogout')?.addEventListener('click', () => {
 });
 
 // ============= RESUMEN PANEL CLIENTE =============
-function renderArchivo(url) {
+function renderArchivo(url, label = 'VER ARCHIVO') {
   if (!url) return '';
-  if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
-    return `<img src="${url}" alt="Archivo" style="max-width:100%; max-height:180px; border-radius:8px; box-shadow:0 2px 8px #0002;">`;
+  const lower = url.toLowerCase();
+  if (lower.match(/\.(jpg|jpeg|png|gif)$/)) {
+    return `<a href="${url}" target="_blank"><img src="${url}" alt="Archivo" style="max-width: 150px; border: 1px solid #ccc;"></a>`;
   }
-  if (url.match(/\.pdf$/i)) {
-    return `<embed src="${url}" type="application/pdf" width="100%" height="180px" style="border-radius:8px; box-shadow:0 2px 8px #0002;" />`;
+  if (lower.endsWith('.pdf')) {
+    return `<a href="${url}" target="_blank" class="link-archivo">${label}</a>`;
   }
-  return `<a href="${url}" target="_blank" class="btn btn-link">Ver archivo</a>`;
+  return `<a href="${url}" target="_blank" class="link-archivo">${label}</a>`;
 }
 
 function mostrarUltimaFactura(facturas) {
@@ -50,7 +51,7 @@ function mostrarUltimaFactura(facturas) {
   panel.innerHTML = `
     <p class="mb-1"><strong>Nro:</strong> ${ultima.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultima.fecha || '-'}</p>
-    ${renderArchivo(ultima.factura_url)}
+    ${renderArchivo(ultima.factura_url, 'VER FACTURA')}
   `;
 }
 
@@ -63,7 +64,7 @@ function mostrarUltimoComprobanteCliente(comprobantes) {
   }
   comprobantes.sort((a, b) => new Date(b.fecha_envio) - new Date(a.fecha_envio));
   const ultimo = comprobantes[0];
-  const archivoHTML = renderArchivo(ultimo.comprobante_url);
+  const archivoHTML = renderArchivo(ultimo.comprobante_url, 'VER COMPROBANTE');
   panel.innerHTML = `
     <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>

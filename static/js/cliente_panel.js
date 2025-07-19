@@ -55,7 +55,7 @@ function mostrarUltimaFactura(facturas) {
     <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha || '-'}</p>
     <p class="mb-1"><strong>DNI/CUIT/CUIL:</strong> ${ultimo.dni_cuit_cuil || '-'}</p>
-    ${archivoHTML || '<span class="text-muted">No hay archivo disponible.</span>'}
+    ${archivoHTML || '<span class="text-muted">No disponible</span>'}
   `;
 }
 
@@ -68,16 +68,13 @@ function mostrarUltimoComprobanteCliente(comprobantes) {
 
   const ultimo = comprobantes[0];
 
-  let archivoHTML = '';
-  if (ultimo.comprobante_url) {
-    archivoHTML = `<a href="${ultimo.comprobante_url}" target="_blank" style="color: #0bf; text-decoration: underline;">VER COMPROBANTE</a>`;
-  }
+  const archivoHTML = renderArchivo(ultimo.comprobante_url, 'VER COMPROBANTE');
 
   panel.innerHTML = `
     <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
     <p class="mb-1"><strong>DNI/CUIT/CUIL:</strong> ${ultimo.dni_cuit_cuil || '-'}</p>
-    ${archivoHTML || '<span class="text-muted">No hay comprobante disponible.</span>'}
+    ${archivoHTML || '<span class="text-muted">No disponible</span>'}
   `;
 }
 

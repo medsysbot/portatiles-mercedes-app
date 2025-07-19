@@ -1,7 +1,12 @@
 function getAuthToken() {
-  return localStorage.getItem("token");
+  const token = localStorage.getItem("token") || localStorage.getItem("access_token");
+  if (!token || token.length < 10) {
+    console.warn("Token ausente o inválido:", token);
+    window.location.href = "/login";
+    return null;
+  }
+  return token;
 }
-
 async function fetchConAuth(url, options = {}) {
   const token = getAuthToken();
   if (!token) {

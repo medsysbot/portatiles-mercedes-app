@@ -22,6 +22,7 @@ from routes.cliente_panel import router as cliente_router
 from routes.admin_panel import router as admin_router
 from routes.login import router as login_router
 from routes.clientes import router as clientes_router
+from routes.comprobantes_pago import router as comprobantes_pago_router
 from routes.inventario_banos import router as inventario_router
 from routes.facturas_pendientes import router as facturas_pendientes_router
 from routes.morosos import router as morosos_router
@@ -55,7 +56,8 @@ templates = Jinja2Templates(directory="templates")
 router.include_router(ventas_router)
 # Incluir las rutas del módulo de débito automático
 router.include_router(debito_router)
-# Rutas específicas del panel del cliente
+#app.include_router(comprobantes_pago_router)
+app.include_router(comprobantes_pago_router)
 router.include_router(cliente_router)
 router.include_router(admin_router)
 router.include_router(login_router)

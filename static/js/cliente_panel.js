@@ -27,26 +27,18 @@ document.getElementById('btnLogout')?.addEventListener('click', () => {
 });
 
 // ============= RESUMEN PANEL CLIENTE =============
-function renderArchivo(url, label = 'VER ARCHIVO') {
-  if (!url) return '';
-  const lower = url.toLowerCase();
-
-  const enlace =
-    `<div style="margin-top: 8px;">` +
-    `<a href="${url}" target="_blank" class="link-archivo">${label}</a>` +
-    `</div>`;
-
-  if (lower.match(/\.(jpg|jpeg|png|gif)$/)) {
-    const miniatura =
-      `<div style="margin-top: 10px;">` +
-      `<a href="${url}" target="_blank">` +
-      `<img src="${url}" alt="Vista previa" style="max-width: 150px; border-radius: 4px; border: 1px solid #fff;">` +
-      `</a>` +
-      `</div>`;
-    return enlace + miniatura;
+function renderArchivo(url, texto = 'VER ARCHIVO') {
+  if (!url) return null;
+  if (url.endsWith('.jpg') || url.endsWith('.png')) {
+    return `
+      <a href="${url}" target="_blank" style="display:block; color:#0bf; text-decoration:underline; margin-bottom:5px;">${texto}</a>
+      <a href="${url}" target="_blank">
+        <img src="${url}" alt="${texto}" style="max-width:150px; border:1px solid #ccc; border-radius:4px;">
+      </a>
+    `;
+  } else {
+    return `<a href="${url}" target="_blank" style="color:#0bf; text-decoration:underline;">${texto}</a>`;
   }
-
-  return enlace;
 }
 
 function mostrarUltimaFactura(facturas) {
@@ -57,11 +49,13 @@ function mostrarUltimaFactura(facturas) {
     return;
   }
   facturas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-  const ultima = facturas[0];
+  const ultimo = facturas[0];
+  const archivoHTML = renderArchivo(ultimo.factura_url, 'VER FACTURA');
   panel.innerHTML = `
-    <p class="mb-1"><strong>Nro:</strong> ${ultima.numero_factura || '-'}</p>
-    <p class="mb-1"><strong>Fecha:</strong> ${ultima.fecha || '-'}</p>
-    ${renderArchivo(ultima.factura_url, 'VER FACTURA')}
+    <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
+    <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha || '-'}</p>
+    <p class="mb-1"><strong>DNI/CUIT/CUIL:</strong> ${ultimo.dni_cuit_cuil || '-'}</p>
+    ${archivoHTML || '<span class="text-muted">No hay archivo disponible.</span>'}
   `;
 }
 
@@ -74,12 +68,12 @@ function mostrarUltimoComprobanteCliente(comprobantes) {
   }
   comprobantes.sort((a, b) => new Date(b.fecha_envio) - new Date(a.fecha_envio));
   const ultimo = comprobantes[0];
-  const archivoHTML = renderArchivo(ultimo.comprobante_url, 'VER COMPROBANTE');
+  const archivoHTML = renderArchivo(ultimo.comprobante_url, 'VER PAGO');
   panel.innerHTML = `
     <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
     <p class="mb-1"><strong>DNI/CUIT/CUIL:</strong> ${ultimo.dni_cuit_cuil || '-'}</p>
-    ${archivoHTML || '<span class="text-muted">No hay comprobante disponible.</span>'}
+    ${archivoHTML || '<span class="text-muted">No hay archivo disponible.</span>'}
   `;
 }
 

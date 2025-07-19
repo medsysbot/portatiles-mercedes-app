@@ -321,7 +321,7 @@ body.panel-cliente table.dataTable th {
 }
 
 .dataTables_wrapper .dataTables_filter input[type="search"] {
-  width: 50% !important;
+  width: 70% !important;
   display: inline-block;
   margin-right: 0.5em;
 }
@@ -346,7 +346,7 @@ body.panel-cliente .table-responsive.bg-light {
 }
 
 .buscador-tabla {
-  width: 50% !important;
+  width: 70% !important;
   background: #ffffff !important;
   color: #000000 !important;
   border: 1px solid #000000 !important;

@@ -591,6 +591,22 @@ body.panel-empleados #busquedaAusencias::placeholder {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
+.archivo-contenedor {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  color: #ffffff !important;
+}
+
+.archivo-contenedor a {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+.link-archivo {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
 /* Ajustes de ancho para los buscadores en el panel de cliente */
 .campo-busqueda-cliente,
 .campo-busqueda-cliente:focus {

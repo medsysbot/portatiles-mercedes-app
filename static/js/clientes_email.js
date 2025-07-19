@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok || !res.ok) throw new Error(res.detail || 'Error al enviar');
       form.reset();
     } catch (err) {
+      console.error('Error al enviar email', err);
     }
   });
 });

@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaDatosPersonales tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const inicio = Date.now();
     try {
       const resp = await fetch('/admin/api/empleados_datos_personales/eliminar', {
         method: 'POST',
@@ -39,21 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarDatos();
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-      }, delay);
+      await obtenerDatos();
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-      }, delay);
       console.error('Error eliminando datos personales:', err);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
-  async function cargarDatos() {
+  async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/empleados_datos_personales', { headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') } });
       const datos = await resp.json();
@@ -61,8 +54,9 @@ document.addEventListener('DOMContentLoaded', () => {
       tabla.rows.add(datos).draw();
     } catch (err) {
       console.error('Error al cargar datos personales:', err);
+      if (!tabla.data().count()) tabla.clear().draw();
     }
   }
 
-  cargarDatos();
+  obtenerDatos();
 });

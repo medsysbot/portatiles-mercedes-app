@@ -12,6 +12,7 @@ function inicializarTablaAlquileres() {
       { data: 'numero_bano', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
       { data: 'numero_bano' },
       { data: 'cliente_nombre' },
+      { data: 'razon_social' },
       { data: 'dni_cuit_cuil' },
       { data: 'direccion' },
       { data: 'fecha_inicio' },
@@ -30,18 +31,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabla = tablaAlquileres;
 
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
+  const btnEditar = document.getElementById('btnEditarSeleccionado');
 
-  function actualizarBoton() {
+  function actualizarBotones() {
     const marcados = document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked');
     if (btnEliminar) btnEliminar.disabled = marcados.length === 0;
+    if (btnEditar) btnEditar.disabled = marcados.length !== 1;
   }
 
-  $('#tablaAlquileres tbody').on('change', '.fila-check', actualizarBoton);
+  $('#tablaAlquileres tbody').on('change', '.fila-check', actualizarBotones);
+
+  btnEditar?.addEventListener('click', () => {
+    const seleccionado = document.querySelector('#tablaAlquileres tbody .fila-check:checked');
+    if (!seleccionado) return;
+    const id = seleccionado.dataset.id;
+    window.location.href = `/admin/alquileres/editar/${id}`;
+  });
 
   btnEliminar?.addEventListener('click', async () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
     if (!seleccionados.length) return;
-    const start = Date.now();
     try {
       const resp = await fetch('/admin/api/alquileres/eliminar', {
         method: 'POST',
@@ -49,35 +58,30 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ ids: seleccionados })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarAlquileres();
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
+      await obtenerDatos();
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
       console.error('Error eliminando alquileres:', err);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
-  async function cargarAlquileres() {
+  async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/alquileres', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error consultando alquileres');
       window.pmAlquileresAdminData = await resp.json();
-      mostrarAlquileres(window.pmAlquileresAdminData);
+      mostrarDatos(window.pmAlquileresAdminData);
       mensajeError?.classList.add('d-none');
     } catch (err) {
       console.error('Error al cargar alquileres:', err);
+      if (!window.pmAlquileresAdminData.length) tabla.clear().draw();
     }
   }
 
-  function mostrarAlquileres(lista) {
+  function mostrarDatos(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
   }
@@ -86,10 +90,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const q = texto.toLowerCase();
     const filtrados = window.pmAlquileresAdminData.filter(a =>
       (a.cliente_nombre || '').toLowerCase().includes(q) ||
+      (a.razon_social || '').toLowerCase().includes(q) ||
       (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (a.numero_bano || '').toLowerCase().includes(q)
     );
-    mostrarAlquileres(filtrados);
+    mostrarDatos(filtrados);
     if (filtrados.length === 0) {
     } else {
     }
@@ -103,8 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (window.pmAlquileresAdminData.length === 0) {
-    cargarAlquileres();
+    obtenerDatos();
   } else {
-    mostrarAlquileres(window.pmAlquileresAdminData);
+    mostrarDatos(window.pmAlquileresAdminData);
   }
 });

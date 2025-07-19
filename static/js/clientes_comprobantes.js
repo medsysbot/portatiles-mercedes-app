@@ -1,32 +1,12 @@
 // Archivo: static/js/clientes_comprobantes.js
 // Proyecto: Portátiles Mercedes
 
-document.addEventListener('DOMContentLoaded', () => {
-  if (!localStorage.getItem('access_token')) {
-    window.location.href = '/login';
-    return;
-  }
+window.pmClientesComprobantesData = window.pmClientesComprobantesData || [];
+let tablaComprobantes = null;
 
-  function handleUnauthorized() {
-    localStorage.clear();
-    window.location.href = '/login';
-  }
-
-  async function fetchConAuth(url, options = {}) {
-    const token = localStorage.getItem('access_token');
-    if (!token) handleUnauthorized();
-    const resp = await fetch(url, {
-      ...options,
-      headers: {
-        ...options.headers,
-        Authorization: 'Bearer ' + token
-      }
-    });
-    if (resp.status === 401) handleUnauthorized();
-    return resp;
-  }
-
-  const tabla = $('#tablaComprobantes').DataTable({
+function inicializarTablaComprobantes() {
+  if (tablaComprobantes) return;
+  tablaComprobantes = $('#tablaComprobantes').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
@@ -55,6 +35,35 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     ]
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (!localStorage.getItem('access_token')) {
+    window.location.href = '/login';
+    return;
+  }
+
+  function handleUnauthorized() {
+    localStorage.clear();
+    window.location.href = '/login';
+  }
+
+  async function fetchConAuth(url, options = {}) {
+    const token = localStorage.getItem('access_token');
+    if (!token) handleUnauthorized();
+    const resp = await fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        Authorization: 'Bearer ' + token
+      }
+    });
+    if (resp.status === 401) handleUnauthorized();
+    return resp;
+  }
+
+  inicializarTablaComprobantes();
+  const tabla = tablaComprobantes;
 
   const buscador = document.getElementById('busquedaComprobantes');
   const btnBuscar = document.getElementById('btnBuscarComprobante');
@@ -64,7 +73,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const contControles = document.getElementById('contenedorControles');
   const btnCancelar = document.getElementById('btnCancelarForm');
   const btnEliminar = document.getElementById('btnEliminarComprobantes');
-  let registros = [];
 
   function actualizarBtnEliminar() {
     if (!btnEliminar) return;
@@ -80,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const checks = document.querySelectorAll('.pm-check:checked');
     if (!checks.length) return;
 
-    const start = Date.now();
 
     let dni = localStorage.getItem('dni_cuit_cuil');
     if (!dni) {
@@ -99,13 +106,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       await cargarComprobantes();
       actualizarBtnEliminar();
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
     } catch (e) {
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
       console.error('Error eliminando', e);
     }
   });
@@ -128,13 +129,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrar() {
     const q = (buscador.value || '').toLowerCase();
-      const filtrados = registros.filter(c =>
-        (c.nombre_cliente || '').toLowerCase().includes(q) ||
-        (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-        (c.razon_social || '').toLowerCase().includes(q) ||
-        (c.numero_de_factura || '').toLowerCase().includes(q) ||
-        (c.comprobante_url || '').toLowerCase().includes(q)
-      );
+    const filtrados = window.pmClientesComprobantesData.filter(c =>
+      (c.nombre_cliente || '').toLowerCase().includes(q) ||
+      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (c.razon_social || '').toLowerCase().includes(q) ||
+      (c.numero_de_factura || '').toLowerCase().includes(q) ||
+      (c.comprobante_url || '').toLowerCase().includes(q)
+    );
     mostrarComprobantes(filtrados);
   }
 
@@ -156,12 +157,13 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const resp = await fetchConAuth(`/api/comprobantes_pago?dni_cuit_cuil=${dni}`);
       if (!resp.ok) throw new Error('Error consultando comprobantes');
-      registros = await resp.json();
-      mostrarComprobantes(registros);
+      window.pmClientesComprobantesData = await resp.json();
+      mostrarComprobantes(window.pmClientesComprobantesData);
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
     } catch (err) {
       console.error('Error cargando comprobantes:', err);
+      if (window.pmClientesComprobantesData.length === 0) tabla.clear().draw();
     }
   }
 
@@ -171,6 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (const [_, v] of datos.entries()) {
       if (!v) {
+        alert('Complete todos los campos');
         return;
       }
     }
@@ -183,13 +186,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       const res = await resp.json();
       if (resp.ok && res.ok) {
-        setTimeout(() => {
-          location.href = '/clientes/comprobantes';
-        }, 1500);
+        location.href = '/clientes/comprobantes';
       } else {
         throw new Error(res.detail || 'Error al subir comprobante');
       }
     } catch (err) {
+      console.error('Error enviando formulario:', err);
     }
   });
 

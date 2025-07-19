@@ -24,12 +24,15 @@ async function fetchConAuth(url, options = {}) {
   return resp;
 }
 
+window.pmDatosPersonalesData = window.pmDatosPersonalesData || {};
+
 async function cargarDatosCliente() {
   try {
     const resp = await fetchConAuth('/clientes/datos_personales_api');
     if (!resp) return;
     if (!resp.ok) throw new Error('Error al obtener datos');
     const datos = await resp.json();
+    window.pmDatosPersonalesData = datos || {};
     document.getElementById('nombre').value = datos.nombre || '';
     document.getElementById('apellido').value = datos.apellido || '';
     document.getElementById('dni_cuit_cuil').value = datos.dni_cuit_cuil || '';
@@ -37,7 +40,8 @@ async function cargarDatosCliente() {
     document.getElementById('telefono').value = datos.telefono || '';
     document.getElementById('razon_social').value = datos.razon_social || '';
     document.getElementById('email').value = datos.email || '';
-  } catch (_) {
+  } catch (err) {
+    console.error('Error al obtener datos', err);
   }
 }
 
@@ -47,7 +51,7 @@ async function guardarDatosCliente(ev) {
   const data = {};
   new FormData(form).forEach((v, k) => { data[k] = v; });
 
-  await new Promise(r => setTimeout(r, 2500));
+  
 
   try {
     const resp = await fetchConAuth('/clientes/guardar_datos_personales', {
@@ -58,12 +62,12 @@ async function guardarDatosCliente(ev) {
     if (!resp) return;
     const resJson = await resp.json();
     if (resp.ok) {
-      await new Promise(r => setTimeout(r, 2500));
       window.location.href = '/cliente/panel';
     } else {
       throw new Error(resJson.detail || resJson.error || 'Error al guardar los datos');
     }
   } catch (error) {
+    console.error('Error al guardar los datos', error);
   }
 }
 

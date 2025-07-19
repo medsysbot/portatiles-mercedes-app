@@ -1,5 +1,6 @@
 // Archivo: static/js/clientes_admin.js
 // Proyecto: Portátiles Mercedes
+// Requiere que la plantilla cargue /static/js/alertas.js para usar showAlert
 
 function handleUnauthorized() {
   localStorage.removeItem('access_token');
@@ -36,7 +37,7 @@ function inicializarTablaClientes() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   inicializarTablaClientes();
   const tabla = tablaClientes;
 
@@ -52,8 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.value);
     if (!ids.length) return;
-    const start = Date.now();
     try {
+      if (typeof showAlert === 'function') {
+        await showAlert('borrando', 'Eliminando clientes...', true, 2600);
+      }
       const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
@@ -61,13 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error al eliminar');
       await obtenerClientes();
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
+      if (typeof showAlert === 'function') {
+        await showAlert('borrado-exito', 'Clientes eliminados', true, 2600);
+        await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
+        await showAlert('exito-datos', 'Clientes actualizados', true, 2600);
+      }
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
+      if (typeof showAlert === 'function') {
+        await showAlert('borrado-error', 'Error eliminando clientes', true, 2600);
+      }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
@@ -75,11 +80,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function obtenerClientes() {
     try {
+      if (typeof showAlert === 'function') {
+        await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
+      }
       const resp = await fetch('/clientes');
       const data = await resp.json();
       window.pmClientesAdminData = data || [];
       mostrarClientes(window.pmClientesAdminData);
+      if (typeof showAlert === 'function') {
+        await showAlert('exito-datos', 'Clientes cargados', true, 2600);
+      }
     } catch (error) {
+      if (typeof showAlert === 'function') {
+        await showAlert('error-datos', 'Error al cargar clientes', true, 2600);
+      }
       if (window.pmClientesAdminData.length === 0) tabla.clear().draw();
     }
   }
@@ -104,10 +118,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarCliente');
   if (buscador) buscador.addEventListener('input', () => filtrarClientes(buscador.value.trim()));
   if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
-
   if (window.pmClientesAdminData.length === 0) {
-    obtenerClientes();
-  } else {
-    mostrarClientes(window.pmClientesAdminData);
+  obtenerClientes();
+} else {
+  if (typeof showAlert === 'function') {
+    await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
+    await showAlert('exito-datos', 'Clientes cargados', true, 2600);
   }
+  mostrarClientes(window.pmClientesAdminData);
+}
+
 });
+

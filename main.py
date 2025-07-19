@@ -10,6 +10,9 @@ Proyecto: Portátiles Mercedes
 """Aplicación principal de Portátiles Mercedes."""
 
 import os
+
+# Instancia de Supabase para registro de errores
+supabase_error_log = None
 from datetime import datetime
 from dotenv import load_dotenv
 
@@ -41,7 +44,6 @@ import sys
 import traceback
 import logging
 import os
-from pathlib import Path
 
 
 def excepthook(type, value, tb):
@@ -51,30 +53,44 @@ def excepthook(type, value, tb):
 
 sys.excepthook = excepthook
 
-# Configuración de logging para eventos de login
-LOG_DIR = Path("logs")
-LOG_DIR.mkdir(exist_ok=True)
-LOG_FILE = LOG_DIR / "login_events.log"
+# Configuración de logging para imprimir todo por consola
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    stream=sys.stdout,
+)
 
 login_logger = logging.getLogger("login_events")
 login_logger.setLevel(logging.INFO)
-if not login_logger.handlers:
-    file_handler = logging.FileHandler(LOG_FILE, mode="a", encoding="utf-8")
-    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    file_handler.setFormatter(formatter)
-    login_logger.addHandler(file_handler)
-    login_logger.propagate = False
 
-# Logger para registrar tracebacks de errores generales
-ERROR_LOG_FILE = LOG_DIR / "errores_backend.log"
 error_logger = logging.getLogger("errores_backend")
 error_logger.setLevel(logging.ERROR)
-if not error_logger.handlers:
-    err_handler = logging.FileHandler(ERROR_LOG_FILE, mode="a", encoding="utf-8")
-    err_formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    err_handler.setFormatter(err_formatter)
-    error_logger.addHandler(err_handler)
-    error_logger.propagate = False
+
+system_error_logger = logging.getLogger("errores_sistema")
+system_error_logger.setLevel(logging.ERROR)
+
+system_error_logger = logging.getLogger("errores_sistema")
+system_error_logger.setLevel(logging.ERROR)
+
+# ==== BLOQUE REGISTRO DE ERRORES EN SUPABASE ====
+def registrar_error_supabase(endpoint, usuario, rol, detalle_error, mensaje, request_data, ip_cliente):
+    """Guarda un error en la tabla logs_errores"""
+    if not supabase_error_log:
+        print("[LOG] Supabase no configurado para registrar errores")
+        return
+    try:
+        supabase_error_log.table("logs_errores").insert({
+            "endpoint": endpoint,
+            "usuario": usuario or "N/A",
+            "rol": rol or "N/A",
+            "detalle_error": detalle_error or "",
+            "mensaje": mensaje or "",
+            "request_data": request_data or {},
+            "ip_cliente": ip_cliente or ""
+        }).execute()
+    except Exception as exc:
+        print("[LOG] Error guardando error en Supabase:", exc)
+# ==== FIN BLOQUE ====
 
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.staticfiles import StaticFiles
@@ -124,18 +140,50 @@ app.add_middleware(
 
 # Opcional: forzar HTTPS
 # app.add_middleware(HTTPSRedirectMiddleware)
-
 # Registrar manejador de excepciones para capturar tracebacks
+# ========================= HANDLERS PARA LOGS DE ERRORES =========================
+
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request: Request, exc: HTTPException):
-    """Registra el traceback completo antes de responder."""
+    """Registra el traceback y el error en Supabase antes de responder."""
     error_logger.error(
         "Error en %s: %s\n%s",
         request.url.path,
         exc.detail,
         traceback.format_exc(),
     )
+    user = request.cookies.get("access_token", "N/A")
+    registrar_error_supabase(
+        endpoint=request.url.path,
+        usuario=user,
+        rol=None,
+        detalle_error=str(exc.detail),
+        mensaje="HTTPException",
+        request_data=None,
+        ip_cliente=request.client.host if request.client else ""
+    )
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.detail})
+
+@app.exception_handler(Exception)
+async def general_exception_handler(request: Request, exc: Exception):
+    """Registra cualquier excepción no manejada en Supabase."""
+    error_logger.error(
+        "Excepción en %s: %s\n%s",
+        request.url.path,
+        exc,
+        traceback.format_exc(),
+    )
+    user = request.cookies.get("access_token", "N/A")
+    registrar_error_supabase(
+        endpoint=request.url.path,
+        usuario=user,
+        rol=None,
+        detalle_error=str(exc),
+        mensaje="Exception",
+        request_data=None,
+        ip_cliente=request.client.host if request.client else ""
+    )
+    return JSONResponse(status_code=500, content={"detail": "Error interno del sistema"})
 
 # Inyectar el cliente de Supabase global en todos los módulos solo si está habilitado
 if os.getenv("ENABLE_SUPABASE") == "1":

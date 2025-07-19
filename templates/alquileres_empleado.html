@@ -8,9 +8,11 @@
 <div class="container mt-4">
   <h2>Alquileres</h2>
 
-  <div class="d-flex justify-content-between align-items-center my-3">
-    <input type="text" id="busquedaAlquileres" class="form-control buscador-tabla" placeholder="Buscar alquiler...">
-    <button id="btnBuscarAlquiler" class="btn btn-secondary ml-2">Buscar</button>
+  <div class="d-flex align-items-center justify-content-between mb-3" style="gap: 8px;">
+    <input type="text" id="campoBuscar" class="form-control buscador-tabla" placeholder="Buscar...">
+    <div>
+      <button id="btnBuscar" class="btn btn-dark ml-2">Buscar</button>
+    </div>
   </div>
 
   <div class="table-responsive bg-light p-3">
@@ -19,6 +21,7 @@
       <tr>
         <th>Nº Baño</th>
         <th>Cliente</th>
+        <th>Razón social</th>
         <th>DNI / CUIT / CUIL</th>
         <th>Dirección</th>
         <th>Fecha inicio</th>
@@ -30,6 +33,13 @@
   </table>
   </div>
 </div>
+<div id="alert-manager" class="alert-container" style="display:none;">
+  <div class="alert-box">
+    <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon">
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
+{% endblock %}
 
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

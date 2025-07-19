@@ -2,14 +2,14 @@
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
-  const tabla = document.querySelector('#tablaEmails tbody');
+  window.pmEmailsAdminData = window.pmEmailsAdminData || [];
+  const tbody = document.querySelector('#tablaEmails tbody');
   const form = document.getElementById('formEnviarEmail');
   const btnNuevo = document.getElementById('btnMostrarForm');
   const contTabla = document.getElementById('contenedorTabla');
   const btnCancelar = document.getElementById('btnCancelarForm');
   const buscador = document.getElementById('busquedaEmail');
   const btnBuscar = document.getElementById('btnBuscarEmail');
-  let emailsCargados = [];
 
   form.classList.add('d-none');
 
@@ -25,62 +25,68 @@ document.addEventListener('DOMContentLoaded', () => {
     btnNuevo.classList.remove('d-none');
   });
 
-  function mostrarEmails(lista) {
-    tabla.innerHTML = '';
+  function mostrarDatos(lista) {
+    if (!tbody) return;
+    tbody.innerHTML = '';
     lista.forEach(e => {
-      const fila = document.createElement('tr');
-      fila.innerHTML = `
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
         <td>${e.fecha}</td>
         <td>${e.remitente}</td>
         <td>${e.asunto}</td>
-        <td>${(e.cuerpo || '').slice(0, 100)}</td>
-      `;
-      tabla.appendChild(fila);
+        <td>${(e.cuerpo || '').slice(0, 100)}</td>`;
+      tbody.appendChild(tr);
     });
   }
 
-  async function cargarEmails() {
+  async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/emails', {
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+        headers: { Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '') }
       });
       if (!resp.ok) throw new Error('Error al consultar emails');
-      emailsCargados = await resp.json();
-      mostrarEmails(emailsCargados);
+      window.pmEmailsAdminData = await resp.json();
+      mostrarDatos(window.pmEmailsAdminData);
     } catch (err) {
       console.error('Error cargando emails:', err);
+      if (!window.pmEmailsAdminData.length && tbody) tbody.innerHTML = '';
     }
   }
 
   function filtrarEmails() {
     const q = (buscador?.value || '').toLowerCase();
-    const filtrados = emailsCargados.filter(e =>
+    const filtrados = window.pmEmailsAdminData.filter(e =>
       (e.remitente || '').toLowerCase().includes(q) ||
       (e.asunto || '').toLowerCase().includes(q)
     );
-    mostrarEmails(filtrados);
+    mostrarDatos(filtrados);
   }
 
   buscador?.addEventListener('input', filtrarEmails);
   btnBuscar?.addEventListener('click', filtrarEmails);
 
-  form.addEventListener('submit', async ev => {
+  form?.addEventListener('submit', async ev => {
     ev.preventDefault();
     const datos = new FormData(form);
     try {
       const resp = await fetch('/admin/emails/enviar', {
         method: 'POST',
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        headers: { Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '') },
         body: datos
       });
       const res = await resp.json();
       if (!resp.ok || !res.ok) throw new Error(res.detail || 'Error al enviar');
       form.reset();
-      cargarEmails();
+      obtenerDatos();
       btnCancelar.click();
     } catch (err) {
+      console.error('Error enviando email:', err);
     }
   });
 
-  cargarEmails();
+  if (window.pmEmailsAdminData.length === 0) {
+    obtenerDatos();
+  } else {
+    mostrarDatos(window.pmEmailsAdminData);
+  }
 });

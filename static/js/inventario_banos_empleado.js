@@ -2,8 +2,8 @@
 // Proyecto: Portátiles Mercedes
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buscador = document.getElementById('busquedaInventario');
-  const btnBuscar = document.getElementById('btnBuscarInventario');
+  const buscador = document.getElementById('campoBuscar');
+  const btnBuscar = document.getElementById('btnBuscar');
   const mensajeError = document.getElementById('errorInventario');
 
   let banosCargados = [];
@@ -31,9 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error al consultar inventario');
       banosCargados = await resp.json();
       mostrar(banosCargados);
-      mensajeError.classList.add('d-none');
+      mensajeError?.classList.add('d-none');
     } catch (err) {
       console.error('Error cargando inventario:', err);
+      mensajeError?.classList.remove('d-none');
     }
   }
 
@@ -50,9 +51,6 @@ document.addEventListener('DOMContentLoaded', () => {
       (b.estado || '').toLowerCase().includes(q)
     );
     mostrar(filtrados);
-    if (filtrados.length === 0) {
-    } else {
-    }
   }
 
   buscador?.addEventListener('input', () => filtrar(buscador.value.trim()));

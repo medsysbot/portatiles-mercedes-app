@@ -100,7 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
         { data: 'dni_cuit_cuil', render: d => `<input type="checkbox" class="seleccion-cliente" value="${d}">`, orderable: false },
         { data: 'nombre' },
         { data: 'dni_cuit_cuil' },
-        { data: 'razon_social' }
+        { data: 'razon_social' },
+        { data: 'direccion' }
       ]
     });
 
@@ -136,26 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const checks = document.querySelectorAll('.pm-check:checked');
     if (!checks.length) return;
-
-    const start = Date.now();
-
     try {
       for (const ch of checks) {
         const id = ch.dataset.id;
-        await fetchConAuth(`/admin/api/comprobantes_pago/${id}`, {
-          method: 'DELETE'
-        });
+        await fetchConAuth(`/admin/api/comprobantes_pago/${id}`, { method: 'DELETE' });
       }
-
-      await cargarComprobantes();
+      await obtenerDatos();
       actualizarBtnEliminar();
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
     } catch (e) {
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
       console.error('Error eliminando', e);
     }
   });
@@ -171,7 +160,7 @@ document.addEventListener('DOMContentLoaded', () => {
     location.href = '/admin/comprobantes';
   });
 
-  function mostrarComprobantes(lista) {
+  function mostrarDatos(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
   }
@@ -185,22 +174,23 @@ document.addEventListener('DOMContentLoaded', () => {
       (c.numero_de_factura || '').toLowerCase().includes(q) ||
       (c.comprobante_url || '').toLowerCase().includes(q)
     );
-    mostrarComprobantes(filtrados);
+    mostrarDatos(filtrados);
   }
 
   buscador?.addEventListener('input', filtrar);
   btnBuscar?.addEventListener('click', filtrar);
 
-  async function cargarComprobantes() {
+  async function obtenerDatos() {
     try {
       const resp = await fetchConAuth('/admin/api/comprobantes_pago');
       if (!resp.ok) throw new Error('Error consultando comprobantes');
       window.pmComprobantesAdminData = await resp.json();
-      mostrarComprobantes(window.pmComprobantesAdminData);
+      mostrarDatos(window.pmComprobantesAdminData);
       document.querySelectorAll('.pm-check').forEach(c => (c.checked = false));
       actualizarBtnEliminar();
     } catch (err) {
       console.error('Error cargando comprobantes:', err);
+      if (!window.pmComprobantesAdminData.length) tabla.clear().draw();
     }
   }
 
@@ -214,6 +204,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.querySelector('input[name="dni_cuit_cuil"]').value = cliente.dni_cuit_cuil;
       document.querySelector('input[name="nombre_cliente"]').value = cliente.nombre;
       document.querySelector('input[name="razon_social"]').value = cliente.razon_social;
+      const inputDir = document.querySelector('input[name="direccion"]');
+      if (inputDir) inputDir.value = cliente.direccion || '';
     }
     $('#modalClientesComprobante').modal('hide');
     seleccionado.checked = false;
@@ -226,10 +218,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     for (const [_, v] of datos.entries()) {
       if (!v) {
+        console.error('Campos incompletos');
         return;
       }
     }
-
     try {
       const resp = await fetch('/admin/comprobantes', {
         method: 'POST',
@@ -245,6 +237,7 @@ document.addEventListener('DOMContentLoaded', () => {
         throw new Error(res.detail || 'Error al subir comprobante');
       }
     } catch (err) {
+      console.error('Error enviando formulario', err);
     }
   });
 
@@ -255,9 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   if (window.pmComprobantesAdminData.length === 0) {
-    cargarComprobantes();
+    obtenerDatos();
   } else {
-    mostrarComprobantes(window.pmComprobantesAdminData);
+    mostrarDatos(window.pmComprobantesAdminData);
     actualizarBtnEliminar();
   }
 });

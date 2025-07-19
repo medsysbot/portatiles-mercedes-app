@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 {% endblock %}
 {% block content %}
-<h2 class="mt-0">Nueva factura pendiente</h2>
+<h2 class="mt-0">Nueva factura</h2>
 <div class="pm-form-container">
   <form action="/admin/facturas_pendientes/nueva" method="post" enctype="multipart/form-data">
     <div class="form-group">
@@ -24,6 +24,10 @@
     <div class="form-group">
       <label>Razón social</label>
       <input type="text" name="razon_social" class="form-control">
+    </div>
+    <div class="form-group">
+      <label>Dirección</label>
+      <input type="text" name="direccion" class="form-control">
     </div>
     <div class="form-group">
       <label>Nombre cliente</label>
@@ -62,6 +66,7 @@
                 <th>DNI / CUIT / CUIL</th>
                 <th>Nombre</th>
                 <th>Razón social</th>
+                <th>Dirección</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -77,6 +82,15 @@
 </div>
 {% endblock %}
 
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
+{% block scripts %}
+{{ super() }}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/facturas_pendientes_form.js"></script>
 {% endblock %}

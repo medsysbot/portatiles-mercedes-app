@@ -12,7 +12,7 @@
 <h2 class="mb-3 mt-0">Mis servicios de limpieza</h2>
 
 <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
-  <input type="text" id="busquedaServicios" class="form-control buscador-tabla mb-2" placeholder="Buscar servicio...">
+  <input type="text" id="busquedaServicios" class="form-control buscador-tabla campo-busqueda-cliente mb-2" placeholder="Buscar...">
   <button class="btn btn-secondary ml-2 mb-2" id="btnBuscarServicios" type="button">Buscar</button>
 </div>
 
@@ -25,6 +25,7 @@
         <th>DNI / CUIT / CUIL</th>
         <th>Nombre Cliente</th>
         <th>Razón Social</th>
+        <th>Dirección</th>
         <th>Tipo Servicio</th>
         <th>Estado</th>
         <th>Remito</th>
@@ -36,6 +37,14 @@
 </div>
 {% endblock %}
 
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
+{% block scripts %}
   {{ super() }}
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
   <script src="/clientes_servicios_limpieza.js"></script>

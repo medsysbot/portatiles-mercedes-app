@@ -1,21 +1,18 @@
 // Archivo: static/js/inventario_banos_admin.js
 // Proyecto: Portátiles Mercedes
 
-document.addEventListener('DOMContentLoaded', () => {
-  const btnNuevo = document.getElementById('btnNuevoBano');
-  const buscador = document.getElementById('busquedaInventario');
-  const btnBuscar = document.getElementById('btnBuscarInventario');
-  const mensajeError = document.getElementById('errorInventario');
+window.pmInventarioBanosData = window.pmInventarioBanosData || [];
+let tablaInventario = null;
 
-  let banosCargados = [];
-
-  const tabla = $('#tablaInventario').DataTable({
+function inicializarTablaInventario() {
+  if (tablaInventario) return;
+  tablaInventario = $('#tablaInventario').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
     ordering: true,
     columns: [
-      { data: 'numero_bano', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
+      { data: 'numero_bano', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
       { data: 'numero_bano' },
       { data: 'condicion' },
       { data: 'ultima_reparacion' },
@@ -24,6 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'observaciones' }
     ]
   });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const btnNuevo = document.getElementById('btnNuevoBano');
+  const buscador = document.getElementById('busquedaInventario');
+  const btnBuscar = document.getElementById('btnBuscarInventario');
+  const mensajeError = document.getElementById('errorInventario');
+
+  inicializarTablaInventario();
+  const tabla = tablaInventario;
 
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
@@ -37,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaInventario tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const inicio = Date.now();
     try {
       const resp = await fetch('/admin/api/inventario_banos/eliminar', {
         method: 'POST',
@@ -45,35 +51,30 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarTabla();
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-      }, delay);
+      await obtenerDatos();
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-      }, delay);
       console.error('Error eliminando baños:', err);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
-  async function cargarTabla() {
+  async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/inventario_banos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error al consultar inventario');
-      banosCargados = await resp.json();
-      mostrarBanos(banosCargados);
+      window.pmInventarioBanosData = await resp.json();
+      mostrarDatos(window.pmInventarioBanosData);
       mensajeError?.classList.add('d-none');
     } catch (err) {
       console.error('Error cargando inventario:', err);
+      if (!window.pmInventarioBanosData.length) tabla.clear().draw();
     }
   }
 
-  function mostrarBanos(lista) {
+  function mostrarDatos(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
   }
@@ -92,16 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrarBanos(texto) {
     const q = texto.toLowerCase();
-    const filtrados = banosCargados.filter(b =>
+    const filtrados = window.pmInventarioBanosData.filter(b =>
       (b.numero_bano || '').toLowerCase().includes(q) ||
       (b.condicion || '').toLowerCase().includes(q) ||
       (b.estado || '').toLowerCase().includes(q)
     );
-    mostrarBanos(filtrados);
-    if (filtrados.length === 0) {
-    } else {
-    }
+    mostrarDatos(filtrados);
   }
 
-  cargarTabla();
+  if (window.pmInventarioBanosData.length === 0) {
+    obtenerDatos();
+  } else {
+    mostrarDatos(window.pmInventarioBanosData);
+  }
 });

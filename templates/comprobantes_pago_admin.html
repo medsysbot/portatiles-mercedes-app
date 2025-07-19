@@ -34,6 +34,10 @@
         <input type="text" class="form-control" id="razonSocialAdmin" name="razon_social">
       </div>
       <div class="form-group">
+        <label for="direccionAdmin">Dirección</label>
+        <input type="text" class="form-control" id="direccionAdmin" name="direccion">
+      </div>
+      <div class="form-group">
         <label for="numeroFacturaAdmin">Número de factura</label>
         <input type="text" class="form-control" id="numeroFacturaAdmin" name="numero_de_factura">
       </div>
@@ -60,12 +64,13 @@
           <div class="table-responsive">
             <table id="tablaClientesComprobante" class="table pm-tabla table-striped table-bordered">
               <thead>
-                <tr>
-                  <th></th>
-                  <th>Nombre</th>
-                  <th>DNI / CUIT / CUIL</th>
-                  <th>Razón social</th>
-                </tr>
+              <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th>DNI / CUIT / CUIL</th>
+                <th>Razón social</th>
+                <th>Dirección</th>
+              </tr>
               </thead>
               <tbody></tbody>
             </table>
@@ -95,6 +100,13 @@
       <tbody></tbody>
     </table>
   </div>
+<div id="alert-manager" class="alert-container" style="display:none;">
+  <div class="alert-box">
+    <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon">
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
+{% endblock %}
 
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>

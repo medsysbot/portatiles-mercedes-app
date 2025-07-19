@@ -34,6 +34,11 @@
            value="{{ servicio.razon_social if servicio else '' }}">
   </div>
   <div class="form-group">
+    <label>Dirección</label>
+    <input type="text" name="direccion" class="form-control" readonly
+           value="{{ servicio.direccion if servicio else '' }}">
+  </div>
+  <div class="form-group">
     <label>Tipo de servicio</label>
     <input type="text" name="tipo_servicio" class="form-control" required
            value="{{ servicio.tipo_servicio if servicio else '' }}">
@@ -69,7 +74,7 @@
         <h5 class="modal-title" id="modalClientesLimpiezaLabel">Seleccionar cliente</h5>
       </div>
       <div class="modal-body">
-        <input type="text" id="filtroClientesLimpieza" class="form-control mb-3" placeholder="Buscar...">
+        <input type="text" id="filtroClientesLimpieza" class="form-control buscador-tabla mb-3" placeholder="Buscar...">
         <div class="table-responsive">
           <table id="tablaClientesLimpieza" class="table pm-tabla table-striped table-bordered">
             <thead>
@@ -77,6 +82,7 @@
                 <th>Nombre</th>
                 <th>DNI / CUIT / CUIL</th>
                 <th>Razón social</th>
+                <th>Dirección</th>
                 <th></th>
               </tr>
             </thead>
@@ -91,6 +97,14 @@
   </div>
 </div>
 {% endblock %}
+
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
 
 {% block scripts %}
   {{ super() }}

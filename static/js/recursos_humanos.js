@@ -183,6 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarDatos(datosCargados);
     } catch (err) {
       console.error('Error al cargar datos personales:', err);
+      if (!datosCargados.length) tablaDatos.clear().draw();
     }
   }
 
@@ -193,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarSalarios(salariosCargados);
     } catch (err) {
       console.error('Error al cargar salarios:', err);
+      if (!salariosCargados.length) tablaSalarios.clear().draw();
     }
   }
 
@@ -203,6 +205,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarAusencias(ausenciasCargados);
     } catch (err) {
       console.error('Error al cargar ausencias:', err);
+      if (!ausenciasCargados.length) tablaAusencias.clear().draw();
     }
   }
 

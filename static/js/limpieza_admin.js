@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
       { data: 'razon_social' },
+      { data: 'direccion' },
       { data: 'tipo_servicio' },
       {
         data: 'estado',
@@ -38,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
   let servicios = [];
 
   async function cargarServicios() {
-    const inicio = Date.now();
     try {
       const resp = await fetch('/admin/api/servicios_limpieza', {
         headers: { Authorization: 'Bearer ' + (localStorage.getItem('access_token') || '') }
@@ -47,13 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
       servicios = await resp.json();
       mostrarServicios(servicios);
       errorDiv.classList.add('d-none');
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-      }, delay);
+      
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-      }, delay);
       console.error('Error cargando servicios:', err);
     }
   }
@@ -98,13 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       if (!resp.ok) throw new Error('Error al eliminar');
       await cargarServicios();
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-      }, delay);
+      
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - inicio));
-      setTimeout(() => {
-      }, delay);
       console.error('Error eliminando servicios:', err);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
@@ -118,6 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (s.nombre_cliente || '').toLowerCase().includes(q) ||
       (s.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (s.razon_social || '').toLowerCase().includes(q) ||
+      (s.direccion || '').toLowerCase().includes(q) ||
       (s.numero_bano || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);

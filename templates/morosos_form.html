@@ -26,6 +26,10 @@
     <input type="text" name="razon_social" class="form-control">
   </div>
   <div class="form-group">
+    <label>Dirección</label>
+    <input type="text" name="direccion" class="form-control">
+  </div>
+  <div class="form-group">
     <label>Nombre cliente</label>
     <input type="text" name="nombre_cliente" class="form-control">
   </div>
@@ -58,6 +62,7 @@
                 <th>DNI / CUIT / CUIL</th>
                 <th>Nombre</th>
                 <th>Razón social</th>
+                <th>Dirección</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -72,6 +77,14 @@
   </div>
 </div>
 {% endblock %}
+
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
 
 {% block scripts %}
   {{ super() }}

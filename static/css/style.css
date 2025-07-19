@@ -321,7 +321,7 @@ body.panel-cliente table.dataTable th {
 }
 
 .dataTables_wrapper .dataTables_filter input[type="search"] {
-  width: 50% !important;
+  width: 70% !important;
   display: inline-block;
   margin-right: 0.5em;
 }
@@ -346,7 +346,7 @@ body.panel-cliente .table-responsive.bg-light {
 }
 
 .buscador-tabla {
-  width: 50% !important;
+  width: 70% !important;
   background: #ffffff !important;
   color: #000000 !important;
   border: 1px solid #000000 !important;
@@ -512,3 +512,122 @@ body.panel-cliente table.pm-tabla tr:hover {
 /* Oculta la X de cierre en modales de selección */
 .modal-header .close { display: none !important; }
 
+#campoBuscar {
+  width: 70% !important;
+  max-width: 210px !important;
+  min-width: 120px;
+  display: inline-block;
+}
+@media (max-width: 600px) {
+  #campoBuscar {
+    width: 55vw !important;
+    max-width: 180px !important;
+  }
+}
+/* Ajuste SOLO para el buscador de Recursos Humanos en el panel de empleados */
+body.panel-empleados #campoBuscarRecursos,
+body.panel-empleados #campoBuscarRecursos:focus {
+  width: 170px !important;         /* Tamaño final (ajustalo si querés más chico/grande) */
+  max-width: 200px !important;
+  min-width: 100px;
+  background: rgba(128,128,128,0.5) !important;   /* Gris semitransparente */
+  color: #fff !important;
+  border: 1px solid #fff !important;
+  font-size: 1em !important;
+  transition: width 0.2s;
+}
+@media (max-width: 600px) {
+  body.panel-empleados #campoBuscarRecursos {
+    width: 50vw !important;
+    max-width: 170px !important;
+  }
+}
+body.panel-empleados #campoBuscarRecursos::placeholder {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+/* Ajustes de ancho para los buscadores de Recursos Humanos */
+body.panel-empleados #busquedaDatos,
+body.panel-empleados #busquedaSalarios,
+body.panel-empleados #busquedaAusencias,
+body.panel-empleados #busquedaDatos:focus,
+body.panel-empleados #busquedaSalarios:focus,
+body.panel-empleados #busquedaAusencias:focus {
+  width: 170px !important;
+  max-width: 200px !important;
+  min-width: 100px;
+  background: rgba(128,128,128,0.5) !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+  font-size: 1em !important;
+  transition: width 0.2s;
+}
+
+@media (max-width: 600px) {
+  body.panel-empleados #busquedaDatos,
+  body.panel-empleados #busquedaSalarios,
+  body.panel-empleados #busquedaAusencias {
+    width: 50vw !important;
+    max-width: 170px !important;
+  }
+}
+
+body.panel-empleados #busquedaDatos::placeholder,
+body.panel-empleados #busquedaSalarios::placeholder,
+body.panel-empleados #busquedaAusencias::placeholder {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+/* Vistas previas de facturas y comprobantes en panel de cliente */
+#preview-factura img,
+#preview-factura embed,
+#preview-comprobante img,
+#preview-comprobante embed {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.archivo-contenedor {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  color: #ffffff !important;
+}
+
+.archivo-contenedor a {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+.link-archivo {
+  color: #ffffff !important;
+  text-decoration: underline;
+}
+
+/* Ajustes de ancho para los buscadores en el panel de cliente */
+.campo-busqueda-cliente,
+.campo-busqueda-cliente:focus {
+  width: 170px !important;
+  max-width: 200px !important;
+  min-width: 100px;
+  background: rgba(128, 128, 128, 0.5) !important;
+  color: #fff !important;
+  border: 1px solid #fff !important;
+  font-size: 1em !important;
+  transition: width 0.2s;
+}
+
+@media (max-width: 600px) {
+  .campo-busqueda-cliente {
+    width: 50vw !important;
+    max-width: 170px !important;
+  }
+}
+
+.campo-busqueda-cliente::placeholder {
+  color: #fff !important;
+  opacity: 1 !important;
+}

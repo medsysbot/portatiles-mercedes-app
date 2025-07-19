@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaMorosos tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const start = Date.now();
     try {
       const resp = await fetch('/admin/api/morosos/eliminar', {
         method: 'POST',
@@ -52,30 +51,29 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarMorosos();
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
+      await obtenerDatos();
     } catch (_) {
+      console.error('Error eliminando morosos');
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
-  async function cargarMorosos() {
+  async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/morosos', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error consultando morosos');
       morososCargados = await resp.json();
-      mostrarMorosos(morososCargados);
+      mostrarDatos(morososCargados);
       mensajeError?.classList.add('d-none');
     } catch (_) {
+      if (!morososCargados.length) tabla.clear().draw();
     }
   }
 
-  function mostrarMorosos(lista) {
+  function mostrarDatos(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
   }
@@ -101,5 +99,5 @@ document.addEventListener('DOMContentLoaded', () => {
     filtrarMorosos(buscador.value.trim());
   });
 
-  cargarMorosos();
+  obtenerDatos();
 });

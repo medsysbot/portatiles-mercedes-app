@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaFacturas tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
-    const start = Date.now();
     try {
       const resp = await fetch('/admin/api/facturas_pendientes/eliminar', {
         method: 'POST',
@@ -54,35 +53,30 @@ document.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarFacturas();
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
+      await obtenerDatos();
     } catch (err) {
-      const delay = Math.max(0, 1600 - (Date.now() - start));
-      setTimeout(() => {
-      }, delay);
       console.error('Error eliminando facturas:', err);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 
-  async function cargarFacturas() {
+  async function obtenerDatos() {
     try {
       const resp = await fetch('/admin/api/facturas_pendientes', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (!resp.ok) throw new Error('Error consultando facturas');
       window.pmFacturasPendAdminData = await resp.json();
-      mostrarFacturas(window.pmFacturasPendAdminData);
+      mostrarDatos(window.pmFacturasPendAdminData);
       mensajeError?.classList.add('d-none');
     } catch (err) {
       console.error('Error cargando facturas:', err);
+      if (!window.pmFacturasPendAdminData.length) tabla.clear().draw();
     }
   }
 
-  function mostrarFacturas(lista) {
+  function mostrarDatos(lista) {
     tabla.clear();
     tabla.rows.add(lista).draw();
   }
@@ -106,15 +100,15 @@ document.addEventListener('DOMContentLoaded', () => {
       (f.nombre_cliente || '').toLowerCase().includes(q) ||
       (f.numero_factura || '').toLowerCase().includes(q)
     );
-    mostrarFacturas(filtradas);
+    mostrarDatos(filtradas);
     if (filtradas.length === 0) {
     } else {
     }
   }
 
   if (window.pmFacturasPendAdminData.length === 0) {
-    cargarFacturas();
+    obtenerDatos();
   } else {
-    mostrarFacturas(window.pmFacturasPendAdminData);
+    mostrarDatos(window.pmFacturasPendAdminData);
   }
 });

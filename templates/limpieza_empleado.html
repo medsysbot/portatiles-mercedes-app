@@ -10,12 +10,12 @@
 {% block content %}
 <h2 class="mb-3 mt-0">Servicios de limpieza</h2>
 
-<div class="d-flex flex-wrap justify-content-between align-items-center my-3">
-  <input type="text" id="busquedaServicios" class="form-control buscador-tabla mb-2" placeholder="Buscar servicio...">
-  <div class="d-flex flex-wrap align-items-center ml-auto">
-    <button class="btn btn-secondary ml-2 mb-2" id="btnBuscarServicios" type="button">Buscar</button>
-    <button id="btnEditarSeleccionado" class="btn btn-info ml-2 mb-2" disabled>Editar</button>
-    <a href="/empleado/limpieza/nuevo" class="btn btn-primary ml-2 mb-2"><i class="fas fa-broom"></i> Nuevo servicio</a>
+<div class="d-flex align-items-center justify-content-between mb-3" style="gap: 8px;">
+  <input type="text" id="campoBuscar" class="form-control buscador-tabla" placeholder="Buscar...">
+  <div>
+    <button id="btnBuscar" class="btn btn-dark ml-2">Buscar</button>
+    <button id="btnEditarSeleccionado" class="btn btn-info ml-2" disabled>Editar</button>
+    <a href="/empleado/limpieza/nuevo" class="btn btn-primary ml-2"><i class="fas fa-broom"></i> Nuevo servicio</a>
   </div>
 </div>
 
@@ -29,6 +29,7 @@
         <th>DNI / CUIT / CUIL</th>
         <th>Nombre Cliente</th>
         <th>Razón Social</th>
+        <th>Dirección</th>
         <th>Tipo Servicio</th>
         <th>Estado</th>
         <th>Remito</th>
@@ -40,6 +41,14 @@
 </div>
 {% endblock %}
 
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
+{% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/limpieza_empleado.js"></script>
 {% endblock %}

@@ -1,49 +1,82 @@
-// Archivo: static/js/dashboard_empleado.js
-// Proyecto: Portátiles Mercedes
+// ==================== PANEL EMPLEADO PORTÁTILES MERCEDES ====================
+
+// ==== AUTENTICACIÓN Y TOKEN ====
+function getAuthToken() {
+  return localStorage.getItem("access_token");
+}
 
 function limpiarCredenciales() {
   localStorage.clear();
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  const headers = { Authorization: 'Bearer ' + localStorage.getItem('access_token') };
-
-  async function cargarResumen() {
-    try {
-      const [servicios, reportes] = await Promise.all([
-        fetch('/empleado/api/servicios_limpieza', { headers }),
-        fetch('/empleado/api/reportes', { headers })
-      ]);
-
-      const serviciosData = servicios.ok ? await servicios.json() : [];
-      const reportesData = reportes.ok ? await reportes.json() : [];
-
-      document.getElementById('cntComprobantes').textContent = serviciosData.length;
-      document.getElementById('cntReportes').textContent = reportesData.length;
-
-    } catch (err) {
-      console.error('Error cargando dashboard empleado:', err);
-    }
+// Wrapper seguro para fetch con token y control de sesión
+async function fetchConAuth(url, options = {}) {
+  const token = getAuthToken();
+  if (!token) {
+    window.location.href = "/login";
+    return;
   }
-
-  const calendarioEl = document.getElementById('calendario');
-if (calendarioEl && window.FullCalendar) {
-  const calendario = new FullCalendar.Calendar(calendarioEl, {
-    initialView: 'dayGridMonth',
-    height: 'auto',
-    headerToolbar: {
-      start: '',                                 // Sin flechas
-      center: 'title',                          // Título del mes y año al centro
-      end: 'today,dayGridMonth,timeGridWeek,listWeek' // Botones a la derecha
-    },
-    locale: 'es',
-    titleFormat: { year: 'numeric', month: 'long' } // 🔥 Quita el "D" y deja "Junio 2025"
-  });
-  calendario.render();
+  options.headers = {
+    ...(options.headers || {}),
+    "Authorization": "Bearer " + token
+  };
+  const resp = await fetch(url, options);
+  if (resp.status === 401) {
+    limpiarCredenciales();
+    window.location.href = "/login";
+    return;
+  }
+  return resp;
 }
 
-  cargarResumen();
+// =========== RESUMEN TARJETAS Y DASHBOARD ===========
+async function cargarResumenEmpleado() {
+  try {
+    const [servRes, repRes] = await Promise.all([
+      fetchConAuth('/empleado/api/servicios_limpieza'),
+      fetchConAuth('/empleado/api/reportes')
+    ]);
+    const servicios = servRes ? await servRes.json() : [];
+    const reportes = repRes ? await repRes.json() : [];
+    const realizados = servicios.filter(s =>
+      ["Completado", "Finalizado"].includes((s.estado || "").trim())
+    );
 
-  const btnLogout = document.getElementById('btnLogout');
-  btnLogout?.addEventListener('click', limpiarCredenciales);
+    document.getElementById('cntComprobantes').textContent = servicios.length;
+    document.getElementById('cntReportes').textContent = reportes.length;
+    document.getElementById('cntServiciosRealizados').textContent = realizados.length;
+  } catch (e) {
+    document.getElementById('cntComprobantes').textContent = '0';
+    document.getElementById('cntReportes').textContent = '0';
+    document.getElementById('cntServiciosRealizados').textContent = '0';
+    console.error('Error cargando dashboard empleado:', e);
+  }
+}
+
+// =========== CALENDARIO FULLCALENDAR ===========
+function inicializarCalendario() {
+  const calendarioEl = document.getElementById('calendario');
+  if (calendarioEl && window.FullCalendar) {
+    const calendario = new FullCalendar.Calendar(calendarioEl, {
+      initialView: 'dayGridMonth',
+      height: 'auto',
+      headerToolbar: {
+        start: '',
+        center: 'title',
+        end: 'today,dayGridMonth,timeGridWeek,listWeek'
+      },
+      locale: 'es',
+      titleFormat: { year: 'numeric', month: 'long' }
+    });
+    calendario.render();
+  }
+}
+
+// =========== DESTRUCCIÓN DE SESIÓN EN LOGOUT ===========
+document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
+
+// =========== INICIALIZACIÓN GENERAL ===========
+document.addEventListener('DOMContentLoaded', () => {
+  cargarResumenEmpleado();
+  inicializarCalendario();
 });

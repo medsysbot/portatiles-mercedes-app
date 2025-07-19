@@ -9,28 +9,6 @@ function handleUnauthorized() {
   window.location.href = '/login';
 }
 
-window.pmClientesAlquileresData = window.pmClientesAlquileresData || [];
-let tablaClientesAlquileres = null;
-
-function inicializarTablaClientesAlquileres() {
-  if (tablaClientesAlquileres) return;
-  tablaClientesAlquileres = $('#tablaAlquileres').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true,
-    columns: [
-      { data: 'numero_bano', defaultContent: '-' },
-      { data: 'cliente_nombre', defaultContent: '-' },
-      { data: 'dni_cuit_cuil', defaultContent: '-' },
-      { data: 'direccion', defaultContent: '-' },
-      { data: 'fecha_inicio', defaultContent: '-' },
-      { data: 'fecha_fin', defaultContent: '-' },
-      { data: 'observaciones', defaultContent: '-' }
-    ]
-  });
-}
-
 document.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem('access_token')) {
     window.location.href = '/login';
@@ -41,8 +19,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarAlquiler');
   const errorDiv = document.getElementById('errorAlquileres');
 
-  inicializarTablaClientesAlquileres();
-  const tabla = tablaClientesAlquileres;
+  let registros = [];
+
+  const tabla = $('#tablaAlquileres').DataTable({
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+    columns: [
+      { data: 'numero_bano', defaultContent: '-' },
+      { data: 'cliente_nombre', defaultContent: '-' },
+      { data: 'razon_social', defaultContent: '-' },
+      { data: 'dni_cuit_cuil', defaultContent: '-' },
+      { data: 'direccion', defaultContent: '-' },
+      { data: 'fecha_inicio', defaultContent: '-' },
+      { data: 'fecha_fin', defaultContent: '-' },
+      { data: 'observaciones', defaultContent: '-' }
+    ]
+  });
 
   async function cargarAlquileres() {
     try {
@@ -50,9 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
       });
       if (resp.status === 401) return handleUnauthorized();
-      window.pmClientesAlquileresData = await resp.json();
-      mostrarAlquileres(window.pmClientesAlquileresData);
-      if (window.pmClientesAlquileresData.length === 0) {
+      registros = await resp.json();
+      mostrarAlquileres(registros);
+      if (registros.length === 0) {
       }
     } catch (err) {
       console.error('Error cargando alquileres:', err);
@@ -66,8 +60,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function filtrar() {
     const q = (buscador.value || '').toLowerCase();
-    const filtrados = window.pmClientesAlquileresData.filter(a =>
+    const filtrados = registros.filter(a =>
       (a.cliente_nombre || '').toLowerCase().includes(q) ||
+      (a.razon_social || '').toLowerCase().includes(q) ||
       (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (String(a.numero_bano || '')).toLowerCase().includes(q)
     );
@@ -79,9 +74,5 @@ document.addEventListener('DOMContentLoaded', () => {
   buscador?.addEventListener('input', filtrar);
   btnBuscar?.addEventListener('click', filtrar);
 
-  if (window.pmClientesAlquileresData.length === 0) {
-    cargarAlquileres();
-  } else {
-    mostrarAlquileres(window.pmClientesAlquileresData);
-  }
+  cargarAlquileres();
 });

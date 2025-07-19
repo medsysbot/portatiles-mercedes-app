@@ -56,6 +56,7 @@ class ServicioLimpiezaNuevo(BaseModel):
     numero_bano: str
     dni_cuit_cuil: str
     nombre_cliente: str
+    direccion: str | None = None
     razon_social: str | None = None
     tipo_servicio: str
     observaciones: str | None = None
@@ -159,6 +160,7 @@ async def crear_servicio_limpieza(
     numero_bano: str = Form(...),
     dni_cuit_cuil: str = Form(...),
     nombre_cliente: str = Form(...),
+    direccion: str | None = Form(None),
     razon_social: str | None = Form(None),
     tipo_servicio: str = Form(...),
     observaciones: str | None = Form(None),
@@ -172,6 +174,7 @@ async def crear_servicio_limpieza(
         "numero_bano": numero_bano,
         "dni_cuit_cuil": dni_cuit_cuil,
         "nombre_cliente": nombre_cliente,
+        "direccion": direccion,
         "razon_social": razon_social,
         "tipo_servicio": tipo_servicio,
         "observaciones": observaciones,
@@ -241,6 +244,7 @@ async def listar_servicios_limpieza():
             "dni_cuit_cuil": d.get("dni_cuit_cuil"),
             "nombre_cliente": d.get("nombre_cliente"),
             "razon_social": d.get("razon_social"),
+            "direccion": d.get("direccion"),
             "tipo_servicio": d.get("tipo_servicio"),
             "remito_url": d.get("remito_url"),
             "observaciones": d.get("observaciones"),
@@ -309,6 +313,7 @@ async def listar_alquileres_empleado():
             {
                 "numero_bano": item.get("numero_bano"),
                 "cliente_nombre": item.get("cliente_nombre") or item.get("cliente"),
+                "razon_social": item.get("razon_social"),
                 "dni_cuit_cuil": item.get("dni_cuit_cuil"),
                 "direccion": item.get("direccion"),
                 "fecha_inicio": item.get("fecha_inicio") or item.get("inicio_contrato"),

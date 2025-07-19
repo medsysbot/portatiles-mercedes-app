@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let tabla = null;
 
   async function cargarClientes(texto = '') {
+    const inicio = startDataLoad();
+    await dataLoadDelay();
     try {
       const resp = await fetch(`/admin/api/clientes/busqueda?q=${encodeURIComponent(texto)}`);
       if (!resp.ok) throw new Error('Error');
@@ -14,7 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
       clientes = data.clientes || [];
       tabla.clear();
       tabla.rows.add(clientes).draw();
+      endDataLoad(inicio, true);
     } catch (err) {
+      endDataLoad(inicio, false);
       console.error('Error al buscar clientes', err);
     }
   }
@@ -32,7 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
         { data: 'dni_cuit_cuil', render: d => `<input type="checkbox" class="seleccion-cliente" value="${d}">`, orderable: false },
         { data: 'dni_cuit_cuil' },
         { data: 'nombre' },
-        { data: 'razon_social' }
+        { data: 'razon_social' },
+        { data: 'direccion' }
       ]
     });
 
@@ -50,12 +55,14 @@ document.addEventListener('DOMContentLoaded', () => {
     btnAgregar?.addEventListener('click', () => {
       const seleccionado = document.querySelector('#tablaClientesMoroso tbody .seleccion-cliente:checked');
       if (!seleccionado) return;
-      const cliente = clientes.find(c => c.dni_cuit_cuil == seleccionado.value);
-      if (cliente) {
-        document.querySelector('input[name="dni_cuit_cuil"]').value = cliente.dni_cuit_cuil;
-        document.querySelector('input[name="nombre_cliente"]').value = cliente.nombre;
-        document.querySelector('input[name="razon_social"]').value = cliente.razon_social;
-      }
+    const cliente = clientes.find(c => c.dni_cuit_cuil == seleccionado.value);
+    if (cliente) {
+      document.querySelector('input[name="dni_cuit_cuil"]').value = cliente.dni_cuit_cuil;
+      document.querySelector('input[name="nombre_cliente"]').value = cliente.nombre;
+      document.querySelector('input[name="razon_social"]').value = cliente.razon_social;
+      const inputDir = document.querySelector('input[name="direccion"]');
+      if (inputDir) inputDir.value = cliente.direccion || '';
+    }
       $('#modalClientesMoroso').modal('hide');
       seleccionado.checked = false;
       if (btnAgregar) btnAgregar.disabled = true;

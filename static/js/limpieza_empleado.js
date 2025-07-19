@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
       { data: 'dni_cuit_cuil' },
       { data: 'nombre_cliente' },
       { data: 'razon_social' },
+      { data: 'direccion' },
       { data: 'tipo_servicio' },
       {
         data: 'estado',
@@ -30,13 +31,16 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
-  const btnBuscar = document.getElementById('btnBuscarServicios');
-  const buscador = document.getElementById('busquedaServicios');
+  const btnBuscar = document.getElementById('btnBuscar');
+  const buscador = document.getElementById('campoBuscar');
   const btnEditar = document.getElementById('btnEditarSeleccionado');
   let servicios = [];
 
   async function cargarServicios() {
     const inicio = Date.now();
+    if (typeof showAlert === 'function') {
+      showAlert('enviando-reporte', 'Cargando servicios...', false, 1600);
+    }
     try {
       const resp = await fetch('/empleado/api/servicios_limpieza', {
         headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
@@ -48,10 +52,16 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('exito-datos', 'Listado actualizado', false, 2600);
+        }
       }, delay);
     } catch (err) {
       const delay = Math.max(0, 1600 - (Date.now() - inicio));
       setTimeout(() => {
+        if (typeof showAlert === 'function') {
+          showAlert('error-datos', 'Error al cargar servicios', false, 2600);
+        }
       }, delay);
       console.error('Error cargando servicios:', err);
     }
@@ -83,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (s.nombre_cliente || '').toLowerCase().includes(q) ||
       (s.dni_cuit_cuil || '').toLowerCase().includes(q) ||
       (s.razon_social || '').toLowerCase().includes(q) ||
+      (s.direccion || '').toLowerCase().includes(q) ||
       (s.numero_bano || '').toLowerCase().includes(q)
     );
     mostrarServicios(filtrados);

@@ -12,7 +12,7 @@
 
 <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
   <div class="mb-2 flex-grow-1">
-    <input type="text" id="busquedaServicios" class="form-control buscador-tabla mb-2" placeholder="Buscar por nombre, DNI o Razón social">
+    <input type="text" id="busquedaServicios" class="form-control buscador-tabla mb-2" placeholder="Buscar...">
   </div>
   <div class="d-flex flex-wrap gap-2 ml-auto">
     <button class="btn btn-secondary mb-2" id="btnBuscarServicios" type="button">Buscar</button>
@@ -32,6 +32,7 @@
         <th>DNI / CUIT / CUIL</th>
         <th>Nombre Cliente</th>
         <th>Razón Social</th>
+        <th>Dirección</th>
         <th>Tipo Servicio</th>
         <th>Estado</th>
         <th>Remito</th>
@@ -43,6 +44,14 @@
 </div>
 {% endblock %}
 
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
+{% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/limpieza_admin.js"></script>
 {% endblock %}

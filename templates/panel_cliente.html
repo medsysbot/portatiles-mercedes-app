@@ -1,33 +1,34 @@
 {% extends 'base_adminlte.html' %}
-
 {% block title %}Panel de Cliente{% endblock %}
-{% block description %}Panel principal para clientes{% endblock %}
-
+{% block description %}Panel principal para clientes | Portátiles Mercedes{% endblock %}
 {% block body_class %}hold-transition sidebar-mini layout-fixed admin-bg panel-cliente{% endblock %}
 
 {% block head_extra %}
   {{ super() }}
   <link rel="stylesheet" href="/static/css/style.css">
-<link rel="preload" as="image" href="/static/iconos/email-incorrecto.png">
-<link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
-<link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
-<link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-<link rel="preload" as="image" href="/static/iconos/error-mensaje.png">
-<link rel="preload" as="image" href="/static/iconos/error-datos.png">
-<link rel="preload" as="image" href="/static/iconos/error-informe-limpieza.png">
-<link rel="preload" as="image" href="/static/iconos/error-registro.png">
-<link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-<link rel="preload" as="image" href="/static/iconos/exito-informe.png">
-<link rel="preload" as="image" href="/static/iconos/exito-mensaje.png">
-<link rel="preload" as="image" href="/static/iconos/exito-registro.png">
-<link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
-<link rel="preload" as="image" href="/static/iconos/password-error.png">
-<link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
-<link rel="preload" as="image" href="/static/iconos/registro-ok.png">
-<link rel="preload" as="image" href="/static/iconos/reporte-error.png">
-<link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
-<link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-<link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css">
+  <!-- Precarga solo íconos realmente usados por el panel -->
+  <link rel="preload" as="image" href="/static/iconos/email-incorrecto.png">
+  <link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
+  <link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
+  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
+  <link rel="preload" as="image" href="/static/iconos/error-mensaje.png">
+  <link rel="preload" as="image" href="/static/iconos/error-datos.png">
+  <link rel="preload" as="image" href="/static/iconos/error-informe-limpieza.png">
+  <link rel="preload" as="image" href="/static/iconos/error-registro.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-informe.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-mensaje.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-registro.png">
+  <link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
+  <link rel="preload" as="image" href="/static/iconos/password-error.png">
+  <link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
+  <link rel="preload" as="image" href="/static/iconos/registro-ok.png">
+  <link rel="preload" as="image" href="/static/iconos/reporte-error.png">
+  <link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
+  <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
+  <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
   <style>
     body { background: #000 !important; }
     .main-header.navbar { background: #fff !important; color: #111 !important; }
@@ -67,10 +68,10 @@
     <div class="sidebar">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu">
-          <li class="nav-item"><a href="/cliente/panel" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i><p>Resumen</p></a></li>
+          <li class="nav-item"><a href="/panel/cliente" class="nav-link"><i class="nav-icon fas fa-tachometer-alt"></i><p>Resumen</p></a></li>
           <li class="nav-item"><a href="/clientes/datos_personales" class="nav-link"><i class="nav-icon fas fa-user"></i><p>Datos personales</p></a></li>
           <li class="nav-item"><a href="/clientes/alquileres" class="nav-link"><i class="nav-icon fas fa-file-contract"></i><p>Mis alquileres</p></a></li>
-          <li class="nav-item"><a href="/clientes/facturas_pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturas pendientes</p></a></li>
+          <li class="nav-item"><a href="/clientes/facturas_pendientes" class="nav-link"><i class="nav-icon fas fa-file-invoice-dollar"></i><p>Facturas</p></a></li>
           <li class="nav-item"><a href="/clientes/comprobantes" class="nav-link"><i class="nav-icon fas fa-receipt"></i><p>Comprobantes</p></a></li>
           <li class="nav-item"><a href="/clientes/mis_compras" class="nav-link"><i class="nav-icon fas fa-shopping-cart"></i><p>Mis compras</p></a></li>
           <li class="nav-item"><a href="/clientes/servicios_limpieza" class="nav-link"><i class="nav-icon fas fa-broom"></i><p>Servicios de limpieza</p></a></li>
@@ -83,12 +84,77 @@
   <div class="content-wrapper pt-3">
     <section class="content">
       <div class="container-fluid p-0" style="min-height: 100vh;">
-        {% block content %}{% endblock %}
+        {% block content %}
+        <!-- Panel resumen clientes – Portátiles Mercedes -->
+        <div class="row">
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-success">
+              <div class="inner text-center">
+                <h3 id="card-proxima-limpieza">--/--/----</h3>
+                <p>Próxima limpieza</p>
+              </div>
+              <div class="icon"><i class="fas fa-broom"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-primary">
+              <div class="inner text-center">
+                <h3 id="card-banos-alquilados">0</h3>
+                <p>Baños alquilados</p>
+              </div>
+              <div class="icon"><i class="fas fa-toilet"></i></div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-12">
+            <div class="small-box bg-info">
+              <div class="inner text-center">
+                <h3 id="card-ultima-factura">--/--/----</h3>
+                <p>Última factura</p>
+              </div>
+              <div class="icon"><i class="fas fa-file-invoice-dollar"></i></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4">
+          <!-- Última factura -->
+          <div class="col-md-6 mb-2">
+            <div class="card bg-light h-100">
+              <div class="card-body">
+                <h5 class="card-title mb-2">Última factura</h5>
+                <div id="preview-factura" class="archivo-contenedor p-2 text-center text-md-left">
+                  <!-- Aquí el JS inyecta la factura -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Último comprobante de pago -->
+          <div class="col-md-6 mb-2">
+            <div class="card bg-light h-100">
+              <div class="card-body">
+                <h5 class="card-title mb-2">Último comprobante de pago</h5>
+                <div id="preview-comprobante" class="archivo-contenedor p-2 text-center text-md-left">
+                  <!-- Aquí el JS inyecta el comprobante -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endblock %}
       </div>
     </section>
   </div>
 </div>
 {% endblock %}
 
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
+{% block scripts %}
+  {{ super() }}
+  <script src="/static/js/chart.min.js"></script>
   <script src="/static/js/cliente_panel.js"></script>
 {% endblock %}

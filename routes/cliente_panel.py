@@ -39,9 +39,9 @@ def get_dni_from_email(email: str):
     return None
 
 # ==== HTML: Todas requieren token ====
-@router.get("/cliente/panel")
+@router.get("/panel/cliente")
 async def html_panel_cliente(request: Request, token_data: dict = Depends(verificar_token)):
-    return templates.TemplateResponse("cliente_panel.html", {"request": request})
+    return templates.TemplateResponse("panel_cliente.html", {"request": request})
 
 @router.get("/clientes/datos_personales")
 async def html_datos_personales(request: Request, token_data: dict = Depends(verificar_token)):
@@ -100,7 +100,7 @@ async def get_alquileres(token_data: dict = Depends(verificar_token)):
         res = (
             supabase.table("alquileres")
             .select(
-                "numero_bano,cliente_nombre,dni_cuit_cuil,direccion,fecha_inicio,fecha_fin,observaciones"
+                "numero_bano,cliente_nombre,razon_social,dni_cuit_cuil,direccion,fecha_inicio,fecha_fin,observaciones"
             )
             .eq("dni_cuit_cuil", dni)
             .execute()
@@ -157,7 +157,7 @@ async def get_servicios_limpieza(token_data: dict = Depends(verificar_token)):
         res = (
             supabase.table("servicios_limpieza")
             .select(
-                "fecha_servicio,numero_bano,dni_cuit_cuil,nombre_cliente,razon_social,tipo_servicio,remito_url,observaciones"
+                "fecha_servicio,numero_bano,dni_cuit_cuil,nombre_cliente,razon_social,direccion,tipo_servicio,remito_url,observaciones,estado"
             )
             .eq("dni_cuit_cuil", dni)
             .execute()

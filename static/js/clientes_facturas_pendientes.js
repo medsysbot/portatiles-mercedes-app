@@ -39,7 +39,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const buscador = document.getElementById('busquedaFacturas');
   const btnBuscar = document.getElementById('btnBuscarFacturas');
-  const errorDiv = document.getElementById('errorFacturas');
 
   inicializarTablaFacturasPendientes();
   const tabla = tablaFacturasPendientes;
@@ -54,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarFacturas(window.pmFacturasPendientesData);
     } catch (err) {
       console.error('Error cargando facturas:', err);
+      if (window.pmFacturasPendientesData.length === 0) tabla.clear().draw();
     }
   }
 
@@ -71,8 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
       (f.numero_factura || '').toLowerCase().includes(q)
     );
     mostrarFacturas(filtrados);
-    if (filtrados.length === 0) {
-    }
   }
 
   buscador?.addEventListener('input', filtrar);

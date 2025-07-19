@@ -63,10 +63,11 @@ function mostrarUltimoComprobanteCliente(comprobantes) {
   }
   comprobantes.sort((a, b) => new Date(b.fecha_envio) - new Date(a.fecha_envio));
   const ultimo = comprobantes[0];
+  const archivoHTML = renderArchivo(ultimo.comprobante_url);
   panel.innerHTML = `
     <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
     <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
-    ${renderArchivo(ultimo.comprobante_url)}
+    ${archivoHTML || '<span class="text-muted">No hay comprobante disponible.</span>'}
   `;
 }
 

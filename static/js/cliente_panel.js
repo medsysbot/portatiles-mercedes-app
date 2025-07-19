@@ -1,133 +1,184 @@
-function getAuthToken() {
-  const token = localStorage.getItem("token") || localStorage.getItem("access_token");
-  if (!token || token.length < 10) {
-    console.warn("Token ausente o inválido:", token);
-    window.location.href = "/login";
-    return null;
-  }
-  return token;
+// Archivo: cliente_panel.js
+// Proyecto: Portátiles Mercedes
+
+function limpiarCredenciales() {
+  localStorage.clear();
+  window.location.href = '/login';
 }
 
 async function fetchConAuth(url, options = {}) {
-  const token = getAuthToken();
-  if (!token) {
-    window.location.href = "/login";
-    return;
-  }
-
-  options.headers = {
-    ...(options.headers || {}),
-    "Authorization": "Bearer " + token
-  };
-
-  const resp = await fetch(url, options);
+  const token = localStorage.getItem('access_token');
+  const resp = await fetch(url, {
+    ...options,
+    headers: {
+      ...options.headers,
+      'Authorization': `Bearer ${token}`,
+    },
+  });
   if (resp.status === 401) {
-    localStorage.clear();
-    window.location.href = "/login";
+    limpiarCredenciales();
+    throw new Error('Unauthorized');
   }
   return resp;
 }
 
-document.getElementById('btnLogout')?.addEventListener('click', () => {
-  localStorage.clear();
-});
+// Inicialización de tablas DataTables
+let tablas = {};
+function initTablas() {
+  const opciones = {
+    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    paging: true,
+    searching: false,
+    ordering: true,
+  };
 
-// Mostrar archivo (PDF, imagen o enlace)
-function renderArchivo(url) {
-  if (!url) return '<span class="text-muted">No disponible</span>';
-  if (url.match(/\.(jpg|jpeg|png|gif)$/i)) {
-    return `<img src="${url}" alt="Archivo" style="max-width:100%; max-height:180px; border-radius:8px; box-shadow: 2px 2px 4px rgba(0,0,0,0.2);">`;
-  }
-  if (url.match(/\.pdf$/i)) {
-    return `<embed src="${url}" type="application/pdf" width="100%" height="180px" style="border-radius:8px;">`;
-  }
-  return `<a href="${url}" target="_blank" class="btn btn-link">Ver archivo</a>`;
+  tablas = {
+    alquileres: $('#tablaAlquileres').DataTable(opciones),
+    facturas: $('#tablaFacturasPendientes').DataTable(opciones),
+    ventas: $('#tablaVentasCliente').DataTable(opciones),
+    limpiezas: $('#tablaServicios').DataTable(opciones),
+    programacion: $('#tablaProgramacion').DataTable(opciones),
+    comprobantes: $('#tablaComprobantes').DataTable({
+      ...opciones,
+      columnDefs: [{ targets: 0, orderable: false }],
+    }),
+  };
 }
 
-// Mostrar última factura
-function mostrarUltimaFactura(facturas) {
-  const panel = document.getElementById('preview-factura');
-  if (!panel) return;
-  if (!facturas.length) {
-    panel.innerHTML = '<span class="text-muted">No hay factura registrada.</span>';
-    return;
+// Función para cargar datos desde API y renderizar tablas
+async function cargarDatos(url, tabla, errorId, mensajeVacio) {
+  try {
+    const resp = await fetchConAuth(url);
+    if (!resp.ok) throw new Error('Error en petición');
+    const datos = await resp.json();
+    tabla.clear().rows.add(datos).draw();
+    if (mensajeVacio && document.getElementById(mensajeVacio)) {
+      document.getElementById(mensajeVacio).style.display = datos.length === 0 ? 'block' : 'none';
+    }
+  } catch (error) {
+    console.error(`Error cargando ${url}`, error);
+    if (errorId && document.getElementById(errorId)) {
+      document.getElementById(errorId).style.display = 'block';
+    }
   }
-
-  facturas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-  const ultima = facturas[0];
-  const archivoHTML = renderArchivo(ultima.factura_url);
-
-  panel.innerHTML = `
-    <p class="mb-1"><strong>Nro:</strong> ${ultima.numero_factura || '--'}</p>
-    <p class="mb-1"><strong>Fecha:</strong> ${ultima.fecha || '--'}</p>
-    ${archivoHTML || '<span class="text-muted">No disponible</span>'}
-  `;
 }
 
-// Mostrar último comprobante del cliente
-function mostrarUltimoComprobanteCliente(comprobantes) {
+// Función para inicializar eventos de filtrado rápido
+function initBusquedaRapida(inputId, btnId, tablaKey, datos) {
+  document.getElementById(btnId).addEventListener('click', () => {
+    const q = document.getElementById(inputId).value.toLowerCase();
+    const filtrados = datos.filter(item =>
+      Object.values(item).some(val => String(val).toLowerCase().includes(q))
+    );
+    tablas[tablaKey].clear().rows.add(filtrados).draw();
+  });
+}
+
+// ========================
+// Tarjeta resumen de último comprobante de pago
+function mostrarUltimoComprobante(comprobantes) {
   const panel = document.getElementById('preview-comprobante');
   if (!panel) return;
 
-  if (!comprobantes || !comprobantes.length) {
-    panel.innerHTML = '<span class="text-muted">No hay comprobante registrado.</span>';
+  if (!comprobantes.length) {
+    panel.innerHTML = '<p class="text-center">Sin comprobantes</p>';
     return;
   }
 
   comprobantes.sort((a, b) => new Date(b.fecha_envio) - new Date(a.fecha_envio));
-  const ultimo = comprobantes.find(c => c.comprobante_url?.trim() !== '');
+  const ultimo = comprobantes[0];
 
-  const archivoHTML = renderArchivo(ultimo?.comprobante_url || '');
+  let archivoHTML = '';
+  if (ultimo.comprobante_url) {
+    if (/\.(jpg|jpeg|png|gif)$/i.test(ultimo.comprobante_url)) {
+      archivoHTML = `<img src="${ultimo.comprobante_url}" alt="Comprobante" class="img-fluid mt-2" style="max-height:150px; object-fit:contain; width:100%;"/>`;
+    } else if (/\.pdf$/i.test(ultimo.comprobante_url)) {
+      archivoHTML = `<embed src="${ultimo.comprobante_url}" type="application/pdf" width="100%" height="150px" style="border-radius:8px;">`;
+    } else {
+      archivoHTML = `<a href="${ultimo.comprobante_url}" target="_blank">Ver comprobante</a>`;
+    }
+  }
 
   panel.innerHTML = `
-    <p class="mb-1"><strong>Factura:</strong> ${ultimo?.numero_de_factura || '--'}</p>
-    <p class="mb-1"><strong>Fecha:</strong> ${ultimo?.fecha_envio || '--'}</p>
-    ${archivoHTML || '<span class="text-muted">No disponible</span>'}
+    <p class="mb-1"><strong>Factura:</strong> ${ultimo.numero_factura || '-'}</p>
+    <p class="mb-1"><strong>Fecha:</strong> ${ultimo.fecha_envio || '-'}</p>
+    ${archivoHTML}
   `;
 }
 
-// Cargar resumen del cliente
-async function cargarResumenCliente() {
+// ========================
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const token = localStorage.getItem('access_token');
+  if (!token) limpiarCredenciales();
+
+  initTablas();
+
   try {
-    const [alqRes, factRes, compRes, limpRes] = await Promise.all([
-      fetchConAuth('/clientes/alquileres_api'),
-      fetchConAuth('/clientes/facturas_pendientes_api'),
-      fetchConAuth('/clientes/comprobantes_pago'),
-      fetchConAuth('/clientes/proxima_limpieza')
-    ]);
+    const ver = await fetch('/verificar_token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    });
+    if (!ver.ok) limpiarCredenciales();
+    const info = await ver.json();
+    if (info.rol !== 'cliente') limpiarCredenciales();
 
-    const alquileres = alqRes ? await alqRes.json() : [];
-    const facturas = factRes ? await factRes.json() : [];
-    const comprobantes = compRes ? await compRes.json() : [];
-    const limpieza = limpRes ? await limpRes.json() : { fecha_servicio: null };
+    const email = info.email;
+    const datosCliRes = await fetch(`/info_datos_cliente?email=${email}`);
+    const datosCli = datosCliRes.ok ? await datosCliRes.json() : {};
+    const dni = datosCli.dni_cuit_cuil;
 
-    document.getElementById('card-proxima-limpieza').textContent =
-      limpieza.fecha_servicio ? limpieza.fecha_servicio : '--/--/----';
-    document.getElementById('card-banos-alquilados').textContent = alquileres.length;
+    // Cargar datos personales automáticamente
+    Object.keys(datosCli).forEach(key => {
+      if (document.getElementById(key)) {
+        document.getElementById(key).value = datosCli[key];
+      }
+    });
 
-    let fechaUltimaFactura = '--/--/----';
-    if (facturas.length) {
-      facturas.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
-      fechaUltimaFactura = facturas[0].fecha || '--/--/----';
+    // Cargar datos para tablas
+    cargarDatos(`/alquileres_cliente?dni_cuit_cuil=${dni}`, tablas.alquileres, 'errorAlquileres', 'mensajeAlquileres');
+    cargarDatos(`/facturas_pendientes_cliente?dni=${dni}`, tablas.facturas, 'errorFacturas', 'mensajeFacturas');
+    cargarDatos(`/ventas_cliente?dni_cuit_cuil=${dni}`, tablas.ventas, 'errorVentas', 'mensajeVentas');
+    cargarDatos(`/limpiezas_cliente?dni_cuit_cuil=${dni}`, tablas.limpiezas, 'errorServicios', 'mensajeServicios');
+    cargarDatos('/cliente/api/limpiezas_programadas', tablas.programacion, '', '');
+    cargarDatos(`/api/comprobantes_pago?dni_cuit_cuil=${dni}`, tablas.comprobantes, 'msgComprobante', '');
+
+    // Tarjeta resumen de último comprobante de pago
+    try {
+      const resp = await fetchConAuth(`/api/comprobantes_pago?dni_cuit_cuil=${dni}`);
+      if (resp.ok) {
+        const comprobantes = await resp.json();
+        mostrarUltimoComprobante(comprobantes);
+      } else {
+        mostrarUltimoComprobante([]);
+      }
+    } catch (e) {
+      mostrarUltimoComprobante([]);
     }
-    document.getElementById('card-ultima-factura').textContent = fechaUltimaFactura;
 
-    mostrarUltimaFactura(facturas);
-    mostrarUltimoComprobanteCliente(comprobantes);
+    // Inicialización búsqueda rápida (ejemplo para alquileres)
+    let alquileresData = (await fetchConAuth(`/alquileres_cliente?dni_cuit_cuil=${dni}`)).json();
+    initBusquedaRapida('busquedaAlquileres', 'btnBuscarAlquiler', 'alquileres', await alquileresData);
+
+    // Formulario guardar datos personales
+    document.getElementById('formDatos').addEventListener('submit', async e => {
+      e.preventDefault();
+      const formData = new FormData(e.target);
+      const datos = Object.fromEntries(formData.entries());
+      const resp = await fetchConAuth('/guardar_datos_cliente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(datos),
+      });
+      const resultado = await resp.json();
+      alert(resultado.mensaje || 'Datos actualizados correctamente.');
+    });
 
   } catch (err) {
-    document.getElementById('card-proxima-limpieza').textContent = '--/--/----';
-    document.getElementById('card-banos-alquilados').textContent = '0';
-    document.getElementById('card-ultima-factura').textContent = '--/--/----';
-    document.getElementById('preview-factura').innerHTML = '<span class="text-muted">No hay factura registrada.</span>';
-    document.getElementById('preview-comprobante').innerHTML = '<span class="text-muted">No hay comprobante registrado.</span>';
-    console.error('Error cargando resumen:', err);
+    console.error(err);
+    limpiarCredenciales();
   }
-}
 
-// Ejecutar al cargar DOM
-document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('card-proxima-limpieza')) {
-    cargarResumenCliente();
-  }
+  document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
 });

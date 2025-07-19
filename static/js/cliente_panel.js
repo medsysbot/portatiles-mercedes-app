@@ -30,13 +30,23 @@ document.getElementById('btnLogout')?.addEventListener('click', () => {
 function renderArchivo(url, label = 'VER ARCHIVO') {
   if (!url) return '';
   const lower = url.toLowerCase();
+
+  const enlace =
+    `<div style="margin-top: 8px;">` +
+    `<a href="${url}" target="_blank" class="link-archivo">${label}</a>` +
+    `</div>`;
+
   if (lower.match(/\.(jpg|jpeg|png|gif)$/)) {
-    return `<a href="${url}" target="_blank"><img src="${url}" alt="Archivo" style="max-width: 150px; border: 1px solid #ccc;"></a>`;
+    const miniatura =
+      `<div style="margin-top: 10px;">` +
+      `<a href="${url}" target="_blank">` +
+      `<img src="${url}" alt="Vista previa" style="max-width: 150px; border-radius: 4px; border: 1px solid #fff;">` +
+      `</a>` +
+      `</div>`;
+    return enlace + miniatura;
   }
-  if (lower.endsWith('.pdf')) {
-    return `<a href="${url}" target="_blank" class="link-archivo">${label}</a>`;
-  }
-  return `<a href="${url}" target="_blank" class="link-archivo">${label}</a>`;
+
+  return enlace;
 }
 
 function mostrarUltimaFactura(facturas) {

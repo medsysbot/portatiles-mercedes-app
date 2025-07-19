@@ -115,15 +115,25 @@
             </div>
           </div>
         </div>
-        <!-- Vista previa del último comprobante de pago -->
         <div class="row mt-4">
-          <div class="col-md-12">
-            <div class="card bg-light">
+          <!-- Última factura -->
+          <div class="col-md-6 mb-2">
+            <div class="card bg-light h-100">
+              <div class="card-body">
+                <h5 class="card-title mb-2">Última factura</h5>
+                <div id="preview-factura" class="p-2 text-center text-md-left">
+                  <!-- Aquí el JS inyecta la factura -->
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Último comprobante de pago -->
+          <div class="col-md-6 mb-2">
+            <div class="card bg-light h-100">
               <div class="card-body">
                 <h5 class="card-title mb-2">Último comprobante de pago</h5>
-                <div id="preview-comprobante" class="p-2">
-                  <span class="text-muted">No hay comprobante registrado.</span>
-                  <!-- El JS actualiza esto con link o preview si existe -->
+                <div id="preview-comprobante" class="p-2 text-center text-md-left">
+                  <!-- Aquí el JS inyecta el comprobante -->
                 </div>
               </div>
             </div>

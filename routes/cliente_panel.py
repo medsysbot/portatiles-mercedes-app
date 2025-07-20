@@ -199,7 +199,7 @@ async def get_comprobantes(token_data: dict = Depends(verificar_token)):
         res = (
             supabase.table("comprobantes_pago")
             .select(
-                "nombre_cliente,dni_cuit_cuil,factura_url,comprobante_url,fecha_envio"
+                "nombre_cliente,dni_cuit_cuil,numero_de_factura,comprobante_url,fecha_envio"
             )
             .eq("dni_cuit_cuil", dni)
             .execute()

@@ -19,7 +19,7 @@
 | GET | /alquiler_form | Formulario de alquiler en nueva ventana | alquiler_form.html | Sí |
 | GET | /limpieza | Registro de limpiezas | limpieza.html | Sí |
 | GET | /ventas | Vista de registro de ventas | ventas.html | Sí |
-| GET | /comprobantes | Carga y listado de comprobantes | cliente_panel.html | Sí |
+| GET | /clientes/comprobantes | Carga y listado de comprobantes | clientes_comprobantes.html | Sí |
 | GET | /venta | Formulario de venta de baños | venta.html | Sí |
 | GET | /admin/inventario_banos | Inventario de baños | inventario_banos_admin.html | Sí |
 | GET | /inventario_bano_form | Formulario de nuevo baño (modal) | inventario_bano_form.html | Sí |
@@ -43,6 +43,7 @@
 | GET | /alquileres_cliente | Alquileres asociados al cliente | JSON | Sí |
 | GET | /pagos_cliente | Pagos realizados por el cliente | JSON | Sí |
 | GET | /limpiezas_cliente | Limpiezas registradas para el cliente | JSON | Sí |
+| GET | /clientes/comprobantes_api | Comprobantes del cliente (por token) | JSON | Sí |
 | GET | /api/comprobantes_pago | Comprobantes de pago del cliente | JSON | Sí |
 | POST | /api/comprobantes_pago | Subir comprobante de pago | JSON | Sí |
 | DELETE | /api/comprobantes_pago/{id} | Borrar comprobante del cliente | JSON | Sí |

@@ -298,14 +298,6 @@ async def mostrar_formulario_venta():
     return HTMLResponse(content=html_contenido)
 
 
-@router.get("/debito", response_class=HTMLResponse)
-async def mostrar_formulario_debito():
-    """Devuelve la página para activar débitos automáticos."""
-    html_path = TEMPLATES_DIR / "debito.html"
-    html_contenido = html_path.read_text(encoding="utf-8")
-    return HTMLResponse(content=html_contenido)
-
-
 @router.get("/servicios", response_class=HTMLResponse)
 async def mostrar_servicios():
     """Página pública con la descripción de servicios."""

@@ -152,7 +152,7 @@ body.panel-cliente table.pm-tabla td {
 
 /* Fondos paneles */
 body.panel-admin, body.panel-cliente, body.panel-empleados {
-  background-image: url('/static/imagenes/fondo-panel.png');
+  background-image: url('/static/imagenes/fondo-panel.webp');
   background-size: cover;
   background-attachment: fixed;
   background-position: center;

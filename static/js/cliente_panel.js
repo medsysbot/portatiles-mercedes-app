@@ -92,7 +92,7 @@ async function cargarResumenCliente() {
     const [alqRes, factRes, compRes, limpRes] = await Promise.all([
       fetchConAuth('/clientes/alquileres_api'),
       fetchConAuth('/clientes/facturas_pendientes_api'),
-      fetchConAuth('/clientes/comprobantes_pago'),
+      fetchConAuth('/clientes/comprobantes'),
       fetchConAuth('/clientes/proxima_limpieza')
     ]);
 

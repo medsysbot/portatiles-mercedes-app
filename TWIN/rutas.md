@@ -140,6 +140,8 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 | GET | `/ventas_cliente` | Ventas asociadas al cliente | Sí |
 | POST | `/cliente/reporte` | Envía un reporte desde el panel | Sí |
 | POST | `/cliente/email` | Envía un email a la empresa | Sí |
+| GET | `/clientes/comprobantes` | Vista de comprobantes del cliente (`clientes_comprobantes.html`). | Sí |
+| GET | `/clientes/comprobantes_api` | Lista de comprobantes del cliente autenticado. | Sí |
 
 ## Rutas - Recuperación de contraseña
 

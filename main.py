@@ -120,7 +120,7 @@ import routes.inventario_banos as inventario_banos_module
 import routes.reportes as reportes_module
 import routes.facturas_pendientes as facturas_pendientes_module
 import routes.morosos as morosos_module
-from routes import admin_panel, empleado_panel, cliente_panel, ventas, limpieza, debito, reportes
+from routes import admin_panel, empleado_panel, cliente_panel, ventas, limpieza, reportes
 
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware

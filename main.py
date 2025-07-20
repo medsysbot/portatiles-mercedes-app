@@ -191,7 +191,6 @@ if os.getenv("ENABLE_SUPABASE") == "1":
     cliente_panel.supabase = supabase_client
     ventas.supabase = supabase_client
     limpieza.supabase = supabase_client
-    debito.supabase = supabase_client
     alquileres_module.supabase = supabase_client
     inventario_banos_module.supabase = supabase_client
     reportes_module.supabase = supabase_client

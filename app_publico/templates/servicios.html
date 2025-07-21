@@ -6,7 +6,7 @@ Proyecto: Portátiles Mercedes
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-servicio.png">
+    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-servicio.webp">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Conocé todos nuestros servicios sanitarios">
@@ -14,32 +14,40 @@ Proyecto: Portátiles Mercedes
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
     <style>
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
         body {
+            min-height: 100vh;
+            min-width: 100vw;
             font-family: 'Nunito', Arial, sans-serif;
             background: url('/app_publico/static/imagenes/fondo-servicio.webp') no-repeat center center fixed;
             background-size: cover;
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            width: 100vw;
+            position: relative;
             overflow: auto;
         }
         .fondo-servicios {
             min-height: 100vh;
+            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: flex-start;
+            position: relative;
+            padding-bottom: 2rem;
         }
         .contenedor-superior {
             width: 100vw;
-            max-width: none;
-            min-height: 180px;
+            min-height: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            padding-top: 5px;
-            padding-bottom: 12px;
+            padding-top: 8px;
+            padding-bottom: 0;
             background: transparent;
         }
         .titulo-index {
@@ -48,17 +56,16 @@ Proyecto: Portátiles Mercedes
             font-size: 4.5vw;
             color: #DEB460;
             text-align: center;
-            margin-bottom: 6px;
-            line-height: 1.1;
+            margin-bottom: 2px;
+            line-height: 1.08;
             white-space: nowrap;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
-        }
-        .logo-portatiles {
-            height: 2.1em;
-            margin: 0 18px;
+            /* Sombra fuerte, mismo que index y alquiler */
+            text-shadow: 0 3px 7px #000, 0 1px 0 #222, 1px 0 3px #222;
+            letter-spacing: 0.5px;
         }
         .subtitulo-portatiles {
             font-family: 'Nunito', Arial, sans-serif;
@@ -67,15 +74,25 @@ Proyecto: Portátiles Mercedes
             font-size: 2.2vw;
             color: #545454;
             text-align: center;
-            margin-top: 0.2em;
-            margin-bottom: 30px;
+            margin-top: 0.1em;
+            margin-bottom: 14px;
             text-shadow: 0 1.5px 2.5px #fff;
+        }
+        @media (max-width: 700px) {
+            .titulo-index { font-size: 28px; white-space: normal; }
+            .subtitulo-portatiles { font-size: 16px; }
+        }
+        @media (max-width: 500px) {
+            .contenedor-superior { min-height: 90px; padding-top: 3px; padding-bottom: 4px; }
+            .titulo-index { font-size: 20px; }
+            .subtitulo-portatiles { font-size: 13px; margin-bottom: 8px; }
         }
         .botonera-flotante {
             position: absolute;
             left: 40px;
             bottom: 180px;
             min-width: 260px;
+            width: 260px;
             display: flex;
             flex-direction: column;
             gap: 16px;
@@ -84,23 +101,21 @@ Proyecto: Portátiles Mercedes
         .boton-index {
             width: 260px;
             height: 38px;
+            font-family: 'Nunito', Arial, sans-serif;
+            font-weight: 400;
             font-size: 18px;
-            background: rgba(0, 0, 0, 0.58);
+            font-style: italic;
+            background: rgba(0,0,0,0.58);
             color: #fff;
             border: none;
             border-radius: 13px;
             display: flex;
             align-items: center;
+            justify-content: flex-start;
             gap: 10px;
+            cursor: pointer;
             padding-left: 16px;
-            text-decoration: none;
-            font-style: italic;
-            font-weight: 400;
-        }
-        .boton-index,
-        .boton-index:visited,
-        .boton-index:active,
-        .boton-index:focus {
+            box-sizing: border-box;
             text-decoration: none !important;
         }
         .boton-index:hover {
@@ -111,20 +126,25 @@ Proyecto: Portátiles Mercedes
             height: 22px;
         }
         .contenedor-texto {
-            margin: 40px auto;
-            max-width: 700px;
+            flex: 1;
+            margin-left: 320px;
+            margin-right: 80px;
+            margin-top: 40px;
+            max-width: 900px;
+            min-width: 0;
             color: #fff;
-            font-size: 20px;
-            line-height: 1.6;
+            font-size: 21px;
             font-weight: 300;
-            padding: 0 20px;
+            line-height: 1.6;
+            text-align: left;
         }
         .pie-pagina {
             width: 100%;
             text-align: center;
             font-size: 12px;
             color: #848280;
-            margin: 30px 0 10px;
+            margin-top: 40px;
+            margin-bottom: 10px;
         }
         ul {
             padding-left: 20px;
@@ -134,41 +154,19 @@ Proyecto: Portátiles Mercedes
         ul li {
             margin-bottom: 10px;
         }
-        @media (max-width: 700px) {
-            .titulo-index { font-size: 28px; }
-            .subtitulo-portatiles { font-size: 16px; }
-            .botonera-flotante {
-                position: static;
-                flex-direction: column;
-                align-items: stretch;
-                margin: 20px;
-            }
-            .boton-index {
-                width: 100%;
-                font-size: 16px;
-                height: 32px;
-            }
-            .contenedor-texto {
-                margin: 20px;
-                font-size: 18px;
-            }
+        @media (max-width: 1100px) {
+            .contenedor-texto { margin: 30px 20px 0 20px; max-width: 100%; }
+            .botonera-flotante { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; }
         }
-        @media (max-width: 500px) {
-            .subtitulo-portatiles {
-                font-size: 13px;
-                margin-bottom: 10px;
-            }
+        @media (max-width: 700px) {
+            .botonera-flotante { flex-direction: column; align-items: stretch; }
+            .boton-index { font-size: 16px; height: 32px; }
+            .contenedor-texto { margin: 20px 10px 0 10px; font-size: 18px; }
         }
         .titulo-con-logo {
-            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
-        }
-        .titulo-con-logo .titulo-index,
-        .titulo-con-logo .subtitulo-portatiles {
-            position: relative;
-            z-index: 2;
         }
     </style>
 </head>
@@ -176,9 +174,7 @@ Proyecto: Portátiles Mercedes
     <div class="fondo-servicios">
         <div class="contenedor-superior titulo-con-logo">
             <div class="titulo-index titulo-publico">Servicios</div>
-            <div class="subtitulo-portatiles">
-                Lo tradicional, hecho inteligente.
-            </div>
+            <div class="subtitulo-portatiles">Lo tradicional, hecho inteligente.</div>
         </div>
         <div class="botonera-flotante">
             <a href="/" class="boton-index">

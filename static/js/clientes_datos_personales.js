@@ -26,11 +26,39 @@ async function fetchConAuth(url, options = {}) {
 
 window.pmDatosPersonalesData = window.pmDatosPersonalesData || {};
 
+// Deshabilita por completo el formulario para evitar
+// modificaciones luego de guardar los datos iniciales
+function bloquearEdicion() {
+  const form = document.getElementById('formDatosCliente');
+  if (!form) return;
+  const inputs = form.querySelectorAll('input');
+  const bloqueo = ev => {
+    ev.preventDefault();
+    ev.target.blur();
+    if (typeof showAlert === 'function') {
+      showAlert('error-datos', 'Los datos sólo pueden modificarse desde administración');
+    }
+    ev.target.value = window.pmDatosPersonalesData[ev.target.name] || '';
+  };
+  inputs.forEach(inp => {
+    inp.readOnly = true;
+    inp.addEventListener('focus', bloqueo);
+    inp.addEventListener('keydown', bloqueo);
+    inp.addEventListener('paste', bloqueo);
+    inp.addEventListener('input', bloqueo);
+  });
+  const btn = document.getElementById('btnGuardarDatos');
+  if (btn) btn.disabled = true;
+}
+
 async function cargarDatosCliente() {
   try {
     const resp = await fetchConAuth('/clientes/datos_personales_api');
     if (!resp) return;
-    if (!resp.ok) throw new Error('Error al obtener datos');
+    if (!resp.ok) {
+      if (resp.status === 404) return; // Cliente sin datos cargados
+      throw new Error('Error al obtener datos');
+    }
     const datos = await resp.json();
     window.pmDatosPersonalesData = datos || {};
     document.getElementById('nombre').value = datos.nombre || '';
@@ -40,6 +68,7 @@ async function cargarDatosCliente() {
     document.getElementById('telefono').value = datos.telefono || '';
     document.getElementById('razon_social').value = datos.razon_social || '';
     document.getElementById('email').value = datos.email || '';
+    bloquearEdicion();
   } catch (err) {
     console.error('Error al obtener datos', err);
   }

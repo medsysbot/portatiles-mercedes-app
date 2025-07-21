@@ -19,17 +19,17 @@ Proyecto: Portátiles Mercedes
             width: 100%;
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
         body {
             min-height: 100vh;
             min-width: 100vw;
-            width: 100vw;
-            height: 100vh;
             font-family: 'Nunito', Arial, sans-serif;
             background: url('/app_publico/static/imagenes/fondo-info-bano.webp') no-repeat center center fixed;
             background-size: cover;
             position: relative;
-            overflow: auto;
+            overflow-y: auto !important;
+            overflow-x: hidden;
         }
         .fondo-alquiler {
             min-height: 100vh;
@@ -76,11 +76,6 @@ Proyecto: Portátiles Mercedes
             margin-top: 0.2em;
             margin-bottom: 30px;
             text-shadow: 0 1.5px 2.5px #fff;
-        }
-        .logo-portatiles {
-            height: 2.1em;
-            margin: 0 18px;
-            vertical-align: middle;
         }
         @media (max-width: 700px) {
             .titulo-index { font-size: 28px; white-space: normal; }
@@ -142,22 +137,8 @@ Proyecto: Portátiles Mercedes
             box-sizing: border-box;
             text-decoration: none;
         }
-        .boton-index,
-        .boton-index:visited,
-        .boton-index:active,
-        .boton-index:focus { text-decoration: none !important; }
         .boton-index:hover { background-color: rgba(60, 60, 60, 1); }
-        .boton-index img {
-            width: 22px;
-            height: 22px;
-            display: inline-block;
-        }
-        .boton-index span {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex: 1;
-        }
+        .boton-index img { width: 22px; height: 22px; display: inline-block; }
         .contenedor-texto {
             flex: 1 1 0;
             margin-left: 320px;
@@ -173,7 +154,6 @@ Proyecto: Portátiles Mercedes
             color: #fff;
             text-align: left;
             line-height: 1.6;
-            text-shadow: none;
             margin-bottom: 24px;
             max-width: 100%;
         }
@@ -185,8 +165,9 @@ Proyecto: Portátiles Mercedes
             gap: 10px;
         }
         .info-texto {
-            overflow-y: auto;
-            max-height: calc(100vh - 300px);
+            width: 100%;
+            overflow: visible;
+            max-height: none;
         }
         .pie-pagina {
             width: 100%;
@@ -234,7 +215,6 @@ Proyecto: Portátiles Mercedes
             <div class="contenedor-texto">
                 <div class="info-contenedor">
                     <div class="presentacion-portatiles info-texto">
-                        <!-- CONTENIDO INFORMATIVO (idéntico al original) -->
                         <h2><strong>Historia y evolución del baño químico</strong></h2>
                         <h3><strong>Origen</strong></h3>
                         <p>El concepto de baño químico portátil nace en los años 40, durante la Segunda Guerra Mundial y posteriormente se consolida en los años 50, en los astilleros y grandes obras de construcción en Estados Unidos. Ante la necesidad de brindar una solución sanitaria rápida, móvil y sin conexión a redes cloacales, surgen las primeras cabinas rudimentarias de madera y metal, con depósitos de residuos tratados químicamente.</p>

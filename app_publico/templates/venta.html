@@ -5,50 +5,16 @@ Acceso: Público
 Proyecto: Portátiles Mercedes
 Última modificación: 2025-06-15
 -->
+<!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-galeria.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-info-bano.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-login.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-registro.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-servicio.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-splash-clientes.png">
     <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-panel.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.png">
-    <link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-    <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-galeria.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-info-bano.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-login.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-registro.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-servicio.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-splash-clientes.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-panel.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Solicitá la compra de nuestros productos">
     <title>Formulario de Venta - Portátiles Mercedes</title>
-      <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="/static/css/alertas-custom.css">
-      <!-- Íconos sistema de alertas -->
-      <link rel="preload" as="image" href="/static/iconos/inicio-sesion.png">
-      <link rel="preload" as="image" href="/static/iconos/exito-sesion.png">
-      <link rel="preload" as="image" href="/static/iconos/error-sesion.png">
-      <link rel="preload" as="image" href="/static/iconos/password-error.png">
-      <link rel="preload" as="image" href="/static/iconos/formulario-error.png">
-      <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-      <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-      <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-      <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-      <link rel="preload" as="image" href="/static/iconos/error-conexion.png">
-      <style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <style>
         html, body {
             height: 100%;
             width: 100%;
@@ -120,7 +86,6 @@ Proyecto: Portátiles Mercedes
             box-sizing: border-box;
             text-decoration: none;
         }
-
         .boton-index,
         .boton-index:visited,
         .boton-index:active,
@@ -178,7 +143,6 @@ Proyecto: Portátiles Mercedes
         <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
         <span>Cerrar formulario</span>
     </button>
-<!-- ==== Funciones auxiliares ==== -->
     <script src="/app_publico/static/js/guardar_venta.js"></script>
     <script>
         document.getElementById('cerrarFormulario').addEventListener('click', () => {
@@ -188,16 +152,5 @@ Proyecto: Portátiles Mercedes
             window.close();
         });
     </script>
-    <!-- Alerta personalizada global -->
-</div>
-    <!-- ALERTA CENTRAL PERSONALIZADA -->
-    <div id="alert-manager" class="alert-container">
-        <div class="alert-box">
-            <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-            <span id="alert-text" class="alert-message">Texto de alerta</span>
-        </div>
-    </div>
-
-    <script src="/static/js/alertas.js"></script>
 </body>
 </html>

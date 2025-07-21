@@ -9,37 +9,17 @@ Proyecto: Portátiles Mercedes
 <html lang="es">
 <head>
     <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-galeria.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-info-bano.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-login.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-registro.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-servicio.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-splash-clientes.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-panel.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.png">
-    <meta charset="UTF-8">
-    <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">    
+    <!-- SOLO LOS 3 ICONOS DE ALERTA USADOS -->
+    <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
     <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
     <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
-    <link rel="preload" as="image" href="/static/iconos/error-conexion.png">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Formulario para solicitar alquiler de baños portátiles">
     <title>Formulario de Alquiler - Portátiles Mercedes</title>
     <link rel="stylesheet" href="/static/css/alertas-custom.css">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
-    <!-- Íconos sistema de alertas -->
-    <link rel="preload" as="image" href="/static/iconos/inicio-sesion.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-sesion.png">
-    <link rel="preload" as="image" href="/static/iconos/error-sesion.png">
-    <link rel="preload" as="image" href="/static/iconos/password-error.png">
-    <link rel="preload" as="image" href="/static/iconos/formulario-error.png">
-    <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-    <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-    <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-    <link rel="preload" as="image" href="/static/iconos/error-conexion.png">
+    <link rel="stylesheet" href="/static/css/style.css">
     <style>
         html, body {
             height: 100%;
@@ -75,22 +55,11 @@ Proyecto: Portátiles Mercedes
             cursor: pointer;
             transition: background 0.13s;
             padding-left: 16px;
-            padding-top: 0;
-            padding-bottom: 0;
             white-space: nowrap;
             box-sizing: border-box;
             text-decoration: none;
         }
-
-        .boton-index,
-        .boton-index:visited,
-        .boton-index:active,
-        .boton-index:focus {
-            text-decoration: none !important;
-        }
-        .boton-index:hover {
-            background-color: rgba(60, 60, 60, 1);
-        }
+        .boton-index:hover { background-color: rgba(60, 60, 60, 1); }
         .boton-index img {
             width: 22px;
             height: 22px;
@@ -132,7 +101,6 @@ Proyecto: Portátiles Mercedes
             border-radius: 6px;
             font: inherit;
         }
-    <link rel="stylesheet" href="/static/css/style.css">
     </style>
 </head>
 <body>
@@ -169,15 +137,17 @@ Proyecto: Portátiles Mercedes
         <span>Cerrar Formulario</span>
     </button>
 
-<!-- ==== Funciones auxiliares ==== -->
-    <!-- Alerta personalizada global -->
-</div>
     <script src="/app_publico/static/js/guardar_alquiler.js"></script>
+    <script src="/static/js/alertas.js"></script>
+    <div id="alert-manager" class="alert-container">
+        <div class="alert-box">
+            <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
+            <span id="alert-text" class="alert-message">Texto de alerta</span>
+        </div>
+    </div>
     <script>
         document.getElementById('cerrarFormulario').addEventListener('click', () => {
-            if (window.opener) {
-                window.opener.focus();
-            }
+            if (window.opener) { window.opener.focus(); }
             window.close();
         });
 
@@ -189,14 +159,5 @@ Proyecto: Portátiles Mercedes
             setTimeout(() => window.close(), 100);
         });
     </script>
-    <!-- ALERTA CENTRAL PERSONALIZADA -->
-    <div id="alert-manager" class="alert-container">
-        <div class="alert-box">
-            <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-            <span id="alert-text" class="alert-message">Texto de alerta</span>
-        </div>
-    </div>
-
-    <script src="/static/js/alertas.js"></script>
 </body>
 </html>

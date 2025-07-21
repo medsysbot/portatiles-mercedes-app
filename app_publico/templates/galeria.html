@@ -6,55 +6,13 @@ Proyecto: Portátiles Mercedes
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.png">
   <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-galeria.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-info-bano.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-login.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-registro.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-servicio.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-splash-clientes.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.png">
-  <link rel="preload" as="image" href="/static/imagenes/fondo-panel.png">
-  <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.png">
-  <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.png">
-  <link rel="preload" as="image" href="/static/iconos/email-incorrecto.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-  <link rel="preload" as="image" href="/static/iconos/error-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/error-informe-limpieza.png">
-  <link rel="preload" as="image" href="/static/iconos/error-registro.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-informe.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-registro.png">
-  <link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/password-error.png">
-  <link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
-  <link rel="preload" as="image" href="/static/iconos/registro-ok.png">
-  <link rel="preload" as="image" href="/static/iconos/reporte-error.png">
-  <link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
-  <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-  <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
   <meta charset="UTF-8">
   <title>Galería - Portátiles Mercedes</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Galería de trabajos y servicios realizados">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/alertas-custom.css">
   <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
-  <!-- Íconos sistema de alertas -->
-  <link rel="preload" as="image" href="/static/iconos/inicio-sesion.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-sesion.png">
-  <link rel="preload" as="image" href="/static/iconos/error-sesion.png">
-  <link rel="preload" as="image" href="/static/iconos/password-error.png">
-  <link rel="preload" as="image" href="/static/iconos/formulario-error.png">
-  <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/error-conexion.png">
   <style>
     html, body {
       height: 100%;
@@ -63,13 +21,11 @@ Proyecto: Portátiles Mercedes
       padding: 0 !important;
       box-sizing: border-box;
       overflow-x: hidden;
-      overflow-y: hidden; /* Evita scroll general */
+      overflow-y: hidden;
     }
     body {
       min-height: 100vh;
       min-width: 100vw;
-      width: 100vw;
-      height: 100vh;
       font-family: 'Nunito', Arial, sans-serif;
       background: url('/app_publico/static/imagenes/fondo-galeria.webp') no-repeat center center fixed;
       background-size: cover;
@@ -78,7 +34,6 @@ Proyecto: Portátiles Mercedes
     }
     .contenedor-superior {
       width: 100vw;
-      max-width: none;
       min-height: 180px;
       display: flex;
       flex-direction: column;
@@ -103,12 +58,6 @@ Proyecto: Portátiles Mercedes
       justify-content: center;
       width: 100%;
     }
-    .logo-portatiles {
-      height: 2.1em;
-      margin: 0 18px;
-      vertical-align: middle;
-    }
-
     .subtitulo-portatiles {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 700;
@@ -120,19 +69,8 @@ Proyecto: Portátiles Mercedes
       margin-bottom: 30px;
       text-shadow: 0 1.5px 2.5px #fff;
     }
-    .slogan-index {
-      font-family: 'Nunito', Arial, sans-serif;
-      font-weight: 700;
-      font-style: italic;
-      font-size: 2.2vw;
-      color: #545454;
-      text-align: center;
-      margin-top: 0.2em;
-      margin-bottom: 30px;
-      text-shadow: 0 1.5px 2.5px #fff;
-    }
     .botonera-flotante {
-      position: fixed; /* Fija el botón en pantalla */
+      position: fixed;
       bottom: 40px;
       left: 40px;
       min-width: 260px;
@@ -142,12 +80,12 @@ Proyecto: Portátiles Mercedes
       gap: 16px;
       z-index: 99;
     }
-      .boton-index {
-        width: 260px;
-        min-width: 260px;
-        max-width: 260px;
-        height: 38px;
-        font-family: 'Nunito', Arial, sans-serif;
+    .boton-index {
+      width: 260px;
+      min-width: 260px;
+      max-width: 260px;
+      height: 38px;
+      font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
       font-size: 18px;
       font-style: italic;
@@ -163,17 +101,9 @@ Proyecto: Portátiles Mercedes
       transition: background .13s;
       padding-left: 16px;
       white-space: nowrap;
-      padding-top: 0;
-        padding-bottom: 0;
-        box-sizing: border-box;
-      }
-
-      .boton-index,
-      .boton-index:visited,
-      .boton-index:active,
-      .boton-index:focus {
-        text-decoration: none !important;
-      }
+      box-sizing: border-box;
+      text-decoration: none !important;
+    }
     .boton-index img {
       width: 22px;
       height: 22px;
@@ -186,11 +116,9 @@ Proyecto: Portátiles Mercedes
       justify-content: flex-start;
       align-items: center;
       width: 100vw;
-      height: calc(100vh - 224px); /* Espacio restante sin scroll general */
+      height: calc(100vh - 224px);
       overflow-y: auto;
       background: transparent !important;
-      box-shadow: none !important;
-      border: none !important;
       padding-bottom: 24px;
       margin-top: 0 !important;
       padding-top: 0 !important;
@@ -199,17 +127,12 @@ Proyecto: Portátiles Mercedes
       width: calc(100vw - 70px);
       max-width: calc(100vw - 70px);
       max-height: 80vh;
-      border-radius: 0;
-      box-shadow: none;
-      background: transparent;
       object-fit: contain;
       margin: 0;
       padding: 0;
       display: block;
     }
-    .contenedor-fotos-galeria img:first-child {
-      margin-top: 24px;
-    }
+    .contenedor-fotos-galeria img:first-child { margin-top: 24px; }
     .pie-pagina {
       text-align: center;
       width: 100%;
@@ -219,61 +142,26 @@ Proyecto: Portátiles Mercedes
       padding: 12px 0;
       background: transparent;
     }
-  @media (max-width: 700px) {
-      .titulo-index {
-        font-size: 28px;
-        white-space: normal;
-      }
-      .subtitulo-portatiles {
-        font-size: 16px;
-      }
-      .slogan-index {
-        font-size: 16px;
-      }
+    @media (max-width: 700px) {
+      .titulo-index { font-size: 28px; white-space: normal; }
+      .subtitulo-portatiles { font-size: 16px; }
       .botonera-flotante {
         flex-direction: column;
         width: calc(100% - 20px);
         min-width: 0;
         left: 10px;
         bottom: 10px;
-        margin: 0;
         align-items: stretch;
       }
-      .boton-index {
-        min-width: 0;
-        font-size: 16px;
-        height: 32px;
-      }
+      .boton-index { font-size: 16px; height: 32px; min-width: 0; }
     }
-  @media (max-width: 500px) {
-      .contenedor-superior {
-        min-height: 120px;
-        padding-top: 5px;
-        padding-bottom: 6px;
-      }
-      .titulo-index {
-        font-size: 20px;
-      }
-      .logo-portatiles {
-        height: 1.2em;
-        margin: 0 6px;
-      }
-      .subtitulo-portatiles {
-        font-size: 13px;
-        margin-bottom: 10px;
-      }
-      .slogan-index {
-        font-size: 13px;
-        margin-bottom: 10px;
-      }
-      .contenedor-fotos-galeria img {
-        width: 90px;
-      }
+    @media (max-width: 500px) {
+      .contenedor-superior { min-height: 120px; padding-top: 5px; padding-bottom: 6px; }
+      .titulo-index { font-size: 20px; }
+      .subtitulo-portatiles { font-size: 13px; margin-bottom: 10px; }
+      .contenedor-fotos-galeria img { width: 90px; }
     }
-
-    /* ===== Logo de fondo para títulos ===== */
     .titulo-con-logo {
-      position: relative;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -287,48 +175,27 @@ Proyecto: Portátiles Mercedes
 </head>
 <body>
   <main>
-<!-- ==== Encabezado de la página ==== -->
     <div class="contenedor-superior titulo-con-logo">
-      <div class="titulo-index titulo-publico"><!-- Título principal sin logo, padding superior de 10px, alineado al centro. Mejora visual temporal. -->
-        Galería
-      </div>
-      <!-- Subtítulo institucional, solo en páginas públicas según estándar visual Portátiles Mercedes -->
-      <div class="subtitulo-portatiles">
-        Lo tradicional, hecho inteligente.
-      </div>
+      <div class="titulo-index titulo-publico">Galería</div>
+      <div class="subtitulo-portatiles">Lo tradicional, hecho inteligente.</div>
     </div>
-<!-- ==== Botonera principal ==== -->
     <div class="botonera-flotante">
-      <!-- Botón estandarizado: Volver a inicio según guía Portátiles Mercedes -->
       <a href="/" class="boton-index">
         <img src="/app_publico/static/icons/inicio.png" alt="Inicio">
         <span>Volver a inicio</span>
       </a>
     </div>
-<!-- ==== Galería de imágenes ==== -->
     <div class="contenedor-fotos-galeria">
       <img src="/app_publico/static/imagenes/evento-1.webp" alt="Evento 1">
       <img src="/app_publico/static/imagenes/evento-2.webp" alt="Evento 2">
       <img src="/app_publico/static/imagenes/evento-3.webp" alt="Evento 3">
       <img src="/app_publico/static/imagenes/evento.webp" alt="Evento 4">
-      <img src="/app_publico/static/imagenes/obra-1.webp"   alt="Obra 1">
-      <img src="/app_publico/static/imagenes/obra-2.webp"   alt="Obra 2">
+      <img src="/app_publico/static/imagenes/obra-1.webp" alt="Obra 1">
+      <img src="/app_publico/static/imagenes/obra-2.webp" alt="Obra 2">
     </div>
   </main>
-<!-- ==== Footer ==== -->
   <footer class="pie-pagina">
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
-  <!-- Alerta personalizada global -->
-</div>
-  <!-- ALERTA CENTRAL PERSONALIZADA -->
-  <div id="alert-manager" class="alert-container">
-    <div class="alert-box">
-      <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-      <span id="alert-text" class="alert-message">Texto de alerta</span>
-    </div>
-  </div>
-
-  <script src="/static/js/alertas.js"></script>
 </body>
 </html>

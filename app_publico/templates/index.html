@@ -33,76 +33,51 @@ Proyecto: Portátiles Mercedes
     }
     .contenedor-superior {
       width: 100vw;
-      max-width: none;
-      min-height: 220px;
+      min-height: 140px; /* Igual que alquiler */
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-end;
-      padding-top: 16px;
-      padding-bottom: 20px;
+      padding-top: 8px;
+      padding-bottom: 0;
       background: transparent;
-    }
-    .contenedor-titulos-fondo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px 38px 18px 38px;
-      background: rgba(12,12,12,0.54);
-      border-radius: 30px;
-      box-shadow: 0 8px 32px 0 rgba(0,0,0,0.22);
-      max-width: 670px;
-      margin: 0 auto;
     }
     .titulo-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 800;
-      font-size: 4.2vw;
+      font-size: 4.5vw;
       color: #DEB460;
       text-align: center;
-      margin-bottom: 0.14em;
-      line-height: 1.1;
+      margin-bottom: 2px;
+      line-height: 1.08;
       white-space: nowrap;
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
-      letter-spacing: 1.2px;
-      /* Sombra y contorno negro para máxima legibilidad */
-      text-shadow:
-        -2px -2px 0 #191919,  
-         2px -2px 0 #191919,
-        -2px  2px 0 #191919,
-         2px  2px 0 #191919,
-         0px  3px 10px rgba(0,0,0,0.38);
+      text-shadow: 0 3px 7px #000, 0 1px 0 #222, 1px 0 3px #222;
+      letter-spacing: 0.5px;
     }
     .slogan-index {
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 700;
       font-style: italic;
-      font-size: 2.1vw;
-      color: #fff;
+      font-size: 2.2vw;
+      color: #545454;
       text-align: center;
-      margin-top: 2px;
-      margin-bottom: 0;
-      letter-spacing: 0.2px;
-      /* Sombra negra fina para resaltar */
-      text-shadow:
-        1px 1px 7px rgba(0,0,0,0.35),
-        -1px -1px 0 #191919;
+      margin-top: 0.1em;
+      margin-bottom: 14px;
+      text-shadow: 0 1.5px 2.5px #fff;
     }
     @media (max-width: 700px) {
-      .contenedor-superior { min-height: 120px; padding: 8px 0; }
-      .contenedor-titulos-fondo { padding: 13px 9vw 12px 9vw; max-width: 94vw; }
-      .titulo-index { font-size: 27px; }
-      .slogan-index { font-size: 16px; }
+      .contenedor-superior { min-height: 90px; padding-top: 3px; padding-bottom: 4px; }
+      .titulo-index { font-size: 28px; white-space: normal; }
+      .slogan-index { font-size: 16px; margin-bottom: 8px; }
     }
     @media (max-width: 500px) {
-      .contenedor-superior { min-height: 80px; }
-      .contenedor-titulos-fondo { padding: 8px 2vw 8px 2vw; }
-      .titulo-index { font-size: 17px; }
-      .slogan-index { font-size: 12.5px; }
+      .contenedor-superior { min-height: 70px; }
+      .titulo-index { font-size: 20px; }
+      .slogan-index { font-size: 13px; }
     }
     .contenedor-main {
       position: relative;
@@ -238,9 +213,6 @@ Proyecto: Portátiles Mercedes
       }
     }
     @media (max-width: 500px) {
-      .contenedor-superior {
-        min-height: 80px;
-      }
       .boton-index { font-size: 13px; height: 27px; }
       .contenedor-texto {
         margin: 0 3vw;
@@ -250,18 +222,21 @@ Proyecto: Portátiles Mercedes
       .presentacion-portatiles { font-size: 14px; }
       .pie-pagina { font-size: 10px; }
     }
+    .titulo-con-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
   </style>
 </head>
 <body>
   <main>
     <div class="contenedor-superior titulo-con-logo">
-      <div class="contenedor-titulos-fondo">
-        <div class="titulo-index titulo-publico">
-          Portátiles Mercedes
-        </div>
-        <div class="slogan-index">
-          Lo tradicional, hecho inteligente.
-        </div>
+      <div class="titulo-index titulo-publico">
+        Portátiles Mercedes
+      </div>
+      <div class="slogan-index">
+        Lo tradicional, hecho inteligente.
       </div>
     </div>
     <div class="contenedor-main">

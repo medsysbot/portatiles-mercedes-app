@@ -7,22 +7,22 @@
 {% block content %}
 <h2 class="mt-0">Nuevo dato personal</h2>
 <div class="pm-form-container">
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" data-success-url="/admin/empleados_datos_personales">
   <div class="form-group">
     <label>Nombre empleado</label>
-    <input type="text" name="nombre_empleado" class="form-control">
+  <input type="text" name="nombre_empleado" class="form-control" required>
   </div>
   <div class="form-group">
     <label>DNI / CUIT / CUIL</label>
-    <input type="text" name="dni_cuit_cuil" class="form-control">
+  <input type="text" name="dni_cuit_cuil" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Email</label>
-    <input type="email" name="email" class="form-control">
+  <input type="email" name="email" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Fecha ingreso</label>
-    <input type="date" name="fecha_ingreso" class="form-control">
+  <input type="date" name="fecha_ingreso" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Documento (PDF o imagen)</label>
@@ -46,4 +46,5 @@
 
 {% block scripts %}
   {{ super() }}
+  <script src="/static/js/form_guardar.js"></script>
 {% endblock %}

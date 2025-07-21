@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <form id="formComprobanteAdmin" enctype="multipart/form-data" class="mb-3 d-none pm-form-container">
+  <form id="formComprobanteAdmin" enctype="multipart/form-data" class="mb-3 d-none pm-form-container" data-success-url="/admin/comprobantes">
     <div class="form-group">
       <label for="nombreAdmin">Nombre cliente</label>
       <input type="text" class="form-control" id="nombreAdmin" name="nombre_cliente">
@@ -111,4 +111,5 @@
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/comprobantes_pago_admin.js"></script>
+<script src="/static/js/form_guardar.js"></script>
 {% endblock %}

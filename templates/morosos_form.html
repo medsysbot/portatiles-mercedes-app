@@ -8,18 +8,18 @@
 {% block content %}
 <h2 class="mt-0">Nuevo moroso</h2>
 <div class="pm-form-container">
-<form method="post">
+<form method="post" data-success-url="/admin/morosos">
   <div class="form-group">
     <label>Fecha facturación</label>
-    <input type="date" name="fecha_facturacion" class="form-control">
+  <input type="date" name="fecha_facturacion" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Número factura</label>
-    <input type="text" name="numero_factura" class="form-control">
+  <input type="text" name="numero_factura" class="form-control" required>
   </div>
   <div class="form-group">
     <label>DNI / CUIT / CUIL</label>
-    <input type="text" name="dni_cuit_cuil" class="form-control">
+  <input type="text" name="dni_cuit_cuil" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Razón social</label>
@@ -31,11 +31,11 @@
   </div>
   <div class="form-group">
     <label>Nombre cliente</label>
-    <input type="text" name="nombre_cliente" class="form-control">
+  <input type="text" name="nombre_cliente" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Monto adeudado</label>
-    <input type="number" step="0.01" name="monto_adeudado" class="form-control">
+  <input type="number" step="0.01" name="monto_adeudado" class="form-control" required>
   </div>
   <div class="form-actions">
     <button type="submit" class="btn btn-primary">Guardar</button>
@@ -90,4 +90,5 @@
   {{ super() }}
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
   <script src="/static/js/morosos_form.js"></script>
+  <script src="/static/js/form_guardar.js"></script>
 {% endblock %}

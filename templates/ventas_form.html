@@ -7,22 +7,22 @@
 {% block content %}
 <h2 class="mt-0">Nueva Venta</h2>
 <div class="pm-form-container">
-<form method="post">
+<form method="post" data-success-url="/admin/ventas">
   <div class="form-group">
     <label>Fecha de operación</label>
-    <input type="date" name="fecha_operacion" class="form-control">
+  <input type="date" name="fecha_operacion" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Tipo de baño</label>
-    <input type="text" name="tipo_bano" class="form-control">
+  <input type="text" name="tipo_bano" class="form-control" required>
   </div>
   <div class="form-group">
     <label>DNI / CUIT / CUIL del cliente</label>
-    <input type="text" name="dni_cuit_cuil" class="form-control">
+  <input type="text" name="dni_cuit_cuil" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Nombre del cliente</label>
-    <input type="text" name="nombre_cliente" class="form-control">
+  <input type="text" name="nombre_cliente" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Forma de pago</label>
@@ -58,4 +58,5 @@
 
 {% block scripts %}
   {{ super() }}
+  <script src="/static/js/form_guardar.js"></script>
 {% endblock %}

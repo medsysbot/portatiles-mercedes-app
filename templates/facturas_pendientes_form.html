@@ -8,18 +8,18 @@
 {% block content %}
 <h2 class="mt-0">Nueva factura</h2>
 <div class="pm-form-container">
-  <form action="/admin/facturas_pendientes/nueva" method="post" enctype="multipart/form-data">
+  <form action="/admin/facturas_pendientes/nueva" method="post" enctype="multipart/form-data" data-success-url="/admin/facturas_pendientes">
     <div class="form-group">
       <label>Fecha</label>
-      <input type="date" name="fecha" class="form-control">
+      <input type="date" name="fecha" class="form-control" required>
     </div>
     <div class="form-group">
       <label>Número factura</label>
-      <input type="text" name="numero_factura" class="form-control">
+      <input type="text" name="numero_factura" class="form-control" required>
     </div>
     <div class="form-group">
       <label>DNI / CUIT / CUIL</label>
-      <input type="text" name="dni_cuit_cuil" class="form-control">
+      <input type="text" name="dni_cuit_cuil" class="form-control" required>
     </div>
     <div class="form-group">
       <label>Razón social</label>
@@ -31,11 +31,11 @@
     </div>
     <div class="form-group">
       <label>Nombre cliente</label>
-      <input type="text" name="nombre_cliente" class="form-control">
+      <input type="text" name="nombre_cliente" class="form-control" required>
     </div>
     <div class="form-group">
       <label>Monto adeudado</label>
-      <input type="number" step="0.01" name="monto_adeudado" class="form-control">
+      <input type="number" step="0.01" name="monto_adeudado" class="form-control" required>
     </div>
     <div class="form-group mb-3">
       <label for="facturaUpload">Subir factura (PDF o imagen):</label>
@@ -93,4 +93,5 @@
 {{ super() }}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/facturas_pendientes_form.js"></script>
+<script src="/static/js/form_guardar.js"></script>
 {% endblock %}

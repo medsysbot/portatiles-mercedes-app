@@ -6,56 +6,14 @@ Proyecto: Portátiles Mercedes
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-galeria.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-info-bano.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-login.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-registro.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-servicio.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-splash-clientes.webp">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.png">
-  <link rel="preload" as="image" href="/static/imagenes/fondo-panel.webp">
-  <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.webp">
-  <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.webp">
-  <link rel="preload" as="image" href="/static/iconos/email-incorrecto.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-  <link rel="preload" as="image" href="/static/iconos/error-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/error-informe-limpieza.png">
-  <link rel="preload" as="image" href="/static/iconos/error-registro.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-informe.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-registro.png">
-  <link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/password-error.png">
-  <link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
-  <link rel="preload" as="image" href="/static/iconos/registro-ok.png">
-  <link rel="preload" as="image" href="/static/iconos/reporte-error.png">
-  <link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
-  <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-  <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
+  <link rel="preload" as="image" href="/app_publico/static/imagenes/portada-index.webp">
   <meta charset="UTF-8">
   <title>Portátiles Mercedes - Soluciones Sanitarias</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Sistema integral de alquiler y venta de baños portátiles">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/css/alertas-custom.css">
   <link rel="stylesheet" href="/app_publico/static/css/robot_pm.css">
   <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
-  <!-- Íconos sistema de alertas -->
-  <link rel="preload" as="image" href="/static/iconos/inicio-sesion.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-sesion.png">
-  <link rel="preload" as="image" href="/static/iconos/error-sesion.png">
-  <link rel="preload" as="image" href="/static/iconos/password-error.png">
-  <link rel="preload" as="image" href="/static/iconos/formulario-error.png">
-  <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/error-conexion.png">
   <style>
     html, body {
       height: 100%;
@@ -138,10 +96,10 @@ Proyecto: Portátiles Mercedes
       z-index: 99;
     }
     .boton-index {
-      width: 260px;           /* Fijo: igual que .botonera-flotante */
+      width: 260px;
       min-width: 260px;
       max-width: 260px;
-      height: 38px;           /* Altura fija para todos */
+      height: 38px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
       font-size: 18px;
@@ -158,18 +116,8 @@ Proyecto: Portátiles Mercedes
       transition: background .13s;
       padding-left: 16px;
       white-space: nowrap;
-      padding-top: 0;
-      padding-bottom: 0;
       box-sizing: border-box;
-    }
-    .boton-index,
-    .boton-index:visited,
-    .boton-index:active,
-    .boton-index:focus {
       text-decoration: none !important;
-    }
-    .boton-index span {
-      text-decoration: none;
     }
     .boton-index img {
       width: 22px;
@@ -191,7 +139,6 @@ Proyecto: Portátiles Mercedes
       color: #fff;
       text-align: left;
       line-height: 1.6;
-      text-shadow: none;
       margin-bottom: 24px;
       max-width: 100%;
     }
@@ -287,8 +234,6 @@ Proyecto: Portátiles Mercedes
         font-size: 10px;
       }
     }
-
-    /* ===== Logo de fondo para títulos ===== */
     .titulo-con-logo {
       position: relative;
       display: flex;
@@ -304,9 +249,8 @@ Proyecto: Portátiles Mercedes
 </head>
 <body>
   <main>
-<!-- ==== Encabezado de la página ==== -->
     <div class="contenedor-superior titulo-con-logo">
-      <div class="titulo-index titulo-publico"><!-- Título principal sin logo, padding superior de 10px, alineado al centro. Mejora visual temporal. -->
+      <div class="titulo-index titulo-publico">
         Portátiles Mercedes
       </div>
       <div class="slogan-index">
@@ -314,24 +258,23 @@ Proyecto: Portátiles Mercedes
       </div>
     </div>
     <div class="contenedor-main">
-<!-- ==== Botonera principal ==== -->
       <div class="botonera-flotante">
         <a href="informacion-banos.html" class="boton-index">
           <img src="/app_publico/static/icons/info-banos.png" alt="Info">
           <span>Información</span>
-        </a><!-- Texto de botón simplificado: Información -->
+        </a>
         <button class="boton-index" onclick="window.location.href='/alquiler'">
           <img src="/app_publico/static/icons/alquiler.png" alt="Alquiler">
           Alquiler
-        </button><!-- Texto de botón corregido según estándar Portátiles Mercedes -->
+        </button>
         <button class="boton-index" onclick="window.location.href='/ventas'">
           <img src="/app_publico/static/icons/venta.png" alt="Venta">
           Ventas
-        </button><!-- Texto de botón corregido según estándar Portátiles Mercedes -->
+        </button>
         <button class="boton-index" onclick="window.location.href='/servicios'">
           <img src="/app_publico/static/icons/servicios-2.png" alt="Servicio">
           Servicios
-        </button><!-- Texto de botón corregido según estándar Portátiles Mercedes -->
+        </button>
         <a id="linkGaleria" href="/galeria" class="boton-index">
           <img src="/app_publico/static/icons/galeria.png" alt="Galería">
           <span>Galería</span>
@@ -357,47 +300,29 @@ Proyecto: Portátiles Mercedes
       </div>
     </div>
   </main>
-<!-- ==== Footer ==== -->
   <footer class="pie-pagina">
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
-<div id="robot-pm-widget">
+  <!-- WIDGET ROBOT PM -->
+  <div id="robot-pm-widget">
     <div id="robot-globo">
-        <span>¡Hola! Soy PM 😊</span>
-        <div class="robot-globo-punta"></div>
+      <span>¡Hola! Soy PM 😊</span>
+      <div class="robot-globo-punta"></div>
     </div>
-
     <div id="robot-estela">
-        <div class="fuego fuego1"></div>
-        <div class="fuego fuego2"></div>
+      <div class="fuego fuego1"></div>
+      <div class="fuego fuego2"></div>
     </div>
-  <!-- 👁️ Ojitos del robot -->
-  <div id="robotOjos">
-    <div class="ojo-led">
-      <div class="parpado"></div>
-  </div>
-  <div class="ojo-led">
-    <div class="parpado"></div>
-  </div>
-</div>
-<img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
-
-      <audio id="audioBienvenida" autoplay>
-        <source src="/app_publico/static/audio/robot_pm_bienvenida.mp3" type="audio/mpeg">
-        Tu navegador no soporta el audio.
+    <div id="robotOjos">
+      <div class="ojo-led"><div class="parpado"></div></div>
+      <div class="ojo-led"><div class="parpado"></div></div>
+    </div>
+    <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
+    <audio id="audioBienvenida" autoplay>
+      <source src="/app_publico/static/audio/robot_pm_bienvenida.mp3" type="audio/mpeg">
+      Tu navegador no soporta el audio.
     </audio>
-</div>
-
-  <!-- ALERTA CENTRAL PERSONALIZADA -->
-  <div id="alert-manager" class="alert-container">
-    <div class="alert-box">
-      <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-      <span id="alert-text" class="alert-message">Texto de alerta</span>
-    </div>
   </div>
-  
-  <script src="app_publico/static/js/robot_pm.js"></script>
-  <script src="/static/js/alertas.js"></script>
-  </body>
-  </html>
-  
+  <script src="/app_publico/static/js/robot_pm.js"></script>
+</body>
+</html>

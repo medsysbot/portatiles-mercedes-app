@@ -28,7 +28,6 @@ Proyecto: Portátiles Mercedes
             background: url('/app_publico/static/imagenes/fondo-info-bano.webp') no-repeat center center fixed;
             background-size: cover;
             position: relative;
-            overflow-y: auto !important;
             overflow-x: hidden;
         }
         .fondo-alquiler {
@@ -43,13 +42,13 @@ Proyecto: Portátiles Mercedes
         }
         .contenedor-superior {
             width: 100vw;
-            min-height: 180px;
+            min-height: 140px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            padding-top: 5px;
-            padding-bottom: 12px;
+            padding-top: 8px;
+            padding-bottom: 0;
             background: transparent;
         }
         .titulo-index {
@@ -58,13 +57,15 @@ Proyecto: Portátiles Mercedes
             font-size: 4.5vw;
             color: #DEB460;
             text-align: center;
-            margin-bottom: 6px;
-            line-height: 1.1;
+            margin-bottom: 2px;
+            line-height: 1.08;
             white-space: nowrap;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
+            text-shadow: 0 3px 7px #000, 0 1px 0 #222, 1px 0 3px #222;
+            letter-spacing: 0.5px;
         }
         .subtitulo-portatiles {
             font-family: 'Nunito', Arial, sans-serif;
@@ -73,21 +74,19 @@ Proyecto: Portátiles Mercedes
             font-size: 2.2vw;
             color: #545454;
             text-align: center;
-            margin-top: 0.2em;
-            margin-bottom: 30px;
+            margin-top: 0.1em;
+            margin-bottom: 14px;
             text-shadow: 0 1.5px 2.5px #fff;
         }
         @media (max-width: 700px) {
+            .contenedor-superior { min-height: 90px; padding-top: 3px; padding-bottom: 4px; }
             .titulo-index { font-size: 28px; white-space: normal; }
-            .subtitulo-portatiles { font-size: 16px; }
+            .subtitulo-portatiles { font-size: 16px; margin-bottom: 8px; }
         }
         @media (max-width: 500px) {
-            .contenedor-superior { min-height: 120px; padding-top: 5px; padding-bottom: 6px; }
+            .contenedor-superior { min-height: 70px; }
             .titulo-index { font-size: 20px; }
-            .logo-portatiles { height: 1.2em; margin: 0 6px; }
-            .subtitulo-portatiles { font-size: 13px; margin-bottom: 10px; }
-            .presentacion-portatiles { font-size: 15px; }
-            .pie-pagina { font-size: 10px; }
+            .subtitulo-portatiles { font-size: 13px; }
         }
         .contenedor-main {
             position: relative;
@@ -157,18 +156,6 @@ Proyecto: Portátiles Mercedes
             margin-bottom: 24px;
             max-width: 100%;
         }
-        .info-contenedor {
-            margin-left: 20px;
-            margin-right: 20px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-        }
-        .info-texto {
-            width: 100%;
-            overflow: visible;
-            max-height: none;
-        }
         .pie-pagina {
             width: 100%;
             text-align: center;
@@ -179,12 +166,12 @@ Proyecto: Portátiles Mercedes
         }
         @media (max-width: 1100px) {
             .contenedor-main { flex-direction: column; align-items: stretch; }
-            .botonera-flotante { position: static; flex-direction: row; flex-wrap: wrap; width: 100%; min-width: 0; margin-left: 0; margin-top: 0; justify-content: center; gap: 12px; }
+            .botonera-flotante { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 12px; }
             .contenedor-texto { margin-left: 20px; margin-right: 20px; margin-top: 30px; max-width: 100%; }
         }
         @media (max-width: 700px) {
-            .botonera-flotante { position: static; flex-direction: column; width: 100%; min-width: 0; margin-left: 0; margin-top: 0; align-items: stretch; }
-            .boton-index { min-width: 0; font-size: 16px; height: 32px; }
+            .botonera-flotante { position: static; flex-direction: column; align-items: stretch; }
+            .boton-index { font-size: 16px; height: 32px; }
             .contenedor-texto { margin-left: 10px; margin-right: 10px; margin-top: 20px; max-width: 100%; }
         }
         .titulo-con-logo {
@@ -192,18 +179,13 @@ Proyecto: Portátiles Mercedes
             flex-direction: column;
             align-items: center;
         }
-        .titulo-con-logo .titulo-index,
-        .titulo-con-logo .subtitulo-portatiles {
-            position: relative;
-            z-index: 2;
-        }
     </style>
 </head>
 <body>
     <div class="fondo-alquiler">
         <div class="contenedor-superior titulo-con-logo">
             <div class="titulo-index titulo-publico">Información</div>
-            <div class="subtitulo-portatiles">Lo tradicional, hecho inteligente</div>
+            <div class="subtitulo-portatiles">Lo tradicional, hecho inteligente.</div>
         </div>
         <div class="contenedor-main">
             <div class="botonera-flotante">
@@ -213,54 +195,52 @@ Proyecto: Portátiles Mercedes
                 </a>
             </div>
             <div class="contenedor-texto">
-                <div class="info-contenedor">
-                    <div class="presentacion-portatiles info-texto">
-                        <h2><strong>Historia y evolución del baño químico</strong></h2>
-                        <h3><strong>Origen</strong></h3>
-                        <p>El concepto de baño químico portátil nace en los años 40, durante la Segunda Guerra Mundial y posteriormente se consolida en los años 50, en los astilleros y grandes obras de construcción en Estados Unidos. Ante la necesidad de brindar una solución sanitaria rápida, móvil y sin conexión a redes cloacales, surgen las primeras cabinas rudimentarias de madera y metal, con depósitos de residuos tratados químicamente.</p>
-                        <h3><strong>Evolución Técnica</strong></h3>
-                        <ul>
-                            <li>Década del 60-70: se introducen los plásticos moldeados como reemplazo de la madera, dando lugar a cabinas más livianas, resistentes y fáciles de limpiar.</li>
-                            <li>Década del 80-90: se estandariza el uso de aditivos químicos no sólo desodorizantes, sino también bactericidas y descomponedores de materia orgánica.</li>
-                            <li>2000 en adelante: aparecen mejoras ergonómicas, materiales más durables, cabinas inclusivas (accesibles) y modelos de alta rotación con mantenimiento optimizado.</li>
-                        </ul>
-                        <h3><strong>Funcionamiento del Baño Químico:</strong></h3>
-                        <ul>
-                            <li>Recolección controlada: los desechos van a un depósito hermético ubicado debajo del asiento o inodoro.</li>
-                            <li>Tratamiento químico: se utilizan líquidos azules o verdes con:</li>
-                            <li>Bactericidas (control de gérmenes y olores).</li>   
-                            <li>Enzimas digestoras (para degradar materia).</li> 
-                            <li>Colorantes y fragancias.</li>
-                            <li>Ventilación controlada: se evita la acumulación de gases mediante ductos y válvulas de escape.</li> 
-                            <li>Vaciado y limpieza: el contenido se extrae mediante camiones de servicio y se desinfecta con productos especiales.</li>
-                        </ul>
-                        <h3><strong>Mantenimiento:</strong></h3>
-                        <ul>
-                            <li>Limpieza externa e interna con hidrojet o bomba manual</li>
-                            <li>Reemplazo del líquido químico del tanque</li>
-                            <li>Revisión estructural (puerta, cerradura, ventilaciones, piso)</li>
-                            <li>Control de niveles y fecha de próximo servicio. Según uso, el mantenimiento puede ser diario, semanal o quincenal. En Portátiles Mercedes, esto se gestiona por contrato y planificación técnica precisa.</li>                        
-                        </ul>
-                        <h3><strong>Utilidades Modernas</strong></h3>
-                        <ul>
-                            <p>Hoy el baño químico es indispensable en contextos donde no hay baños fijos o donde se necesita instalación temporal:</p>
-                            <li>Obras en construcción.</li>
-                            <li>Eventos masivos (festivales, recitales, ferias).</li>
-                            <li>Emergencias sanitarias o climáticas.</li>
-                            <li>Campamentos, zonas rurales, parques.</li>                        
-                        </ul>
-                        <h3><strong>Ventajas:</strong></h3>
-                        <ul>
-                            <li>Portabilidad: se puede instalar en cualquier lugar.</li>
-                            <li>Autonomía: no depende de red cloacal ni agua corriente.</li>
-                            <li>Instalación rápida y sin obra.</li>     
-                            <li>Mantenimiento flexible.</li> 
-                            <li>Costo operativo bajo en comparación con baños fijos en zonas remotas.</li>
-                        </ul>
-                        <h3><strong>Resumen</strong></h3>
-                        <p>El baño químico es una solución sanitaria moderna, ágil y vital para sectores industriales, urbanos y sociales. Su evolución desde un recurso de emergencia a un elemento logístico esencial refleja la importancia de su correcto mantenimiento, gestión y profesionalización del servicio.</p>
-                        <p>Hoy, empresas como Portátiles Mercedes llevan esta solución al más alto nivel de operatividad, higiene y cumplimiento, integrándola en sistemas de alquiler, planificación técnica, y atención al cliente con trazabilidad y excelencia.</p>
-                    </div>
+                <div class="presentacion-portatiles info-texto">
+                    <h2><strong>Historia y evolución del baño químico</strong></h2>
+                    <h3><strong>Origen</strong></h3>
+                    <p>El concepto de baño químico portátil nace en los años 40, durante la Segunda Guerra Mundial y posteriormente se consolida en los años 50, en los astilleros y grandes obras de construcción en Estados Unidos. Ante la necesidad de brindar una solución sanitaria rápida, móvil y sin conexión a redes cloacales, surgen las primeras cabinas rudimentarias de madera y metal, con depósitos de residuos tratados químicamente.</p>
+                    <h3><strong>Evolución Técnica</strong></h3>
+                    <ul>
+                        <li>Década del 60-70: se introducen los plásticos moldeados como reemplazo de la madera, dando lugar a cabinas más livianas, resistentes y fáciles de limpiar.</li>
+                        <li>Década del 80-90: se estandariza el uso de aditivos químicos no sólo desodorizantes, sino también bactericidas y descomponedores de materia orgánica.</li>
+                        <li>2000 en adelante: aparecen mejoras ergonómicas, materiales más durables, cabinas inclusivas (accesibles) y modelos de alta rotación con mantenimiento optimizado.</li>
+                    </ul>
+                    <h3><strong>Funcionamiento del Baño Químico:</strong></h3>
+                    <ul>
+                        <li>Recolección controlada: los desechos van a un depósito hermético ubicado debajo del asiento o inodoro.</li>
+                        <li>Tratamiento químico: se utilizan líquidos azules o verdes con:</li>
+                        <li>Bactericidas (control de gérmenes y olores).</li>   
+                        <li>Enzimas digestoras (para degradar materia).</li> 
+                        <li>Colorantes y fragancias.</li>
+                        <li>Ventilación controlada: se evita la acumulación de gases mediante ductos y válvulas de escape.</li> 
+                        <li>Vaciado y limpieza: el contenido se extrae mediante camiones de servicio y se desinfecta con productos especiales.</li>
+                    </ul>
+                    <h3><strong>Mantenimiento:</strong></h3>
+                    <ul>
+                        <li>Limpieza externa e interna con hidrojet o bomba manual</li>
+                        <li>Reemplazo del líquido químico del tanque</li>
+                        <li>Revisión estructural (puerta, cerradura, ventilaciones, piso)</li>
+                        <li>Control de niveles y fecha de próximo servicio. Según uso, el mantenimiento puede ser diario, semanal o quincenal. En Portátiles Mercedes, esto se gestiona por contrato y planificación técnica precisa.</li>                        
+                    </ul>
+                    <h3><strong>Utilidades Modernas</strong></h3>
+                    <ul>
+                        <p>Hoy el baño químico es indispensable en contextos donde no hay baños fijos o donde se necesita instalación temporal:</p>
+                        <li>Obras en construcción.</li>
+                        <li>Eventos masivos (festivales, recitales, ferias).</li>
+                        <li>Emergencias sanitarias o climáticas.</li>
+                        <li>Campamentos, zonas rurales, parques.</li>                        
+                    </ul>
+                    <h3><strong>Ventajas:</strong></h3>
+                    <ul>
+                        <li>Portabilidad: se puede instalar en cualquier lugar.</li>
+                        <li>Autonomía: no depende de red cloacal ni agua corriente.</li>
+                        <li>Instalación rápida y sin obra.</li>     
+                        <li>Mantenimiento flexible.</li> 
+                        <li>Costo operativo bajo en comparación con baños fijos en zonas remotas.</li>
+                    </ul>
+                    <h3><strong>Resumen</strong></h3>
+                    <p>El baño químico es una solución sanitaria moderna, ágil y vital para sectores industriales, urbanos y sociales. Su evolución desde un recurso de emergencia a un elemento logístico esencial refleja la importancia de su correcto mantenimiento, gestión y profesionalización del servicio.</p>
+                    <p>Hoy, empresas como Portátiles Mercedes llevan esta solución al más alto nivel de operatividad, higiene y cumplimiento, integrándola en sistemas de alquiler, planificación técnica, y atención al cliente con trazabilidad y excelencia.</p>
                 </div>
                 <img src="/app_publico/static/imagenes/plano.webp" alt="Plano de funcionamiento" style="display: block; margin: 30px auto 0 auto; width: 100%; max-width: 500px; border-radius: 12px; box-shadow: 0 0 10px rgba(0,0,0,0.2);">
             </div>

@@ -6,56 +6,14 @@ Proyecto: Portátiles Mercedes
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-galeria.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-info-bano.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-login.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-registro.png">
     <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-servicio.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-splash-clientes.png">
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-panel.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.png">
-    <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.png">
-    <link rel="preload" as="image" href="/static/iconos/email-incorrecto.png">
-    <link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
-    <link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
-    <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-    <link rel="preload" as="image" href="/static/iconos/error-mensaje.png">
-    <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-    <link rel="preload" as="image" href="/static/iconos/error-informe-limpieza.png">
-    <link rel="preload" as="image" href="/static/iconos/error-registro.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-informe.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-mensaje.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-registro.png">
-    <link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
-    <link rel="preload" as="image" href="/static/iconos/password-error.png">
-    <link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
-    <link rel="preload" as="image" href="/static/iconos/registro-ok.png">
-    <link rel="preload" as="image" href="/static/iconos/reporte-error.png">
-    <link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
-    <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-    <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Conocé todos nuestros servicios sanitarios">
     <title>Servicios - Portátiles Mercedes</title>
-      <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
-      <link rel="stylesheet" href="/static/css/alertas-custom.css">
-      <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
-      <!-- Íconos sistema de alertas -->
-      <link rel="preload" as="image" href="/static/iconos/inicio-sesion.png">
-      <link rel="preload" as="image" href="/static/iconos/exito-sesion.png">
-      <link rel="preload" as="image" href="/static/iconos/error-sesion.png">
-      <link rel="preload" as="image" href="/static/iconos/password-error.png">
-      <link rel="preload" as="image" href="/static/iconos/formulario-error.png">
-      <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-      <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-      <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-      <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-      <link rel="preload" as="image" href="/static/iconos/error-conexion.png">
-      <style>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
+    <style>
         body {
             font-family: 'Nunito', Arial, sans-serif;
             background: url('/app_publico/static/imagenes/fondo-servicio.webp') no-repeat center center fixed;
@@ -66,14 +24,12 @@ Proyecto: Portátiles Mercedes
             width: 100vw;
             overflow: auto;
         }
-
         .fondo-servicios {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
-
         .contenedor-superior {
             width: 100vw;
             max-width: none;
@@ -86,7 +42,6 @@ Proyecto: Portátiles Mercedes
             padding-bottom: 12px;
             background: transparent;
         }
-
         .titulo-index {
             font-family: 'Nunito', Arial, sans-serif;
             font-weight: 800;
@@ -101,12 +56,10 @@ Proyecto: Portátiles Mercedes
             justify-content: center;
             width: 100%;
         }
-
         .logo-portatiles {
             height: 2.1em;
             margin: 0 18px;
         }
-
         .subtitulo-portatiles {
             font-family: 'Nunito', Arial, sans-serif;
             font-weight: 700;
@@ -118,7 +71,6 @@ Proyecto: Portátiles Mercedes
             margin-bottom: 30px;
             text-shadow: 0 1.5px 2.5px #fff;
         }
-
         .botonera-flotante {
             position: absolute;
             left: 40px;
@@ -129,7 +81,6 @@ Proyecto: Portátiles Mercedes
             gap: 16px;
             z-index: 99;
         }
-
         .boton-index {
             width: 260px;
             height: 38px;
@@ -146,23 +97,19 @@ Proyecto: Portátiles Mercedes
             font-style: italic;
             font-weight: 400;
         }
-
         .boton-index,
         .boton-index:visited,
         .boton-index:active,
         .boton-index:focus {
             text-decoration: none !important;
         }
-
         .boton-index:hover {
             background-color: rgba(60, 60, 60, 1);
         }
-
         .boton-index img {
             width: 22px;
             height: 22px;
         }
-
         .contenedor-texto {
             margin: 40px auto;
             max-width: 700px;
@@ -172,7 +119,6 @@ Proyecto: Portátiles Mercedes
             font-weight: 300;
             padding: 0 20px;
         }
-
         .pie-pagina {
             width: 100%;
             text-align: center;
@@ -180,24 +126,17 @@ Proyecto: Portátiles Mercedes
             color: #848280;
             margin: 30px 0 10px;
         }
-
         ul {
             padding-left: 20px;
             margin-top: 12px;
             margin-bottom: 24px;
         }
-
         ul li {
             margin-bottom: 10px;
         }
-
         @media (max-width: 700px) {
-            .titulo-index {
-                font-size: 28px;
-            }
-            .subtitulo-portatiles {
-                font-size: 16px;
-            }
+            .titulo-index { font-size: 28px; }
+            .subtitulo-portatiles { font-size: 16px; }
             .botonera-flotante {
                 position: static;
                 flex-direction: column;
@@ -214,15 +153,12 @@ Proyecto: Portátiles Mercedes
                 font-size: 18px;
             }
         }
-
         @media (max-width: 500px) {
             .subtitulo-portatiles {
                 font-size: 13px;
                 margin-bottom: 10px;
             }
         }
-
-        /* ===== Logo de fondo para títulos ===== */
         .titulo-con-logo {
             position: relative;
             display: flex;
@@ -238,27 +174,18 @@ Proyecto: Portátiles Mercedes
 </head>
 <body>
     <div class="fondo-servicios">
-<!-- ==== Encabezado de la página ==== -->
         <div class="contenedor-superior titulo-con-logo">
-            <div class="titulo-index titulo-publico"><!-- Título principal sin logo, padding superior de 10px, alineado al centro. Mejora visual temporal. -->
-                Servicios
-            </div>
-            <!-- Subtítulo institucional, solo en páginas públicas según estándar visual Portátiles Mercedes -->
+            <div class="titulo-index titulo-publico">Servicios</div>
             <div class="subtitulo-portatiles">
                 Lo tradicional, hecho inteligente.
             </div>
         </div>
-
-<!-- ==== Botonera principal ==== -->
         <div class="botonera-flotante">
-            <!-- Botón estandarizado: Volver a inicio según guía Portátiles Mercedes -->
             <a href="/" class="boton-index">
                 <img src="/app_publico/static/icons/inicio.png" alt="Inicio">
                 <span>Volver a inicio</span>
             </a>
         </div>
-
-<!-- ==== Texto descriptivo ==== -->
         <div class="contenedor-texto">
             En <strong>Portátiles Mercedes</strong> ofrecemos un servicio completo para nuestros baños químicos portátiles:<br><br>
             <ul>
@@ -271,21 +198,8 @@ Proyecto: Portátiles Mercedes
             Nuestro compromiso es que cada baño esté siempre en perfectas condiciones de uso.
         </div>
     </div>
-
-<!-- ==== Footer ==== -->
     <footer class="pie-pagina">
         Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
     </footer>
-    <!-- Alerta personalizada global -->
-</div>
-    <!-- ALERTA CENTRAL PERSONALIZADA -->
-    <div id="alert-manager" class="alert-container">
-        <div class="alert-box">
-            <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-            <span id="alert-text" class="alert-message">Texto de alerta</span>
-        </div>
-    </div>
-
-    <script src="/static/js/alertas.js"></script>
 </body>
 </html>

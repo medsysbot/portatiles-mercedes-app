@@ -3,7 +3,7 @@ Archivo: login.html
 Descripción: Formulario de acceso al sistema
 Acceso: Público
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-07-05
+Última modificación: 2025-07-21 (limpieza y optimización)
 -->
 <!DOCTYPE html>
 <html lang="es">
@@ -15,45 +15,23 @@ Proyecto: Portátiles Mercedes
   <link rel="stylesheet" href="/static/css/alertas-custom.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
-  <!-- PRELOAD DE ICONOS Y FONDOS -->
-  <link rel="preload" as="image" href="/static/iconos/inicio-sesion.png">  
-  <link rel="preload" as="image" href="/static/iconos/exito-sesion.png">  
-  <link rel="preload" as="image" href="/static/iconos/error-sesion.png">  
-  <link rel="preload" as="image" href="/static/iconos/email-incorrecto.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-  <link rel="preload" as="image" href="/static/iconos/error-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/error-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/error-informe-limpieza.png">
-  <link rel="preload" as="image" href="/static/iconos/error-registro.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-informe.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-mensaje.png">
-  <link rel="preload" as="image" href="/static/iconos/exito-registro.png">
-  <link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
-  <link rel="preload" as="image" href="/static/iconos/password-error.png">
-  <link rel="preload" as="image" href="/static/iconos/formulario-error.png">
-  <link rel="preload" as="image" href="/static/iconos/error-conexion.png">
-  <link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
-  <link rel="preload" as="image" href="/static/iconos/registro-ok.png">
-  <link rel="preload" as="image" href="/static/iconos/reporte-error.png">
-  <link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
-  <link rel="preload" as="image" href="/static/iconos/seleccionar-rol.png">
-  <link rel="preload" as="image" href="/static/iconos/verifique-contrasena.png">
+  <!-- SOLO LOS ICONOS USADOS EN EL FORMULARIO DE LOGIN/REGISTRO -->
+  <link rel="preload" as="image" href="/app_publico/static/icons/inicio.png">
+  <link rel="preload" as="image" href="/app_publico/static/icons/usuario-port.png">
+  <link rel="preload" as="image" href="/app_publico/static/icons/password-port.png">
+  <link rel="preload" as="image" href="/app_publico/static/icons/rol-port.png">
+  <link rel="preload" as="image" href="/app_publico/static/icons/ingresar-al-sistema.png">
   <link rel="preload" as="image" href="/app_publico/static/icons/registro-clientes.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-galeria.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-info-bano.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-login.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-registro.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-servicio.png">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-splash-clientes.webp">
-  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.png">
-  <link rel="preload" as="image" href="/static/imagenes/fondo-panel.webp">
-  <link rel="preload" as="image" href="/static/imagenes/fondo-splash-admin.webp">
-  <link rel="preload" as="image" href="/static/imagenes/fondo-splash-empleados.webp">
+  <!-- SOLO ALERTAS RELEVANTES PARA LOGIN -->
+  <link rel="preload" as="image" href="/static/iconos/inicio-sesion.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-sesion.png">
+  <link rel="preload" as="image" href="/static/iconos/error-sesion.png">
+  <link rel="preload" as="image" href="/static/iconos/password-error.png">
+  <link rel="preload" as="image" href="/static/iconos/error-conexion.png">
+  <!-- SOLO FONDO DE LOGIN -->
+  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-login.webp">
   <style>
+    /* ... (el mismo CSS, intacto, no se elimina nada del estilo) ... */
     html, body {
       height: 100%;
       margin: 0;
@@ -265,8 +243,8 @@ Proyecto: Portátiles Mercedes
       margin-right: auto;
     }
     .botonera-flotante .boton-index {
-  justify-content: flex-start !important;
-} 
+      justify-content: flex-start !important;
+    } 
   </style>
 </head>
 <body>
@@ -289,75 +267,72 @@ Proyecto: Portátiles Mercedes
     </div>
     <!-- ==== Formulario de login ==== -->
     <div id="div_login" style="display:flex; flex-direction:column; align-items:center;">
-    <form id="loginForm">
-      <div class="campo-login">
-        <img src="/app_publico/static/icons/usuario-port.png" alt="Usuario">
-        <input id="email" type="email" name="email" placeholder="Email">
-      </div>
-      <div class="campo-login">
-        <img src="/app_publico/static/icons/password-port.png" alt="Contraseña">
-        <input id="password" type="password" name="password" placeholder="Contraseña">
-      </div>
-      <div id="campo-rol" class="campo-login" style="display:none;">
-        <img src="/app_publico/static/icons/rol-port.png" alt="Rol">
-        <select name="rol" id="rol">
-          <option value="" disabled selected>Seleccionar rol</option>
-          <option value="Administrador">Administrador</option>
-          <option value="empleado">Empleado</option>
-          <option value="cliente">Cliente</option>
-        </select>
-      </div>
-      <div style="text-align:right;margin-top:4px;">
-        <a href="/recuperar_password" style="color:#fff;font-size:14px;text-decoration:underline;">¿Olvidaste tu contraseña? Recuperar</a>
-      </div>
-      <button type="button" id="btnAcceder" class="boton-index">
-        <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Acceder">
-        <span>Acceder</span>
-      </button>
-      <button type="submit" id="btnIngresar" class="boton-index" style="display:none;">
-        <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Ingresar">
-        <span>Ingresar</span>
-      </button>
-      <button type="button" id="btnRegistrarse" class="boton-index">
-        <img src="/app_publico/static/icons/registro-clientes.png" alt="Registrarse">
-        <span>Registrarse</span>
-      </button>
-    </form>
+      <form id="loginForm">
+        <div class="campo-login">
+          <img src="/app_publico/static/icons/usuario-port.png" alt="Usuario">
+          <input id="email" type="email" name="email" placeholder="Email">
+        </div>
+        <div class="campo-login">
+          <img src="/app_publico/static/icons/password-port.png" alt="Contraseña">
+          <input id="password" type="password" name="password" placeholder="Contraseña">
+        </div>
+        <div id="campo-rol" class="campo-login" style="display:none;">
+          <img src="/app_publico/static/icons/rol-port.png" alt="Rol">
+          <select name="rol" id="rol">
+            <option value="" disabled selected>Seleccionar rol</option>
+            <option value="Administrador">Administrador</option>
+            <option value="empleado">Empleado</option>
+            <option value="cliente">Cliente</option>
+          </select>
+        </div>
+        <div style="text-align:right;margin-top:4px;">
+          <a href="/recuperar_password" style="color:#fff;font-size:14px;text-decoration:underline;">¿Olvidaste tu contraseña? Recuperar</a>
+        </div>
+        <button type="button" id="btnAcceder" class="boton-index">
+          <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Acceder">
+          <span>Acceder</span>
+        </button>
+        <button type="submit" id="btnIngresar" class="boton-index" style="display:none;">
+          <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Ingresar">
+          <span>Ingresar</span>
+        </button>
+        <button type="button" id="btnRegistrarse" class="boton-index">
+          <img src="/app_publico/static/icons/registro-clientes.png" alt="Registrarse">
+          <span>Registrarse</span>
+        </button>
+      </form>
     </div>
-
     <!-- ==== Formulario de registro ==== -->
     <div id="div_registro" style="display:none; flex-direction:column; align-items:center;">
-    <form id="registroForm">
-      <div class="campo-login">
-        <input id="reg_nombre" type="text" name="nombre" placeholder="Nombre completo">
-      </div>
-      <div class="campo-login">
-        <input id="reg_email" type="email" name="email" placeholder="Email">
-      </div>
-      <div class="campo-login">
-        <input id="reg_password" type="password" name="password" placeholder="Elige una contraseña" autocomplete="new-password">
-      </div>
-      <div class="campo-login">
-        <input id="reg_password2" type="password" name="password2" placeholder="Confirmar contraseña" autocomplete="new-password">
-      </div>
-      <button type="submit" class="boton-index">
-        <img src="/app_publico/static/icons/registro-clientes.png" alt="Crear cuenta">
-        <span>Crear cuenta</span>
-      </button>
-    </form>
-    </div>
-    </div>
-    <script src="/app_publico/static/js/alquiler_form.js"></script>
-    <!-- ALERTA CENTRAL PERSONALIZADA -->
-    <div id="alert-manager" class="alert-container">
-        <div class="alert-box">
-            <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-            <span id="alert-text" class="alert-message"></span>
+      <form id="registroForm">
+        <div class="campo-login">
+          <input id="reg_nombre" type="text" name="nombre" placeholder="Nombre completo">
         </div>
+        <div class="campo-login">
+          <input id="reg_email" type="email" name="email" placeholder="Email">
+        </div>
+        <div class="campo-login">
+          <input id="reg_password" type="password" name="password" placeholder="Elige una contraseña" autocomplete="new-password">
+        </div>
+        <div class="campo-login">
+          <input id="reg_password2" type="password" name="password2" placeholder="Confirmar contraseña" autocomplete="new-password">
+        </div>
+        <button type="submit" class="boton-index">
+          <img src="/app_publico/static/icons/registro-clientes.png" alt="Crear cuenta">
+          <span>Crear cuenta</span>
+        </button>
+      </form>
     </div>
-    <!-- Scripts al final del contenedor-main -->
-    <script src="/static/js/alertas.js"></script>
-    <script src="/app_publico/static/js/login.js"></script>
   </div>
+  <!-- ALERTA CENTRAL PERSONALIZADA -->
+  <div id="alert-manager" class="alert-container">
+    <div class="alert-box">
+      <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
+      <span id="alert-text" class="alert-message"></span>
+    </div>
+  </div>
+  <!-- Scripts esenciales al final -->
+  <script src="/static/js/alertas.js"></script>
+  <script src="/app_publico/static/js/login.js"></script>
 </body>
 </html>

@@ -12,7 +12,7 @@
 {% block content %}
 <h2 class="mt-0">Nuevo Empleado</h2>
 <div class="pm-form-container">
-  <form method="post">
+  <form method="post" data-success-url="/admin/empleados">
     <div class="form-group">
       <label>Nombre completo</label>
       <input type="text" name="nombre" class="form-control" required>
@@ -70,4 +70,5 @@
     });
   }
 </script>
+<script src="/static/js/form_guardar.js"></script>
 {% endblock %}

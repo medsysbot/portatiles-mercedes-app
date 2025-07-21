@@ -7,14 +7,14 @@
 {% block content %}
 <h2 class="mt-0">Nuevo Baño</h2>
 <div class="pm-form-container">
-<form method="post">
+<form method="post" data-success-url="/admin/inventario_banos">
   <div class="form-group">
     <label>Nº Baño</label>
-    <input type="text" name="numero_bano" class="form-control">
+  <input type="text" name="numero_bano" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Condición</label>
-    <input type="text" name="condicion" class="form-control">
+  <input type="text" name="condicion" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Última reparación</label>
@@ -53,4 +53,5 @@
 
 {% block scripts %}
   {{ super() }}
+  <script src="/static/js/form_guardar.js"></script>
 {% endblock %}

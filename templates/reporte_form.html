@@ -7,7 +7,7 @@
 {% block content %}
 <h2 class="mt-0">Nuevo Reporte</h2>
 <div class="pm-form-container">
-<form method="post">
+<form method="post" data-success-url="/admin/reportes">
   <div class="form-group">
     <label>Fecha</label>
     <input type="date" name="fecha" class="form-control" required>
@@ -42,4 +42,5 @@
 
 {% block scripts %}
   {{ super() }}
+  <script src="/static/js/form_guardar.js"></script>
 {% endblock %}

@@ -7,18 +7,18 @@
 {% block content %}
 <h2 class="mt-0">Nuevo salario</h2>
 <div class="pm-form-container">
-<form method="post" enctype="multipart/form-data">
+<form method="post" enctype="multipart/form-data" data-success-url="/admin/empleados_salarios">
   <div class="form-group">
     <label>Nombre empleado</label>
-    <input type="text" name="nombre_empleado" class="form-control">
+  <input type="text" name="nombre_empleado" class="form-control" required>
   </div>
   <div class="form-group">
     <label>DNI / CUIT / CUIL</label>
-    <input type="text" name="dni_cuit_cuil" class="form-control">
+  <input type="text" name="dni_cuit_cuil" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Salario</label>
-    <input type="number" step="0.01" name="salario" class="form-control">
+  <input type="number" step="0.01" name="salario" class="form-control" required>
   </div>
   <div class="form-group">
     <label>Anticipo pedido</label>
@@ -51,4 +51,5 @@
 {% block scripts %}
   {{ super() }}
   <script src="/static/js/alertas.js"></script>
+  <script src="/static/js/form_guardar.js"></script>
 {% endblock %}

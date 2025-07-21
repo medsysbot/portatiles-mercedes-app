@@ -9,7 +9,7 @@
 <h2 class="mt-0">{{ 'Editar Servicio de Limpieza' if servicio else 'Nuevo Servicio de Limpieza' }}</h2>
 
 <div class="pm-form-container">
-  <form method="post" enctype="multipart/form-data">
+  <form method="post" enctype="multipart/form-data" data-success-url="/admin/limpieza">
     <div class="form-group">
       <label>Fecha del servicio</label>
       <input type="date" name="fecha_servicio" class="form-control" required value="{{ servicio.fecha_servicio if servicio else '' }}">
@@ -104,4 +104,5 @@
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/limpieza_form_admin.js"></script>
+<script src="/static/js/form_guardar.js"></script>
 {% endblock %}

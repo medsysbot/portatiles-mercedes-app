@@ -45,13 +45,13 @@ Proyecto: Portátiles Mercedes
 
         .contenedor-superior {
             width: 100vw;
-            min-height: 180px;
+            min-height: 140px; /* Menor altura para subir el título */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: flex-end;
-            padding-top: 5px;
-            padding-bottom: 12px;
+            padding-top: 8px;         /* Subir más el bloque */
+            padding-bottom: 0;
             background: transparent;
         }
 
@@ -61,13 +61,16 @@ Proyecto: Portátiles Mercedes
             font-size: 4.5vw;
             color: #DEB460;
             text-align: center;
-            margin-bottom: 6px;
-            line-height: 1.1;
+            margin-bottom: 2px;
+            line-height: 1.08;
             white-space: nowrap;
             display: flex;
             align-items: center;
             justify-content: center;
             width: 100%;
+            /* Sombra fuerte como en Index (negro, sutil pero efectiva) */
+            text-shadow: 0 3px 7px #000, 0 1px 0 #222, 1px 0 3px #222;
+            letter-spacing: 0.5px;
         }
 
         .subtitulo-portatiles {
@@ -77,8 +80,8 @@ Proyecto: Portátiles Mercedes
             font-size: 2.2vw;
             color: #545454;
             text-align: center;
-            margin-top: 0.2em;
-            margin-bottom: 30px;
+            margin-top: 0.1em;    /* Más cerca del título */
+            margin-bottom: 14px;  /* Menos espacio debajo */
             text-shadow: 0 1.5px 2.5px #fff;
         }
 
@@ -86,11 +89,10 @@ Proyecto: Portátiles Mercedes
             .titulo-index { font-size: 28px; white-space: normal; }
             .subtitulo-portatiles { font-size: 16px; }
         }
-
         @media (max-width: 500px) {
-            .contenedor-superior { min-height: 120px; padding-top: 5px; padding-bottom: 6px; }
+            .contenedor-superior { min-height: 90px; padding-top: 3px; padding-bottom: 4px; }
             .titulo-index { font-size: 20px; }
-            .subtitulo-portatiles { font-size: 13px; margin-bottom: 10px; }
+            .subtitulo-portatiles { font-size: 13px; margin-bottom: 8px; }
         }
 
         .contenedor-main {
@@ -186,7 +188,6 @@ Proyecto: Portátiles Mercedes
             .botonera-flotante { position: static; flex-direction: row; flex-wrap: wrap; justify-content: center; }
             .contenedor-texto { margin: 30px 20px 0 20px; max-width: 100%; }
         }
-
         @media (max-width: 700px) {
             .botonera-flotante { flex-direction: column; align-items: stretch; }
             .boton-index { font-size: 16px; height: 32px; }

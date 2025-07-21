@@ -5,10 +5,15 @@ Acceso: Público
 Proyecto: Portátiles Mercedes
 Última modificación: 2025-06-15
 -->
+<!-- Modificado 2025-11-27: integración del sistema de alertas visuales -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.webp">
+    <!-- SOLO LOS 3 ICONOS DE ALERTA USADOS -->
+    <link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
+    <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
+    <link rel="preload" as="image" href="/static/iconos/error-datos.png">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Solicitá la compra de nuestros productos">
@@ -108,8 +113,14 @@ Proyecto: Portátiles Mercedes
     </style>
 </head>
 <body>
+    <div id="alert-manager" class="alert-container">
+        <div class="alert-box">
+            <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
+            <span id="alert-text" class="alert-message">Texto de alerta</span>
+        </div>
+    </div>
 <!-- ==== Formulario principal ==== -->
-    <form id="formVenta">
+    <form id="formVenta" data-success-url="/ventas">
         <label>Nombre del cliente
             <input type="text" name="cliente_nombre">
         </label>
@@ -144,6 +155,7 @@ Proyecto: Portátiles Mercedes
         <span>Cerrar formulario</span>
     </button>
     <script src="/app_publico/static/js/guardar_venta.js"></script>
+    <script src="/static/js/alertas.js"></script>
     <script>
         document.getElementById('cerrarFormulario').addEventListener('click', () => {
             if (window.opener) {

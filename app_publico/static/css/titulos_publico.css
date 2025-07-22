@@ -6,3 +6,30 @@
         -0.8px  0.8px 0 #000,
          0.8px  0.8px 0 #000;
 }
+
+@media (max-width: 700px) {
+  .titulo-index, .titulo-publico {
+    font-size: 8vw !important;
+    min-font-size: 30px;
+    white-space: normal;
+    line-height: 1.15;
+  }
+  .subtitulo-portatiles {
+    font-size: 5vw !important;
+    min-font-size: 18px;
+    margin-bottom: 18px;
+    text-shadow:
+      0.7px 0.7px 1.2px #fff,
+      -0.7px -0.7px 1.2px #fff;
+  }
+}
+@media (max-width: 500px) {
+  .titulo-index, .titulo-publico {
+    font-size: 22px !important;
+    line-height: 1.15;
+  }
+  .subtitulo-portatiles {
+    font-size: 15px !important;
+    margin-bottom: 12px;
+  }
+}

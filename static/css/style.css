@@ -371,6 +371,12 @@ body.panel-cliente .buscador-tabla {
   border: 1px solid #ffffff !important;
 }
 
+body.panel-admin .buscador-tabla {
+  width: 170px !important;
+  max-width: 200px !important;
+  min-width: 100px;
+}
+
 .buscador-tabla::placeholder {
   color: #000000 !important;
 }
@@ -388,6 +394,10 @@ body.panel-cliente .buscador-tabla::placeholder {
 /* En pantallas pequeñas, el buscador ocupa el ancho completo */
 @media (max-width: 768px) {
   .buscador-tabla {
+    width: 100% !important;
+  }
+
+  body.panel-admin .buscador-tabla {
     width: 100% !important;
   }
 }

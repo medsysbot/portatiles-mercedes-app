@@ -26,6 +26,9 @@ from routes.ventas import VENTAS_TABLE
 
 load_dotenv()
 
+# Configuración de correo
+EMAIL_ORIGEN = os.getenv("EMAIL_ORIGEN")
+
 # Conexión a Supabase (mismo enfoque que en cliente_panel)
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
@@ -448,7 +451,13 @@ def admin_morosos_page(request: Request):
 def admin_emails_page(request: Request):
     """Módulo de envíos de emails."""
     # Sección conectada correctamente. Listo para insertar datos reales.
-    return templates.TemplateResponse("emails_admin.html", {"request": request})
+    return templates.TemplateResponse(
+        "emails_admin.html",
+        {
+            "request": request,
+            "gmail_user": EMAIL_ORIGEN,
+        },
+    )
 
 
 @router.get("/admin/ia-respuestas", response_class=HTMLResponse)

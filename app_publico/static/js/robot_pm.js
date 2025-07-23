@@ -44,6 +44,8 @@ function animacionSubidaYCaida() {
     }, 400);
 }
 
+// Funcionalidad de audio temporalmente deshabilitada
+/*
 function reproducirSaludo() {
     const audio = document.getElementById("audioBienvenida");
     if (!audio) return;
@@ -54,6 +56,7 @@ function reproducirSaludo() {
         }, { once: true });
     });
 }
+*/
 
 function parpadear() {
     const ojos = document.getElementById("robotOjos");
@@ -69,7 +72,7 @@ function parpadear() {
 
 document.addEventListener("DOMContentLoaded", () => {
     animarRobotFlotacionConstante();
-    reproducirSaludo();
+    // reproducirSaludo(); // audio deshabilitado
     parpadear();
     setInterval(animacionSubidaYCaida, 75000); // cada 75 segundos
 });

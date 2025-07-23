@@ -1,0 +1,70 @@
+{% extends 'panel_admin.html' %}
+{% block title %}Gestión de emails{% endblock %}
+{% block description %}Enviar y revisar correos recibidos{% endblock %}
+{% block head_extra %}
+{{ super() }}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+{% endblock %}
+{% block content %}
+<div class="container mt-4">
+  <h2 class="mb-3 mt-0">Email Management</h2>
+  <form id="formEmailAdmin" enctype="multipart/form-data" class="pm-form-container mb-4">
+    <div class="form-group">
+      <label for="destinoEmail">Destinatario</label>
+      <input type="email" id="destinoEmail" name="destino" class="form-control" value="portatilesmercedes.bot@gmail.com" readonly>
+    </div>
+    <div class="form-group">
+      <label for="asuntoEmail">Motivo / Asunto</label>
+      <input type="text" id="asuntoEmail" name="asunto" class="form-control" required>
+    </div>
+    <div class="form-group">
+      <label for="cuerpoEmail">Mensaje</label>
+      <textarea id="cuerpoEmail" name="cuerpo" rows="4" class="form-control" required></textarea>
+    </div>
+    <div class="form-group">
+      <label for="adjuntosEmail">Adjuntos</label>
+      <input type="file" id="adjuntosEmail" name="adjuntos" class="form-control" multiple accept=".pdf,.jpg,.jpeg,.png,.docx,.xlsx,.zip">
+    </div>
+    <button type="submit" class="btn btn-primary">Enviar</button>
+  </form>
+  <div class="table-responsive bg-light p-3">
+    <table id="tablaEmailsAdmin" class="table pm-tabla table-striped table-bordered">
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>De</th>
+          <th>Asunto</th>
+          <th>Mensaje</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+<!-- Modal para ver email completo -->
+<div class="modal fade" id="modalEmail" tabindex="-1" role="dialog" aria-labelledby="modalEmailLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalEmailLabel">Detalle email</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="modalEmailInfo" class="mb-2"></p>
+        <div id="modalEmailAdjuntos" class="mb-3"></div>
+        <div id="modalEmailCuerpo" style="white-space: pre-wrap;"></div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="/emails_admin.js"></script>
+{% endblock %}

@@ -31,14 +31,25 @@ document.addEventListener('DOMContentLoaded', () => {
     tbody.innerHTML = '';
     lista.forEach((e, idx) => {
       const tr = document.createElement('tr');
+
+      const tdCheck = document.createElement('td');
+      const check = document.createElement('input');
+      check.type = 'checkbox';
+      check.className = 'pm-check';
+      check.dataset.idx = idx;
+      tdCheck.appendChild(check);
+      tr.appendChild(tdCheck);
+
       const preview = (e.cuerpo || '').slice(0, 100);
       const texto = e.cuerpo && e.cuerpo.length > 100 ? preview + '...' : preview;
-      tr.innerHTML = `
-        <td><input type="checkbox" class="pm-check" data-idx="${idx}"></td>
-        <td>${e.fecha}</td>
-        <td>${e.remitente}</td>
-        <td>${e.asunto}</td>
-        <td>${texto}</td>`;
+
+      const cols = [e.fecha, e.remitente, e.asunto, texto];
+      cols.forEach(val => {
+        const td = document.createElement('td');
+        td.textContent = val;
+        tr.appendChild(td);
+      });
+
       tbody.appendChild(tr);
     });
     actualizarBtnAbrir();

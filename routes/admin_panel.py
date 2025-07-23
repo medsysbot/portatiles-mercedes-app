@@ -53,6 +53,7 @@ router = APIRouter()
 # Las plantillas privadas ahora se ubican en la carpeta `templates` de la raíz
 # del proyecto. Por eso actualizamos la ruta que usa Jinja2Templates.
 templates = Jinja2Templates(directory="templates")
+templates.env.globals["gmail_user"] = EMAIL_ORIGEN
 
 
 class Cliente(BaseModel):
@@ -445,20 +446,6 @@ def admin_morosos_page(request: Request):
     """Listado de clientes morosos."""
     # Sección conectada correctamente. Listo para insertar datos reales.
     return templates.TemplateResponse("morosos_admin.html", {"request": request})
-
-
-@router.get("/admin/emails", response_class=HTMLResponse)
-def admin_emails_page(request: Request):
-    """Módulo de envíos de emails."""
-    # Sección conectada correctamente. Listo para insertar datos reales.
-    return templates.TemplateResponse(
-        "emails_admin.html",
-        {
-            "request": request,
-            "gmail_user": EMAIL_ORIGEN,
-        },
-    )
-
 
 @router.get("/admin/ia-respuestas", response_class=HTMLResponse)
 @router.get("/admin/ia/respuestas", response_class=HTMLResponse)

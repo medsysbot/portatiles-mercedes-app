@@ -48,55 +48,10 @@ if not logger.handlers:
     logger.propagate = False
 
 TEMPLATES = Jinja2Templates(directory="templates")
+TEMPLATES.env.globals["gmail_user"] = EMAIL_ORIGIN
 
 
-def _obtener_emails() -> list[dict]:
-    """Devuelve los últimos 10 correos recibidos."""
-    if not all([EMAIL_ORIGIN, EMAIL_PASSWORD, IMAP_SERVER, IMAP_PORT]):
-        logger.warning("Variables de IMAP no configuradas")
-        return []
-    mensajes: list[dict] = []
-    try:
-        with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
-            imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select("INBOX")
-            status, data = imap.search(None, "ALL")
-            if status != "OK":
-                return []
-            ids = data[0].split()
-            for uid in reversed(ids[-10:]):
-                stat, msg_data = imap.fetch(uid, "(RFC822)")
-                if stat != "OK" or not msg_data:
-                    continue
-                msg = email.message_from_bytes(msg_data[0][1])
-                fecha = parsedate_to_datetime(msg.get("Date"))
-                cuerpo = ""
-                if msg.is_multipart():
-                    for part in msg.walk():
-                        ctype = part.get_content_type()
-                        disp = part.get_content_disposition()
-                        if ctype == "text/plain" and disp in (None, "inline"):
-                            cuerpo = part.get_payload(decode=True).decode(errors="ignore")
-                            break
-                else:
-                    cuerpo = msg.get_payload(decode=True).decode(errors="ignore")
-                mensajes.append(
-                    {
-                        "fecha": fecha.strftime("%Y-%m-%d %H:%M"),
-                        "remitente": parseaddr(msg.get("From"))[1],
-                        "asunto": msg.get("Subject") or "(sin asunto)",
-                        "cuerpo": cuerpo,
-                    }
-                )
-    except Exception as exc:  # pragma: no cover - dependencias externas
-        logger.exception("Error leyendo emails: %s", exc)
-    return mensajes
 
-
-@router.get("/admin/api/emails")
-async def listar_emails():
-    """API con los últimos correos recibidos."""
-    return JSONResponse(content=_obtener_emails())
 
 
 @router.post("/admin/emails/enviar")

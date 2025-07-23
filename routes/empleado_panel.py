@@ -20,6 +20,7 @@ from supabase import Client, create_client
 router = APIRouter()
 
 templates = Jinja2Templates(directory="templates")
+templates.env.globals["gmail_user"] = os.getenv("EMAIL_ORIGEN")
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")

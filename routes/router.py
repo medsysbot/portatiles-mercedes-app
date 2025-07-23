@@ -235,11 +235,6 @@ async def obtener_morosos_admin_js():
     return FileResponse(js_path, media_type="application/javascript")
 
 
-@router.get("/emails_admin.js")
-async def obtener_emails_admin_js():
-    """Script para el módulo de emails."""
-    js_path = PRIVATE_STATIC_DIR / "js" / "emails_admin.js"
-    return FileResponse(js_path, media_type="application/javascript")
 
 
 @router.get("/comprobantes_pago_admin.js")

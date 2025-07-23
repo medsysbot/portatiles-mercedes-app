@@ -33,3 +33,21 @@
     font-size: 6vw !important;
   }
 }
+
+@media (max-width: 700px) {
+  body {
+    position: relative;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    z-index: -1;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: inherit;
+    background-position: center center !important;
+    background-size: cover !important;
+    background-repeat: no-repeat !important;
+    pointer-events: none;
+  }
+}

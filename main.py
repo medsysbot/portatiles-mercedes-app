@@ -120,6 +120,7 @@ import routes.inventario_banos as inventario_banos_module
 import routes.reportes as reportes_module
 import routes.facturas_pendientes as facturas_pendientes_module
 import routes.morosos as morosos_module
+import routes.emails_admin as emails_admin_module
 from routes import admin_panel, empleado_panel, cliente_panel, ventas, limpieza, reportes
 
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
@@ -197,6 +198,7 @@ if os.getenv("ENABLE_SUPABASE") == "1":
     facturas_pendientes_module.supabase = supabase_client
     morosos_module.supabase = supabase_client
     empleado_panel.supabase = supabase_client
+    emails_admin_module.supabase = supabase_client
     import routes.empleados_datos_personales as edp_module
     import routes.empleados_salarios as es_module
     import routes.empleados_ausencias as ea_module

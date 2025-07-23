@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     searching: false,
     ordering: true,
     columns: [
+      { data: 'uid', orderable: false, render: uid => `<input type="checkbox" class="fila-email" value="${uid}">` },
       { data: 'fecha', render: f => {
           if (!f) return '';
           const d = new Date(f);
@@ -15,10 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       },
       { data: 'email_origen' },
+      { data: 'email_destino' },
       { data: 'asunto' },
-      { data: 'mensaje', render: d => d && d.length > 40 ? d.slice(0,40) + '...' : d },
-      { data: 'id', orderable: false, render: id => `<button class="btn btn-sm btn-primary ver-email" data-id="${id}">Abrir</button>` }
-    ]
+      { data: 'mensaje', render: d => d && d.length > 40 ? d.slice(0,40) + '...' : d }
+    ],
+    createdRow: function(row, data) {
+      const cb = row.querySelector('.fila-email');
+      if (cb) cb.dataset.mailbox = data.mailbox;
+    }
   });
 
   async function cargarEmails() {
@@ -36,6 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
   cargarEmails();
 
   const form = document.getElementById('formEmailAdmin');
+  const btnAbrir = document.getElementById('btnAbrirEmail');
+  const buscador = document.getElementById('busquedaEmails');
+  const btnBuscar = document.getElementById('btnBuscarEmails');
+
   form?.addEventListener('submit', async ev => {
     ev.preventDefault();
     const fd = new FormData(form);
@@ -50,20 +59,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  $('#tablaEmailsAdmin').on('click', '.ver-email', async function() {
-    const id = this.dataset.id;
+  $('#tablaEmailsAdmin tbody').on('change', '.fila-email', function() {
+    $('#tablaEmailsAdmin tbody .fila-email').not(this).prop('checked', false);
+    if (btnAbrir) btnAbrir.disabled = !this.checked;
+  });
+
+  btnAbrir?.addEventListener('click', async () => {
+    const seleccionado = document.querySelector('#tablaEmailsAdmin tbody .fila-email:checked');
+    if (!seleccionado) return;
+    const uid = seleccionado.value;
+    const mailbox = seleccionado.dataset.mailbox;
     try {
-      const resp = await fetch(`/admin/api/emails/${id}`);
+      const resp = await fetch(`/admin/api/emails/${encodeURIComponent(mailbox)}/${uid}`);
       if (!resp.ok) throw new Error('Error');
       const data = await resp.json();
       document.getElementById('modalEmailInfo').textContent = `De: ${data.email_origen} - Para: ${data.email_destino} - Fecha: ${new Date(data.fecha).toLocaleString('es-AR')}`;
-      document.getElementById('modalEmailCuerpo').textContent = data.mensaje || '';
+      document.getElementById('modalEmailCuerpo').textContent = data.cuerpo || '';
       const cont = document.getElementById('modalEmailAdjuntos');
       cont.innerHTML = '';
-      (data.adjuntos || []).forEach(a => {
+      (data.adjuntos || []).forEach((a, idx) => {
         const link = document.createElement('a');
-        link.href = a.url;
-        link.textContent = a.nombre;
+        link.href = `/admin/api/emails/${encodeURIComponent(mailbox)}/${uid}/adjunto/${idx}`;
+        link.textContent = a;
         link.target = '_blank';
         cont.appendChild(link);
         cont.appendChild(document.createElement('br'));
@@ -72,5 +89,17 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       console.error('Error obteniendo email', err);
     }
+  });
+
+  function filtrar(texto) {
+    tabla.search(texto).draw();
+  }
+
+  buscador?.addEventListener('input', () => {
+    filtrar(buscador.value.trim());
+  });
+
+  btnBuscar?.addEventListener('click', () => {
+    filtrar(buscador.value.trim());
   });
 });

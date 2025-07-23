@@ -11,7 +11,7 @@
   <form id="formEmailAdmin" enctype="multipart/form-data" class="pm-form-container mb-4">
     <div class="form-group">
       <label for="destinoEmail">Destinatario</label>
-      <input type="email" id="destinoEmail" name="destino" class="form-control" value="portatilesmercedes.bot@gmail.com" readonly>
+      <input type="email" id="destinoEmail" name="destino" class="form-control" value="{{ gmail_user }}">
     </div>
     <div class="form-group">
       <label for="asuntoEmail">Motivo / Asunto</label>
@@ -27,15 +27,25 @@
     </div>
     <button type="submit" class="btn btn-primary">Enviar</button>
   </form>
+  <div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
+    <div class="mb-2 flex-grow-1">
+      <input type="text" id="busquedaEmails" class="form-control buscador-tabla" placeholder="Buscar...">
+    </div>
+    <div class="d-flex flex-wrap gap-2">
+      <button id="btnBuscarEmails" class="btn btn-secondary" type="button">Buscar</button>
+      <button id="btnAbrirEmail" class="btn btn-primary" disabled>Abrir</button>
+    </div>
+  </div>
   <div class="table-responsive bg-light p-3">
     <table id="tablaEmailsAdmin" class="table pm-tabla table-striped table-bordered">
       <thead>
         <tr>
+          <th></th>
           <th>Fecha</th>
           <th>De</th>
+          <th>Para</th>
           <th>Asunto</th>
           <th>Mensaje</th>
-          <th></th>
         </tr>
       </thead>
       <tbody></tbody>

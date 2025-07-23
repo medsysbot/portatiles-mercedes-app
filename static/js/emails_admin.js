@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const tbody = document.querySelector('#tablaEmails tbody');
   const form = document.getElementById('formEnviarEmail');
   const btnNuevo = document.getElementById('btnMostrarForm');
+  const btnAbrir = document.getElementById('btnAbrirMensaje');
   const contTabla = document.getElementById('contenedorTabla');
   const btnCancelar = document.getElementById('btnCancelarForm');
   const buscador = document.getElementById('busquedaEmail');
@@ -28,15 +29,35 @@ document.addEventListener('DOMContentLoaded', () => {
   function mostrarDatos(lista) {
     if (!tbody) return;
     tbody.innerHTML = '';
-    lista.forEach(e => {
+    lista.forEach((e, idx) => {
       const tr = document.createElement('tr');
+      const preview = (e.cuerpo || '').slice(0, 100);
+      const texto = e.cuerpo && e.cuerpo.length > 100 ? preview + '...' : preview;
       tr.innerHTML = `
+        <td><input type="checkbox" class="pm-check" data-idx="${idx}"></td>
         <td>${e.fecha}</td>
         <td>${e.remitente}</td>
         <td>${e.asunto}</td>
-        <td>${(e.cuerpo || '').slice(0, 100)}</td>`;
+        <td>${texto}</td>`;
       tbody.appendChild(tr);
     });
+    actualizarBtnAbrir();
+  }
+
+  function actualizarBtnAbrir() {
+    if (!btnAbrir) return;
+    const marcados = document.querySelectorAll('#tablaEmails tbody .pm-check:checked').length;
+    btnAbrir.disabled = marcados !== 1;
+  }
+
+  function abrirMensaje() {
+    const seleccionado = document.querySelector('#tablaEmails tbody .pm-check:checked');
+    if (!seleccionado) return;
+    const idx = seleccionado.dataset.idx;
+    const msg = window.pmEmailsAdminData[idx]?.cuerpo || '';
+    const cont = document.getElementById('cuerpoMensajeCompleto');
+    if (cont) cont.textContent = msg;
+    $('#modalMensajeCompleto').modal('show');
   }
 
   async function obtenerDatos() {
@@ -47,6 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!resp.ok) throw new Error('Error al consultar emails');
       window.pmEmailsAdminData = await resp.json();
       mostrarDatos(window.pmEmailsAdminData);
+      actualizarBtnAbrir();
     } catch (err) {
       console.error('Error cargando emails:', err);
       if (!window.pmEmailsAdminData.length && tbody) tbody.innerHTML = '';
@@ -64,6 +86,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buscador?.addEventListener('input', filtrarEmails);
   btnBuscar?.addEventListener('click', filtrarEmails);
+
+  document.addEventListener('change', ev => {
+    if (ev.target.matches('#tablaEmails tbody .pm-check')) actualizarBtnAbrir();
+  });
+
+  btnAbrir?.addEventListener('click', abrirMensaje);
 
   form?.addEventListener('submit', async ev => {
     ev.preventDefault();
@@ -88,5 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
     obtenerDatos();
   } else {
     mostrarDatos(window.pmEmailsAdminData);
+    actualizarBtnAbrir();
   }
 });

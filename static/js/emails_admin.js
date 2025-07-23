@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
       cont.innerHTML = '';
       (data.adjuntos || []).forEach((a, idx) => {
         const link = document.createElement('a');
-        link.href = `/admin/api/emails/${encodeURIComponent(mailbox)}/${uid}/adjunto/${idx}`;
+        link.href = `/admin/api/emails/${encodeURIComponent(mailbox)}/${encodeURIComponent(uid)}/adjunto/${idx}`;
         link.textContent = a;
         link.target = '_blank';
         cont.appendChild(link);

@@ -648,3 +648,38 @@ body.panel-empleados #busquedaAusencias::placeholder {
   max-height: 60vh;
   overflow-y: auto;
 }
+
+/* Tabla de emails administracion */
+.table-responsive-emails {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #fff;
+}
+#tablaEmails {
+    min-width: 700px;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 1rem;
+    background: #fff;
+}
+#tablaEmails th, #tablaEmails td {
+    padding: 10px;
+    border: 1px solid #333;
+    text-align: left;
+    vertical-align: top;
+    white-space: pre-line;
+    max-width: 260px;
+    word-break: break-word;
+}
+#tablaEmails td:first-child, #tablaEmails th:first-child {
+    width: 45px;
+    text-align: center;
+    min-width: 45px;
+}
+@media (max-width: 700px) {
+    #tablaEmails th, #tablaEmails td {
+        font-size: 0.98rem;
+        padding: 7px 6px;
+    }
+}

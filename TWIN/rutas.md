@@ -91,8 +91,6 @@ Mantener esta lista actualizada facilita el seguimiento de cambios en el backend
 
 | Método | Ruta | Descripción | Autenticación |
 |--------|------|-------------|---------------|
-| GET | `/admin/emails` | Vista principal de emails (`emails_admin.html`). | Sí |
-| GET | `/admin/api/emails` | Devuelve los últimos 10 correos recibidos. | Sí |
 | POST | `/admin/emails/enviar` | Envía un correo desde la cuenta configurada. | Sí |
 
 ## Rutas - Splash

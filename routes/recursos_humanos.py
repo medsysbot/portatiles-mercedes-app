@@ -16,6 +16,7 @@ from .empleados_ausencias import router as ausencias_router
 
 router = APIRouter()
 TEMPLATES = Jinja2Templates(directory="templates")
+TEMPLATES.env.globals["gmail_user"] = os.getenv("EMAIL_ORIGEN")
 
 router.include_router(datos_router)
 router.include_router(salarios_router)

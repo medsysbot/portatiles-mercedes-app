@@ -50,6 +50,7 @@ public_templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 # Plantillas privadas del panel administrativo ahora residen en la carpeta
 # `templates` de la raíz del proyecto.
 templates = Jinja2Templates(directory="templates")
+templates.env.globals["gmail_user"] = os.getenv("EMAIL_ORIGEN")
 
 # Incluir las rutas del módulo de ventas
 router.include_router(ventas_router)

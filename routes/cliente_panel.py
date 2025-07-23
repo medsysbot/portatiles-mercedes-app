@@ -24,6 +24,7 @@ if not logger.handlers:
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+templates.env.globals["gmail_user"] = os.getenv("EMAIL_ORIGEN")
 
 def get_dni_from_email(email: str):
     """Devuelve el DNI asociado al email o ``None`` si no existe."""

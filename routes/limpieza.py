@@ -53,6 +53,7 @@ if not logger.handlers:
     logger.propagate = False
 
 TEMPLATES = Jinja2Templates(directory="templates")
+TEMPLATES.env.globals["gmail_user"] = os.getenv("EMAIL_ORIGEN")
 TABLA = "servicios_limpieza"
 BUCKET = "servicios-limpieza"
 

@@ -20,6 +20,7 @@ from utils.file_utils import obtener_tipo_archivo
 
 router = APIRouter()
 TEMPLATES = Jinja2Templates(directory="templates")
+TEMPLATES.env.globals["gmail_user"] = os.getenv("EMAIL_ORIGEN")
 
 
 @router.get("/admin/comprobantes", response_class=HTMLResponse)

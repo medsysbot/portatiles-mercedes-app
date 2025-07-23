@@ -641,3 +641,10 @@ body.panel-empleados #busquedaAusencias::placeholder {
   color: #fff !important;
   opacity: 1 !important;
 }
+
+/* Visualización de mensajes en modal */
+#modalMensajeCompleto pre.mensaje-completo {
+  white-space: pre-wrap;
+  max-height: 60vh;
+  overflow-y: auto;
+}

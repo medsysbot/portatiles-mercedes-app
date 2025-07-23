@@ -7,6 +7,7 @@ Proyecto: Portátiles Mercedes
 from fastapi import APIRouter, HTTPException, Request, Depends
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+import os
 
 from utils.auth_utils import auth_required
 

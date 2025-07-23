@@ -14,6 +14,7 @@ from fastapi import APIRouter, Request
 from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.templating import Jinja2Templates
 from fastapi import Depends
+import os
 from utils.auth_utils import verificar_token
 
 from routes.ventas import router as ventas_router

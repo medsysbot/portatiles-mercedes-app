@@ -198,7 +198,6 @@ if os.getenv("ENABLE_SUPABASE") == "1":
     facturas_pendientes_module.supabase = supabase_client
     morosos_module.supabase = supabase_client
     empleado_panel.supabase = supabase_client
-    emails_admin_module.supabase = supabase_client
     import routes.empleados_datos_personales as edp_module
     import routes.empleados_salarios as es_module
     import routes.empleados_ausencias as ea_module

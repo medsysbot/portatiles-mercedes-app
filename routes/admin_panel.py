@@ -89,23 +89,6 @@ def obtener_clientes_db() -> list:
     raise HTTPException(status_code=500, detail="Supabase no configurado")
 
 
-def _ultimos_emails(limit: int = 5) -> list[dict]:
-    """Devuelve los últimos correos registrados en la base."""
-    if not supabase:
-        return []
-    try:
-        res = (
-            supabase.table("emails_enviados")
-            .select("fecha,asunto,email_destino,estado")
-            .order("fecha", desc=True)
-            .limit(limit)
-            .execute()
-        )
-        return getattr(res, "data", []) or []
-    except Exception as exc:  # pragma: no cover - errores de conexión
-        logger.error("Error consultando emails: %s", exc)
-        return []
-
 
 def _contar_total(tabla: str) -> int:
     """Devuelve el total de registros en la tabla.

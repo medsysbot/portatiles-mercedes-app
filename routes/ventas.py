@@ -110,7 +110,7 @@ async def registrar_venta(venta: VentaPublica):
                 msg = EmailMessage()
                 msg["From"] = EMAIL_ORIGEN
                 msg["To"] = EMAIL_ORIGEN
-                msg["Subject"] = "Nueva venta registrada"
+                msg["Subject"] = "Nuevo formulario de Venta enviado"
                 cuerpo = (
                     f"Cliente: {venta.cliente_nombre}\n"
                     f"DNI/CUIT/CUIL: {venta.dni_cuit_cuil}\n"
@@ -170,6 +170,30 @@ async def crear_venta(request: Request):
     except Exception as exc:  # pragma: no cover
         logger.exception("Error al guardar venta:")
         return {"error": f"Error al guardar venta: {exc}"}
+
+    if all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
+        try:
+            msg = EmailMessage()
+            msg["From"] = EMAIL_ORIGEN
+            msg["To"] = EMAIL_ORIGEN
+            msg["Subject"] = "Nuevo formulario de Venta enviado"
+            cuerpo = (
+                f"Fecha de operación: {venta.fecha_operacion}\n"
+                f"Tipo de baño: {venta.tipo_bano}\n"
+                f"DNI/CUIT/CUIL: {venta.dni_cuit_cuil}\n"
+                f"Nombre cliente: {venta.nombre_cliente}\n"
+                f"Forma de pago: {venta.forma_pago}\n"
+                f"Observaciones: {venta.observaciones or ''}"
+            )
+            msg.set_content(cuerpo)
+            with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
+                smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
+                smtp.send_message(msg)
+            logger.info("Correo de venta enviado")
+        except Exception as exc:  # pragma: no cover - dependencias externas
+            logger.exception("Error enviando correo de venta: %s", exc)
+    else:
+        logger.warning("SMTP no configurado - no se envió correo")
 
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}

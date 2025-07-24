@@ -344,9 +344,7 @@ body.panel-cliente .table-responsive.bg-light {
 }
 .d-flex.justify-content-between.align-items-center.flex-wrap {
     flex-direction: row !important;
-    flex-wrap: nowrap !important;
 }
-
 .buscador-tabla {
   width: 70% !important;
   background: #ffffff !important;

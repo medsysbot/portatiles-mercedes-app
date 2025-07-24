@@ -303,3 +303,21 @@ async def descargar_adjunto(mailbox: str, uid: str, indice: int, usuario=Depends
     except Exception as exc:  # pragma: no cover - dependencias externas
         logger.exception("Error descargando adjunto: %s", exc)
         raise HTTPException(status_code=500, detail="Error descargando adjunto")
+
+
+@router.delete("/admin/api/emails/{mailbox}/{uid}")
+async def eliminar_email(mailbox: str, uid: str, usuario=Depends(auth_required)):
+    """Elimina un email de la bandeja especificada."""
+    if usuario.get("rol") != "Administrador":
+        raise HTTPException(status_code=403, detail="Acceso restringido")
+    try:
+        with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
+            imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
+            imap.select(mailbox)
+            imap.store(uid, "+FLAGS", "\\Deleted")
+            imap.expunge()
+        logger.info("Email %s eliminado de %s", uid, mailbox)
+        return {"ok": True}
+    except Exception as exc:  # pragma: no cover - dependencias externas
+        logger.exception("Error eliminando email: %s", exc)
+        raise HTTPException(status_code=500, detail="Error eliminando email")

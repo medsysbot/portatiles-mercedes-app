@@ -3,10 +3,14 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   const tabla = $('#tablaEmailsAdmin').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
+    language: {
+      url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json',
+      emptyTable: 'No emails in the inbox'
+    },
     paging: true,
     searching: false,
     ordering: true,
+    order: [[1, 'desc']],
     columns: [
       { data: 'uid', orderable: false, render: uid => `<input type="checkbox" class="fila-email" value="${uid}">` },
       { data: 'fecha', render: f => {
@@ -16,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       },
       { data: 'email_origen' },
-      { data: 'email_destino' },
       { data: 'asunto' },
       { data: 'mensaje', render: d => d && d.length > 40 ? d.slice(0,40) + '...' : d }
     ],
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   async function cargarEmails() {
     try {
-      const resp = await fetch('/admin/api/emails');
+      const resp = await fetch('/api/emails/ultimos');
       if (!resp.ok) throw new Error('Error');
       const datos = await resp.json();
       tabla.clear();

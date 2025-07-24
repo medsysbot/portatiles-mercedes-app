@@ -28,6 +28,7 @@ from routes.facturas_pendientes import router as facturas_pendientes_router
 from routes.morosos import router as morosos_router
 from routes.emails_admin import router as emails_router
 from routes.recursos_humanos import router as recursos_humanos_router
+from routes.email_publico import router as email_publico_router
 
 # Directorios base de las plantillas y archivos estáticos
 # Luego de reubicar `routes/` en la raíz del repositorio, la carpeta
@@ -67,6 +68,7 @@ router.include_router(facturas_pendientes_router)
 router.include_router(morosos_router)
 router.include_router(emails_router)
 router.include_router(recursos_humanos_router)
+router.include_router(email_publico_router)
 
 @router.get("/", response_class=HTMLResponse)
 async def mostrar_index():

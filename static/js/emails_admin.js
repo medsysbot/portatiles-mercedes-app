@@ -21,8 +21,7 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { data: 'email_origen' },
       { data: 'asunto' },
-      { data: 'mensaje', render: d => d && d.length > 40 ? d.slice(0,40) + '...' : d },
-      { data: null, orderable: false, defaultContent: '<button class="btn-delete btn btn-danger btn-sm">Eliminar</button>' }
+      { data: 'mensaje', render: d => d && d.length > 40 ? d.slice(0,40) + '...' : d }
     ],
     createdRow: function(row, data) {
       const cb = row.querySelector('.fila-email');
@@ -48,6 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const form = document.getElementById('formEmailAdmin');
   const btnAbrir = document.getElementById('btnAbrirEmail');
+  const btnEliminar = document.getElementById('btnEliminarEmails');
   const buscador = document.getElementById('busquedaEmails');
   const btnBuscar = document.getElementById('btnBuscarEmails');
 
@@ -66,26 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   $('#tablaEmailsAdmin tbody').on('change', '.fila-email', function() {
-    $('#tablaEmailsAdmin tbody .fila-email').not(this).prop('checked', false);
-    if (btnAbrir) btnAbrir.disabled = !this.checked;
-  });
-
-  $('#tablaEmailsAdmin tbody').on('click', '.btn-delete', async function() {
-    const fila = $(this).closest('tr');
-    const data = tabla.row(fila).data();
-    if (!data) return;
-    if (!confirm('¿Eliminar este email?')) return;
-    try {
-      const resp = await fetch(`/admin/api/emails/${encodeURIComponent(data.mailbox)}/${data.uid}`, {
-        method: 'DELETE',
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
-      });
-      if (!resp.ok) throw new Error('Error');
-      tabla.row(fila).remove().draw();
-      if (btnAbrir) btnAbrir.disabled = true;
-    } catch (err) {
-      console.error('Error eliminando email', err);
-    }
+    const seleccionadas = $('#tablaEmailsAdmin tbody .fila-email:checked');
+    if (btnAbrir) btnAbrir.disabled = seleccionadas.length !== 1;
+    if (btnEliminar) btnEliminar.disabled = seleccionadas.length === 0;
   });
 
   btnAbrir?.addEventListener('click', async () => {
@@ -113,6 +96,29 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       console.error('Error obteniendo email', err);
     }
+  });
+
+  btnEliminar?.addEventListener('click', async () => {
+    const seleccionados = Array.from(document.querySelectorAll('#tablaEmailsAdmin tbody .fila-email:checked'));
+    if (!seleccionados.length) return;
+    if (!confirm('¿Eliminar emails seleccionados?')) return;
+    for (const cb of seleccionados) {
+      const uid = cb.value;
+      const mailbox = cb.dataset.mailbox;
+      try {
+        const resp = await fetch(`/admin/api/emails/${encodeURIComponent(mailbox)}/${uid}`, {
+          method: 'DELETE',
+          headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+        });
+        if (resp.ok) {
+          tabla.row($(cb).closest('tr')).remove().draw(false);
+        }
+      } catch (err) {
+        console.error('Error eliminando email', err);
+      }
+    }
+    if (btnAbrir) btnAbrir.disabled = true;
+    if (btnEliminar) btnEliminar.disabled = true;
   });
 
   function filtrar(texto) {

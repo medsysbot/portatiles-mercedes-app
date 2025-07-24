@@ -20,8 +20,7 @@ from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel, ValidationError
 from fpdf import FPDF
 from supabase import create_client, Client
-import smtplib
-from email.message import EmailMessage
+from utils.email_sender import enviar_email
 
 router = APIRouter()
 
@@ -105,30 +104,20 @@ async def registrar_venta(venta: VentaPublica):
             pdf.multi_cell(0, 10, f"Observaciones: {venta.observaciones}")
         pdf.output(dest="S").encode("latin1")
 
-        if all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
-            try:
-                msg = EmailMessage()
-                msg["From"] = EMAIL_ORIGEN
-                msg["To"] = EMAIL_ORIGEN
-                msg["Subject"] = "Nuevo formulario de Venta enviado"
-                cuerpo = (
-                    f"Cliente: {venta.cliente_nombre}\n"
-                    f"DNI/CUIT/CUIL: {venta.dni_cuit_cuil}\n"
-                    f"Tipo de baño: {venta.tipo_bano}\n"
-                    f"Cantidad: {venta.cantidad}\n"
-                    f"Dirección: {venta.direccion_entrega}\n"
-                    f"Fecha: {venta.fecha_venta}\n"
-                    f"Observaciones: {venta.observaciones or ''}"
-                )
-                msg.set_content(cuerpo)
-                with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
-                    smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
-                    smtp.send_message(msg)
-                logger.info("Correo de venta enviado")
-            except Exception as exc:  # pragma: no cover - dependencias externas
-                logger.exception("Error enviando correo de venta: %s", exc)
-        else:
-            logger.warning("SMTP no configurado - no se envió correo")
+        cuerpo = (
+            f"Cliente: {venta.cliente_nombre}\n"
+            f"DNI/CUIT/CUIL: {venta.dni_cuit_cuil}\n"
+            f"Tipo de baño: {venta.tipo_bano}\n"
+            f"Cantidad: {venta.cantidad}\n"
+            f"Dirección: {venta.direccion_entrega}\n"
+            f"Fecha: {venta.fecha_venta}\n"
+            f"Observaciones: {venta.observaciones or ''}"
+        )
+        try:
+            await enviar_email(EMAIL_ORIGEN, "Nuevo formulario de Venta enviado", cuerpo)
+            logger.info("Correo de venta enviado")
+        except Exception as exc:  # pragma: no cover - dependencias externas
+            logger.exception("Error enviando correo de venta: %s", exc)
 
         return {"mensaje": "Venta registrada"}
     except Exception as exc:  # pragma: no cover
@@ -171,29 +160,19 @@ async def crear_venta(request: Request):
         logger.exception("Error al guardar venta:")
         return {"error": f"Error al guardar venta: {exc}"}
 
-    if all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
-        try:
-            msg = EmailMessage()
-            msg["From"] = EMAIL_ORIGEN
-            msg["To"] = EMAIL_ORIGEN
-            msg["Subject"] = "Nuevo formulario de Venta enviado"
-            cuerpo = (
-                f"Fecha de operación: {venta.fecha_operacion}\n"
-                f"Tipo de baño: {venta.tipo_bano}\n"
-                f"DNI/CUIT/CUIL: {venta.dni_cuit_cuil}\n"
-                f"Nombre cliente: {venta.nombre_cliente}\n"
-                f"Forma de pago: {venta.forma_pago}\n"
-                f"Observaciones: {venta.observaciones or ''}"
-            )
-            msg.set_content(cuerpo)
-            with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
-                smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
-                smtp.send_message(msg)
-            logger.info("Correo de venta enviado")
-        except Exception as exc:  # pragma: no cover - dependencias externas
-            logger.exception("Error enviando correo de venta: %s", exc)
-    else:
-        logger.warning("SMTP no configurado - no se envió correo")
+    cuerpo = (
+        f"Fecha de operación: {venta.fecha_operacion}\n"
+        f"Tipo de baño: {venta.tipo_bano}\n"
+        f"DNI/CUIT/CUIL: {venta.dni_cuit_cuil}\n"
+        f"Nombre cliente: {venta.nombre_cliente}\n"
+        f"Forma de pago: {venta.forma_pago}\n"
+        f"Observaciones: {venta.observaciones or ''}"
+    )
+    try:
+        await enviar_email(EMAIL_ORIGEN, "Nuevo formulario de Venta enviado", cuerpo)
+        logger.info("Correo de venta enviado")
+    except Exception as exc:  # pragma: no cover - dependencias externas
+        logger.exception("Error enviando correo de venta: %s", exc)
 
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}

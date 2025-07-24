@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   cargarEmails();
+  setInterval(cargarEmails, 60000);
 
   const form = document.getElementById('formEmailAdmin');
   const btnAbrir = document.getElementById('btnAbrirEmail');

@@ -157,7 +157,7 @@ async def listar_emails(q: str | None = None, usuario=Depends(auth_required)):
                 status, data = imap.search(None, criterio)
                 if status != "OK" or not data or not data[0]:
                     continue
-                ids = data[0].split()[-100:]
+                ids = data[0].split()[-20:]
                 for uid in ids:
                     status, msg_data = imap.fetch(uid, "(RFC822)")
                     if status != "OK" or not msg_data:
@@ -187,7 +187,7 @@ async def listar_emails(q: str | None = None, usuario=Depends(auth_required)):
         raise HTTPException(status_code=500, detail="Error obteniendo emails")
 
     mensajes.sort(key=lambda m: m["fecha"], reverse=True)
-    return mensajes
+    return mensajes[:10]
 
 @router.get("/admin/api/emails/{mailbox}/{uid}")
 async def obtener_email(mailbox: str, uid: str, usuario=Depends(auth_required)):

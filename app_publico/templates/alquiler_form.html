@@ -151,14 +151,6 @@ Proyecto: Portátiles Mercedes
             if (window.opener) { window.opener.focus(); }
             window.close();
         });
-
-        document.getElementById('formulario-alquiler').addEventListener('submit', () => {
-            if (window.opener) {
-                window.opener.location.href = '/alquiler';
-                window.opener.focus();
-            }
-            setTimeout(() => window.close(), 100);
-        });
     </script>
 </body>
 </html>

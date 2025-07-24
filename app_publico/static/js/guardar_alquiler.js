@@ -29,7 +29,7 @@ form.addEventListener('submit', async (e) => {
 
   let ok = false;
   try {
-    const resp = await fetch('/admin/alquileres/nuevo', {
+    const resp = await fetch('/api/public/alquiler', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(datos)
@@ -53,7 +53,6 @@ form.addEventListener('submit', async (e) => {
 
   setTimeout(() => {
     if (window.opener) {
-      window.opener.location.href = '/alquiler';
       window.opener.focus();
     }
     window.close();

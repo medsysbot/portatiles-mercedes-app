@@ -22,7 +22,6 @@ from dotenv import load_dotenv
 from fastapi import APIRouter, HTTPException, Request, Form, UploadFile, File, Depends
 from fastapi.responses import JSONResponse, HTMLResponse, Response
 from fastapi.templating import Jinja2Templates
-from supabase import create_client, Client
 from datetime import datetime
 from utils.file_utils import obtener_tipo_archivo
 from utils.auth_utils import auth_required
@@ -39,14 +38,7 @@ SMTP_PORT = os.getenv("SMTP_PORT")
 IMAP_SERVER = os.getenv("IMAP_SERVER") or "imap.gmail.com"
 IMAP_PORT = os.getenv("IMAP_PORT") or 993
 
-SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_ROLE_KEY") or os.getenv("SUPABASE_KEY")
-supabase: Client | None = None
-if SUPABASE_URL and SUPABASE_KEY:
-    supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-BUCKET = "emails-adjuntos"
-TABLA = "emails_enviados"
 
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
@@ -92,9 +84,7 @@ async def enviar_email(
     msg["Subject"] = asunto
     msg.set_content(cuerpo)
 
-    urls_adjuntos: list[dict] = []
     if adjuntos:
-        bucket = supabase.storage.from_(BUCKET) if supabase else None
         for archivo in adjuntos:
             if not archivo.filename:
                 continue
@@ -104,15 +94,8 @@ async def enviar_email(
             mime = obtener_tipo_archivo(datos)
             if mime == "desconocido":
                 continue
-            nombre = f"{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{archivo.filename}"
-            if bucket:
-                try:
-                    bucket.upload(nombre, datos, {"content-type": mime})
-                    url = bucket.get_public_url(nombre)
-                    urls_adjuntos.append({"nombre": archivo.filename, "url": url})
-                except Exception as exc:
-                    logger.error("Error subiendo adjunto: %s", exc)
-            msg.add_attachment(datos, maintype=mime.split('/')[0], subtype=mime.split('/')[1], filename=archivo.filename)
+            maintype, subtype = mime.split("/", 1)
+            msg.add_attachment(datos, maintype=maintype, subtype=subtype, filename=archivo.filename)
 
     try:
         with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
@@ -122,20 +105,6 @@ async def enviar_email(
     except Exception as exc:  # pragma: no cover - dependencias externas
         logger.exception("Error enviando correo: %s", exc)
         raise HTTPException(status_code=500, detail=f"Error enviando correo: {exc}")
-
-    if supabase:
-        registro = {
-            "fecha": datetime.utcnow().isoformat(),
-            "email_origen": EMAIL_ORIGIN,
-            "email_destino": destino,
-            "asunto": asunto,
-            "mensaje": cuerpo,
-            "adjuntos": urls_adjuntos,
-        }
-        try:
-            supabase.table(TABLA).insert(registro).execute()
-        except Exception as exc:
-            logger.error("Error registrando email en base: %s", exc)
 
     return {"ok": True}
 

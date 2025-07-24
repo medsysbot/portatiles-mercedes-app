@@ -17,8 +17,7 @@ from supabase import create_client, Client
 from postgrest.exceptions import APIError
 import logging
 import os
-import smtplib
-from email.message import EmailMessage
+from utils.email_sender import enviar_email
 
 router = APIRouter()
 
@@ -123,43 +122,20 @@ async def crear_alquiler(request: Request):
     except Exception as exc:  # pragma: no cover - errores de conexión
         return {"error": f"Error al guardar alquiler: {exc}"}
 
-    if all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
-        try:
-            logger.info(
-                "Enviando correo de alquiler | origen=%s destino=%s servidor=%s puerto=%s",
-                EMAIL_ORIGEN,
-                EMAIL_ORIGEN,
-                SMTP_SERVER,
-                SMTP_PORT,
-            )
-            msg = EmailMessage()
-            msg["From"] = EMAIL_ORIGEN
-            msg["To"] = EMAIL_ORIGEN
-            msg["Subject"] = "Nuevo formulario de Alquiler enviado"
-            cuerpo = (
-                f"Número de baño: {alquiler.numero_bano}\n"
-                f"Cliente: {alquiler.cliente_nombre}\n"
-                f"DNI/CUIT/CUIL: {alquiler.dni_cuit_cuil}\n"
-                f"Dirección: {alquiler.direccion or ''}\n"
-                f"Fecha inicio: {alquiler.fecha_inicio}\n"
-                f"Fecha fin: {alquiler.fecha_fin or ''}\n"
-                f"Observaciones: {alquiler.observaciones or ''}"
-            )
-            msg.set_content(cuerpo)
-            with smtplib.SMTP_SSL(SMTP_SERVER, int(SMTP_PORT)) as smtp:
-                smtp.login(EMAIL_ORIGEN, EMAIL_PASSWORD)
-                smtp.send_message(msg)
-            logger.info("Correo de alquiler enviado")
-        except Exception as exc:  # pragma: no cover - dependencias externas
-            logger.exception("Error enviando correo de alquiler: %s", exc)
-    else:
-        logger.error(
-            "SMTP no configurado - faltan EMAIL_ORIGEN=%s, EMAIL_PASSWORD=%s, SMTP_SERVER=%s, SMTP_PORT=%s",
-            bool(EMAIL_ORIGEN),
-            bool(EMAIL_PASSWORD),
-            bool(SMTP_SERVER),
-            bool(SMTP_PORT),
-        )
+    cuerpo = (
+        f"Número de baño: {alquiler.numero_bano}\n"
+        f"Cliente: {alquiler.cliente_nombre}\n"
+        f"DNI/CUIT/CUIL: {alquiler.dni_cuit_cuil}\n"
+        f"Dirección: {alquiler.direccion or ''}\n"
+        f"Fecha inicio: {alquiler.fecha_inicio}\n"
+        f"Fecha fin: {alquiler.fecha_fin or ''}\n"
+        f"Observaciones: {alquiler.observaciones or ''}"
+    )
+    try:
+        await enviar_email(EMAIL_ORIGEN, "Nuevo formulario de Alquiler enviado", cuerpo)
+        logger.info("Correo de alquiler enviado")
+    except Exception as exc:  # pragma: no cover - dependencias externas
+        logger.exception("Error enviando correo de alquiler: %s", exc)
 
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}

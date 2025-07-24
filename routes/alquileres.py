@@ -128,7 +128,7 @@ async def crear_alquiler(request: Request):
             msg = EmailMessage()
             msg["From"] = EMAIL_ORIGEN
             msg["To"] = EMAIL_ORIGEN
-            msg["Subject"] = "Nuevo alquiler registrado"
+            msg["Subject"] = "Nuevo formulario de Alquiler enviado"
             cuerpo = (
                 f"Número de baño: {alquiler.numero_bano}\n"
                 f"Cliente: {alquiler.cliente_nombre}\n"

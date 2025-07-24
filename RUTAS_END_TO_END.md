@@ -52,6 +52,7 @@
 | POST | /registrar_limpieza | Guarda los datos de limpieza y sube remito | JSON | Sí |
 | POST | /activar_debito | Activa débitos automáticos para un cliente | JSON | Sí |
 | POST | /api/public/email | Envía correo desde formularios públicos | JSON | No |
+| POST | /api/public/alquiler | Envía correo con solicitud de alquiler | JSON | No |
 | GET | /admin/clientes | Vista de clientes | HTML | Sí |
 | GET | /admin/clientes/nuevo | Formulario alta de cliente | HTML | Sí |
 | POST | /admin/clientes/nuevo | Crear cliente | Redirección | Sí |

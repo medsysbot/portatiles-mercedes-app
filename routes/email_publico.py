@@ -42,6 +42,15 @@ class FormEmail(BaseModel):
     mensaje: str
 
 
+class FormAlquiler(BaseModel):
+    nombre: str
+    telefono: str
+    direccion: str
+    correo: EmailStr
+    tipo_banio: str
+    fecha: str
+
+
 @router.post("/api/public/email")
 async def enviar_email_publico(datos: FormEmail, request: Request):
     """Recibe datos de un formulario público y los reenvía por email."""
@@ -61,6 +70,35 @@ async def enviar_email_publico(datos: FormEmail, request: Request):
     )
     try:
         await enviar_email(destino, "Formulario público", cuerpo)
+    except Exception as exc:  # pragma: no cover - dependencias externas
+        raise HTTPException(status_code=500, detail=f"Error enviando email: {exc}")
+
+    return {"ok": True}
+
+
+@router.post("/api/public/alquiler")
+async def enviar_alquiler_publico(datos: FormAlquiler, request: Request):
+    """Recibe datos del formulario público de alquiler y los reenvía por email."""
+    ip = request.client.host if request.client else "anon"
+    if _limite_superado(ip):
+        raise HTTPException(status_code=429, detail="Demasiadas solicitudes")
+
+    destino = os.getenv("EMAIL_ORIGEN")
+    if not destino:
+        raise HTTPException(status_code=500, detail="Email de destino no configurado")
+
+    datos_dict = {
+        "Nombre": datos.nombre.strip(),
+        "Teléfono": datos.telefono.strip(),
+        "Dirección": datos.direccion.strip(),
+        "Correo": datos.correo.strip(),
+        "Tipo de baño": datos.tipo_banio.strip(),
+        "Fecha": datos.fecha.strip(),
+    }
+
+    cuerpo = "\n".join(f"{k}: {v}" for k, v in datos_dict.items())
+    try:
+        await enviar_email(destino, "Solicitud de alquiler", cuerpo)
     except Exception as exc:  # pragma: no cover - dependencias externas
         raise HTTPException(status_code=500, detail=f"Error enviando email: {exc}")
 

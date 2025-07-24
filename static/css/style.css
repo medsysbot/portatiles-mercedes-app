@@ -344,7 +344,28 @@ body.panel-cliente .table-responsive.bg-light {
 .d-flex.align-items-center .btn {
   margin-top: 0 !important;
 }
-
+/* Botoneras Portátiles Mercedes - Alineación y espaciado uniforme */
+.botonera-panel,
+.d-flex.flex-wrap.gap-2,
+.d-flex.flex-wrap.gap-2 > * {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 0.5em !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+/* Siempre deja espacio entre botones y nunca los apila verticalmente, salvo en móviles */
+@media (max-width: 600px) {
+  .botonera-panel,
+  .d-flex.flex-wrap.gap-2 {
+    flex-direction: column !important;
+    gap: 0.7em !important;
+    align-items: stretch !important;
+    justify-content: flex-start !important;
+  }
+}
 .buscador-tabla {
   width: 70% !important;
   background: #ffffff !important;

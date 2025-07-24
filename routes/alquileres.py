@@ -125,6 +125,13 @@ async def crear_alquiler(request: Request):
 
     if all([EMAIL_ORIGEN, EMAIL_PASSWORD, SMTP_SERVER, SMTP_PORT]):
         try:
+            logger.info(
+                "Enviando correo de alquiler | origen=%s destino=%s servidor=%s puerto=%s",
+                EMAIL_ORIGEN,
+                EMAIL_ORIGEN,
+                SMTP_SERVER,
+                SMTP_PORT,
+            )
             msg = EmailMessage()
             msg["From"] = EMAIL_ORIGEN
             msg["To"] = EMAIL_ORIGEN
@@ -146,7 +153,13 @@ async def crear_alquiler(request: Request):
         except Exception as exc:  # pragma: no cover - dependencias externas
             logger.exception("Error enviando correo de alquiler: %s", exc)
     else:
-        logger.warning("SMTP no configurado - no se envió correo")
+        logger.error(
+            "SMTP no configurado - faltan EMAIL_ORIGEN=%s, EMAIL_PASSWORD=%s, SMTP_SERVER=%s, SMTP_PORT=%s",
+            bool(EMAIL_ORIGEN),
+            bool(EMAIL_PASSWORD),
+            bool(SMTP_SERVER),
+            bool(SMTP_PORT),
+        )
 
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}

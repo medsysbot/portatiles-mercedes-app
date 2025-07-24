@@ -21,7 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
       },
       { data: 'email_origen' },
       { data: 'asunto' },
-      { data: 'mensaje', render: d => d && d.length > 40 ? d.slice(0,40) + '...' : d }
+      { data: 'mensaje', render: d => d && d.length > 40 ? d.slice(0,40) + '...' : d },
+      { data: null, orderable: false, defaultContent: '<button class="btn-delete btn btn-danger btn-sm">Eliminar</button>' }
     ],
     createdRow: function(row, data) {
       const cb = row.querySelector('.fila-email');
@@ -34,6 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const resp = await fetch('/api/emails/ultimos');
       if (!resp.ok) throw new Error('Error');
       const datos = await resp.json();
+      datos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
       tabla.clear();
       tabla.rows.add(datos).draw();
     } catch (err) {
@@ -66,6 +68,24 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#tablaEmailsAdmin tbody').on('change', '.fila-email', function() {
     $('#tablaEmailsAdmin tbody .fila-email').not(this).prop('checked', false);
     if (btnAbrir) btnAbrir.disabled = !this.checked;
+  });
+
+  $('#tablaEmailsAdmin tbody').on('click', '.btn-delete', async function() {
+    const fila = $(this).closest('tr');
+    const data = tabla.row(fila).data();
+    if (!data) return;
+    if (!confirm('¿Eliminar este email?')) return;
+    try {
+      const resp = await fetch(`/admin/api/emails/${encodeURIComponent(data.mailbox)}/${data.uid}`, {
+        method: 'DELETE',
+        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+      });
+      if (!resp.ok) throw new Error('Error');
+      tabla.row(fila).remove().draw();
+      if (btnAbrir) btnAbrir.disabled = true;
+    } catch (err) {
+      console.error('Error eliminando email', err);
+    }
   });
 
   btnAbrir?.addEventListener('click', async () => {

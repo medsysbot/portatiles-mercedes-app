@@ -17,7 +17,7 @@ form.addEventListener('submit', async (e) => {
   for (const valor of Object.values(datos)) {
     if (!valor.trim()) {
       if (typeof showAlert === 'function') {
-        await showAlert('error-validacion', 'Complete todos los campos', false);
+        await showAlert('formulario-error', 'Debe completar todos los campos', false);
       }
       return;
     }

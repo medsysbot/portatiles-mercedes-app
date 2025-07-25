@@ -10,50 +10,53 @@ Proyecto: Portátiles Mercedes
   <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
   <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
   <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Solicitá la compra de nuestros productos">
   <title>Formulario de Venta - Portátiles Mercedes</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
-  <link rel="stylesheet" href="/static/css/alertas-custom.css">
 
   <style>
     html, body {
-      margin: 0;
-      padding: 0;
       height: 100%;
       width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      min-height: 100vh;
       font-family: 'Nunito', Arial, sans-serif;
       background-image: url('/app_publico/static/imagenes/fondo-ventas.webp');
       background-size: cover;
       background-position: center;
-      overflow: hidden;
+      position: relative;
     }
 
     #formVenta {
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
-      background: rgba(255, 255, 255, 0.82);
-      padding: 14px 22px;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.88); /* más transparente */
+      padding: 18px 24px;
       border-radius: 14px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
       max-width: 500px;
       width: 90%;
       box-sizing: border-box;
       position: absolute;
-      top: 56%;
+      top: 52%;
       left: 50%;
       transform: translate(-50%, -50%);
-      color: #000;
     }
 
     #formVenta label {
       display: flex;
       flex-direction: column;
-      margin-bottom: 6px;
+      margin-bottom: 10px;
       font-weight: 600;
+      color: #000;
     }
 
     #formVenta input,
@@ -61,47 +64,26 @@ Proyecto: Portátiles Mercedes
     #formVenta textarea {
       padding: 8px;
       margin-top: 4px;
-      border: 1px solid #000;
+      border: 1px solid #444;
       border-radius: 6px;
       font: inherit;
       color: #000;
     }
 
-    .botonera-formulario {
+    .botonera-flotante {
       position: absolute;
+      left: 40px;
+      bottom: 160px;
       display: flex;
-      gap: 16px;
-      z-index: 10;
-    }
-
-    @media (max-width: 700px) {
-      .botonera-formulario {
-        flex-direction: column;
-        align-items: stretch;
-        width: 90%;
-        left: 50%;
-        top: 32px;
-        transform: translateX(-50%);
-      }
-
-      .boton-index {
-        font-size: 16px;
-        height: 32px;
-        width: 100%;
-        justify-content: center;
-      }
-    }
-
-    @media (min-width: 701px) {
-      .botonera-formulario {
-        bottom: 40px;
-        left: 40px;
-        flex-direction: column;
-      }
+      flex-direction: column;
+      gap: 14px;
+      z-index: 99;
     }
 
     .boton-index {
       width: 260px;
+      min-width: 260px;
+      max-width: 260px;
       height: 38px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
@@ -117,8 +99,10 @@ Proyecto: Portátiles Mercedes
       gap: 10px;
       cursor: pointer;
       padding-left: 16px;
+      white-space: nowrap;
       box-sizing: border-box;
       text-decoration: none;
+      transition: background 0.15s ease;
     }
 
     .boton-index:hover {
@@ -130,23 +114,72 @@ Proyecto: Portátiles Mercedes
       height: 22px;
     }
 
+    .boton-index span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex: 1;
+    }
+
     #alert-manager {
+      display: none;
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      z-index: 100;
-      display: flex;
+      background: rgba(0,0,0,0.4);
+      z-index: 999;
       justify-content: center;
       align-items: center;
-      pointer-events: none;
+    }
+
+    #alert-manager.active {
+      display: flex;
+    }
+
+    .alert-box {
+      background: #fff;
+      padding: 16px 24px;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .alert-icon {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .botonera-flotante {
+        top: 24px;
+        bottom: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 90%;
+      }
+
+      .boton-index {
+        min-width: 0;
+        width: 48%;
+        font-size: 16px;
+        height: 32px;
+      }
+
+      #formVenta {
+        top: 56%;
+        padding: 16px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- Alerta visual -->
   <div id="alert-manager" class="alert-container">
     <div class="alert-box">
       <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
@@ -154,8 +187,8 @@ Proyecto: Portátiles Mercedes
     </div>
   </div>
 
-  <!-- Botonera -->
-  <div class="botonera-formulario">
+  <!-- Botones laterales (desktop) o superiores (móvil) -->
+  <div class="botonera-flotante">
     <button id="cerrarFormulario" class="boton-index" type="button">
       <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
       <span>Cerrar formulario</span>
@@ -166,7 +199,7 @@ Proyecto: Portátiles Mercedes
     </button>
   </div>
 
-  <!-- Formulario -->
+  <!-- ==== Formulario principal ==== -->
   <form id="formVenta" data-success-url="/ventas">
     <label>Nombre del cliente
       <input type="text" name="cliente_nombre">
@@ -199,7 +232,9 @@ Proyecto: Portátiles Mercedes
   <script src="/app_publico/static/js/guardar_venta.js"></script>
   <script>
     document.getElementById('cerrarFormulario').addEventListener('click', () => {
-      if (window.opener) window.opener.focus();
+      if (window.opener) {
+        window.opener.focus();
+      }
       window.close();
     });
   </script>

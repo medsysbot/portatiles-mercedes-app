@@ -17,7 +17,7 @@ const ALERT_ICONS = {
   "enviando-reporte":      { icon: "/static/iconos/enviando-reporte.png",      msg: "Enviando reporte..." },
   "error-mensaje":         { icon: "/static/iconos/error-mensaje.png",         msg: "Error al enviar mensaje" },
   "error-datos":           { icon: "/static/iconos/error-datos.png",           msg: "Error en los datos" },
-  "error-validacion":     { icon: "/static/iconos/formulario-error.png",     msg: "Validación incorrecta" },
+  "error-validacion":      { icon: "/static/iconos/formulario-error.png",      msg: "Validación incorrecta" },
   "error-informe-limpieza":{ icon: "/static/iconos/error-informe-limpieza.png",msg: "Error al enviar informe de limpieza" },
   "error-registro":        { icon: "/static/iconos/error-registro.png",        msg: "Error en el registro" },
   "exito-datos":           { icon: "/static/iconos/exito-datos.png",           msg: "Datos guardados correctamente" },
@@ -31,7 +31,7 @@ const ALERT_ICONS = {
   "reporte-error":         { icon: "/static/iconos/reporte-error.png",         msg: "Error al enviar reporte" },
   "reporte-exito":         { icon: "/static/iconos/reporte-exito.png",         msg: "Reporte enviado con éxito" },
   "seleccionar-rol":       { icon: "/static/iconos/seleccionar-rol.png",       msg: "Seleccione un rol para continuar" },
-  "borrando":              { icon: "/static/iconos/borrado.png",              msg: "Eliminando registros..." },
+  "borrando":              { icon: "/static/iconos/borrado.png",               msg: "Eliminando registros..." },
   "borrado-exito":         { icon: "/static/iconos/borrado-exito.png",         msg: "Registros eliminados" },
   "borrado-error":         { icon: "/static/iconos/borrado-error.png",         msg: "Error al eliminar" },
   "info-cargando":         { icon: "/static/iconos/enviando-reporte.png",      msg: "Cargando datos..." },
@@ -53,11 +53,10 @@ function showAlert(type, customMessage = null, duration = 2500) {
   alertText.textContent = customMessage || info.msg;
   alertBox.style.display = "flex";
   clearTimeout(alertTimeout);
-  if (duration !== "infinito") {
-    alertTimeout = setTimeout(() => {
-      alertBox.style.display = "none";
-    }, duration);
-  }
+  if (typeof duration === "number" && duration > 0) {
+  alertTimeout = setTimeout(() => {
+    alertBox.style.display = "none";
+  }, duration);
 }
 // === FUNCIÓN EXTENDIDA: mostrar y redirigir ===
 function showAlertAndRedirect(type, redirectUrl, customMessage = null, duration = 2500, delayAfter = 500) {

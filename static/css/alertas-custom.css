@@ -9,7 +9,7 @@
   display: none; /* Oculta por defecto */
   align-items: center;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.6); /* ✅ fondo negro semitransparente */
+  background-color: rgba(0, 0, 0, 0.85); /* ✅ fondo negro semitransparente */
   z-index: 9999;
 }
 
@@ -20,7 +20,7 @@
 
 /* Tarjeta interna (contenedor del ícono y texto) */
 .alert-box {
-  background-color: rgba(0, 0, 0, 0.7); /* ✅ negro con muy poca opacidad */
+  background-color: rgba(0, 0, 0, 0.90); /* ✅ negro con muy poca opacidad */
   padding: 40px 50px;
   border-radius: 14px;
   display: flex;

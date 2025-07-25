@@ -23,7 +23,7 @@ form.addEventListener('submit', async (e) => {
   }
 
   if (typeof showAlert === 'function') {
-    await showAlert('cargando-datos', 'Enviando datos...', 2500);
+    await showAlert('enviando-reporte', 'Enviando datos...', 2500);
   }
 
   let ok = false;
@@ -39,7 +39,7 @@ form.addEventListener('submit', async (e) => {
 
     if (ok) {
       if (typeof showAlert === 'function') {
-        await showAlert('exito-datos', 'Formulario enviado correctamente', 2500);
+        await showAlert('reporte-exito', 'Formulario enviado correctamente', 2500);
       }
 
       setTimeout(() => {
@@ -52,12 +52,12 @@ form.addEventListener('submit', async (e) => {
 
     } else {
       if (typeof showAlert === 'function') {
-        await showAlert('error-datos', resJson.detail || 'Error al enviar el formulario', 2500);
+        await showAlert('reporte-error', resJson.detail || 'Error al enviar el formulario', 2500);
       }
     }
   } catch (_) {
     if (typeof showAlert === 'function') {
-      await showAlert('error-datos', 'Error al enviar el formulario', 2500);
+      await showAlert('reporte-error', 'Error al enviar el formulario', 2500);
     }
   }
 });

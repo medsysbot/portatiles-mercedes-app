@@ -23,7 +23,7 @@ form.addEventListener('submit', async (e) => {
   }
 
   if (typeof showAlert === 'function') {
-    await showAlert('enviando-reporte', 'Enviando datos...', 2500);
+    await showAlert('enviando-reporte', 'Enviando formulario...', 2500);
   }
 
   let ok = false;

@@ -91,10 +91,10 @@ function endDataLoad(inicio, ok = true) {
     }
   }, delay);
 }
-// === Al cargar: ocultar alerta por defecto ===
-document.addEventListener("DOMContentLoaded", () => {
+// Ya no forzamos el display:none porque ahora showAlert lo maneja bien
+window.addEventListener("load", () => {
   const box = document.getElementById("alert-manager");
-  if (box) {
+  if (box && box.style.visibility === "hidden") {
     box.style.display = "none";
   }
 });

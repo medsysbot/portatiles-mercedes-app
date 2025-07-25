@@ -1,156 +1,249 @@
 <!--
 Archivo: alquiler_form.html
-Descripción: Formulario de solicitud de alquiler
-Acceso: Público
+Formulario de solicitud de alquiler - Público
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-06-15
+Adaptado al diseño de venta.html (julio 2025)
 -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.webp">
-    <!-- SOLO LOS 3 ICONOS DE ALERTA USADOS -->
-    <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
-    <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Formulario para solicitar alquiler de baños portátiles">
-    <title>Formulario de Alquiler - Portátiles Mercedes</title>
-    <link rel="stylesheet" href="/static/css/alertas-custom.css">
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/static/css/style.css">
-    <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
-    <style>
-        html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            min-height: 100vh;
-            min-width: 100vw;
-            font-family: 'Nunito', Arial, sans-serif;
-            background: url('/app_publico/static/imagenes/fondo-alquiler.webp') no-repeat center center fixed;
-            background-size: cover;
-            position: relative;
-        }
-        .boton-index {
-            width: 260px;
-            min-width: 260px;
-            max-width: 260px;
-            height: 38px;
-            font-family: 'Nunito', Arial, sans-serif;
-            font-weight: 400;
-            font-size: 18px;
-            font-style: italic;
-            background: rgba(0,0,0,0.58);
-            color: #fff;
-            border: none;
-            border-radius: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 10px;
-            cursor: pointer;
-            transition: background 0.13s;
-            padding-left: 16px;
-            white-space: nowrap;
-            box-sizing: border-box;
-            text-decoration: none;
-        }
-        .boton-index:hover { background-color: rgba(60, 60, 60, 1); }
-        .boton-index img {
-            width: 22px;
-            height: 22px;
-            display: inline-block;
-        }
-        #cerrarFormulario {
-            position: fixed;
-            left: 40px;
-            bottom: 40px;
-        }
-        #formulario-alquiler {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            background: rgba(255, 255, 255, 0.92);
-            padding: 20px 28px;
-            border-radius: 14px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-            max-width: 500px;
-            width: 90%;
-            box-sizing: border-box;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        #formulario-alquiler label {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        #formulario-alquiler input,
-        #formulario-alquiler select,
-        #formulario-alquiler textarea {
-            padding: 8px;
-            margin-top: 4px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font: inherit;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Solicitá el alquiler de baños portátiles" />
+  <title>Formulario de Alquiler - Portátiles Mercedes</title>
+
+  <!-- Precarga de imágenes usadas -->
+  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-alquiler.webp">
+  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
+  <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
+
+  <!-- Tipografía y estilos -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css" />
+
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      font-family: 'Nunito', Arial, sans-serif;
+    }
+
+    body {
+      background: url('/app_publico/static/imagenes/fondo-alquiler.webp') no-repeat center center fixed;
+      background-size: cover;
+      overflow: hidden;
+    }
+
+    #alert-manager {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.5);
+      z-index: 9999;
+      visibility: hidden;
+    }
+
+    .alert-box {
+      background: white;
+      border-radius: 10px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .alert-icon {
+      width: 48px;
+      height: 48px;
+    }
+
+    .alert-message {
+      font-weight: 600;
+      font-size: 17px;
+      text-align: center;
+      color: #333;
+    }
+
+    #formulario-alquiler {
+      position: absolute;
+      top: 15vh;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 500px;
+      padding: 20px 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: rgba(255, 255, 255, 0.86);
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+      box-sizing: border-box;
+    }
+
+    #formulario-alquiler label {
+      font-weight: 600;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    #formulario-alquiler input,
+    #formulario-alquiler select,
+    #formulario-alquiler textarea {
+      padding: 8px;
+      font: inherit;
+      border-radius: 6px;
+      border: 1px solid #444;
+      color: #000;
+    }
+
+    .contenedor-botones {
+      position: fixed;
+      left: 40px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 260px;
+      max-width: 90vw;
+      z-index: 100;
+    }
+
+    .boton-index {
+      width: 100%;
+      height: 38px;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-size: 18px;
+      font-style: italic;
+      background: rgba(0, 0, 0, 0.58);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      padding-left: 16px;
+      cursor: pointer;
+      transition: background 0.13s;
+      text-decoration: none;
+    }
+
+    .boton-index:hover {
+      background-color: rgba(60, 60, 60, 1);
+    }
+
+    .boton-index img {
+      width: 22px;
+      height: 22px;
+    }
+
+    @media (max-width: 700px) {
+      .contenedor-botones {
+        position: static;
+        margin: 18px auto 0 auto;
+        flex-direction: column;
+        align-items: stretch;
+        width: 90%;
+        max-width: 260px;
+      }
+
+      .boton-index {
+        font-size: 16px;
+        height: 32px;
+      }
+    }
+
+    @media (max-width: 950px) and (orientation: landscape) {
+      .contenedor-botones {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin-top: 52px;
+        margin-bottom: 10px;
+        gap: 12px;
+      }
+
+      .boton-index {
+        height: 34px;
+        font-size: 15px;
+        justify-content: flex-start;
+        padding-left: 12px;
+        padding-right: 4px;
+        width: 230px;
+        min-width: 230px;
+        display: flex;
+        align-items: center;
+      }
+
+      .boton-index img {
+        width: 20px;
+        height: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
-<!-- ==== Formulario principal ==== -->
-    <form id="formulario-alquiler">
-        <label>Nombre y apellido
-            <input type="text" name="nombre">
-        </label>
-        <label>Teléfono
-            <input type="text" name="telefono">
-        </label>
-        <label>Dirección
-            <input type="text" name="direccion">
-        </label>
-        <label>Correo electrónico
-            <input type="text" name="correo">
-        </label>
-        <label>Tipo de baño
-            <select name="tipo_banio">
-                <option value="comun">Común</option>
-                <option value="vip">VIP</option>
-            </select>
-        </label>
-        <label>Fecha
-            <input type="text" name="fecha">
-        </label>
-        <button type="submit" class="boton-index">
-            <img src="/app_publico/static/icons/ver-formulario.png" alt="Enviar">
-            <span>Enviar</span>
-        </button>
-    </form>
-    <button id="cerrarFormulario" class="boton-index" type="button">
-        <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
-        <span>Cerrar Formulario</span>
-    </button>
 
-    <script src="/app_publico/static/js/guardar_alquiler.js"></script>
-    <script src="/static/js/alertas.js"></script>
-    <div id="alert-manager" class="alert-container">
-        <div class="alert-box">
-            <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-            <span id="alert-text" class="alert-message">Texto de alerta</span>
-        </div>
+  <!-- Alerta visual -->
+  <div id="alert-manager" class="alert-container">
+    <div class="alert-box">
+      <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
+      <span id="alert-text" class="alert-message">Texto de alerta</span>
     </div>
-    <script>
-        document.getElementById('cerrarFormulario').addEventListener('click', () => {
-            if (window.opener) { window.opener.focus(); }
-            window.close();
-        });
-    </script>
+  </div>
+
+  <!-- Formulario -->
+  <form id="formulario-alquiler" data-success-url="/alquileres">
+    <label>Nombre y apellido
+      <input type="text" name="nombre" />
+    </label>
+    <label>Teléfono
+      <input type="text" name="telefono" />
+    </label>
+    <label>Dirección
+      <input type="text" name="direccion" />
+    </label>
+    <label>Correo electrónico
+      <input type="email" name="correo" />
+    </label>
+    <label>Tipo de baño
+      <select name="tipo_banio">
+        <option value="comun">Común</option>
+        <option value="vip">VIP</option>
+      </select>
+    </label>
+    <label>Fecha
+      <input type="date" name="fecha" />
+    </label>
+  </form>
+
+  <!-- Botonera -->
+  <div class="contenedor-botones">
+    <button type="submit" form="formulario-alquiler" class="boton-index">
+      <img src="/app_publico/static/icons/ver-formulario.png" alt="Enviar">
+      <span>Enviar</span>
+    </button>
+    <button type="button" class="boton-index" onclick="window.close()">
+      <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
+      <span>Cerrar formulario</span>
+    </button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/js/alertas.js"></script>
+  <script src="/app_publico/static/js/guardar_alquiler.js"></script>
+
 </body>
 </html>

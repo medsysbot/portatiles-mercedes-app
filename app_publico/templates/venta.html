@@ -17,12 +17,13 @@ Proyecto: Portátiles Mercedes
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
   <link rel="stylesheet" href="/static/css/alertas-custom.css">
+
   <style>
     html, body {
-      height: 100%;
-      width: 100%;
       margin: 0;
       padding: 0;
+      height: 100%;
+      width: 100%;
       font-family: 'Nunito', Arial, sans-serif;
       background-image: url('/app_publico/static/imagenes/fondo-ventas.webp');
       background-size: cover;
@@ -34,7 +35,7 @@ Proyecto: Portátiles Mercedes
       display: flex;
       flex-direction: column;
       gap: 0.6rem;
-      background: rgba(255, 255, 255, 0.82); /* más transparente */
+      background: rgba(255, 255, 255, 0.82);
       padding: 14px 22px;
       border-radius: 14px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
@@ -42,7 +43,7 @@ Proyecto: Portátiles Mercedes
       width: 90%;
       box-sizing: border-box;
       position: absolute;
-      top: 56%; /* bajado un poco más */
+      top: 56%;
       left: 50%;
       transform: translate(-50%, -50%);
       color: #000;
@@ -68,22 +69,25 @@ Proyecto: Portátiles Mercedes
 
     .botonera-formulario {
       position: absolute;
-      left: 40px;
-      bottom: 40px;
       display: flex;
-      flex-direction: column;
       gap: 16px;
       z-index: 10;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1023px) {
       .botonera-formulario {
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: center;
-        bottom: 32px;
+        top: 32px;
         left: 50%;
         transform: translateX(-50%);
+        flex-direction: row;
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .botonera-formulario {
+        bottom: 40px;
+        left: 40px;
+        flex-direction: column;
       }
     }
 
@@ -141,7 +145,7 @@ Proyecto: Portátiles Mercedes
     </div>
   </div>
 
-  <!-- Botonera -->
+  <!-- Botones fuera del formulario -->
   <div class="botonera-formulario">
     <button id="cerrarFormulario" class="boton-index" type="button">
       <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
@@ -153,7 +157,7 @@ Proyecto: Portátiles Mercedes
     </button>
   </div>
 
-  <!-- Formulario -->
+  <!-- Formulario principal -->
   <form id="formVenta" data-success-url="/ventas">
     <label>Nombre del cliente
       <input type="text" name="cliente_nombre">

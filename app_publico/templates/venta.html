@@ -1,9 +1,7 @@
 <!--
 Archivo: venta.html
 Descripción: Formulario de solicitud de venta
-Acceso: Público
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-07-24
 -->
 <!DOCTYPE html>
 <html lang="es">
@@ -29,23 +27,22 @@ Proyecto: Portátiles Mercedes
       background-image: url('/app_publico/static/imagenes/fondo-ventas.webp');
       background-size: cover;
       background-position: center;
-      position: relative;
       overflow: hidden;
     }
 
     #formVenta {
       display: flex;
       flex-direction: column;
-      gap: 0.7rem;
-      background: rgba(255, 255, 255, 0.92);
-      padding: 16px 24px;
+      gap: 0.6rem;
+      background: rgba(255, 255, 255, 0.82); /* más transparente */
+      padding: 14px 22px;
       border-radius: 14px;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
       max-width: 500px;
       width: 90%;
       box-sizing: border-box;
       position: absolute;
-      top: 50%;
+      top: 56%; /* bajado un poco más */
       left: 50%;
       transform: translate(-50%, -50%);
       color: #000;
@@ -54,7 +51,7 @@ Proyecto: Portátiles Mercedes
     #formVenta label {
       display: flex;
       flex-direction: column;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       font-weight: 600;
     }
 
@@ -69,7 +66,29 @@ Proyecto: Portátiles Mercedes
       color: #000;
     }
 
+    .botonera-formulario {
+      position: absolute;
+      left: 40px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      z-index: 10;
+    }
+
+    @media (max-width: 768px) {
+      .botonera-formulario {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        bottom: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+
     .boton-index {
+      width: 260px;
       height: 38px;
       font-family: 'Nunito', Arial, sans-serif;
       font-weight: 400;
@@ -84,33 +103,18 @@ Proyecto: Portátiles Mercedes
       justify-content: flex-start;
       gap: 10px;
       cursor: pointer;
-      transition: background 0.13s;
       padding-left: 16px;
+      box-sizing: border-box;
       text-decoration: none;
-      white-space: nowrap;
+    }
+
+    .boton-index:hover {
+      background-color: rgba(60, 60, 60, 1);
     }
 
     .boton-index img {
       width: 22px;
       height: 22px;
-    }
-
-    .botonera-formulario {
-      position: absolute;
-      top: 40px;
-      left: 40px;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      gap: 12px;
-      z-index: 10;
-    }
-
-    @media (min-width: 1024px) {
-      .botonera-formulario {
-        flex-direction: column;
-        align-items: flex-start;
-      }
     }
 
     #alert-manager {
@@ -137,7 +141,7 @@ Proyecto: Portátiles Mercedes
     </div>
   </div>
 
-  <!-- Botonera flotante -->
+  <!-- Botonera -->
   <div class="botonera-formulario">
     <button id="cerrarFormulario" class="boton-index" type="button">
       <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
@@ -149,7 +153,7 @@ Proyecto: Portátiles Mercedes
     </button>
   </div>
 
-  <!-- Formulario principal -->
+  <!-- Formulario -->
   <form id="formVenta" data-success-url="/ventas">
     <label>Nombre del cliente
       <input type="text" name="cliente_nombre">
@@ -177,7 +181,7 @@ Proyecto: Portátiles Mercedes
     </label>
   </form>
 
-  <!-- Scripts en orden correcto -->
+  <!-- Scripts -->
   <script src="/static/js/alertas.js"></script>
   <script src="/app_publico/static/js/guardar_venta.js"></script>
   <script>

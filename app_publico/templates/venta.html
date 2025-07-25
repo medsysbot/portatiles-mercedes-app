@@ -3,23 +3,24 @@ Archivo: venta.html
 Descripción: Formulario de solicitud de venta
 Acceso: Público
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-06-15
+Última modificación: 2025-07-24
 -->
-<!-- Modificado 2025-11-27: integración del sistema de alertas visuales -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.webp">
     <!-- SOLO LOS 3 ICONOS DE ALERTA USADOS -->
-    <link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-datos.png">
-    <link rel="preload" as="image" href="/static/iconos/error-datos.png">
+    <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
+    <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
+    <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Solicitá la compra de nuestros productos">
     <title>Formulario de Venta - Portátiles Mercedes</title>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
+
     <style>
         html, body {
             height: 100%;
@@ -120,7 +121,8 @@ Proyecto: Portátiles Mercedes
             <span id="alert-text" class="alert-message">Texto de alerta</span>
         </div>
     </div>
-<!-- ==== Formulario principal ==== -->
+
+    <!-- ==== Formulario principal ==== -->
     <form id="formVenta" data-success-url="/ventas">
         <label>Nombre del cliente
             <input type="text" name="cliente_nombre">
@@ -151,12 +153,15 @@ Proyecto: Portátiles Mercedes
             <span>Enviar venta</span>
         </button>
     </form>
+
     <button id="cerrarFormulario" class="boton-index" type="button">
         <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
         <span>Cerrar formulario</span>
     </button>
-    <script src="/app_publico/static/js/guardar_venta.js"></script>
+
+    <!-- Scripts en orden correcto -->
     <script src="/static/js/alertas.js"></script>
+    <script src="/app_publico/static/js/guardar_venta.js"></script>
     <script>
         document.getElementById('cerrarFormulario').addEventListener('click', () => {
             if (window.opener) {

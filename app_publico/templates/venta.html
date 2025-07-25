@@ -74,16 +74,25 @@ Proyecto: Portátiles Mercedes
       z-index: 10;
     }
 
-    @media (max-width: 1023px) {
+    @media (max-width: 700px) {
       .botonera-formulario {
-        top: 32px;
+        flex-direction: column;
+        align-items: stretch;
+        width: 90%;
         left: 50%;
+        top: 32px;
         transform: translateX(-50%);
-        flex-direction: row;
+      }
+
+      .boton-index {
+        font-size: 16px;
+        height: 32px;
+        width: 100%;
+        justify-content: center;
       }
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 701px) {
       .botonera-formulario {
         bottom: 40px;
         left: 40px;
@@ -145,7 +154,7 @@ Proyecto: Portátiles Mercedes
     </div>
   </div>
 
-  <!-- Botones fuera del formulario -->
+  <!-- Botonera -->
   <div class="botonera-formulario">
     <button id="cerrarFormulario" class="boton-index" type="button">
       <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
@@ -157,7 +166,7 @@ Proyecto: Portátiles Mercedes
     </button>
   </div>
 
-  <!-- Formulario principal -->
+  <!-- Formulario -->
   <form id="formVenta" data-success-url="/ventas">
     <label>Nombre del cliente
       <input type="text" name="cliente_nombre">

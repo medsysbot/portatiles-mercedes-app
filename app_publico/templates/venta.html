@@ -8,167 +8,183 @@ Proyecto: Portátiles Mercedes
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.webp">
-    <!-- SOLO LOS 3 ICONOS DE ALERTA USADOS -->
-    <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
-    <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
-    <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
+  <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.webp">
+  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
+  <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Solicitá la compra de nuestros productos">
+  <title>Formulario de Venta - Portátiles Mercedes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
+  <link rel="stylesheet" href="/static/css/alertas-custom.css">
+  <style>
+    html, body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Nunito', Arial, sans-serif;
+      background-image: url('/app_publico/static/imagenes/fondo-ventas.webp');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+      overflow: hidden;
+    }
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Solicitá la compra de nuestros productos">
-    <title>Formulario de Venta - Portátiles Mercedes</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
+    #formVenta {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      background: rgba(255, 255, 255, 0.92);
+      padding: 16px 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      max-width: 500px;
+      width: 90%;
+      box-sizing: border-box;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: #000;
+    }
 
-    <style>
-        html, body {
-            height: 100%;
-            width: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            min-height: 100vh;
-            font-family: 'Nunito', Arial, sans-serif;
-            background-image: url('/app_publico/static/imagenes/fondo-ventas.webp');
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-        #formVenta {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            background: rgba(255, 255, 255, 0.92);
-            padding: 20px 28px;
-            border-radius: 14px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-            max-width: 500px;
-            width: 90%;
-            box-sizing: border-box;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        #formVenta label {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 12px;
-            font-weight: 600;
-        }
-        #formVenta input,
-        #formVenta select,
-        #formVenta textarea {
-            padding: 8px;
-            margin-top: 4px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font: inherit;
-        }
-        .boton-index {
-            width: 260px;
-            min-width: 260px;
-            max-width: 260px;
-            height: 38px;
-            font-family: 'Nunito', Arial, sans-serif;
-            font-weight: 400;
-            font-size: 18px;
-            font-style: italic;
-            background: rgba(0,0,0,0.58);
-            color: #fff;
-            border: none;
-            border-radius: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 10px;
-            cursor: pointer;
-            transition: background 0.13s;
-            padding-left: 16px;
-            padding-top: 0;
-            padding-bottom: 0;
-            white-space: nowrap;
-            box-sizing: border-box;
-            text-decoration: none;
-        }
-        .boton-index,
-        .boton-index:visited,
-        .boton-index:active,
-        .boton-index:focus {
-            text-decoration: none !important;
-        }
-        .boton-index:hover {
-            background-color: rgba(60, 60, 60, 1);
-        }
-        .boton-index img {
-            width: 22px;
-            height: 22px;
-            display: inline-block;
-        }
-        #cerrarFormulario {
-            position: fixed;
-            left: 40px;
-            bottom: 40px;
-        }
-    </style>
+    #formVenta label {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    #formVenta input,
+    #formVenta select,
+    #formVenta textarea {
+      padding: 8px;
+      margin-top: 4px;
+      border: 1px solid #000;
+      border-radius: 6px;
+      font: inherit;
+      color: #000;
+    }
+
+    .boton-index {
+      height: 38px;
+      font-family: 'Nunito', Arial, sans-serif;
+      font-weight: 400;
+      font-size: 18px;
+      font-style: italic;
+      background: rgba(0,0,0,0.58);
+      color: #fff;
+      border: none;
+      border-radius: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      cursor: pointer;
+      transition: background 0.13s;
+      padding-left: 16px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .boton-index img {
+      width: 22px;
+      height: 22px;
+    }
+
+    .botonera-formulario {
+      position: absolute;
+      top: 40px;
+      left: 40px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 12px;
+      z-index: 10;
+    }
+
+    @media (min-width: 1024px) {
+      .botonera-formulario {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    #alert-manager {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-    <div id="alert-manager" class="alert-container">
-        <div class="alert-box">
-            <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-            <span id="alert-text" class="alert-message">Texto de alerta</span>
-        </div>
+
+  <!-- Alerta visual -->
+  <div id="alert-manager" class="alert-container">
+    <div class="alert-box">
+      <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
+      <span id="alert-text" class="alert-message">Texto de alerta</span>
     </div>
+  </div>
 
-    <!-- ==== Formulario principal ==== -->
-    <form id="formVenta" data-success-url="/ventas">
-        <label>Nombre del cliente
-            <input type="text" name="cliente_nombre">
-        </label>
-        <label>DNI / CUIT / CUIL
-            <input type="text" name="dni_cuit_cuil">
-        </label>
-        <label>Tipo de baño
-            <select name="tipo_banio">
-                <option value="comun">Común</option>
-                <option value="VIP">VIP</option>
-            </select>
-        </label>
-        <label>Cantidad
-            <input type="number" name="cantidad">
-        </label>
-        <label>Dirección de entrega
-            <input type="text" name="direccion_entrega">
-        </label>
-        <label>Fecha de venta
-            <input type="date" name="fecha_venta">
-        </label>
-        <label>Observaciones
-            <textarea name="observaciones"></textarea>
-        </label>
-        <button type="submit" class="boton-index">
-            <img src="/app_publico/static/icons/ver-formulario.png" alt="Enviar">
-            <span>Enviar venta</span>
-        </button>
-    </form>
-
+  <!-- Botonera flotante -->
+  <div class="botonera-formulario">
     <button id="cerrarFormulario" class="boton-index" type="button">
-        <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
-        <span>Cerrar formulario</span>
+      <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
+      <span>Cerrar formulario</span>
     </button>
+    <button type="submit" form="formVenta" class="boton-index">
+      <img src="/app_publico/static/icons/ver-formulario.png" alt="Enviar">
+      <span>Enviar venta</span>
+    </button>
+  </div>
 
-    <!-- Scripts en orden correcto -->
-    <script src="/static/js/alertas.js"></script>
-    <script src="/app_publico/static/js/guardar_venta.js"></script>
-    <script>
-        document.getElementById('cerrarFormulario').addEventListener('click', () => {
-            if (window.opener) {
-                window.opener.focus();
-            }
-            window.close();
-        });
-    </script>
+  <!-- Formulario principal -->
+  <form id="formVenta" data-success-url="/ventas">
+    <label>Nombre del cliente
+      <input type="text" name="cliente_nombre">
+    </label>
+    <label>DNI / CUIT / CUIL
+      <input type="text" name="dni_cuit_cuil">
+    </label>
+    <label>Tipo de baño
+      <select name="tipo_banio">
+        <option value="comun">Común</option>
+        <option value="VIP">VIP</option>
+      </select>
+    </label>
+    <label>Cantidad
+      <input type="number" name="cantidad">
+    </label>
+    <label>Dirección de entrega
+      <input type="text" name="direccion_entrega">
+    </label>
+    <label>Fecha de venta
+      <input type="date" name="fecha_venta">
+    </label>
+    <label>Observaciones
+      <textarea name="observaciones"></textarea>
+    </label>
+  </form>
+
+  <!-- Scripts en orden correcto -->
+  <script src="/static/js/alertas.js"></script>
+  <script src="/app_publico/static/js/guardar_venta.js"></script>
+  <script>
+    document.getElementById('cerrarFormulario').addEventListener('click', () => {
+      if (window.opener) window.opener.focus();
+      window.close();
+    });
+  </script>
 </body>
 </html>

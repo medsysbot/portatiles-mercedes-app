@@ -1,25 +1,25 @@
-<!--
+ <!--
 Archivo: venta.html
 Descripción: Formulario de solicitud de venta
+Acceso: Público
 Proyecto: Portátiles Mercedes
-Última modificación: 2025-07-24 (versión final responsiva completa)
+Última modificación: 2025-07-24
 -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Solicitá la compra de nuestros productos" />
-  <title>Formulario de Venta - Portátiles Mercedes</title>
-
-  <!-- Precarga de fondo y alertas -->
   <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-ventas.webp">
+  <!-- SOLO LOS 3 ICONOS DE ALERTA USADOS -->
   <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
   <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
   <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
 
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Solicitá la compra de nuestros productos">
+  <title>Formulario de Venta - Portátiles Mercedes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
 
   <style>
     html, body {
@@ -27,107 +27,75 @@ Proyecto: Portátiles Mercedes
       width: 100%;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
-
     body {
+      min-height: 100vh;
       font-family: 'Nunito', Arial, sans-serif;
-      background: url('/app_publico/static/imagenes/fondo-ventas.webp') no-repeat center center fixed;
+      background-image: url('/app_publico/static/imagenes/fondo-ventas.webp');
       background-size: cover;
-      background-attachment: fixed;
+      background-position: center;
       position: relative;
       overflow: hidden;
     }
 
-    #alert-manager {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      background: rgba(0,0,0,0.5);
-      visibility: hidden;
-    }
-
-    .alert-box {
-      background: white;
-      border-radius: 10px;
-      padding: 24px;
+    #formVenta {
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 14px;
-    }
-
-    .alert-icon {
-      width: 48px;
-      height: 48px;
-    }
-
-    .alert-message {
-      font-weight: 600;
-      font-size: 17px;
-      text-align: center;
-      color: #333;
-    }
-
-    #formVenta {
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.88);
+      padding: 16px 24px;
+      border-radius: 14px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+      max-width: 500px;
+      width: 90%;
+      box-sizing: border-box;
       position: absolute;
-      top: 5vh;
+      bottom: 5px;
       left: 50%;
       transform: translateX(-50%);
-      width: 90%;
-      max-width: 500px;
-      max-height: 75vh;
-      overflow-y: auto;
-      padding: 20px 28px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      background: rgba(255, 255, 255, 0.86);
-      border-radius: 14px;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.12);
-      box-sizing: border-box;
     }
 
     #formVenta label {
-      font-weight: 600;
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #111;
     }
 
     #formVenta input,
     #formVenta select,
     #formVenta textarea {
-      padding: 8px;
-      font: inherit;
+      padding: 7px;
+      margin-top: 4px;
+      border: 1px solid #ccc;
       border-radius: 6px;
-      border: 1px solid #444;
-      color: #000;
+      font: inherit;
     }
 
-    .contenedor-botones {
-      position: fixed;
-      left: 40px;
-      bottom: 40px;
+    .botonera-formulario {
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      width: 260px;
-      max-width: 90vw;
-      z-index: 100;
+      gap: 12px;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 700px) {
+      .botonera-formulario {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+      }
     }
 
     .boton-index {
-      width: 100%;
+      width: 260px;
       height: 38px;
       font-family: 'Nunito', Arial, sans-serif;
-      font-size: 18px;
       font-weight: 400;
+      font-size: 18px;
       font-style: italic;
-      background: rgba(0, 0, 0, 0.58);
+      background: rgba(0,0,0,0.58);
       color: #fff;
       border: none;
       border-radius: 13px;
@@ -135,9 +103,9 @@ Proyecto: Portátiles Mercedes
       align-items: center;
       justify-content: flex-start;
       gap: 10px;
-      padding-left: 16px;
       cursor: pointer;
-      transition: background 0.13s;
+      padding-left: 16px;
+      box-sizing: border-box;
       text-decoration: none;
     }
 
@@ -148,35 +116,51 @@ Proyecto: Portátiles Mercedes
     .boton-index img {
       width: 22px;
       height: 22px;
+      display: inline-block;
     }
 
-    @media (max-width: 700px) {
-      .contenedor-botones {
-        position: static;
-        margin: 16px auto 0 auto;
-        flex-direction: column;
-        align-items: stretch;
-        width: 90%;
-        max-width: 260px;
-      }
+    .alert-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
 
-      .boton-index {
-        font-size: 16px;
-        height: 32px;
-      }
+    .alert-box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 300px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    .alert-icon {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 12px;
+    }
+
+    .alert-message {
+      font-weight: 600;
+      font-size: 17px;
+      color: #222;
     }
   </style>
 </head>
 <body>
-  <!-- Alerta personalizada -->
-  <div id="alert-manager" class="alert-container">
+  <div id="alert-manager" class="alert-container" style="display:none;">
     <div class="alert-box">
       <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
       <span id="alert-text" class="alert-message">Texto de alerta</span>
     </div>
   </div>
 
-  <!-- Formulario de venta -->
+  <!-- ==== Formulario principal ==== -->
   <form id="formVenta" data-success-url="/ventas">
     <label>Nombre del cliente
       <input type="text" name="cliente_nombre">
@@ -202,22 +186,29 @@ Proyecto: Portátiles Mercedes
     <label>Observaciones
       <textarea name="observaciones"></textarea>
     </label>
+
+    <div class="botonera-formulario">
+      <button type="submit" class="boton-index">
+        <img src="/app_publico/static/icons/ver-formulario.png" alt="Enviar">
+        <span>Enviar venta</span>
+      </button>
+      <button id="cerrarFormulario" class="boton-index" type="button">
+        <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
+        <span>Cerrar formulario</span>
+      </button>
+    </div>
   </form>
 
-  <!-- Botonera -->
-  <div class="contenedor-botones">
-    <button type="submit" form="formVenta" class="boton-index">
-      <img src="/app_publico/static/icons/ver-formulario.png" alt="Enviar">
-      <span>Enviar venta</span>
-    </button>
-    <button type="button" class="boton-index" onclick="window.close()">
-      <img src="/app_publico/static/icons/cerrar-formulario.png" alt="Cerrar">
-      <span>Cerrar formulario</span>
-    </button>
-  </div>
-
-  <!-- Scripts en orden -->
+  <!-- Scripts en orden correcto -->
   <script src="/static/js/alertas.js"></script>
   <script src="/app_publico/static/js/guardar_venta.js"></script>
+  <script>
+    document.getElementById('cerrarFormulario').addEventListener('click', () => {
+      if (window.opener) {
+        window.opener.focus();
+      }
+      window.close();
+    });
+  </script>
 </body>
 </html>

@@ -41,6 +41,15 @@ form.addEventListener('submit', async (e) => {
       if (typeof showAlert === 'function') {
         await showAlert('exito-datos', 'Formulario enviado correctamente', false);
       }
+
+      setTimeout(() => {
+        if (window.opener) {
+          window.opener.location.href = '/alquiler';
+          window.opener.focus();
+        }
+        window.close();
+      }, 2400);
+
     } else {
       if (typeof showAlert === 'function') {
         await showAlert('error-datos', resJson.detail || 'Error al enviar el formulario', false);
@@ -50,16 +59,5 @@ form.addEventListener('submit', async (e) => {
     if (typeof showAlert === 'function') {
       await showAlert('error-datos', 'Error al enviar el formulario', false);
     }
-  }
-
-  // Redirección solo después del éxito
-  if (ok) {
-    setTimeout(() => {
-      if (window.opener) {
-        window.opener.location.href = '/alquiler';
-        window.opener.focus();
-      }
-      window.close();
-    }, 2400);
   }
 });

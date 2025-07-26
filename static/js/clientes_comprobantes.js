@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const [_, v] of datos.entries()) {
       if (!v) {
         if (typeof showAlert === 'function') {
-          await showAlert('error-reporte', 'Complete todos los campos', 2500);
+          await showAlert('reporte-error', 'Complete todos los campos', 2500);
         }
         return;
       }
@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await resp.json();
       if (resp.ok && res.ok) {
         if (typeof showAlert === 'function') {
-          await showAlert('exito-reporte', 'Comprobante enviado', 2500);
+          await showAlert('reporte-exito', 'Comprobante enviado', 2500);
         }
         setTimeout(() => {
           location.href = '/clientes/comprobantes';
@@ -203,7 +203,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       console.error('Error enviando formulario:', err);
       if (typeof showAlert === 'function') {
-        await showAlert('error-reporte', 'Error al enviar comprobante', 2500);
+        await showAlert('reporte-error', 'Error al enviar comprobante', 2500);
       }
     }
   });

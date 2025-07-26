@@ -26,8 +26,7 @@ async function fetchConAuth(url, options = {}) {
 
 window.pmDatosPersonalesData = window.pmDatosPersonalesData || {};
 
-// Deshabilita por completo el formulario para evitar
-// modificaciones luego de guardar los datos iniciales
+// === Bloquea edición posterior ===
 function bloquearEdicion() {
   const form = document.getElementById('formDatosCliente');
   if (!form) return;
@@ -36,7 +35,7 @@ function bloquearEdicion() {
     ev.preventDefault();
     ev.target.blur();
     if (typeof showAlert === 'function') {
-      showAlert('error-datos', 'Los datos sólo pueden modificarse desde administración');
+      showAlert('error-registro', 'Los datos sólo pueden modificarse desde administración');
     }
     ev.target.value = window.pmDatosPersonalesData[ev.target.name] || '';
   };
@@ -51,6 +50,7 @@ function bloquearEdicion() {
   if (btn) btn.disabled = true;
 }
 
+// === Carga datos del cliente ===
 async function cargarDatosCliente() {
   try {
     const resp = await fetchConAuth('/clientes/datos_personales_api');
@@ -74,13 +74,16 @@ async function cargarDatosCliente() {
   }
 }
 
+// === Guarda datos y muestra alertas ===
 async function guardarDatosCliente(ev) {
   ev.preventDefault();
   const form = document.getElementById('formDatosCliente');
   const data = {};
   new FormData(form).forEach((v, k) => { data[k] = v; });
 
-  
+  if (typeof showAlert === 'function') {
+    await showAlert('registrando-usuario', 'Registrando...', 2000);
+  }
 
   try {
     const resp = await fetchConAuth('/clientes/guardar_datos_personales', {
@@ -90,16 +93,26 @@ async function guardarDatosCliente(ev) {
     });
     if (!resp) return;
     const resJson = await resp.json();
+
     if (resp.ok) {
-      window.location.href = '/cliente/panel';
+      if (typeof showAlert === 'function') {
+        await showAlert('exito-registro', 'Registro exitoso', 2200);
+      }
+      setTimeout(() => {
+        window.location.href = '/cliente/panel';
+      }, 2000);
     } else {
       throw new Error(resJson.detail || resJson.error || 'Error al guardar los datos');
     }
   } catch (error) {
     console.error('Error al guardar los datos', error);
+    if (typeof showAlert === 'function') {
+      await showAlert('error-registro', 'Error al registrarse', 2400);
+    }
   }
 }
 
+// === Inicio ===
 document.addEventListener('DOMContentLoaded', () => {
   if (!localStorage.getItem('access_token')) {
     window.location.href = '/login';

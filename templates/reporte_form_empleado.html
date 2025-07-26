@@ -1,6 +1,14 @@
 {% extends 'panel_empleado.html' %}
 {% block title %}Nuevo Reporte{% endblock %}
 {% block description %}Carga de reportes por empleados{% endblock %}
+{% block head_extra %}
+  {{ super() }}
+  <link rel="stylesheet" href="/static/css/alertas-custom.css">
+  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
+  <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
+{% endblock %}
+
 {% block content %}
 <h2 class="mt-0">Nuevo Reporte</h2>
 <form method="post" data-success-url="/empleado/reportes">
@@ -35,5 +43,6 @@
 
 {% block scripts %}
   {{ super() }}
+  <script src="/static/js/alertas.js"></script>
   <script src="/static/js/form_guardar.js"></script>
 {% endblock %}

@@ -99,7 +99,7 @@ async function guardarDatosCliente(ev) {
         await showAlert('exito-registro', 'Registro exitoso', 2200);
       }
       setTimeout(() => {
-        window.location.href = '/cliente/panel';
+        window.location.href = '/panel/cliente';
       }, 2000);
     } else {
       throw new Error(resJson.detail || resJson.error || 'Error al guardar los datos');

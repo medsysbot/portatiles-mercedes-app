@@ -39,7 +39,7 @@ form.addEventListener('submit', async (e) => {
 
     if (ok) {
       if (typeof showAlert === 'function') {
-        await showAlert('exito-reporte', 'Formulario enviado correctamente', 2500);
+        await showAlert('reporte-exito', 'Formulario enviado correctamente', 2500);
       }
 
       setTimeout(() => {
@@ -56,12 +56,12 @@ form.addEventListener('submit', async (e) => {
           ? resJson.detail
           : 'Error al enviar el formulario';
       if (typeof showAlert === 'function') {
-        await showAlert('error-reporte', mensajeError, 2500);
+        await showAlert('reporte-error', mensajeError, 2500);
       }
     }
   } catch (_) {
     if (typeof showAlert === 'function') {
-      await showAlert('error-reporte', 'Error al enviar el formulario', 2500);
+      await showAlert('reporte-error', 'Error al enviar el formulario', 2500);
     }
   }
 });

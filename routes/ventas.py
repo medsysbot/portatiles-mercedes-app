@@ -4,7 +4,7 @@ Archivo: routes/ventas.py
 Descripción: Recibe formulario público de ventas y envía correo
 Acceso: Público
 Proyecto: Portátiles Mercedes
-Versión final - Sin Supabase, sin PDF
+Versión unificada con técnica de envío de email de alquileres
 ----------------------------------------------------------
 """
 
@@ -46,9 +46,9 @@ class VentaPublica(BaseModel):
 async def registrar_venta(venta: VentaPublica):
     """Recibe los datos del formulario de ventas y envía correo."""
 
-    EMAIL_ORIGEN = os.getenv("EMAIL_ORIGEN")
-    if not EMAIL_ORIGEN:
-        return {"ok": False, "detail": "Email de origen no configurado"}
+    email_origen = os.getenv("EMAIL_ORIGEN")
+    if not email_origen:
+        raise HTTPException(status_code=500, detail="Email de origen no configurado")
 
     cuerpo = (
         f"Nuevo formulario de VENTA recibido:\n\n"
@@ -62,9 +62,9 @@ async def registrar_venta(venta: VentaPublica):
     )
 
     try:
-        await enviar_email(EMAIL_ORIGEN, "Nuevo formulario de Venta enviado", cuerpo)
+        await enviar_email(email_origen, "Nuevo formulario de Venta enviado", cuerpo)
         logger.info("Correo de venta enviado correctamente")
         return {"ok": True}
     except Exception as exc:
         logger.exception("Error al enviar correo de venta: %s", exc)
-        return {"ok": False, "detail": "No se pudo enviar el correo de venta"}
+        raise HTTPException(status_code=500, detail="No se pudo enviar el correo de venta")

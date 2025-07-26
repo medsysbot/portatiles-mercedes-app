@@ -1,10 +1,16 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Gestión de emails{% endblock %}
 {% block description %}Enviar y revisar correos recibidos{% endblock %}
+
 {% block head_extra %}
-{{ super() }}
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  {{ super() }}
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="/static/css/alertas-custom.css">
+  <link rel="preload" as="image" href="/static/iconos/email-envio.png">
+  <link rel="preload" as="image" href="/static/iconos/email-exito.png">
+  <link rel="preload" as="image" href="/static/iconos/email-error.png">
 {% endblock %}
+
 {% block content %}
 <div class="container mt-4">
   <h2 class="mb-3 mt-0">Email Management</h2>
@@ -27,6 +33,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Enviar</button>
   </form>
+
   <div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
     <div class="mb-2 flex-grow-1">
       <input type="text" id="busquedaEmails" class="form-control buscador-tabla" placeholder="Buscar...">
@@ -37,6 +44,7 @@
       <button id="btnEliminarEmails" class="btn btn-danger" disabled>Eliminar</button>
     </div>
   </div>
+
   <div class="table-responsive bg-light p-3">
     <table id="tablaEmailsAdmin" class="table pm-tabla table-striped table-bordered">
       <thead>
@@ -52,6 +60,7 @@
     </table>
   </div>
 </div>
+
 <!-- Modal para ver email completo -->
 <div class="modal fade" id="modalEmail" tabindex="-1" role="dialog" aria-labelledby="modalEmailLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
@@ -73,8 +82,18 @@
     </div>
   </div>
 </div>
+
+<!-- ALERTA CENTRAL PERSONALIZADA -->
+<div id="alert-manager" class="alert-container">
+  <div class="alert-box">
+    <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+    <span id="alert-text" class="alert-message">Texto de alerta</span>
+  </div>
+</div>
 {% endblock %}
+
 {% block scripts %}
-<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
-<script src="/emails_admin.js"></script>
+  <script src="/static/js/alertas.js"></script>
+  <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+  <script src="/emails_admin.js"></script>
 {% endblock %}

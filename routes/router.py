@@ -28,7 +28,7 @@ from routes.morosos import router as morosos_router
 from routes.emails_admin import router as emails_router
 from routes.recursos_humanos import router as recursos_humanos_router
 from routes.email_publico import router as email_publico_router
-
+from routes.ventas import router as ventas_router
 # Directorios base de las plantillas y archivos estáticos
 # Luego de reubicar `routes/` en la raíz del repositorio, la carpeta
 # `app_publico` se encuentra al mismo nivel que este módulo. Por eso
@@ -53,9 +53,8 @@ public_templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 templates = Jinja2Templates(directory="templates")
 templates.env.globals["gmail_user"] = os.getenv("EMAIL_ORIGEN")
 
-# Incluir las rutas del módulo de ventas
-# Incluir las rutas del módulo de débito automático
-#app.include_router(comprobantes_pago_router)
+# router.include_router(ventas_router)router.include_router(ventas_router)Incluir las rutas del módulo de ventas
+router.include_router(ventas_router)
 router.include_router(comprobantes_pago_router)
 router.include_router(cliente_router)
 router.include_router(admin_router)

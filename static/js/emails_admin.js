@@ -54,14 +54,24 @@ document.addEventListener('DOMContentLoaded', () => {
   form?.addEventListener('submit', async ev => {
     ev.preventDefault();
     const fd = new FormData(form);
+
+    if (typeof showAlert === 'function') {
+      await showAlert('email-envio', 'Enviando email', 1800);
+    }
+
     try {
       const resp = await fetch('/admin/emails/enviar', { method: 'POST', body: fd });
       const res = await resp.json();
       if (!resp.ok || !res.ok) throw new Error(res.detail || 'Error');
+
       form.reset();
+      await showAlert('email-exito', 'E-mail enviado', 2200);
       cargarEmails();
     } catch (err) {
       console.error('Error enviando email', err);
+      if (typeof showAlert === 'function') {
+        await showAlert('email-incorrecto', 'E-mail no enviado', 2500);
+      }
     }
   });
 
@@ -102,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaEmailsAdmin tbody .fila-email:checked'));
     if (!seleccionados.length) return;
     if (!confirm('¿Eliminar emails seleccionados?')) return;
+
     for (const cb of seleccionados) {
       const uid = cb.value;
       const mailbox = cb.dataset.mailbox;
@@ -117,6 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
         console.error('Error eliminando email', err);
       }
     }
+
     if (btnAbrir) btnAbrir.disabled = true;
     if (btnEliminar) btnEliminar.disabled = true;
   });

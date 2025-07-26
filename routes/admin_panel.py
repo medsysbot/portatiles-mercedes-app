@@ -21,8 +21,7 @@ import os
 import logging
 from supabase import create_client, Client
 from jose import jwt, JWTError
-from routes.alquileres import ALQUILERES_TABLE
-from routes.ventas import VENTAS_TABLE
+
 
 load_dotenv()
 

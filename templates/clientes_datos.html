@@ -1,8 +1,13 @@
 {% extends 'panel_cliente.html' %}
 {% block title %}Mis Datos Personales{% endblock %}
 {% block description %}Gestión de los datos personales del cliente{% endblock %}
+
 {% block head_extra %}
-{{ super() }}
+  {{ super() }}
+  <link rel="stylesheet" href="/static/css/alertas-custom.css">
+  <link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
+  <link rel="preload" as="image" href="/static/iconos/error-registro.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-registro.png">
 {% endblock %}
 
 {% block content %}
@@ -54,7 +59,9 @@
     <span id="alert-text" class="alert-message">Texto de alerta</span>
   </div>
 </div>
+
 {% block scripts %}
   {{ super() }}
+  <script src="/static/js/alertas.js"></script>
   <script src="/static/js/clientes_datos_personales.js"></script>
 {% endblock %}

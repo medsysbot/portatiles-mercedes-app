@@ -18,7 +18,7 @@ const ALERT_ICONS = {
   "error-sesion":           { icon: "/static/iconos/error-sesion.png",          msg: "Error al iniciar sesión" },
   "exito-sesion":           { icon: "/static/iconos/exito-sesion.png",          msg: "Sesión iniciada" },
   "inicio-sesion":          { icon: "/static/iconos/inicio-sesion.png",         msg: "Iniciando sesión" },
-  "email-incorrecto":       { icon: "/static/iconos/email-incorrecto.png",      msg: "E-mail incorrecto" },
+  "email-incorrecto":       { icon: "/static/iconos/email-error.png",      msg: "E-mail incorrecto" },
   "enviando-informe":       { icon: "/static/iconos/enviando-informe.png",      msg: "Enviando informe..." },
   "enviando-mensaje":       { icon: "/static/iconos/enviando-mensaje.png",      msg: "Enviando mensaje..." },
   "enviando-reporte":       { icon: "/static/iconos/enviando-reporte.png",      msg: "Enviando datos..." },

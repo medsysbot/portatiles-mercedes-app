@@ -31,7 +31,9 @@ if not logger.handlers:
     logger.addHandler(handler)
     logger.propagate = False
 
+TEMPLATES = Jinja2Templates(directory="templates")
 VENTAS_TABLE = "ventas"
+
 # ==== Modelo de formulario ====
 class VentaPublica(BaseModel):
     cliente_nombre: str

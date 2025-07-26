@@ -2,6 +2,15 @@
 {% block title %}Enviar Email{% endblock %}
 {% block description %}Formulario para enviar emails al área administrativa{% endblock %}
 
+{% block head_extra %}
+  <!-- Precarga de íconos para alertas -->
+  <link rel="preload" as="image" href="/static/iconos/email-envio.png">
+  <link rel="preload" as="image" href="/static/iconos/email-exito.png">
+  <link rel="preload" as="image" href="/static/iconos/email-error.png">
+  <link rel="stylesheet" href="/static/css/alertas-custom.css">
+  {{ super() }}
+{% endblock %}
+
 {% block content %}
 <div class="container mt-4">
   <h2>Enviar Email</h2>
@@ -36,8 +45,10 @@
     <span id="alert-text" class="alert-message">Texto de alerta</span>
   </div>
 </div>
+
 {% block scripts %}
   {{ super() }}
-  <script src="/clientes_email.js"></script>
+  <!-- Cargar alertas.js primero -->
   <script src="/static/js/alertas.js"></script>
+  <script src="/clientes_email.js"></script>
 {% endblock %}

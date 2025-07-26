@@ -7,6 +7,10 @@ let alertTimeout = null;
 // === ICONOS Y MENSAJES PERSONALIZADOS ===
 const ALERT_ICONS = {
 
+
+ "registrando-usuario":     { icon: "/static/iconos/registrando-usuario.png",   msg: "Registrando..." },  
+  "error-registro":         { icon: "/static/iconos/error-registro.png",        msg: "Error al registrarse" },  
+  "exito-registro":         { icon: "/static/iconos/exito-registro.png",        msg: "Registro exitoso" },   
   "email-exito":            { icon: "/static/iconos/email-exito.png",           msg: "E-mail enviado" }, 
   "email-envio":            { icon: "/static/iconos/email-envio.png",           msg: "Enviando email" },  
   "error-informe":          { icon: "/static/iconos/error-informe.png",         msg: "Error al enviar informe" },

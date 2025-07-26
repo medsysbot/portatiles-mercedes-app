@@ -6,7 +6,7 @@ Proyecto: Portátiles Mercedes
 Versión final con alertas visuales y await controlado
 */
 
-const form = document.getElementById('formulario-venta');
+const form = document.getElementById('formventa');
 
 form.addEventListener('submit', async (e) => {
   e.preventDefault();

@@ -40,7 +40,6 @@ class VentaPublica(BaseModel):
     direccion_entrega: str
     fecha_venta: date
     correo_cliente: str
-    observaciones: str | None = None
 
 # ==== Endpoint ====
 @router.post("/registrar_venta")
@@ -60,7 +59,6 @@ async def registrar_venta(venta: VentaPublica):
         f"Cantidad: {venta.cantidad}\n"
         f"Dirección de entrega: {venta.direccion_entrega}\n"
         f"Fecha de venta: {venta.fecha_venta}\n"
-        f"Observaciones: {venta.observaciones or ''}"
     )
 
     try:

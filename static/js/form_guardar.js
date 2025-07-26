@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const datos = new FormData(form);
 
     if (typeof showAlert === 'function') {
-      await showAlert('enviando-informe', 'Enviando informe...', 2200);
+      await showAlert('info-cargando', 'Enviando reporte...', 2200);
     }
 
     try {
@@ -23,19 +23,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (resp.ok) {
         if (typeof showAlert === 'function') {
-          await showAlert('informe-enviado', 'Informe enviado', 2200);
+          await showAlert('exito-reporte', 'Reporte enviado', 2200);
         }
         setTimeout(() => {
           window.location.href = form.dataset.successUrl || '/';
         }, 2000);
       } else {
         if (typeof showAlert === 'function') {
-          await showAlert('error-informe', 'Error al enviar informe', 2400);
+          await showAlert('error-reporte', 'Error al enviar reporte', 2400);
         }
       }
     } catch (_) {
       if (typeof showAlert === 'function') {
-        await showAlert('error-informe', 'Error al enviar informe', 2400);
+        await showAlert('error-reporte', 'Error al enviar reporte', 2400);
       }
     }
   });

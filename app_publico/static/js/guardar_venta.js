@@ -52,7 +52,7 @@ form.addEventListener('submit', async (e) => {
 
     } else {
       if (typeof showAlert === 'function') {
-        await showAlert('reporte-error', mensajeError, 2500);
+        await showAlert('reporte-error', resJson.detail || 'Error al enviar el formulario', 2500);
       }
     }
   } catch (_) {

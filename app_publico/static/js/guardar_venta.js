@@ -3,7 +3,7 @@ Archivo: guardar_venta.js
 Descripción: Envía los datos del formulario de venta
 Acceso: Público
 Proyecto: Portátiles Mercedes
-Versión final con alertas visuales y await controlado
+Versión final unificada con técnica de alquileres
 */
 
 const form = document.getElementById('formVenta');
@@ -35,7 +35,7 @@ form.addEventListener('submit', async (e) => {
     });
 
     const resJson = await resp.json();
-    ok = resp.ok && (resJson.ok === true || resJson.mensaje);
+    ok = resp.ok && resJson.ok;
 
     if (ok) {
       if (typeof showAlert === 'function') {
@@ -52,7 +52,10 @@ form.addEventListener('submit', async (e) => {
 
     } else {
       if (typeof showAlert === 'function') {
-        await showAlert('reporte-error', resJson.detail || 'Error al enviar el formulario', 2500);
+        const errorMsg = typeof resJson.detail === 'string'
+          ? resJson.detail
+          : 'Error al enviar el formulario';
+        await showAlert('reporte-error', errorMsg, 2500);
       }
     }
   } catch (_) {

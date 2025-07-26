@@ -1,37 +1,42 @@
 // Archivo: static/js/form_guardar.js
 // Proyecto: Portátiles Mercedes
-// Manejo estandarizado de formularios con botón Guardar
+// Adaptación oficial según plantilla validada (limpieza_form_empleado.js)
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('form[data-success-url]').forEach(form => {
-    form.addEventListener('submit', async ev => {
-      if (!form.checkValidity()) {
-        return; // el navegador mostrará los mensajes de validación
-      }
-      ev.preventDefault();
-      if (typeof showAlert === 'function') {
-        showAlert('guardando-datos', 'Guardando datos...', false);
-      }
-      try {
-        const url = form.getAttribute('action') || window.location.pathname;
-        const resp = await fetch(url, { method: 'POST', body: new FormData(form) });
-        if (resp.ok) {
-          if (typeof showAlertAndRedirect === 'function') {
-            showAlertAndRedirect('exito-registro', form.dataset.successUrl);
-          } else {
-            window.location.href = form.dataset.successUrl;
-          }
-        } else {
-          if (typeof showAlert === 'function') {
-            showAlert('error-datos', 'Error al guardar datos');
-          }
-        }
-      } catch (err) {
-        console.error('Error enviando formulario', err);
+  const form = document.querySelector('form[data-success-url]');
+
+  if (!form) return;
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const datos = new FormData(form);
+
+    if (typeof showAlert === 'function') {
+      await showAlert('enviando-informe', 'Enviando informe...', 2200);
+    }
+
+    try {
+      const resp = await fetch(form.getAttribute('action') || window.location.pathname, {
+        method: 'POST',
+        body: datos
+      });
+
+      if (resp.ok) {
         if (typeof showAlert === 'function') {
-          showAlert('error-datos', 'Error al guardar datos');
+          await showAlert('informe-enviado', 'Informe enviado', 2200);
+        }
+        setTimeout(() => {
+          window.location.href = form.dataset.successUrl || '/';
+        }, 2000);
+      } else {
+        if (typeof showAlert === 'function') {
+          await showAlert('error-informe', 'Error al enviar informe', 2400);
         }
       }
-    });
+    } catch (_) {
+      if (typeof showAlert === 'function') {
+        await showAlert('error-informe', 'Error al enviar informe', 2400);
+      }
+    }
   });
 });

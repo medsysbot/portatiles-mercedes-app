@@ -51,10 +51,6 @@ form.addEventListener('submit', async (e) => {
       }, 2400);
 
     } else {
-      const mensajeError =
-        typeof resJson.detail === 'string'
-          ? resJson.detail
-          : 'Error al enviar el formulario';
       if (typeof showAlert === 'function') {
         await showAlert('reporte-error', mensajeError, 2500);
       }

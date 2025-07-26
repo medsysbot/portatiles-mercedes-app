@@ -1,9 +1,17 @@
 {% extends 'panel_empleado.html' %}
 {% block title %}{{ 'Editar Servicio de Limpieza' if servicio else 'Nuevo Servicio de Limpieza' }}{% endblock %}
 {% block description %}Formulario para registrar o editar un servicio de limpieza{% endblock %}
+
 {% block head_extra %}
+<!-- ✅ Precarga obligatoria antes del super() -->
+<link rel="preload" as="image" href="/static/iconos/enviando-informe.png">
+<link rel="preload" as="image" href="/static/iconos/exito-informe.png">
+<link rel="preload" as="image" href="/static/iconos/error-informe.png">
+<link rel="stylesheet" href="/static/css/alertas-custom.css">
+
 {{ super() }}
 {% endblock %}
+
 {% block content %}
 <h2 class="mt-0">{{ 'Editar Servicio de Limpieza' if servicio else 'Nuevo Servicio de Limpieza' }}</h2>
 

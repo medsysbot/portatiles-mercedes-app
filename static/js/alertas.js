@@ -8,7 +8,7 @@ let alertTimeout = null;
 const ALERT_ICONS = {
 
 
- "registrando-usuario":     { icon: "/static/iconos/registrando-usuario.png",   msg: "Registrando..." },  
+  "registrando-usuario":    { icon: "/static/iconos/registrando-usuario.png",   msg: "Registrando..." },  
   "error-registro":         { icon: "/static/iconos/error-registro.png",        msg: "Error al registrarse" },  
   "exito-registro":         { icon: "/static/iconos/exito-registro.png",        msg: "Registro exitoso" },   
   "email-exito":            { icon: "/static/iconos/email-exito.png",           msg: "E-mail enviado" }, 

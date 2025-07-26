@@ -32,7 +32,7 @@ const ALERT_ICONS = {
   "borrado-exito":          { icon: "/static/iconos/borrado-exito.png",         msg: "Registros eliminados" },
   "borrado-error":          { icon: "/static/iconos/borrado-error.png",         msg: "Error al eliminar" },
   "info-cargando":          { icon: "/static/iconos/enviando-reporte.png",      msg: "Cargando información..." },
-  "cargando-datos":         { icon: "/static/iconos/enviando-reporte.png",      msg: "Cargando datos..." },
+  "informe-enviado":        { icon: "/static/iconos/exito-informe.png",         msg: "Informe enviado" },
   "verifique-contrasena":   { icon: "/static/iconos/verifique-contrasena.png",  msg: "Verifique su contraseña" }
 };
 

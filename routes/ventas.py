@@ -31,6 +31,7 @@ if not logger.handlers:
     logger.addHandler(handler)
     logger.propagate = False
 
+VENTAS_TABLE = "ventas"
 # ==== Modelo de formulario ====
 class VentaPublica(BaseModel):
     cliente_nombre: str

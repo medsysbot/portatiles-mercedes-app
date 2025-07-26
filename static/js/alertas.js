@@ -6,8 +6,9 @@ let alertTimeout = null;
 
 // === ICONOS Y MENSAJES PERSONALIZADOS ===
 const ALERT_ICONS = {
- 
-  
+
+  "email-exito":            { icon: "/static/iconos/email-exito.png",           msg: "E-mail enviado" }, 
+  "email-envio":            { icon: "/static/iconos/email-envio.png",           msg: "Enviando email" },  
   "error-informe":          { icon: "/static/iconos/error-informe.png",         msg: "Error al enviar informe" },
   "repote-error":           { icon: "/static/iconos/reporte-error.png",         msg: "Error al enviar el formulario" },
   "reporte-exito":          { icon: "/static/iconos/reporte-exito.png",         msg: "Exito al enviar el formulario" },
@@ -18,7 +19,7 @@ const ALERT_ICONS = {
   "error-sesion":           { icon: "/static/iconos/error-sesion.png",          msg: "Error al iniciar sesión" },
   "exito-sesion":           { icon: "/static/iconos/exito-sesion.png",          msg: "Sesión iniciada" },
   "inicio-sesion":          { icon: "/static/iconos/inicio-sesion.png",         msg: "Iniciando sesión" },
-  "email-incorrecto":       { icon: "/static/iconos/email-error.png",      msg: "E-mail incorrecto" },
+  "email-incorrecto":       { icon: "/static/iconos/email-error.png",           msg: "E-mail no enviado" },
   "enviando-informe":       { icon: "/static/iconos/enviando-informe.png",      msg: "Enviando informe..." },
   "enviando-mensaje":       { icon: "/static/iconos/enviando-mensaje.png",      msg: "Enviando mensaje..." },
   "enviando-reporte":       { icon: "/static/iconos/enviando-reporte.png",      msg: "Enviando datos..." },

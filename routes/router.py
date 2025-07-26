@@ -17,7 +17,6 @@ from fastapi import Depends
 import os
 from utils.auth_utils import verificar_token
 
-from routes.ventas import router as ventas_router
 from routes.cliente_panel import router as cliente_router
 from routes.admin_panel import router as admin_router
 from routes.login import router as login_router

@@ -59,7 +59,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
       const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        },
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
@@ -118,15 +121,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const btnBuscar = document.getElementById('btnBuscarCliente');
   if (buscador) buscador.addEventListener('input', () => filtrarClientes(buscador.value.trim()));
   if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
+
   if (window.pmClientesAdminData.length === 0) {
-  obtenerClientes();
-} else {
-  if (typeof showAlert === 'function') {
-    await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
-    await showAlert('exito-datos', 'Clientes cargados', true, 2600);
+    obtenerClientes();
+  } else {
+    if (typeof showAlert === 'function') {
+      await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
+      await showAlert('exito-datos', 'Clientes cargados', true, 2600);
+    }
+    mostrarClientes(window.pmClientesAdminData);
   }
-  mostrarClientes(window.pmClientesAdminData);
-}
-
 });
-

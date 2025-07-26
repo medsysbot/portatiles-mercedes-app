@@ -3,8 +3,15 @@
 {% block description %}Listado de comprobantes subidos{% endblock %}
 
 {% block head_extra %}
-<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
-{{ super() }}
+  <!-- Precarga de íconos de alerta -->
+  <link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
+  <link rel="preload" as="image" href="/static/iconos/exito-reporte.png">
+  <link rel="preload" as="image" href="/static/iconos/error-reporte.png">
+  <!-- Estilos de alertas -->
+  <link rel="stylesheet" href="/static/css/alertas-custom.css">
+  <!-- CSS de DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+  {{ super() }}
 {% endblock %}
 
 {% block content %}
@@ -57,27 +64,31 @@
           <tr>
             <th></th>
             <th>Nombre cliente</th>
-          <th>DNI / CUIT / CUIL</th>
-          <th>Razón social</th>
-          <th>Número de factura</th>
+            <th>DNI / CUIT / CUIL</th>
+            <th>Razón social</th>
+            <th>Número de factura</th>
             <th>Comprobante</th>
             <th>Fecha</th>
           </tr>
         </thead>
-      <tbody></tbody>
+        <tbody></tbody>
       </table>
     </div>
   </div>
-<div id="alert-manager" class="alert-container" style="display:none;">
-  <div class="alert-box">
-    <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon">
-    <span id="alert-text" class="alert-message">Texto de alerta</span>
+
+  <!-- ALERTA CENTRAL PERSONALIZADA -->
+  <div id="alert-manager" class="alert-container" style="display:none;">
+    <div class="alert-box">
+      <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon">
+      <span id="alert-text" class="alert-message">Texto de alerta</span>
+    </div>
   </div>
-</div>
 {% endblock %}
 
 {% block scripts %}
   {{ super() }}
+  <!-- Script de alertas SIEMPRE PRIMERO -->
+  <script src="/static/js/alertas.js"></script>
   <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
   <script src="/clientes_comprobantes.js"></script>
 {% endblock %}

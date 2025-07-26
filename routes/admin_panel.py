@@ -35,6 +35,7 @@ supabase: Client | None = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
+ALQUILERES_TABLE = "alquileres"
 
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)

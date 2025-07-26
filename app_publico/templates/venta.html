@@ -182,32 +182,35 @@ Versión final - Compactado y 100% responsivo
   </div>
 
   <!-- Formulario -->
-  <form id="formVenta" data-success-url="/ventas">
-    <label>Nombre del cliente
-      <input type="text" name="cliente_nombre">
-    </label>
-    <label>DNI / CUIT / CUIL
-      <input type="text" name="dni_cuit_cuil">
-    </label>
-    <label>Tipo de baño
-      <select name="tipo_banio">
-        <option value="comun">Común</option>
-        <option value="VIP">VIP</option>
-      </select>
-    </label>
-    <label>Cantidad
-      <input type="number" name="cantidad">
-    </label>
-    <label>Dirección de entrega
-      <input type="text" name="direccion_entrega">
-    </label>
-    <label>Fecha de venta
-      <input type="date" name="fecha_venta">
-    </label>
-    <label>Observaciones
-      <textarea name="observaciones"></textarea>
-    </label>
-  </form>
+<form id="formVenta" data-success-url="/ventas">
+  <label>Nombre del cliente
+    <input type="text" name="cliente_nombre">
+  </label>
+  <label>DNI / CUIT / CUIL
+    <input type="text" name="dni_cuit_cuil">
+  </label>
+  <label>Correo electrónico
+    <input type="email" name="correo_cliente">
+  </label>
+  <label>Tipo de baño
+    <select name="tipo_banio">
+      <option value="comun">Común</option>
+      <option value="VIP">VIP</option>
+    </select>
+  </label>
+  <label>Cantidad
+    <input type="number" name="cantidad">
+  </label>
+  <label>Dirección de entrega
+    <input type="text" name="direccion_entrega">
+  </label>
+  <label>Fecha de venta
+    <input type="date" name="fecha_venta">
+  </label>
+  <label>Observaciones
+    <textarea name="observaciones"></textarea>
+  </label>
+</form>
 
   <!-- Botonera -->
   <div class="contenedor-botones">

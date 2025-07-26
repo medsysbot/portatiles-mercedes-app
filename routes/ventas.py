@@ -12,8 +12,13 @@ from datetime import date
 import logging
 import os
 
-from fastapi import APIRouter, Request
-from pydantic import BaseModel
+from fastapi import APIRouter, HTTPException, Request
+from fastapi.responses import RedirectResponse, HTMLResponse
+from fastapi.templating import Jinja2Templates
+from pydantic import BaseModel, ValidationError
+from fpdf import FPDF
+from supabase import create_client, Client
+import smtplib
 from utils.email_sender import enviar_email
 
 router = APIRouter()

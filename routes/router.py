@@ -54,7 +54,6 @@ templates = Jinja2Templates(directory="templates")
 templates.env.globals["gmail_user"] = os.getenv("EMAIL_ORIGEN")
 
 # Incluir las rutas del módulo de ventas
-router.include_router(ventas_router)
 # Incluir las rutas del módulo de débito automático
 #app.include_router(comprobantes_pago_router)
 router.include_router(comprobantes_pago_router)

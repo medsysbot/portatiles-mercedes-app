@@ -51,8 +51,12 @@ form.addEventListener('submit', async (e) => {
       }, 2400);
 
     } else {
+      const mensajeError =
+        typeof resJson.detail === 'string'
+          ? resJson.detail
+          : 'Error al enviar el formulario';
       if (typeof showAlert === 'function') {
-        await showAlert('error-reporte', resJson.detail || 'Error al enviar el formulario', 2500);
+        await showAlert('error-reporte', mensajeError, 2500);
       }
     }
   } catch (_) {

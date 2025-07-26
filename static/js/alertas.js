@@ -6,6 +6,9 @@ let alertTimeout = null;
 
 // === ICONOS Y MENSAJES PERSONALIZADOS ===
 const ALERT_ICONS = {
+ 
+  
+  "error-informe":          { icon: "/static/iconos/error-informe.png",         msg: "Error al enviar informe" },
   "repote-error":           { icon: "/static/iconos/reporte-error.png",         msg: "Error al enviar el formulario" },
   "reporte-exito":          { icon: "/static/iconos/reporte-exito.png",         msg: "Exito al enviar el formulario" },
   "formulario-error":       { icon: "/static/iconos/formulario-error.png",      msg: "Error al cargar el formulario" },

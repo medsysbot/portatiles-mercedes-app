@@ -1,17 +1,31 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Clientes{% endblock %}
 {% block description %}Listado y administración de clientes{% endblock %}
+
 {% block head_extra %}
 {{ super() }}
+<!-- Precarga íconos para alertas personalizadas -->
+<link rel="preload" as="image" href="/static/iconos/borrado.png">
+<link rel="preload" as="image" href="/static/iconos/borrado-exito.png">
+<link rel="preload" as="image" href="/static/iconos/borrado-error.png">
+<link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
+<link rel="preload" as="image" href="/static/iconos/error-registro.png">
+<link rel="preload" as="image" href="/static/iconos/exito-registro.png">
+
+<!-- CSS de alertas visuales -->
+<link rel="stylesheet" href="/static/css/alertas-custom.css">
+
+<!-- DataTables -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 {% endblock %}
+
 {% block content %}
 <h2 class="mb-3 mt-0">Administración de clientes</h2>
 
 <div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
-    <div class="mb-2 flex-grow-1">
-      <input type="text" id="busquedaCliente" class="form-control buscador-tabla" placeholder="Buscar...">
-    </div>
+  <div class="mb-2 flex-grow-1">
+    <input type="text" id="busquedaCliente" class="form-control buscador-tabla" placeholder="Buscar...">
+  </div>
   <div class="d-flex flex-wrap gap-2">
     <button class="btn btn-secondary" id="btnBuscarCliente" type="button">Buscar</button>
     <a href="/admin/clientes/nuevo" class="btn btn-success"><i class="fas fa-user-plus"></i> Agregar cliente</a>
@@ -38,6 +52,8 @@
     <tbody></tbody>
   </table>
 </div>
+
+<!-- Contenedor de alerta personalizada -->
 <div id="alert-manager" class="alert-container" style="display:none;">
   <div class="alert-box">
     <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon">
@@ -47,6 +63,8 @@
 {% endblock %}
 
 {% block scripts %}
+<!-- Alertas.js debe ir antes que cualquier otro script -->
+<script src="/static/js/alertas.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/clientes_admin.js"></script>
 {% endblock %}

@@ -21,8 +21,8 @@ import os
 import logging
 from supabase import create_client, Client
 from jose import jwt, JWTError
-
-
+from routes.alquileres import ALQUILERES_TABLE
+from routes.ventas import VENTAS_TABLE
 load_dotenv()
 
 # Configuración de correo
@@ -35,7 +35,6 @@ supabase: Client | None = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-ALQUILERES_TABLE = "alquileres"
 
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)

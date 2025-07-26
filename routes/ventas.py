@@ -48,7 +48,7 @@ async def registrar_venta(venta: VentaPublica):
 
     EMAIL_ORIGEN = os.getenv("EMAIL_ORIGEN")
     if not EMAIL_ORIGEN:
-        raise HTTPException(status_code=500, detail="Email de origen no configurado")
+        return {"ok": False, "detail": "Email de origen no configurado"}
 
     cuerpo = (
         f"Nuevo formulario de VENTA recibido:\n\n"
@@ -67,4 +67,4 @@ async def registrar_venta(venta: VentaPublica):
         return {"ok": True}
     except Exception as exc:
         logger.exception("Error al enviar correo de venta: %s", exc)
-        raise HTTPException(status_code=500, detail="No se pudo enviar el correo de venta")
+        return {"ok": False, "detail": "No se pudo enviar el correo de venta"}

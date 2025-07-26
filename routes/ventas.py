@@ -12,7 +12,7 @@ from datetime import date
 import logging
 import os
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Request
 from pydantic import BaseModel
 from utils.email_sender import enviar_email
 
@@ -41,14 +41,25 @@ class VentaPublica(BaseModel):
     fecha_venta: date
     correo_cliente: str
 
-# ==== Endpoint ====
+# ==== Endpoint unificado con técnica de alquileres ====
 @router.post("/registrar_venta")
-async def registrar_venta(venta: VentaPublica):
+async def registrar_venta(request: Request):
     """Recibe los datos del formulario de ventas y envía correo."""
+
+    if request.headers.get("content-type", "").startswith("application/json"):
+        datos = await request.json()
+    else:
+        form = await request.form()
+        datos = dict(form)
+
+    try:
+        venta = VentaPublica(**datos)
+    except Exception as exc:
+        return {"error": f"Datos inválidos: {exc}"}
 
     email_origen = os.getenv("EMAIL_ORIGEN")
     if not email_origen:
-        raise HTTPException(status_code=500, detail="Email de origen no configurado")
+        return {"error": "Email de origen no configurado"}
 
     cuerpo = (
         f"Nuevo formulario de VENTA recibido:\n\n"
@@ -67,4 +78,4 @@ async def registrar_venta(venta: VentaPublica):
         return {"ok": True}
     except Exception as exc:
         logger.exception("Error al enviar correo de venta: %s", exc)
-        raise HTTPException(status_code=500, detail="No se pudo enviar el correo de venta")
+        return {"error": "No se pudo enviar el correo de venta"}

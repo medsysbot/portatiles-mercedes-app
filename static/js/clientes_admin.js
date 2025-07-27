@@ -110,10 +110,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
 
   if (window.pmClientesAdminData.length === 0) {
-    if (typeof showAlert === 'function') await showAlert('registrando-usuario', '', true, 2600);
-    await obtenerClientes();
-    if (typeof showAlert === 'function') await showAlert('exito-registro', '', true, 2600);
-  } else {
-    mostrarClientes(window.pmClientesAdminData);
-  }
-});
+  await obtenerClientes();
+} else {
+  mostrarClientes(window.pmClientesAdminData);
+}

@@ -1,249 +1,14 @@
-#robot-pm-widget {
-    position: fixed;
-    bottom: 10vh;        /* ✅ Altura flotante ideal */
-    right: 40px;         /* ✅ Frente al baño */
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+/* === ROBOT PM WIDGET - PORTÁTILES MERCEDES === */
 
-#robot-pm-img {
-    width: 215px;
-    height: auto;
-    animation: flotacion 0s ease-in-out infinite;
-}
-
-#robot-globo {
-    position: relative;
-    background-color: #ffffff;
-    border: 3px solid #000000;
-    border-radius: 20px;
-    padding: 10px 18px;
-    font-size: 15px;
-    font-weight: 600;
-    color: #000000;
-    max-width: 200px;
-    text-align: center;
-    margin-bottom: 3px;  /* ✅ Pegadito a la cabeza */
-    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
-    line-height: 1.3;
-    z-index: 5;
-    top: 2px;
-}
-
-.robot-globo-punta {
-    position: absolute;
-    bottom: -12px;
-    right: 35px;
-    left: auto;
-    width: 20px;
-    height: 20px;
-    background-color: #ffffff;
-    border-right: 3px solid #000000;
-    border-bottom: 3px solid #000000;
-    transform: rotate(-45deg);
-    z-index: -1;
-}
-
-#robot-estela {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: -30px;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-}
-
-.fuego {
-    width: 12px;
-    height: 30px;
-    border-radius: 50%;
-    background: radial-gradient(ellipse at center, #ff9900 0%, #ff0000 60%, transparent 100%);
-    animation: fuegoAnimado 0.3s infinite alternate;
-    opacity: 0.8;
-    filter: blur(1px);
-}
-
-.fuego1 {
-    transform: rotate(5deg);
-}
-
-.fuego2 {
-    transform: rotate(-5deg);
-    margin-top: -10px;
-}
-
-@keyframes fuegoAnimado {
-    0% { transform: scaleY(1); opacity: 0.6; }
-    100% { transform: scaleY(1.6); opacity: 1; }
-}
-
-@keyframes flotacion {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-2px); }
-    100% { transform: translateY(0); }
-}
-
-/* === ROBOT PM WIDGET - Portátiles Mercedes === */
-
-/* Widget flotante, esquina inferior derecha */
 .robot-pm-flotante {
   position: fixed;
-  right: 24px;
-  bottom: 22px;
+  right: 6px;        /* Más pegado al borde derecho */
+  bottom: 18px;
   z-index: 2000;
-  width: 220px;
-  min-height: 260px;
+  width: 226px;
+  min-height: 275px;
   user-select: none;
   pointer-events: auto;
-}
-
-/* Imagen del robot con botones encima (posiciona relativos) */
-.robot-pm-imagen-con-botones {
-  position: relative;
-  width: 220px;
-  height: 260px;
-}
-
-/* Imagen del robot, se ve normal */
-#robot-pm-img {
-  width: 220px;
-  height: 260px;
-  display: block;
-  pointer-events: none; /* Los clicks van a los botones overlay */
-}
-
-/* Botones transparentes (zonas activas AU/TX/X costado) */
-.robot-btn-area {
-  position: absolute;
-  background: transparent;
-  border: none;
-  opacity: 0;
-  z-index: 2;
-  cursor: pointer;
-  width: 38px;
-  height: 38px;
-  padding: 0;
-  margin: 0;
-}
-
-/* Ajusta estas posiciones según la imagen: */
-/* TX - abajo del costado izquierdo */
-.robot-btn-tx {
-  left: 8px; bottom: 46px;
-}
-/* AU - centro costado */
-.robot-btn-au {
-  left: 8px; bottom: 92px;
-}
-/* X - arriba costado */
-.robot-btn-close {
-  left: 8px; bottom: 142px;
-}
-
-/* Globito de diálogo (sale arriba del robot) */
-#robot-globo {
-  position: absolute;
-  left: 62px;
-  bottom: 245px;
-  background: #fff;
-  color: #222;
-  border-radius: 14px;
-  padding: 15px 22px;
-  font-size: 17px;
-  font-family: 'Nunito', Arial, sans-serif;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.15), 0 1.5px 2.5px #ccc;
-  min-width: 90px;
-  max-width: 250px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity .25s, transform .2s;
-  z-index: 10;
-}
-.robot-globo-oculto { display: none; }
-.robot-globo-punta {
-  position: absolute;
-  left: 28px;
-  bottom: -19px;
-  width: 28px; height: 19px;
-  background: transparent;
-}
-.robot-globo-punta::before {
-  content: '';
-  display: block;
-  width: 24px; height: 19px;
-  background: #fff;
-  border-radius: 0 0 24px 24px;
-  margin-left: 2px;
-}
-
-/* Formulario de entrada de texto/audio: oculto por defecto */
-.robot-form-entrada {
-  display: none;
-  position: absolute;
-  left: 17px;
-  bottom: 17px;
-  width: 186px;
-  z-index: 30;
-  background: rgba(255,255,255,0.99);
-  border-radius: 12px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.18);
-  padding: 8px 10px 7px 10px;
-  flex-direction: row;
-  align-items: center;
-  gap: 7px;
-  animation: fadein-robot-input .33s;
-}
-
-/* Input de texto */
-#robot-input-texto {
-  width: 110px;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-size: 16px;
-  color: #222;
-  padding: 2px 3px;
-  font-family: 'Nunito', Arial, sans-serif;
-}
-
-/* Botón enviar (→) */
-.robot-btn-enviar {
-  background: #deb460;
-  border: none;
-  color: #222;
-  font-size: 21px;
-  border-radius: 7px;
-  padding: 2px 9px 2px 9px;
-  margin-left: 1px;
-  cursor: pointer;
-  transition: background .13s;
-  font-family: inherit;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.robot-btn-enviar:hover { background: #e4cb85; }
-
-@keyframes fadein-robot-input {
-  from { opacity: 0; transform: translateY(10px);}
-  to   { opacity: 1; transform: translateY(0);}
-}
-
-/* Área de grabación de audio */
-.robot-area-audio { gap: 8px; }
-#robot-audio-status {
-  color: #535353;
-  font-size: 15px;
-  margin-left: 3px;
-  font-family: 'Nunito', Arial, sans-serif;
-}
-
-/* -- Animación flotante -- */
-.robot-pm-flotante {
   animation: robot-float 3s ease-in-out infinite;
 }
 @keyframes robot-float {
@@ -252,34 +17,184 @@
   100% { transform: translateY(0); }
 }
 
+/* Imagen del robot */
+.robot-pm-imagen-con-botones {
+  position: relative;
+  width: 226px;
+  height: 275px;
+}
+#robot-pm-img {
+  width: 226px;
+  height: 275px;
+  display: block;
+  pointer-events: none;
+}
+
+/* Botones transparentes (zonas activas sobre AU, TX, X costado) */
+.robot-btn-area {
+  position: absolute;
+  background: transparent;
+  border: none;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  margin: 0;
+}
+.robot-btn-tx    { left: 4px;  bottom: 51px; }
+.robot-btn-au    { left: 4px;  bottom: 103px; }
+.robot-btn-close { left: 4px;  bottom: 160px; }
+.robot-btn-area.robot-btn-visible { display: block !important; }
+
+/* --- Globo de diálogo/respuesta --- */
+#robot-globo {
+  position: absolute;
+  left: 72px;
+  bottom: 260px;
+  background: #fff;
+  color: #222;
+  border-radius: 18px;
+  border: 2.5px solid #deb460;
+  padding: 15px 24px 14px 19px;
+  font-size: 18.5px;
+  font-family: 'Nunito', Arial, sans-serif;
+  box-shadow: 0 9px 34px rgba(0,0,0,0.17), 0 1.5px 2.5px #e4cb85;
+  min-width: 110px;
+  max-width: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  transition: opacity .23s, transform .18s;
+  z-index: 10;
+  border-bottom-right-radius: 32px 22px;
+}
+.robot-globo-oculto { display: none; }
+.robot-globo-punta {
+  position: absolute;
+  left: 33px;
+  bottom: -20px;
+  width: 28px; height: 20px;
+  background: transparent;
+}
+.robot-globo-punta::before {
+  content: '';
+  display: block;
+  width: 24px; height: 20px;
+  background: #fff;
+  border-radius: 0 0 20px 24px;
+  border-bottom: 2.5px solid #deb460;
+  margin-left: 2.5px;
+}
+
+/* --- MODALES de input y audio --- */
+.robot-form-entrada {
+  display: none;
+  position: absolute;
+  left: 40px;
+  bottom: 26px;
+  width: 320px;
+  min-height: 75px;
+  background: #fffdfa;
+  border-radius: 17px;
+  border: 2.2px solid #deb460;
+  box-shadow: 0 4px 22px rgba(222,180,96,0.13), 0 1.5px 2.5px #e4cb85;
+  padding: 16px 20px 13px 20px;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  animation: fadein-robot-input .35s;
+  z-index: 22;
+}
+.robot-form-entrada.robot-input-visible { display: flex !important; }
+@keyframes fadein-robot-input {
+  from { opacity: 0; transform: translateY(30px);}
+  to   { opacity: 1; transform: translateY(0);}
+}
+/* --- Botón X dentro del modal --- */
+.robot-modal-close {
+  background: transparent;
+  border: none;
+  color: #deb460;
+  font-size: 24px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: 3px;
+  margin-top: -3px;
+  cursor: pointer;
+  transition: color .13s;
+}
+.robot-modal-close:hover { color: #b78c28; }
+
+/* --- Input de texto --- */
+#robot-input-texto {
+  width: 65%;
+  min-width: 110px;
+  border: 1.2px solid #deb460;
+  border-radius: 8px;
+  outline: none;
+  background: #fffdfa;
+  font-size: 18px;
+  color: #444;
+  padding: 7px 8px;
+  font-family: 'Nunito', Arial, sans-serif;
+  margin-right: 7px;
+}
+
+/* --- Botón enviar (→) --- */
+.robot-btn-enviar {
+  background: #deb460;
+  border: none;
+  color: #222;
+  font-size: 27px;
+  border-radius: 10px;
+  padding: 3px 18px 3px 15px;
+  margin-left: 3px;
+  cursor: pointer;
+  transition: background .13s;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+}
+.robot-btn-enviar:hover { background: #e4cb85; }
+
+/* --- Área de grabación de audio --- */
+.robot-area-audio { gap: 13px; }
+#robot-audio-status {
+  color: #646200;
+  font-size: 17px;
+  font-family: 'Nunito', Arial, sans-serif;
+  font-weight: 600;
+  background: #fffbea;
+  border-radius: 6px;
+  padding: 4px 10px;
+  margin-left: 2px;
+}
+
 /* -- Animación cohete al cerrar -- */
 .robot-pm-flotante.robot-cohete-out {
-  animation: robot-cohete-out 0.9s cubic-bezier(.16,.96,.61,.99) forwards;
+  animation: robot-cohete-out 0.88s cubic-bezier(.16,.96,.61,.99) forwards;
 }
 @keyframes robot-cohete-out {
   0%   { transform: translateY(0) scale(1) rotate(0deg);}
-  60%  { transform: translateY(-150px) scale(1.1) rotate(-9deg);}
-  90%  { transform: translateY(-330px) scale(0.93) rotate(-19deg);}
-  100% { transform: translateY(-700px) scale(0.8) rotate(-36deg); opacity: 0;}
+  60%  { transform: translateY(-155px) scale(1.14) rotate(-11deg);}
+  92%  { transform: translateY(-365px) scale(0.93) rotate(-23deg);}
+  100% { transform: translateY(-790px) scale(0.82) rotate(-38deg); opacity: 0;}
 }
 
-/* -- Responsive -- */
+/* --- Responsive --- */
 @media (max-width: 650px) {
-  .robot-pm-flotante { width: 150px; min-height: 170px;}
-  .robot-pm-imagen-con-botones { width: 150px; height: 170px;}
-  #robot-pm-img { width: 150px; height: 170px;}
-  #robot-globo { left: 18px; bottom: 154px; max-width: 160px; font-size: 13px;}
-  .robot-form-entrada { width: 120px; left: 10px;}
+  .robot-pm-flotante { width: 146px; min-height: 120px;}
+  .robot-pm-imagen-con-botones { width: 146px; height: 120px;}
+  #robot-pm-img { width: 146px; height: 120px;}
+  #robot-globo { left: 0px; bottom: 115px; max-width: 130px; font-size: 13px; padding: 7px 12px 7px 10px;}
+  .robot-form-entrada { width: 99vw; left: -40vw; min-width: 0; font-size: 14px;}
+  #robot-input-texto { font-size: 14px;}
+  .robot-btn-enviar { font-size: 17px; padding: 2px 9px 2px 8px;}
+  #robot-audio-status { font-size: 13px; padding: 3px 6px;}
 }
-
-/* Botones ocultos por defecto, las clases JS los muestran */
-.robot-btn-area, .robot-form-entrada, .robot-globo-oculto { display: none; }
-
-/* Visibilidad controlada por JS */
-.robot-btn-area.robot-btn-visible { display: block !important; }
-.robot-form-entrada.robot-input-visible { display: flex !important; }
-#robot-globo.robot-globo-visible { display: flex !important; }
-
-
-
 

@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Aquí van las únicas 3 alertas personalizadas según pedido
     try {
       if (typeof showAlert === 'function') {
-        await showAlert('enviando-reporte', 'Enviando reporte...', true, 2600);
+        await showAlert('borrando', 'Eliminando reporte...', true, 2600);
       }
 
       const resp = await fetch('/admin/api/reportes/eliminar', {
@@ -72,11 +72,11 @@ document.addEventListener('DOMContentLoaded', () => {
       await cargarReportes();
 
       if (typeof showAlert === 'function') {
-        await showAlert('reporte-exito', 'Reporte enviado con éxito', true, 2600);
+        await showAlert('borrado-exito', 'Reporte eliminado con éxito', true, 2600);
       }
     } catch (_) {
       if (typeof showAlert === 'function') {
-        await showAlert('reporte-error', 'Error al enviar el reporte', true, 2600);
+        await showAlert('borrado-error', 'Error al eliminar el reporte', true, 2600);
       }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;

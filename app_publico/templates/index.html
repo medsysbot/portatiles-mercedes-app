@@ -304,20 +304,22 @@ Proyecto: Portátiles Mercedes
     <button id="robot-btn-close" class="robot-btn-area robot-btn-close" title="Cerrar" aria-label="Cerrar"></button>
   </div>
 
-  <!-- Campo de texto y enviar, oculto por defecto -->
+  <!-- Modal de texto -->
   <form id="robot-form-texto" class="robot-form-entrada" autocomplete="off">
     <input type="text" id="robot-input-texto" maxlength="180" placeholder="Escribí tu pregunta..." autocomplete="off">
     <button type="submit" class="robot-btn-enviar" title="Enviar" aria-label="Enviar">→</button>
+    <button type="button" id="robot-close-texto" class="robot-modal-close" title="Cerrar" aria-label="Cerrar">✖</button>
   </form>
 
-  <!-- Área de grabación de audio, oculto por defecto -->
+  <!-- Modal de audio -->
   <div id="robot-area-audio" class="robot-form-entrada robot-area-audio">
     <button id="robot-btn-grabar" type="button" class="robot-btn-enviar" title="Grabar audio" aria-label="Grabar">🎤</button>
     <span id="robot-audio-status" class="robot-audio-status">Presioná para grabar</span>
     <button id="robot-btn-enviar-audio" type="button" class="robot-btn-enviar" style="display:none;" title="Enviar audio" aria-label="Enviar audio">→</button>
     <button id="robot-btn-cancelar-audio" type="button" class="robot-btn-enviar" style="display:none;" title="Cancelar" aria-label="Cancelar">✖</button>
+    <button type="button" id="robot-close-audio" class="robot-modal-close" title="Cerrar" aria-label="Cerrar">✖</button>
   </div>
-</div>
+</div> 
   </div>
   <script src="/app_publico/static/js/robot_pm.js"></script>
 </body>

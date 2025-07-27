@@ -40,7 +40,6 @@ function inicializarTablaClientes() {
 document.addEventListener('DOMContentLoaded', async () => {
   inicializarTablaClientes();
   const tabla = tablaClientes;
-
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
   function actualizarBoton() {
@@ -54,9 +53,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.value);
     if (!ids.length) return;
     try {
-      if (typeof showAlert === 'function') {
-        await showAlert('borrando', 'Eliminando clientes...', true, 2600);
-      }
+      if (typeof showAlert === 'function') await showAlert('borrando', 'Eliminando clientes...', true, 2600);
+
       const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',
         headers: {
@@ -65,17 +63,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         },
         body: JSON.stringify({ ids })
       });
+
       if (!resp.ok) throw new Error('Error al eliminar');
+
+      if (typeof showAlert === 'function') await showAlert('borrado-exito', 'Clientes eliminados', true, 2600);
+
       await obtenerClientes();
-      if (typeof showAlert === 'function') {
-        await showAlert('borrado-exito', 'Clientes eliminados', true, 2600);
-        await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
-        await showAlert('exito-datos', 'Clientes actualizados', true, 2600);
-      }
     } catch (err) {
-      if (typeof showAlert === 'function') {
-        await showAlert('borrado-error', 'Error eliminando clientes', true, 2600);
-      }
+      if (typeof showAlert === 'function') await showAlert('borrado-error', 'Error eliminando clientes', true, 2600);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
@@ -83,20 +78,16 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   async function obtenerClientes() {
     try {
-      if (typeof showAlert === 'function') {
-        await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
-      }
+      if (typeof showAlert === 'function') await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);
+
       const resp = await fetch('/clientes');
       const data = await resp.json();
       window.pmClientesAdminData = data || [];
       mostrarClientes(window.pmClientesAdminData);
-      if (typeof showAlert === 'function') {
-        await showAlert('exito-datos', 'Clientes cargados', true, 2600);
-      }
+
+      if (typeof showAlert === 'function') await showAlert('exito-datos', 'Clientes cargados', true, 2600);
     } catch (error) {
-      if (typeof showAlert === 'function') {
-        await showAlert('error-datos', 'Error al cargar clientes', true, 2600);
-      }
+      if (typeof showAlert === 'function') await showAlert('error-datos', 'Error al cargar clientes', true, 2600);
       if (window.pmClientesAdminData.length === 0) tabla.clear().draw();
     }
   }
@@ -123,7 +114,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
 
   if (window.pmClientesAdminData.length === 0) {
-    obtenerClientes();
+    await obtenerClientes();
   } else {
     if (typeof showAlert === 'function') {
       await showAlert('cargando-datos', 'Cargando clientes...', true, 2600);

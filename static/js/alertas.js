@@ -1,18 +1,17 @@
-// ╔════════════════════════════════════╗
-// ║ ALERTAS PERSONALIZADAS PORTÁTILES MERCEDES ║
-// ╚════════════════════════════════════╝
+// ╔═══════════════════════════════════════════════════════╗
+// ║ ALERTAS PERSONALIZADAS · PORTÁTILES MERCEDES · v2     ║
+// ╚═══════════════════════════════════════════════════════╝
 
 let alertTimeout = null;
+let alertaActiva = false;
 
 // === ICONOS Y MENSAJES PERSONALIZADOS ===
 const ALERT_ICONS = {
-
-
-  "registrando-usuario":    { icon: "/static/iconos/registrando-usuario.png",   msg: "Registrando..." },  
-  "error-registro":         { icon: "/static/iconos/error-registro.png",        msg: "Error al registrarse" },  
-  "exito-registro":         { icon: "/static/iconos/exito-registro.png",        msg: "Registro exitoso" },   
-  "email-exito":            { icon: "/static/iconos/email-exito.png",           msg: "E-mail enviado" }, 
-  "email-envio":            { icon: "/static/iconos/email-envio.png",           msg: "Enviando email" },  
+  "registrando-usuario":    { icon: "/static/iconos/registrando-usuario.png",   msg: "Registrando..." },
+  "error-registro":         { icon: "/static/iconos/error-registro.png",        msg: "Error al registrarse" },
+  "exito-registro":         { icon: "/static/iconos/exito-registro.png",        msg: "Registro exitoso" },
+  "email-exito":            { icon: "/static/iconos/email-exito.png",           msg: "E-mail enviado" },
+  "email-envio":            { icon: "/static/iconos/email-envio.png",           msg: "Enviando email" },
   "error-informe":          { icon: "/static/iconos/error-informe.png",         msg: "Error al enviar informe" },
   "repote-error":           { icon: "/static/iconos/reporte-error.png",         msg: "Error al enviar el formulario" },
   "reporte-exito":          { icon: "/static/iconos/reporte-exito.png",         msg: "Exito al enviar el formulario" },
@@ -42,52 +41,42 @@ const ALERT_ICONS = {
   "verifique-contrasena":   { icon: "/static/iconos/verifique-contrasena.png",  msg: "Verifique su contraseña" }
 };
 
-// === FUNCIÓN PRINCIPAL DE ALERTA ===
-function showAlert(type, customMessage = null, duration = 2500) {
+// === FUNCIÓN PRINCIPAL (espera completa) ===
+async function showAlert(type, customMessage = null, bloquear = true, tiempo = 2600) {
+  if (alertaActiva) await new Promise(r => setTimeout(r, 100)); // Espera si ya hay una alerta activa
+
+  alertaActiva = true;
   const alertBox = document.getElementById("alert-manager");
   const alertIcon = document.getElementById("alert-icon");
   const alertText = document.getElementById("alert-text");
 
-  const info = ALERT_ICONS[type] || { icon: "", msg: "Mensaje desconocido" };
-
+  const info = ALERT_ICONS[type] || { icon: "", msg: "Alerta desconocida" };
   alertIcon.src = info.icon;
   alertIcon.alt = type;
   alertText.textContent = customMessage || info.msg;
+
   alertBox.style.visibility = "visible";
   alertBox.style.display = "flex";
 
-  clearTimeout(alertTimeout);
+  if (alertTimeout) clearTimeout(alertTimeout);
 
-  if (duration !== false && duration !== "infinito") {
+  await new Promise(resolve => {
     alertTimeout = setTimeout(() => {
       alertBox.style.display = "none";
       alertBox.style.visibility = "hidden";
-    }, duration);
-  }
+      alertaActiva = false;
+      resolve();
+    }, tiempo);
+  });
 }
 
 // === ALERTA CON REDIRECCIÓN ===
-function showAlertAndRedirect(type, redirectUrl, customMessage = null, duration = 2500, delayAfter = 500) {
-  showAlert(type, customMessage, duration);
-  setTimeout(() => {
-    window.location.href = redirectUrl;
-  }, duration + delayAfter);
+async function showAlertAndRedirect(type, url, customMessage = null, tiempo = 2600, postDelay = 500) {
+  await showAlert(type, customMessage, true, tiempo);
+  setTimeout(() => { window.location.href = url; }, postDelay);
 }
 
-// === UTILIDADES DE CARGA DE DATOS ===
-function startDataLoad() {
-  showAlert('cargando-datos', 'Cargando datos...', false);
-  return Date.now();
-}
-
-function endDataLoad(startTime, ok = true) {
-  const delay = Math.max(0, 600 - (Date.now() - startTime));
-  setTimeout(() => {
-    showAlert(ok ? 'exito-datos' : 'error-datos');
-  }, delay);
-}
-
-// === OCULTAR ALERTA AL CARGAR ===
+// === INICIAL: ocultar al cargar por seguridad ===
 document.addEventListener("DOMContentLoaded", () => {
   const box = document.getElementById("alert-manager");
   if (box) {

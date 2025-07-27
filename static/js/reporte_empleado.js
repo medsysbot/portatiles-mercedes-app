@@ -21,19 +21,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (resp.ok) {
         if (typeof showAlert === 'function') {
-          await showAlert('exito-reporte', 'Reporte enviado', 2600);
+          await showAlert('reporte-exito', 'Reporte enviado', 2600);
         }
         setTimeout(() => {
           window.location.href = form.dataset.successUrl || '/';
         }, 2600);
       } else {
         if (typeof showAlert === 'function') {
-          await showAlert('error-reporte', 'Error al enviar reporte', 2600);
+          await showAlert('reporte-error', 'Error al enviar reporte', 2600);
         }
       }
     } catch (_) {
       if (typeof showAlert === 'function') {
-        await showAlert('error-reporte', 'Error al enviar reporte', 2600);
+        await showAlert('reporte-error', 'Error al enviar reporte', 2600);
       }
     }
   });

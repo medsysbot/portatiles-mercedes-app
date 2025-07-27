@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       // ALERTA: Cargando
-      await showAlert("/static/iconos/enviando-reporte.png", "Enviando reporte...");
+      await showAlert("info-cargando", "Enviando reporte...", 2600);
 
       const response = await fetch(action, {
         method: method.toUpperCase(),
@@ -22,15 +22,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (response.ok) {
         // ALERTA: Éxito
-        await showAlert("/static/iconos/reporte-exito.png", "Éxito al enviar el reporte");
+        await showAlert("reporte-exito", "Éxito al enviar el reporte", 2600);
         window.location.href = successUrl;
       } else {
         // ALERTA: Error
-        await showAlert("/static/iconos/reporte-error.png", "Error al enviar el reporte");
+        await showAlert("reporte-error", "Error al enviar el reporte", 2600);
       }
     } catch (error) {
       // ALERTA: Error (con catch)
-      await showAlert("/static/iconos/reporte-error.png", "Error inesperado al enviar el reporte");
+      await showAlert("reporte-error", "Error inesperado al enviar el reporte", 2600);
     }
   });
 });

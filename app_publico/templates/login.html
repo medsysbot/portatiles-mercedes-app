@@ -1,10 +1,3 @@
-<!--
-Archivo: login.html
-Descripción: Formulario de acceso al sistema
-Acceso: Público
-Proyecto: Portátiles Mercedes
-Última modificación: 2025-07-21 (limpieza y optimización)
--->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,314 +8,137 @@ Proyecto: Portátiles Mercedes
   <link rel="stylesheet" href="/static/css/alertas-custom.css">
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/app_publico/static/css/titulos_publico.css">
-  <!-- SOLO LOS ICONOS USADOS EN EL FORMULARIO DE LOGIN/REGISTRO -->
+
+  <!-- Precarga de íconos del login -->
   <link rel="preload" as="image" href="/app_publico/static/icons/inicio.png">
   <link rel="preload" as="image" href="/app_publico/static/icons/usuario-port.png">
   <link rel="preload" as="image" href="/app_publico/static/icons/password-port.png">
   <link rel="preload" as="image" href="/app_publico/static/icons/rol-port.png">
   <link rel="preload" as="image" href="/app_publico/static/icons/ingresar-al-sistema.png">
   <link rel="preload" as="image" href="/app_publico/static/icons/registro-clientes.png">
-  <!-- SOLO ALERTAS RELEVANTES PARA LOGIN -->
   <link rel="preload" as="image" href="/static/iconos/inicio-sesion.png">
   <link rel="preload" as="image" href="/static/iconos/exito-sesion.png">
   <link rel="preload" as="image" href="/static/iconos/error-sesion.png">
   <link rel="preload" as="image" href="/static/iconos/password-error.png">
   <link rel="preload" as="image" href="/static/iconos/error-conexion.png">
-  <!-- SOLO FONDO DE LOGIN -->
   <link rel="preload" as="image" href="/app_publico/static/imagenes/fondo-login.webp">
+
   <style>
     html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    body {
-      min-height: 100vh;
-      width: 100vw;
+      margin: 0; padding: 0; width: 100%; height: 100%;
       font-family: 'Nunito', Arial, sans-serif;
       background: url('/app_publico/static/imagenes/fondo-login.webp') no-repeat center center fixed;
       background-size: cover;
-      position: relative;
       overflow-x: hidden;
     }
+
     .contenedor-superior {
-      width: 100vw;
-      min-height: 140px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      padding-top: 8px;
-      padding-bottom: 0;
-      background: transparent;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: flex-end;
+      width: 100%; min-height: 140px; background: transparent;
     }
+
     .titulo-index {
-      font-family: 'Nunito', Arial, sans-serif;
-      font-weight: 800;
-      font-size: 4.5vw;
-      color: #DEB460;
-      text-align: center;
-      margin-bottom: 2px;
-      line-height: 1.08;
-      white-space: nowrap;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      /* Sombra negra fuerte (como alquiler/ventas/index) */
-      text-shadow: 0 3px 7px #000, 0 1px 0 #222, 1px 0 3px #222;
-      letter-spacing: 0.5px;
+      font-size: 4.5vw; font-weight: 800; color: #DEB460;
+      text-shadow: 0 3px 7px #000, 0 1px 0 #222;
     }
+
     .subtitulo-portatiles {
-      font-family: 'Nunito', Arial, sans-serif;
-      font-weight: 700;
-      font-style: italic;
-      font-size: 2.2vw;
-      color: #545454;
-      text-align: center;
-      margin-top: 0.1em;    /* Más cerca del título */
-      margin-bottom: 14px;  /* Menos espacio debajo */
-      text-shadow: 0 1.5px 2.5px #fff;
+      font-size: 2.2vw; font-style: italic; font-weight: 700;
+      color: #545454; margin-bottom: 14px;
     }
+
     .contenedor-main {
-      position: relative;
-      display: flex;
-      flex-direction: row;
-      width: 100vw;
-      box-sizing: border-box;
-      justify-content: center;
-      align-items: flex-start;
+      display: flex; justify-content: center;
+      width: 100%; min-height: 60vh;
       padding-bottom: 40px;
-      min-height: 60vh;
     }
-    .botonera-flotante {
-      position: absolute;
-      left: 40px;
-      bottom: 180px;
-      min-width: 260px;
-      width: 260px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      z-index: 99;
-    }
-    .boton-index {
-      width: 260px;
-      min-width: 260px;
-      max-width: 260px;
-      height: 38px;
-      font-family: 'Nunito', Arial, sans-serif;
-      font-weight: 400;
-      font-size: 18px;
-      font-style: italic;
-      background: rgba(0,0,0,0.58);
-      color: #fff;
-      border: none;
-      border-radius: 13px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      cursor: pointer;
-      transition: background .13s;
-      padding-left: 16px;
-      text-decoration: none;
-    }
-    .boton-index img {
-      width: 22px;
-      height: 22px;
-      display: inline-block;
-    }
+
     form {
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-      width: 260px;
-      box-sizing: border-box;
-      color: #fff;
-      margin: 0;
-      margin-top: 60px;
+      display: flex; flex-direction: column;
+      gap: 18px; width: 260px;
+      margin-top: 60px; color: #fff;
     }
+
     .campo-login {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
       background: rgba(0,0,0,0.58);
-      border-radius: 8px;
-      padding: 8px 12px;
-      box-sizing: border-box;
+      border-radius: 8px; padding: 8px 12px;
     }
-    .campo-login img {
-      width: 20px;
-      height: 20px;
-      margin-right: 10px;
-    }
+
+    .campo-login img { width: 20px; margin-right: 10px; }
     .campo-login input, .campo-login select {
-      background: transparent;
-      border: none;
-      outline: none;
-      color: #fff;
-      font-size: 16px;
-      width: 100%;
+      background: transparent; border: none; color: #fff;
+      font-size: 16px; width: 100%;
     }
-    @media (max-width: 1100px) {
-      .contenedor-main {
-        flex-direction: column;
-        align-items: center;
-      }
-      .botonera-flotante {
-        position: static;
-        flex-direction: row;
-        flex-wrap: wrap;
-        width: 100%;
-        min-width: 0;
-        margin-left: 0;
-        margin-top: 0;
-        justify-content: center;
-        gap: 12px;
-      }
-      form {
-        margin: 0;
-        margin-top: 60px;
-      }
+
+    .boton-index {
+      display: flex; align-items: center;
+      justify-content: center; gap: 10px;
+      background: rgba(0,0,0,0.58);
+      color: #fff; font-size: 18px;
+      border-radius: 13px; border: none;
+      height: 38px; cursor: pointer;
     }
+
+    .boton-index img { width: 22px; }
+
     @media (max-width: 700px) {
-      .botonera-flotante {
-        position: static;
-        flex-direction: column;
-        width: 100%;
-        min-width: 0;
-        margin-left: 0;
-        margin-top: 0;
-        align-items: stretch;
-      }
-      .boton-index {
-        min-width: 0;
-        font-size: 16px;
-        height: 32px;
-      }
-      
-    }
-    @media (max-width: 500px) {
-      .contenedor-superior {
-        min-height: 90px;
-        padding-top: 3px;
-        padding-bottom: 4px;
-      }
-      .logo-portatiles {
-        height: 1.2em;
-        margin: 0 6px;
-      }
-      .subtitulo-portatiles {
-        margin-bottom: 8px;
-      }
-    }
-    .titulo-con-logo {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .titulo-con-logo .titulo-index,
-    .titulo-con-logo .subtitulo-portatiles {
-      position: relative;
-      z-index: 2;
-    }
-    #btnRegistrarse {
-      margin-left: auto;
-      margin-right: auto;
-    }
-    .botonera-flotante .boton-index {
-      justify-content: flex-start !important;
+      .titulo-index { font-size: 7vw; }
+      .subtitulo-portatiles { font-size: 4vw; }
     }
   </style>
 </head>
 <body>
-  <div class="contenedor-superior titulo-con-logo">
-    <div class="titulo-index titulo-publico">
-      Login
-    </div>
-    <div class="subtitulo-portatiles">
-      Lo tradicional, hecho inteligente.
-    </div>
+  <div class="contenedor-superior">
+    <div class="titulo-index">Login</div>
+    <div class="subtitulo-portatiles">Lo tradicional, hecho inteligente.</div>
   </div>
-  <!-- ==== Sección principal ==== -->
+
   <div class="contenedor-main">
-    <!-- ==== Botonera de navegación ==== -->
-    <div class="botonera-flotante">
-      <a href="/" class="boton-index">
-        <img src="/app_publico/static/icons/inicio.png" alt="Inicio">
-        <span>Volver a inicio</span>
-      </a>
-    </div>
-    <!-- ==== Formulario de login ==== -->
-    <div id="div_login" style="display:flex; flex-direction:column; align-items:center;">
-      <form id="loginForm">
-        <div class="campo-login">
-          <img src="/app_publico/static/icons/usuario-port.png" alt="Usuario">
-          <input id="email" type="email" name="email" placeholder="Email">
-        </div>
-        <div class="campo-login">
-          <img src="/app_publico/static/icons/password-port.png" alt="Contraseña">
-          <input id="password" type="password" name="password" placeholder="Contraseña">
-        </div>
-        <div id="campo-rol" class="campo-login" style="display:none;">
-          <img src="/app_publico/static/icons/rol-port.png" alt="Rol">
-          <select name="rol" id="rol">
-            <option value="" disabled selected>Seleccionar rol</option>
-            <option value="Administrador">Administrador</option>
-            <option value="empleado">Empleado</option>
-            <option value="cliente">Cliente</option>
-          </select>
-        </div>
-        <div style="text-align:right;margin-top:4px;">
-          <a href="/recuperar_password" style="color:#fff;font-size:14px;text-decoration:underline;">¿Olvidaste tu contraseña? Recuperar</a>
-        </div>
-        <button type="button" id="btnAcceder" class="boton-index">
-          <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Acceder">
-          <span>Acceder</span>
-        </button>
-        <button type="submit" id="btnIngresar" class="boton-index" style="display:none;">
-          <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Ingresar">
-          <span>Ingresar</span>
-        </button>
-        <button type="button" id="btnRegistrarse" class="boton-index">
-          <img src="/app_publico/static/icons/registro-clientes.png" alt="Registrarse">
-          <span>Registrarse</span>
-        </button>
-      </form>
-    </div>
-    <!-- ==== Formulario de registro ==== -->
-    <div id="div_registro" style="display:none; flex-direction:column; align-items:center;">
-      <form id="registroForm">
-        <div class="campo-login">
-          <input id="reg_nombre" type="text" name="nombre" placeholder="Nombre completo">
-        </div>
-        <div class="campo-login">
-          <input id="reg_email" type="email" name="email" placeholder="Email">
-        </div>
-        <div class="campo-login">
-          <input id="reg_password" type="password" name="password" placeholder="Elige una contraseña" autocomplete="new-password">
-        </div>
-        <div class="campo-login">
-          <input id="reg_password2" type="password" name="password2" placeholder="Confirmar contraseña" autocomplete="new-password">
-        </div>
-        <button type="submit" class="boton-index">
-          <img src="/app_publico/static/icons/registro-clientes.png" alt="Crear cuenta">
-          <span>Crear cuenta</span>
-        </button>
-      </form>
-    </div>
+    <form id="loginForm">
+      <div class="campo-login">
+        <img src="/app_publico/static/icons/usuario-port.png" alt="Usuario">
+        <input id="email" type="email" name="email" placeholder="Email" required>
+      </div>
+      <div class="campo-login">
+        <img src="/app_publico/static/icons/password-port.png" alt="Contraseña">
+        <input id="password" type="password" name="password" placeholder="Contraseña" required>
+      </div>
+      <div class="campo-login" id="campo-rol" style="display:none;">
+        <img src="/app_publico/static/icons/rol-port.png" alt="Rol">
+        <select name="rol" id="rol">
+          <option value="" disabled selected>Seleccionar rol</option>
+          <option value="Administrador">Administrador</option>
+          <option value="empleado">Empleado</option>
+          <option value="cliente">Cliente</option>
+        </select>
+      </div>
+      <div style="text-align:right;">
+        <a href="/recuperar_password" style="color:#fff;font-size:14px;text-decoration:underline;">
+          ¿Olvidaste tu contraseña? Recuperar
+        </a>
+      </div>
+      <button type="submit" id="btnIngresar" class="boton-index">
+        <img src="/app_publico/static/icons/ingresar-al-sistema.png" alt="Ingresar">
+        <span>Ingresar</span>
+      </button>
+      <button type="button" id="btnRegistrarse" class="boton-index">
+        <img src="/app_publico/static/icons/registro-clientes.png" alt="Registrarse">
+        <span>Registrarse</span>
+      </button>
+    </form>
   </div>
-  <!-- ALERTA CENTRAL PERSONALIZADA -->
+
+  <!-- ALERTAS PERSONALIZADAS -->
   <div id="alert-manager" class="alert-container">
     <div class="alert-box">
-      <img id="alert-icon" src="" alt="icono-alerta" class="alert-icon" />
-      <span id="alert-text" class="alert-message"></span>
+      <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
+      <span id="alert-text" class="alert-message">Texto de alerta</span>
     </div>
   </div>
-  <!-- Scripts esenciales al final -->
+
+  <!-- SCRIPTS -->
   <script src="/static/js/alertas.js"></script>
   <script src="/app_publico/static/js/login.js"></script>
 </body>

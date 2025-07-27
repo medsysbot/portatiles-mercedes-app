@@ -2,51 +2,58 @@
 <!-- Refactor: migración completa a tabla datos_personales_clientes. Eliminadas todas las referencias a clientes. -->
 {% block title %}{{ 'Editar' if cliente else 'Nuevo' }} Cliente{% endblock %}
 {% block description %}Formulario de gestión de clientes{% endblock %}
+
 {% block head_extra %}
 {{ super() }}
+<!-- Precarga íconos específicos que usará este formulario -->
+<link rel="preload" as="image" href="/static/iconos/registrando-usuario.png">
+<link rel="preload" as="image" href="/static/iconos/error-registro.png">
+<link rel="preload" as="image" href="/static/iconos/exito-registro.png">
+<link rel="stylesheet" href="/static/css/alertas-custom.css">
 {% endblock %}
+
 {% block content %}
-<h2 class="mt-0">{{ 'Editar' if cliente else 'Nuevo' }} Cliente</h2><!-- Título alineado arriba según estándar visual de Portátiles Mercedes -->
+<h2 class="mt-0">{{ 'Editar' if cliente else 'Nuevo' }} Cliente</h2>
 <div class="pm-form-container">
   <form method="post" data-success-url="/admin/clientes">
-  <div class="form-group">
-    <label>Nombre</label>
-    <input type="text" name="nombre" class="form-control" value="{{ cliente.nombre if cliente else '' }}" required>
-  </div>
-  <div class="form-group">
-    <label>Apellido</label>
-    <input type="text" name="apellido" class="form-control" value="{{ cliente.apellido if cliente else '' }}" required>
-  </div>
-  <div class="form-group">
-    <label>DNI / CUIT / CUIL</label>
-    <input type="text" name="dni_cuit_cuil" class="form-control" value="{{ cliente.dni_cuit_cuil if cliente else '' }}" required>
-  </div>
-  <div class="form-group">
-    <label>Dirección</label>
-    <input type="text" name="direccion" class="form-control" value="{{ cliente.direccion if cliente else '' }}" required>
-  </div>
-  <div class="form-group">
-    <label>Teléfono</label>
-    <input type="text" name="telefono" class="form-control" value="{{ cliente.telefono if cliente else '' }}" required>
-  </div>
-  <div class="form-group">
-    <label>Razón social</label>
-    <input type="text" name="razon_social" class="form-control" value="{{ cliente.razon_social if cliente else '' }}" required>
-  </div>
-  <div class="form-group">
-    <label>Email</label>
-    <input type="email" name="email" class="form-control" value="{{ cliente.email if cliente else '' }}" required>
-  </div>
-  <div class="form-actions">
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a href="/admin/clientes" class="btn btn-secondary">Volver</a>
-  </div>
+    <div class="form-group">
+      <label>Nombre</label>
+      <input type="text" name="nombre" class="form-control" value="{{ cliente.nombre if cliente else '' }}" required>
+    </div>
+    <div class="form-group">
+      <label>Apellido</label>
+      <input type="text" name="apellido" class="form-control" value="{{ cliente.apellido if cliente else '' }}" required>
+    </div>
+    <div class="form-group">
+      <label>DNI / CUIT / CUIL</label>
+      <input type="text" name="dni_cuit_cuil" class="form-control" value="{{ cliente.dni_cuit_cuil if cliente else '' }}" required>
+    </div>
+    <div class="form-group">
+      <label>Dirección</label>
+      <input type="text" name="direccion" class="form-control" value="{{ cliente.direccion if cliente else '' }}" required>
+    </div>
+    <div class="form-group">
+      <label>Teléfono</label>
+      <input type="text" name="telefono" class="form-control" value="{{ cliente.telefono if cliente else '' }}" required>
+    </div>
+    <div class="form-group">
+      <label>Razón social</label>
+      <input type="text" name="razon_social" class="form-control" value="{{ cliente.razon_social if cliente else '' }}" required>
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" class="form-control" value="{{ cliente.email if cliente else '' }}" required>
+    </div>
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Guardar</button>
+      <a href="/admin/clientes" class="btn btn-secondary">Volver</a>
+    </div>
   </form>
 </div>
 {% endblock %}
 
 <!-- ALERTA CENTRAL PERSONALIZADA -->
-<div id="alert-manager" class="alert-container">
+<div id="alert-manager" class="alert-container" style="display: none;">
   <div class="alert-box">
     <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
     <span id="alert-text" class="alert-message">Texto de alerta</span>
@@ -55,5 +62,6 @@
 
 {% block scripts %}
   {{ super() }}
-  <script src="/static/js/form_guardar.js"></script>
+  <script src="/static/js/alertas.js"></script>
+  <script src="/static/js/guardar_cliente_admin.js"></script>
 {% endblock %}

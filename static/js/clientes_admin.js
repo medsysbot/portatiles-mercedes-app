@@ -113,4 +113,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   await obtenerClientes();
 } else {
   mostrarClientes(window.pmClientesAdminData);
-}
+});

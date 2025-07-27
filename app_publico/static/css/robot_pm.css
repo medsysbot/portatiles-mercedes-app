@@ -86,6 +86,200 @@
     100% { transform: translateY(0); }
 }
 
-/* Ajuste final de los ojos */
+/* === ROBOT PM WIDGET - Portátiles Mercedes === */
+
+/* Widget flotante, esquina inferior derecha */
+.robot-pm-flotante {
+  position: fixed;
+  right: 24px;
+  bottom: 22px;
+  z-index: 2000;
+  width: 220px;
+  min-height: 260px;
+  user-select: none;
+  pointer-events: auto;
+}
+
+/* Imagen del robot con botones encima (posiciona relativos) */
+.robot-pm-imagen-con-botones {
+  position: relative;
+  width: 220px;
+  height: 260px;
+}
+
+/* Imagen del robot, se ve normal */
+#robot-pm-img {
+  width: 220px;
+  height: 260px;
+  display: block;
+  pointer-events: none; /* Los clicks van a los botones overlay */
+}
+
+/* Botones transparentes (zonas activas AU/TX/X costado) */
+.robot-btn-area {
+  position: absolute;
+  background: transparent;
+  border: none;
+  opacity: 0;
+  z-index: 2;
+  cursor: pointer;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  margin: 0;
+}
+
+/* Ajusta estas posiciones según la imagen: */
+/* TX - abajo del costado izquierdo */
+.robot-btn-tx {
+  left: 8px; bottom: 46px;
+}
+/* AU - centro costado */
+.robot-btn-au {
+  left: 8px; bottom: 92px;
+}
+/* X - arriba costado */
+.robot-btn-close {
+  left: 8px; bottom: 142px;
+}
+
+/* Globito de diálogo (sale arriba del robot) */
+#robot-globo {
+  position: absolute;
+  left: 62px;
+  bottom: 245px;
+  background: #fff;
+  color: #222;
+  border-radius: 14px;
+  padding: 15px 22px;
+  font-size: 17px;
+  font-family: 'Nunito', Arial, sans-serif;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.15), 0 1.5px 2.5px #ccc;
+  min-width: 90px;
+  max-width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .25s, transform .2s;
+  z-index: 10;
+}
+.robot-globo-oculto { display: none; }
+.robot-globo-punta {
+  position: absolute;
+  left: 28px;
+  bottom: -19px;
+  width: 28px; height: 19px;
+  background: transparent;
+}
+.robot-globo-punta::before {
+  content: '';
+  display: block;
+  width: 24px; height: 19px;
+  background: #fff;
+  border-radius: 0 0 24px 24px;
+  margin-left: 2px;
+}
+
+/* Formulario de entrada de texto/audio: oculto por defecto */
+.robot-form-entrada {
+  display: none;
+  position: absolute;
+  left: 17px;
+  bottom: 17px;
+  width: 186px;
+  z-index: 30;
+  background: rgba(255,255,255,0.99);
+  border-radius: 12px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.18);
+  padding: 8px 10px 7px 10px;
+  flex-direction: row;
+  align-items: center;
+  gap: 7px;
+  animation: fadein-robot-input .33s;
+}
+
+/* Input de texto */
+#robot-input-texto {
+  width: 110px;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 16px;
+  color: #222;
+  padding: 2px 3px;
+  font-family: 'Nunito', Arial, sans-serif;
+}
+
+/* Botón enviar (→) */
+.robot-btn-enviar {
+  background: #deb460;
+  border: none;
+  color: #222;
+  font-size: 21px;
+  border-radius: 7px;
+  padding: 2px 9px 2px 9px;
+  margin-left: 1px;
+  cursor: pointer;
+  transition: background .13s;
+  font-family: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.robot-btn-enviar:hover { background: #e4cb85; }
+
+@keyframes fadein-robot-input {
+  from { opacity: 0; transform: translateY(10px);}
+  to   { opacity: 1; transform: translateY(0);}
+}
+
+/* Área de grabación de audio */
+.robot-area-audio { gap: 8px; }
+#robot-audio-status {
+  color: #535353;
+  font-size: 15px;
+  margin-left: 3px;
+  font-family: 'Nunito', Arial, sans-serif;
+}
+
+/* -- Animación flotante -- */
+.robot-pm-flotante {
+  animation: robot-float 3s ease-in-out infinite;
+}
+@keyframes robot-float {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-13px);}
+  100% { transform: translateY(0); }
+}
+
+/* -- Animación cohete al cerrar -- */
+.robot-pm-flotante.robot-cohete-out {
+  animation: robot-cohete-out 0.9s cubic-bezier(.16,.96,.61,.99) forwards;
+}
+@keyframes robot-cohete-out {
+  0%   { transform: translateY(0) scale(1) rotate(0deg);}
+  60%  { transform: translateY(-150px) scale(1.1) rotate(-9deg);}
+  90%  { transform: translateY(-330px) scale(0.93) rotate(-19deg);}
+  100% { transform: translateY(-700px) scale(0.8) rotate(-36deg); opacity: 0;}
+}
+
+/* -- Responsive -- */
+@media (max-width: 650px) {
+  .robot-pm-flotante { width: 150px; min-height: 170px;}
+  .robot-pm-imagen-con-botones { width: 150px; height: 170px;}
+  #robot-pm-img { width: 150px; height: 170px;}
+  #robot-globo { left: 18px; bottom: 154px; max-width: 160px; font-size: 13px;}
+  .robot-form-entrada { width: 120px; left: 10px;}
+}
+
+/* Botones ocultos por defecto, las clases JS los muestran */
+.robot-btn-area, .robot-form-entrada, .robot-globo-oculto { display: none; }
+
+/* Visibilidad controlada por JS */
+.robot-btn-area.robot-btn-visible { display: block !important; }
+.robot-form-entrada.robot-input-visible { display: flex !important; }
+#robot-globo.robot-globo-visible { display: flex !important; }
+
+
 
 

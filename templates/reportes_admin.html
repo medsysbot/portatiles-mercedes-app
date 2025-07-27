@@ -1,21 +1,33 @@
 {% extends 'panel_admin.html' %}
 {% block title %}Reportes{% endblock %}
 {% block description %}Listado de reportes generados en el sistema{% endblock %}
+
 {% block head_extra %}
 {{ super() }}
+<!-- Precarga solo de íconos necesarios -->
+<link rel="preload" as="image" href="/static/iconos/enviando-reporte.png">
+<link rel="preload" as="image" href="/static/iconos/reporte-exito.png">
+<link rel="preload" as="image" href="/static/iconos/reporte-error.png">
+<link rel="stylesheet" href="/static/css/alertas-custom.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 {% endblock %}
+
 {% block content %}
 <h2 class="mt-0">Administración de reportes</h2>
+
 <div class="d-flex justify-content-between align-items-center my-3 flex-wrap">
   <div class="mb-2 flex-grow-1">
     <input type="text" id="busquedaReportes" class="form-control buscador-tabla" placeholder="Buscar...">
   </div>
   <div class="d-flex flex-wrap gap-2">
     <button id="btnBuscarReportes" class="btn btn-secondary" type="button">Buscar</button>
-    <a href="/admin/reportes/nuevo" class="btn btn-primary"><i class="fas fa-file-alt"></i> Agregar reporte</a>
+    <a href="/admin/reportes/nuevo" class="btn btn-primary">
+      <i class="fas fa-file-alt"></i> Agregar reporte
+    </a>
     <button id="btnEliminarSeleccionados" class="btn btn-danger" disabled>Eliminar</button>
   </div>
 </div>
+
 <div class="table-responsive bg-light p-3">
   <table id="tablaReportes" class="table pm-tabla table-striped table-bordered">
     <thead>
@@ -32,14 +44,19 @@
   </table>
 </div>
 {% endblock %}
+
 <!-- ALERTA CENTRAL PERSONALIZADA -->
-<div id="alert-manager" class="alert-container">
+<div id="alert-manager" class="alert-container" style="display: none;">
   <div class="alert-box">
     <img id="alert-icon" alt="icono-alerta" class="alert-icon" />
     <span id="alert-text" class="alert-message">Texto de alerta</span>
   </div>
 </div>
+
 {% block scripts %}
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<!-- 🔹 Primero alertas.js -->
+<script src="/static/js/alertas.js"></script>
+<!-- 🔹 Luego script de módulo -->
 <script src="/reportes_admin.js"></script>
 {% endblock %}

@@ -167,3 +167,21 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 });
+  const btnCloseTexto = document.getElementById('robot-close-texto');
+  const btnCloseAudio = document.getElementById('robot-close-audio');
+
+  // Cerrar modal de texto con X
+  btnCloseTexto.addEventListener('click', function (e) {
+    e.preventDefault();
+    formTexto.classList.remove('robot-input-visible');
+    mostrarGlobo('¿En qué te ayudo?');
+    estado = "reposo";
+  });
+
+  // Cerrar modal de audio con X
+  btnCloseAudio.addEventListener('click', function (e) {
+    e.preventDefault();
+    areaAudio.classList.remove('robot-input-visible');
+    mostrarGlobo('¿En qué te ayudo?');
+    estado = "reposo";
+  });

@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const method = form.getAttribute('method') || 'post';
 
     try {
-      await showAlert('info-cargando');
+      // ALERTA: Cargando
+      await showAlert("/static/iconos/enviando-reporte.png", "Enviando reporte...");
 
       const response = await fetch(action, {
         method: method.toUpperCase(),
@@ -20,13 +21,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (response.ok) {
-        await showAlert('reporte-exito');
+        // ALERTA: Éxito
+        await showAlert("/static/iconos/reporte-exito.png", "Éxito al enviar el reporte");
         window.location.href = successUrl;
       } else {
-        await showAlert('repote-error');
+        // ALERTA: Error
+        await showAlert("/static/iconos/reporte-error.png", "Error al enviar el reporte");
       }
     } catch (error) {
-      await showAlert('repote-error');
+      // ALERTA: Error (con catch)
+      await showAlert("/static/iconos/reporte-error.png", "Error inesperado al enviar el reporte");
     }
   });
 });

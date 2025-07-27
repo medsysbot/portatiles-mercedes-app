@@ -1,8 +1,8 @@
-/* === ROBOT PM WIDGET - PORTÁTILES MERCEDES === */
+/* === ROBOT PM WIDGET - PORTÁTILES MERCEDES - PLATEADO === */
 
 .robot-pm-flotante {
   position: fixed;
-  right: 6px;        /* Más pegado al borde derecho */
+  right: 6px;
   bottom: 18px;
   z-index: 2000;
   width: 226px;
@@ -17,7 +17,6 @@
   100% { transform: translateY(0); }
 }
 
-/* Imagen del robot */
 .robot-pm-imagen-con-botones {
   position: relative;
   width: 226px;
@@ -53,14 +52,14 @@
   position: absolute;
   left: 72px;
   bottom: 260px;
-  background: #fff;
-  color: #222;
+  background: linear-gradient(160deg, #f0f0f0 80%, #bfc6cf 100%);
+  color: #333a3d;
   border-radius: 18px;
-  border: 2.5px solid #deb460;
+  border: 2.5px solid #bfc6cf;
   padding: 15px 24px 14px 19px;
   font-size: 18.5px;
   font-family: 'Nunito', Arial, sans-serif;
-  box-shadow: 0 9px 34px rgba(0,0,0,0.17), 0 1.5px 2.5px #e4cb85;
+  box-shadow: 0 9px 34px rgba(132, 134, 142, 0.13), 0 2px 5px #e5e8ea;
   min-width: 110px;
   max-width: 260px;
   display: flex;
@@ -83,9 +82,9 @@
   content: '';
   display: block;
   width: 24px; height: 20px;
-  background: #fff;
+  background: linear-gradient(170deg, #f0f0f0 70%, #bfc6cf 100%);
   border-radius: 0 0 20px 24px;
-  border-bottom: 2.5px solid #deb460;
+  border-bottom: 2.5px solid #bfc6cf;
   margin-left: 2.5px;
 }
 
@@ -97,10 +96,10 @@
   bottom: 26px;
   width: 320px;
   min-height: 75px;
-  background: #fffdfa;
+  background: linear-gradient(140deg, #fafbfc 60%, #ced6dd 120%);
   border-radius: 17px;
-  border: 2.2px solid #deb460;
-  box-shadow: 0 4px 22px rgba(222,180,96,0.13), 0 1.5px 2.5px #e4cb85;
+  border: 2.2px solid #adb8be;
+  box-shadow: 0 4px 22px rgba(172, 178, 188, 0.11), 0 2px 5px #e5e8ea;
   padding: 16px 20px 13px 20px;
   flex-direction: row;
   align-items: center;
@@ -117,7 +116,7 @@
 .robot-modal-close {
   background: transparent;
   border: none;
-  color: #deb460;
+  color: #bfc6cf;
   font-size: 24px;
   font-weight: bold;
   margin-left: auto;
@@ -126,53 +125,60 @@
   cursor: pointer;
   transition: color .13s;
 }
-.robot-modal-close:hover { color: #b78c28; }
+.robot-modal-close:hover { color: #889097; }
 
 /* --- Input de texto --- */
 #robot-input-texto {
   width: 65%;
   min-width: 110px;
-  border: 1.2px solid #deb460;
+  border: 1.2px solid #bfc6cf;
   border-radius: 8px;
   outline: none;
-  background: #fffdfa;
+  background: linear-gradient(120deg, #f3f3f3 60%, #e0e3e5 100%);
   font-size: 18px;
-  color: #444;
+  color: #333a3d;
   padding: 7px 8px;
   font-family: 'Nunito', Arial, sans-serif;
   margin-right: 7px;
+  box-shadow: 0 1.5px 2.5px #e6e6e6;
 }
 
 /* --- Botón enviar (→) --- */
 .robot-btn-enviar {
-  background: #deb460;
-  border: none;
-  color: #222;
+  background: linear-gradient(120deg, #dadfe5 60%, #bfc6cf 100%);
+  border: 1.2px solid #adb8be;
+  color: #454b50;
   font-size: 27px;
   border-radius: 10px;
   padding: 3px 18px 3px 15px;
   margin-left: 3px;
   cursor: pointer;
-  transition: background .13s;
+  transition: background .13s, border-color .13s;
   font-family: inherit;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   font-weight: 800;
+  box-shadow: 0 2px 7px #e6e6e6;
 }
-.robot-btn-enviar:hover { background: #e4cb85; }
+.robot-btn-enviar:hover {
+  background: linear-gradient(110deg, #f3f3f3 50%, #adb8be 100%);
+  border-color: #8a99a4;
+}
 
 /* --- Área de grabación de audio --- */
 .robot-area-audio { gap: 13px; }
 #robot-audio-status {
-  color: #646200;
+  color: #4e5154;
   font-size: 17px;
   font-family: 'Nunito', Arial, sans-serif;
   font-weight: 600;
-  background: #fffbea;
+  background: linear-gradient(120deg, #ececec 50%, #ccd2d7 100%);
   border-radius: 6px;
+  border: 1px solid #bfc6cf;
   padding: 4px 10px;
   margin-left: 2px;
+  box-shadow: 0 1.5px 2.5px #e6e6e6;
 }
 
 /* -- Animación cohete al cerrar -- */
@@ -197,4 +203,3 @@
   .robot-btn-enviar { font-size: 17px; padding: 2px 9px 2px 8px;}
   #robot-audio-status { font-size: 13px; padding: 3px 6px;}
 }
-

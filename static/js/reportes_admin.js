@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const btnBuscar = document.getElementById('btnBuscarReportes');
   const buscador = document.getElementById('busquedaReportes');
+  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
   const errorDiv = document.getElementById('errorReportes');
   let reportes = [];
-  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
   async function cargarReportes() {
     try {
@@ -33,9 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mostrarReportes(reportes);
       errorDiv.classList.add('d-none');
     } catch (_) {
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudieron cargar los reportes', false, 2500);
-      }
+      console.error('Error al cargar reportes');
     }
   }
 
@@ -54,22 +52,35 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(document.querySelectorAll('#tablaReportes tbody .fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
+
+    // Aquí van las únicas 3 alertas personalizadas según pedido
     try {
+      if (typeof showAlert === 'function') {
+        await showAlert('enviando-reporte', 'Enviando reporte...', true, 2600);
+      }
+
       const resp = await fetch('/admin/api/reportes/eliminar', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        },
         body: JSON.stringify({ ids })
       });
+
       if (!resp.ok) throw new Error('Error al eliminar');
       await cargarReportes();
+
+      if (typeof showAlert === 'function') {
+        await showAlert('reporte-exito', 'Reporte enviado con éxito', true, 2600);
+      }
     } catch (_) {
       if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'Error eliminando reportes', false, 2500);
+        await showAlert('reporte-error', 'Error al enviar el reporte', true, 2600);
       }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
-
   });
 
   function filtrarReportes(texto) {
@@ -79,8 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
       (r.asunto || '').toLowerCase().includes(q)
     );
     mostrarReportes(filtrados);
-    if (filtrados.length === 0) {
-    }
   }
 
   buscador?.addEventListener('input', () => filtrarReportes(buscador.value.trim()));

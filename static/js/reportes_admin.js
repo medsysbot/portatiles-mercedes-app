@@ -1,90 +1,132 @@
-// Archivo: static/js/reportes_admin.js
+// Archivo: static/js/clientes_admin.js
 // Proyecto: Portátiles Mercedes
+// Requiere que la plantilla cargue /static/js/alertas.js para usar showAlert
 
-document.addEventListener('DOMContentLoaded', () => {
-  const tabla = $('#tablaReportes').DataTable({
+function handleUnauthorized() {
+  localStorage.removeItem('access_token');
+  localStorage.removeItem('usuario');
+  localStorage.removeItem('rol');
+  localStorage.removeItem('nombre');
+  window.location.href = '/login';
+}
+
+window.pmClientesAdminData = window.pmClientesAdminData || [];
+let tablaClientes = null;
+
+function inicializarTablaClientes() {
+  if (tablaClientes) return;
+  tablaClientes = $('#tabla-clientes').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
     searching: false,
     ordering: true,
     columns: [
-      { data: 'id_reporte', render: d => `<input type="checkbox" class="fila-check" data-id="${d}">`, orderable: false },
-      { data: 'id_reporte' },
-      { data: 'fecha' },
-      { data: 'nombre_persona' },
-      { data: 'asunto' },
-      { data: 'contenido' }
+      {
+        data: 'dni_cuit_cuil',
+        render: data => `<input type="checkbox" class="fila-check" value="${data}">`,
+        orderable: false
+      },
+      { data: 'dni_cuit_cuil' },
+      { data: 'nombre' },
+      { data: 'apellido' },
+      { data: 'direccion' },
+      { data: 'telefono' },
+      { data: 'razon_social' },
+      { data: 'email' }
     ]
   });
+}
 
-  const btnBuscar = document.getElementById('btnBuscarReportes');
-  const buscador = document.getElementById('busquedaReportes');
-  const errorDiv = document.getElementById('errorReportes');
-  let reportes = [];
+document.addEventListener('DOMContentLoaded', async () => {
+  inicializarTablaClientes();
+  const tabla = tablaClientes;
+
   const btnEliminar = document.getElementById('btnEliminarSeleccionados');
 
-  async function cargarReportes() {
-    try {
-      const resp = await fetch('/admin/api/reportes', {
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
-      });
-      if (!resp.ok) throw new Error('Error al consultar reportes');
-      reportes = await resp.json();
-      mostrarReportes(reportes);
-      errorDiv.classList.add('d-none');
-    } catch (_) {
-      if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'No se pudieron cargar los reportes', false, 2500);
-      }
-    }
-  }
-
-  function mostrarReportes(lista) {
-    tabla.clear();
-    tabla.rows.add(lista).draw();
-  }
-
   function actualizarBoton() {
-    const checks = document.querySelectorAll('#tablaReportes tbody .fila-check:checked');
+    const checks = document.querySelectorAll('#tabla-clientes tbody .fila-check:checked');
     if (btnEliminar) btnEliminar.disabled = checks.length === 0;
   }
 
-  $('#tablaReportes tbody').on('change', '.fila-check', actualizarBoton);
+  $('#tabla-clientes tbody').on('change', '.fila-check', actualizarBoton);
 
   btnEliminar?.addEventListener('click', async () => {
-    const ids = Array.from(document.querySelectorAll('#tablaReportes tbody .fila-check:checked')).map(c => c.dataset.id);
+    const ids = Array.from(document.querySelectorAll('#tabla-clientes tbody .fila-check:checked')).map(c => c.value);
     if (!ids.length) return;
     try {
-      const resp = await fetch('/admin/api/reportes/eliminar', {
+      if (typeof showAlert === 'function') {
+        await showAlert('enviando-reporte', 'Eliminando clientes...', true, 2600);
+      }
+      const resp = await fetch('/admin/api/clientes/eliminar', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        },
         body: JSON.stringify({ ids })
       });
       if (!resp.ok) throw new Error('Error al eliminar');
-      await cargarReportes();
-    } catch (_) {
+      await obtenerClientes();
       if (typeof showAlert === 'function') {
-        showAlert('error-datos', 'Error eliminando reportes', false, 2500);
+        await showAlert('reporte-exito', 'Clientes eliminados', true, 2600);
+      }
+    } catch (err) {
+      if (typeof showAlert === 'function') {
+        await showAlert('reporte-error', 'Error eliminando clientes', true, 2600);
       }
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
-
   });
 
-  function filtrarReportes(texto) {
-    const q = texto.toLowerCase();
-    const filtrados = reportes.filter(r =>
-      (r.nombre_persona || '').toLowerCase().includes(q) ||
-      (r.asunto || '').toLowerCase().includes(q)
-    );
-    mostrarReportes(filtrados);
-    if (filtrados.length === 0) {
+  async function obtenerClientes() {
+    try {
+      if (typeof showAlert === 'function') {
+        await showAlert('enviando-reporte', 'Cargando clientes...', true, 2600);
+      }
+      const resp = await fetch('/clientes');
+      const data = await resp.json();
+      window.pmClientesAdminData = data || [];
+      mostrarClientes(window.pmClientesAdminData);
+      if (typeof showAlert === 'function') {
+        await showAlert('reporte-exito', 'Clientes cargados', true, 2600);
+      }
+    } catch (error) {
+      if (typeof showAlert === 'function') {
+        await showAlert('reporte-error', 'Error al cargar clientes', true, 2600);
+      }
+      if (window.pmClientesAdminData.length === 0) tabla.clear().draw();
     }
   }
 
-  buscador?.addEventListener('input', () => filtrarReportes(buscador.value.trim()));
-  btnBuscar?.addEventListener('click', () => filtrarReportes(buscador.value.trim()));
+  function mostrarClientes(lista) {
+    tabla.clear();
+    tabla.rows.add(lista).draw();
+  }
 
-  cargarReportes();
+  function filtrarClientes(texto) {
+    const q = texto.toLowerCase();
+    const filtrados = window.pmClientesAdminData.filter(c =>
+      (c.nombre || '').toLowerCase().includes(q) ||
+      (c.dni_cuit_cuil || '').toLowerCase().includes(q) ||
+      (c.razon_social || '').toLowerCase().includes(q) ||
+      (c.email || '').toLowerCase().includes(q)
+    );
+    mostrarClientes(filtrados);
+  }
+
+  const buscador = document.getElementById('busquedaCliente');
+  const btnBuscar = document.getElementById('btnBuscarCliente');
+  if (buscador) buscador.addEventListener('input', () => filtrarClientes(buscador.value.trim()));
+  if (btnBuscar) btnBuscar.addEventListener('click', () => filtrarClientes(buscador.value.trim()));
+
+  if (window.pmClientesAdminData.length === 0) {
+    obtenerClientes();
+  } else {
+    if (typeof showAlert === 'function') {
+      await showAlert('enviando-reporte', 'Cargando clientes...', true, 2600);
+      await showAlert('reporte-exito', 'Clientes cargados', true, 2600);
+    }
+    mostrarClientes(window.pmClientesAdminData);
+  }
 });

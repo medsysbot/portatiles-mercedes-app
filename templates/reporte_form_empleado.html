@@ -1,6 +1,7 @@
 {% extends 'panel_empleado.html' %}
 {% block title %}Nuevo Reporte{% endblock %}
 {% block description %}Carga de reportes por empleados{% endblock %}
+
 {% block head_extra %}
   {{ super() }}
   <link rel="stylesheet" href="/static/css/alertas-custom.css">
@@ -44,5 +45,5 @@
 {% block scripts %}
   {{ super() }}
   <script src="/static/js/alertas.js"></script>
-  <script src="/static/js/form_guardar.js"></script>
+  <script src="/static/js/reporte_empleado.js"></script>
 {% endblock %}

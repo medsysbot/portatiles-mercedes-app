@@ -21,8 +21,8 @@
   right: 18px;
   bottom: 1px;
   z-index: 3000;
-  width: 220px;
-  min-height: 260px;
+  width: 260px;
+  min-height: 300px;
   user-select: none;
   pointer-events: auto;
   transition: transform .29s cubic-bezier(.8,.33,.18,1.18), box-shadow .19s;
@@ -34,8 +34,8 @@
 }
 
 /* Imagen robot y zonas de botones */
-.robot-pm-imagen-con-botones { position: relative; width: 220px; height: 260px; }
-#robot-pm-img { width: 220px; height: 260px; display: block; pointer-events: none; }
+.robot-pm-imagen-con-botones { position: relative; width: 260px; height: 300px; }
+#robot-pm-img { width: 260px; height: 300px; display: block; pointer-events: none; }
 
 .robot-btn-area {
   position: absolute; background: transparent; border: none; opacity: 0;
@@ -49,7 +49,7 @@
 .robot-globo {
   position: absolute;
   left: -70px;   /* Sale SIEMPRE para la izquierda */
-  bottom: 212px;
+  bottom: 252px;
   background: #fff;
   border: 2.5px solid #232323;
   border-radius: 31px 36px 32px 37px;

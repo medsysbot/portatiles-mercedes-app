@@ -48,8 +48,8 @@
 /* Globo a la izquierda */
 .robot-globo {
   position: absolute;
-  left: 25px;   /* Sale SIEMPRE para la izquierda */
-  bottom: 190px;
+  left: 45px;   /* Sale SIEMPRE para la izquierda */
+  bottom: 225px;
   background: #fff;
   border: 2.5px solid #232323;
   border-radius: 31px 36px 32px 37px;

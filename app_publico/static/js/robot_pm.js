@@ -1,5 +1,6 @@
 // WIDGET ROBOT PM - PORTÁTILES MERCEDES
 
+const robotWidget = document.getElementById('robot-pm-widget');
 const robotGlobo = document.getElementById('robot-globo');
 const robotGloboTexto = document.getElementById('robot-globo-texto');
 const robotGloboClose = document.getElementById('robot-globo-close');
@@ -8,60 +9,84 @@ const robotBtnAU = document.getElementById('robot-btn-au');
 const robotBtnTX = document.getElementById('robot-btn-tx');
 const robotBtnClose = document.getElementById('robot-btn-close');
 
+const robotModalInput = robotGlobo.querySelector('.robot-modal-input');
+const robotModalAudio = robotGlobo.querySelector('.robot-modal-audio');
+
 // Estado: 'reposo', 'escribir', 'audio'
 let estado = "reposo";
 
-// Saludo inicial (globo chico)
+// ----- Mostrar saludo inicial (globo chico)
 function mostrarSaludo() {
-    robotGloboTexto.innerHTML = "¡Hola! Soy PM <span style='font-size:1em'>😊</span><br>¿En qué te ayudo?";
-    robotGlobo.classList.remove('robot-globo-oculto');
+    robotGloboTexto.textContent = "¡Hola! Soy PM 😊";
+    robotGlobo.classList.remove('modo-entrada', 'modo-audio', 'robot-globo-oculto');
+    robotGloboClose.style.display = "none";
     estado = "reposo";
 }
 window.addEventListener('DOMContentLoaded', mostrarSaludo);
 
-// Botón TX (Texto)
+// ----- Botón TX (Texto)
 robotBtnTX.onclick = () => {
-    robotGloboTexto.innerHTML =
-      `<form id="robot-form-texto" class="robot-globo-input" autocomplete="off">
-         <input id="robot-input-texto" type="text" maxlength="180" placeholder="Escribí tu pregunta aquí" required>
-         <button class="robot-btn-enviar" type="submit" title="Enviar pregunta">&#8594;</button>
-       </form>`;
-    robotGlobo.classList.remove('robot-globo-oculto');
+    robotGlobo.classList.add('modo-entrada');
+    robotGlobo.classList.remove('modo-audio', 'robot-globo-oculto');
+    robotGloboTexto.textContent = ""; // Limpia saludo
+    robotModalInput.style.display = "flex";
+    robotModalAudio.style.display = "none";
+    robotGloboClose.style.display = "block";
     estado = "escribir";
-    setTimeout(() => { document.getElementById('robot-input-texto').focus(); }, 180);
-    // Submit pregunta escrita
-    const formTexto = document.getElementById('robot-form-texto');
-    formTexto.onsubmit = (e) => {
-        e.preventDefault();
-        // Aquí lógica para enviar pregunta escrita (AJAX)
-        robotGloboTexto.innerHTML = "Enviando pregunta...";
-        setTimeout(mostrarSaludo, 1800); // Demo: vuelve a saludo
-    };
+    setTimeout(() => {
+        const input = document.getElementById('robot-input-texto');
+        if (input) input.focus();
+    }, 180);
 };
 
-// Botón AU (Audio)
+// ----- Botón AU (Audio)
 robotBtnAU.onclick = () => {
-    robotGloboTexto.innerHTML =
-      `<div class="robot-globo-audio">
-         <span id="robot-mic-icono">&#127908;</span>
-         <span id="robot-audio-status">Presioná el micrófono para grabar tu pregunta.</span>
-       </div>`;
-    robotGlobo.classList.remove('robot-globo-oculto');
+    robotGlobo.classList.add('modo-audio');
+    robotGlobo.classList.remove('modo-entrada', 'robot-globo-oculto');
+    robotGloboTexto.textContent = ""; // Limpia saludo
+    robotModalInput.style.display = "none";
+    robotModalAudio.style.display = "flex";
+    robotGloboClose.style.display = "block";
     estado = "audio";
-    // Aquí lógica para activar grabación audio
+    // Aquí lógica para activar grabación audio (si usás grabador)
 };
 
-// Botón Cerrar (costado robot)
+// ----- Botón Cerrar (costado robot)
 robotBtnClose.onclick = () => {
-    // Animación cohete
-    const robot = document.getElementById('robot-pm-widget');
-    robot.classList.add('robot-cohete-out');
-    setTimeout(() => { robot.style.display = 'none'; }, 900);
+    robotWidget.classList.add('robot-cohete-out');
+    setTimeout(() => { robotWidget.style.display = 'none'; }, 900);
 };
 
-// Botón X dentro del globo
+// ----- Botón X dentro del globo (modal)
 robotGloboClose.onclick = () => {
     robotGlobo.classList.add('robot-globo-oculto');
-    if (estado !== "reposo") mostrarSaludo();
+    robotModalInput.style.display = "none";
+    robotModalAudio.style.display = "none";
+    setTimeout(mostrarSaludo, 350); // Vuelve al saludo chico
 };
 
+// ----- ENVIAR PREGUNTA TEXTO
+const inputForm = robotGlobo.querySelector('.robot-modal-input');
+if (inputForm) {
+    inputForm.onsubmit = (e) => {
+        e.preventDefault();
+        const input = document.getElementById('robot-input-texto');
+        if (!input.value.trim()) return;
+        robotModalInput.style.display = "none";
+        robotGloboTexto.textContent = "Enviando pregunta...";
+        robotGloboClose.style.display = "none";
+        // Aquí lógica de AJAX para enviar pregunta (demo: vuelve a saludo)
+        setTimeout(mostrarSaludo, 1700);
+    };
+}
+
+// ----- ENVIAR AUDIO (DEMO: solo muestra mensaje)
+const audioBtn = robotGlobo.querySelector('#robot-enviar-audio');
+if (audioBtn) {
+    audioBtn.onclick = () => {
+        robotModalAudio.style.display = "none";
+        robotGloboTexto.textContent = "Enviando audio...";
+        robotGloboClose.style.display = "none";
+        setTimeout(mostrarSaludo, 1700);
+    };
+}

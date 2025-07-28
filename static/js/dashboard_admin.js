@@ -27,14 +27,14 @@ async function cargarTarjetas() {
   }
 }
 
-// ---- EMAILS NUEVOS (NO LEÍDOS) ----
+// ---- EMAILS NUEVOS (NO LEÍDOS) - PARA LA TARJETA ----
 async function cargarEmailsNuevos() {
   try {
+    // Usa el endpoint específico para la cantidad de no leídos
     const resp = await fetch('/admin/api/emails/noleidos');
     if (!resp.ok) throw new Error('Error consultando emails');
     const datos = await resp.json();
-    const cantidad = typeof datos.noleidos === 'number' ? datos.noleidos : 0;
-    document.getElementById('card-emails-nuevos').textContent = cantidad;
+    document.getElementById('card-emails-nuevos').textContent = datos.noleidos ?? '-';
   } catch (err) {
     document.getElementById('card-emails-nuevos').textContent = '-';
     console.error('Error cargando emails nuevos:', err);
@@ -88,4 +88,22 @@ async function cargarGraficos(charts) {
     charts.ingresos = new Chart(
       document.getElementById('graficoIngresos').getContext('2d'), {
       type: 'line',
-      data: { labels, datasets: [{ label: 'Ingresos', data:
+      data: { labels, datasets: [{ label: 'Ingresos', data: ingresos, borderColor: 'rgba(0,123,255,0.9)', fill: false }] },
+      options: opcionesGrafico
+    });
+
+  } catch (err) {
+    console.error('Error gráficos:', err);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
+
+  cargarTarjetas();         // Tarjetas principales
+  cargarEmailsNuevos();     // Tarjeta emails nuevos (NO LEÍDOS)
+  cargarGraficos({});       // Gráficos
+
+  // Opcional: actualizar emails cada 60 segundos
+  setInterval(cargarEmailsNuevos, 60000);
+});

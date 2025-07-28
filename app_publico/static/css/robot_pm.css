@@ -1,26 +1,25 @@
-/* === ROBOT PM WIDGET - PORTÁTILES MERCEDES - PLATEADO === */
+/* === ROBOT PM WIDGET - PORTÁTILES MERCEDES - FIJO Y GRANDE === */
 .robot-pm-fijo {
   position: fixed;
-  right: 16px;
-  bottom: 18px;
+  right: 10px;
+  bottom: 22px;
   z-index: 2000;
-  width: 238px;
-  min-height: 285px;
+  width: 252px;
+  min-height: 330px;
   user-select: none;
   pointer-events: auto;
 }
 .robot-pm-imagen-con-botones {
   position: relative;
-  width: 238px;
-  height: 285px;
+  width: 252px;
+  height: 290px;
 }
 #robot-pm-img {
-  width: 238px;
-  height: 285px;
+  width: 252px;
+  height: 290px;
   display: block;
   pointer-events: none;
 }
-
 /* Botones transparentes (zonas activas sobre AU, TX, X costado) */
 .robot-btn-area {
   position: absolute;
@@ -29,134 +28,92 @@
   opacity: 0;
   z-index: 2;
   cursor: pointer;
-  width: 48px;
-  height: 48px;
+  width: 52px;
+  height: 52px;
   padding: 0;
   margin: 0;
 }
-.robot-btn-tx    { left: 6px;  bottom: 62px; }
-.robot-btn-au    { left: 6px;  bottom: 114px; }
-.robot-btn-close { left: 6px;  bottom: 170px; }
-.robot-btn-area.robot-btn-visible { display: block !important; }
+.robot-btn-au    { left: 6px;  bottom: 60px; }
+.robot-btn-tx    { left: 6px;  bottom: 120px; }
+.robot-btn-close { left: 6px;  bottom: 178px; }
 
-/* Globo/modal superior */
-#robot-globo {
+/* --- Globo de diálogo/modales --- */
+.robot-globo {
   position: absolute;
-  left: 44px;
-  bottom: 252px;
-  background: linear-gradient(160deg, #f0f0f0 80%, #bfc6cf 100%);
-  color: #333a3d;
-  border-radius: 20px;
-  border: 2.5px solid #bfc6cf;
-  padding: 23px 30px 23px 22px;
-  font-size: 19.5px;
-  font-family: 'Nunito', Arial, sans-serif;
-  box-shadow: 0 10px 38px rgba(132,134,142,0.16), 0 2px 7px #d8dade;
-  min-width: 140px;
-  max-width: 330px;
+  left: -295px;  /* Apunta a la izquierda del robot */
+  bottom: 72px;
+  background: #fff;
+  border-radius: 27px;
+  border: 3.2px solid #bfc6cf;
+  box-shadow: 0 9px 38px rgba(122,134,145,0.17), 0 2px 9px #e5e8ea;
+  min-width: 330px;
+  max-width: 410px;
+  min-height: 80px;
   display: flex;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  font-weight: 700;
-  transition: opacity .23s, transform .18s;
-  z-index: 30;
-  border-bottom-right-radius: 32px 22px;
+  font-family: 'Nunito', Arial, sans-serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: #30363c;
+  padding: 24px 30px 23px 30px;
+  transition: opacity .18s, transform .13s;
+  z-index: 50;
 }
-.robot-globo-oculto { display: none; }
+.robot-globo-oculto { display: none !important; }
 .robot-globo-punta {
   position: absolute;
-  left: 32px;
-  bottom: -22px;
-  width: 34px; height: 22px;
+  left: -34px;
+  bottom: 20px;
+  width: 38px; height: 34px;
   background: transparent;
-  pointer-events: none;
 }
 .robot-globo-punta::before {
   content: '';
   display: block;
-  width: 30px; height: 22px;
-  background: linear-gradient(170deg, #f0f0f0 70%, #bfc6cf 100%);
-  border-radius: 0 0 24px 24px;
-  border-bottom: 2.5px solid #bfc6cf;
-  margin-left: 2.5px;
+  width: 38px; height: 34px;
+  background: #fff;
+  border-left: 3.2px solid #bfc6cf;
+  border-bottom: 3.2px solid #bfc6cf;
+  border-bottom-left-radius: 28px 34px;
+  box-shadow: 2px 7px 13px rgba(110,115,120,0.14);
+  transform: rotate(-15deg);
 }
-#robot-globo-close, .robot-globo-close {
+
+/* --- Botón X dentro del modal --- */
+.robot-modal-close {
   background: transparent;
   border: none;
-  color: #555d65;
-  font-size: 32px;
+  color: #bfc6cf;
+  font-size: 35px;
   font-weight: bold;
   margin-left: auto;
-  margin-right: -10px;
-  margin-top: -15px;
+  margin-top: -11px;
+  margin-bottom: 2px;
   cursor: pointer;
-  opacity: 0.75;
   transition: color .13s;
-  z-index: 3;
+  z-index: 55;
+  line-height: 1;
 }
-#robot-globo-close:hover { color: #8a99a4; opacity: 1; }
+.robot-modal-close:hover { color: #757e89; }
 
-#robot-globo .robot-microfono {
-  font-size: 42px;
-  margin-right: 12px;
-  color: #777;
-  vertical-align: middle;
-}
-
-#robot-globo .robot-input-texto {
-  width: 175px;
-  font-size: 19px;
-  border: 1.2px solid #bfc6cf;
-  border-radius: 8px;
-  background: #f9fafb;
-  color: #333a3d;
-  padding: 8px 10px;
-  margin-right: 8px;
-  outline: none;
-  box-shadow: 0 1.5px 2.5px #e6e6e6;
-}
-
-#robot-globo .robot-btn-enviar {
-  background: linear-gradient(120deg, #dadfe5 60%, #bfc6cf 100%);
-  border: 1.2px solid #adb8be;
-  color: #454b50;
-  font-size: 31px;
-  border-radius: 10px;
-  padding: 4px 15px 4px 14px;
-  margin-left: 5px;
-  cursor: pointer;
-  transition: background .13s, border-color .13s;
-  font-family: inherit;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  box-shadow: 0 2px 7px #e6e6e6;
-}
-#robot-globo .robot-btn-enviar:hover {
-  background: linear-gradient(110deg, #f3f3f3 50%, #adb8be 100%);
-  border-color: #8a99a4;
-}
-
-/* Animación cohete */
-.robot-pm-fijo.robot-cohete-out {
-  animation: robot-cohete-out 0.93s cubic-bezier(.16,.96,.61,.99) forwards;
-}
-@keyframes robot-cohete-out {
-  0%   { transform: translateY(0) scale(1) rotate(0deg);}
-  65%  { transform: translateY(-185px) scale(1.12) rotate(-9deg);}
-  95%  { transform: translateY(-395px) scale(0.95) rotate(-16deg);}
-  100% { transform: translateY(-1050px) scale(0.81) rotate(-32deg); opacity: 0;}
-}
-
-/* Responsive */
+/* --- Responsive --- */
 @media (max-width: 650px) {
-  .robot-pm-fijo { width: 140px; min-height: 90px;}
-  .robot-pm-imagen-con-botones { width: 140px; height: 90px;}
-  #robot-pm-img { width: 140px; height: 90px;}
-  #robot-globo {
-    left: 0px; bottom: 85px; max-width: 98vw; font-size: 15px; padding: 12px 10px 12px 8px;
+  .robot-pm-fijo { width: 138px; min-height: 108px;}
+  .robot-pm-imagen-con-botones { width: 138px; height: 108px;}
+  #robot-pm-img { width: 138px; height: 108px;}
+  .robot-globo {
+    left: -170px;
+    bottom: 24px;
+    min-width: 98vw;
+    max-width: 98vw;
+    font-size: 14px;
+    padding: 10px 10px 13px 13px;
   }
-  #robot-globo .robot-input-texto { font-size: 14px; width: 80px;}
-  #robot-globo .robot-btn-enviar { font-size: 17px; padding: 2px 7px 2px 6px;}
+  .robot-globo-punta { left: -15px; bottom: 13px; width: 22px; height: 17px;}
+  .robot-globo-punta::before {
+    width: 22px; height: 17px; border-bottom-left-radius: 13px 16px;
+  }
+  .robot-modal-close { font-size: 22px; margin-top: -7px;}
 }

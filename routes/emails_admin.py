@@ -38,8 +38,6 @@ SMTP_PORT = os.getenv("SMTP_PORT")
 IMAP_SERVER = os.getenv("IMAP_SERVER") or "imap.gmail.com"
 IMAP_PORT = os.getenv("IMAP_PORT") or 993
 
-
-
 LOG_DIR = "logs"
 os.makedirs(LOG_DIR, exist_ok=True)
 LOG_FILE = os.path.join(LOG_DIR, "emails_admin.log")
@@ -55,16 +53,11 @@ if not logger.handlers:
 TEMPLATES = Jinja2Templates(directory="templates")
 TEMPLATES.env.globals["gmail_user"] = EMAIL_ORIGIN
 
-
 @router.get("/admin/emails", response_class=HTMLResponse)
 async def emails_admin_page(request: Request, usuario=Depends(auth_required)):
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
     return TEMPLATES.TemplateResponse("emails_admin.html", {"request": request})
-
-
-
-
 
 @router.post("/admin/emails/enviar")
 async def enviar_email(
@@ -107,7 +100,6 @@ async def enviar_email(
         raise HTTPException(status_code=500, detail=f"Error enviando correo: {exc}")
 
     return {"ok": True}
-
 
 @router.get("/api/emails/ultimos")
 async def ultimos_emails(usuario=Depends(auth_required)):
@@ -154,7 +146,6 @@ async def ultimos_emails(usuario=Depends(auth_required)):
 
     mensajes.sort(key=lambda m: m["fecha"], reverse=True)
     return mensajes
-
 
 @router.get("/admin/api/emails")
 async def listar_emails(q: str | None = None, usuario=Depends(auth_required)):
@@ -245,7 +236,6 @@ async def obtener_email(mailbox: str, uid: str, usuario=Depends(auth_required)):
         logger.exception("Error obteniendo email: %s", exc)
         raise HTTPException(status_code=500, detail="Error obteniendo email")
 
-
 @router.get("/admin/api/emails/{mailbox}/{uid}/adjunto/{indice}")
 async def descargar_adjunto(mailbox: str, uid: str, indice: int, usuario=Depends(auth_required)):
     if usuario.get("rol") != "Administrador":
@@ -273,7 +263,6 @@ async def descargar_adjunto(mailbox: str, uid: str, indice: int, usuario=Depends
         logger.exception("Error descargando adjunto: %s", exc)
         raise HTTPException(status_code=500, detail="Error descargando adjunto")
 
-
 @router.delete("/admin/api/emails/{mailbox}/{uid}")
 async def eliminar_email(mailbox: str, uid: str, usuario=Depends(auth_required)):
     """Elimina un email de la bandeja especificada."""
@@ -290,3 +279,29 @@ async def eliminar_email(mailbox: str, uid: str, usuario=Depends(auth_required))
     except Exception as exc:  # pragma: no cover - dependencias externas
         logger.exception("Error eliminando email: %s", exc)
         raise HTTPException(status_code=500, detail="Error eliminando email")
+
+# === ENDPOINT CANTIDAD DE EMAILS NO LEÍDOS ===
+
+@router.get("/admin/api/emails/noleidos")
+async def cantidad_emails_noleidos(usuario=Depends(auth_required)):
+    """
+    Devuelve la cantidad de emails no leídos en INBOX (para mostrar en Dashboard).
+    Acceso: Solo Administrador.
+    """
+    if usuario.get("rol") != "Administrador":
+        raise HTTPException(status_code=403, detail="Acceso restringido")
+
+    try:
+        with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
+            imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
+            imap.select("INBOX")
+            status, data = imap.search(None, 'UNSEEN')
+            if status != "OK" or not data:
+                return {"noleidos": 0}
+            ids = data[0].split()
+            return {"noleidos": len(ids)}
+    except Exception as exc:
+        logger.exception("Error contando emails no leídos: %s", exc)
+        raise HTTPException(status_code=500, detail="Error contando emails no leídos")
+
+# FIN DEL ARCHIVO

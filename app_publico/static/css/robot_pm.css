@@ -6,7 +6,7 @@
   position: fixed;
   z-index: 2999;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.75);
+  background: rgba(0,0,0,0.82);
   opacity: 0;
   transition: opacity .28s;
 }
@@ -29,7 +29,7 @@
 }
 .robot-pm-flotante.centrado {
   top: 65%; left: 50%; right: auto; bottom: auto;
-  transform: translate(-50%,-54%) scale(1.65);
+  transform: translate(-50%,-54%) scale(0.88);
   box-shadow: 0 0 44px 6px rgba(0,0,0,.29);
 }
 
@@ -79,10 +79,10 @@
 .robot-pm-flotante.centrado .robot-globo {
   left: 50%; bottom: 85%;
   transform: translateX(-52%);
-  min-width: 285px;
-  max-width: 560px;
-  font-size: 22px;
-  padding: 28px 44px 28px 32px;
+  min-width: 180px;
+  max-width: 320px;
+  font-size: 16px;
+  padding: 14px 20px 14px 20px;
   border-radius: 39px 53px 49px 51px;
   box-shadow: 0 16px 54px 10px rgba(40,40,50,0.13);
 }

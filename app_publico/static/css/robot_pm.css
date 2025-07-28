@@ -135,14 +135,16 @@
   .robot-btn-close { left: 2px;  bottom: 84px; }
 
   /* AJUSTE: globo centrado arriba del robot */
-  .robot-globo {
-    left: 50% !important;           /* Centra horizontalmente */
-    bottom: 155px !important;       /* Justo arriba del robot (ajusta si hace falta) */
-    transform: translateX(-50%) !important;  /* Centra respecto a su propio ancho */
-    max-width: 150px;               /* Ajusta si quieres que sea más o menos ancho */
-    font-size: 12px;
-    padding: 8px 11px 8px 10px;
-    min-width: 70px;
-    border-radius: 34px !important;
+ .robot-globo {
+   left: 50% !important;
+   bottom: 155px !important;
+   transform: translateX(-50%) !important;
+   max-width: 175px;
+   min-width: 90px;
+   min-height: 34px;
+   font-size: 12px;
+   padding: 8px 18px 8px 14px;
+   border-radius: 34px !important;
   }
 }
+

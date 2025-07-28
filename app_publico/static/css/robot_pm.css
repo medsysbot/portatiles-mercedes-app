@@ -135,7 +135,6 @@
   .robot-btn-close { left: 2px;  bottom: 84px; }
 
   /* AJUSTE: globo centrado arriba del robot */
-@media (max-width: 650px) {
   .robot-globo {
     left: 50% !important;
     bottom: 155px !important;
@@ -155,4 +154,3 @@
     white-space: normal !important;
   }
 }
-

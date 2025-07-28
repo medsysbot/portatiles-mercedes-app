@@ -4,7 +4,7 @@
 .robot-pm-flotante {
   position: fixed;
   right: 18px;
-  bottom: -8px;
+  bottom: -40px;
   z-index: 3000;
   width: 260px;
   min-height: 300px;

@@ -111,12 +111,13 @@ async def ultimos_emails(usuario=Depends(auth_required)):
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select("INBOX", readonly=True)  # <----- SOLO LECTURA, NO MARCA LEÍDO
+            imap.select("INBOX", readonly=True)  # SOLO LECTURA, NO MARCA LEÍDO
             status, data = imap.search(None, "ALL")
             if status == "OK" and data and data[0]:
                 ids = data[0].split()[-10:]
                 for uid in ids:
-                    status, msg_data = imap.fetch(uid, "(RFC822)")
+                    # NO MARCA COMO LEÍDO
+                    status, msg_data = imap.fetch(uid, "(BODY.PEEK[])")
                     if status != "OK" or not msg_data:
                         continue
                     msg = email.message_from_bytes(msg_data[0][1])
@@ -161,20 +162,19 @@ async def listar_emails(
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
             mailbox = "INBOX"
-            imap.select(mailbox, readonly=True)  # <----- SOLO LECTURA
+            imap.select(mailbox, readonly=True)  # SOLO LECTURA
             if solo_noleidos:
                 criterio = "UNSEEN"
             else:
                 criterio = "ALL"
             if q:
-                # Filtro extra sobre criterio
                 criterio = f'(OR SUBJECT "{q}" FROM "{q}")'
             status, data = imap.search(None, criterio)
             if status != "OK" or not data or not data[0]:
                 return []
             ids = data[0].split()[-20:]
             for uid in ids:
-                status, msg_data = imap.fetch(uid, "(RFC822)")
+                status, msg_data = imap.fetch(uid, "(BODY.PEEK[])")  # NO MARCA LEÍDO
                 if status != "OK" or not msg_data:
                     continue
                 msg = email.message_from_bytes(msg_data[0][1])
@@ -212,11 +212,11 @@ async def obtener_email(mailbox: str, uid: str, usuario=Depends(auth_required)):
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select(mailbox, readonly=True)  # <----- SOLO LECTURA
-            status, data = imap.fetch(uid, "(RFC822)")
-            if status != "OK" or not data:
+            imap.select(mailbox, readonly=True)  # SOLO LECTURA
+            status, msg_data = imap.fetch(uid, "(BODY.PEEK[])")  # NO MARCA LEÍDO
+            if status != "OK" or not msg_data:
                 raise HTTPException(status_code=404, detail="Email no encontrado")
-            msg = email.message_from_bytes(data[0][1])
+            msg = email.message_from_bytes(msg_data[0][1])
             fecha = parsedate_to_datetime(msg.get("Date")).isoformat()
             de = parseaddr(msg.get("From"))[1]
             para = parseaddr(msg.get("To"))[1] if msg.get("To") else ""
@@ -251,11 +251,11 @@ async def descargar_adjunto(mailbox: str, uid: str, indice: int, usuario=Depends
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select(mailbox, readonly=True)  # <----- SOLO LECTURA
-            status, data = imap.fetch(uid, "(RFC822)")
-            if status != "OK" or not data:
+            imap.select(mailbox, readonly=True)  # SOLO LECTURA
+            status, msg_data = imap.fetch(uid, "(BODY.PEEK[])")  # NO MARCA LEÍDO
+            if status != "OK" or not msg_data:
                 raise HTTPException(status_code=404, detail="Adjunto no encontrado")
-            msg = email.message_from_bytes(data[0][1])
+            msg = email.message_from_bytes(msg_data[0][1])
             archivos = [p for p in msg.walk() if p.get_filename()]
             if indice < 0 or indice >= len(archivos):
                 raise HTTPException(status_code=404, detail="Adjunto no encontrado")
@@ -302,7 +302,7 @@ async def cantidad_emails_noleidos(usuario=Depends(auth_required)):
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select("INBOX", readonly=True)  # <----- SOLO LECTURA
+            imap.select("INBOX", readonly=True)  # SOLO LECTURA
             status, data = imap.search(None, 'UNSEEN')
             if status != "OK" or not data:
                 return {"noleidos": 0}

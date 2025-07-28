@@ -21,8 +21,8 @@
 /* Globo a la izquierda, con piquito tipo comic */
 .robot-globo {
   position: absolute;
-  left: 25px;   /* SIEMPRE a la izquierda */
-  bottom: 295px;  /* Ajustar según altura robot */
+  left: 15px;   /* SIEMPRE a la izquierda */
+  bottom: 285px;  /* Ajustar según altura robot */
   background: #fff;
   border: 2.5px solid #222;
   border-radius: 32px 40px 36px 38px;

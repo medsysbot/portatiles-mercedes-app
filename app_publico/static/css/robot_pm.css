@@ -1,17 +1,17 @@
 /* === ROBOT FIJO, ESQUINA INFERIOR DERECHA, RESPONSIVE === */
 .robot-pm-flotante {
   position: fixed;
-  right: 16px;
+  right: 22px;
   bottom: 14px;
   z-index: 2000;
-  width: 270px;
-  min-height: 290px;
+  width: 290px;
+  min-height: 320px;
   user-select: none;
   pointer-events: auto;
 }
 
-.robot-pm-imagen-con-botones { position: relative; width: 270px; height: 290px; }
-#robot-pm-img { width: 270px; height: 290px; display: block; pointer-events: none; }
+.robot-pm-imagen-con-botones { position: relative; width: 290px; height: 320px; }
+#robot-pm-img { width: 320px; height: 290px; display: block; pointer-events: none; }
 
 .robot-btn-area { position: absolute; background: transparent; border: none; opacity: 0; z-index: 2; cursor: pointer; width: 46px; height: 46px; }
 .robot-btn-tx    { left: 4px;  bottom: 51px; }

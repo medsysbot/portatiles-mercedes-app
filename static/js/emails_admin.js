@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const tabla = $('#tablaEmailsAdmin').DataTable({
     language: {
       url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json',
-      emptyTable: 'No emails in the inbox'
+      emptyTable: 'No emails en la bandeja'
     },
     paging: true,
     searching: false,
@@ -29,21 +29,25 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  async function cargarEmails() {
+  // === SOLO NO LEÍDOS ===
+  async function cargarEmailsNoLeidos() {
     try {
-      const resp = await fetch('/api/emails/ultimos');
+      // Importante: solo trae los no leídos gracias al parámetro solo_noleidos=1
+      const resp = await fetch('/admin/api/emails?solo_noleidos=1');
       if (!resp.ok) throw new Error('Error');
       const datos = await resp.json();
       datos.sort((a, b) => new Date(b.fecha) - new Date(a.fecha));
       tabla.clear();
       tabla.rows.add(datos).draw();
     } catch (err) {
-      console.error('Error cargando emails', err);
+      tabla.clear().draw();
+      console.error('Error cargando emails no leídos', err);
     }
   }
 
-  cargarEmails();
-  setInterval(cargarEmails, 60000);
+  // Inicial y refresco automático
+  cargarEmailsNoLeidos();
+  setInterval(cargarEmailsNoLeidos, 60000);
 
   const form = document.getElementById('formEmailAdmin');
   const btnAbrir = document.getElementById('btnAbrirEmail');
@@ -66,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       form.reset();
       await showAlert('email-exito', 'E-mail enviado', 2200);
-      cargarEmails();
+      cargarEmailsNoLeidos();
     } catch (err) {
       console.error('Error enviando email', err);
       if (typeof showAlert === 'function') {
@@ -103,6 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
         cont.appendChild(document.createElement('br'));
       });
       $('#modalEmail').modal('show');
+      // Opcional: actualizar la lista tras abrir un correo (puede marcarse como leído en backend)
+      setTimeout(cargarEmailsNoLeidos, 1000);
     } catch (err) {
       console.error('Error obteniendo email', err);
     }

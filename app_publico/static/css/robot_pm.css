@@ -125,14 +125,23 @@
   color: #6e707a;
   margin-right: 17px;
 }
-
 /* --- RESPONSIVE SOLO PARA MÓVIL --- */
 @media (max-width: 650px) {
-  .robot-pm-flotante, .robot-pm-imagen-con-botones { width: 112px; height: 137px; min-height: 0;}
-  #robot-pm-img { width: 112px; height: 137px; }
-  .robot-btn-area { width: 22px; height: 22px; }
-  .robot-btn-tx    { left: 1.6px;  bottom: 13px; }
-  .robot-btn-au    { left: 1.6px;  bottom: 32px; }
-  .robot-btn-close { left: 1.6px;  bottom: 55px; }
-  .robot-globo { left: -72px; bottom: 40px; max-width: 114px; font-size: 11px; padding: 6px 11px 6px 9px;}
+  .robot-pm-flotante, .robot-pm-imagen-con-botones { width: 125px; height: 155px; min-height: 0;}
+  #robot-pm-img { width: 125px; height: 155px; }
+  .robot-btn-area { width: 25px; height: 25px; }
+  .robot-btn-tx    { left: 2px;  bottom: 24px; }
+  .robot-btn-au    { left: 2px;  bottom: 55px; }
+  .robot-btn-close { left: 2px;  bottom: 84px; }
+
+  /* AJUSTE: globo centrado arriba del robot */
+  .robot-globo {
+    left: 50% !important;           /* Centra horizontalmente */
+    bottom: 155px !important;       /* Justo arriba del robot (ajusta si hace falta) */
+    transform: translateX(-50%) !important;  /* Centra respecto a su propio ancho */
+    max-width: 150px;               /* Ajusta si quieres que sea más o menos ancho */
+    font-size: 12px;
+    padding: 8px 11px 8px 10px;
+    min-width: 70px;
+  }
 }

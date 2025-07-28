@@ -143,5 +143,6 @@
     font-size: 12px;
     padding: 8px 11px 8px 10px;
     min-width: 70px;
+    border-radius: 34px !important;
   }
 }

@@ -1,183 +1,155 @@
-/* === WIDGET ROBOT PM - Portátiles Mercedes - Globo tipo cómic === */
+/* === ROBOT PM WIDGET - PORTÁTILES MERCEDES (PLATEADO) === */
 .robot-pm-flotante {
   position: fixed;
-  right: 6px;
+  right: 12px;
   bottom: 18px;
   z-index: 2000;
-  width: 235px;
+  width: 252px;
   min-height: 305px;
   user-select: none;
   pointer-events: auto;
 }
 .robot-pm-imagen-con-botones {
   position: relative;
-  width: 235px;
+  width: 252px;
   height: 305px;
 }
 #robot-pm-img {
-  width: 235px;
+  width: 252px;
   height: 305px;
   display: block;
   pointer-events: none;
 }
 
-/* --- Botones costado --- */
+/* Botones transparentes (exacto sobre AU, TX, X) */
 .robot-btn-area {
   position: absolute;
   background: transparent;
   border: none;
-  opacity: 0;
+  opacity: 0.01;
   z-index: 2;
   cursor: pointer;
-  width: 48px;
-  height: 48px;
+  width: 53px;
+  height: 53px;
   padding: 0;
   margin: 0;
 }
-.robot-btn-au    { left: 4px;  bottom: 145px; }
-.robot-btn-tx    { left: 4px;  bottom: 95px; }
-.robot-btn-close { left: 4px;  bottom: 35px; }
+.robot-btn-au    { left: 7px;  bottom: 158px; } /* AU */
+.robot-btn-tx    { left: 7px;  bottom: 101px; } /* TX */
+.robot-btn-close { left: 7px;  bottom: 42px; }  /* X */
 
-.robot-btn-area.robot-btn-visible { opacity: 1 !important; }
-
-/* --- Globo tipo cómic --- */
+/* --- Globo comic --- */
 #robot-globo {
   position: absolute;
-  left: 42px;
-  bottom: 255px;
-  min-width: 180px;
-  max-width: 350px;
-  min-height: 55px;
+  left: 54px;
+  bottom: 282px;
+  min-width: 168px;
+  max-width: 330px;
   background: #fff;
-  border: 4px solid #222;
-  border-radius: 26px 36px 36px 30px/24px 32px 30px 27px;
-  box-shadow: 0 2px 9px rgba(80,80,80,0.11);
-  padding: 18px 28px 18px 23px;
+  border-radius: 32px;
+  border: 3px solid #111;
+  box-shadow: 0 8px 32px rgba(80,90,110,0.17);
   font-family: 'Nunito', Arial, sans-serif;
-  color: #222;
   font-size: 21px;
-  font-weight: 700;
-  line-height: 1.35;
+  font-weight: 600;
+  color: #333a3d;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
-  z-index: 10;
-  transition: min-width 0.2s, min-height 0.2s, max-width 0.2s;
+  padding: 28px 28px 18px 32px;
+  transition: opacity .18s, transform .19s;
+  z-index: 20;
 }
-
-/* Flecha/pico globo a la izquierda */
-#robot-globo::after {
+.robot-globo-oculto { display: none !important; }
+.robot-globo-x {
+  position: absolute;
+  right: 19px;
+  top: 13px;
+  background: none;
+  border: none;
+  font-size: 33px;
+  color: #555;
+  cursor: pointer;
+  z-index: 22;
+}
+.robot-globo-punta {
+  position: absolute;
+  left: 58px;
+  bottom: -33px;
+  width: 47px;
+  height: 35px;
+  background: transparent;
+  z-index: 2;
+}
+.robot-globo-punta::before {
   content: '';
   display: block;
-  position: absolute;
-  left: -34px;
-  bottom: 32px;
-  width: 48px;
-  height: 44px;
-  background: url('/app_publico/static/icons/globo_pico_izq.svg') no-repeat center center;
-  background-size: contain;
-  z-index: 12;
+  width: 45px; height: 35px;
+  background: #fff;
+  border-left: 3px solid #111;
+  border-bottom: 3px solid #111;
+  border-radius: 0 0 27px 32px;
+  margin-left: 0;
+  margin-top: 1px;
+  transform: skew(-18deg, 2deg) rotate(-11deg);
 }
 
-/* Texto saludo/respuesta */
-.robot-globo-texto {
-  width: 100%;
-  display: block;
-  font-family: inherit;
-  color: inherit;
-  font-size: 20px;
-  font-weight: 700;
-}
-
-/* --- Formulario texto/audio dentro del globo --- */
-.robot-form-entrada {
+/* --- Input o audio dentro del globo --- */
+.robot-globo-input,
+.robot-globo-audio {
   width: 100%;
   margin-top: 14px;
-  margin-bottom: 0;
-  display: none;
+  display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
-  gap: 12px;
+  gap: 14px;
 }
-.robot-form-entrada.robot-input-visible { display: flex !important; }
-
 #robot-input-texto {
-  width: 60%;
-  min-width: 100px;
+  flex: 1;
   border: 2px solid #bfc6cf;
   border-radius: 8px;
-  outline: none;
-  background: #f8f8f8;
-  font-size: 18px;
-  color: #333a3d;
-  padding: 8px 10px;
-  font-family: 'Nunito', Arial, sans-serif;
-  margin-right: 7px;
+  background: #f7f9fa;
+  font-size: 19px;
+  color: #2c333a;
+  padding: 9px 13px;
+  margin-right: 3px;
   box-shadow: 0 1.5px 2.5px #e6e6e6;
 }
-
 .robot-btn-enviar {
-  background: linear-gradient(110deg, #e6e7e8 50%, #adb8be 100%);
-  border: 2px solid #adb8be;
-  color: #222;
-  font-size: 27px;
-  border-radius: 10px;
-  padding: 3px 16px 3px 13px;
-  margin-left: 2px;
+  background: linear-gradient(120deg, #dadfe5 60%, #bfc6cf 100%);
+  border: 1.8px solid #adb8be;
+  color: #454b50;
+  font-size: 26px;
+  border-radius: 11px;
+  padding: 6px 16px 6px 15px;
   cursor: pointer;
   font-family: inherit;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 900;
+  font-weight: 800;
   box-shadow: 0 2px 7px #e6e6e6;
-  transition: background .13s, border-color .13s;
 }
-.robot-btn-enviar:hover {
-  background: linear-gradient(110deg, #fff 50%, #bfc6cf 100%);
-  border-color: #555;
-}
+.robot-btn-enviar:hover { background: #f3f3f3; border-color: #8a99a4; }
 
-/* --- Audio área --- */
-.robot-area-audio { gap: 11px; }
+/* Mic icono grande en audio */
+#robot-mic-icono {
+  font-size: 34px;
+  margin-right: 12px;
+}
 #robot-audio-status {
-  color: #414345;
-  font-size: 18px;
-  font-family: 'Nunito', Arial, sans-serif;
-  font-weight: 700;
-  background: #f8f8f8;
-  border-radius: 6px;
-  border: 2px solid #bfc6cf;
-  padding: 4px 10px;
-  box-shadow: 0 1.5px 2.5px #e6e6e6;
+  font-size: 19px;
+  color: #575c5e;
 }
 
-/* --- Botón X dentro del globo (cierra input, NO el robot entero) --- */
-.robot-modal-close {
-  background: transparent;
-  border: none;
-  color: #222;
-  font-size: 32px;
-  font-weight: bold;
-  margin-left: auto;
-  margin-right: 2px;
-  margin-top: -3px;
-  cursor: pointer;
-  transition: color .13s;
-  z-index: 18;
-}
-.robot-modal-close:hover { color: #8a8a8a; }
-
-/* --- Responsive --- */
-@media (max-width: 650px) {
-  .robot-pm-flotante { width: 145px; min-height: 120px;}
-  .robot-pm-imagen-con-botones { width: 145px; height: 120px;}
-  #robot-pm-img { width: 145px; height: 120px;}
-  #robot-globo { left: 0px; bottom: 100px; min-width: 90px; max-width: 97vw; font-size: 13px; padding: 8px 11px 8px 8px;}
-  .robot-form-entrada { font-size: 14px;}
-  #robot-input-texto { font-size: 14px;}
-  .robot-btn-enviar { font-size: 16px; padding: 2px 6px 2px 5px;}
-  #robot-audio-status { font-size: 13px; padding: 3px 6px;}
+/* Responsive */
+@media (max-width: 700px) {
+  .robot-pm-flotante { width: 154px; min-height: 152px;}
+  .robot-pm-imagen-con-botones { width: 154px; height: 152px;}
+  #robot-pm-img { width: 154px; height: 152px;}
+  #robot-globo { left: -4vw; bottom: 122px; max-width: 92vw; font-size: 15.5px; padding: 17px 10px 13px 13px;}
+  .robot-globo-punta { left: 24px; bottom: -23px; width: 32px; height: 18px;}
+  .robot-globo-punta::before { width: 31px; height: 18px; border-radius: 0 0 11px 18px;}
+  .robot-globo-x { font-size: 21px; right: 7px; top: 5px;}
 }

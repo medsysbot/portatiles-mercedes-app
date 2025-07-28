@@ -19,7 +19,7 @@ from email.utils import parsedate_to_datetime, parseaddr
 
 from dotenv import load_dotenv
 
-from fastapi import APIRouter, HTTPException, Request, Form, UploadFile, File, Depends
+from fastapi import APIRouter, HTTPException, Request, Form, UploadFile, File, Depends, Query
 from fastapi.responses import JSONResponse, HTMLResponse, Response
 from fastapi.templating import Jinja2Templates
 from datetime import datetime
@@ -148,7 +148,11 @@ async def ultimos_emails(usuario=Depends(auth_required)):
     return mensajes
 
 @router.get("/admin/api/emails")
-async def listar_emails(q: str | None = None, usuario=Depends(auth_required)):
+async def listar_emails(
+    q: str | None = None,
+    solo_noleidos: int = Query(0, description="1 para mostrar solo no leídos"),
+    usuario=Depends(auth_required)
+):
     if usuario.get("rol") != "Administrador":
         raise HTTPException(status_code=403, detail="Acceso restringido")
 
@@ -156,39 +160,43 @@ async def listar_emails(q: str | None = None, usuario=Depends(auth_required)):
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            for mailbox in ["INBOX", '"[Gmail]/Sent Mail"']:
-                imap.select(mailbox)
+            mailbox = "INBOX"
+            imap.select(mailbox)
+            if solo_noleidos:
+                criterio = "UNSEEN"
+            else:
                 criterio = "ALL"
-                if q:
-                    criterio = f'(OR SUBJECT "{q}" FROM "{q}")'
-                status, data = imap.search(None, criterio)
-                if status != "OK" or not data or not data[0]:
+            if q:
+                # Filtro extra sobre criterio
+                criterio = f'(OR SUBJECT "{q}" FROM "{q}")'
+            status, data = imap.search(None, criterio)
+            if status != "OK" or not data or not data[0]:
+                return []
+            ids = data[0].split()[-20:]
+            for uid in ids:
+                status, msg_data = imap.fetch(uid, "(RFC822)")
+                if status != "OK" or not msg_data:
                     continue
-                ids = data[0].split()[-20:]
-                for uid in ids:
-                    status, msg_data = imap.fetch(uid, "(RFC822)")
-                    if status != "OK" or not msg_data:
-                        continue
-                    msg = email.message_from_bytes(msg_data[0][1])
-                    fecha = parsedate_to_datetime(msg.get("Date")).isoformat()
-                    de = parseaddr(msg.get("From"))[1]
-                    para = parseaddr(msg.get("To"))[1]
-                    asunto = msg.get("Subject", "")
-                    cuerpo = ""
-                    for part in msg.walk():
-                        if part.get_content_type() == "text/plain" and not part.get_filename():
-                            cuerpo = part.get_payload(decode=True).decode(part.get_content_charset() or "utf-8", errors="replace")
-                            break
-                    snippet = "\n".join(cuerpo.strip().splitlines()[:2])
-                    mensajes.append({
-                        "uid": uid.decode(),
-                        "mailbox": mailbox,
-                        "fecha": fecha,
-                        "email_origen": de,
-                        "email_destino": para,
-                        "asunto": asunto,
-                        "mensaje": snippet,
-                    })
+                msg = email.message_from_bytes(msg_data[0][1])
+                fecha = parsedate_to_datetime(msg.get("Date")).isoformat()
+                de = parseaddr(msg.get("From"))[1]
+                para = parseaddr(msg.get("To"))[1] if msg.get("To") else ""
+                asunto = msg.get("Subject", "")
+                cuerpo = ""
+                for part in msg.walk():
+                    if part.get_content_type() == "text/plain" and not part.get_filename():
+                        cuerpo = part.get_payload(decode=True).decode(part.get_content_charset() or "utf-8", errors="replace")
+                        break
+                snippet = "\n".join(cuerpo.strip().splitlines()[:2])
+                mensajes.append({
+                    "uid": uid.decode(),
+                    "mailbox": mailbox,
+                    "fecha": fecha,
+                    "email_origen": de,
+                    "email_destino": para,
+                    "asunto": asunto,
+                    "mensaje": snippet,
+                })
     except Exception as exc:  # pragma: no cover - dependencias externas
         logger.exception("Error listando correos: %s", exc)
         raise HTTPException(status_code=500, detail="Error obteniendo emails")
@@ -211,7 +219,7 @@ async def obtener_email(mailbox: str, uid: str, usuario=Depends(auth_required)):
             msg = email.message_from_bytes(data[0][1])
             fecha = parsedate_to_datetime(msg.get("Date")).isoformat()
             de = parseaddr(msg.get("From"))[1]
-            para = parseaddr(msg.get("To"))[1]
+            para = parseaddr(msg.get("To"))[1] if msg.get("To") else ""
             asunto = msg.get("Subject", "")
             cuerpo = ""
             adjuntos: list[str] = []

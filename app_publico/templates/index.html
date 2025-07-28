@@ -283,26 +283,14 @@ Proyecto: Portátiles Mercedes
   <footer class="pie-pagina">
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
-  <!-- WIDGET ROBOT PM -->
-  <!-- WIDGET ROBOT PM - PORTÁTILES MERCEDES -->
-<div id="robot-pm-widget" class="robot-pm-flotante">
-  <!-- Globo/dialogo único: se adapta según interacción -->
+  <!-- WIDGET ROBOT PM - Portátiles Mercedes -->
+<div id="robot-pm-widget" class="robot-pm-fijo">
+  <!-- Globo de diálogo/modal (aparece arriba) -->
   <div id="robot-globo" class="robot-globo-oculto">
     <span id="robot-globo-contenido"></span>
-    <form id="robot-form-texto" class="robot-form-entrada" autocomplete="off" style="display:none;">
-      <input type="text" id="robot-input-texto" maxlength="180" placeholder="Escribí tu pregunta aquí..." autocomplete="off">
-      <button type="submit" class="robot-btn-enviar" title="Enviar">&#8594;</button>
-    </form>
-    <div id="robot-form-audio" class="robot-form-entrada" style="display:none;">
-      <button type="button" id="robot-btn-grabar" class="robot-btn-enviar" title="Grabar">
-        <img src="/app_publico/static/icons/microfono.png" alt="Grabar" style="width:34px;height:34px;">
-      </button>
-      <span id="robot-audio-status" class="robot-audio-status">Presioná el micrófono para enviar tu pregunta.</span>
-    </div>
-    <!-- (La X de cierre solo está en el robot, nunca se tapa) -->
+    <button id="robot-globo-close" class="robot-globo-close" title="Cerrar">×</button>
     <div class="robot-globo-punta"></div>
   </div>
-
   <!-- Imagen robot con zonas activas para botones -->
   <div class="robot-pm-imagen-con-botones">
     <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
@@ -311,7 +299,7 @@ Proyecto: Portátiles Mercedes
     <!-- Botón AU (Audio) -->
     <button id="robot-btn-au" class="robot-btn-area robot-btn-au" title="Grabar audio"></button>
     <!-- Botón Cerrar -->
-    <button id="robot-btn-close" class="robot-btn-area robot-btn-close" title="Cerrar robot"></button>
+    <button id="robot-btn-close" class="robot-btn-area robot-btn-close" title="Cerrar"></button>
   </div>
 </div>
 <script src="/app_publico/static/js/robot_pm.js"></script>

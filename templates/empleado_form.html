@@ -3,16 +3,13 @@
 {% block description %}Formulario para dar de alta empleados{% endblock %}
 {% block head_extra %}
 {{ super() }}
-<style>
-  .input-group .form-control {
-    max-width: 500px;
-  }
-</style>
+<!-- ALERTAS PERSONALIZADAS -->
+<link rel="stylesheet" href="/static/css/alertas-custom.css">
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">Nuevo Empleado</h2>
 <div class="pm-form-container">
-  <form method="post" data-success-url="/admin/empleados">
+  <form id="form-nuevo-empleado" method="post" data-success-url="/admin/empleados" autocomplete="off">
     <div class="form-group">
       <label>Nombre completo</label>
       <input type="text" name="nombre" class="form-control" required>
@@ -49,6 +46,7 @@
   </form>
 </div>
 {% endblock %}
+
 <!-- ALERTA CENTRAL PERSONALIZADA -->
 <div id="alert-manager" class="alert-container">
   <div class="alert-box">
@@ -56,19 +54,18 @@
     <span id="alert-text" class="alert-message">Texto de alerta</span>
   </div>
 </div>
+
 {% block scripts %}
+<!-- ALERTAS JS (siempre antes que el JS del formulario) -->
+<script src="/static/js/alertas.js"></script>
+<!-- JS del formulario nuevo empleado -->
+<script src="/static/js/nuevo_empleado.js"></script>
+<!-- Script toggle password -->
 <script>
-  const toggle = document.getElementById('togglePass');
-  if (toggle) {
-    toggle.addEventListener('click', () => {
-      const pwd = document.getElementById('password');
-      if (pwd.type === 'password') {
-        pwd.type = 'text';
-      } else {
-        pwd.type = 'password';
-      }
-    });
-  }
+  document.getElementById('togglePass')?.addEventListener('click', () => {
+    const pwd = document.getElementById('password');
+    if (pwd.type === 'password') { pwd.type = 'text'; }
+    else { pwd.type = 'password'; }
+  });
 </script>
-<script src="/static/js/form_guardar.js"></script>
 {% endblock %}

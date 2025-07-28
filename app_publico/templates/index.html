@@ -283,31 +283,33 @@ Proyecto: Portátiles Mercedes
   <footer class="pie-pagina">
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
-      <!-- WIDGET ROBOT PM - Portátiles Mercedes -->
-    <div id="robot-pm-widget" class="robot-pm-flotante">
-      <!-- Globo (reutilizado para saludo, entrada y respuesta) -->
-      <div id="robot-globo" class="robot-globo">
-        <span id="robot-globo-texto"></span>
-        <button id="robot-globo-close" class="robot-globo-close" title="Cerrar">✕</button>
-        <!-- Piquito comic -->
-        <div class="robot-globo-punta"></div>
-      </div>
-      <!-- Imagen robot con zonas activas -->
-      <div class="robot-pm-imagen-con-botones">
-        <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
-        <!-- Botones AU, TX, X (superpuestos exactos a la imagen) -->
-        <button id="robot-btn-au"    class="robot-btn-area robot-btn-au"    title="Grabar audio"></button>
-        <button id="robot-btn-tx"    class="robot-btn-area robot-btn-tx"    title="Escribir texto"></button>
-        <button id="robot-btn-close" class="robot-btn-area robot-btn-close" title="Cerrar robot"></button>
-      </div>
+  <!-- WIDGET ROBOT PM - Portátiles Mercedes -->
+<div id="robot-pm-widget" class="robot-pm-flotante">
+  <!-- Globo saludo/pregunta/entrada SIEMPRE a la izquierda -->
+  <div id="robot-globo" class="robot-globo robot-globo-izq">
+    <span id="robot-globo-texto">¡Hola! Soy PM 😊</span>
+    <button id="robot-globo-close" class="robot-globo-close" style="display:none;" title="Cerrar">✕</button>
+    <div class="robot-globo-punta"></div>
+    <!-- FORMULARIOS INTERNOS -->
+    <div class="robot-modal-input" style="display:none;">
+      <input type="text" id="robot-input-texto" maxlength="280" placeholder="Escribí tu pregunta aquí">
+      <button id="robot-enviar-texto" class="robot-btn-enviar" title="Enviar mensaje">→</button>
     </div>
-    <!-- Fin Widget -->
-    <script src="/app_publico/static/js/robot_pm.js"></script>
-  </body>
-</html>
-
-
-
-  
-  </body>
-</html>
+    <div class="robot-modal-audio" style="display:none;">
+      <span class="icon-mic" style="font-size:27px; margin-right:10px;">🎤</span>
+      <span id="robot-audio-status">Presioná el micrófono para enviar tu pregunta</span>
+      <button id="robot-enviar-audio" class="robot-btn-enviar" title="Enviar audio">→</button>
+    </div>
+  </div>
+  <!-- Imagen robot + zonas activas -->
+  <div class="robot-pm-imagen-con-botones">
+    <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
+    <!-- Botones transparentes -->
+    <button id="robot-btn-au"    class="robot-btn-area robot-btn-au"    title="Grabar audio"></button>
+    <button id="robot-btn-tx"    class="robot-btn-area robot-btn-tx"    title="Escribir texto"></button>
+    <button id="robot-btn-close" class="robot-btn-area robot-btn-close" title="Cerrar robot"></button>
+  </div>
+</div>
+<script src="/app_publico/static/js/robot_pm.js"></script>
+</body>
+</html> 

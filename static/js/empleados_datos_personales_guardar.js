@@ -2,7 +2,7 @@
 // Proyecto: Portátiles Mercedes - Recursos Humanos (formulario alta)
 // Manejo de alertas visuales y redirección tras alta de empleado
 
-document.addEventListener('DOMContentLoaded', () => {
+cument.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form[data-success-url]');
   if (!form) return;
 

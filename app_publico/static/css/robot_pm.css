@@ -29,7 +29,7 @@
 }
 .robot-pm-flotante.centrado {
   top: 65%; left: 50%; right: auto; bottom: auto;
-  transform: translate(-50%,-54%) scale(1.12);
+  transform: translate(-50%,-54%) scale(1.30);
   box-shadow: 0 0 44px 6px rgba(0,0,0,.29);
 }
 
@@ -103,8 +103,8 @@
   right: 13px;
   background: transparent;
   border: none;
-  color: #888da1;
-  font-size: 17px;
+  color: #111;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
 }

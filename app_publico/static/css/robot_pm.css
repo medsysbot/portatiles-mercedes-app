@@ -19,7 +19,7 @@
 .robot-pm-flotante {
   position: fixed;
   right: 18px;
-  bottom: 18px;
+  bottom: 10px;
   z-index: 3000;
   width: 220px;
   min-height: 260px;
@@ -48,7 +48,7 @@
 /* Globo a la izquierda */
 .robot-globo {
   position: absolute;
-  left: -276px;   /* Sale SIEMPRE para la izquierda */
+  left: 25px;   /* Sale SIEMPRE para la izquierda */
   bottom: 190px;
   background: #fff;
   border: 2.5px solid #232323;

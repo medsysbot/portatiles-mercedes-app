@@ -283,26 +283,28 @@ Proyecto: Portátiles Mercedes
   <footer class="pie-pagina">
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   </footer>
-  <!-- WIDGET ROBOT PM - Portátiles Mercedes -->
+  <!-- WIDGET ROBOT PM - PORTÁTILES MERCEDES -->
 <div id="robot-pm-widget" class="robot-pm-fijo">
-  <!-- Globo de diálogo/modal (aparece arriba) -->
-  <div id="robot-globo" class="robot-globo-oculto">
-    <span id="robot-globo-contenido"></span>
-    <button id="robot-globo-close" class="robot-globo-close" title="Cerrar">×</button>
+  <!-- Globo de diálogo y modal de acción -->
+  <div id="robot-globo" class="robot-globo">
+    <button id="robot-close-modal" class="robot-modal-close" title="Cerrar">×</button>
+    <div id="robot-globo-contenido">
+      <!-- Este contenido se reemplaza por JS según acción -->
+      <span id="robot-globo-texto">¡Hola! Soy PM 😊<br>¿En qué te ayudo?</span>
+    </div>
     <div class="robot-globo-punta"></div>
   </div>
   <!-- Imagen robot con zonas activas para botones -->
   <div class="robot-pm-imagen-con-botones">
     <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
-    <!-- Botón TX (Texto) -->
-    <button id="robot-btn-tx" class="robot-btn-area robot-btn-tx" title="Escribir pregunta"></button>
     <!-- Botón AU (Audio) -->
     <button id="robot-btn-au" class="robot-btn-area robot-btn-au" title="Grabar audio"></button>
-    <!-- Botón Cerrar -->
-    <button id="robot-btn-close" class="robot-btn-area robot-btn-close" title="Cerrar"></button>
+    <!-- Botón TX (Texto) -->
+    <button id="robot-btn-tx" class="robot-btn-area robot-btn-tx" title="Escribir pregunta"></button>
+    <!-- Botón X (Cerrar robot) -->
+    <button id="robot-btn-close" class="robot-btn-area robot-btn-close" title="Cerrar robot"></button>
   </div>
 </div>
 <script src="/app_publico/static/js/robot_pm.js"></script>
-
 </body>
 </html>

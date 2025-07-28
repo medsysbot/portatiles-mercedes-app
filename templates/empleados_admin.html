@@ -39,7 +39,7 @@
     <tbody>
       {% for empleado in empleados %}
       <tr>
-        <td><input type="checkbox" class="fila-check" data-id="{{ empleado.uuid }}"></td>
+        <td><input type="checkbox" class="fila-check" data-id="{{ empleado.id }}"></td>
         <td>{{ empleado.email }}</td>
         <td>********</td>  <!-- No mostrar hash, solo indicar que existe -->
         <td>{{ empleado.nombre }}</td>

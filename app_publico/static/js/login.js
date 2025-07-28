@@ -60,12 +60,12 @@ loginForm?.addEventListener('submit', async (e) => {
         return;
     }
 
-    // 🚩 Mostrar alerta "Iniciando sesión..." (amarillo) al menos 900ms, aunque el backend responda rápido
-    const t0 = Date.now();
-    const esperaMinima = 900; // milisegundos
+    // 🚩 Mostrar alerta "Iniciando sesión..." (amarillo) al menos 900ms aunque el backend responda rápido
+    const esperaMinima = 900; // milisegundos (ajustar aquí si quieres más)
     let resultado = null;
     let data = null;
     let errorConexion = false;
+    let t0 = Date.now();
 
     await showAlert('inicio-sesion', 'Iniciando sesión...', false, 'infinito');
 
@@ -86,6 +86,9 @@ loginForm?.addEventListener('submit', async (e) => {
     if (elapsed < esperaMinima) {
         await new Promise(resolve => setTimeout(resolve, esperaMinima - elapsed));
     }
+
+    // Ocultar cartel amarillo
+    if (typeof ocultarAlert === 'function') ocultarAlert();
 
     // Ahora mostrar el resultado (verde, rojo, etc.)
     if (errorConexion) {

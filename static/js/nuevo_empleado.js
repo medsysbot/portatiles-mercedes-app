@@ -5,6 +5,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form[data-success-url]');
   if (!form) return;
 
+  let redirTimeout = null;
+
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
 
@@ -37,15 +39,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!resp.ok) throw new Error('Error al registrar');
 
-      // Verificar respuesta si fuera necesario (puedes adaptar aquí)
+      // Éxito: alerta y espera 4 segundos antes de redirigir
       await showAlert('exito-registro', 'Registrado con éxito');
-      // Redirigir a la tabla (controlado por data-success-url)
       const url = form.getAttribute('data-success-url');
-      setTimeout(() => { window.location.href = url; }, 700);
+      redirTimeout = setTimeout(() => {
+        window.location.href = url;
+      }, 4000); // 4 segundos de espera
     } catch (err) {
       await showAlert('error-registro', 'Error al registrar');
     }
   });
+
+  // Si el usuario presiona "Volver", cancelar la redirección automática
+  const volverBtn = document.querySelector('.btn.btn-secondary[href]');
+  if (volverBtn) {
+    volverBtn.addEventListener('click', () => {
+      if (redirTimeout) {
+        clearTimeout(redirTimeout);
+        redirTimeout = null;
+      }
+      // Dejar que el enlace funcione normalmente
+    });
+  }
 
   // Alternar visibilidad de contraseña
   const toggle = document.getElementById('togglePass');

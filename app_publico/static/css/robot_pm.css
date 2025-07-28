@@ -4,14 +4,14 @@
   right: 16px;
   bottom: 24px;
   z-index: 2000;
-  width: 226px;
-  min-height: 275px;
+  width: 270px;
+  min-height: 310px;
   user-select: none;
   pointer-events: auto;
 }
 
-.robot-pm-imagen-con-botones { position: relative; width: 226px; height: 275px; }
-#robot-pm-img { width: 226px; height: 275px; display: block; pointer-events: none; }
+.robot-pm-imagen-con-botones { position: relative; width: 270px; height: 310px; }
+#robot-pm-img { width: 270px; height: 310px; display: block; pointer-events: none; }
 
 .robot-btn-area { position: absolute; background: transparent; border: none; opacity: 0; z-index: 2; cursor: pointer; width: 46px; height: 46px; }
 .robot-btn-tx    { left: 4px;  bottom: 51px; }
@@ -21,8 +21,8 @@
 /* Globo a la izquierda, con piquito tipo comic */
 .robot-globo {
   position: absolute;
-  left: -290px;   /* SIEMPRE a la izquierda */
-  bottom: 210px;  /* Ajustar según altura robot */
+  left: 25px;   /* SIEMPRE a la izquierda */
+  bottom: 295px;  /* Ajustar según altura robot */
   background: #fff;
   border: 2.5px solid #222;
   border-radius: 32px 40px 36px 38px;

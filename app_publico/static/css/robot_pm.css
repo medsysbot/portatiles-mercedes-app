@@ -1,30 +1,22 @@
 /* === ROBOT PM WIDGET - PORTÁTILES MERCEDES - PLATEADO === */
-
-.robot-pm-flotante {
+.robot-pm-fijo {
   position: fixed;
-  right: 6px;
+  right: 16px;
   bottom: 18px;
   z-index: 2000;
-  width: 226px;
-  min-height: 275px;
+  width: 238px;
+  min-height: 285px;
   user-select: none;
   pointer-events: auto;
-  animation: robot-float 3s ease-in-out infinite;
 }
-@keyframes robot-float {
-  0%   { transform: translateY(0); }
-  50%  { transform: translateY(-13px);}
-  100% { transform: translateY(0); }
-}
-
 .robot-pm-imagen-con-botones {
   position: relative;
-  width: 226px;
-  height: 275px;
+  width: 238px;
+  height: 285px;
 }
 #robot-pm-img {
-  width: 226px;
-  height: 275px;
+  width: 238px;
+  height: 285px;
   display: block;
   pointer-events: none;
 }
@@ -37,147 +29,134 @@
   opacity: 0;
   z-index: 2;
   cursor: pointer;
-  width: 46px;
-  height: 46px;
+  width: 48px;
+  height: 48px;
   padding: 0;
   margin: 0;
 }
-.robot-btn-tx    { left: 4px;  bottom: 51px; }
-.robot-btn-au    { left: 4px;  bottom: 103px; }
-.robot-btn-close { left: 4px;  bottom: 160px; }
+.robot-btn-tx    { left: 6px;  bottom: 62px; }
+.robot-btn-au    { left: 6px;  bottom: 114px; }
+.robot-btn-close { left: 6px;  bottom: 170px; }
+.robot-btn-area.robot-btn-visible { display: block !important; }
 
-/* --- Globo de diálogo/respuesta --- */
+/* Globo/modal superior */
 #robot-globo {
   position: absolute;
-  left: 72px;
-  bottom: 260px;
+  left: 44px;
+  bottom: 252px;
   background: linear-gradient(160deg, #f0f0f0 80%, #bfc6cf 100%);
   color: #333a3d;
-  border-radius: 18px;
+  border-radius: 20px;
   border: 2.5px solid #bfc6cf;
-  padding: 20px 27px 21px 22px;
-  font-size: 20px;
+  padding: 23px 30px 23px 22px;
+  font-size: 19.5px;
   font-family: 'Nunito', Arial, sans-serif;
-  box-shadow: 0 9px 34px rgba(132, 134, 142, 0.13), 0 2px 5px #e5e8ea;
-  min-width: 120px;
-  max-width: 320px;
+  box-shadow: 0 10px 38px rgba(132,134,142,0.16), 0 2px 7px #d8dade;
+  min-width: 140px;
+  max-width: 330px;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
+  align-items: flex-start;
+  justify-content: flex-start;
+  font-weight: 700;
   transition: opacity .23s, transform .18s;
-  z-index: 10;
+  z-index: 30;
   border-bottom-right-radius: 32px 22px;
-  flex-direction: column;
 }
-.robot-globo-oculto { display: none !important; }
+.robot-globo-oculto { display: none; }
 .robot-globo-punta {
   position: absolute;
-  left: 33px;
-  bottom: -20px;
-  width: 28px; height: 20px;
+  left: 32px;
+  bottom: -22px;
+  width: 34px; height: 22px;
   background: transparent;
+  pointer-events: none;
 }
 .robot-globo-punta::before {
   content: '';
   display: block;
-  width: 24px; height: 20px;
+  width: 30px; height: 22px;
   background: linear-gradient(170deg, #f0f0f0 70%, #bfc6cf 100%);
-  border-radius: 0 0 20px 24px;
+  border-radius: 0 0 24px 24px;
   border-bottom: 2.5px solid #bfc6cf;
   margin-left: 2.5px;
 }
-
-/* --- FORMULARIOS DENTRO DEL GLOBO --- */
-.robot-form-entrada {
-  display: none;
-  width: 100%;
-  margin-top: 12px;
-  margin-bottom: 2px;
-  justify-content: center;
-  align-items: center;
+#robot-globo-close, .robot-globo-close {
+  background: transparent;
+  border: none;
+  color: #555d65;
+  font-size: 32px;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: -10px;
+  margin-top: -15px;
+  cursor: pointer;
+  opacity: 0.75;
+  transition: color .13s;
+  z-index: 3;
 }
-.robot-form-entrada.robot-input-visible {
-  display: flex !important;
+#robot-globo-close:hover { color: #8a99a4; opacity: 1; }
+
+#robot-globo .robot-microfono {
+  font-size: 42px;
+  margin-right: 12px;
+  color: #777;
+  vertical-align: middle;
 }
 
-#robot-input-texto {
-  width: 60%;
-  min-width: 110px;
+#robot-globo .robot-input-texto {
+  width: 175px;
+  font-size: 19px;
   border: 1.2px solid #bfc6cf;
   border-radius: 8px;
-  outline: none;
-  background: linear-gradient(120deg, #f3f3f3 60%, #e0e3e5 100%);
-  font-size: 18px;
+  background: #f9fafb;
   color: #333a3d;
-  padding: 7px 8px;
-  font-family: 'Nunito', Arial, sans-serif;
-  margin-right: 7px;
+  padding: 8px 10px;
+  margin-right: 8px;
+  outline: none;
   box-shadow: 0 1.5px 2.5px #e6e6e6;
 }
 
-.robot-btn-enviar {
+#robot-globo .robot-btn-enviar {
   background: linear-gradient(120deg, #dadfe5 60%, #bfc6cf 100%);
   border: 1.2px solid #adb8be;
   color: #454b50;
-  font-size: 28px;
+  font-size: 31px;
   border-radius: 10px;
-  padding: 3px 18px 3px 15px;
-  margin-left: 3px;
+  padding: 4px 15px 4px 14px;
+  margin-left: 5px;
   cursor: pointer;
   transition: background .13s, border-color .13s;
   font-family: inherit;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-weight: 800;
+  font-weight: 900;
   box-shadow: 0 2px 7px #e6e6e6;
 }
-.robot-btn-enviar:hover {
+#robot-globo .robot-btn-enviar:hover {
   background: linear-gradient(110deg, #f3f3f3 50%, #adb8be 100%);
   border-color: #8a99a4;
 }
 
-/* --- Área de grabación de audio --- */
-#robot-form-audio {
-  flex-direction: row;
-}
-#robot-btn-grabar img {
-  width: 37px; height: 37px;
-  margin-right: 10px;
-}
-#robot-audio-status {
-  color: #4e5154;
-  font-size: 18px;
-  font-family: 'Nunito', Arial, sans-serif;
-  font-weight: 600;
-  background: linear-gradient(120deg, #ececec 50%, #ccd2d7 100%);
-  border-radius: 6px;
-  border: 1px solid #bfc6cf;
-  padding: 5px 13px;
-  margin-left: 2px;
-  box-shadow: 0 1.5px 2.5px #e6e6e6;
-}
-
-/* -- Animación cohete al cerrar -- */
-.robot-pm-flotante.robot-cohete-out {
-  animation: robot-cohete-out 0.88s cubic-bezier(.16,.96,.61,.99) forwards;
+/* Animación cohete */
+.robot-pm-fijo.robot-cohete-out {
+  animation: robot-cohete-out 0.93s cubic-bezier(.16,.96,.61,.99) forwards;
 }
 @keyframes robot-cohete-out {
   0%   { transform: translateY(0) scale(1) rotate(0deg);}
-  60%  { transform: translateY(-155px) scale(1.14) rotate(-11deg);}
-  92%  { transform: translateY(-365px) scale(0.93) rotate(-23deg);}
-  100% { transform: translateY(-790px) scale(0.82) rotate(-38deg); opacity: 0;}
+  65%  { transform: translateY(-185px) scale(1.12) rotate(-9deg);}
+  95%  { transform: translateY(-395px) scale(0.95) rotate(-16deg);}
+  100% { transform: translateY(-1050px) scale(0.81) rotate(-32deg); opacity: 0;}
 }
 
-/* --- Responsive --- */
+/* Responsive */
 @media (max-width: 650px) {
-  .robot-pm-flotante { width: 99vw; min-width: 0; left: 0 !important; right: 0; }
-  .robot-pm-imagen-con-botones { width: 130px; height: 95px; }
-  #robot-pm-img { width: 130px; height: 95px;}
-  #robot-globo { left: 0px; bottom: 95px; max-width: 98vw; font-size: 14px; padding: 8px 7vw 9px 3vw;}
-  .robot-form-entrada { font-size: 12px;}
-  #robot-input-texto { font-size: 13px;}
-  .robot-btn-enviar { font-size: 16px; padding: 1.5px 6px 1.5px 7px;}
-  #robot-audio-status { font-size: 11px; padding: 3px 6px;}
+  .robot-pm-fijo { width: 140px; min-height: 90px;}
+  .robot-pm-imagen-con-botones { width: 140px; height: 90px;}
+  #robot-pm-img { width: 140px; height: 90px;}
+  #robot-globo {
+    left: 0px; bottom: 85px; max-width: 98vw; font-size: 15px; padding: 12px 10px 12px 8px;
+  }
+  #robot-globo .robot-input-texto { font-size: 14px; width: 80px;}
+  #robot-globo .robot-btn-enviar { font-size: 17px; padding: 2px 7px 2px 6px;}
 }

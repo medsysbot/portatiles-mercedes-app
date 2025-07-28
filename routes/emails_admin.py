@@ -111,7 +111,7 @@ async def ultimos_emails(usuario=Depends(auth_required)):
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select("INBOX")
+            imap.select("INBOX", readonly=True)  # <----- SOLO LECTURA, NO MARCA LEÍDO
             status, data = imap.search(None, "ALL")
             if status == "OK" and data and data[0]:
                 ids = data[0].split()[-10:]
@@ -161,7 +161,7 @@ async def listar_emails(
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
             mailbox = "INBOX"
-            imap.select(mailbox)
+            imap.select(mailbox, readonly=True)  # <----- SOLO LECTURA
             if solo_noleidos:
                 criterio = "UNSEEN"
             else:
@@ -212,7 +212,7 @@ async def obtener_email(mailbox: str, uid: str, usuario=Depends(auth_required)):
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select(mailbox)
+            imap.select(mailbox, readonly=True)  # <----- SOLO LECTURA
             status, data = imap.fetch(uid, "(RFC822)")
             if status != "OK" or not data:
                 raise HTTPException(status_code=404, detail="Email no encontrado")
@@ -251,7 +251,7 @@ async def descargar_adjunto(mailbox: str, uid: str, indice: int, usuario=Depends
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select(mailbox)
+            imap.select(mailbox, readonly=True)  # <----- SOLO LECTURA
             status, data = imap.fetch(uid, "(RFC822)")
             if status != "OK" or not data:
                 raise HTTPException(status_code=404, detail="Adjunto no encontrado")
@@ -279,7 +279,7 @@ async def eliminar_email(mailbox: str, uid: str, usuario=Depends(auth_required))
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select(mailbox)
+            imap.select(mailbox)  # Eliminar sí requiere acceso normal, no readonly
             imap.store(uid, "+FLAGS", "\\Deleted")
             imap.expunge()
         logger.info("Email %s eliminado de %s", uid, mailbox)
@@ -302,7 +302,7 @@ async def cantidad_emails_noleidos(usuario=Depends(auth_required)):
     try:
         with imaplib.IMAP4_SSL(IMAP_SERVER, int(IMAP_PORT)) as imap:
             imap.login(EMAIL_ORIGIN, EMAIL_PASSWORD)
-            imap.select("INBOX")
+            imap.select("INBOX", readonly=True)  # <----- SOLO LECTURA
             status, data = imap.search(None, 'UNSEEN')
             if status != "OK" or not data:
                 return {"noleidos": 0}

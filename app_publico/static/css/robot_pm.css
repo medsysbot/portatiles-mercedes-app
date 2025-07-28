@@ -153,5 +153,24 @@
    flex-direction: row;
    white-space: pre-line;
  }
+@media (max-width: 650px) {
+  .robot-globo {
+    left: 50% !important;
+    bottom: 155px !important;
+    transform: translateX(-50%) !important;
+    max-width: 210px !important;
+    min-width: 90px !important;
+    min-height: 34px !important;
+    font-size: 13.5px !important;
+    padding: 10px 18px 10px 14px !important;
+    border-radius: 34px !important;
+    box-sizing: border-box !important;
+    text-align: center !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-direction: row !important;
+    white-space: normal !important;
+  }
 }
 

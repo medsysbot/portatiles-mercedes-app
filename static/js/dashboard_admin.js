@@ -30,16 +30,10 @@ async function cargarTarjetas() {
 // ---- EMAILS NUEVOS (NO LEÍDOS) ----
 async function cargarEmailsNuevos() {
   try {
-    // Requiere estar autenticado como admin (por backend)
-    const resp = await fetch('/api/emails/ultimos');
+    const resp = await fetch('/admin/api/emails/noleidos');
     if (!resp.ok) throw new Error('Error consultando emails');
-    const emails = await resp.json();
-    // Contar solo los que NO están leídos (suponiendo que la API marca como 'UNSEEN' o 'Seen')
-    // Si la API ya filtra sólo no leídos, usamos emails.length directo.
-    // Si devuelve todos, filtramos por una bandera "unread" o similar (AJUSTAR SI CAMBIA).
-
-    // Si el backend NO devuelve info de leído/no leído, mostramos la cantidad recibida (últimos no leídos)
-    const cantidad = Array.isArray(emails) ? emails.length : 0;
+    const datos = await resp.json();
+    const cantidad = typeof datos.noleidos === 'number' ? datos.noleidos : 0;
     document.getElementById('card-emails-nuevos').textContent = cantidad;
   } catch (err) {
     document.getElementById('card-emails-nuevos').textContent = '-';
@@ -94,22 +88,4 @@ async function cargarGraficos(charts) {
     charts.ingresos = new Chart(
       document.getElementById('graficoIngresos').getContext('2d'), {
       type: 'line',
-      data: { labels, datasets: [{ label: 'Ingresos', data: ingresos, borderColor: 'rgba(0,123,255,0.9)', fill: false }] },
-      options: opcionesGrafico
-    });
-
-  } catch (err) {
-    console.error('Error gráficos:', err);
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
-
-  cargarTarjetas();         // Tarjetas principales
-  cargarEmailsNuevos();     // Tarjeta emails nuevos
-  cargarGraficos({});       // Gráficos
-
-  // Opcional: actualizar emails cada 60 segundos
-  setInterval(cargarEmailsNuevos, 60000);
-});
+      data: { labels, datasets: [{ label: 'Ingresos', data:

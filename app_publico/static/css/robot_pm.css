@@ -1,6 +1,6 @@
-/* === WIDGET ROBOT PM - PORTÁTILES MERCEDES (AJUSTADO) === */
+/* === WIDGET ROBOT PM - PORTÁTILES MERCEDES (SOLO ESQUINA, SIN OVERLAY) === */
 
-/* --- Widget robot en esquina --- */
+/* Widget robot en esquina */
 .robot-pm-flotante {
   position: fixed;
   right: 18px;
@@ -12,56 +12,50 @@
   pointer-events: auto;
 }
 
-/* --- Imagen robot y zonas de botones --- */
+/* Imagen robot y zonas de botones */
 .robot-pm-imagen-con-botones { position: relative; width: 260px; height: 300px; }
 #robot-pm-img { width: 260px; height: 300px; display: block; pointer-events: none; }
 
-/* --- Botones transparentes: AJUSTADOS --- */
 .robot-btn-area {
-  position: absolute;
-  background: transparent;
-  border: none;
-  opacity: 0;
-  z-index: 2;
-  cursor: pointer;
-  width: 54px;
-  height: 54px;
+  position: absolute; background: transparent; border: none; opacity: 0;
+  z-index: 2; cursor: pointer; width: 54px; height: 54px;
 }
+
+/* Botones transparentes: AJUSTADOS */
 .robot-btn-tx    { left: 8px;  bottom: 52px;  }   /* Escribir */
 .robot-btn-au    { left: 8px;  bottom: 107px; }   /* Audio */
 .robot-btn-close { left: 8px;  bottom: 165px; }   /* Cerrar */
 
-/* --- Globo a la izquierda, ovalado, sin piquito --- */
+/* Globo a la izquierda */
 .robot-globo {
   position: absolute;
-  left: -10px;
+  left: -10px;   /* Sale SIEMPRE para la izquierda */
   bottom: 252px;
   background: #fff;
   border: 2.5px solid #232323;
-  border-radius: 36px 38px 36px 38px;
+  border-radius: 31px 36px 32px 37px;
   box-shadow: 0 8px 34px rgba(70,70,72,0.17), 0 2px 6px #e5e8ea;
   padding: 13px 26px 13px 22px;
-  font-size: 17px;
+  font-size: 18px;
   font-family: 'Nunito', Arial, sans-serif;
   color: #232729;
-  min-width: 65px; 
-  max-width: 340px; 
-  min-height: 35px; 
-  max-height: 265px;
-  display: flex; 
-  align-items: center; 
-  justify-content: flex-start;
+  min-width: 65px; max-width: 340px; min-height: 35px; max-height: 265px;
+  display: flex; align-items: center; justify-content: flex-start;
   font-weight: 600;
   z-index: 20;
-  direction: ltr;
-  box-sizing: border-box;
-  transition: width .21s, min-width .19s, font-size .16s, padding .17s;
-  overflow-x: auto;
-  overflow-y: auto;
-  white-space: pre-line;
+}
+.robot-globo-izq .robot-globo-punta {
+  position: absolute; left: -18px; bottom: 23px; width: 27px; height: 22px; background: transparent;
+}
+.robot-globo-izq .robot-globo-punta::before {
+  content: '';
+  display: block; width: 25px; height: 19px;
+  background: #fff; border: 2.5px solid #232323; border-left: none;
+  border-top-right-radius: 24px 24px; border-bottom-right-radius: 24px 24px;
+  margin-left: 0; margin-top: 1px; box-shadow: -2px 4px 5px rgba(90,90,100,0.03);
 }
 
-/* --- Close X globo (solo visible en modo interactivo) --- */
+/* Close X globo (solo visible en modo interactivo) */
 .robot-globo-close {
   display: none;
   position: absolute;
@@ -70,23 +64,19 @@
   background: transparent;
   border: none;
   color: #111;
-  font-size: 13.5px;
+  font-size: 14px;
   font-weight: bold;
   cursor: pointer;
-  line-height: 1;
-  padding: 0;
-  opacity: 0.83;
-  letter-spacing: -1px;
 }
 .robot-globo.modo-interactivo .robot-globo-close { display: block; }
 
-/* --- Formulario de texto --- */
+/* Formulario de texto */
 .robot-modal-input {
   display: none;
   width: 100%;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 16px;
 }
 .robot-globo.modo-interactivo .robot-modal-input { display: flex; }
 .robot-modal-input input {
@@ -97,12 +87,11 @@
   flex: 1 1 auto;
   outline: none;
   background: #f7f7f7;
-  font-family: inherit;
 }
 .robot-btn-enviar {
-  font-size: 15.5px;
+  font-size: 17px;
   border-radius: 8px;
-  padding: 2.5px 9px;
+  padding: 3px 10px;
   background: #eaeaea;
   border: 1px solid #bbb;
   cursor: pointer;
@@ -111,50 +100,48 @@
   box-shadow: 0 2px 7px #e6e6e6;
 }
 
-/* --- Modal de audio --- */
+/* Modal de audio */
 .robot-modal-audio {
   display: none;
   width: 100%;
-  min-width: 120px;
-  max-width: 210px;
-  height: 39px;
-  border-radius: 19px;
+  min-width: 190px;
+  max-width: 410px;
+  height: 54px;
+  border-radius: 21px;
   background: #f7f7f7;
   color: #232729;
   align-items: center;
   justify-content: flex-start;
-  font-size: 13.5px;
+  font-size: 18px;
   font-family: inherit;
-  white-space: pre-line;
-  margin-top: 5px;
-  gap: 8px;
+  white-space: nowrap;
+  margin-top: 20px;
 }
 .robot-globo.modo-interactivo .robot-modal-audio { display: flex; }
 .robot-modal-audio .icon-mic {
-  font-size: 21px;
+  font-size: 35px;
   color: #6e707a;
-  margin-right: 4px;
-  margin-left: 2px;
+  margin-right: 17px;
 }
 
-/* --- Responsive para móvil --- */
+/* Responsive */
 @media (max-width: 650px) {
-  .robot-pm-flotante, .robot-pm-imagen-con-botones { width: 115px; height: 132px; min-height: 0;}
-  #robot-pm-img { width: 115px; height: 132px; }
-  .robot-btn-area { width: 18px; height: 18px; }
-  .robot-btn-tx    { left: 2px;  bottom: 18px; }
-  .robot-btn-au    { left: 2px;  bottom: 37px; }
-  .robot-btn-close { left: 2px;  bottom: 62px; }
-  .robot-globo { left: -110px; bottom: 40px; max-width: 95vw; font-size: 9.6px; padding: 5px 7px 5px 6px;}
-  .robot-modal-input input { font-size: 10.5px;}
-  .robot-btn-enviar { font-size: 10.5px; padding: 1.5px 5.5px;}
-  .robot-modal-audio { font-size: 9.3px; min-width: 55px; max-width: 95vw; height: 23px; }
+  .robot-pm-flotante, .robot-pm-imagen-con-botones { width: 125px; height: 155px; min-height: 0;}
+  #robot-pm-img { width: 125px; height: 155px; }
+  .robot-btn-area { width: 25px; height: 25px; }
+  .robot-btn-tx    { left: 2px;  bottom: 24px; }
+  .robot-btn-au    { left: 2px;  bottom: 55px; }
+  .robot-btn-close { left: 2px;  bottom: 84px; }
+  .robot-globo { left: -138px; bottom: 92px; max-width: 140px; font-size: 11px; padding: 6px 11px 6px 9px;}
 }
 
-/* --- Ajuste globo para solo crecer izquierda y arriba --- */
-.robot-globo {
-  /* Si el texto es muy largo, crece para la izquierda y hacia arriba */
-  left: -10px;
-  right: unset !important;
-  top: unset !important;
+/* Animación cohete salida (si se usa) */
+.robot-pm-flotante.robot-cohete-out {
+  animation: robot-cohete-out 0.93s cubic-bezier(.16,.96,.61,.99) forwards;
+}
+@keyframes robot-cohete-out {
+  0%   { transform: translateY(0) scale(1) rotate(0deg);}
+  60%  { transform: translateY(-165px) scale(1.15) rotate(-8deg);}
+  92%  { transform: translateY(-405px) scale(0.89) rotate(-19deg);}
+  100% { transform: translateY(-860px) scale(0.81) rotate(-41deg); opacity: 0;}
 }

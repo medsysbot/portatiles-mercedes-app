@@ -1,88 +1,92 @@
-// robot_pm.js - Widget PM - Portátiles Mercedes
+// === ROBOT PM WIDGET - Portátiles Mercedes ===
+// Este JS controla el widget fijo, botones AU/TX/X y el globo-modal
+document.addEventListener('DOMContentLoaded', function () {
+    const widget = document.getElementById('robot-pm-widget');
+    const btnTX = document.getElementById('robot-btn-tx');
+    const btnAU = document.getElementById('robot-btn-au');
+    const btnClose = document.getElementById('robot-btn-close');
+    const globo = document.getElementById('robot-globo');
+    const globoContenido = document.getElementById('robot-globo-contenido');
+    const globoClose = document.getElementById('robot-globo-close');
+    let modo = null; // 'texto' | 'audio'
 
-const widget = document.getElementById('robot-pm-widget');
-const globo = document.getElementById('robot-globo');
-const globoContenido = document.getElementById('robot-globo-contenido');
-const btnTX = document.getElementById('robot-btn-tx');
-const btnAU = document.getElementById('robot-btn-au');
-const btnClose = document.getElementById('robot-btn-close');
-const formTexto = document.getElementById('robot-form-texto');
-const inputTexto = document.getElementById('robot-input-texto');
-const formAudio = document.getElementById('robot-form-audio');
-const btnGrabar = document.getElementById('robot-btn-grabar');
-const audioStatus = document.getElementById('robot-audio-status');
-
-// Estado actual del robot (reposo, texto, audio)
-let estado = "reposo";
-
-// Mostrar el globo, texto o input
-function mostrarGlobo(modo, mensaje = "") {
-    globo.classList.remove('robot-globo-oculto');
-    formTexto.style.display = 'none';
-    formAudio.style.display = 'none';
-    globoContenido.style.display = 'block';
-    globoContenido.innerHTML = '';
-
-    if (modo === 'reposo') {
-        globoContenido.textContent = '¡Hola! Soy PM 😊 ¿En qué te ayudo?';
-    } else if (modo === 'texto') {
-        globoContenido.textContent = '';
-        formTexto.style.display = 'flex';
-        inputTexto.value = '';
-        inputTexto.placeholder = "Escribí tu pregunta aquí...";
-        inputTexto.focus();
-    } else if (modo === 'audio') {
-        globoContenido.textContent = '';
-        formAudio.style.display = 'flex';
-        audioStatus.textContent = "Presioná el micrófono para enviar tu pregunta.";
-    } else if (modo === 'respuesta') {
-        globoContenido.textContent = mensaje;
+    // Utilidad: mostrar el globo
+    function mostrarGlobo(contenidoHTML, mostrarCerrar = true) {
+        globoContenido.innerHTML = contenidoHTML;
+        globo.classList.remove('robot-globo-oculto');
+        if (mostrarCerrar) globoClose.style.display = "block";
+        else globoClose.style.display = "none";
     }
-}
 
-// Mostrar saludo inicial al cargar
-mostrarGlobo('reposo');
+    // Utilidad: ocultar globo
+    function ocultarGlobo() {
+        globo.classList.add('robot-globo-oculto');
+        globoContenido.innerHTML = '';
+        modo = null;
+    }
 
-// --- BOTÓN TX (Texto) ---
-btnTX.addEventListener('click', function() {
-    estado = "texto";
-    mostrarGlobo('texto');
-});
+    // Mostrar globo de saludo inicial
+    mostrarGlobo('¡Hola! Soy PM 😊 ¿En qué te ayudo?', false);
 
-// --- BOTÓN AU (Audio) ---
-btnAU.addEventListener('click', function() {
-    estado = "audio";
-    mostrarGlobo('audio');
-});
+    // --- BOTÓN TEXTO ---
+    btnTX.addEventListener('click', function (e) {
+        e.preventDefault();
+        modo = 'texto';
+        mostrarGlobo(`
+            <form id="robot-form-texto" autocomplete="off" style="display:flex;align-items:center;width:100%;">
+              <input type="text" id="robot-input-texto" class="robot-input-texto" maxlength="180" placeholder="Escribí tu pregunta aquí">
+              <button type="submit" class="robot-btn-enviar" title="Enviar pregunta">&#8594;</button>
+            </form>
+        `);
+        document.getElementById('robot-input-texto').focus();
 
-// --- BOTÓN CERRAR (X costado) ---
-btnClose.addEventListener('click', function() {
-    // Animación cohete y luego remover widget
-    widget.classList.add('robot-cohete-out');
-    setTimeout(() => { widget.remove(); }, 900);
-});
+        // Listener del form (una sola vez)
+        setTimeout(() => {
+            const formTexto = document.getElementById('robot-form-texto');
+            if (formTexto) {
+                formTexto.onsubmit = async function(ev) {
+                    ev.preventDefault();
+                    const texto = document.getElementById('robot-input-texto').value.trim();
+                    if (!texto) return;
+                    mostrarGlobo('<span>Enviando...</span><span style="font-size:27px;vertical-align:middle;">&#8594;</span>');
+                    // Aquí deberías enviar la pregunta al backend
+                    setTimeout(() => mostrarGlobo('¡Pregunta enviada! 😊'), 1200);
+                };
+            }
+        }, 80);
+    });
 
-// --- ENVIAR TEXTO ---
-formTexto.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const pregunta = inputTexto.value.trim();
-    if (pregunta.length === 0) return;
-    mostrarGlobo('respuesta', "Enviando tu pregunta...");
-    // Acá deberías llamar al backend vía fetch/AJAX y luego mostrar respuesta:
+    // --- BOTÓN AUDIO ---
+    btnAU.addEventListener('click', function (e) {
+        e.preventDefault();
+        modo = 'audio';
+        mostrarGlobo(`
+            <div style="display:flex;align-items:center;">
+                <span class="robot-microfono">&#127908;</span>
+                <span style="font-size:17px;margin-left:7px;">Presioná el micrófono para grabar tu pregunta.</span>
+            </div>
+        `);
+        // Aquí agregar lógica de grabación si hace falta
+    });
+
+    // --- BOTÓN CIERRE (costado del robot) ---
+    btnClose.addEventListener('click', function (e) {
+        e.preventDefault();
+        widget.classList.add('robot-cohete-out');
+        setTimeout(() => { widget.style.display = 'none'; }, 950);
+    });
+
+    // --- BOTÓN CIERRE DEL GLOBO ---
+    globoClose.addEventListener('click', function (e) {
+        e.preventDefault();
+        ocultarGlobo();
+        setTimeout(() => {
+            mostrarGlobo('¡Hola! Soy PM 😊 ¿En qué te ayudo?', false);
+        }, 300);
+    });
+
+    // Saludo inicial
     setTimeout(() => {
-        mostrarGlobo('respuesta', "¡Recibí tu mensaje! Pronto te respondo.");
-        estado = "reposo";
-        setTimeout(() => mostrarGlobo('reposo'), 2600);
-    }, 1200);
-});
-
-// --- GRABAR AUDIO (solo interfaz, sin STT) ---
-btnGrabar.addEventListener('click', function() {
-    mostrarGlobo('respuesta', "Grabando y enviando tu pregunta de audio...");
-    // Simular backend respuesta:
-    setTimeout(() => {
-        mostrarGlobo('respuesta', "¡Audio recibido! Pronto te respondo.");
-        estado = "reposo";
-        setTimeout(() => mostrarGlobo('reposo'), 2600);
-    }, 1400);
+        mostrarGlobo('¡Hola! Soy PM 😊 ¿En qué te ayudo?', false);
+    }, 900);
 });

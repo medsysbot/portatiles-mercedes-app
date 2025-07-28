@@ -2,16 +2,16 @@
 .robot-pm-flotante {
   position: fixed;
   right: 16px;
-  bottom: 24px;
+  bottom: 14px;
   z-index: 2000;
   width: 270px;
-  min-height: 310px;
+  min-height: 290px;
   user-select: none;
   pointer-events: auto;
 }
 
-.robot-pm-imagen-con-botones { position: relative; width: 270px; height: 310px; }
-#robot-pm-img { width: 270px; height: 310px; display: block; pointer-events: none; }
+.robot-pm-imagen-con-botones { position: relative; width: 270px; height: 290px; }
+#robot-pm-img { width: 270px; height: 290px; display: block; pointer-events: none; }
 
 .robot-btn-area { position: absolute; background: transparent; border: none; opacity: 0; z-index: 2; cursor: pointer; width: 46px; height: 46px; }
 .robot-btn-tx    { left: 4px;  bottom: 51px; }

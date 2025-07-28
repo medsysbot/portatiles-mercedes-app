@@ -1,92 +1,116 @@
-// === ROBOT PM WIDGET - Portátiles Mercedes ===
-// Este JS controla el widget fijo, botones AU/TX/X y el globo-modal
-document.addEventListener('DOMContentLoaded', function () {
-    const widget = document.getElementById('robot-pm-widget');
-    const btnTX = document.getElementById('robot-btn-tx');
-    const btnAU = document.getElementById('robot-btn-au');
-    const btnClose = document.getElementById('robot-btn-close');
-    const globo = document.getElementById('robot-globo');
-    const globoContenido = document.getElementById('robot-globo-contenido');
-    const globoClose = document.getElementById('robot-globo-close');
-    let modo = null; // 'texto' | 'audio'
+// robot_pm.js - Portátiles Mercedes
 
-    // Utilidad: mostrar el globo
-    function mostrarGlobo(contenidoHTML, mostrarCerrar = true) {
-        globoContenido.innerHTML = contenidoHTML;
-        globo.classList.remove('robot-globo-oculto');
-        if (mostrarCerrar) globoClose.style.display = "block";
-        else globoClose.style.display = "none";
-    }
+const widget = document.getElementById('robot-pm-widget');
+const globo = document.getElementById('robot-globo');
+const globoContenido = document.getElementById('robot-globo-contenido');
+const globoTexto = document.getElementById('robot-globo-texto');
+const globoClose = document.getElementById('robot-close-modal');
 
-    // Utilidad: ocultar globo
-    function ocultarGlobo() {
-        globo.classList.add('robot-globo-oculto');
-        globoContenido.innerHTML = '';
-        modo = null;
-    }
+const btnTX = document.getElementById('robot-btn-tx');
+const btnAU = document.getElementById('robot-btn-au');
+const btnCLOSE = document.getElementById('robot-btn-close');
 
-    // Mostrar globo de saludo inicial
-    mostrarGlobo('¡Hola! Soy PM 😊 ¿En qué te ayudo?', false);
+// Estado actual del widget
+let estado = 'reposo';
 
-    // --- BOTÓN TEXTO ---
-    btnTX.addEventListener('click', function (e) {
-        e.preventDefault();
-        modo = 'texto';
-        mostrarGlobo(`
-            <form id="robot-form-texto" autocomplete="off" style="display:flex;align-items:center;width:100%;">
-              <input type="text" id="robot-input-texto" class="robot-input-texto" maxlength="180" placeholder="Escribí tu pregunta aquí">
-              <button type="submit" class="robot-btn-enviar" title="Enviar pregunta">&#8594;</button>
-            </form>
-        `);
-        document.getElementById('robot-input-texto').focus();
+// ---- FUNCIONES GLOBO Y MODAL ----
 
-        // Listener del form (una sola vez)
-        setTimeout(() => {
-            const formTexto = document.getElementById('robot-form-texto');
-            if (formTexto) {
-                formTexto.onsubmit = async function(ev) {
-                    ev.preventDefault();
-                    const texto = document.getElementById('robot-input-texto').value.trim();
-                    if (!texto) return;
-                    mostrarGlobo('<span>Enviando...</span><span style="font-size:27px;vertical-align:middle;">&#8594;</span>');
-                    // Aquí deberías enviar la pregunta al backend
-                    setTimeout(() => mostrarGlobo('¡Pregunta enviada! 😊'), 1200);
-                };
-            }
-        }, 80);
-    });
+function mostrarGlobo(html) {
+  globoContenido.innerHTML = html;
+  globo.classList.remove('robot-globo-oculto');
+}
 
-    // --- BOTÓN AUDIO ---
-    btnAU.addEventListener('click', function (e) {
-        e.preventDefault();
-        modo = 'audio';
-        mostrarGlobo(`
-            <div style="display:flex;align-items:center;">
-                <span class="robot-microfono">&#127908;</span>
-                <span style="font-size:17px;margin-left:7px;">Presioná el micrófono para grabar tu pregunta.</span>
-            </div>
-        `);
-        // Aquí agregar lógica de grabación si hace falta
-    });
+function ocultarGlobo() {
+  globo.classList.add('robot-globo-oculto');
+}
 
-    // --- BOTÓN CIERRE (costado del robot) ---
-    btnClose.addEventListener('click', function (e) {
-        e.preventDefault();
-        widget.classList.add('robot-cohete-out');
-        setTimeout(() => { widget.style.display = 'none'; }, 950);
-    });
+// Globo saludo (inicio)
+function saludoInicial() {
+  mostrarGlobo(`<span id="robot-globo-texto">¡Hola! Soy PM 😊<br>¿En qué te ayudo?</span>`);
+  globo.classList.remove('robot-globo-oculto');
+  estado = 'reposo';
+}
 
-    // --- BOTÓN CIERRE DEL GLOBO ---
-    globoClose.addEventListener('click', function (e) {
-        e.preventDefault();
-        ocultarGlobo();
-        setTimeout(() => {
-            mostrarGlobo('¡Hola! Soy PM 😊 ¿En qué te ayudo?', false);
-        }, 300);
-    });
+// Modal para escribir pregunta (TX)
+function mostrarModalTexto() {
+  mostrarGlobo(`
+    <form id="robot-form-texto" class="robot-form-entrada" autocomplete="off">
+      <input type="text" id="robot-input-texto" maxlength="180" placeholder="Escribí tu pregunta aquí" autofocus />
+      <button type="submit" class="robot-btn-enviar" title="Enviar pregunta">&#8594;</button>
+    </form>
+  `);
+  document.getElementById('robot-form-texto').onsubmit = enviarTexto;
+  estado = 'texto';
+}
 
-    // Saludo inicial
-    setTimeout(() => {
-        mostrarGlobo('¡Hola! Soy PM 😊 ¿En qué te ayudo?', false);
-    }, 900);
-});
+// Modal para grabar audio (AU)
+function mostrarModalAudio() {
+  mostrarGlobo(`
+    <div class="robot-form-entrada robot-area-audio">
+      <button id="robot-btn-grabar" type="button" class="robot-btn-enviar" title="Presioná para grabar">
+        <img src="/app_publico/static/icons/microfono.png" alt="Grabar" style="width:34px;height:34px;">
+      </button>
+      <span id="robot-audio-status" class="robot-audio-status">Presioná el micrófono para grabar tu pregunta.</span>
+    </div>
+  `);
+  document.getElementById('robot-btn-grabar').onclick = simularGrabacionAudio;
+  estado = 'audio';
+}
+
+// ---- MANEJO DE BOTONES ----
+
+// Cerrar solo el globo/modal (no el robot)
+globoClose.onclick = () => {
+  if (estado === 'texto' || estado === 'audio') {
+    saludoInicial();
+  }
+}
+
+// Cerrar todo el widget y "volar"
+btnCLOSE.onclick = () => {
+  widget.classList.add('robot-cohete-out');
+  setTimeout(() => {
+    widget.style.display = 'none';
+  }, 900);
+}
+
+// Mostrar globo para escribir (TX)
+btnTX.onclick = () => {
+  mostrarModalTexto();
+}
+
+// Mostrar globo para grabar (AU)
+btnAU.onclick = () => {
+  mostrarModalAudio();
+}
+
+// ---- FUNCIONES MODAL ----
+
+// Simulación grabación audio (puedes conectar aquí la lógica real)
+function simularGrabacionAudio() {
+  const status = document.getElementById('robot-audio-status');
+  status.innerText = 'Enviando pregunta...';
+  setTimeout(() => {
+    saludoInicial();
+    mostrarGlobo(`<span id="robot-globo-texto">Respuesta simulada por audio 🎤</span>`);
+    setTimeout(saludoInicial, 2200);
+  }, 2000);
+}
+
+// Enviar texto (puedes conectar aquí la lógica real)
+function enviarTexto(e) {
+  e.preventDefault();
+  const input = document.getElementById('robot-input-texto');
+  const pregunta = input.value.trim();
+  if (!pregunta) return;
+  mostrarGlobo(`<span id="robot-globo-texto">Enviando pregunta...</span>`);
+  setTimeout(() => {
+    saludoInicial();
+    mostrarGlobo(`<span id="robot-globo-texto">Respuesta simulada: ${pregunta}</span>`);
+    setTimeout(saludoInicial, 2500);
+  }, 1800);
+}
+
+// ---- INICIO ----
+saludoInicial();
+

@@ -292,11 +292,13 @@ Proyecto: Portátiles Mercedes
       <!-- Formulario de entrada invisible por defecto -->
       <input id="robot-input-texto" type="text" maxlength="180" placeholder="Escribí tu pregunta aquí y presioná ENTER" style="display:none; width:95%; border:none; outline:none; background:transparent; font-size:inherit; color:inherit; font-family:inherit;">
       <!-- Audio minimalista -->
-      <div id="robot-modal-audio" class="robot-modal-audio" style="display: flex; flex-direction: column; align-items: center;">
-        <span class="robot-audio-status" style="margin-bottom: 4px;">Tocá el micrófono para grabar</span>
-        <span class="icon-mic">&#127908;</span>
-        <span class="robot-audio-status-sec" style="margin-top: 4px; font-size:13px; color:#444;">Volvé a tocar para enviar</span>
-      </div>
+     <div id="robot-modal-audio" class="robot-modal-audio" style="display: flex; align-items: flex-start; gap: 8px;">
+       <span class="icon-mic" style="font-size:17px; margin-top:2px;">&#127908;</span>
+       <span class="robot-audio-status" style="font-size:14px; font-weight:500; color:#222; line-height:1.28;">
+         Tocá el micrófono para grabar.<br>
+         Volvé a tocar para enviar.
+       </span>
+      </div>   
     </div>
     <!-- Imagen robot + zonas activas -->
     <div class="robot-pm-imagen-con-botones">

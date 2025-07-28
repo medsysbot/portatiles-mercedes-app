@@ -60,7 +60,13 @@ loginForm?.addEventListener('submit', async (e) => {
         return;
     }
 
-    // 🚩 Iniciando sesión (amarillo, infinito)
+    // 🚩 Mostrar alerta "Iniciando sesión..." (amarillo) al menos 900ms, aunque el backend responda rápido
+    const t0 = Date.now();
+    const esperaMinima = 900; // milisegundos
+    let resultado = null;
+    let data = null;
+    let errorConexion = false;
+
     await showAlert('inicio-sesion', 'Iniciando sesión...', false, 'infinito');
 
     try {
@@ -69,73 +75,85 @@ loginForm?.addEventListener('submit', async (e) => {
             body: JSON.stringify({ email, password, rol }),
             headers: { 'Content-Type': 'application/json' }
         });
-        const data = await res.json();
-
-        // 🚩 LOGIN OK
-        if (res.ok && data.access_token) {
-            await showAlert('exito-sesion', 'Inicio de sesión exitoso', false, 2600);
-            localStorage.setItem('access_token', data.access_token);
-
-            // Redirección según rol o datos
-            const finalizar = (url) => setTimeout(() => { window.location.href = url; }, 2600);
-
-            if (data.usuario && data.usuario.dni_cuit_cuil) {
-                localStorage.setItem('usuario_obj', JSON.stringify({
-                    dni_cuit_cuil: data.usuario.dni_cuit_cuil,
-                    email: data.usuario.email,
-                    nombre: data.usuario.nombre
-                }));
-                localStorage.setItem('dni_cuit_cuil', data.usuario.dni_cuit_cuil);
-                finalizar('/splash_cliente');
-                return;
-            }
-            if (data.rol && (data.rol === 'empleado' || data.rol === 'Empleado' || data.rol === 'Administrador')) {
-                localStorage.setItem('usuario_obj', JSON.stringify({
-                    email: data.email || email,
-                    nombre: data.nombre || '',
-                    rol: data.rol,
-                    id: data.id || ''
-                }));
-                finalizar(data.rol === 'Administrador' ? '/splash' : '/splash_empleado');
-                return;
-            }
-            fetch(`/clientes/datos_personales_api?email=${encodeURIComponent(email)}`, {
-                headers: { 'Authorization': 'Bearer ' + data.access_token }
-            })
-            .then(r2 => r2.json())
-            .then(datos => {
-                if (datos.dni_cuit_cuil) {
-                    localStorage.setItem('usuario_obj', JSON.stringify({
-                        dni_cuit_cuil: datos.dni_cuit_cuil,
-                        email: datos.email,
-                        nombre: datos.nombre
-                    }));
-                    localStorage.setItem('dni_cuit_cuil', datos.dni_cuit_cuil);
-                } else {
-                    localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: datos.nombre || '' }));
-                }
-                finalizar('/splash_cliente');
-            })
-            .catch(() => {
-                localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: data.nombre || '' }));
-                finalizar('/splash_cliente');
-            });
-            return;
-        }
-
-        // 🚩 Usuario o contraseña incorrectos (mensaje del backend debe incluir "credencial")
-        if (data && data.detail && data.detail.toLowerCase().includes('credencial')) {
-            await showAlert('password-error', 'Usuario o contraseña incorrectos', false, 2600);
-            return;
-        }
-
-        // 🚩 Otro error de sesión (problemas extra)
-        await showAlert('error-sesion', 'Error en la sesión', false, 2600);
-
+        data = await res.json();
+        resultado = res;
     } catch (_) {
-        // 🚩 Error de conexión
-        await showAlert('error-conexion', 'Error de conexión', false, 2600);
+        errorConexion = true;
     }
+
+    // Esperar que la alerta amarilla se vea por lo menos esperaMinima ms
+    const elapsed = Date.now() - t0;
+    if (elapsed < esperaMinima) {
+        await new Promise(resolve => setTimeout(resolve, esperaMinima - elapsed));
+    }
+
+    // Ahora mostrar el resultado (verde, rojo, etc.)
+    if (errorConexion) {
+        await showAlert('error-conexion', 'Error de conexión', false, 2600);
+        return;
+    }
+
+    // 🚩 LOGIN OK
+    if (resultado && resultado.ok && data && data.access_token) {
+        await showAlert('exito-sesion', 'Inicio de sesión exitoso', false, 2600);
+        localStorage.setItem('access_token', data.access_token);
+
+        // Redirección según rol o datos
+        const finalizar = (url) => setTimeout(() => { window.location.href = url; }, 2600);
+
+        if (data.usuario && data.usuario.dni_cuit_cuil) {
+            localStorage.setItem('usuario_obj', JSON.stringify({
+                dni_cuit_cuil: data.usuario.dni_cuit_cuil,
+                email: data.usuario.email,
+                nombre: data.usuario.nombre
+            }));
+            localStorage.setItem('dni_cuit_cuil', data.usuario.dni_cuit_cuil);
+            finalizar('/splash_cliente');
+            return;
+        }
+        if (data.rol && (data.rol === 'empleado' || data.rol === 'Empleado' || data.rol === 'Administrador')) {
+            localStorage.setItem('usuario_obj', JSON.stringify({
+                email: data.email || email,
+                nombre: data.nombre || '',
+                rol: data.rol,
+                id: data.id || ''
+            }));
+            finalizar(data.rol === 'Administrador' ? '/splash' : '/splash_empleado');
+            return;
+        }
+        fetch(`/clientes/datos_personales_api?email=${encodeURIComponent(email)}`, {
+            headers: { 'Authorization': 'Bearer ' + data.access_token }
+        })
+        .then(r2 => r2.json())
+        .then(datos => {
+            if (datos.dni_cuit_cuil) {
+                localStorage.setItem('usuario_obj', JSON.stringify({
+                    dni_cuit_cuil: datos.dni_cuit_cuil,
+                    email: datos.email,
+                    nombre: datos.nombre
+                }));
+                localStorage.setItem('dni_cuit_cuil', datos.dni_cuit_cuil);
+            } else {
+                localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: datos.nombre || '' }));
+            }
+            finalizar('/splash_cliente');
+        })
+        .catch(() => {
+            localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: data.nombre || '' }));
+            finalizar('/splash_cliente');
+        });
+        return;
+    }
+
+    // 🚩 Usuario o contraseña incorrectos (mensaje del backend debe incluir "credencial")
+    if (data && data.detail && data.detail.toLowerCase().includes('credencial')) {
+        await showAlert('password-error', 'Usuario o contraseña incorrectos', false, 2600);
+        return;
+    }
+
+    // 🚩 Otro error de sesión (problemas extra)
+    await showAlert('error-sesion', 'Error en la sesión', false, 2600);
+
 });
 
 registroForm?.addEventListener('submit', async (e) => {
@@ -146,15 +164,15 @@ registroForm?.addEventListener('submit', async (e) => {
     const pass2 = document.getElementById('reg_password2').value.trim();
 
     if (!nombre || !email || !pass1 || !pass2) {
-        await showAlert('error-validacion', 'Complete todos los campos', false);
+        await showAlert('error-validacion', 'Complete todos los campos', false, 2600);
         return;
     }
     if (pass1 !== pass2) {
-        await showAlert('error-validacion', 'Verifique contraseñas', false);
+        await showAlert('error-validacion', 'Verifique contraseñas', false, 2600);
         return;
     }
 
-    await showAlert('cargando-datos', 'Enviando datos...', false);
+    await showAlert('cargando-datos', 'Enviando datos...', false, 2600);
     try {
         const resp = await fetch('/registrar_cliente', {
             method: 'POST',
@@ -164,12 +182,12 @@ registroForm?.addEventListener('submit', async (e) => {
         if (resp.ok) {
             registroForm.reset();
             loginForm.reset();
-            await showAlert('exito-datos', 'Cuenta creada', false);
+            await showAlert('exito-datos', 'Cuenta creada', false, 2600);
             mostrarLoginInicial();
         } else {
-            await showAlert('error-datos', resultado.detail || 'Error al enviar el formulario', false);
+            await showAlert('error-datos', resultado.detail || 'Error al enviar el formulario', false, 2600);
         }
     } catch (_) {
-        await showAlert('error-datos', 'Error al enviar el formulario', false);
+        await showAlert('error-datos', 'Error al enviar el formulario', false, 2600);
     }
 });

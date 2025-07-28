@@ -6,7 +6,7 @@
   position: fixed;
   z-index: 2999;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.82);
+  background: rgba(0,0,0,0.90);
   opacity: 0;
   transition: opacity .28s;
 }
@@ -29,7 +29,7 @@
 }
 .robot-pm-flotante.centrado {
   top: 65%; left: 50%; right: auto; bottom: auto;
-  transform: translate(-50%,-54%) scale(0.88);
+  transform: translate(-50%,-54%) scale(1.12);
   box-shadow: 0 0 44px 6px rgba(0,0,0,.29);
 }
 
@@ -104,7 +104,7 @@
   background: transparent;
   border: none;
   color: #888da1;
-  font-size: 27px;
+  font-size: 17px;
   font-weight: bold;
   cursor: pointer;
 }
@@ -120,16 +120,16 @@
 }
 .robot-pm-flotante.centrado .robot-modal-input { display: flex; }
 .robot-modal-input input {
-  font-size: 20px;
+  font-size: 14px;
   border-radius: 8px;
   border: 1.5px solid #bbb;
-  padding: 8px 11px;
+  padding: 4px 8px;
   flex: 1 1 auto;
   outline: none;
   background: #f7f7f7;
 }
 .robot-btn-enviar {
-  font-size: 26px;
+  font-size: 17px;
   border-radius: 8px;
   padding: 7px 17px;
   background: #eaeaea;
@@ -152,7 +152,7 @@
   color: #232729;
   align-items: center;
   justify-content: flex-start;
-  font-size: 22px;
+  font-size: 18px;
   font-family: inherit;
   white-space: nowrap;
   margin-top: 20px;

@@ -1,5 +1,6 @@
 // Archivo: static/js/dashboard_admin.js
 // Proyecto: Portátiles Mercedes
+
 function limpiarCredenciales() {
   localStorage.clear();
 }
@@ -23,6 +24,26 @@ async function cargarTarjetas() {
     document.getElementById('totalPendientes').textContent = '-';
     document.getElementById('totalMorosos').textContent    = '-';
     console.error('Error cargando tarjetas:', err);
+  }
+}
+
+// ---- EMAILS NUEVOS (NO LEÍDOS) ----
+async function cargarEmailsNuevos() {
+  try {
+    // Requiere estar autenticado como admin (por backend)
+    const resp = await fetch('/api/emails/ultimos');
+    if (!resp.ok) throw new Error('Error consultando emails');
+    const emails = await resp.json();
+    // Contar solo los que NO están leídos (suponiendo que la API marca como 'UNSEEN' o 'Seen')
+    // Si la API ya filtra sólo no leídos, usamos emails.length directo.
+    // Si devuelve todos, filtramos por una bandera "unread" o similar (AJUSTAR SI CAMBIA).
+
+    // Si el backend NO devuelve info de leído/no leído, mostramos la cantidad recibida (últimos no leídos)
+    const cantidad = Array.isArray(emails) ? emails.length : 0;
+    document.getElementById('card-emails-nuevos').textContent = cantidad;
+  } catch (err) {
+    document.getElementById('card-emails-nuevos').textContent = '-';
+    console.error('Error cargando emails nuevos:', err);
   }
 }
 
@@ -85,6 +106,10 @@ async function cargarGraficos(charts) {
 document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btnLogout')?.addEventListener('click', limpiarCredenciales);
 
-  cargarTarjetas();      // Solo tarjetas (lo nuevo, recomendado)
-  cargarGraficos({});    // Los gráficos siguen funcionando igual
+  cargarTarjetas();         // Tarjetas principales
+  cargarEmailsNuevos();     // Tarjeta emails nuevos
+  cargarGraficos({});       // Gráficos
+
+  // Opcional: actualizar emails cada 60 segundos
+  setInterval(cargarEmailsNuevos, 60000);
 });

@@ -292,14 +292,16 @@ Proyecto: Portátiles Mercedes
       <!-- Formulario de entrada invisible por defecto -->
       <input id="robot-input-texto" type="text" maxlength="180" placeholder="Escribí tu pregunta aquí y presioná ENTER" style="display:none; width:95%; border:none; outline:none; background:transparent; font-size:inherit; color:inherit; font-family:inherit;">
       <!-- Audio minimalista -->
-     <div id="robot-modal-audio" class="robot-modal-audio" style="display: flex; align-items: flex-start; gap: 8px;">
-       <span class="icon-mic" style="font-size:17px; margin-top:2px;">&#127908;</span>
-       <span class="robot-audio-status" style="font-size:14px; font-weight:500; color:#222; line-height:1.28;">
-         Tocá el micrófono para grabar.<br>
-         Volvé a tocar para enviar.
-       </span>
-      </div>   
-    </div>
+      <div class="robot-modal-audio" id="robot-modal-audio" style="display:flex; flex-direction:column; align-items:center; gap:7px;">
+        <div style="display: flex; align-items: center; gap: 18px;">
+          <span id="robot-mic-icono" style="font-size:34px;cursor:pointer;">&#127908;</span>
+          <span id="robot-send-icono" style="font-size:29px;cursor:pointer;">&#8594;</span>
+        </div>
+        <div style="display:flex; justify-content: center; gap:48px; font-size: 12px; color: #333; width: 95%;">
+          <span>Grabar</span>
+          <span>Enviar</span>
+        </div>
+      </div>
     <!-- Imagen robot + zonas activas -->
     <div class="robot-pm-imagen-con-botones">
       <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">

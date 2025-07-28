@@ -6,7 +6,7 @@
   position: fixed;
   z-index: 2999;
   top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.55);
+  background: rgba(0,0,0,0.75);
   opacity: 0;
   transition: opacity .28s;
 }
@@ -19,7 +19,7 @@
 .robot-pm-flotante {
   position: fixed;
   right: 18px;
-  bottom: 4px;
+  bottom: 1px;
   z-index: 3000;
   width: 220px;
   min-height: 260px;
@@ -28,7 +28,7 @@
   transition: transform .29s cubic-bezier(.8,.33,.18,1.18), box-shadow .19s;
 }
 .robot-pm-flotante.centrado {
-  top: 50%; left: 50%; right: auto; bottom: auto;
+  top: 65%; left: 50%; right: auto; bottom: auto;
   transform: translate(-50%,-54%) scale(1.65);
   box-shadow: 0 0 44px 6px rgba(0,0,0,.29);
 }
@@ -48,8 +48,8 @@
 /* Globo a la izquierda */
 .robot-globo {
   position: absolute;
-  left: -80px;   /* Sale SIEMPRE para la izquierda */
-  bottom: 215px;
+  left: -70px;   /* Sale SIEMPRE para la izquierda */
+  bottom: 212px;
   background: #fff;
   border: 2.5px solid #232323;
   border-radius: 31px 36px 32px 37px;
@@ -77,7 +77,7 @@
 
 /* Modo modal grande (texto/audio) */
 .robot-pm-flotante.centrado .robot-globo {
-  left: 50%; bottom: 105%;
+  left: 50%; bottom: 85%;
   transform: translateX(-52%);
   min-width: 285px;
   max-width: 560px;

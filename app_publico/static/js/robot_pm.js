@@ -1,116 +1,67 @@
-// robot_pm.js - Portátiles Mercedes
+// WIDGET ROBOT PM - PORTÁTILES MERCEDES
 
-const widget = document.getElementById('robot-pm-widget');
-const globo = document.getElementById('robot-globo');
-const globoContenido = document.getElementById('robot-globo-contenido');
-const globoTexto = document.getElementById('robot-globo-texto');
-const globoClose = document.getElementById('robot-close-modal');
+const robotGlobo = document.getElementById('robot-globo');
+const robotGloboTexto = document.getElementById('robot-globo-texto');
+const robotGloboClose = document.getElementById('robot-globo-close');
 
-const btnTX = document.getElementById('robot-btn-tx');
-const btnAU = document.getElementById('robot-btn-au');
-const btnCLOSE = document.getElementById('robot-btn-close');
+const robotBtnAU = document.getElementById('robot-btn-au');
+const robotBtnTX = document.getElementById('robot-btn-tx');
+const robotBtnClose = document.getElementById('robot-btn-close');
 
-// Estado actual del widget
-let estado = 'reposo';
+// Estado: 'reposo', 'escribir', 'audio'
+let estado = "reposo";
 
-// ---- FUNCIONES GLOBO Y MODAL ----
-
-function mostrarGlobo(html) {
-  globoContenido.innerHTML = html;
-  globo.classList.remove('robot-globo-oculto');
+// Saludo inicial (globo chico)
+function mostrarSaludo() {
+    robotGloboTexto.innerHTML = "¡Hola! Soy PM <span style='font-size:1em'>😊</span><br>¿En qué te ayudo?";
+    robotGlobo.classList.remove('robot-globo-oculto');
+    estado = "reposo";
 }
+window.addEventListener('DOMContentLoaded', mostrarSaludo);
 
-function ocultarGlobo() {
-  globo.classList.add('robot-globo-oculto');
-}
+// Botón TX (Texto)
+robotBtnTX.onclick = () => {
+    robotGloboTexto.innerHTML =
+      `<form id="robot-form-texto" class="robot-globo-input" autocomplete="off">
+         <input id="robot-input-texto" type="text" maxlength="180" placeholder="Escribí tu pregunta aquí" required>
+         <button class="robot-btn-enviar" type="submit" title="Enviar pregunta">&#8594;</button>
+       </form>`;
+    robotGlobo.classList.remove('robot-globo-oculto');
+    estado = "escribir";
+    setTimeout(() => { document.getElementById('robot-input-texto').focus(); }, 180);
+    // Submit pregunta escrita
+    const formTexto = document.getElementById('robot-form-texto');
+    formTexto.onsubmit = (e) => {
+        e.preventDefault();
+        // Aquí lógica para enviar pregunta escrita (AJAX)
+        robotGloboTexto.innerHTML = "Enviando pregunta...";
+        setTimeout(mostrarSaludo, 1800); // Demo: vuelve a saludo
+    };
+};
 
-// Globo saludo (inicio)
-function saludoInicial() {
-  mostrarGlobo(`<span id="robot-globo-texto">¡Hola! Soy PM 😊<br>¿En qué te ayudo?</span>`);
-  globo.classList.remove('robot-globo-oculto');
-  estado = 'reposo';
-}
+// Botón AU (Audio)
+robotBtnAU.onclick = () => {
+    robotGloboTexto.innerHTML =
+      `<div class="robot-globo-audio">
+         <span id="robot-mic-icono">&#127908;</span>
+         <span id="robot-audio-status">Presioná el micrófono para grabar tu pregunta.</span>
+       </div>`;
+    robotGlobo.classList.remove('robot-globo-oculto');
+    estado = "audio";
+    // Aquí lógica para activar grabación audio
+};
 
-// Modal para escribir pregunta (TX)
-function mostrarModalTexto() {
-  mostrarGlobo(`
-    <form id="robot-form-texto" class="robot-form-entrada" autocomplete="off">
-      <input type="text" id="robot-input-texto" maxlength="180" placeholder="Escribí tu pregunta aquí" autofocus />
-      <button type="submit" class="robot-btn-enviar" title="Enviar pregunta">&#8594;</button>
-    </form>
-  `);
-  document.getElementById('robot-form-texto').onsubmit = enviarTexto;
-  estado = 'texto';
-}
+// Botón Cerrar (costado robot)
+robotBtnClose.onclick = () => {
+    // Animación cohete
+    const robot = document.getElementById('robot-pm-widget');
+    robot.classList.add('robot-cohete-out');
+    setTimeout(() => { robot.style.display = 'none'; }, 900);
+};
 
-// Modal para grabar audio (AU)
-function mostrarModalAudio() {
-  mostrarGlobo(`
-    <div class="robot-form-entrada robot-area-audio">
-      <button id="robot-btn-grabar" type="button" class="robot-btn-enviar" title="Presioná para grabar">
-        <img src="/app_publico/static/icons/microfono.png" alt="Grabar" style="width:34px;height:34px;">
-      </button>
-      <span id="robot-audio-status" class="robot-audio-status">Presioná el micrófono para grabar tu pregunta.</span>
-    </div>
-  `);
-  document.getElementById('robot-btn-grabar').onclick = simularGrabacionAudio;
-  estado = 'audio';
-}
-
-// ---- MANEJO DE BOTONES ----
-
-// Cerrar solo el globo/modal (no el robot)
-globoClose.onclick = () => {
-  if (estado === 'texto' || estado === 'audio') {
-    saludoInicial();
-  }
-}
-
-// Cerrar todo el widget y "volar"
-btnCLOSE.onclick = () => {
-  widget.classList.add('robot-cohete-out');
-  setTimeout(() => {
-    widget.style.display = 'none';
-  }, 900);
-}
-
-// Mostrar globo para escribir (TX)
-btnTX.onclick = () => {
-  mostrarModalTexto();
-}
-
-// Mostrar globo para grabar (AU)
-btnAU.onclick = () => {
-  mostrarModalAudio();
-}
-
-// ---- FUNCIONES MODAL ----
-
-// Simulación grabación audio (puedes conectar aquí la lógica real)
-function simularGrabacionAudio() {
-  const status = document.getElementById('robot-audio-status');
-  status.innerText = 'Enviando pregunta...';
-  setTimeout(() => {
-    saludoInicial();
-    mostrarGlobo(`<span id="robot-globo-texto">Respuesta simulada por audio 🎤</span>`);
-    setTimeout(saludoInicial, 2200);
-  }, 2000);
-}
-
-// Enviar texto (puedes conectar aquí la lógica real)
-function enviarTexto(e) {
-  e.preventDefault();
-  const input = document.getElementById('robot-input-texto');
-  const pregunta = input.value.trim();
-  if (!pregunta) return;
-  mostrarGlobo(`<span id="robot-globo-texto">Enviando pregunta...</span>`);
-  setTimeout(() => {
-    saludoInicial();
-    mostrarGlobo(`<span id="robot-globo-texto">Respuesta simulada: ${pregunta}</span>`);
-    setTimeout(saludoInicial, 2500);
-  }, 1800);
-}
-
-// ---- INICIO ----
-saludoInicial();
+// Botón X dentro del globo
+robotGloboClose.onclick = () => {
+    robotGlobo.classList.add('robot-globo-oculto');
+    if (estado !== "reposo") mostrarSaludo();
+};
 

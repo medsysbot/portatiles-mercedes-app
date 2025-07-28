@@ -139,7 +139,7 @@
    left: 50% !important;
    bottom: 155px !important;
    transform: translateX(-50%) !important;
-   max-width: 230px;      /* Más ancho */
+   max-width: 210px;      /* Más ancho */
    min-width: 90px;
    min-height: 34px;
    font-size: 13.5px;

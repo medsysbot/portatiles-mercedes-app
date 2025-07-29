@@ -280,32 +280,13 @@ Proyecto: Portátiles Mercedes
       </div>
     </div>
   </main>
-  <footer class="pie-pagina">
+  <footer></footer> class="pie-pagina">
     Portátiles Mercedes registrados. En muchos casos estas imágenes son meramente ilustrativas.
   <footer>
-  <!-- WIDGET ROBOT PM - PORTÁTILES MERCEDES -->
-  <div id="robot-pm-widget" class="robot-pm-flotante">
-    <!-- Globo SIEMPRE a la izquierda, mismo diseño -->
-    <div id="robot-globo" class="robot-globo robot-globo-izq">
-      <span id="robot-globo-texto">¡Hola! Soy PM 😊 ¿En qué te ayudo?</span>
-      <!-- No se usa la X adentro ni flecha, solo texto -->
-      <!-- Formulario de entrada invisible por defecto -->
-      <input id="robot-input-texto" type="text" maxlength="180" placeholder="Escribí tu pregunta aquí y presioná ENTER" style="display:none; width:95%; border:none; outline:none; background:transparent; font-size:inherit; color:inherit; font-family:inherit;">
-      <!-- Audio minimalista -->
-      <div id="robot-modal-audio" class="robot-modal-audio" style="display:none;">
-        <span id="robot-mic-icono">&#127908;</span>
-        <span id="robot-audio-status" style="font-size:15px;">Tocá el micrófono para grabar. Volvé a tocar para enviar.</span>
-      </div>
-    </div>
-    <!-- Imagen robot + zonas activas -->
-    <div class="robot-pm-imagen-con-botones">
-      <img id="robot-pm-img" src="/app_publico/static/icons/robot_pm.png" alt="Robot PM">
-      <button id="robot-btn-au"    class="robot-btn-area robot-btn-au"    title="Grabar audio"></button>
-      <button id="robot-btn-tx"    class="robot-btn-area robot-btn-tx"    title="Escribir texto"></button>
-      <button id="robot-btn-close" class="robot-btn-area robot-btn-close" title="Cerrar robot"></button>
-    </div>
-  </div>
-  <script src="/app_publico/static/js/robot_pm.js"></script>
-</footer>
+  <!-- Widget Robot PM flotante -->
+ <div id="widget-robot-pm" class="robot-pm-flotante" tabindex="0">
+   <img src="/static/icons/robot_pm.png" alt="Robot PM" class="robot-pm-img">
+   </div>
+<script src="/app_publico/static/js/robot_pm.js"></script>
 </body>
 </html>

@@ -1,86 +1,24 @@
-/* Contenedor del widget: posición fija en pantalla */
+/* ===== Widget Robot PM - Portátiles Mercedes ===== */
+
+/* Contenedor flotante fijo en pantalla */
 #widget-robot-pm {
     position: fixed;
-    bottom: 10px;    /* Distancia desde abajo */
-    right: 30px;     /* Distancia desde la derecha */
-    z-index: 1000;   /* Siempre encima */
-    width: 250px;    /* Cambia este valor para agrandar/achicar el widget */
-    height: 880px;   /* Cambia este valor para agrandar/achicar el widget */
+    bottom: 30px;         /* Distancia desde abajo */
+    right: 30px;          /* Distancia desde la derecha */
+    z-index: 1000;        /* Siempre encima */
+    width: 120px;         /* Tamaño del widget */
+    height: 120px;        /* Tamaño del widget */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    animation: pm-flotar 3.8s ease-in-out infinite;
+    transition: filter 0.18s;
     /* Puedes agregar sombra si quieres */
     /* box-shadow: 0 4px 18px rgba(0,0,0,0.18); */
 }
 
-/* Imagen del robot */
-.robot-pm-img {
-    width: 100%;     /* Hace que la imagen ocupe todo el div */
-    height: auto;    /* Mantiene proporción */
-    max-width: 75%;
-    max-height: 100%;
-    display: block;
-    /* Si necesitas un borde redondo: */
-    /* border-radius: 50%; */
-    /* Si necesitas animación: */
-    /* transition: transform 0.2s; */
-}
-
-#widget-robot-pm:active .robot-pm-img,
-#widget-robot-pm:focus .robot-pm-img {
-    /* Ejemplo: agrandar un poco al click o focus */
-    /* transform: scale(1.06); */
-}
-
-/* Flotación suave */
-@keyframes pm-flotar {
-    0% { transform: translateY(0px);}
-    50% { transform: translateY(-12px);}
-    100% { transform: translateY(0px);}
-}
-
-/* Salida tipo cohete hacia arriba */
-@keyframes pm-cohete {
-    0%   { transform: translateY(0) scale(1);}
-    10%  { transform: translateY(-30px) scale(1.08);}
-    80%  { transform: translateY(-110vh) scale(0.92);}
-    100% { transform: translateY(-110vh) scale(0.8); opacity: 0;}
-}
-
-/* Regreso suave desde arriba */
-@keyframes pm-regreso {
-    0%   { transform: translateY(-110vh) scale(0.8); opacity: 0;}
-    50%  { transform: translateY(-70px) scale(1.02); opacity: 0.6;}
-    100% { transform: translateY(0) scale(1); opacity: 1;}
-}
-
-#widget-robot-pm {
-    position: fixed;
-    bottom: -100px;
-    right: 30px;
-    z-index: 1000;
-    width: 370px;
-    height: 830px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    /* Animación flotante base */
-    animation: pm-flotar 3.8s ease-in-out infinite;
-    transition: filter 0.18s;
-}
-
-/* Animación cohete y regreso usando clases dinámicas con JS */
-#widget-robot-pm.cohete-salida {
-    animation: pm-cohete 1.5s cubic-bezier(.8,0,.8,1) forwards;
-}
-
-#widget-robot-pm.cohete-regreso {
-    animation: pm-regreso 2.1s cubic-bezier(.32,0,.62,1) forwards;
-}
-
-/* Imagen siempre al 100% del widget */
+/* Imagen del robot: ocupa todo el widget, sin bordes */
 .robot-pm-img {
     width: 100%;
     height: auto;
@@ -91,3 +29,42 @@
     pointer-events: none; /* El evento click va en el contenedor */
 }
 
+/* Flotación suave */
+@keyframes pm-flotar {
+    0%   { transform: translateY(0px);}
+    50%  { transform: translateY(-14px);}
+    100% { transform: translateY(0px);}
+}
+
+/* Animación de salida tipo cohete */
+@keyframes pm-cohete {
+    0%   { transform: translateY(0) scale(1);}
+    10%  { transform: translateY(-30px) scale(1.08);}
+    80%  { transform: translateY(-110vh) scale(0.92);}
+    100% { transform: translateY(-110vh) scale(0.8); opacity: 0;}
+}
+
+/* Animación de regreso desde arriba */
+@keyframes pm-regreso {
+    0%   { transform: translateY(-110vh) scale(0.8); opacity: 0;}
+    50%  { transform: translateY(-70px) scale(1.02); opacity: 0.6;}
+    100% { transform: translateY(0) scale(1); opacity: 1;}
+}
+
+/* Cohete: clases dinámicas (JS) */
+#widget-robot-pm.cohete-salida {
+    animation: pm-cohete 1.5s cubic-bezier(.8,0,.8,1) forwards;
+}
+#widget-robot-pm.cohete-regreso {
+    animation: pm-regreso 2.1s cubic-bezier(.32,0,.62,1) forwards;
+}
+
+/* Responsive para móviles pequeños */
+@media (max-width: 480px) {
+    #widget-robot-pm {
+        width: 68px;
+        height: 68px;
+        bottom: 16px;
+        right: 16px;
+    }
+}

@@ -6,8 +6,8 @@
     bottom: 30px;         /* Distancia desde abajo */
     right: 30px;          /* Distancia desde la derecha */
     z-index: 1000;        /* Siempre encima */
-    width: 120px;         /* Tamaño del widget */
-    height: 120px;        /* Tamaño del widget */
+    width: 220px;         /* Tamaño del widget */
+    height: 650px;        /* Tamaño del widget */
     display: flex;
     align-items: center;
     justify-content: center;

@@ -283,10 +283,25 @@ Proyecto: Portátiles Mercedes
     <footer class="pie-pagina">
       Portátiles Mercedes registrados
     </footer>
-    <!-- Widget Robot PM flotante -->
-    <div id="widget-robot-pm" class="robot-pm-flotante" tabindex="0">
-      <img src="app_publico/static/icons/robot_pm.png" alt="Robot PM" class="robot-pm-img">
+  <!-- WIDGET ROBOT PM - PORTÁTILES MERCEDES -->
+<div id="widget-robot-pm-container">
+    <!-- Robot (imagen flotante, clickeable) -->
+    <img
+        id="widget-robot-pm"
+        src="/app_publico/static/icons/robot_pm.png"
+        alt="Robot Portátiles Mercedes"
+        style="position: fixed; bottom: 32px; right: 32px; width: 110px; height: auto; z-index: 2000; cursor: pointer; transition: filter 0.2s;"
+        tabindex="0"
+    />
+    <!-- Modal oculto por defecto -->
+    <div id="modal-pm" style="display: none; position: fixed; left: 0; top: 0; width: 100vw; height: 100vh; background: rgba(33, 34, 38, 0.48); z-index: 3000; align-items: center; justify-content: center;">
+        <div style="position: relative; width: 360px; max-width: 90vw; margin: auto; background: none; border-radius: 20px; box-shadow: 0 2px 16px rgba(0,0,0,0.18);">
+            <img src="/app_publico/static/icons/modal_pm.png" alt="Modal PM" style="width: 100%; display: block; border-radius: 18px;">
+            <!-- Aquí puedes agregar los botones, textarea, etc, sobre la imagen modal -->
+            <button id="pm-cerrar-modal" type="button" style="position: absolute; top: 22px; right: 30px; background: transparent; border: none; font-size: 2rem; color: #FFF; cursor: pointer; z-index: 2;">×</button>
+            <!-- Más elementos, si lo deseas -->
+        </div>
     </div>
-    <script src="/app_publico/static/js/robot_pm.js"></script>
-  </body>
+</div> 
+</body>
 </html>

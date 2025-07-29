@@ -1,48 +1,101 @@
-/* ==== MODAL ROBOT PM PEQUEÑO ==== */
-#robot-pm-widget, .robot-pm-modal {
-  width: 195px !important;          /* La mitad o menos */
-  max-width: 96vw;
-  min-width: 140px;
-  background: #23272c !important;   /* Gris oscuro */
-  color: #fff;
-  border-radius: 20px;
-  box-shadow: 0 8px 36px 0 #0005;
-  padding: 18px 14px 14px 14px !important;
-  z-index: 9999;
+/* ==== MODAL ROBOT PM PEQUEÑO SOBRE IMAGEN ==== */
+#modal-pm {
+  display: none;
+  position: fixed;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  z-index: 10010;
+  background: none;
 }
 
-#robot-pm-widget .robot-globo-texto,
-.robot-pm-modal .robot-globo-texto {
-  font-size: 0.95em;
+#modal-pm .modal-pm-contenido {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  margin: auto;
+  width: 310px;       /* Tamaño ajustable */
+  max-width: 98vw;
+  height: 540px;
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  pointer-events: auto;
 }
 
-#robot-pm-widget input,
-#robot-pm-widget textarea,
-.robot-pm-modal input,
-.robot-pm-modal textarea {
-  font-size: 1em;
-  width: 96%;
-  background: #1d2024;
-  color: #fff;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 5px 8px;
-  margin-top: 8px;
+/* Fondo del modal (imagen) */
+#modal-pm .modal-pm-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0; top: 0;
+  z-index: 0;
+  pointer-events: none; /* Para que los clicks pasen a los botones */
+  user-select: none;
 }
 
-#robot-pm-widget button,
-.robot-pm-modal button {
-  margin: 0 3px;
-  padding: 5px 13px;
-  background: #444e57;
-  color: #fff;
+/* ====== Elementos superpuestos sobre la imagen ====== */
+#modal-pm .modal-pm-status {
+  position: absolute;
+  top: 110px; left: 36px; right: 36px;
+  height: 34px;
+  color: #2be18a;
+  font-size: 1.02em;
+  text-align: center;
+  z-index: 1;
+  background: transparent;
   border: none;
-  border-radius: 6px;
-  font-size: 0.98em;
+  pointer-events: none;
+  font-family: 'Nunito', Arial, sans-serif;
+}
+
+#modal-pm .modal-btn-mic {
+  position: absolute;
+  top: 160px; left: 50%; transform: translateX(-50%);
+  width: 60px; height: 60px;
+  background: none;
+  border: none;
+  z-index: 1;
   cursor: pointer;
-  transition: background 0.18s;
+  outline: none;
 }
-#robot-pm-widget button:hover,
-.robot-pm-modal button:hover {
-  background: #586273;
+#modal-pm .modal-btn-mic img {
+  width: 55px; height: 55px;
+  filter: drop-shadow(0 1px 6px #0005);
+  pointer-events: none;
 }
+
+/* Textarea de pregunta */
+#modal-pm .modal-textarea {
+  position: absolute;
+  left: 28px; right: 28px; bottom: 114px;
+  height: 48px;
+  z-index: 1;
+  background: #24272bE0;
+  color: #fff;
+  border: 1.5px solid #43474c;
+  border-radius: 8px;
+  padding: 7px 10px;
+  font-size: 1.08em;
+  resize: none;
+  font-family: 'Nunito', Arial, sans-serif;
+}
+
+/* Botón SEND */
+#modal-pm .modal-btn-send {
+  position: absolute;
+  bottom: 34px; left: 50%; transform: translateX(-50%);
+  width: 110px; height: 46px;
+  background: none;
+  border: none;
+  z-index: 1;
+  cursor: pointer;
+  outline: none;
+  font-size: 1.15em;
+  color: #23272c;
+  font-family: 'Nunito', Arial, sans-serif;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+}
+
+/* --- Opcional: ocultar selección en mobile --- */
+#modal-pm textarea, #modal-pm input { outline: none; }

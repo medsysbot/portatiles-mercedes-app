@@ -1,156 +1,87 @@
-/* === WIDGET ROBOT PM - PORTÁTILES MERCEDES (POSITIVO, FUNCIONA IGUAL EN DESKTOP Y MÓVIL) === */
-
-/* Widget robot en esquina */
-.robot-pm-flotante {
-  position: fixed;
-  right: 18px;
-  bottom: 1px;
-  z-index: 3000;
-  width: 260px;
-  min-height: 300px;
-  user-select: none;
-  pointer-events: auto;
-  background: none !important; /* Elimina cualquier fondo indeseado */
+#robot-pm-widget {
+    position: fixed;
+    bottom: 10vh;        /* âœ… Altura flotante ideal */
+    right: 40px;         /* âœ… Frente al baÃ±o */
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Imagen robot y zonas de botones */
-.robot-pm-imagen-con-botones { position: relative; width: 260px; height: 300px; }
-#robot-pm-img { width: 260px; height: 300px; display: block; pointer-events: none; }
-
-.robot-btn-area {
-  position: absolute; background: transparent; border: none; opacity: 0;
-  z-index: 2; cursor: pointer; width: 54px; height: 54px;
-}
-.robot-btn-tx    { left: 8px;  bottom: 52px;  }
-.robot-btn-au    { left: 8px;  bottom: 107px; }
-.robot-btn-close { left: 8px;  bottom: 165px; }
-
-/* Globo a la izquierda del robot SIEMPRE, ovalado, sin piquito */
-.robot-globo {
-  position: absolute;
-  left: -10px;         /* Siempre pegado a la izquierda del robot */
-  bottom: 252px;       /* Ajusta según alto del robot */
-  background: #fff;
-  border: 2.5px solid #232323;
-  border-radius: 36px 38px 36px 38px;
-  box-shadow: 0 8px 34px rgba(70,70,72,0.17), 0 2px 6px #e5e8ea;
-  padding: 6px 26px 18px 22px;
-  font-size: 18px;
-  font-family: 'Nunito', Arial, sans-serif;
-  color: #232729;
-  min-width: 65px; max-width: 340px; min-height: 35px; max-height: 265px;
-  display: flex; align-items: center; justify-content: flex-start;
-  font-weight: 600;
-  z-index: 20;
-  direction: ltr;
-  box-sizing: border-box;
-  overflow-x: auto;
-  overflow-y: auto;
-  white-space: pre-line;
-  transition: width .21s, min-width .19s, font-size .16s, padding .17s;
+#robot-pm-img {
+    width: 140px;
+    height: auto;
+    animation: flotacion 0s ease-in-out infinite;
 }
 
-/* Quita piquito si existe */
-.robot-globo-punta,
-.robot-globo-izq .robot-globo-punta,
-.robot-globo-izq .robot-globo-punta::before {
-  display: none !important;
+#robot-globo {
+    position: relative;
+    background-color: #ffffff;
+    border: 3px solid #000000;
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #000000;
+    max-width: 200px;
+    text-align: center;
+    margin-bottom: 3px;  /* âœ… Pegadito a la cabeza */
+    box-shadow: 2px 2px 6px rgba(0,0,0,0.3);
+    line-height: 1.3;
+    z-index: 5;
+    top: 20px;
 }
 
-/* Close X globo (solo visible en modo interactivo) */
-.robot-globo-close {
-  display: none;
-  position: absolute;
-  top: 11px;
-  right: 13px;
-  background: transparent;
-  border: none;
-  color: #111;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-}
-.robot-globo.modo-interactivo .robot-globo-close { display: block; }
-
-/* Formulario de texto */
-.robot-modal-input {
-  display: none;
-  width: 100%;
-  gap: 12px;
-  align-items: center;
-  margin-top: 16px;
-}
-.robot-globo.modo-interactivo .robot-modal-input { display: flex; }
-.robot-modal-input input {
-  font-size: 14px;
-  border-radius: 8px;
-  border: 1.5px solid #bbb;
-  padding: 4px 8px;
-  flex: 1 1 auto;
-  outline: none;
-  background: #f7f7f7;
-}
-.robot-btn-enviar {
-  font-size: 17px;
-  border-radius: 8px;
-  padding: 3px 10px;
-  background: #eaeaea;
-  border: 1px solid #bbb;
-  cursor: pointer;
-  font-family: inherit;
-  font-weight: 800;
-  box-shadow: 0 2px 7px #e6e6e6;
+.robot-globo-punta {
+    position: absolute;
+    bottom: -12px;
+    right: 35px;
+    left: auto;
+    width: 20px;
+    height: 20px;
+    background-color: #ffffff;
+    border-right: 3px solid #000000;
+    border-bottom: 3px solid #000000;
+    transform: rotate(-45deg);
+    z-index: -1;
 }
 
-/* Modal de audio */
-.robot-modal-audio {
-  display: none;
-  width: 100%;
-  min-width: 190px;
-  max-width: 410px;
-  height: 54px;
-  border-radius: 21px;
-  background: #f7f7f7;
-  color: #232729;
-  align-items: center;
-  justify-content: flex-start;
-  font-size: 18px;
-  font-family: inherit;
-  white-space: pre-line;
-  margin-top: 20px;
+#robot-estela {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: -30px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 }
-.robot-globo.modo-interactivo .robot-modal-audio { display: flex; }
-.robot-modal-audio .icon-mic {
-  font-size: 35px;
-  color: #6e707a;
-  margin-right: 17px;
-}
-/* --- RESPONSIVE SOLO PARA MÓVIL --- */
-@media (max-width: 650px) {
-  .robot-pm-flotante, .robot-pm-imagen-con-botones { width: 125px; height: 155px; min-height: 0;}
-  #robot-pm-img { width: 125px; height: 155px; }
-  .robot-btn-area { width: 25px; height: 25px; }
-  .robot-btn-tx    { left: 2px;  bottom: 24px; }
-  .robot-btn-au    { left: 2px;  bottom: 55px; }
-  .robot-btn-close { left: 2px;  bottom: 84px; }
 
-  /* AJUSTE: globo centrado arriba del robot */
-  .robot-globo {
-    left: 50% !important;
-    bottom: 155px !important;
-    transform: translateX(-50%) !important;
-    max-width: 210px !important;
-    min-width: 90px !important;
-    min-height: 34px !important;
-    font-size: 13.5px !important;
-    padding: 10px 18px 10px 14px !important;
-    border-radius: 34px !important;
-    box-sizing: border-box !important;
-    text-align: center !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    flex-direction: row !important;
-    white-space: normal !important;
-  }
+.fuego {
+    width: 12px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(ellipse at center, #ff9900 0%, #ff0000 60%, transparent 100%);
+    animation: fuegoAnimado 0.3s infinite alternate;
+    opacity: 0.8;
+    filter: blur(1px);
+}
+
+.fuego1 {
+    transform: rotate(5deg);
+}
+
+.fuego2 {
+    transform: rotate(-5deg);
+    margin-top: -10px;
+}
+
+@keyframes fuegoAnimado {
+    0% { transform: scaleY(1); opacity: 0.6; }
+    100% { transform: scaleY(1.6); opacity: 1; }
+}
+
+@keyframes flotacion {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-2px); }
+    100% { transform: translateY(0); }
 }

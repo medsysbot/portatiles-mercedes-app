@@ -1,183 +1,126 @@
-// WIDGET ROBOT PM - PORTÁTILES MERCEDES
+document.addEventListener('DOMContentLoaded', () => {
+  const robotWidget = document.getElementById('widget-robot-pm');
+  const modalPM     = document.getElementById('modal-pm');
+  const btnMic      = document.getElementById('modal-btn-mic');
+  const btnSend     = document.getElementById('modal-btn-send');
+  const textarea    = document.getElementById('modal-pm-textarea');
+  const statusDiv   = document.getElementById('modal-pm-status');
 
-const robotGlobo      = document.getElementById('robot-globo');
-const robotGloboTexto = document.getElementById('robot-globo-texto');
-const robotInputTexto = document.getElementById('robot-input-texto');
-const robotModalAudio = document.getElementById('robot-modal-audio');
-const robotMicIcono   = document.getElementById('robot-mic-icono');
-const robotBtnAU      = document.getElementById('robot-btn-au');
-const robotBtnTX      = document.getElementById('robot-btn-tx');
-const robotBtnClose   = document.getElementById('robot-btn-close');
-const robotWidget     = document.getElementById('robot-pm-widget');
+  let grabando = false;
+  let mediaRecorder = null;
+  let audioChunks = [];
 
-let modo = "saludo";
-let timeoutSaludo = null;
-let grabando = false;
-let mediaRecorder = null;
-let audioChunks = [];
+  // Abrir modal al tocar el robot
+  robotWidget?.addEventListener('click', () => {
+    modalPM.style.display = 'flex';
+    resetModal();
+  });
 
-// Mostrar saludo inicial
-function mostrarSaludo() {
-  modo = "saludo";
-  robotGloboTexto.style.display = "inline";
-  robotGloboTexto.innerHTML = "¡Hola! Soy PM <span style='font-size:1em'>😊</span><br>¿En qué te ayudo?";
-  robotInputTexto.style.display = "none";
-  robotModalAudio.style.display = "none";
-}
-function mostrarExplicacion() {
-  modo = "explicacion";
-  robotGloboTexto.style.display = "inline";
-  robotGloboTexto.innerHTML = "Bienvenido. Usá mis botones laterales:<br>TX para escribir, AU para grabar audio, X para cerrar.";
-  robotInputTexto.style.display = "none";
-  robotModalAudio.style.display = "none";
-  limpiarTimeout();
-  timeoutSaludo = setTimeout(mostrarSaludo, 9000);
-}
-
-// Input texto: el globo entero es un input, ENTER envía pregunta
-function activarInputTexto() {
-  modo = "texto";
-  robotGloboTexto.style.display = "none";
-  robotInputTexto.style.display = "inline-block";
-  robotInputTexto.value = "";
-  robotInputTexto.focus();
-  robotModalAudio.style.display = "none";
-  limpiarTimeout();
-
-  robotInputTexto.onkeydown = function(e) {
-    if (e.key === "Enter" && robotInputTexto.value.trim().length > 0) {
-      enviarPreguntaTexto(robotInputTexto.value.trim());
+  // Cerrar modal si se toca fuera del contenido (opcional, saca si no lo quieres)
+  modalPM.addEventListener('click', (e) => {
+    if (e.target === modalPM) {
+      cerrarModal();
     }
-  }
-}
+  });
 
-function enviarPreguntaTexto(texto) {
-  robotInputTexto.style.display = "none";
-  robotGloboTexto.style.display = "inline";
-  robotGloboTexto.innerHTML = "Enviando pregunta...";
-  fetchWidgetAPI({ text: texto, want_audio: false });
-}
-
-// Grabación y envío de audio
-function activarAudio() {
-  modo = "audio";
-  robotGloboTexto.style.display = "none";
-  robotInputTexto.style.display = "none";
-  robotModalAudio.style.display = "flex";
-  limpiarTimeout();
-  setAudioUIGrabando(false);
-
-  // Si ya hay evento, lo quita
-  robotMicIcono.onclick = null;
-  robotMicIcono.onclick = () => {
+  // Botón micrófono - iniciar/detener grabación
+  btnMic.addEventListener('click', () => {
     if (!grabando) {
       iniciarGrabacion();
     } else {
       detenerGrabacion();
     }
+  });
+
+  // Botón SEND - envía texto o audio según lo que haya
+  btnSend.addEventListener('click', async () => {
+    if (grabando) {
+      detenerGrabacion(); // terminar grabación y luego enviar audio
+      return;
+    }
+    const texto = textarea.value.trim();
+    if (texto.length === 0) {
+      statusDiv.textContent = 'Ingrese una pregunta o use el micrófono.';
+      return;
+    }
+    statusDiv.textContent = 'Enviando pregunta...';
+    await enviarPreguntaTexto(texto);
+    cerrarModal();
+    // Aquí puedes abrir el modal de respuesta si hace falta
+  });
+
+  // === GRABACIÓN DE AUDIO ===
+  function iniciarGrabacion() {
+    statusDiv.textContent = 'Grabando...';
+    btnMic.classList.add('grabando');
+    grabando = true;
+    audioChunks = [];
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.start();
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) audioChunks.push(e.data);
+        };
+        mediaRecorder.onstop = () => {
+          let audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
+          enviarAudioGrabado(audioBlob);
+          cerrarModal();
+        };
+      })
+      .catch(() => {
+        statusDiv.textContent = "No se pudo acceder al micrófono.";
+        grabando = false;
+        btnMic.classList.remove('grabando');
+      });
   }
-}
 
-function setAudioUIGrabando(estaGrabando) {
-  grabando = estaGrabando;
-  if (grabando) {
-    robotModalAudio.querySelector("#robot-audio-status").innerText = "Grabando... Tocá el micrófono para enviar.";
-    robotMicIcono.classList.add("grabando");
-  } else {
-    robotModalAudio.querySelector("#robot-audio-status").innerText = "Tocá el micrófono para grabar tu pregunta.";
-    robotMicIcono.classList.remove("grabando");
+  function detenerGrabacion() {
+    if (mediaRecorder && mediaRecorder.state !== "inactive") {
+      mediaRecorder.stop();
+    }
+    grabando = false;
+    btnMic.classList.remove('grabando');
+    statusDiv.textContent = "Procesando audio...";
   }
-}
 
-function iniciarGrabacion() {
-  setAudioUIGrabando(true);
-  audioChunks = [];
-  navigator.mediaDevices.getUserMedia({ audio: true })
-    .then(stream => {
-      mediaRecorder = new MediaRecorder(stream);
-      mediaRecorder.start();
-      mediaRecorder.ondataavailable = (e) => {
-        if (e.data.size > 0) audioChunks.push(e.data);
-      };
-      mediaRecorder.onstop = () => {
-        let audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-        enviarAudioGrabado(audioBlob);
-      };
-    })
-    .catch(err => {
-      setAudioUIGrabando(false);
-      robotModalAudio.querySelector("#robot-audio-status").innerText = "No se pudo acceder al micrófono.";
-    });
-}
-
-function detenerGrabacion() {
-  setAudioUIGrabando(false);
-  if (mediaRecorder && mediaRecorder.state !== "inactive") {
-    mediaRecorder.stop();
+  // === ENVÍO DE TEXTO Y AUDIO (AJUSTA ENDPOINT Y RESPUESTA SEGÚN TU BACKEND) ===
+  async function enviarPreguntaTexto(texto) {
+    try {
+      const formData = new FormData();
+      formData.append('text', texto);
+      formData.append('want_audio', 'false');
+      await fetch('/api/widget_chat', { method: 'POST', body: formData });
+      // Aquí deberías mostrar el modal de respuesta, etc.
+    } catch (err) {
+      statusDiv.textContent = "Error al enviar la pregunta.";
+    }
   }
-  // mediaRecorder.onstop envía automáticamente el audio
-}
 
-function enviarAudioGrabado(audioBlob) {
-  robotModalAudio.style.display = "none";
-  robotGloboTexto.style.display = "inline";
-  robotGloboTexto.innerHTML = "Enviando audio...";
-  fetchWidgetAPI({ audioBlob, want_audio: true });
-}
+  async function enviarAudioGrabado(audioBlob) {
+    try {
+      const formData = new FormData();
+      formData.append('audio', audioBlob, 'pregunta.mp3');
+      formData.append('want_audio', 'true');
+      await fetch('/api/widget_chat', { method: 'POST', body: formData });
+      // Aquí NO abras modal, la respuesta vendría por audio
+    } catch (err) {
+      statusDiv.textContent = "Error al enviar el audio.";
+    }
+  }
 
-// Lógica fetch para enviar texto/audio
-function fetchWidgetAPI({ text, audioBlob, want_audio }) {
-  const formData = new FormData();
-  if (text) formData.append('text', text);
-  if (audioBlob) formData.append('audio', audioBlob, "pregunta.mp3");
-  formData.append('want_audio', want_audio ? "true" : "false");
+  // Cerrar modal (ocultar y limpiar)
+  function cerrarModal() {
+    modalPM.style.display = 'none';
+    resetModal();
+  }
 
-  fetch("/api/widget_chat", {
-    method: "POST",
-    body: formData
-  })
-    .then(r => r.json())
-    .then(data => {
-      if (!data.ok) {
-        robotGloboTexto.innerHTML = data.error || "Error al procesar la respuesta.";
-        setTimeout(mostrarSaludo, 2300);
-        return;
-      }
-      // Mostrar respuesta textual
-      robotGloboTexto.innerHTML = data.respuesta_texto ? data.respuesta_texto.replace(/\n/g, "<br>") : "Sin respuesta";
-      // Si hay respuesta de audio y el usuario lo pidió
-      if (want_audio && data.respuesta_audio_url) {
-        let audio = new Audio(data.respuesta_audio_url);
-        audio.play();
-      }
-      setTimeout(mostrarSaludo, 8000);
-    })
-    .catch(() => {
-      robotGloboTexto.innerHTML = "Error de conexión.";
-      setTimeout(mostrarSaludo, 2000);
-    });
-}
-
-function limpiarTimeout() {
-  if (timeoutSaludo) clearTimeout(timeoutSaludo);
-  timeoutSaludo = null;
-}
-
-// --- EVENTOS ---
-// Botón TX (texto)
-robotBtnTX.onclick = activarInputTexto;
-
-// Botón AU (audio)
-robotBtnAU.onclick = activarAudio;
-
-// Botón CLOSE (cerrar robot)
-robotBtnClose.onclick = () => {
-  robotWidget.style.display = "none";
-};
-
-// Clic en globo: instrucciones si está en modo saludo
-robotGlobo.onclick = () => {
-  if (modo === "saludo") mostrarExplicacion();
-};
-
-window.addEventListener('DOMContentLoaded', mostrarSaludo);
+  // Limpiar modal al abrir/cerrar
+  function resetModal() {
+    textarea.value = '';
+    statusDiv.textContent = '';
+    grabando = false;
+    btnMic.classList.remove('grabando');
+    // Si quieres limpiar mediaRecorder, hazlo aquí si hay leak
+  }
+});

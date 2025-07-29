@@ -285,27 +285,22 @@ Proyecto: Portátiles Mercedes
       Portátiles Mercedes registrados
     </footer>
   <!-- WIDGET ROBOT PM - PORTÁTILES MERCEDES -->
-  <!-- Widget Robot PM (flotante, clic abre modal) -->
- <div id="widget-robot-pm">
-     <img src="/app_publico/static/icons/robot_pm.png" alt="Robot PM" class="robot-pm-img">
- </div>
-
-<!-- Modal PM (oculto por defecto, aparece al hacer clic en el robot) -->
- <div id="modal-pm" class="modal-pm" style="display: none;">
-     <div class="modal-pm-contenido">
-        <!-- Imagen de fondo del modal (puedes poner los botones encima con posición absoluta) -->
-         <img src="/app_publico/static/icons/modal_pm.png" alt="Modal PM" class="modal-pm-img">
-        <!-- Aquí puedes agregar tus botones, textarea, etc. (posicionados con CSS) -->
-        <!-- EJEMPLO: -->
-        <!--
-        <button id="btn-mic" class="modal-btn-mic"></button>
-        <textarea id="modal-textarea" class="modal-pm-textarea"></textarea>
-        <button id="btn-send" class="modal-btn-send"></button>
-        <button id="btn-close-modal-pm" class="modal-btn-close"></button>
-        -->
-     </div>
- </div>
-
+<!-- Widget Robot PM -->
+<div id="widget-robot-pm">
+  <img src="/app_publico/static/icons/robot_pm.png" alt="Robot PM" class="robot-pm-img">
+</div>
+<!-- Modal PM -->
+<div id="modal-pm" style="display:none;">
+  <div class="modal-pm-contenido">
+    <img src="/app_publico/static/icons/modal_pm.png" alt="Modal PM" class="modal-pm-img">
+    <div class="modal-pm-status" id="modal-pm-status"></div>
+    <button class="modal-btn-mic" id="modal-btn-mic">
+      <img src="/app_publico/static/icons/mic.png" alt="Mic">
+    </button>
+    <textarea class="modal-textarea" id="modal-pm-textarea" maxlength="180" placeholder="Escriba su pregunta..."></textarea>
+    <button class="modal-btn-send" id="modal-btn-send">SEND</button>
+  </div>
+</div> 
 <!-- === SCRIPTS === -->
 <script src="/app_publico/static/js/robot_pm.js"></script>
 <script src="/app_publico/static/js/modal_pm.js"></script>

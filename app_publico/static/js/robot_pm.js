@@ -1,75 +1,31 @@
-function animarRobotFlotacionConstante() {
-    const contenedor = document.getElementById("robot-pm-widget");
-    if (!contenedor) return;
+// Archivo: robot_pm.js
+document.addEventListener('DOMContentLoaded', () => {
+    const robot = document.getElementById('widget-robot-pm');
+    let coheteTimeout = null, regresoTimeout = null;
 
-    contenedor.animate([
-        { transform: "translateY(0)" },
-        { transform: "translateY(-12px)" },
-        { transform: "translateY(0)" }
-    ], {
-        duration: 3000,
-        iterations: Infinity
+    function lanzarCohete() {
+        // Quitar clases previas, poner animación de cohete
+        robot.classList.remove('cohete-regreso');
+        robot.classList.add('cohete-salida');
+        // Al terminar la animación de salida, iniciar el regreso
+        coheteTimeout = setTimeout(() => {
+            robot.classList.remove('cohete-salida');
+            robot.classList.add('cohete-regreso');
+            // Al terminar el regreso, volver a modo flotante normal
+            regresoTimeout = setTimeout(() => {
+                robot.classList.remove('cohete-regreso');
+                // Repetir el ciclo después de ~90s
+                setTimeout(lanzarCohete, 90000);
+            }, 2100); // coincide con duración pm-regreso
+        }, 1500 + 10000); // 1.5s cohete + 10s fuera de pantalla
+    }
+
+    // Lanzar primer cohete después de 90s
+    setTimeout(lanzarCohete, 90000);
+
+    // Si recargas página, limpiar timeouts
+    window.addEventListener('beforeunload', () => {
+        clearTimeout(coheteTimeout);
+        clearTimeout(regresoTimeout);
     });
-}
-
-function animacionSubidaYCaida() {
-    const contenedor = document.getElementById("robot-pm-widget");
-    const estela = document.getElementById("robot-estela");
-
-    if (!contenedor || !estela) return;
-
-    // 🔥 Mostrar estela
-    estela.style.opacity = "1";
-
-    // Subida rápida
-    contenedor.animate([
-        { transform: "translateY(0)" },
-        { transform: "translateY(-100vh)" }
-    ], {
-        duration: 400,
-        easing: "ease-in"
-    });
-
-    // Bajada suave y ocultar estela
-    setTimeout(() => {
-        contenedor.animate([
-            { transform: "translateY(-100vh)" },
-            { transform: "translateY(0)" }
-        ], {
-            duration: 3000,
-            easing: "ease-out"
-        });
-
-        estela.style.opacity = "0";
-    }, 400);
-}
-
-function reproducirSaludo() {
-    const audio = document.getElementById("audioBienvenida");
-    if (!audio) return;
-
-    audio.play().catch(() => {
-        document.addEventListener("click", () => {
-            audio.play();
-        }, { once: true });
-    });
-}
-
-function parpadear() {
-    const ojos = document.getElementById("robotOjos");
-    if (!ojos) return;
-
-    setInterval(() => {
-        ojos.style.visibility = "hidden";
-        setTimeout(() => {
-            ojos.style.visibility = "visible";
-        }, 150);
-    }, 4000);
-}
-
-document.addEventListener("DOMContentLoaded", () => {
-    animarRobotFlotacionConstante();
-    reproducirSaludo();
-    parpadear();
-    setInterval(animacionSubidaYCaida, 75000); // cada 75 segundos
 });

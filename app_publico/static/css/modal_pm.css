@@ -1,0 +1,48 @@
+/* ==== MODAL ROBOT PM PEQUEÑO ==== */
+#robot-pm-widget, .robot-pm-modal {
+  width: 195px !important;          /* La mitad o menos */
+  max-width: 96vw;
+  min-width: 140px;
+  background: #23272c !important;   /* Gris oscuro */
+  color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 36px 0 #0005;
+  padding: 18px 14px 14px 14px !important;
+  z-index: 9999;
+}
+
+#robot-pm-widget .robot-globo-texto,
+.robot-pm-modal .robot-globo-texto {
+  font-size: 0.95em;
+}
+
+#robot-pm-widget input,
+#robot-pm-widget textarea,
+.robot-pm-modal input,
+.robot-pm-modal textarea {
+  font-size: 1em;
+  width: 96%;
+  background: #1d2024;
+  color: #fff;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 5px 8px;
+  margin-top: 8px;
+}
+
+#robot-pm-widget button,
+.robot-pm-modal button {
+  margin: 0 3px;
+  padding: 5px 13px;
+  background: #444e57;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.98em;
+  cursor: pointer;
+  transition: background 0.18s;
+}
+#robot-pm-widget button:hover,
+.robot-pm-modal button:hover {
+  background: #586273;
+}

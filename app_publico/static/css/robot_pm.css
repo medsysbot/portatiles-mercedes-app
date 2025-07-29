@@ -5,7 +5,7 @@
     right: 30px;     /* Distancia desde la derecha */
     z-index: 1000;   /* Siempre encima */
     width: 250px;    /* Cambia este valor para agrandar/achicar el widget */
-    height: 680px;   /* Cambia este valor para agrandar/achicar el widget */
+    height: 880px;   /* Cambia este valor para agrandar/achicar el widget */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -61,7 +61,7 @@
     right: 30px;
     z-index: 1000;
     width: 370px;
-    height: 730px;
+    height: 830px;
     display: flex;
     align-items: center;
     justify-content: center;

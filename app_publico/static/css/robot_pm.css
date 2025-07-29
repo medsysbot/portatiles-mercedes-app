@@ -1,7 +1,7 @@
 /* Contenedor del widget: posición fija en pantalla */
 #widget-robot-pm {
     position: fixed;
-    bottom: 30px;    /* Distancia desde abajo */
+    bottom: 10px;    /* Distancia desde abajo */
     right: 30px;     /* Distancia desde la derecha */
     z-index: 1000;   /* Siempre encima */
     width: 110px;    /* Cambia este valor para agrandar/achicar el widget */
@@ -60,7 +60,7 @@
     bottom: 30px;
     right: 30px;
     z-index: 1000;
-    width: 210px;
+    width: 150px;
     height: 380px;
     display: flex;
     align-items: center;

@@ -57,11 +57,11 @@
 
 #widget-robot-pm {
     position: fixed;
-    bottom: -60px;
+    bottom: -100px;
     right: 30px;
     z-index: 1000;
     width: 170px;
-    height: 430px;
+    height: 530px;
     display: flex;
     align-items: center;
     justify-content: center;

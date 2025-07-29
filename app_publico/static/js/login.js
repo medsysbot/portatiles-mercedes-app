@@ -155,7 +155,7 @@ loginForm?.addEventListener('submit', async (e) => {
     }
 
     // 🚩 Otro error de sesión (problemas extra)
-    await showAlert('error-sesion', 'Error en la sesión', false, 2600);
+    await showAlert('password-error', 'Password o usuario incorrecto', false, 2600);
 
 });
 

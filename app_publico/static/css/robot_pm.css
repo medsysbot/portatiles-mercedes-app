@@ -18,7 +18,7 @@
 .robot-pm-img {
     width: 100%;     /* Hace que la imagen ocupe todo el div */
     height: auto;    /* Mantiene proporción */
-    max-width: 100%;
+    max-width: 75%;
     max-height: 100%;
     display: block;
     /* Si necesitas un borde redondo: */

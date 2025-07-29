@@ -3,7 +3,7 @@
 /* Contenedor flotante fijo en pantalla */
 #widget-robot-pm {
     position: fixed;
-    bottom: -150px;         /* Distancia desde abajo */
+    bottom: -180px;         /* Distancia desde abajo */
     right: 30px;          /* Distancia desde la derecha */
     z-index: 1000;        /* Siempre encima */
     width: 190px;         /* Tamaño del widget */

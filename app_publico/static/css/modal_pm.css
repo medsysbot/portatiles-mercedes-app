@@ -111,7 +111,7 @@
 /* === Responsive para pantallas pequeñas === */
 @media (max-width: 700px), (max-height: 640px) {
   #modal-pm .modal-pm-contenido {
-    width: 97vw; max-width: 98vw; min-width: 120px;
-    height: 93vw; min-height: 230px; max-height: 98vh;
+    width: 77vw; max-width: 78vw; min-width: 120px;
+    height: 93vw; min-height: 430px; max-height: 93vh;
   }
 }

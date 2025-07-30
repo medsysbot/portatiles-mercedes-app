@@ -199,7 +199,7 @@
     position: absolute;
     left: 30%;             /* Igual al principal, así se ven alineados */
     right: 29%;
-    bottom: 58%;           /* Lo ubicas justo encima del textarea principal */
+    bottom: 46%;           /* Lo ubicas justo encima del textarea principal */
     height: 2.8%;          /* Un poco más bajo que el principal */
     font-size: 0.95em;
     z-index: 2;

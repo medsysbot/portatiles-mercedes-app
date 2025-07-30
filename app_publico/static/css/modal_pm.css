@@ -110,11 +110,11 @@
   /* === CONTENEDOR PRINCIPAL DEL MODAL === */
   #modal-pm .modal-pm-contenido {
     width: 94vw;           /* El modal ocupa el 94% del ancho de la ventana */
-    min-width: 70vw;       /* Mínimo 70% para evitar que quede muy chico */
-    max-width: 99vw;       /* Máximo 99% del ancho, nunca desborda */
-    height: 97vw;          /* Altura igual al ancho (modal cuadrado/adaptativo) */
-    min-height: 76vw;      /* No deja que se achique de más */
-    max-height: 98vh;      /* Nunca más alto que la pantalla */
+    min-width: 90vw;       /* Mínimo 70% para evitar que quede muy chico */
+    max-width: 90vw;       /* Máximo 99% del ancho, nunca desborda */
+    height: 180vw;          /* Altura igual al ancho (modal cuadrado/adaptativo) */
+    min-height: 90vw;      /* No deja que se achique de más */
+    max-height: 90vh;      /* Nunca más alto que la pantalla */
     padding: 0;
     border-radius: 18px;   /* Bordes redondeados solo si tu imagen los permite */
     position: relative;    /* Necesario para posicionar los elementos hijos en absoluto */

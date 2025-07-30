@@ -11,7 +11,7 @@
   position: absolute;
   left: 0; right: 0; top: 0; bottom: 0;
   margin: auto;
-  width: 310px;       /* Tamaño ajustable */
+  width: 510px;       /* Tamaño ajustable */
   max-width: 98vw;
   height: 540px;
   max-height: 95vh;

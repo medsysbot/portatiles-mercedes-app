@@ -91,29 +91,29 @@
 /* Botón SEND: centrado debajo del textarea */
 #modal-pm .modal-btn-send {
   position: absolute;
-  bottom: 45%; left: 50%; transform: translateX(-50%);
-  width: 2%; height: .5%;   /* Ancho y alto relativos */
+  bottom: 23%;             /* Ajusta según tu diseño, 23% o lo que prefieras */
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14%;              /* Igual al micrófono o un poco menos */
+  height: 8%;              /* Proporcional */
   background: none;
   border: none;
-  z-index: 1;
+  z-index: 2;
   cursor: pointer;
   outline: none;
-  font-size: 1.15em;
-  color: #23272c;
-  font-family: 'Nunito', Arial, sans-serif;
-  letter-spacing: 1.5px;
-  font-weight: 700;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-
 #modal-pm .modal-btn-send img {
-  width: 94%;
-  height: 94%;
+  width: 88%;
+  height: 88%;
   display: block;
   margin: 0 auto;
   filter: drop-shadow(0 1px 6px #0004);
   pointer-events: none;
 }
-
 
 /* Opcional: quitar outline azul en mobile */
 #modal-pm textarea, #modal-pm input { outline: none; }

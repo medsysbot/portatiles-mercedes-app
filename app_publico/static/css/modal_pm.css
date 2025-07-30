@@ -75,7 +75,7 @@
 #modal-pm .modal-textarea {
   position: absolute;
   left: 29%; right: 28.6%;      /* Márgenes laterales en % */
-  bottom: 33.65%;              /* Desde abajo, proporcional */
+  bottom: 35.65%;              /* Desde abajo, proporcional */
   height: 3%;                 /* Alto relativo al contenedor */
   z-index: 1;
   background: #24272bE0;

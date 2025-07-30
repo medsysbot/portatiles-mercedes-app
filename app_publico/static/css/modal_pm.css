@@ -179,9 +179,9 @@
   /* === TEXTAREA PRINCIPAL: Donde el usuario escribe la pregunta === */
   #modal-pm .modal-textarea {
     position: absolute;
-    left: 30.8%;             /* Margen izquierdo, ajústalo para centrar */
+    left: 30.7%;             /* Margen izquierdo, ajústalo para centrar */
     right: 29.4%;            /* Margen derecho */
-    bottom: 36.3%;           /* Subir/bajar textarea principal */
+    bottom: 35.7%;           /* Subir/bajar textarea principal */
     height: 2.6%;           /* Altura del textarea */
     font-size: 1.03em;
     z-index: 2;

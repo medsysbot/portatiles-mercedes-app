@@ -134,50 +134,6 @@
     pointer-events: none;
 }
 
-/* ==== STATUSAREA MODAL PM - DESKTOP/LAPTOP ==== */
-
-/* Contenedor del status: área para mensaje, imagen, etc */
-#modal-pm .modal-statusarea-wrapper {
-  position: absolute;
-  left: 12%;           /* Margen izquierdo relativo al ancho del modal */
-  right: 12%;          /* Margen derecho igual */
-  bottom: 38%;         /* Distancia desde abajo del modal */
-  height: 8.8%;        /* Altura en % del alto del modal */
-  z-index: 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Textarea de status (texto tipo "grabando") */
-#modal-pm .modal-statusarea {
-  width: 100%;
-  height: 100%;
-  background: #292e32de;
-  color: #bee5a0;
-  border: 0.27vw solid #2be18a88;     /* Borde también en % */
-  border-radius: 2vw;
-  text-align: center;
-  font-size: 0.99em;
-  resize: none;
-  z-index: 2;
-  pointer-events: none;
-  position: relative;
-}
-
-/* Imagen "grabando" superpuesta sobre el textarea (JS la muestra/oculta) */
-#modal-pm #img-grabando {
-  display: none;
-  position: absolute;
-  left: 0; top: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-  z-index: 3;
-  border-radius: 2vw;
-}
-
 @media (max-width: 600px) {
   /* === CONTENEDOR PRINCIPAL DEL MODAL === */
   #modal-pm .modal-pm-contenido {

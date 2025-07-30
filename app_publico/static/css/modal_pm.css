@@ -92,7 +92,7 @@
   position: absolute;
   left: 30.6%;           /* Márgenes laterales (ajusta al gusto) */
   right: 29.8%;
-  top: 46%;            /* Ajusta para ubicarlo abajo del micrófono */
+  top: 46.3%;            /* Ajusta para ubicarlo abajo del micrófono */
   height: 3%;        /* Alto relativo al modal */
   font-size: 1.05em;
   z-index: 2;

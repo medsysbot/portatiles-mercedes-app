@@ -142,7 +142,7 @@
   #modal-pm .modal-btn-mic {
     position: absolute;
     top: 31.7%;           /* Distancia desde arriba: baja o sube el mic */
-    left: 50.7%;
+    left: 50.8%;
     transform: translateX(-50%);
     width: 20%;           /* El mic ocupa 20% del ancho del modal */
     height: 12%;          /* Alto proporcional, puedes subir/bajar esto */
@@ -159,7 +159,7 @@
   /* === BOTÓN SEND, centrado debajo del textarea === */
   #modal-pm .modal-btn-send {
     position: absolute;
-    bottom: 15%;           /* Ajusta esto para subir/bajar el botón SEND */
+    bottom: 28%;           /* Ajusta esto para subir/bajar el botón SEND */
     left: 50%;
     transform: translateX(-50%);
     width: 17%;            /* Ancho del botón SEND */

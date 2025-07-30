@@ -14,10 +14,10 @@
   position: absolute;
   left: 0; right: 0; top: 0; bottom: 0;
   margin: auto;
-  width: 38vw;           /* Ancho proporcional a la ventana */
-  max-width: 510px;      /* Máximo permitido (ajusta según imagen) */
-  min-width: 510px;      /* Mínimo permitido */
-  height: 82vh;          /* Alto proporcional a la ventana */
+  width: 44vw;           /* Ancho proporcional a la ventana */
+  max-width: 580px;      /* Máximo permitido (ajusta según imagen) */
+  min-width: 580px;      /* Mínimo permitido */
+  height: 88vh;          /* Alto proporcional a la ventana */
   max-height: 850px;
   min-height: 850px;
   display: flex;

@@ -139,8 +139,8 @@
   display: block;      /* Cambia a block para ajustar visualmente */
   position: absolute;
   left: 0; top: 0;
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  height: 50%;
   object-fit: contain;
   pointer-events: none;
   z-index: 5;

@@ -16,10 +16,10 @@
   margin: auto;
   width: 38vw;           /* Ancho proporcional a la ventana */
   max-width: 510px;      /* Máximo permitido (ajusta según imagen) */
-  min-width: 210px;      /* Mínimo permitido */
+  min-width: 510px;      /* Mínimo permitido */
   height: 82vh;          /* Alto proporcional a la ventana */
   max-height: 850px;
-  min-height: 320px;
+  min-height: 8500px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -74,9 +74,9 @@
 /* Textarea de pregunta: centrado en la parte inferior */
 #modal-pm .modal-textarea {
   position: absolute;
-  left: 11%; right: 11%;      /* Márgenes laterales en % */
-  bottom: 20.5%;              /* Desde abajo, proporcional */
-  height: 9%;                 /* Alto relativo al contenedor */
+  left: 21%; right: 21%;      /* Márgenes laterales en % */
+  bottom: 28.5%;              /* Desde abajo, proporcional */
+  height: 6%;                 /* Alto relativo al contenedor */
   z-index: 1;
   background: #24272bE0;
   color: #fff;

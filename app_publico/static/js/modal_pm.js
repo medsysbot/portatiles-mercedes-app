@@ -1,3 +1,4 @@
+// Archivo: modal_pm.js
 document.addEventListener('DOMContentLoaded', () => {
   const robotWidget = document.getElementById('widget-robot-pm');
   const modalPM     = document.getElementById('modal-pm');
@@ -10,20 +11,20 @@ document.addEventListener('DOMContentLoaded', () => {
   let mediaRecorder = null;
   let audioChunks = [];
 
-  // Abrir modal al tocar el robot
+  // --- Abrir modal al tocar el robot ---
   robotWidget?.addEventListener('click', () => {
     modalPM.style.display = 'flex';
     resetModal();
   });
 
-  // Cerrar modal si se toca fuera del contenido (opcional, saca si no lo quieres)
+  // --- Cerrar modal si se toca fuera del contenido (modal overlay) ---
   modalPM.addEventListener('click', (e) => {
     if (e.target === modalPM) {
       cerrarModal();
     }
   });
 
-  // Botón micrófono - iniciar/detener grabación
+  // --- Botón micrófono - iniciar/detener grabación ---
   btnMic.addEventListener('click', () => {
     if (!grabando) {
       iniciarGrabacion();
@@ -32,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Botón SEND - envía texto o audio según lo que haya
+  // --- Botón SEND - envía texto o audio según lo que haya ---
   btnSend.addEventListener('click', async () => {
     if (grabando) {
       detenerGrabacion(); // terminar grabación y luego enviar audio
@@ -109,13 +110,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // Cerrar modal (ocultar y limpiar)
+  // --- Cerrar modal (ocultar y limpiar) ---
   function cerrarModal() {
     modalPM.style.display = 'none';
     resetModal();
   }
 
-  // Limpiar modal al abrir/cerrar
+  // --- Limpiar modal al abrir/cerrar ---
   function resetModal() {
     textarea.value = '';
     statusDiv.textContent = '';

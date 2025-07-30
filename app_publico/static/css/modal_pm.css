@@ -74,7 +74,7 @@
 /* Textarea de pregunta: centrado en la parte inferior */
 #modal-pm .modal-textarea {
   position: absolute;
-  left: 26%; right: 26%;      /* Márgenes laterales en % */
+  left: 27%; right: 27%;      /* Márgenes laterales en % */
   bottom: 33.65%;              /* Desde abajo, proporcional */
   height: 3%;                 /* Alto relativo al contenedor */
   z-index: 1;
@@ -111,7 +111,7 @@
 /* === Responsive para pantallas pequeñas === */
 @media (max-width: 700px), (max-height: 640px) {
   #modal-pm .modal-pm-contenido {
-    width: 57vw; max-width: 57vw; min-width: 120px;
-    height: 93vw; min-height: 430px; max-height: 93vh;
+    width: 62vw; max-width: 62vw; min-width: 170px;
+    height: 105vw; min-height: 530px; max-height: 105vh;
   }
 }

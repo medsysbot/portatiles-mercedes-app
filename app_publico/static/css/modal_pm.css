@@ -245,7 +245,7 @@
 
   /* ---- Ajuste SOLO para la imagen PNG de status ("grabando") ---- */
   #img-grabando {
-    display: block;                  /* Muestra la imagen (ajusta esto desde JS según estado) */
+    display: none;                  /* Muestra la imagen (ajusta esto desde JS según estado) */
     position: absolute;
     left: -10%;
     top: 44.66%;

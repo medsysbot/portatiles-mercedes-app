@@ -106,6 +106,16 @@
   align-items: center;
   justify-content: center;
 }
+
+#modal-pm .modal-btn-send img {
+    width: 88%;
+    height: 88%;
+    display: block;
+    margin: 0 auto;
+    filter: drop-shadow(0 1px 6px #0004);
+    pointer-events: none;
+}
+
 @media (max-width: 600px) {
   /* === CONTENEDOR PRINCIPAL DEL MODAL === */
   #modal-pm .modal-pm-contenido {
@@ -169,10 +179,10 @@
   /* === TEXTAREA PRINCIPAL: Donde el usuario escribe la pregunta === */
   #modal-pm .modal-textarea {
     position: absolute;
-    left: 12%;             /* Margen izquierdo, ajústalo para centrar */
-    right: 12%;            /* Margen derecho */
+    left: 25%;             /* Margen izquierdo, ajústalo para centrar */
+    right: 25%;            /* Margen derecho */
     bottom: 35%;           /* Subir/bajar textarea principal */
-    height: 5%;           /* Altura del textarea */
+    height: 4%;           /* Altura del textarea */
     font-size: 1.03em;
     z-index: 2;
     padding: 5px 8px;

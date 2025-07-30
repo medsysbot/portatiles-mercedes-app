@@ -91,7 +91,7 @@
 /* Botón SEND: centrado debajo del textarea */
 #modal-pm .modal-btn-send {
   position: absolute;
-  bottom: 30%;             /* Ajusta según tu diseño, 23% o lo que prefieras */
+  bottom: 27%;             /* Ajusta según tu diseño, 23% o lo que prefieras */
   left: 50%;
   transform: translateX(-50%);
   width: 14%;              /* Igual al micrófono o un poco menos */

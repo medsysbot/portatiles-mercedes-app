@@ -256,3 +256,17 @@
     z-index: 5;                      /* Encima del textarea de status */
     background: transparent;
   }
+
+   #img-enviando {
+    display: block;                  /* Muestra la imagen cuando corresponda */
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;                     /* Ocupa todo el ancho del statusarea wrapper */
+    height: 100%;                    /* Ocupa todo el alto del statusarea wrapper */
+    object-fit: contain;             /* Mantiene la proporción del PNG */
+    pointer-events: none;            /* No permite interacción */
+    z-index: 5;                      /* Encima de la palabra, si la hay */
+    background: transparent;
+  }
+}

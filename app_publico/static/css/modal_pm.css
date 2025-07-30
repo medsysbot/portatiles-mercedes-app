@@ -243,13 +243,12 @@
     font-family: 'Nunito', Arial, sans-serif;
   }
 
-  media (max-width: 700px) {
   /* ---- Ajuste SOLO para la imagen PNG de status ("grabando") ---- */
   #img-grabando {
     display: block;                  /* Muestra la imagen (ajusta esto desde JS según estado) */
     position: absolute;
-    left: 0;
-    top: 0;
+    left: 40;
+    top: 400;
     width: 100%;                     /* Ocupa todo el ancho del wrapper */
     height: 100%;                    /* Ocupa todo el alto del wrapper */
     object-fit: contain;             /* Mantiene proporción, no la deforma */

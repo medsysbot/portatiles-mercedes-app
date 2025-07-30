@@ -139,7 +139,7 @@
   display: block;      /* Cambia a block para ajustar visualmente */
   position: absolute;
   left: -10%; top: 44.8%;
-  width: 185%;
+  width: 135%;
   height: 8.2%;
   object-fit: contain;
   pointer-events: none;
@@ -249,7 +249,7 @@
     position: absolute;
     left: -10%;
     top: 44.5%;
-    width: 187%;                     /* Ocupa todo el ancho del wrapper */
+    width: 137%;                     /* Ocupa todo el ancho del wrapper */
     height: 8.4%;                    /* Ocupa todo el alto del wrapper */
     object-fit: contain;             /* Mantiene proporción, no la deforma */
     pointer-events: none;            /* No interfiere con clics */

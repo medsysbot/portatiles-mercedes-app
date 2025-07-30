@@ -57,7 +57,7 @@
 /* Botón del micrófono: centrado sobre la imagen */
 #modal-pm .modal-btn-mic {
   position: absolute;
-  top: 31%; left: 51%; transform: translateX(-50%);
+  top: 34%; left: 51%; transform: translateX(-50%);
   width: 17%; height: 10%;  /* Proporcional al ancho/alto del modal */
   background: none;
   border: none;
@@ -74,7 +74,7 @@
 /* Textarea de pregunta: centrado en la parte inferior */
 #modal-pm .modal-textarea {
   position: absolute;
-  left: 29%; right: 28.6%;      /* Márgenes laterales en % */
+  left: 28.7%; right: 28.9%;      /* Márgenes laterales en % */
   bottom: 35.65%;              /* Desde abajo, proporcional */
   height: 2.8%;                 /* Alto relativo al contenedor */
   z-index: 1;

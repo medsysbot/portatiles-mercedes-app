@@ -138,9 +138,9 @@
 #img-grabando {
   display: block;      /* Cambia a block para ajustar visualmente */
   position: absolute;
-  left: 40; top: 0;
+  left: 40; top: 1;
   width: 45%;
-  height: 10%;
+  height: 20%;
   object-fit: contain;
   pointer-events: none;
   z-index: 5;

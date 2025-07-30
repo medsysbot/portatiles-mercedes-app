@@ -248,7 +248,7 @@
     display: block;                  /* Muestra la imagen (ajusta esto desde JS según estado) */
     position: absolute;
     left: -10%;
-    top: 44.5%;
+    top: 44.53%;
     width: 137%;                     /* Ocupa todo el ancho del wrapper */
     height: 8.4%;                    /* Ocupa todo el alto del wrapper */
     object-fit: contain;             /* Mantiene proporción, no la deforma */

@@ -91,7 +91,7 @@
 #modal-pm .modal-statusarea {
   position: absolute;
   left: 30.6%;           /* Márgenes laterales (ajusta al gusto) */
-  right: 29.8%;
+  right: 29.5%;
   top: 46.5%;            /* Ajusta para ubicarlo abajo del micrófono */
   height: 2.9%;        /* Alto relativo al modal */
   font-size: 1.05em;

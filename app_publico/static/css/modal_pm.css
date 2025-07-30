@@ -67,8 +67,8 @@
 /* Textarea de pregunta */
 #modal-pm .modal-textarea {
   position: absolute;
-  left: 48px; right: 48px; bottom: 284px;
-  height: 26px;
+  left: 78px; right: 78px; bottom: 284px;
+  height: 23px;
   z-index: 1;
   background: #24272bE0;
   color: #fff;

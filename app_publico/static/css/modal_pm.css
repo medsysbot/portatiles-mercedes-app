@@ -138,7 +138,7 @@
 #img-grabando {
   display: block;      /* Cambia a block para ajustar visualmente */
   position: absolute;
-  left: 40; top: 45;
+  left: 40%; top: 45%;
   width: 45%;
   height: 20%;
   object-fit: contain;
@@ -247,8 +247,8 @@
   #img-grabando {
     display: block;                  /* Muestra la imagen (ajusta esto desde JS según estado) */
     position: absolute;
-    left: 30;
-    top: 400;
+    left: 30%;
+    top: 40%;
     width: 50%;                     /* Ocupa todo el ancho del wrapper */
     height: 30%;                    /* Ocupa todo el alto del wrapper */
     object-fit: contain;             /* Mantiene proporción, no la deforma */

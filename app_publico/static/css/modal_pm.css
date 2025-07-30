@@ -74,9 +74,9 @@
 /* Textarea de pregunta: centrado en la parte inferior */
 #modal-pm .modal-textarea {
   position: absolute;
-  left: 21%; right: 21%;      /* Márgenes laterales en % */
-  bottom: 28.5%;              /* Desde abajo, proporcional */
-  height: 6%;                 /* Alto relativo al contenedor */
+  left: 41%; right: 41%;      /* Márgenes laterales en % */
+  bottom: 68.5%;              /* Desde abajo, proporcional */
+  height: 3%;                 /* Alto relativo al contenedor */
   z-index: 1;
   background: #24272bE0;
   color: #fff;

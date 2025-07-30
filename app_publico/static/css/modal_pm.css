@@ -197,8 +197,8 @@
   /* === TEXTAREA SECUNDARIA: Para mostrar mensajes como "Grabando..." === */
   #modal-pm .modal-statusarea {
     position: absolute;
-    left: 30.5%;             /* Igual al principal, así se ven alineados */
-    right: 29.8%;
+    left: 30.53%;             /* Igual al principal, así se ven alineados */
+    right: 29.82%;
     bottom: 49.2%;           /* Lo ubicas justo encima del textarea principal */
     height: 2.8%;          /* Un poco más bajo que el principal */
     font-size: 0.95em;

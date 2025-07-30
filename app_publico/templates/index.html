@@ -284,7 +284,7 @@ Proyecto: Portátiles Mercedes
     <footer class="pie-pagina">
       Portátiles Mercedes registrados
     <footer>
- <!-- === WIDGET ROBOT PM Y MODAL PM === -->
+<!-- === WIDGET ROBOT PM Y MODAL PM === -->
 <!-- Widget Robot PM (flotante en pantalla) -->
 <div id="widget-robot-pm">
   <img src="/app_publico/static/icons/robot_pm.png" alt="Robot PM" class="robot-pm-img">
@@ -297,20 +297,15 @@ Proyecto: Portátiles Mercedes
     <button class="modal-btn-mic" id="modal-btn-mic" type="button">
       <img src="/app_publico/static/icons/micro.png" alt="Micrófono" id="icono-mic">
     </button>
-    <!-- Bloque STATUSAREA: aquí puedes mostrar texto, "grabando.png" o "pregunta.png" -->
-    <div class="modal-statusarea-wrapper" id="modal-statusarea-wrapper" 
-         style="position:absolute; left:12%; right:12%; bottom:38%; height:8.8%; z-index:3; display:flex; align-items:center; justify-content:center;">
-      <!-- Textarea de status (texto feedback, ejemplo "Cargando", "Enviando", etc) -->
-      <textarea class="modal-statusarea" id="modal-statusarea" readonly
-        style="width:100%; height:100%; background:#292e32de; color:#bee5a0; border:1.5px solid #2be18a88; border-radius:7px; text-align:center; font-size:0.96em; resize:none; z-index:2; pointer-events:none; position:relative;"></textarea>
-      <!-- Imagen "grabando" (oculta por defecto, la muestra el JS cuando grabas) -->
+    <!-- Bloque superpuesto para status: 
+         - Muestra texto, o 
+         - Muestra la imagen "grabando.png" cuando está grabando -->
+    <div class="modal-statusarea-wrapper" id="modal-statusarea-wrapper">
+      <textarea class="modal-statusarea" id="modal-statusarea" readonly></textarea>
       <img src="/app_publico/static/icons/grabando.png" alt="Grabando" id="img-grabando"
-           style="display:none; position:absolute; left:0; top:0; width:100%; height:100%; object-fit:contain; pointer-events:none; z-index:3;">
-      <!-- Imagen "pregunta" (ejemplo, también oculta por defecto, úsala si la necesitas) -->
-      <img src="/app_publico/static/icons/pregunta.png" alt="Pregunta" id="img-pregunta"
-           style="display:none; position:absolute; left:0; top:0; width:100%; height:100%; object-fit:contain; pointer-events:none; z-index:3;">
+           style="display:none; position:absolute; left:0; top:0; width:100%; height:100%; object-fit:contain; pointer-events:none;">
     </div>
-    <!-- Textarea de pregunta (para escribir la pregunta) -->
+    <!-- Textarea de pregunta -->
     <textarea class="modal-textarea" id="modal-pm-textarea" maxlength="180" placeholder="Escriba su pregunta..."></textarea>
     <!-- Botón SEND solo con ícono -->
     <button class="modal-btn-send" id="modal-btn-send" type="button">

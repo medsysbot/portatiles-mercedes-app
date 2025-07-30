@@ -106,22 +106,101 @@
   align-items: center;
   justify-content: center;
 }
-#modal-pm .modal-btn-send img {
-  width: 88%;
-  height: 88%;
-  display: block;
-  margin: 0 auto;
-  filter: drop-shadow(0 1px 6px #0004);
-  pointer-events: none;
-}
-
-/* Opcional: quitar outline azul en mobile */
-#modal-pm textarea, #modal-pm input { outline: none; }
-
-/* === Responsive para pantallas pequeñas === */
-@media (max-width: 700px), (max-height: 640px) {
+@media (max-width: 600px) {
+  /* Contenido del modal PM centrado, todo en % */
   #modal-pm .modal-pm-contenido {
-    width: 90vw; max-width: 90vw; min-width: 200 px;
-    height: 160vw; min-height: 590px; max-height: 160vh;
+    width: 94vw;          /* Prácticamente todo el ancho disponible */
+    min-width: 70vw;
+    max-width: 99vw;
+    height: 97vw;         /* Altura relativa al ancho para máxima compatibilidad móvil */
+    min-height: 76vw;
+    max-height: 98vh;
+    padding: 0;
+    border-radius: 18px;
+  }
+
+  /* Imagen de fondo del modal */
+  #modal-pm .modal-pm-img {
+    width: 100%;
+    height: 100%;
+    left: 0; top: 0;
+    border-radius: 18px;
+  }
+
+  /* --- Micrófono --- */
+  #modal-pm .modal-btn-mic {
+    position: absolute;
+    top: 27.5%;         /* Ubica el mic en vertical según % del modal */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20%;         /* Ancho relativo al modal */
+    height: 12%;        /* Alto relativo al modal */
+    z-index: 2;
+    padding: 0;
+  }
+  #modal-pm .modal-btn-mic img {
+    width: 96%; height: 96%;
+    max-width: 80px; max-height: 80px;
+    min-width: 34px; min-height: 34px;
+  }
+
+  /* --- Botón SEND --- */
+  #modal-pm .modal-btn-send {
+    position: absolute;
+    bottom: 15%;        /* Desde abajo, ajusta esto para subir o bajar el botón SEND */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 17%;
+    height: 9.5%;
+    z-index: 2;
+    padding: 0;
+  }
+  #modal-pm .modal-btn-send img {
+    width: 100%; height: 100%;
+    max-width: 68px; max-height: 68px;
+    min-width: 26px; min-height: 26px;
+  }
+
+  /* --- Textarea 1: principal (ejemplo, abajo del micrófono) --- */
+  #modal-pm .modal-textarea {
+    position: absolute;
+    left: 12%;           /* Ajusta los márgenes laterales a tu gusto */
+    right: 12%;
+    bottom: 27%;         /* Ajusta para subir/bajar textarea principal */
+    height: 10%;         /* Altura en % del modal */
+    font-size: 1.03em;
+    z-index: 2;
+    padding: 5px 8px;
+  }
+
+  /* --- Textarea 2: secundaria (abajo del textarea principal) --- */
+  #modal-pm .modal-statusarea {
+    position: absolute;
+    left: 12%;
+    right: 12%;
+    bottom: 38%;         /* Ajusta esta distancia para ubicarla donde quieras */
+    height: 8.8%;
+    font-size: 0.95em;
+    z-index: 2;
+    padding: 5px 8px;
+    background: #292e32de;
+    color: #bee5a0;
+    border: 1.5px solid #2be18a88;
+    border-radius: 7px;
+  }
+
+  /* --- Status/feedback arriba --- */
+  #modal-pm .modal-pm-status {
+    position: absolute;
+    top: 6.5%;
+    left: 10%; right: 10%;
+    height: 7%;
+    font-size: 1.06em;
+    z-index: 3;
+    background: transparent;
+    color: #2be18a;
+    text-align: center;
+    pointer-events: none;
+    border: none;
   }
 }

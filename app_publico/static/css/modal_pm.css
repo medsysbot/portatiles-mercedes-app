@@ -141,8 +141,8 @@
   /* === BOTÓN MICRÓFONO, centrado, tamaño proporcional === */
   #modal-pm .modal-btn-mic {
     position: absolute;
-    top: 31.7%;           /* Distancia desde arriba: baja o sube el mic */
-    left: 50.8%;
+    top: 31.73%;           /* Distancia desde arriba: baja o sube el mic */
+    left: 50.85%;
     transform: translateX(-50%);
     width: 20%;           /* El mic ocupa 20% del ancho del modal */
     height: 12%;          /* Alto proporcional, puedes subir/bajar esto */

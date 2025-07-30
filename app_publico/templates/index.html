@@ -297,8 +297,14 @@ Proyecto: Portátiles Mercedes
     <button class="modal-btn-mic" id="modal-btn-mic" type="button">
       <img src="/app_publico/static/icons/micro.png" alt="Micrófono" id="icono-mic">
     </button>
-    <!-- Textarea de estado (para "grabando", imagen, feedback, etc) -->
-    <textarea class="modal-statusarea" id="modal-statusarea" readonly></textarea>
+    <!-- Bloque superpuesto para status: 
+         - Muestra texto, o 
+         - Muestra la imagen "grabando.png" cuando está grabando -->
+    <div class="modal-statusarea-wrapper" id="modal-statusarea-wrapper">
+      <textarea class="modal-statusarea" id="modal-statusarea" readonly></textarea>
+      <img src="/app_publico/static/icons/grabando.png" alt="Grabando" id="img-grabando"
+           style="display:none; position:absolute; left:0; top:0; width:100%; height:100%; object-fit:contain; pointer-events:none;">
+    </div>
     <!-- Textarea de pregunta -->
     <textarea class="modal-textarea" id="modal-pm-textarea" maxlength="180" placeholder="Escriba su pregunta..."></textarea>
     <!-- Botón SEND solo con ícono -->

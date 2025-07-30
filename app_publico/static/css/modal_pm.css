@@ -141,8 +141,8 @@
   /* === BOTÓN MICRÓFONO, centrado, tamaño proporcional === */
   #modal-pm .modal-btn-mic {
     position: absolute;
-    top: 31.5%;           /* Distancia desde arriba: baja o sube el mic */
-    left: 50%;
+    top: 32.5%;           /* Distancia desde arriba: baja o sube el mic */
+    left: 51.4%;
     transform: translateX(-50%);
     width: 20%;           /* El mic ocupa 20% del ancho del modal */
     height: 12%;          /* Alto proporcional, puedes subir/bajar esto */
@@ -179,10 +179,10 @@
   /* === TEXTAREA PRINCIPAL: Donde el usuario escribe la pregunta === */
   #modal-pm .modal-textarea {
     position: absolute;
-    left: 30%;             /* Margen izquierdo, ajústalo para centrar */
-    right: 30%;            /* Margen derecho */
+    left: 31.4%;             /* Margen izquierdo, ajústalo para centrar */
+    right: 31.4%;            /* Margen derecho */
     bottom: 35%;           /* Subir/bajar textarea principal */
-    height: 3%;           /* Altura del textarea */
+    height: 2.6%;           /* Altura del textarea */
     font-size: 1.03em;
     z-index: 2;
     padding: 5px 8px;

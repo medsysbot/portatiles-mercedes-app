@@ -57,7 +57,7 @@
 /* Botón del micrófono: centrado sobre la imagen */
 #modal-pm .modal-btn-mic {
   position: absolute;
-  top: 32.5%; left: 49.8%; transform: translateX(-50%);
+  top: 32.5%; left: 50.9%; transform: translateX(-50%);
   width: 17%; height: 10%;  /* Proporcional al ancho/alto del modal */
   background: none;
   border: none;
@@ -92,7 +92,7 @@
 #modal-pm .modal-btn-send {
   position: absolute;
   bottom: 27.4%;             /* Ajusta según tu diseño, 23% o lo que prefieras */
-  left: 50%;
+  left: 50.6%;
   transform: translateX(-50%);
   width: 14%;              /* Igual al micrófono o un poco menos */
   height: 8%;              /* Proporcional */

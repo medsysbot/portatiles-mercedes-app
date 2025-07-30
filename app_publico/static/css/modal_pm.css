@@ -138,9 +138,9 @@
 #img-grabando {
   display: block;      /* Cambia a block para ajustar visualmente */
   position: absolute;
-  left: 40%; top: 45%;
+  left: 30%; top: 41%;
   width: 45%;
-  height: 20%;
+  height: 8%;
   object-fit: contain;
   pointer-events: none;
   z-index: 5;
@@ -248,9 +248,9 @@
     display: block;                  /* Muestra la imagen (ajusta esto desde JS según estado) */
     position: absolute;
     left: 30%;
-    top: 40%;
-    width: 50%;                     /* Ocupa todo el ancho del wrapper */
-    height: 30%;                    /* Ocupa todo el alto del wrapper */
+    top: 45%;
+    width: 40%;                     /* Ocupa todo el ancho del wrapper */
+    height: 20%;                    /* Ocupa todo el alto del wrapper */
     object-fit: contain;             /* Mantiene proporción, no la deforma */
     pointer-events: none;            /* No interfiere con clics */
     z-index: 5;                      /* Encima del textarea de status */

@@ -17,7 +17,7 @@
   width: 38vw;           /* Ancho proporcional a la ventana */
   max-width: 510px;      /* Máximo permitido (ajusta según imagen) */
   min-width: 210px;      /* Mínimo permitido */
-  height: 62vh;          /* Alto proporcional a la ventana */
+  height: 82vh;          /* Alto proporcional a la ventana */
   max-height: 850px;
   min-height: 320px;
   display: flex;

@@ -138,8 +138,8 @@
 #img-grabando {
   display: block;      /* Cambia a block para ajustar visualmente */
   position: absolute;
-  left: 5%; top: 44.8%;
-  width: 125%;
+  left: 0%; top: 44.8%;
+  width: 137%;
   height: 8%;
   object-fit: contain;
   pointer-events: none;

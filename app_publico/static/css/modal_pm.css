@@ -74,7 +74,7 @@
 /* Textarea de pregunta: centrado en la parte inferior */
 #modal-pm .modal-textarea {
   position: absolute;
-  left: 29%; right: 28.9%;      /* Márgenes laterales en % */
+  left: 30.2%; right: 28.9%;      /* Márgenes laterales en % */
   bottom: 35.65%;              /* Desde abajo, proporcional */
   height: 2.8%;                 /* Alto relativo al contenedor */
   z-index: 1;
@@ -91,7 +91,7 @@
 /* Botón SEND: centrado debajo del textarea */
 #modal-pm .modal-btn-send {
   position: absolute;
-  bottom: 25%; left: 50%; transform: translateX(-50%);
+  bottom: 35%; left: 50%; transform: translateX(-50%);
   width: 26%; height: 8.5%;   /* Ancho y alto relativos */
   background: none;
   border: none;

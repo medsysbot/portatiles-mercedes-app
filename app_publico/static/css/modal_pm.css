@@ -1,20 +1,25 @@
-/* ==== MODAL ROBOT PM PEQUEÑO SOBRE IMAGEN ==== */
+/* ===== MODAL ROBOT PM - Portátiles Mercedes (RESPONSIVE y DOCUMENTADO) ===== */
+
+/* Capa del modal: cubre toda la pantalla, sin color de fondo */
 #modal-pm {
-  display: none;
-  position: fixed;
+  display: none;                          /* Oculto por defecto */
+  position: fixed;                        /* Siempre fijo encima */
   left: 0; top: 0; width: 100vw; height: 100vh;
-  z-index: 10010;
-  background: none;
+  z-index: 10010;                         /* Encima de todo */
+  background: none;                       /* Sin oscurecer */
 }
 
+/* Contenido principal del modal, centrado */
 #modal-pm .modal-pm-contenido {
   position: absolute;
   left: 0; right: 0; top: 0; bottom: 0;
   margin: auto;
-  width: 510px;       /* Tamaño ajustable */
-  max-width: 98vw;
-  height: 840px;
-  max-height: 95vh;
+  width: 38vw;           /* Ancho proporcional a la ventana */
+  max-width: 510px;      /* Máximo permitido (ajusta según imagen) */
+  min-width: 210px;      /* Mínimo permitido */
+  height: 62vh;          /* Alto proporcional a la ventana */
+  max-height: 850px;
+  min-height: 320px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -22,24 +27,25 @@
   pointer-events: auto;
 }
 
-/* Fondo del modal (imagen) */
+/* Fondo del modal: la imagen, ocupa todo el contenido */
 #modal-pm .modal-pm-img {
   position: absolute;
-  width: 100%;
+  width: 100%;           /* Siempre 100% del contenedor */
   height: 100%;
   left: 0; top: 0;
   z-index: 0;
-  pointer-events: none; /* Para que los clicks pasen a los botones */
+  pointer-events: none;  /* No captura eventos */
   user-select: none;
 }
 
-/* ====== Elementos superpuestos sobre la imagen ====== */
+/* Status del modal: feedback al usuario (grabando, enviando, etc) */
 #modal-pm .modal-pm-status {
   position: absolute;
-  top: 110px; left: 36px; right: 36px;
-  height: 34px;
+  top: 12%;              /* 12% desde arriba (proporcional) */
+  left: 10%; right: 10%; /* Márgenes izquierdo/derecho de 10% */
+  height: 5.5%;          /* Alto proporcional */
   color: #2be18a;
-  font-size: 1.02em;
+  font-size: 1.04em;
   text-align: center;
   z-index: 1;
   background: transparent;
@@ -48,10 +54,11 @@
   font-family: 'Nunito', Arial, sans-serif;
 }
 
+/* Botón del micrófono: centrado sobre la imagen */
 #modal-pm .modal-btn-mic {
   position: absolute;
-  top: 288px; left: 53%; transform: translateX(-53%);
-  width: 60px; height: 60px;
+  top: 32%; left: 50%; transform: translateX(-50%);
+  width: 13%; height: 11.5%;  /* Proporcional al ancho/alto del modal */
   background: none;
   border: none;
   z-index: 1;
@@ -59,16 +66,17 @@
   outline: none;
 }
 #modal-pm .modal-btn-mic img {
-  width: 55px; height: 55px;
+  width: 94%; height: 94%;    /* Imagen micrófono dentro del botón */
   filter: drop-shadow(0 1px 6px #0005);
   pointer-events: none;
 }
 
-/* Textarea de pregunta */
+/* Textarea de pregunta: centrado en la parte inferior */
 #modal-pm .modal-textarea {
   position: absolute;
-  left: 151px; right: 145px; bottom: 259px;
-  height: 21px;
+  left: 11%; right: 11%;      /* Márgenes laterales en % */
+  bottom: 20.5%;              /* Desde abajo, proporcional */
+  height: 9%;                 /* Alto relativo al contenedor */
   z-index: 1;
   background: #24272bE0;
   color: #fff;
@@ -80,11 +88,11 @@
   font-family: 'Nunito', Arial, sans-serif;
 }
 
-/* Botón SEND */
+/* Botón SEND: centrado debajo del textarea */
 #modal-pm .modal-btn-send {
   position: absolute;
-  bottom: 34px; left: 50%; transform: translateX(-50%);
-  width: 110px; height: 46px;
+  bottom: 5%; left: 50%; transform: translateX(-50%);
+  width: 26%; height: 8.5%;   /* Ancho y alto relativos */
   background: none;
   border: none;
   z-index: 1;
@@ -97,5 +105,13 @@
   font-weight: 700;
 }
 
-/* --- Opcional: ocultar selección en mobile --- */
+/* Opcional: quitar outline azul en mobile */
 #modal-pm textarea, #modal-pm input { outline: none; }
+
+/* === Responsive para pantallas pequeñas === */
+@media (max-width: 700px), (max-height: 640px) {
+  #modal-pm .modal-pm-contenido {
+    width: 97vw; max-width: 98vw; min-width: 120px;
+    height: 93vw; min-height: 230px; max-height: 98vh;
+  }
+}

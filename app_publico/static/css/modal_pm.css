@@ -50,7 +50,7 @@
 
 #modal-pm .modal-btn-mic {
   position: absolute;
-  top: 285px; left: 53%; transform: translateX(-53%);
+  top: 288px; left: 53%; transform: translateX(-53%);
   width: 60px; height: 60px;
   background: none;
   border: none;
@@ -67,7 +67,7 @@
 /* Textarea de pregunta */
 #modal-pm .modal-textarea {
   position: absolute;
-  left: 151px; right: 145px; bottom: 261px;
+  left: 151px; right: 145px; bottom: 259px;
   height: 21px;
   z-index: 1;
   background: #24272bE0;

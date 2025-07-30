@@ -1,57 +1,61 @@
-/* ===== Widget Robot PM - Portátiles Mercedes ===== */
+/* ===== Widget Robot PM - Portátiles Mercedes (RESPONSIVE, PORCENTUAL, DOCUMENTADO) ===== */
 
-/* Contenedor flotante fijo en pantalla */
+/* Contenedor flotante fijo en pantalla, todo en proporción a la pantalla */
 #widget-robot-pm {
     position: fixed;
-    bottom: -180px;         /* Distancia desde abajo */
-    right: 30px;          /* Distancia desde la derecha */
-    z-index: 1000;        /* Siempre encima */
-    width: 190px;         /* Tamaño del widget */
-    height: 650px;        /* Tamaño del widget */
+    /* Siempre visible sobre el resto del contenido */
+    bottom: 7vh;              /* Distancia desde abajo: 7% de la altura visible */
+    right: 2vw;               /* Distancia desde la derecha: 2% del ancho visible */
+    z-index: 1000;            /* Encima de todo */
+    width: 12vw;              /* Ancho del widget: 12% del ancho de la ventana */
+    max-width: 210px;         /* Máximo permitido, nunca más grande de esto */
+    min-width: 72px;          /* Mínimo para móviles */
+    height: 41vh;             /* Alto del widget: 41% de la altura de la ventana */
+    max-height: 680px;        /* Máximo permitido */
+    min-height: 80px;         /* Mínimo para móviles */
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: center;      /* Centra verticalmente la imagen */
+    justify-content: center;  /* Centra horizontalmente la imagen */
     cursor: pointer;
     animation: pm-flotar 3.8s ease-in-out infinite;
     transition: filter 0.18s;
-    /* Puedes agregar sombra si quieres */
-    /* box-shadow: 0 4px 18px rgba(0,0,0,0.18); */
+    /* box-shadow: 0 4px 18px rgba(0,0,0,0.18); /* Opcional: sombra */
 }
 
-/* Imagen del robot: ocupa todo el widget, sin bordes */
+/* Imagen del robot: ocupa todo el div, no permite interacción directa */
 .robot-pm-img {
-    width: 100%;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
+    width: 100%;             /* Siempre al 100% del contenedor */
+    height: auto;            /* Proporcional, nunca deforma */
+    max-width: 100%;         /* Nunca se pasa del tamaño del contenedor */
+    max-height: 100%;        /* Nunca se pasa del tamaño del contenedor */
     display: block;
-    user-select: none;
-    pointer-events: none; /* El evento click va en el contenedor */
+    user-select: none;       /* No seleccionable */
+    pointer-events: none;    /* Click va al contenedor, no a la imagen */
 }
 
-/* Flotación suave */
+/* Flotación suave en el eje Y, también responsive */
 @keyframes pm-flotar {
-    0%   { transform: translateY(0px);}
-    50%  { transform: translateY(-14px);}
-    100% { transform: translateY(0px);}
+    0%   { transform: translateY(0);}
+    50%  { transform: translateY(-3vh);}   /* Sube 3% del alto de pantalla */
+    100% { transform: translateY(0);}
 }
 
-/* Animación de salida tipo cohete */
+/* Animación tipo cohete: sube y desaparece */
 @keyframes pm-cohete {
     0%   { transform: translateY(0) scale(1);}
-    10%  { transform: translateY(-30px) scale(1.08);}
-    80%  { transform: translateY(-110vh) scale(0.92);}
+    10%  { transform: translateY(-2vh) scale(1.07);}
+    80%  { transform: translateY(-110vh) scale(0.91);}
     100% { transform: translateY(-110vh) scale(0.8); opacity: 0;}
 }
 
-/* Animación de regreso desde arriba */
+/* Animación de regreso: baja desde arriba y aparece suave */
 @keyframes pm-regreso {
     0%   { transform: translateY(-110vh) scale(0.8); opacity: 0;}
-    50%  { transform: translateY(-70px) scale(1.02); opacity: 0.6;}
+    50%  { transform: translateY(-6vh) scale(1.02); opacity: 0.7;}
     100% { transform: translateY(0) scale(1); opacity: 1;}
 }
 
-/* Cohete: clases dinámicas (JS) */
+/* Clases JS para disparar animaciones cohete */
 #widget-robot-pm.cohete-salida {
     animation: pm-cohete 1.5s cubic-bezier(.8,0,.8,1) forwards;
 }
@@ -59,12 +63,16 @@
     animation: pm-regreso 2.1s cubic-bezier(.32,0,.62,1) forwards;
 }
 
-/* Responsive para móviles pequeños */
-@media (max-width: 480px) {
+/* --- Responsive extremo para móviles pequeños --- */
+@media (max-width: 500px), (max-height: 700px) {
     #widget-robot-pm {
-        width: 68px;
-        height: 68px;
-        bottom: 16px;
-        right: 16px;
+        width: 18vw;         /* Un poco más grande en móviles */
+        min-width: 50px;
+        max-width: 88px;
+        height: 12vh;
+        min-height: 50px;
+        max-height: 88px;
+        bottom: 2vh;
+        right: 2vw;
     }
 }

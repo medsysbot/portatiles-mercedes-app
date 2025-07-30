@@ -88,6 +88,24 @@
   font-family: 'Nunito', Arial, sans-serif;
 }
 
+#modal-pm .modal-statusarea {
+  position: absolute;
+  left: 11%;           /* Márgenes laterales (ajusta al gusto) */
+  right: 11%;
+  top: 37%;            /* Ajusta para ubicarlo abajo del micrófono */
+  height: 8.5%;        /* Alto relativo al modal */
+  font-size: 1.05em;
+  z-index: 2;
+  padding: 5px 10px;
+  background: #24272bde;
+  color: #bee5a0;
+  border: 1.5px solid #2be18a88;  /* Borde verde */
+  border-radius: 7px;
+  font-family: 'Nunito', Arial, sans-serif;
+  resize: none;
+  pointer-events: none;
+}
+
 /* Botón SEND: centrado debajo del textarea */
 #modal-pm .modal-btn-send {
   position: absolute;

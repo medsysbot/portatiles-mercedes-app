@@ -109,7 +109,7 @@
 @media (max-width: 600px) {
   /* === CONTENEDOR PRINCIPAL DEL MODAL === */
   #modal-pm .modal-pm-contenido {
-    width: 94vw;           /* El modal ocupa el 94% del ancho de la ventana */
+    width: 120vw;           /* El modal ocupa el 94% del ancho de la ventana */
     min-width: 90vw;       /* Mínimo 70% para evitar que quede muy chico */
     max-width: 90vw;       /* Máximo 99% del ancho, nunca desborda */
     height: 180vw;          /* Altura igual al ancho (modal cuadrado/adaptativo) */
@@ -172,7 +172,7 @@
     left: 12%;             /* Margen izquierdo, ajústalo para centrar */
     right: 12%;            /* Margen derecho */
     bottom: 27%;           /* Subir/bajar textarea principal */
-    height: 10%;           /* Altura del textarea */
+    height: 5%;           /* Altura del textarea */
     font-size: 1.03em;
     z-index: 2;
     padding: 5px 8px;

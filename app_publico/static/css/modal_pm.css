@@ -159,8 +159,8 @@
   /* === BOTÓN SEND, centrado debajo del textarea === */
   #modal-pm .modal-btn-send {
     position: absolute;
-    bottom: 26%;           /* Ajusta esto para subir/bajar el botón SEND */
-    left: 51%;
+    bottom: 27%;           /* Ajusta esto para subir/bajar el botón SEND */
+    left: 50.9%;
     transform: translateX(-50%);
     width: 17%;            /* Ancho del botón SEND */
     height: 9.5%;          /* Alto del botón SEND */

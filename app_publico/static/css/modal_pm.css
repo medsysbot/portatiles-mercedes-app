@@ -180,8 +180,8 @@
   #modal-pm .modal-textarea {
     position: absolute;
     left: 30.7%;             /* Margen izquierdo, ajústalo para centrar */
-    right: 29.4%;            /* Margen derecho */
-    bottom: 35.7%;           /* Subir/bajar textarea principal */
+    right: 29.35%;            /* Margen derecho */
+    bottom: 35.75%;           /* Subir/bajar textarea principal */
     height: 2.6%;           /* Altura del textarea */
     font-size: 1.03em;
     z-index: 2;

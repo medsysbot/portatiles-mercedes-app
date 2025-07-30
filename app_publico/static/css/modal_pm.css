@@ -289,3 +289,24 @@
     border: none;
     font-family: 'Nunito', Arial, sans-serif;
   }
+
+  /* ==== STATUSAREA MODAL PM - MOBILE/RESPONSIVE ==== */
+@media (max-width: 700px), (max-height: 640px) {
+
+  #modal-pm .modal-statusarea-wrapper {
+    left: 6%;
+    right: 6%;
+    bottom: 44%;
+    height: 12.8%;
+  }
+
+  #modal-pm .modal-statusarea {
+    border-radius: 7vw;
+    font-size: 1.09em;
+    border-width: 0.45vw;
+  }
+
+  #modal-pm #img-grabando {
+    border-radius: 7vw;
+  }
+}

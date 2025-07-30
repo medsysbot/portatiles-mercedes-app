@@ -136,7 +136,7 @@
 
 /* Imagen "grabando" (por defecto oculta, el JS la muestra cuando toca grabar) */
 #img-grabando {
-  display: block;      /* Cambia a block para ajustar visualmente */
+  display: none;      /* Cambia a block para ajustar visualmente */
   position: absolute;
   left: -7%; top: 44.8%;
   width: 137%;

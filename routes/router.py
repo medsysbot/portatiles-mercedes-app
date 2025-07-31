@@ -27,7 +27,7 @@ from routes.morosos import router as morosos_router
 from routes.emails_admin import router as emails_router
 from routes.recursos_humanos import router as recursos_humanos_router
 from routes.email_publico import router as email_publico_router
-from routes.contexto import router as contexto_router
+from routes.robot_api import router as robot_router
 from routes.ventas import router as ventas_router
 from routes.ventas_admin import router as ventas_admin_router 
 # Luego de reubicar `routes/` en la raíz del repositorio, la carpeta
@@ -67,7 +67,7 @@ router.include_router(morosos_router)
 router.include_router(emails_router)
 router.include_router(recursos_humanos_router)
 router.include_router(email_publico_router)
-router.include_router(contexto_router)
+router.include_router(robot_router)
 
 
 

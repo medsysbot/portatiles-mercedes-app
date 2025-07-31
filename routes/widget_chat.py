@@ -123,8 +123,8 @@ async def widget_chat(
     custom_reply = False
 
     # 1. Pregunta sobre Portátiles Mercedes (siempre responde)
- if is_portatiles_query(prompt):
-     system_prompt = (
+    if is_portatiles_query(prompt):
+       system_prompt = (
         "Eres el asistente oficial de Portátiles Mercedes. "
         "Responde únicamente sobre el funcionamiento, consultas técnicas, secciones y procesos del sitio Portátiles Mercedes. "
         "Si te preguntan por datos de contacto, teléfono, WhatsApp o correo, responde exactamente: "
@@ -144,7 +144,7 @@ async def widget_chat(
         model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": prompt}
+            {"role": "user", "content": prompt},
         ],
         max_tokens=350,
         temperature=0.35

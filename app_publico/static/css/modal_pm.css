@@ -167,7 +167,7 @@
   top: 36%;    /* <--- Mueve el marco hacia abajo/arriba */
   left: 50%;  /* Centrado horizontal */
   transform: translateX(-50%);
-  width: 86%;    /* Ajusta el tamaño */
+  width: 70%;    /* Ajusta el tamaño */
   height: auto;  /* Ajusta según la imagen */
   z-index: 9999;
   display: flex;

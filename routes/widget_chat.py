@@ -48,8 +48,12 @@ def is_portatiles_query(question: str) -> bool:
     temas_sitio = [
         "login", "registrar", "registro", "inicio de sesión", "olvidé mi contraseña",
         "cambiar contraseña", "formulario", "sección", "dónde encuentro", "cómo hago",
-        "alquiler", "ventas", "pagar", "cliente", "panel", "comprobante", "contacto",
-        "empleado", "administrador", "portal", "navegar", "funciona", "problema acceso"
+        "alquiler", "alquilar", "alquilar baño", "alquiler de baño", "alquiler baño", 
+        "baño químico", "baño portátil", "baños químicos", "baños portátiles",
+        "reservar baño", "servicio de baño", "servicio de baños", "servicios", 
+        "pagar", "pago", "cliente", "clientes", "panel", "comprobante", "contacto",
+        "empleado", "administrador", "portal", "navegar", "funciona", "problema acceso",
+        "contratar baño", "contratar servicio", "necesito baño", "quiero baño"
     ]
     pregunta = question.lower()
     for palabra in temas_sitio:

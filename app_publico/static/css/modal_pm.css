@@ -160,14 +160,16 @@
   background: transparent;     /* Fondo transparente, no tapa nada detrás */
 }
 
-
-/* Contenedor centrado del modal */
+/* El marco (contenedor del modal de respuesta) */
 .modal-respuesta-contenido {
-  position: relative;
-  width: 90vw;
-  max-width: 100vw;
-  background: transparent;
-  border-radius: 3%;
+  position: absolute;
+  /* Aquí puedes mover el marco a donde quieras: */
+  top: 8%;    /* <--- Mueve el marco hacia abajo/arriba */
+  left: 50%;  /* Centrado horizontal */
+  transform: translateX(-50%);
+  width: 46%;    /* Ajusta el tamaño */
+  height: auto;  /* Ajusta según la imagen */
+  z-index: 9999;
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -146,16 +146,18 @@
   z-index: 5;
 }
 
-/* Imagen "grabando" y "enviando" superpuestas, ocupan todo el wrapper */
-#modal-pm .modal-statusarea-wrapper img {
-  position: absolute;
-  left: 0%; top: 0%;
-  width: 50%;
-  height: 20%;
-  object-fit: contain;         /* Mantiene proporción, ajusta la imagen */
-  pointer-events: none;        /* No captura clicks */
-  z-index: 3;                  /* Siempre arriba del textarea */
-  display: block;               /* Se muestran sólo cuando JS activa el display:block */
+/* ==== Imagen PNG "enviando pregunta" para desktop/laptop ==== */
+#img-pregunta {
+  display: block;              /* Muestra la imagen */
+  position: absolute;          /* Permite ubicarla encima del statusarea */
+  left: 0%;                    /* Empieza en el borde izquierdo del contenedor */
+  top: 0%;                     /* Empieza en el borde superior */
+  width: 50%;                 /* Ocupa todo el ancho del wrapper */
+  height: 20%;                /* Ocupa todo el alto del wrapper */
+  object-fit: contain;         /* Mantiene el aspecto original del PNG */
+  pointer-events: none;        /* No captura clics */
+  z-index: 5;                  /* Encima del textarea, debajo de overlays críticos */
+  background: transparent;     /* Fondo transparente, no tapa nada detrás */
 }
 
 

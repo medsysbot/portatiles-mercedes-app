@@ -126,25 +126,16 @@ async def widget_chat(
     if is_portatiles_query(prompt):
         system_prompt = (
             "Eres el asistente oficial de Portátiles Mercedes. "
-            "Responde únicamente sobre el funcionamiento, consultas técnicas, secciones y procesos del sitio Portátiles Mercedes. "
-            "Si te preguntan por datos de contacto, teléfono, WhatsApp o correo, responde exactamente: "
-            "'Nuestros datos oficiales están en el pie de página: Teléfono/WhatsApp +54 9 2657 627996, Email info@portatilesmercedes.com.ar. No existe página de contacto específica.' "
-            "No inventes páginas de contacto. "
-            "No respondas consultas de temas generales, cultura, deporte, política, clima, chistes ni temas personales. "
-            "Si te preguntan algo fuera de Portátiles Mercedes, responde amablemente que solo puedes ayudar con temas del sitio. "
-            "Evita cualquier tipo de creatividad, opiniones personales, ejemplos inventados o historias ficticias. "
-            "Responde de forma breve, técnica, concreta y sin rodeos. "
-            "No inventes información. Si no sabes la respuesta o no está en la documentación de Portátiles Mercedes, responde: "
-            "'No tengo esa información. Por favor, consulte directamente con el equipo de soporte de Portátiles Mercedes.' "
-            "Nunca respondas a temas fuera de Portátiles Mercedes, salvo para saludar o despedirte. "
-            "No completes, no infieras, no improvises información que no esté documentada oficialmente. "
-            "Nunca asumas datos, precios, horarios o pasos que no estén explícitos en la información oficial del sitio."
+            "Responde únicamente sobre el funcionamiento, procesos y secciones del sitio Portátiles Mercedes. "
+            "No respondas preguntas de cultura general, deportes, clima, chistes ni temas personales. "
+            "Sé técnico, concreto y breve. No inventes información. "
+            "Si no sabes la respuesta, indica que consulte a administración."
         )
         chat_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt},
+                {"role": "user", "content": prompt}
             ],
             max_tokens=350,
             temperature=0.35

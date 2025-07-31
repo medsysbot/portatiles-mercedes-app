@@ -150,10 +150,10 @@
 #img-pregunta {
   display: block;              /* Muestra la imagen */
   position: absolute;          /* Permite ubicarla encima del statusarea */
-  left: 20%;                    /* Empieza en el borde izquierdo del contenedor */
-  top: 44%;                     /* Empieza en el borde superior */
+  left: 10%;                    /* Empieza en el borde izquierdo del contenedor */
+  top: 45%;                     /* Empieza en el borde superior */
   width: 100%;                 /* Ocupa todo el ancho del wrapper */
-  height: 8%;                /* Ocupa todo el alto del wrapper */
+  height: 7.5%;                /* Ocupa todo el alto del wrapper */
   object-fit: contain;         /* Mantiene el aspecto original del PNG */
   pointer-events: none;        /* No captura clics */
   z-index: 5;                  /* Encima del textarea, debajo de overlays críticos */
@@ -275,10 +275,10 @@
    #img-pregunta {
     display: block;                  /* Muestra la imagen cuando corresponda */
     position: absolute;
-    left: 40%;
-    top: 44%;
+    left: 10%;
+    top: 44.5%;
     width: 100%;                     /* Ocupa todo el ancho del statusarea wrapper */
-    height: 8%;                    /* Ocupa todo el alto del statusarea wrapper */
+    height: 7.5%;                    /* Ocupa todo el alto del statusarea wrapper */
     object-fit: contain;             /* Mantiene la proporción del PNG */
     pointer-events: none;            /* No permite interacción */
     z-index: 5;                      /* Encima de la palabra, si la hay */

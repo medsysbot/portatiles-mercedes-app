@@ -278,7 +278,7 @@
     left: 0%;
     top: 0%;
     width: 50%;                     /* Ocupa todo el ancho del statusarea wrapper */
-    height: 8%;                    /* Ocupa todo el alto del statusarea wrapper */
+    height: 30%;                    /* Ocupa todo el alto del statusarea wrapper */
     object-fit: contain;             /* Mantiene la proporción del PNG */
     pointer-events: none;            /* No permite interacción */
     z-index: 5;                      /* Encima de la palabra, si la hay */

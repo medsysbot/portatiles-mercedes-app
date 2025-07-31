@@ -1,11 +1,13 @@
-// Archivo: modal_pm.js
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Referencias a elementos ---
   const robotWidget = document.getElementById('widget-robot-pm');
   const modalPM     = document.getElementById('modal-pm');
   const btnMic      = document.getElementById('modal-btn-mic');
   const btnSend     = document.getElementById('modal-btn-send');
   const textarea    = document.getElementById('modal-pm-textarea');
-  const statusDiv   = document.getElementById('modal-pm-status');
+  const statusArea  = document.getElementById('modal-statusarea');
+  const imgGrabando = document.getElementById('img-grabando');
+  const imgPregunta = document.getElementById('img-pregunta');
 
   let grabando = false;
   let mediaRecorder = null;
@@ -17,43 +19,40 @@ document.addEventListener('DOMContentLoaded', () => {
     resetModal();
   });
 
-  // --- Cerrar modal si se toca fuera del contenido (modal overlay) ---
+  // --- Cerrar modal si se toca fuera del contenido ---
   modalPM.addEventListener('click', (e) => {
-    if (e.target === modalPM) {
-      cerrarModal();
-    }
+    if (e.target === modalPM) cerrarModal();
   });
 
-  // --- Botón micrófono - iniciar/detener grabación ---
+  // --- Botón micrófono: iniciar/detener grabación ---
   btnMic.addEventListener('click', () => {
     if (!grabando) {
+      mostrarGrabando();
       iniciarGrabacion();
     } else {
       detenerGrabacion();
     }
   });
 
-  // --- Botón SEND - envía texto o audio según lo que haya ---
+  // --- Botón SEND - envía texto ---
   btnSend.addEventListener('click', async () => {
     if (grabando) {
-      detenerGrabacion(); // terminar grabación y luego enviar audio
+      detenerGrabacion();
+      mostrarEnviandoPregunta();
       return;
     }
     const texto = textarea.value.trim();
     if (texto.length === 0) {
-      statusDiv.textContent = 'Ingrese una pregunta o use el micrófono.';
+      // No mostrar nada si está vacío
       return;
     }
-    statusDiv.textContent = 'Enviando pregunta...';
+    mostrarEnviandoPregunta();
     await enviarPreguntaTexto(texto);
-    cerrarModal();
-    // Aquí puedes abrir el modal de respuesta si hace falta
+    setTimeout(cerrarModal, 1500); // Espera 1.5s y cierra
   });
 
-  // === GRABACIÓN DE AUDIO ===
+  // === Grabación de audio ===
   function iniciarGrabacion() {
-    statusDiv.textContent = 'Grabando...';
-    btnMic.classList.add('grabando');
     grabando = true;
     audioChunks = [];
     navigator.mediaDevices.getUserMedia({ audio: true })
@@ -66,13 +65,15 @@ document.addEventListener('DOMContentLoaded', () => {
         mediaRecorder.onstop = () => {
           let audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
           enviarAudioGrabado(audioBlob);
-          cerrarModal();
+          mostrarEnviandoPregunta();
+          setTimeout(cerrarModal, 1500);
         };
       })
       .catch(() => {
-        statusDiv.textContent = "No se pudo acceder al micrófono.";
+        // Si NO quieres mostrar nada ni siquiera por error, borra la línea siguiente:
+        // mostrarStatusTexto("No se pudo acceder al micrófono.");
         grabando = false;
-        btnMic.classList.remove('grabando');
+        cerrarModal();
       });
   }
 
@@ -81,47 +82,58 @@ document.addEventListener('DOMContentLoaded', () => {
       mediaRecorder.stop();
     }
     grabando = false;
-    btnMic.classList.remove('grabando');
-    statusDiv.textContent = "Procesando audio...";
   }
 
-  // === ENVÍO DE TEXTO Y AUDIO (AJUSTA ENDPOINT Y RESPUESTA SEGÚN TU BACKEND) ===
+  // === Enviar texto ===
   async function enviarPreguntaTexto(texto) {
     try {
       const formData = new FormData();
       formData.append('text', texto);
       formData.append('want_audio', 'false');
       await fetch('/api/widget_chat', { method: 'POST', body: formData });
-      // Aquí deberías mostrar el modal de respuesta, etc.
-    } catch (err) {
-      statusDiv.textContent = "Error al enviar la pregunta.";
+      // Respuesta escrita: el modal se cierra, NO muestra ningún mensaje
+    } catch {
+      // No mostrar ningún texto de error
     }
   }
 
+  // === Enviar audio grabado ===
   async function enviarAudioGrabado(audioBlob) {
     try {
       const formData = new FormData();
       formData.append('audio', audioBlob, 'pregunta.mp3');
       formData.append('want_audio', 'true');
       await fetch('/api/widget_chat', { method: 'POST', body: formData });
-      // Aquí NO abras modal, la respuesta vendría por audio
-    } catch (err) {
-      statusDiv.textContent = "Error al enviar el audio.";
+      // Respuesta de audio: el modal se cierra, NO muestra ningún mensaje
+    } catch {
+      // No mostrar ningún texto de error
     }
   }
 
-  // --- Cerrar modal (ocultar y limpiar) ---
+  // --- Mostrar "grabando" (PNG, oculta lo demás) ---
+  function mostrarGrabando() {
+    statusArea.style.display = 'none';
+    imgGrabando.style.display = 'block';
+    imgPregunta.style.display = 'none';
+  }
+  // --- Mostrar "enviando pregunta" (PNG, oculta lo demás) ---
+  function mostrarEnviandoPregunta() {
+    statusArea.style.display = 'none';
+    imgGrabando.style.display = 'none';
+    imgPregunta.style.display = 'block';
+  }
+
+  // --- Cerrar y limpiar modal ---
   function cerrarModal() {
     modalPM.style.display = 'none';
     resetModal();
   }
-
-  // --- Limpiar modal al abrir/cerrar ---
   function resetModal() {
     textarea.value = '';
-    statusDiv.textContent = '';
+    statusArea.value = '';
+    statusArea.style.display = 'block';
+    imgGrabando.style.display = 'none';
+    imgPregunta.style.display = 'none';
     grabando = false;
-    btnMic.classList.remove('grabando');
-    // Si quieres limpiar mediaRecorder, hazlo aquí si hay leak
   }
 });

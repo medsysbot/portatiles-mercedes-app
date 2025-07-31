@@ -1,0 +1,46 @@
+{
+  "informacion": {
+    "descripcion": "Página con la historia y evolución de los baños químicos. Incluye imagen HD de los modelos históricos.",
+    "ruta": "/informacion-banos.html",
+    "acceso": "público"
+  },
+  "alquiler": {
+    "descripcion": "Página informativa y formulario para solicitar alquiler de baños químicos. Campos requeridos: nombre, teléfono, dirección, email, tipo de baño y fecha estimada. Contacto directo: +5492657627996.",
+    "ruta": "/alquiler.html",
+    "formulario": "/alquiler_form.html",
+    "telefono": "2657627996",
+    "whatsapp": "+5492657627996"
+  },
+  "ventas": {
+    "descripcion": "Página informativa y formulario para la venta de baños químicos. Campos requeridos: nombre, DNI/CUIT/CUIL, email, tipo de baño, cantidad, dirección de entrega y fecha de operación. Contacto directo: +5492657627996.",
+    "ruta": "/ventas.html",
+    "formulario": "/venta_form.html",
+    "telefono": "2657627996",
+    "whatsapp": "+5492657627996"
+  },
+  "servicios": {
+    "descripcion": "Página informativa con la lista de servicios que se ofrecen.",
+    "ruta": "/servicios.html",
+    "acceso": "público"
+  },
+  "galeria": {
+    "descripcion": "Galería de fotos de servicios y eventos.",
+    "ruta": "/galeria.html",
+    "acceso": "público"
+  },
+  "login": {
+    "descripcion": "Login, registro y recuperación de contraseña. Requiere email y contraseña. Contacto directo: +5492657627996.",
+    "ruta": "/login",
+    "telefono": "2657627996",
+    "whatsapp": "+5492657627996"
+  },
+  "panel_cliente": {
+    "descripcion": "Panel privado para clientes: solicitar alquiler, servicios, consultar facturas y comprobantes.",
+    "acceso": "privado"
+  },
+  "contacto": {
+    "telefono": "2657627996",
+    "whatsapp": "+5492657627996",
+    "nota": "El teléfono está siempre en el pie de página."
+  }
+}

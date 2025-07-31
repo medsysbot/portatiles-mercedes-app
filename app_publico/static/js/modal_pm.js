@@ -70,8 +70,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
       })
       .catch(() => {
-        // Si NO quieres mostrar nada ni siquiera por error, borra la línea siguiente:
-        // mostrarStatusTexto("No se pudo acceder al micrófono.");
         grabando = false;
         cerrarModal();
       });
@@ -91,23 +89,32 @@ document.addEventListener('DOMContentLoaded', () => {
       formData.append('text', texto);
       formData.append('want_audio', 'false');
       await fetch('/api/widget_chat', { method: 'POST', body: formData });
-      // Respuesta escrita: el modal se cierra, NO muestra ningún mensaje
-    } catch {
-      // No mostrar ningún texto de error
-    }
+      // No hacer nada más por ahora
+    } catch { /* Silencio */ }
   }
 
-  // === Enviar audio grabado ===
+  // === Enviar audio grabado y reproducir respuesta si hay audio ===
   async function enviarAudioGrabado(audioBlob) {
     try {
       const formData = new FormData();
       formData.append('audio', audioBlob, 'pregunta.mp3');
       formData.append('want_audio', 'true');
-      await fetch('/api/widget_chat', { method: 'POST', body: formData });
-      // Respuesta de audio: el modal se cierra, NO muestra ningún mensaje
-    } catch {
-      // No mostrar ningún texto de error
-    }
+      const resp = await fetch('/api/widget_chat', { method: 'POST', body: formData });
+      if (!resp.ok) return;
+      const data = await resp.json();
+      // Si la API devuelve respuesta_audio_url, reproducir audio
+      if (data.respuesta_audio_url) {
+        reproducirAudioRespuesta(data.respuesta_audio_url);
+      }
+    } catch { /* Silencio */ }
+  }
+
+  // --- Reproducir el audio de la respuesta del asistente ---
+  function reproducirAudioRespuesta(url) {
+    try {
+      const audio = new Audio(url);
+      audio.play();
+    } catch {/* Silencio */}
   }
 
   // --- Mostrar "grabando" (PNG, oculta lo demás) ---

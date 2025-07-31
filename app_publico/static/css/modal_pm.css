@@ -197,9 +197,9 @@
   top: 13%;
   left: 50%;
   transform: translateX(-50%);
-  width: 15.3%;
-  min-height: 37%;
-  max-height: 37%;
+  width: 15%;
+  min-height: 36%;
+  max-height: 36%;
   background: rgba(0,0,0,0.83);
   color: #fff;
   border: none;

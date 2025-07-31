@@ -123,7 +123,7 @@ import routes.facturas_pendientes as facturas_pendientes_module
 import routes.morosos as morosos_module
 import routes.emails_admin as emails_admin_module
 from routes import admin_panel, empleado_panel, cliente_panel, ventas, limpieza, reportes
-
+from routes.widget_chat import router as widget_chat_router
 from fastapi.middleware.trustedhost import TrustedHostMiddleware
 from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
 

@@ -185,11 +185,11 @@
 /* Imagen "esperando respuesta" */
 .img-esperando-respuesta {
   position: absolute;
-  top: 7%;
+  top: 27%;
   left: 50%;
   transform: translateX(-50%);
   width: 23%;
-  z-index: 2;
+  z-index: 9;
   display: block;
 }
 
@@ -199,9 +199,9 @@
   top: 13.6%;
   left: 49.6%;
   transform: translateX(-50%);
-  width: 22.28%;
-  min-height: 40%;
-  max-height: 40%;
+  width: 22.29%;
+  min-height: 42%;
+  max-height: 42%;
   background: rgba(0,0,0,0.83);
   color: #fff;
   border: none;

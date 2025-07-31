@@ -194,12 +194,12 @@
 /* Textarea de respuesta */
 .modal-respuesta-textarea {
   position: absolute;
-  top: 14%;
+  top: 13%;
   left: 50%;
   transform: translateX(-50%);
-  width: 17%;
-  min-height: 50%;
-  max-height: 50%;
+  width: 15%;
+  min-height: 47%;
+  max-height: 47%;
   background: rgba(0,0,0,0.83);
   color: #fff;
   border: none;

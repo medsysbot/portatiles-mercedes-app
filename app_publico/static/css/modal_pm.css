@@ -150,7 +150,7 @@
 #img-pregunta {
   display: block;              /* Muestra la imagen */
   position: absolute;          /* Permite ubicarla encima del statusarea */
-  left: 2%;                    /* Empieza en el borde izquierdo del contenedor */
+  left: 1%;                    /* Empieza en el borde izquierdo del contenedor */
   top: 45%;                     /* Empieza en el borde superior */
   width: 100%;                 /* Ocupa todo el ancho del wrapper */
   height: 7.5%;                /* Ocupa todo el alto del wrapper */
@@ -275,7 +275,7 @@
    #img-pregunta {
     display: block;                  /* Muestra la imagen cuando corresponda */
     position: absolute;
-    left: 1%;
+    left: 0.9%;
     top: 45%;
     width: 100%;                     /* Ocupa todo el ancho del statusarea wrapper */
     height: 7.5%;                    /* Ocupa todo el alto del statusarea wrapper */

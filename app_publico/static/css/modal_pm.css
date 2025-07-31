@@ -185,7 +185,7 @@
 /* Imagen "esperando respuesta" */
 .img-esperando-respuesta {
   position: absolute;
-  top: 32%;
+  top: 31.5%;
   left: 49.5%;
   transform: translateX(-50%);
   width: 28%;
@@ -196,7 +196,7 @@
 /* Textarea de respuesta */
 .modal-respuesta-textarea {
   position: absolute;
-  top: 14.1%;
+  top: 14.2%;
   left: 49.9%;
   transform: translateX(-50%);
   width: 22.22%;

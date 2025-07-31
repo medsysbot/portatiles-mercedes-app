@@ -164,10 +164,10 @@
 .modal-respuesta-contenido {
   position: absolute;
   /* Aquí puedes mover el marco a donde quieras: */
-  top: 27%;    /* <--- Mueve el marco hacia abajo/arriba */
+  top: 17%;    /* <--- Mueve el marco hacia abajo/arriba */
   left: 50%;  /* Centrado horizontal */
   transform: translateX(-50%);
-  width: 70%;    /* Ajusta el tamaño */
+  width: 60%;    /* Ajusta el tamaño */
   height: auto;  /* Ajusta según la imagen */
   z-index: 9999;
   display: flex;
@@ -199,7 +199,7 @@
   top: 13.6%;
   left: 49.6%;
   transform: translateX(-50%);
-  width: 15.28%;
+  width: 25.28%;
   min-height: 36%;
   max-height: 36%;
   background: rgba(0,0,0,0.83);

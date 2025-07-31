@@ -185,7 +185,7 @@
 /* Imagen "esperando respuesta" */
 .img-esperando-respuesta {
   position: absolute;
-  top: 27%;
+  top: 29%;
   left: 50%;
   transform: translateX(-50%);
   width: 23%;
@@ -199,9 +199,9 @@
   top: 14.1%;
   left: 49.9%;
   transform: translateX(-50%);
-  width: 22.29%;
-  min-height: 43%;
-  max-height: 43%;
+  width: 22.22%;
+  min-height: 42.6%;
+  max-height: 42.6%;
   background: rgba(0,0,0,0.83);
   color: #fff;
   border: none;

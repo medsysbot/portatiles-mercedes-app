@@ -1,13 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // --- Referencias a elementos ---
-  const robotWidget = document.getElementById('widget-robot-pm');
-  const modalPM     = document.getElementById('modal-pm');
-  const btnMic      = document.getElementById('modal-btn-mic');
-  const btnSend     = document.getElementById('modal-btn-send');
-  const textarea    = document.getElementById('modal-pm-textarea');
-  const statusArea  = document.getElementById('modal-statusarea');
-  const imgGrabando = document.getElementById('img-grabando');
-  const imgPregunta = document.getElementById('img-pregunta');
+  // MODAL PRINCIPAL (PREGUNTA)
+  const robotWidget    = document.getElementById('widget-robot-pm');
+  const modalPM        = document.getElementById('modal-pm');
+  const btnMic         = document.getElementById('modal-btn-mic');
+  const btnSend        = document.getElementById('modal-btn-send');
+  const textarea       = document.getElementById('modal-pm-textarea');
+  const statusArea     = document.getElementById('modal-statusarea');
+  const imgGrabando    = document.getElementById('img-grabando');
+  const imgPregunta    = document.getElementById('img-pregunta');
+
+  // MODAL RESPUESTA
+  const modalRespuesta         = document.getElementById('modal-respuesta');
+  const imgEsperandoRespuesta  = document.getElementById('img-esperando-respuesta');
+  const textareaRespuesta      = document.getElementById('modal-respuesta-textarea');
+  const btnCerrarRespuesta     = document.getElementById('modal-btn-cerrar-respuesta');
+
+  // Cambia el texto del botón cerrar por icono a la izquierda
+  if (btnCerrarRespuesta) {
+    btnCerrarRespuesta.innerHTML = `<img src="/app_publico/static/icons/cerrar_ai.png" alt="Cerrar" style="width:1.2em;vertical-align:middle;margin-right:6px;">Cerrar`;
+  }
 
   let grabando = false;
   let mediaRecorder = null;
@@ -21,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- Cerrar modal si se toca fuera del contenido ---
   modalPM.addEventListener('click', (e) => {
-    if (e.target === modalPM) cerrarModal();
+    if (e.target === modalPM) cerrarModalPregunta();
   });
 
   // --- Botón micrófono: iniciar/detener grabación ---
@@ -42,13 +53,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const texto = textarea.value.trim();
-    if (texto.length === 0) {
-      // No mostrar nada si está vacío
-      return;
-    }
+    if (texto.length === 0) return;
     mostrarEnviandoPregunta();
+    cerrarModalPregunta();           // Oculta modal de pregunta
+    abrirModalRespuesta();           // Abre modal de respuesta con "esperando"
     await enviarPreguntaTexto(texto);
-    setTimeout(cerrarModal, 1500); // Espera 1.5s y cierra
+    // El fetch muestra la respuesta luego.
   });
 
   // === Grabación de audio ===
@@ -66,12 +76,12 @@ document.addEventListener('DOMContentLoaded', () => {
           let audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
           enviarAudioGrabado(audioBlob);
           mostrarEnviandoPregunta();
-          setTimeout(cerrarModal, 1500);
+          setTimeout(cerrarModalPregunta, 1500);
         };
       })
       .catch(() => {
         grabando = false;
-        cerrarModal();
+        cerrarModalPregunta();
       });
   }
 
@@ -88,9 +98,19 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = new FormData();
       formData.append('text', texto);
       formData.append('want_audio', 'false');
-      await fetch('/api/widget_chat', { method: 'POST', body: formData });
-      // No hacer nada más por ahora
-    } catch { /* Silencio */ }
+      // Abrir modal de respuesta y mostrar esperando
+      abrirModalRespuesta();
+      const resp = await fetch('/api/widget_chat', { method: 'POST', body: formData });
+      if (!resp.ok) {
+        mostrarRespuestaEscrita("Error al recibir la respuesta.");
+        return;
+      }
+      const data = await resp.json();
+      // Mostrar respuesta en el modal de respuesta
+      mostrarRespuestaEscrita(data.respuesta_texto || "No hubo respuesta.");
+    } catch {
+      mostrarRespuestaEscrita("Error de conexión.");
+    }
   }
 
   // === Enviar audio grabado y reproducir respuesta si hay audio ===
@@ -130,8 +150,29 @@ document.addEventListener('DOMContentLoaded', () => {
     imgPregunta.style.display = 'block';
   }
 
-  // --- Cerrar y limpiar modal ---
-  function cerrarModal() {
+  // ---- MODAL DE RESPUESTA ----
+  function abrirModalRespuesta() {
+    textareaRespuesta.value = '';
+    imgEsperandoRespuesta.style.display = 'block';
+    modalRespuesta.style.display = 'block';
+  }
+
+  function mostrarRespuestaEscrita(texto) {
+    imgEsperandoRespuesta.style.display = 'none';
+    textareaRespuesta.value = texto;
+  }
+
+  function cerrarModalRespuesta() {
+    modalRespuesta.style.display = 'none';
+    textareaRespuesta.value = '';
+    imgEsperandoRespuesta.style.display = 'block';
+  }
+
+  // Botón cerrar en modal de respuesta
+  btnCerrarRespuesta.addEventListener('click', cerrarModalRespuesta);
+
+  // MODAL DE PREGUNTA (limpiar todo)
+  function cerrarModalPregunta() {
     modalPM.style.display = 'none';
     resetModal();
   }

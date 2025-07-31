@@ -16,7 +16,6 @@ from fastapi.templating import Jinja2Templates
 from fastapi import Depends
 import os
 from utils.auth_utils import verificar_token
-
 from routes.cliente_panel import router as cliente_router
 from routes.admin_panel import router as admin_router
 from routes.login import router as login_router
@@ -28,6 +27,7 @@ from routes.morosos import router as morosos_router
 from routes.emails_admin import router as emails_router
 from routes.recursos_humanos import router as recursos_humanos_router
 from routes.email_publico import router as email_publico_router
+from routes.contexto import router as contexto_router
 from routes.ventas import router as ventas_router
 from routes.ventas_admin import router as ventas_admin_router 
 # Luego de reubicar `routes/` en la raíz del repositorio, la carpeta
@@ -67,6 +67,9 @@ router.include_router(morosos_router)
 router.include_router(emails_router)
 router.include_router(recursos_humanos_router)
 router.include_router(email_publico_router)
+router.include_router(contexto_router)
+
+
 
 @router.get("/", response_class=HTMLResponse)
 async def mostrar_index():

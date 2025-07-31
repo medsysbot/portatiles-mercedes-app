@@ -159,18 +159,7 @@
   z-index: 5;                  /* Encima del textarea, debajo de overlays críticos */
   background: transparent;     /* Fondo transparente, no tapa nada detrás */
 }
-/* Overlay del modal de respuesta */
-.modal-respuesta-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.69);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
+
 
 /* Contenedor centrado del modal */
 .modal-respuesta-contenido {

@@ -149,7 +149,7 @@
 /* Imagen "grabando" y "enviando" superpuestas, ocupan todo el wrapper */
 #modal-pm .modal-statusarea-wrapper img {
   position: absolute;
-  left: 0; top: 0;
+  left: 0%; top: 0%;
   width: 100%;
   height: 100%;
   object-fit: contain;         /* Mantiene proporción, ajusta la imagen */

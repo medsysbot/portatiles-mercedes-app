@@ -1,6 +1,6 @@
 import os
 import time
-from fastapi import APIRouter, File, UploadFile, Form, Request, Response
+from fastapi import APIRouter, File, UploadFile, Form, Request, Response, HTTPException
 from fastapi.responses import JSONResponse, FileResponse
 from openai import OpenAI
 from tempfile import NamedTemporaryFile
@@ -13,7 +13,6 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise RuntimeError("Falta la variable OPENAI_API_KEY en el .env")
 
-# Configuración general
 VOICE_TTS = "alloy"        # Voz masculina de OpenAI TTS
 TTS_LANGUAGE = "es"        # Español
 GENERAL_LIMIT_DAYS = 7     # Días de bloqueo para preguntas generales
@@ -23,9 +22,7 @@ MAX_AUDIO_SECONDS = 35     # Máx. 35 seg por audio (control simple, no estricto
 CHATGPT_LINK = "https://chat.openai.com/"
 DISCLAIMER = "Este asistente no es ChatGPT oficial; es solo una integración a APIs públicas de OpenAI."
 
-# Inicializar cliente OpenAI
 client = OpenAI(api_key=OPENAI_API_KEY)
-
 router = APIRouter()
 
 def is_general_interest(question: str) -> bool:
@@ -44,7 +41,7 @@ def is_general_interest(question: str) -> bool:
     return False
 
 def is_portatiles_query(question: str) -> bool:
-    """Detecta si la pregunta es del sitio (login, registro, secciones, etc)"""
+    """Detecta si la pregunta es del sitio (funcionalidad o procesos internos)"""
     temas_sitio = [
         "login", "registrar", "registro", "inicio de sesión", "olvidé mi contraseña",
         "cambiar contraseña", "formulario", "sección", "dónde encuentro", "cómo hago",
@@ -60,10 +57,6 @@ def is_portatiles_query(question: str) -> bool:
         if palabra in pregunta:
             return True
     return False
-
-def get_cookie_key(request: Request):
-    """Genera un identificador de usuario por cookie"""
-    return request.cookies.get("robot_widget_id")
 
 def set_general_cookie(response: Response):
     """Setea cookie que bloquea preguntas generales por 7 días"""
@@ -95,20 +88,18 @@ async def widget_chat(
     want_audio: bool = Form(False)
 ):
     """
-    Endpoint principal del widget.
-    - text: texto de la pregunta (opcional si viene audio)
-    - audio: archivo de audio (opcional si viene texto)
-    - want_audio: bool, si la respuesta se debe devolver también en audio
+    Endpoint principal del widget de IA de Portátiles Mercedes.
+    Responde sobre el sitio siempre. Solo 1 pregunta general por usuario por semana.
     """
     prompt = ""
-    # 1. Procesar entrada (audio o texto)
+    # Procesar entrada (audio o texto)
     if audio is not None:
         # Guardar audio temporalmente
         with NamedTemporaryFile(delete=False, suffix=".mp3") as temp_audio:
             temp_audio.write(await audio.read())
             temp_audio.flush()
             audio_path = temp_audio.name
-        # Usar Whisper (OpenAI) para transcribir
+        # Usar Whisper para transcribir
         with open(audio_path, "rb") as f:
             transcript = client.audio.transcriptions.create(
                 model="whisper-1",
@@ -126,27 +117,20 @@ async def widget_chat(
     if not prompt:
         return JSONResponse({"error": "No se detectó pregunta"}, status_code=400)
 
-    # 2. Lógica de control
+    # --- Lógica de control de temas ---
     already_general = is_general_cookie_valid(request)
     respuesta_texto = ""
     custom_reply = False
 
-    # -- a. Pregunta sobre Portátiles Mercedes (ayuda real)
+    # 1. Pregunta sobre Portátiles Mercedes (siempre responde)
     if is_portatiles_query(prompt):
         system_prompt = (
-             "Eres el asistente oficial de Portátiles Mercedes. "
-             "Responde únicamente sobre el funcionamiento, consultas técnicas, secciones y procesos del sitio Portátiles Mercedes. "
-             "No respondas consultas de temas generales, cultura, deporte, política, clima, chistes ni temas personales. "
-             "Si te preguntan algo fuera de Portátiles Mercedes, responde amablemente que solo puedes ayudar con temas del sitio. "
-             "Evita cualquier tipo de creatividad, opiniones personales, ejemplos inventados o historias ficticias. "
-             "Responde de forma breve, técnica, concreta y sin rodeos. "
-             "No inventes información. Si no sabes la respuesta o no está en la documentación de Portátiles Mercedes, responde: "
-             "No tengo esa información. Por favor, consulte directamente con el equipo de soporte de Portátiles Mercedes."
-             "Si ya contestaste la pregunta anterior y vuelve sobre el mismo tema, preguntá si tiene alguna duda extra. "
-             "Nunca respondas a temas fuera de Portátiles Mercedes, salvo para saludar o despedirte."
-             "No completes, no infieras, no improvises información que no esté documentada oficialmente. "
-             "Nunca asumas datos, precios, horarios o pasos que no estén explícitos en la información oficial del sitio."
-       )
+            "Eres el asistente oficial de Portátiles Mercedes. "
+            "Responde únicamente sobre el funcionamiento, procesos y secciones del sitio Portátiles Mercedes. "
+            "No respondas preguntas de cultura general, deportes, clima, chistes ni temas personales. "
+            "Sé técnico, concreto y breve. No inventes información. "
+            "Si no sabes la respuesta, indica que consulte a administración."
+        )
         chat_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -157,54 +141,51 @@ async def widget_chat(
             temperature=0.35
         )
         respuesta_texto = chat_response.choices[0].message.content.strip()
-    # -- b. Pregunta de interés general (fútbol, clima, etc)
+    # 2. Pregunta general (solo 1 por semana)
     elif is_general_interest(prompt):
         if already_general:
-        # Si ya preguntó antes sobre temas generales, solo invita a usar ChatGPT oficial
+            # Ya preguntó: no responde, solo invita a ChatGPT
             respuesta_texto = (
                 "En este momento solo puedo ayudarte con temas de Portátiles Mercedes.\n\n"
                 "Si te interesa seguir conversando sobre temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
-        )
+            )
             custom_reply = True
         else:
-        # La primer a vez: avisa que es horario laboral, hace excepción y responde
+            # Primera vez: hace la excepción y contesta
             respuesta_texto = (
-                 "En este momento estoy en horario laboral y normalmente solo respondo temas de Portátiles Mercedes, "
-                 "pero voy a hacer una excepción y responder tu consulta:\n\n"
-        )
-        
-        system_prompt = (
-            "Responde solo a esta consulta puntual en un solo párrafo breve y claro, sin repetir la pregunta. "
-            "No incluyas datos personales, ni creatividad, ni historias. "
-            "No des consejos fuera de la respuesta. No agregues información adicional."
-        )
-        chat_response = client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt}
-            ],
-            max_tokens=250,
-            temperature=0.35
-        )
-        respuesta_texto += chat_response.choices[0].message.content.strip()
-        respuesta_texto += (
-            "\n\nSi querés seguir investigando otros temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
-        )
-        custom_reply = True
-        set_general_cookie(response)
-    
-    # -- c. Otras preguntas o sin tema claro
+                "En este momento estoy en horario laboral y normalmente solo respondo temas de Portátiles Mercedes, "
+                "pero voy a hacer una excepción y responder tu consulta:\n\n"
+            )
+            system_prompt = (
+                "Responde solo a esta consulta puntual en un solo párrafo breve y claro, sin repetir la pregunta. "
+                "No incluyas datos personales ni historias. No des consejos. No agregues información adicional."
+            )
+            chat_response = client.chat.completions.create(
+                model="gpt-3.5-turbo",
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": prompt}
+                ],
+                max_tokens=250,
+                temperature=0.35
+            )
+            respuesta_texto += chat_response.choices[0].message.content.strip()
+            respuesta_texto += (
+                "\n\nSi querés seguir investigando otros temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
+            )
+            custom_reply = True
+            set_general_cookie(response)
+    # 3. Sin categoría clara (descriptive fallback)
     else:
         respuesta_texto = (
             "Hola, soy el asistente de Portátiles Mercedes. "
             "Podés consultarme sobre login, registro, pagos, y uso del sistema. "
-            "Para temas generales respondé una sola vez por semana. "
+            "Para temas generales respondo solo una consulta por semana por usuario. "
             f"{DISCLAIMER}"
         )
         custom_reply = True
 
-    # 3. Si la respuesta debe ir en audio (TTS OpenAI)
+    # Respuesta en audio (si se requiere)
     respuesta_audio_url = None
     if want_audio:
         tts_response = client.audio.speech.create(
@@ -214,14 +195,12 @@ async def widget_chat(
             response_format="mp3",
             speed=1.0
         )
-        # Guardar el audio temporalmente y devolver como archivo
         temp_audio_out = NamedTemporaryFile(delete=False, suffix=".mp3")
         temp_audio_out.write(tts_response.content)
         temp_audio_out.flush()
         temp_audio_out.close()
         respuesta_audio_url = f"/api/widget_chat/audio/{os.path.basename(temp_audio_out.name)}"
 
-    # 4. Devolver respuesta
     result = {
         "ok": True,
         "respuesta_texto": respuesta_texto,

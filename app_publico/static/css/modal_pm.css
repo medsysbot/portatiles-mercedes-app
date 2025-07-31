@@ -150,8 +150,8 @@
 #modal-pm .modal-statusarea-wrapper img {
   position: absolute;
   left: 0%; top: 0%;
-  width: 100%;
-  height: 50%;
+  width: 50%;
+  height: 20%;
   object-fit: contain;         /* Mantiene proporción, ajusta la imagen */
   pointer-events: none;        /* No captura clicks */
   z-index: 3;                  /* Siempre arriba del textarea */

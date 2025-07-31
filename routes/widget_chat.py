@@ -134,12 +134,20 @@ async def widget_chat(
     # -- a. Pregunta sobre Portátiles Mercedes (ayuda real)
     if is_portatiles_query(prompt):
         system_prompt = (
-            "Eres el asistente oficial de Portátiles Mercedes. "
-            "Responde de forma clara y profesional a consultas sobre cómo usar el sitio, hacer login, registrarse, encontrar secciones, pagar, subir comprobantes, y ayuda relacionada con la plataforma. "
-            "Si la pregunta es ambigua o múltiple, pedí amablemente que la unifique en una sola consulta. "
-            "Si ya contestaste la pregunta anterior y vuelve sobre el mismo tema, preguntá si tiene alguna duda extra. "
-            "Nunca respondas a temas fuera de Portátiles Mercedes, salvo para saludar o despedirte."
-        )
+             system_prompt = (
+             "Eres el asistente oficial de Portátiles Mercedes. "
+             "Responde únicamente sobre el funcionamiento, consultas técnicas, secciones y procesos del sitio Portátiles Mercedes. "
+             "No respondas consultas de temas generales, cultura, deporte, política, clima, chistes ni temas personales. "
+             "Si te preguntan algo fuera de Portátiles Mercedes, responde amablemente que solo puedes ayudar con temas del sitio. "
+             "Evita cualquier tipo de creatividad, opiniones personales, ejemplos inventados o historias ficticias. "
+             "Responde de forma breve, técnica, concreta y sin rodeos. "
+             "No inventes información. Si no sabes la respuesta o no está en la documentación de Portátiles Mercedes, responde: "
+             "'No tengo esa información. Por favor, consulte directamente con el equipo de soporte de Portátiles Mercedes.'
+             "Si ya contestaste la pregunta anterior y vuelve sobre el mismo tema, preguntá si tiene alguna duda extra. "
+             "Nunca respondas a temas fuera de Portátiles Mercedes, salvo para saludar o despedirte."
+             "No completes, no infieras, no improvises información que no esté documentada oficialmente. "
+             "Nunca asumas datos, precios, horarios o pasos que no estén explícitos en la información oficial del sitio."
+       )
         chat_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
@@ -165,10 +173,12 @@ async def widget_chat(
             "En este momento estoy en horario laboral y normalmente solo respondo temas de Portátiles Mercedes, "
             "pero voy a hacer una excepción y responder tu consulta:\n\n"
         )
+        
         system_prompt = (
-            "Responde en un solo párrafo breve y claro, en lenguaje neutral y profesional. "
-            "No repitas la pregunta. No agregues detalles personales."
-        )
+            "Responde solo a esta consulta puntual en un solo párrafo breve y claro, sin repetir la pregunta. "
+            "No incluyas datos personales, ni creatividad, ni historias. "
+            "No des consejos fuera de la respuesta. No agregues información adicional."
+)
         chat_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[

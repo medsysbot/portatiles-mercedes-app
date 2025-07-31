@@ -9,7 +9,7 @@ Proyecto: Portátiles Mercedes
 """
 
 from fastapi import APIRouter, HTTPException, Request, Form
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse, HTMLResponse
 from fastapi.templating import Jinja2Templates
 from pydantic import BaseModel
 from datetime import date
@@ -52,8 +52,12 @@ class VentaAdmin(BaseModel):
     forma_pago: str
     observaciones: str | None = None
 
-# ==== Endpoint: Listar ventas ====
+# ==== Endpoint: Mostrar formulario de nueva venta ====
+@router.get("/admin/ventas/nueva", response_class=HTMLResponse)
+def form_nueva_venta(request: Request):
+    return TEMPLATES.TemplateResponse("ventas_form.html", {"request": request})
 
+# ==== Endpoint: Listar ventas ====
 @router.get("/admin/api/ventas")
 async def listar_ventas():
     if not supabase:
@@ -70,7 +74,6 @@ async def listar_ventas():
     return data
 
 # ==== Endpoint: Eliminar ventas ====
-
 class IdLista(BaseModel):
     ids: list[str]
 
@@ -86,7 +89,6 @@ async def eliminar_ventas(payload: IdLista):
     return {"ok": True}
 
 # ==== Endpoint: Agregar nueva venta (POST) ====
-
 @router.post("/admin/ventas/nueva")
 async def crear_venta(
     fecha_operacion: date = Form(...),

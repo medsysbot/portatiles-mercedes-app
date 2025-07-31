@@ -175,7 +175,7 @@
 
 /* Imagen de fondo del modal */
 .modal-respuesta-img {
-  width: 100%;
+  width: 50%;
   border-radius: 2.5%;
   display: block;
 }

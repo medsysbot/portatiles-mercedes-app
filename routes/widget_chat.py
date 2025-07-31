@@ -159,18 +159,18 @@ async def widget_chat(
         respuesta_texto = chat_response.choices[0].message.content.strip()
     # -- b. Pregunta de interés general (fútbol, clima, etc)
     elif is_general_interest(prompt):
-    if already_general:
+        if already_general:
         # Si ya preguntó antes sobre temas generales, solo invita a usar ChatGPT oficial
-        respuesta_texto = (
-            "En este momento solo puedo ayudarte con temas de Portátiles Mercedes.\n\n"
-            "Si te interesa seguir conversando sobre temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
+            respuesta_texto = (
+                "En este momento solo puedo ayudarte con temas de Portátiles Mercedes.\n\n"
+                "Si te interesa seguir conversando sobre temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
         )
-        custom_reply = True
-    else:
-        # La primera vez: avisa que es horario laboral, hace excepción y responde
-        respuesta_texto = (
-            "En este momento estoy en horario laboral y normalmente solo respondo temas de Portátiles Mercedes, "
-            "pero voy a hacer una excepción y responder tu consulta:\n\n"
+            custom_reply = True
+        else:
+        # La primer a vez: avisa que es horario laboral, hace excepción y responde
+            respuesta_texto = (
+                 "En este momento estoy en horario laboral y normalmente solo respondo temas de Portátiles Mercedes, "
+                 "pero voy a hacer una excepción y responder tu consulta:\n\n"
         )
         
         system_prompt = (

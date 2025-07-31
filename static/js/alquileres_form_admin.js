@@ -54,10 +54,14 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!seleccionado) return;
     const cliente = clientes.find(c => c.dni_cuit_cuil == seleccionado.value);
     if (cliente) {
-      document.querySelector('input[name="dni_cuit_cuil"]').value = cliente.dni_cuit_cuil;
-      document.querySelector('input[name="nombre_cliente"]').value = cliente.nombre;
-      document.querySelector('input[name="razon_social"]').value = cliente.razon_social;
+      // Llena correctamente TODOS los campos
+      const inputDni = document.querySelector('input[name="dni_cuit_cuil"]');
+      const inputNombre = document.querySelector('input[name="cliente_nombre"]') || document.querySelector('input[name="nombre_cliente"]');
+      const inputRazon = document.querySelector('input[name="razon_social"]');
       const inputDir = document.querySelector('input[name="direccion"]');
+      if (inputDni) inputDni.value = cliente.dni_cuit_cuil || '';
+      if (inputNombre) inputNombre.value = cliente.nombre || cliente.cliente_nombre || '';
+      if (inputRazon) inputRazon.value = cliente.razon_social || '';
       if (inputDir) inputDir.value = cliente.direccion || '';
     }
     $('#modalClientesAlquiler').modal('hide');

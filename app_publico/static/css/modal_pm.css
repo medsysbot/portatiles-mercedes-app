@@ -226,6 +226,14 @@
   z-index: 4;
 }
 
+.modal-btn-cerrar-respuesta .icono-cerrar-ai {
+  width: 1.6em;                 /* Ícono proporcional al texto */
+  height: auto;
+  margin-right: 7%;             /* Espacio entre ícono y texto, ajusta si hace falta */
+  display: inline-block;
+  vertical-align: middle;
+}
+
 
 @media (max-width: 600px) {
   /* === CONTENEDOR PRINCIPAL DEL MODAL === */

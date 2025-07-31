@@ -170,7 +170,7 @@
   width: 60%;    /* Ajusta el tamaño */
   height: auto;  /* Ajusta según la imagen */
   z-index: 9999;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
 }
@@ -179,7 +179,7 @@
 .modal-respuesta-img {
   width: 40%;
   border-radius: 2.5%;
-  display: block;
+  display: none;
 }
 
 /* Imagen "esperando respuesta" */
@@ -190,7 +190,7 @@
   transform: translateX(-50%);
   width: 28%;
   z-index: 9;
-  display: block;
+  display: none;
 }
 
 /* Textarea de respuesta */
@@ -230,7 +230,7 @@
   width: 1.6em;                 /* Ícono proporcional al texto */
   height: auto;
   margin-right: 7%;             /* Espacio entre ícono y texto, ajusta si hace falta */
-  display: inline-block;
+  display: none;
   vertical-align: middle;
 }
 

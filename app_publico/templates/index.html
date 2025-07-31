@@ -292,12 +292,12 @@ Proyecto: Portátiles Mercedes
     <a href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer" style="color:#3366cc;">chat.openai.com</a>
   </small>
 </div>          
-<!-- === WIDGET ROBOT PM Y MODAL PM === -->
+<!-- === WIDGET ROBOT PM Y MODALES === -->
 <!-- Widget Robot PM (flotante en pantalla) -->
 <div id="widget-robot-pm">
   <img src="/app_publico/static/icons/robot_pm.png" alt="Robot PM" class="robot-pm-img">
 </div>
-<!-- Modal PM (oculto por defecto) -->
+<!-- Modal PM: Pregunta (oculto por defecto) -->
 <div id="modal-pm" style="display:none;">
   <div class="modal-pm-contenido">
     <img src="/app_publico/static/icons/modal_pm.png" alt="Modal PM" class="modal-pm-img">
@@ -307,30 +307,48 @@ Proyecto: Portátiles Mercedes
     </button>
     <!-- Área de estado para "grabando" y "enviando pregunta" -->
     <div class="modal-statusarea-wrapper" id="modal-statusarea-wrapper">
-      <!-- Textarea de status (opcional, puedes usarlo como fondo si quieres texto) -->
       <textarea class="modal-statusarea" id="modal-statusarea" readonly></textarea>
-      <!-- PNG para "grabando" -->
       <img src="/app_publico/static/icons/grabando.png"
            alt="Grabando"
            id="img-grabando"
            style="display:none;">
-      <!-- PNG para "enviando pregunta" -->
       <img src="/app_publico/static/icons/pregunta.png"
            alt="Enviando pregunta"
            id="img-pregunta"
            style="display:none;">
     </div>
-    <!-- Textarea de pregunta -->
     <textarea class="modal-textarea" id="modal-pm-textarea" maxlength="180" placeholder="Escriba su pregunta..."></textarea>
-    <!-- Botón SEND solo con ícono -->
     <button class="modal-btn-send" id="modal-btn-send" type="button">
       <img src="/app_publico/static/icons/send.png" alt="Enviar" id="icono-send">
+    </button>
+  </div>
+</div>
+<!-- Modal RESPUESTA del robot (oculto por defecto) -->
+<div id="modal-respuesta" class="modal-respuesta-overlay" style="display:none;">
+  <div class="modal-respuesta-contenido">
+    <!-- Fondo de modal respuesta -->
+    <img src="/app_publico/static/icons/modal_respuesta.png" alt="Modal Respuesta" class="modal-respuesta-img">
+    <!-- Imagen esperando respuesta (se muestra hasta que llegue la respuesta) -->
+    <img src="/app_publico/static/icons/respuesta.png"
+         alt="Esperando respuesta"
+         id="img-esperando-respuesta"
+         class="img-esperando-respuesta"
+         style="display:none;">
+    <!-- Textarea grande para mostrar la respuesta del robot -->
+    <textarea class="modal-respuesta-textarea"
+              id="modal-respuesta-textarea"
+              readonly
+              placeholder="Aquí aparecerá la respuesta del asistente."></textarea>
+    <!-- Botón para cerrar el modal de respuesta -->
+    <button class="modal-btn-cerrar-respuesta" id="modal-btn-cerrar-respuesta" type="button">
+      Cerrar
     </button>
   </div>
 </div>
 <!-- === SCRIPTS === -->
 <script src="/app_publico/static/js/robot_pm.js"></script>
 <script src="/app_publico/static/js/modal_pm.js"></script>
+<script src="/app_publico/static/js/modal_respuesta.js"></script>
 </footer>
 </body>
 </html>

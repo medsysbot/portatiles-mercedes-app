@@ -148,7 +148,7 @@
 
 /* ==== Imagen PNG "enviando pregunta" para desktop/laptop ==== */
 #img-pregunta {
-  display: block;              /* Muestra la imagen */
+  display: none;              /* Muestra la imagen */
   position: absolute;          /* Permite ubicarla encima del statusarea */
   left: 1%;                    /* Empieza en el borde izquierdo del contenedor */
   top: 45%;                     /* Empieza en el borde superior */
@@ -273,7 +273,7 @@
   }
 
    #img-pregunta {
-    display: block;                  /* Muestra la imagen cuando corresponda */
+    display: none;                  /* Muestra la imagen cuando corresponda */
     position: absolute;
     left: 0.9%;
     top: 45%;

@@ -134,7 +134,6 @@ async def widget_chat(
     # -- a. Pregunta sobre Portátiles Mercedes (ayuda real)
     if is_portatiles_query(prompt):
         system_prompt = (
-             system_prompt = (
              "Eres el asistente oficial de Portátiles Mercedes. "
              "Responde únicamente sobre el funcionamiento, consultas técnicas, secciones y procesos del sitio Portátiles Mercedes. "
              "No respondas consultas de temas generales, cultura, deporte, política, clima, chistes ni temas personales. "

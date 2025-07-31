@@ -155,7 +155,7 @@
   object-fit: contain;         /* Mantiene proporción, ajusta la imagen */
   pointer-events: none;        /* No captura clicks */
   z-index: 3;                  /* Siempre arriba del textarea */
-  display: none;               /* Se muestran sólo cuando JS activa el display:block */
+  display: block;               /* Se muestran sólo cuando JS activa el display:block */
 }
 
 

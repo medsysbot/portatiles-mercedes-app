@@ -1,10 +1,10 @@
 import os
-from fastapi import FastAPI, File, UploadFile, Form, Request, Response, Cookie
-from fastapi.responses import JSONResponse
+import time
+from fastapi import APIRouter, File, UploadFile, Form, Request, Response
+from fastapi.responses import JSONResponse, FileResponse
 from openai import OpenAI
 from tempfile import NamedTemporaryFile
 from dotenv import load_dotenv
-import time
 
 # Cargar variables de entorno
 load_dotenv()
@@ -26,7 +26,7 @@ DISCLAIMER = "Este asistente no es ChatGPT oficial; es solo una integración a A
 # Inicializar cliente OpenAI
 client = OpenAI(api_key=OPENAI_API_KEY)
 
-app = FastAPI()
+router = APIRouter()
 
 def is_general_interest(question: str) -> bool:
     """Detecta si la pregunta es de interés general (NO del sistema)"""
@@ -82,7 +82,7 @@ def is_general_cookie_valid(request: Request):
     except Exception:
         return False
 
-@app.post("/api/widget_chat")
+@router.post("/api/widget_chat")
 async def widget_chat(
     request: Request,
     response: Response,
@@ -213,45 +213,10 @@ async def widget_chat(
     }
     return JSONResponse(result)
 
-from fastapi.responses import FileResponse
-
-@app.get("/api/widget_chat/audio/{audio_filename}")
+@router.get("/api/widget_chat/audio/{audio_filename}")
 async def get_widget_audio(audio_filename: str):
     """Devuelve el archivo de audio generado (TTS)"""
     audio_path = f"/tmp/{audio_filename}" if not audio_filename.startswith("/tmp") else audio_filename
     if not os.path.exists(audio_path):
         return JSONResponse({"error": "Archivo no encontrado"}, status_code=404)
     return FileResponse(audio_path, media_type="audio/mpeg", filename="respuesta.mp3")
-
-# --- Frontend ejemplo ---
-"""
-// Ejemplo fetch para texto
-const formData = new FormData();
-formData.append('text', "¿Cómo me registro?");
-formData.append('want_audio', false);
-
-fetch("/api/widget_chat", {
-  method: "POST",
-  body: formData
-}).then(r => r.json()).then(data => {
-  // data.respuesta_texto (mostrar)
-  // data.respuesta_audio_url (si want_audio es true)
-});
-
-// Ejemplo fetch para audio
-const audioFile = ... // blob mp3 grabado
-const formData = new FormData();
-formData.append('audio', audioFile, "pregunta.mp3");
-formData.append('want_audio', true);
-
-fetch("/api/widget_chat", {
-  method: "POST",
-  body: formData
-}).then(r => r.json()).then(data => {
-  // data.respuesta_texto, data.respuesta_audio_url
-  // puedes reproducir el audio así:
-  // let audio = new Audio(data.respuesta_audio_url);
-  // audio.play();
-});
-"""
-

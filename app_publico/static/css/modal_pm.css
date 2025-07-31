@@ -185,10 +185,10 @@
 /* Imagen "esperando respuesta" */
 .img-esperando-respuesta {
   position: absolute;
-  top: 29%;
+  top: 30%;
   left: 50%;
   transform: translateX(-50%);
-  width: 23%;
+  width: 24%;
   z-index: 9;
   display: block;
 }
@@ -196,8 +196,8 @@
 /* Textarea de respuesta */
 .modal-respuesta-textarea {
   position: absolute;
-  top: 14%;
-  left: 50.2%;
+  top: 14.3%;
+  left: 50%;
   transform: translateX(-50%);
   width: 22.22%;
   min-height: 42.3%;

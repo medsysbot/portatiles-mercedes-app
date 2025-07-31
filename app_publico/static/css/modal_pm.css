@@ -186,7 +186,7 @@
 .img-esperando-respuesta {
   position: absolute;
   top: 32%;
-  left: 50%;
+  left: 49.5%;
   transform: translateX(-50%);
   width: 28%;
   z-index: 9;
@@ -196,12 +196,12 @@
 /* Textarea de respuesta */
 .modal-respuesta-textarea {
   position: absolute;
-  top: 14.3%;
-  left: 50.1%;
+  top: 14.1%;
+  left: 49.9%;
   transform: translateX(-50%);
   width: 22.22%;
-  min-height: 42.6%;
-  max-height: 42.6%;
+  min-height: 42.67%;
+  max-height: 42.67%;
   background: rgba(0,0,0,0.83);
   color: #fff;
   border: none;

@@ -1,4 +1,13 @@
+// Archivo: static/js/robot_pm.js
+// Proyecto: Portátiles Mercedes
+
+// --- Variable global con el contexto público ---
+window.pmContextoPublico = null;
+
 document.addEventListener('DOMContentLoaded', () => {
+  // --- Cargar contexto al iniciar ---
+  cargarContextoPublico();
+
   // MODAL PRINCIPAL (PREGUNTA)
   const robotWidget    = document.getElementById('widget-robot-pm');
   const modalPM        = document.getElementById('modal-pm');
@@ -184,4 +193,29 @@ document.addEventListener('DOMContentLoaded', () => {
     imgPregunta.style.display = 'none';
     grabando = false;
   }
+
+  // ================================
+  // === FUNCIONES DE CONTEXTO IA ===
+  // ================================
+
+  // Descarga el contexto público del backend y lo guarda globalmente
+  async function cargarContextoPublico() {
+    try {
+      const resp = await fetch('/api/contexto_publico');
+      if (!resp.ok) throw new Error("No se pudo cargar el contexto");
+      // Puede venir como string, hay que parsear
+      let data = await resp.json();
+      // Si está en string, intentar parsear
+      if (typeof data === 'string') data = JSON.parse(data);
+      window.pmContextoPublico = data;
+      // (Opcional) Puedes mostrarlo en consola:
+      // console.log("Contexto público cargado:", data);
+    } catch (err) {
+      window.pmContextoPublico = null;
+      // (Opcional) console.warn("No se pudo cargar el contexto público", err);
+    }
+  }
+
+  // Acceso global al contexto, para futuros usos:
+  // window.pmContextoPublico
 });

@@ -152,34 +152,39 @@ async def widget_chat(
         respuesta_texto = chat_response.choices[0].message.content.strip()
     # -- b. Pregunta de interés general (fútbol, clima, etc)
     elif is_general_interest(prompt):
-        if already_general:
-            respuesta_texto = (
-                "En este momento estoy en horario de trabajo y no puedo conversar sobre temas generales. "
-                f"Si querés seguir conversando sobre otros temas, podés usar ChatGPT aquí: {CHATGPT_LINK}"
-            )
-            custom_reply = True
-        else:
-            respuesta_texto = (
-                "Esta es tu consulta general de la semana. "
-                "Mi función principal es ayudarte con Portátiles Mercedes. "
-                "Pero aquí va mi respuesta:\n\n"
-            )
-            system_prompt = (
-                "Responde en un solo párrafo breve y claro, en lenguaje neutral y profesional."
-                "No repitas la pregunta. No agregues detalles personales."
-            )
-            chat_response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": prompt}
-                ],
-                max_tokens=250,
-                temperature=0.35
-            )
-            respuesta_texto += chat_response.choices[0].message.content.strip()
-            custom_reply = True
-            set_general_cookie(response)
+    if already_general:
+        # Si ya preguntó antes sobre temas generales, solo invita a usar ChatGPT oficial
+        respuesta_texto = (
+            "En este momento solo puedo ayudarte con temas de Portátiles Mercedes.\n\n"
+            "Si te interesa seguir conversando sobre temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
+        )
+        custom_reply = True
+    else:
+        # La primera vez: avisa que es horario laboral, hace excepción y responde
+        respuesta_texto = (
+            "En este momento estoy en horario laboral y normalmente solo respondo temas de Portátiles Mercedes, "
+            "pero voy a hacer una excepción y responder tu consulta:\n\n"
+        )
+        system_prompt = (
+            "Responde en un solo párrafo breve y claro, en lenguaje neutral y profesional. "
+            "No repitas la pregunta. No agregues detalles personales."
+        )
+        chat_response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=250,
+            temperature=0.35
+        )
+        respuesta_texto += chat_response.choices[0].message.content.strip()
+        respuesta_texto += (
+            "\n\nSi querés seguir investigando otros temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
+        )
+        custom_reply = True
+        set_general_cookie(response)
+    
     # -- c. Otras preguntas o sin tema claro
     else:
         respuesta_texto = (

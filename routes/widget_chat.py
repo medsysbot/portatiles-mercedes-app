@@ -178,7 +178,7 @@ async def widget_chat(
             "Responde solo a esta consulta puntual en un solo párrafo breve y claro, sin repetir la pregunta. "
             "No incluyas datos personales, ni creatividad, ni historias. "
             "No des consejos fuera de la respuesta. No agregues información adicional."
-)
+        )
         chat_response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[

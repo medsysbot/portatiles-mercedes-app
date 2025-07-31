@@ -292,23 +292,28 @@ Proyecto: Portátiles Mercedes
 <!-- Modal PM (oculto por defecto) -->
 <div id="modal-pm" style="display:none;">
   <div class="modal-pm-contenido">
-    <img src="/app_publico/static/icons/modal_pm.png" alt="Modal PM" class="modal-pm-img">  
+    <img src="/app_publico/static/icons/modal_pm.png" alt="Modal PM" class="modal-pm-img">
     <!-- Botón micrófono con ícono -->
     <button class="modal-btn-mic" id="modal-btn-mic" type="button">
       <img src="/app_publico/static/icons/micro.png" alt="Micrófono" id="icono-mic">
     </button>
     <!-- Área de estado para "grabando" y "enviando pregunta" -->
     <div class="modal-statusarea-wrapper" id="modal-statusarea-wrapper">
+      <!-- Textarea de status (opcional, puedes usarlo como fondo si quieres texto) -->
       <textarea class="modal-statusarea" id="modal-statusarea" readonly></textarea>
       <!-- PNG para "grabando" -->
-      <img src="/app_publico/static/icons/grabando.png" alt="Grabando" id="img-grabando"
+      <img src="/app_publico/static/icons/grabando.png"
+           alt="Grabando"
+           id="img-grabando"
            style="display:none; position:absolute; left:0; top:0; width:100%; height:100%; object-fit:contain; pointer-events:none;">
       <!-- PNG para "enviando pregunta" -->
-      <img src="/app_publico/static/icons/pregunta.png" alt="Enviando pregunta" id="img-pregunta"
+      <img src="/app_publico/static/icons/pregunta.png"
+           alt="Enviando pregunta"
+           id="img-pregunta"
            style="display:none; position:absolute; left:0; top:0; width:100%; height:100%; object-fit:contain; pointer-events:none;">
     </div>
     <!-- Textarea de pregunta -->
-    <textarea class="modal-textarea" id="modal-pm-textarea" maxlength="180" placeholder="Escriba su pregunta..."></textarea>  
+    <textarea class="modal-textarea" id="modal-pm-textarea" maxlength="180" placeholder="Escriba su pregunta..."></textarea>
     <!-- Botón SEND solo con ícono -->
     <button class="modal-btn-send" id="modal-btn-send" type="button">
       <img src="/app_publico/static/icons/send.png" alt="Enviar" id="icono-send">

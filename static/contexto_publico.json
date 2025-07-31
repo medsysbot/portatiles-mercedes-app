@@ -4,6 +4,12 @@
     "ruta": "/informacion-banos.html",
     "acceso": "público"
   },
+  "contacto_empresa": {
+    "descripcion": "Los datos de contacto oficiales están en el pie de página de la web.",
+    "telefono": "+5492657627996",
+    "email": "info@portatilesmercedes.com.ar",
+    "nota": "No existe una página de contacto, solo los datos mostrados en el pie."
+  }
   "alquiler": {
     "descripcion": "Página informativa y formulario para solicitar alquiler de baños químicos. Campos requeridos: nombre, teléfono, dirección, email, tipo de baño y fecha estimada. Contacto directo: +5492657627996.",
     "ruta": "/alquiler.html",

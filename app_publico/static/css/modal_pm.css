@@ -401,7 +401,7 @@
   /* Textarea de respuesta */
   .modal-respuesta-textarea {
     position: absolute;
-    width: 84%;
+    width: 74%;
     height: auto;
     margin: 16px auto 0 auto;
     background: rgba(0,0,0,0.83);

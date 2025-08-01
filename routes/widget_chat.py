@@ -16,8 +16,6 @@ if not OPENAI_API_KEY:
 VOICE_TTS = "alloy"
 TTS_LANGUAGE = "es"
 GENERAL_LIMIT_DAYS = 7
-MAX_AUDIO_MB = 2
-MAX_AUDIO_SECONDS = 35
 
 CHATGPT_LINK = "https://chat.openai.com/"
 DISCLAIMER = "Este asistente no es ChatGPT oficial; es solo una integración a APIs públicas de OpenAI."
@@ -25,7 +23,6 @@ DISCLAIMER = "Este asistente no es ChatGPT oficial; es solo una integración a A
 client = OpenAI(api_key=OPENAI_API_KEY)
 router = APIRouter()
 
-# === Mensajes FIJOS para respuestas exactas ===
 DATOS_CONTACTO = (
     "Nuestros datos oficiales están en el pie de página:\n"
     "Teléfono/WhatsApp: +54 9 2657 627996\n"
@@ -46,7 +43,6 @@ DATOS_RECUPERAR = (
     "3. Ingresa el correo registrado y sigue las instrucciones que te llegarán al email."
 )
 
-# --- PALABRAS/FRAGMENTOS que SIEMPRE SE CONSIDERAN DEL SITIO ---
 KEYWORDS_SITIO = [
     "portátiles mercedes", "baño químico", "baños químicos", "baño portátil", "baños portátiles",
     "alquiler de baños", "alquiler baño", "alquilar baño", "alquilar un baño", "servicios de baños",
@@ -55,13 +51,10 @@ KEYWORDS_SITIO = [
 ]
 
 def is_general_interest(question: str) -> bool:
-    """Solo es pregunta general si NO es tema de baños/Portátiles Mercedes"""
     pregunta = question.lower()
-    # Si la pregunta contiene algún término que la hace SIEMPRE del sitio, NO es general
     for palabra in KEYWORDS_SITIO:
         if palabra in pregunta:
-            return False
-    # --- Palabras de preguntas generales ---
+            return False  # Si es del sitio, NUNCA se considera general
     palabras_clave = [
         "fútbol", "clima", "deporte", "temperatura", "quién ganó", "dólar",
         "noticias", "presidente", "música", "película", "cine", "videojuego",
@@ -72,7 +65,6 @@ def is_general_interest(question: str) -> bool:
     return any(palabra in pregunta for palabra in palabras_clave)
 
 def is_portatiles_query(question: str) -> bool:
-    # SIEMPRE prioriza los temas clave de baños/Portátiles Mercedes
     pregunta = question.lower()
     for palabra in KEYWORDS_SITIO:
         if palabra in pregunta:
@@ -172,7 +164,7 @@ async def widget_chat(
         respuesta_texto = DATOS_RECUPERAR
         custom_reply = True
 
-    # 2. CONSULTAS DEL SITIO (baños, alquiler, portátiles, funcionamiento, historia, mantenimiento, etc)
+    # 2. CONSULTAS DEL SITIO (baños, alquiler, funcionamiento, historia, mantenimiento, etc)
     elif is_portatiles_query(prompt):
         system_prompt = (
             "Eres el asistente oficial de Portátiles Mercedes. "
@@ -193,11 +185,12 @@ async def widget_chat(
         respuesta_texto = chat_response.choices[0].message.content.strip()
         custom_reply = False
 
-    # 3. PREGUNTAS GENERALES (solo 1 por semana, nunca bloquea nada sobre baños)
+    # 3. PREGUNTAS GENERALES (solo 1 por semana, NUNCA bloquea nada del sitio)
     elif is_general_interest(prompt):
         if already_general:
             respuesta_texto = (
-                "En este momento solo puedo ayudarte con temas de Portátiles Mercedes.\n\n"
+                "Solo respondo una pregunta general por semana y usuario. El resto del tiempo, solo puedo ayudarte con temas de Portátiles Mercedes.\n\n"
+                "Este asistente es una API que utiliza ChatGPT de OpenAI para responder dudas específicas de este sitio. "
                 "Si te interesa seguir conversando sobre temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
             )
             custom_reply = True
@@ -221,7 +214,8 @@ async def widget_chat(
             )
             respuesta_texto += chat_response.choices[0].message.content.strip()
             respuesta_texto += (
-                "\n\nSi querés seguir investigando otros temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
+                "\n\nRecuerda: solo puedes hacer una consulta general por semana. "
+                "Si querés seguir investigando otros temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
             )
             custom_reply = True
             set_general_cookie(response)

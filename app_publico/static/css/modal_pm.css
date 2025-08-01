@@ -364,11 +364,10 @@
   /* Contenedor oscuro central del modal */
   #modal-respuesta {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    min-height: 100vh;
-    height: 100%;
+    top: 17%;
+    left: 50%;
+    width: 60%;
+    height: auto;
     background: rgba(0,0,0,0.70);
     z-index: 5000;
     display: flex !important;

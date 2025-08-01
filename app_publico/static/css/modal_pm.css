@@ -384,7 +384,7 @@
     left: 50%;               /* Mueve a la izquierda/derecha (0% = a la izquierda, 20% = más a la derecha) */    
     transform: translateX(-50%);                       
     width: 80%;            /* Escala horizontalmente la imagen dentro del modal */
-    height: 60%;           /* Escala verticalmente la imagen */
+    height: 61%;           /* Escala verticalmente la imagen */
     border-radius: 10px;
     display: block;
     margin: 0;

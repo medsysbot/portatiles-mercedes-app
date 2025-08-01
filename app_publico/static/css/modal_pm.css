@@ -383,14 +383,14 @@
     width: 108%;
     border-radius: 10px;
     display: block;
-    margin: 5px auto 0 auto;
+    margin: 20px auto 0 auto;
   }
 
   /* Imagen de "esperando respuesta" */
   .img-esperando-respuesta {
     position: absolute;
     top: 10%;
-    left: 50%;
+    left: 60%;
     transform: translateX(-50%);
     width: 36%;
     z-index: 11;
@@ -403,7 +403,7 @@
     position: absolute;
     width: 82%;
     height: 80%;
-    margin: 10% auto 0 auto;
+    margin: 20% auto 0 auto;
     background: rgba(0,0,0,0.83);
     color: #fff;
     border: none;

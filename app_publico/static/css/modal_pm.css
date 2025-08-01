@@ -402,7 +402,7 @@
 
 /* Imagen de fondo del modal */
    .modal-respuesta-img {
-      width: 40%;
+      width: 80%;
       border-radius: 2.5%;
       display: block;
    }
@@ -421,12 +421,12 @@
 /* Textarea de respuesta */
     .modal-respuesta-textarea {
         position: absolute;
-        top: 14.2%;
+        top: 28.2%;
         left: 49.9%;
         transform: translateX(-50%);
-        width: 22.22%;
-        min-height: 42.67%;
-        max-height: 42.67%;
+        width: 40.22%;
+        min-height: 82.67%;
+        max-height: 82.67%;
         background: rgba(0,0,0,0.83);
         color: #fff;
         border: none;

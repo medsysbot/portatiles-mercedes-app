@@ -397,7 +397,7 @@
   /* === Imagen "esperando respuesta" === */
   .img-esperando-respuesta {
     position: absolute;
-    top: 37%;
+    top: 35%;
     left: 50%;
     transform: translateX(-50%);
     width: 38vw;
@@ -408,8 +408,8 @@
 
   .modal-respuesta-textarea {
     position: absolute;
-    width: 65%;
-    height: 180%;
+    width: 62%;
+    height: 210%;
     left: 50%;
     top: 18%;
     transform: translateX(-50%);
@@ -429,7 +429,7 @@
   .modal-btn-cerrar-respuesta {
     position: absolute;
     left: 50%;
-    bottom: 13%;
+    bottom: 15%;
     transform: translateX(-50%);
     background: #282828;
     color: #fff;

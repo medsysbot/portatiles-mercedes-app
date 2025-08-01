@@ -13,11 +13,11 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 if not OPENAI_API_KEY:
     raise RuntimeError("Falta la variable OPENAI_API_KEY en el .env")
 
-VOICE_TTS = "alloy"        # Voz masculina de OpenAI TTS
-TTS_LANGUAGE = "es"        # Español
-GENERAL_LIMIT_DAYS = 7     # Días de bloqueo para preguntas generales
-MAX_AUDIO_MB = 2           # Máx. 2 MB por audio
-MAX_AUDIO_SECONDS = 35     # Máx. 35 seg por audio (control simple, no estricto)
+VOICE_TTS = "alloy"
+TTS_LANGUAGE = "es"
+GENERAL_LIMIT_DAYS = 7
+MAX_AUDIO_MB = 2
+MAX_AUDIO_SECONDS = 35
 
 CHATGPT_LINK = "https://chat.openai.com/"
 DISCLAIMER = "Este asistente no es ChatGPT oficial; es solo una integración a APIs públicas de OpenAI."
@@ -25,8 +25,43 @@ DISCLAIMER = "Este asistente no es ChatGPT oficial; es solo una integración a A
 client = OpenAI(api_key=OPENAI_API_KEY)
 router = APIRouter()
 
+# === Mensajes FIJOS para respuestas exactas ===
+DATOS_CONTACTO = (
+    "Nuestros datos oficiales están en el pie de página:\n"
+    "Teléfono/WhatsApp: +54 9 2657 627996\n"
+    "Email: info@portatilesmercedes.com.ar\n"
+    "No existe página de contacto específica."
+)
+DATOS_REGISTRO = (
+    "Para registrarte en Portátiles Mercedes:\n"
+    "1. Ve a la página de Login.\n"
+    "2. Haz clic en 'Registrar'.\n"
+    "3. Completa tus datos y confirma tu contraseña.\n"
+    "4. Recibirás un correo para activar tu cuenta."
+)
+DATOS_RECUPERAR = (
+    "Para recuperar tu contraseña:\n"
+    "1. Ingresa en la página de Login.\n"
+    "2. Haz clic en 'Recuperar Contraseña'.\n"
+    "3. Ingresa el correo registrado y sigue las instrucciones que te llegarán al email."
+)
+
+# --- PALABRAS/FRAGMENTOS que SIEMPRE SE CONSIDERAN DEL SITIO ---
+KEYWORDS_SITIO = [
+    "portátiles mercedes", "baño químico", "baños químicos", "baño portátil", "baños portátiles",
+    "alquiler de baños", "alquiler baño", "alquilar baño", "alquilar un baño", "servicios de baños",
+    "funcionamiento de baños", "cómo funciona un baño", "historia de los baños", "mantener baño químico",
+    "limpieza de baño químico", "uso del baño químico", "sanitario químico", "información de baños químicos"
+]
+
 def is_general_interest(question: str) -> bool:
-    """Detecta si la pregunta es de interés general (NO del sistema)"""
+    """Solo es pregunta general si NO es tema de baños/Portátiles Mercedes"""
+    pregunta = question.lower()
+    # Si la pregunta contiene algún término que la hace SIEMPRE del sitio, NO es general
+    for palabra in KEYWORDS_SITIO:
+        if palabra in pregunta:
+            return False
+    # --- Palabras de preguntas generales ---
     palabras_clave = [
         "fútbol", "clima", "deporte", "temperatura", "quién ganó", "dólar",
         "noticias", "presidente", "música", "película", "cine", "videojuego",
@@ -34,14 +69,14 @@ def is_general_interest(question: str) -> bool:
         "amor", "pareja", "amigos", "amistad", "animal", "perro", "gato",
         "cualquier cosa", "tema general", "cosas generales"
     ]
-    pregunta = question.lower()
-    for palabra in palabras_clave:
-        if palabra in pregunta:
-            return True
-    return False
+    return any(palabra in pregunta for palabra in palabras_clave)
 
 def is_portatiles_query(question: str) -> bool:
-    """Detecta si la pregunta es del sitio (funcionalidad o procesos internos)"""
+    # SIEMPRE prioriza los temas clave de baños/Portátiles Mercedes
+    pregunta = question.lower()
+    for palabra in KEYWORDS_SITIO:
+        if palabra in pregunta:
+            return True
     temas_sitio = [
         "login", "registrar", "registro", "inicio de sesión", "olvidé mi contraseña",
         "cambiar contraseña", "formulario", "sección", "dónde encuentro", "cómo hago",
@@ -52,14 +87,27 @@ def is_portatiles_query(question: str) -> bool:
         "empleado", "administrador", "portal", "navegar", "funciona", "problema acceso",
         "contratar baño", "contratar servicio", "necesito baño", "quiero baño"
     ]
-    pregunta = question.lower()
-    for palabra in temas_sitio:
-        if palabra in pregunta:
-            return True
-    return False
+    return any(palabra in pregunta for palabra in temas_sitio)
+
+def match_contacto(question: str) -> bool:
+    q = question.lower()
+    return any(p in q for p in [
+        "contacto", "teléfono", "whatsapp", "whatsap", "whats app", "correo", "mail", "email", "e-mail", "mail de contacto", "cómo contact", "como contact"
+    ])
+
+def match_registro(question: str) -> bool:
+    q = question.lower()
+    return any(p in q for p in [
+        "registrar", "registro", "crear cuenta", "cómo me registro", "como me registro", "cómo crear usuario", "alta de usuario", "hacer una cuenta"
+    ])
+
+def match_recuperar(question: str) -> bool:
+    q = question.lower()
+    return any(p in q for p in [
+        "recuperar contraseña", "olvidé mi contraseña", "olvide mi contraseña", "olvidé el password", "olvidé la clave", "resetear contraseña", "restablecer contraseña"
+    ])
 
 def set_general_cookie(response: Response):
-    """Setea cookie que bloquea preguntas generales por 7 días"""
     expire = int(time.time()) + GENERAL_LIMIT_DAYS * 24 * 3600
     response.set_cookie(
         key="robot_widget_general",
@@ -70,7 +118,6 @@ def set_general_cookie(response: Response):
     )
 
 def is_general_cookie_valid(request: Request):
-    """Verifica si la cookie de control de generalidad sigue vigente"""
     valor = request.cookies.get("robot_widget_general")
     if not valor:
         return False
@@ -87,19 +134,13 @@ async def widget_chat(
     audio: UploadFile = File(None),
     want_audio: bool = Form(False)
 ):
-    """
-    Endpoint principal del widget de IA de Portátiles Mercedes.
-    Responde sobre el sitio siempre. Solo 1 pregunta general por usuario por semana.
-    """
     prompt = ""
     # Procesar entrada (audio o texto)
     if audio is not None:
-        # Guardar audio temporalmente
         with NamedTemporaryFile(delete=False, suffix=".mp3") as temp_audio:
             temp_audio.write(await audio.read())
             temp_audio.flush()
             audio_path = temp_audio.name
-        # Usar Whisper para transcribir
         with open(audio_path, "rb") as f:
             transcript = client.audio.transcriptions.create(
                 model="whisper-1",
@@ -113,20 +154,29 @@ async def widget_chat(
         prompt = text.strip()
     else:
         return JSONResponse({"error": "No se envió texto ni audio"}, status_code=400)
-
     if not prompt:
         return JSONResponse({"error": "No se detectó pregunta"}, status_code=400)
 
-    # --- Lógica de control de temas ---
     already_general = is_general_cookie_valid(request)
     respuesta_texto = ""
     custom_reply = False
 
-    # 1. Pregunta sobre Portátiles Mercedes (siempre responde)
-    if is_portatiles_query(prompt):
+    # 1. RESPUESTAS EXACTAS (contacto, registro, recuperar)
+    if match_contacto(prompt):
+        respuesta_texto = DATOS_CONTACTO
+        custom_reply = True
+    elif match_registro(prompt):
+        respuesta_texto = DATOS_REGISTRO
+        custom_reply = True
+    elif match_recuperar(prompt):
+        respuesta_texto = DATOS_RECUPERAR
+        custom_reply = True
+
+    # 2. CONSULTAS DEL SITIO (baños, alquiler, portátiles, funcionamiento, historia, mantenimiento, etc)
+    elif is_portatiles_query(prompt):
         system_prompt = (
             "Eres el asistente oficial de Portátiles Mercedes. "
-            "Responde únicamente sobre el funcionamiento, procesos y secciones del sitio Portátiles Mercedes. "
+            "Responde únicamente sobre el funcionamiento, procesos, historia, uso, mantenimiento y secciones del sitio Portátiles Mercedes y baños químicos. "
             "No respondas preguntas de cultura general, deportes, clima, chistes ni temas personales. "
             "Sé técnico, concreto y breve. No inventes información. "
             "Si no sabes la respuesta, indica que consulte a administración."
@@ -141,17 +191,17 @@ async def widget_chat(
             temperature=0.35
         )
         respuesta_texto = chat_response.choices[0].message.content.strip()
-    # 2. Pregunta general (solo 1 por semana)
+        custom_reply = False
+
+    # 3. PREGUNTAS GENERALES (solo 1 por semana, nunca bloquea nada sobre baños)
     elif is_general_interest(prompt):
         if already_general:
-            # Ya preguntó: no responde, solo invita a ChatGPT
             respuesta_texto = (
                 "En este momento solo puedo ayudarte con temas de Portátiles Mercedes.\n\n"
                 "Si te interesa seguir conversando sobre temas generales, podés usar el ChatGPT oficial: https://chat.openai.com/"
             )
             custom_reply = True
         else:
-            # Primera vez: hace la excepción y contesta
             respuesta_texto = (
                 "En este momento estoy en horario laboral y normalmente solo respondo temas de Portátiles Mercedes, "
                 "pero voy a hacer una excepción y responder tu consulta:\n\n"
@@ -175,11 +225,12 @@ async def widget_chat(
             )
             custom_reply = True
             set_general_cookie(response)
-    # 3. Sin categoría clara (descriptive fallback)
+
+    # 4. Sin categoría clara (fallback)
     else:
         respuesta_texto = (
             "Hola, soy el asistente de Portátiles Mercedes. "
-            "Podés consultarme sobre login, registro, pagos, y uso del sistema. "
+            "Podés consultarme sobre login, registro, pagos, funcionamiento, mantenimiento, historia, alquiler y uso de baños químicos y portátiles. "
             "Para temas generales respondo solo una consulta por semana por usuario. "
             f"{DISCLAIMER}"
         )
@@ -212,7 +263,6 @@ async def widget_chat(
 
 @router.get("/api/widget_chat/audio/{audio_filename}")
 async def get_widget_audio(audio_filename: str):
-    """Devuelve el archivo de audio generado (TTS)"""
     audio_path = f"/tmp/{audio_filename}" if not audio_filename.startswith("/tmp") else audio_filename
     if not os.path.exists(audio_path):
         return JSONResponse({"error": "Archivo no encontrado"}, status_code=404)

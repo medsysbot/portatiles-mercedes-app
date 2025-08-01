@@ -381,7 +381,8 @@
   .modal-respuesta-img {
     position: absolute;     /* Permite usar top/left */
     top: 5%;                /* Sube o baja la imagen (0% = arriba, 10% = más abajo) */
-    left: 5%;               /* Mueve a la izquierda/derecha (0% = a la izquierda, 20% = más a la derecha) */
+    left: 5%;               /* Mueve a la izquierda/derecha (0% = a la izquierda, 20% = más a la derecha) */    
+    transform: translateX(-50%);                       
     width: 80%;            /* Escala horizontalmente la imagen dentro del modal */
     height: 80%;           /* Escala verticalmente la imagen */
     border-radius: 10px;
@@ -428,7 +429,7 @@
   .modal-btn-cerrar-respuesta {
     position: absolute;
     left: 50%;
-    bottom: 7%;
+    bottom: 10%;
     transform: translateX(-50%);
     background: #282828;
     color: #fff;

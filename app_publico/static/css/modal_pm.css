@@ -367,7 +367,7 @@
     left: 5%;
     transform: none;
     width: 90vw;
-    height: 80vh;
+    height: 90vh;
     z-index: 9999;
     display: flex;
     flex-direction: column;
@@ -384,7 +384,7 @@
     left: 50%;               /* Mueve a la izquierda/derecha (0% = a la izquierda, 20% = más a la derecha) */    
     transform: translateX(-50%);                       
     width: 80%;            /* Escala horizontalmente la imagen dentro del modal */
-    height: 65%;           /* Escala verticalmente la imagen */
+    height: 75%;           /* Escala verticalmente la imagen */
     border-radius: 10px;
     display: block;
     margin: 0;
@@ -410,7 +410,7 @@
     position: absolute;
     width: 58%;
     height: 270%;
-    left: 49%;
+    left: 49.5%;
     top: 17%;
     transform: translateX(-50%);
     background: rgba(0,0,0,0.83);

@@ -361,20 +361,6 @@
 
 @media (max-width: 600px) {
 
-   .modal-respuesta-contenido {
-      position: absolute;                     /* Aquí puedes mover el marco a donde quieras: */
-      top: 17%;    /* <--- Mueve el marco hacia abajo/arriba */
-      left: 50%;  /* Centrado horizontal */
-      transform: translateX(-50%);
-      width: 60%;    /* Ajusta el tamaño */
-      height: auto;  /* Ajusta según la imagen */
-      z-index: 9999;
-      display: block;
-      flex-direction: column;
-      align-items: center;
-   }
-  
-
     /* Imagen de fondo del modal */
   .modal-respuesta-img {
      width: 40%;
@@ -404,7 +390,7 @@
    .modal-respuesta-contenido {
       position: absolute;                   /* Aquí puedes mover el marco a donde quieras: */
       top: 17%;    /* <--- Mueve el marco hacia abajo/arriba */
-      left: 50%;  /* Centrado horizontal */
+      left: 60%;  /* Centrado horizontal */
       transform: translateX(-50%);
       width: 60%;    /* Ajusta el tamaño */
       height: auto;  /* Ajusta según la imagen */

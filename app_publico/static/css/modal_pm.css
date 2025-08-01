@@ -402,8 +402,8 @@
   .modal-respuesta-textarea {
     position: absolute;
     width: 82%;
-    height: 80%;
-    margin: 20% auto 0 auto;
+    height: 90%;
+    margin: 20%;
     background: rgba(0,0,0,0.83);
     color: #fff;
     border: none;

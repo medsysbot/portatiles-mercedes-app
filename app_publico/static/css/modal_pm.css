@@ -364,10 +364,10 @@
   /* Modal de respuesta: contenedor principal */
   .modal-respuesta-contenido {
     position: absolute;
-    top: 10%;
+    top: 20%;
     left: 50%;
     transform: translateX(-50%);
-    width: 74%;
+    width: 84%;
     height: auto;
     z-index: 9999;
     display: flex;
@@ -380,7 +380,7 @@
 
   /* Imagen de fondo del modal (si aplica) */
   .modal-respuesta-img {
-    width: 74%;
+    width: 84%;
     border-radius: 10px;
     display: block;
     margin: 10px auto 0 auto;
@@ -401,9 +401,8 @@
   /* Textarea de respuesta */
   .modal-respuesta-textarea {
     position: absolute;
-    width: 90%;
-    min-height: 36%;
-    max-height: 60%;
+    width: 84%;
+    height: auto;
     margin: 16px auto 0 auto;
     background: rgba(0,0,0,0.83);
     color: #fff;

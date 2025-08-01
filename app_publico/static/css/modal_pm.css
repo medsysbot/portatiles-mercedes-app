@@ -382,14 +382,14 @@
 /* Textarea de respuesta */
    .modal-respuesta-textarea {
       position: absolute;
-      top: 14.2%;
+      top: 30.5%;
       left: 49.9%;
       transform: translateX(-50%);
       width: 22.22%;
 
    .modal-respuesta-contenido {
       position: absolute;                   /* Aquí puedes mover el marco a donde quieras: */
-      top: 17%;    /* <--- Mueve el marco hacia abajo/arriba */
+      top: 30.5%;    /* <--- Mueve el marco hacia abajo/arriba */
       left: 60%;  /* Centrado horizontal */
       transform: translateX(-50%);
       width: 60%;    /* Ajusta el tamaño */
@@ -421,7 +421,7 @@
 /* Textarea de respuesta */
     .modal-respuesta-textarea {
         position: absolute;
-        top: 28.2%;
+        top: 40.2%;
         left: 49.9%;
         transform: translateX(-50%);
         width: 40.22%;

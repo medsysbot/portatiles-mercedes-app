@@ -409,9 +409,9 @@
   .modal-respuesta-textarea {
     position: absolute;
     width: 57.7%;
-    height: 65%;
+    height: 66%;
     left: 49.5%;
-    top: 11%;
+    top: 15%;
     transform: translateX(-50%);
     background: rgba(0,0,0,0.83);
     color: #fff;

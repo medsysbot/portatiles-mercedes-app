@@ -361,14 +361,16 @@
 
 @media (max-width: 600px) {
 
-  /* Modal de respuesta: contenedor principal */
+  /* === Modal de respuesta: CONTENEDOR PRINCIPAL === */
   .modal-respuesta-contenido {
     position: absolute;
-    top: 0%;
-    left: 0%;
-    transform: translateX(-50%);
-    width: 100%;
-    height: 100%;
+    /* AJUSTA ESTOS VALORES PARA MOVER EL MODAL */
+    top: 10%;     /* Cambia este valor para subir/bajar el modal (ej: 0% = arriba del todo, 30% = más abajo) */
+    left: 5%;     /* Cambia este valor para mover a la derecha/izquierda (ej: 0% = bien a la izquierda, 20% más a la derecha) */
+    /* Si quieres centrar horizontalmente, puedes usar: left: 50%; transform: translateX(-50%); */
+    transform: none;  /* O usa transform: translateX(-50%); si dejas left: 50% */
+    width: 90vw;   /* Cambia el ancho (ej: 100vw ocupa toda la pantalla, 80vw más angosto) */
+    height: 80vh;  /* Cambia el alto (ej: 100vh = pantalla completa, 60vh más bajo) */
     z-index: 9999;
     display: flex;
     flex-direction: column;
@@ -378,43 +380,42 @@
     box-shadow: 0 4px 26px #0006;
   }
 
-  /* Imagen de fondo del modal (si aplica) */
+  /* === Imagen de fondo del modal (si la usas) === */
   .modal-respuesta-img {
-    width: 108%; 
-    height: 102%;
-    left: 50%;             
-    right: 50%;    
+    width: 100%;
+    height: 100%;
     border-radius: 10px;
     display: block;
-    margin: 20% auto 0 auto;
+    margin: 0 auto;
+    /* Puedes ajustar margin para bajar la imagen */
   }
 
-  /* Imagen de "esperando respuesta" */
+  /* === Imagen "esperando respuesta" === */
   .img-esperando-respuesta {
     position: absolute;
-    top: 10%;
-    left: 60%;
+    top: 14%;     /* Sube o baja la imagen */
+    left: 50%;    /* Centra la imagen horizontalmente */
     transform: translateX(-50%);
-    width: 36%;
+    width: 38vw;  /* Cambia el tamaño de la imagen (en porcentaje de ancho de pantalla) */
     z-index: 11;
     display: block;
     pointer-events: none;
   }
 
-  /* Textarea de respuesta */
+  /* === Textarea de respuesta === */
   .modal-respuesta-textarea {
     position: absolute;
-    width: 82%;
-    height: 102%;
-    left: 50%;             
-    right: 50%;
-    bottom: 49.1%;   
+    width: 88vw;      /* Ajusta el ancho */
+    height: 38vh;     /* Ajusta el alto */
+    left: 50%;        /* Centrado horizontal */
+    top: 36%;         /* Sube o baja el textarea */
+    transform: translateX(-50%);
     background: rgba(0,0,0,0.83);
     color: #fff;
     border: none;
-    border-radius: 10%;
-    padding: 14px 8px;
-    font-size: 1.14em;
+    border-radius: 12px;
+    padding: 14px 10px;
+    font-size: 1.11em;
     resize: none;
     z-index: 10;
     box-sizing: border-box;
@@ -422,9 +423,12 @@
     box-shadow: 0 2px 6px #0003;
   }
 
-  /* Botón cerrar */
+  /* === Botón cerrar (ajusta posición) === */
   .modal-btn-cerrar-respuesta {
-    margin: 50%;
+    position: absolute;
+    left: 50%;           /* Centrado horizontal */
+    bottom: 7%;          /* Distancia desde abajo, sube o baja el botón */
+    transform: translateX(-50%);
     background: #282828;
     color: #fff;
     border: none;
@@ -432,15 +436,15 @@
     padding: 11px 32px;
     font-size: 1.05em;
     cursor: pointer;
-    position: absolute;
     z-index: 16;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     box-shadow: 0 2px 8px #0002;
-    min-width: 48vw;
+    min-width: 60vw;
   }
+
   .modal-btn-cerrar-respuesta .icono-cerrar-ai {
     width: 1.4em;
     height: 1.4em;

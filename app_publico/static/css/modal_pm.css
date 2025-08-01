@@ -357,4 +357,90 @@
     z-index: 5;                      /* Encima de la palabra, si la hay */
     background: transparent;
   }
+/* ==== Imagen PNG "enviando pregunta" para desktop/laptop ==== */
+#img-pregunta {
+  display: none;              /* Muestra la imagen */
+  position: absolute;          /* Permite ubicarla encima del statusarea */
+  left: 1%;                    /* Empieza en el borde izquierdo del contenedor */
+  top: 45%;                     /* Empieza en el borde superior */
+  width: 100%;                 /* Ocupa todo el ancho del wrapper */
+  height: 7.5%;                /* Ocupa todo el alto del wrapper */
+  object-fit: contain;         /* Mantiene el aspecto original del PNG */
+  pointer-events: none;        /* No captura clics */
+  z-index: 5;                  /* Encima del textarea, debajo de overlays críticos */
+  background: transparent;     /* Fondo transparente, no tapa nada detrás */
 }
+
+/* El marco (contenedor del modal de respuesta) */
+.modal-respuesta-contenido {
+  position: absolute;
+  /* Aquí puedes mover el marco a donde quieras: */
+  top: 17%;    /* <--- Mueve el marco hacia abajo/arriba */
+  left: 50%;  /* Centrado horizontal */
+  transform: translateX(-50%);
+  width: 60%;    /* Ajusta el tamaño */
+  height: auto;  /* Ajusta según la imagen */
+  z-index: 9999;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Imagen de fondo del modal */
+.modal-respuesta-img {
+  width: 40%;
+  border-radius: 2.5%;
+  display: none;
+}
+
+/* Imagen "esperando respuesta" */
+.img-esperando-respuesta {
+  position: absolute;
+  top: 30.5%;
+  left: 49.5%;
+  transform: translateX(-50%);
+  width: 28%;
+  z-index: 9;
+  display: none;
+}
+
+/* Textarea de respuesta */
+.modal-respuesta-textarea {
+  position: absolute;
+  top: 14.2%;
+  left: 49.9%;
+  transform: translateX(-50%);
+  width: 22.22%;
+  min-height: 42.67%;
+  max-height: 42.67%;
+  background: rgba(0,0,0,0.83);
+  color: #fff;
+  border: none;
+  border-radius: 4.5%;
+  padding: 5.5% 3.5%;
+  font-size: 105%;
+  resize: none;
+  z-index: 3;
+}
+
+/* Botón cerrar */
+.modal-btn-cerrar-respuesta {
+  margin-top: 3%;
+  background: #282828;
+  color: #fff;
+  border: none;
+  border-radius: 10.5%;
+  padding: 3% 9%;
+  font-size: 99%;
+  cursor: pointer;
+  position: relative;
+  z-index: 4;
+}
+
+.modal-btn-cerrar-respuesta .icono-cerrar-ai {
+  width: 1.6em;                 /* Ícono proporcional al texto */
+  height: auto;
+  margin-right: 7%;             /* Espacio entre ícono y texto, ajusta si hace falta */
+  display: none;
+  vertical-align: middle;
+}                                                           

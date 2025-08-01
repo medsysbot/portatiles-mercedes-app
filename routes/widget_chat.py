@@ -25,7 +25,7 @@ router = APIRouter()
 
 DATOS_CONTACTO = (
     "Nuestros datos oficiales están en el pie de página:\n"
-    "Teléfono/WhatsApp: +54 9 2657 627996\n"
+    "Teléfono/WhatsApp: 2657 627996\n"
     "Email: info@portatilesmercedes.com.ar\n"
     "No existe página de contacto específica."
 )

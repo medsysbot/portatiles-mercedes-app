@@ -435,7 +435,7 @@
     border: none;
     border-radius: 12px;
     padding: 11px 32px;
-    font-size: 1.05em;
+    font-size: 1.55em;
     cursor: pointer;
     z-index: 16;
     display: flex;
@@ -447,8 +447,8 @@
   }
 
   .modal-btn-cerrar-respuesta .icono-cerrar-ai {
-    width: 1.4em;
-    height: 1.4em;
+    width: 2.4em;
+    height: 2.4em;
     margin-right: 6px;
     display: inline-block;
     vertical-align: middle;

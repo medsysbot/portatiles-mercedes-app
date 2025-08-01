@@ -380,7 +380,10 @@
 
   /* Imagen de fondo del modal (si aplica) */
   .modal-respuesta-img {
-    width: 108%;
+    width: 108%; 
+    height: 102%;
+    left: 50%;             
+    right: 50%;    
     border-radius: 10px;
     display: block;
     margin: 20% auto 0 auto;
@@ -403,8 +406,8 @@
     position: absolute;
     width: 82%;
     height: 102%;
-    left: 30.54%;             
-    right: 29.82%;
+    left: 50%;             
+    right: 50%;
     bottom: 49.1%;   
     background: rgba(0,0,0,0.83);
     color: #fff;

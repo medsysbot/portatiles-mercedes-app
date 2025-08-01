@@ -409,9 +409,9 @@
   .modal-respuesta-textarea {
     position: absolute;
     width: 58%;
-    height: 80%;
+    height: 79%;
     left: 49.5%;
-    top: 17%;
+    top: 16%;
     transform: translateX(-50%);
     background: rgba(0,0,0,0.83);
     color: #fff;
@@ -429,7 +429,7 @@
   .modal-btn-cerrar-respuesta {
     position: absolute;
     left: 50%;
-    bottom: 15%;
+    bottom: 26%;
     transform: translateX(-50%);
     background: #282828;
     color: #fff;

@@ -384,7 +384,7 @@
     left: 50%;               /* Mueve a la izquierda/derecha (0% = a la izquierda, 20% = más a la derecha) */    
     transform: translateX(-50%);                       
     width: 80%;            /* Escala horizontalmente la imagen dentro del modal */
-    height: 80%;           /* Escala verticalmente la imagen */
+    height: 75%;           /* Escala verticalmente la imagen */
     border-radius: 10px;
     display: block;
     margin: 0;
@@ -397,7 +397,7 @@
   /* === Imagen "esperando respuesta" === */
   .img-esperando-respuesta {
     position: absolute;
-    top: 34%;
+    top: 37%;
     left: 50%;
     transform: translateX(-50%);
     width: 38vw;
@@ -408,8 +408,9 @@
 
   .modal-respuesta-textarea {
     position: absolute;
-    width: 70%;
-    height: 110%;
+    width: 60
+      5%;
+    height: 150%;
     left: 50%;
     top: 18%;
     transform: translateX(-50%);

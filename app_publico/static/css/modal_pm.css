@@ -365,7 +365,7 @@
   .modal-respuesta-contenido {
     position: absolute;
     /* AJUSTA ESTOS VALORES PARA MOVER EL MODAL */
-    top: 10%;     /* Cambia este valor para subir/bajar el modal (ej: 0% = arriba del todo, 30% = más abajo) */
+    top: 5%;     /* Cambia este valor para subir/bajar el modal (ej: 0% = arriba del todo, 30% = más abajo) */
     left: 5%;     /* Cambia este valor para mover a la derecha/izquierda (ej: 0% = bien a la izquierda, 20% más a la derecha) */
     /* Si quieres centrar horizontalmente, puedes usar: left: 50%; transform: translateX(-50%); */
     transform: none;  /* O usa transform: translateX(-50%); si dejas left: 50% */
@@ -406,9 +406,9 @@
   .modal-respuesta-textarea {
     position: absolute;
     width: 88vw;      /* Ajusta el ancho */
-    height: 38vh;     /* Ajusta el alto */
+    height: 70vh;     /* Ajusta el alto */
     left: 50%;        /* Centrado horizontal */
-    top: 36%;         /* Sube o baja el textarea */
+    top: 26%;         /* Sube o baja el textarea */
     transform: translateX(-50%);
     background: rgba(0,0,0,0.83);
     color: #fff;

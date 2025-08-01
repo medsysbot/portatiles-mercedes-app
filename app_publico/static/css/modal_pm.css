@@ -380,8 +380,8 @@
   /* === Imagen de fondo del modal (movible y escalable) === */
   .modal-respuesta-img {
     position: absolute;     /* Permite usar top/left */
-    top: 0%;                /* Sube o baja la imagen (0% = arriba, 10% = más abajo) */
-    left: 0%;               /* Mueve a la izquierda/derecha (0% = a la izquierda, 20% = más a la derecha) */
+    top: 15%;                /* Sube o baja la imagen (0% = arriba, 10% = más abajo) */
+    left: 50%;               /* Mueve a la izquierda/derecha (0% = a la izquierda, 20% = más a la derecha) */
     width: 100%;            /* Escala horizontalmente la imagen dentro del modal */
     height: 100%;           /* Escala verticalmente la imagen */
     border-radius: 10px;
@@ -407,10 +407,10 @@
 
   .modal-respuesta-textarea {
     position: absolute;
-    width: 88vw;
-    height: 38vh;
+    width: 80vw;
+    height: 68vh;
     left: 50%;
-    top: 36%;
+    top: 18%;
     transform: translateX(-50%);
     background: rgba(0,0,0,0.83);
     color: #fff;

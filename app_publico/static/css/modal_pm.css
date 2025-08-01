@@ -80,7 +80,7 @@
   z-index: 1;
   background: #24272bE0;
   color: #fff;
-  border: 1.5px solid #43474c;
+  border: 1.5px solid #2be18a88;
   border-radius: 8px;
   padding: 7px 10px;
   font-size: 1.08em;
@@ -409,7 +409,7 @@
   .modal-respuesta-textarea {
     position: absolute;
     width: 57.7%;
-    height: 69%;
+    height: 65%;
     left: 50%;
     top: 14%;
     transform: translateX(-50%);

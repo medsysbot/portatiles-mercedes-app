@@ -359,7 +359,7 @@
   }
 /* ==== Imagen PNG "enviando pregunta" para desktop/laptop ==== */
 #img-pregunta {
-  display: none;              /* Muestra la imagen */
+  display: block;              /* Muestra la imagen */
   position: absolute;          /* Permite ubicarla encima del statusarea */
   left: 1%;                    /* Empieza en el borde izquierdo del contenedor */
   top: 45%;                     /* Empieza en el borde superior */
@@ -381,7 +381,7 @@
   width: 60%;    /* Ajusta el tamaño */
   height: auto;  /* Ajusta según la imagen */
   z-index: 9999;
-  display: none;
+  display: block;
   flex-direction: column;
   align-items: center;
 }
@@ -390,7 +390,7 @@
 .modal-respuesta-img {
   width: 40%;
   border-radius: 2.5%;
-  display: none;
+  display: block;
 }
 
 /* Imagen "esperando respuesta" */
@@ -401,7 +401,7 @@
   transform: translateX(-50%);
   width: 28%;
   z-index: 9;
-  display: none;
+  display: block;
 }
 
 /* Textarea de respuesta */
@@ -441,5 +441,5 @@
   width: 1.6em;                 /* Ícono proporcional al texto */
   height: auto;
   margin-right: 7%;             /* Espacio entre ícono y texto, ajusta si hace falta */
-  display: none;
+  display: block;
 }

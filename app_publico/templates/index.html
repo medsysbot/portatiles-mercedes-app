@@ -292,63 +292,21 @@ Proyecto: Portátiles Mercedes
     <a href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer" style="color:#3366cc;">chat.openai.com</a>
   </small>
 </div>          
-<!-- === WIDGET ROBOT PM Y MODALES === -->
-<!-- Widget Robot PM (flotante en pantalla) -->
+<!-- === WIDGET ROBOT PM Y MODALES (SOLO UNA VEZ CADA UNO) === -->
 <div id="widget-robot-pm">
   <img src="/app_publico/static/icons/robot_pm.png" alt="Robot PM" class="robot-pm-img">
 </div>
 <!-- Modal PM: Pregunta (oculto por defecto) -->
-<div id="modal-pm" style="display:none;">
+<div id="modal-pm" style="display: none;">
   <div class="modal-pm-contenido">
     <img src="/app_publico/static/icons/modal_pm.png" alt="Modal PM" class="modal-pm-img">
-    <!-- Botón micrófono con ícono -->
     <button class="modal-btn-mic" id="modal-btn-mic" type="button">
       <img src="/app_publico/static/icons/micro.png" alt="Micrófono" id="icono-mic">
     </button>
-    <!-- Área de estado para "grabando" y "enviando pregunta" -->
     <div class="modal-statusarea-wrapper" id="modal-statusarea-wrapper">
       <textarea class="modal-statusarea" id="modal-statusarea" readonly></textarea>
-      <img src="/app_publico/static/icons/grabando.png"
-           alt="Grabando"
-           id="img-grabando"
-           style="display:none;">
-      <img src="/app_publico/static/icons/pregunta.png"
-           alt="Enviando pregunta"
-           id="img-pregunta"
-           style="display:none;">
-    </div>
-    <textarea class="modal-textarea" id="modal-pm-textarea" placeholder="Escriba su pregunta..."></textarea>
-    <button class="modal-btn-send" id="modal-btn-send" type="button">
-      <img src="/app_publico/static/icons/send.png" alt="Enviar" id="icono-send">
-    </button>
-  </div>
-</div>
-<!-- === WIDGET ROBOT PM Y MODALES === -->
-
-<!-- Widget Robot PM (flotante en pantalla) -->
-<div id="widget-robot-pm">
-  <img src="/app_publico/static/icons/robot_pm.png" alt="Robot PM" class="robot-pm-img">
-</div>
-
-<!-- Modal PM: Pregunta (oculto por defecto) -->
-<div id="modal-pm" style="display:none;">
-  <div class="modal-pm-contenido">
-    <img src="/app_publico/static/icons/modal_pm.png" alt="Modal PM" class="modal-pm-img">
-    <!-- Botón micrófono con ícono -->
-    <button class="modal-btn-mic" id="modal-btn-mic" type="button">
-      <img src="/app_publico/static/icons/micro.png" alt="Micrófono" id="icono-mic">
-    </button>
-    <!-- Área de estado para "grabando" y "enviando pregunta" -->
-    <div class="modal-statusarea-wrapper" id="modal-statusarea-wrapper">
-      <textarea class="modal-statusarea" id="modal-statusarea" readonly></textarea>
-      <img src="/app_publico/static/icons/grabando.png"
-           alt="Grabando"
-           id="img-grabando"
-           style="display:none;">
-      <img src="/app_publico/static/icons/pregunta.png"
-           alt="Enviando pregunta"
-           id="img-pregunta"
-           style="display:none;">
+      <img src="/app_publico/static/icons/grabando.png" alt="Grabando" id="img-grabando" style="display:none;">
+      <img src="/app_publico/static/icons/pregunta.png" alt="Enviando pregunta" id="img-pregunta" style="display:none;">
     </div>
     <textarea class="modal-textarea" id="modal-pm-textarea" placeholder="Escriba su pregunta..."></textarea>
     <button class="modal-btn-send" id="modal-btn-send" type="button">
@@ -361,7 +319,7 @@ Proyecto: Portátiles Mercedes
   <div class="modal-respuesta-contenido">
     <!-- Fondo de modal respuesta -->
     <img src="/app_publico/static/icons/modal_respuesta.png" alt="Modal Respuesta" class="modal-respuesta-img">
-    <!-- Imagen esperando respuesta (se muestra hasta que llegue la respuesta) -->
+    <!-- Imagen esperando respuesta -->
     <img src="/app_publico/static/icons/respuesta.png"
          alt="Esperando respuesta"
          id="img-esperando-respuesta"
@@ -379,8 +337,7 @@ Proyecto: Portátiles Mercedes
     </button>
   </div>
 </div>
-<!-- === SCRIPTS (al final de body) === --><!-- === SCRIPTS (al final de body) === -->      
-<script src="/app_publico/static/js/robot_pm.js"></script>
+<script src="/app_publico/static/js/robot_pm.js"></script>      
 <script src="/app_publico/static/js/modal_pm.js"></script>
 </footer>
 </body>

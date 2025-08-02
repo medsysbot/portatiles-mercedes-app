@@ -223,7 +223,7 @@
 .modal-btn-cerrar-respuesta {
   position: absolute;
   left: 50%;
-  bottom: 0%;
+  bottom: -10%;
   transform: translateX(-50%);
   background: #282828;
   color: #fff;

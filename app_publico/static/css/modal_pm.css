@@ -220,28 +220,29 @@
   z-index: 21;
   font-family: 'Nunito', Arial, sans-serif;
 }
-
-/* Botón cerrar */
 .modal-btn-cerrar-respuesta {
-  margin-top: 3%;
+  position: absolute;
+  left: 50%;
+  bottom: 30%;
+  transform: translateX(-50%);
   background: #282828;
   color: #fff;
   border: none;
-  border-radius: 10.5%;
-  padding: 3% 9%;
-  font-size: 99%;
-  cursor: pointer;
-  position: relative;
-  z-index: 25;
-  display: flex;              /* SIEMPRE flex */
+  border-radius: 12px;
+  padding: 11px 32px;
+  font-size: 1.55em;
+  crsor: pointer;
+  index: 16;
+  display: flex;
   align-items: center;
   justify-content: center;
+  gap: 12px;
+  min-width: 60vw;
 }
-
 .modal-btn-cerrar-respuesta .icono-cerrar-ai {
-  width: 1.6em;
-  height: auto;
-  margin-right: 7%;
+  width: 2.4em;
+  height: 2.4em;
+  margin-right: 6px;
   display: inline-block;
   vertical-align: middle;
 }

@@ -438,7 +438,7 @@
     font-size: 1.55em;
     cursor: pointer;
     z-index: 16;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     gap: 12px;

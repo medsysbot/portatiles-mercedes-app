@@ -402,7 +402,7 @@
     transform: translateX(-50%);
     width: 38vw;
     z-index: 11;
-    display: block;
+    display: none;
     pointer-events: none;
   }
 

@@ -3,6 +3,11 @@
 {% block description %}Gestión de usuarios del sistema{% endblock %}
 {% block head_extra %}
 {{ super() }}
+{{ super() }}
+<!-- Precarga de iconos de alertas para el módulo de empleados -->
+<link rel="preload" as="image" href="/static/iconos/borrado.png">
+<link rel="preload" as="image" href="/static/iconos/borrado-exito.png">
+<link rel="preload" as="image" href="/static/iconos/borrado-error.png">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
 {% endblock %}
 {% block content %}
@@ -71,5 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-<script src="/static/js/empleados_admin.js"></script>\
+<script src="/static/js/alertas.js"></script>
+<script src="/static/js/empleados_admin.js"></script>
 {% endblock %}

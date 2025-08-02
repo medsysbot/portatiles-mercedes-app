@@ -4,8 +4,12 @@
 {% block description %}Listado y administración de alquileres{% endblock %}
 {% block head_extra %}
 {{ super() }}
+{{ super() }}
+<!-- Precarga de iconos de alertas para el módulo de empleados -->
+<link rel="preload" as="image" href="/static/iconos/borrado.png">
+<link rel="preload" as="image" href="/static/iconos/borrado-exito.png">
+<link rel="preload" as="image" href="/static/iconos/borrado-error.png">
 {% endblock %}
-
 {% block content %}
 <div class="container mt-4">
   <h2>Administración de alquileres</h2>
@@ -47,10 +51,9 @@
     <span id="alert-text" class="alert-message">Texto de alerta</span>
   </div>
 </div>
-
 {% endblock %}
-
 {% block scripts %}
+<script src="/alertas.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/alquileres_admin.js"></script>
 {% endblock %}

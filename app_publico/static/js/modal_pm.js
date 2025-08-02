@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function abrirModalRespuesta() {
     textareaRespuesta.value = '';
     imgEsperandoRespuesta.style.display = 'block';
-    modalRespuesta.style.display = 'none';
+    modalRespuesta.style.display = 'flex';
   }
 
   function mostrarRespuestaEscrita(texto) {
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function cerrarModalRespuesta() {
     modalRespuesta.style.display = 'none';
     textareaRespuesta.value = '';
-    imgEsperandoRespuesta.style.display = 'block';
+    imgEsperandoRespuesta.style.display = 'none';
   }
 
   // Botón cerrar en modal de respuesta

@@ -369,7 +369,7 @@
     width: 100vw;
     height: 100vh;
     z-index: 9999;
-    display: block;
+    display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: 13px;
@@ -385,7 +385,7 @@
     width: 81%;            /* Escala horizontalmente la imagen dentro del modal */
     height: 62%;           /* Escala verticalmente la imagen */
     border-radius: 10px;
-    display: block;
+    display: flex;
     margin: 0;
     z-index: 0;
     /* Si quieres mover de forma más precisa, usa transform: */
@@ -401,7 +401,7 @@
     transform: translateX(-50%);
     width: 38vw;
     z-index: 11;
-    display: block;
+    display: flex;
     pointer-events: none;
   }
 

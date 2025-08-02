@@ -58,12 +58,14 @@ loginForm?.addEventListener('submit', async (e) => {
         return;
     }
 
-    // --- Mostrar "inicio-sesion" por mínimo 1200 ms ---
-    await showAlert('inicio-sesion', 'Iniciando sesión...', false, 1200);
-
+    // --- Mostrar "inicio-sesion" SIEMPRE primero ---
+    const esperaMinima = 1000;
     let resultado = null;
     let data = null;
     let errorConexion = false;
+    let t0 = Date.now();
+
+    await showAlert('inicio-sesion', 'Iniciando sesión...', false, 'infinito');
 
     try {
         const res = await fetch('/login', {
@@ -77,7 +79,15 @@ loginForm?.addEventListener('submit', async (e) => {
         errorConexion = true;
     }
 
-    // --- Ahora mostrar el resultado (verde, rojo, etc.) ---
+    // --- Espera mínima real para que la alerta SIEMPRE se vea ---
+    const elapsed = Date.now() - t0;
+    if (elapsed < esperaMinima) {
+        await new Promise(resolve => setTimeout(resolve, esperaMinima - elapsed));
+    }
+
+    if (typeof ocultarAlert === 'function') ocultarAlert();
+
+    // --- Resultado ---
     if (errorConexion) {
         await showAlert('error-conexion', 'Error de conexión', false, 2600);
         return;
@@ -122,27 +132,6 @@ loginForm?.addEventListener('submit', async (e) => {
                     nombre: datos.nombre
                 }));
                 localStorage.setItem('dni_cuit_cuil', datos.dni_cuit_cuil);
-            } else {
-                localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: datos.nombre || '' }));
-            }
-            finalizar('/splash_cliente');
-        })
-        .catch(() => {
-            localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: data.nombre || '' }));
-            finalizar('/splash_cliente');
-        });
-        return;
-    }
-
-    // --- Credenciales incorrectas ---
-    if (data && data.detail && data.detail.toLowerCase().includes('credencial')) {
-        await showAlert('password-error', 'Usuario o contraseña incorrectos', false, 2600);
-        return;
-    }
-
-    // --- Otros errores de sesión ---
-    await showAlert('error-sesion', 'Error en la sesión', false, 2600);
-});                localStorage.setItem('dni_cuit_cuil', datos.dni_cuit_cuil);
             } else {
                 localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: datos.nombre || '' }));
             }

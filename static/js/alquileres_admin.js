@@ -52,12 +52,11 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = `/admin/alquileres/editar/${id}`;
   });
 
-  // BORRADO con alertas
+  // BORRADO con alertas visuales
   btnEliminar?.addEventListener('click', async () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
     if (!seleccionados.length) return;
 
-    // 1. Alerta "borrando"
     await showAlert("borrando", "Eliminando registros...", true, 1200);
 
     try {
@@ -71,11 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (resp.ok) {
-        // 2. Éxito
         await showAlert("borrado-exito", "Registros eliminados", true, 2600);
         setTimeout(() => { obtenerDatos(); }, 260);
       } else {
-        // 3. Error
         await showAlert("borrado-error", "Error al eliminar", true, 2600);
       }
     } catch (err) {

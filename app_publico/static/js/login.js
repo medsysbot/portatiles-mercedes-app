@@ -1,7 +1,5 @@
 // Archivo: login.js
-// Descripción: Manejo unificado de login y registro de clientes
-// Acceso: Público
-// Proyecto: Portátiles Mercedes
+// Login y registro centralizado, usando alertas visuales controladas
 
 const loginForm = document.getElementById('loginForm');
 const registroForm = document.getElementById('registroForm');
@@ -12,6 +10,7 @@ const btnIngresar = document.getElementById('btnIngresar');
 const btnRegistrarse = document.getElementById('btnRegistrarse');
 const campoRol = document.getElementById('campo-rol');
 
+// --- Funciones de UI ---
 function mostrarLoginInicial() {
     campoRol.style.display = 'none';
     btnIngresar.style.display = 'none';
@@ -19,7 +18,6 @@ function mostrarLoginInicial() {
     divRegistro.style.display = 'none';
     divLogin.style.display = 'flex';
 }
-
 function mostrarLoginConRol() {
     campoRol.style.display = 'flex';
     btnAcceder.style.display = 'none';
@@ -27,7 +25,6 @@ function mostrarLoginConRol() {
     divRegistro.style.display = 'none';
     divLogin.style.display = 'flex';
 }
-
 function mostrarRegistro() {
     divRegistro.style.display = 'flex';
     divLogin.style.display = 'none';
@@ -35,16 +32,17 @@ function mostrarRegistro() {
     btnAcceder.style.display = 'none';
     btnIngresar.style.display = 'none';
 }
-
 btnAcceder.addEventListener('click', mostrarLoginConRol);
 btnRegistrarse.addEventListener('click', mostrarRegistro);
 
+// --- Inicializar vista según parámetro ---
 if (location.search.includes('registrarse') || location.hash === '#registro') {
     mostrarRegistro();
 } else {
     mostrarLoginInicial();
 }
 
+// ====================== BLOQUE DE LOGIN ==========================
 loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value.trim();
@@ -52,22 +50,22 @@ loginForm?.addEventListener('submit', async (e) => {
     const rol = document.getElementById('rol').value.trim();
 
     if (!email || !password) {
-        if (typeof showAlert === 'function') {
-            showAlert('error-secion', 'Complete todos los campos', false, 2600);
-        }
+        await showAlert('error-validacion', 'Complete todos los campos', false, 2600);
         return;
     }
     if (!rol) {
-        if (typeof showAlert === 'function') {
-            showAlert('seleccionar-rol', 'Seleccione un rol válido', false, 2600);
-        }
+        await showAlert('seleccionar-rol', 'Seleccione un rol válido', false, 2600);
         return;
     }
 
-    const start = Date.now();
-    if (typeof showAlert === 'function') {
-        showAlert('inicio-sesion', 'Iniciando sesión...', false, 'infinito');
-    }
+    // --- Mostrar "inicio-sesion" SIEMPRE primero ---
+    const esperaMinima = 1000;
+    let resultado = null;
+    let data = null;
+    let errorConexion = false;
+    let t0 = Date.now();
+
+    await showAlert('inicio-sesion', 'Iniciando sesión...', false, 'infinito');
 
     try {
         const res = await fetch('/login', {
@@ -75,79 +73,88 @@ loginForm?.addEventListener('submit', async (e) => {
             body: JSON.stringify({ email, password, rol }),
             headers: { 'Content-Type': 'application/json' }
         });
-        const data = await res.json();
-        const delay = Math.max(0, 1600 - (Date.now() - start));
-        if (res.ok && data.access_token) {
-            setTimeout(() => {
-                if (typeof showAlert === 'function') {
-                    showAlert('exito-sesion', 'Inicio de sesión exitoso', false, 2600);
-                }
-                localStorage.setItem('access_token', data.access_token);
-                const finalizar = (url) => setTimeout(() => { window.location.href = url; }, 2600);
-                if (data.usuario && data.usuario.dni_cuit_cuil) {
-                    localStorage.setItem('usuario_obj', JSON.stringify({
-                        dni_cuit_cuil: data.usuario.dni_cuit_cuil,
-                        email: data.usuario.email,
-                        nombre: data.usuario.nombre
-                    }));
-                    localStorage.setItem('dni_cuit_cuil', data.usuario.dni_cuit_cuil);
-                    finalizar('/splash_cliente');
-                    return;
-                }
-                if (data.rol && (data.rol === 'empleado' || data.rol === 'Empleado' || data.rol === 'Administrador')) {
-                    localStorage.setItem('usuario_obj', JSON.stringify({
-                        email: data.email || email,
-                        nombre: data.nombre || '',
-                        rol: data.rol,
-                        id: data.id || ''
-                    }));
-                    finalizar(data.rol === 'Administrador' ? '/splash' : '/splash_empleado');
-                    return;
-                }
-                fetch(`/clientes/datos_personales_api?email=${encodeURIComponent(email)}`, {
-                    headers: { 'Authorization': 'Bearer ' + data.access_token }
-                })
-                .then(r2 => r2.json())
-                .then(datos => {
-                    if (datos.dni_cuit_cuil) {
-                        localStorage.setItem('usuario_obj', JSON.stringify({
-                            dni_cuit_cuil: datos.dni_cuit_cuil,
-                            email: datos.email,
-                            nombre: datos.nombre
-                        }));
-                        localStorage.setItem('dni_cuit_cuil', datos.dni_cuit_cuil);
-                    } else {
-                        localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: datos.nombre || '' }));
-                    }
-                    finalizar('/splash_cliente');
-                })
-                .catch(() => {
-                    localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: data.nombre || '' }));
-                    finalizar('/splash_cliente');
-                });
-            }, delay);
-        } else {
-            setTimeout(() => {
-                if (typeof showAlert === 'function') {
-                    const msg = (data.detail || '').toLowerCase();
-                    if (msg.includes('credenciales')) {
-                        showAlert('password-error', 'Usuario o contraseña incorrectos', false, 2600);
-                    } else {
-                        showAlert('error-sesion', 'Error en la sesión', false, 2600);
-                    }
-                }
-            }, delay);
-        }
+        data = await res.json();
+        resultado = res;
     } catch (_) {
-        const delay = Math.max(0, 1600 - (Date.now() - start));
-        setTimeout(() => {
-            if (typeof showAlert === 'function') {
-                showAlert('error-conexion', 'Error de conexión', false, 2600);
-            }
-        }, delay);
+        errorConexion = true;
     }
+
+    // --- Espera mínima real para que la alerta SIEMPRE se vea ---
+    const elapsed = Date.now() - t0;
+    if (elapsed < esperaMinima) {
+        await new Promise(resolve => setTimeout(resolve, esperaMinima - elapsed));
+    }
+
+    if (typeof ocultarAlert === 'function') ocultarAlert();
+
+    // --- Resultado ---
+    if (errorConexion) {
+        await showAlert('error-conexion', 'Error de conexión', false, 2600);
+        return;
+    }
+
+    if (resultado && resultado.ok && data && data.access_token) {
+        await showAlert('exito-sesion', 'Inicio de sesión exitoso', false, 2600);
+        localStorage.setItem('access_token', data.access_token);
+
+        // Redirección según perfil
+        const finalizar = (url) => setTimeout(() => { window.location.href = url; }, 2600);
+
+        if (data.usuario && data.usuario.dni_cuit_cuil) {
+            localStorage.setItem('usuario_obj', JSON.stringify({
+                dni_cuit_cuil: data.usuario.dni_cuit_cuil,
+                email: data.usuario.email,
+                nombre: data.usuario.nombre
+            }));
+            localStorage.setItem('dni_cuit_cuil', data.usuario.dni_cuit_cuil);
+            finalizar('/splash_cliente');
+            return;
+        }
+        if (data.rol && (data.rol === 'empleado' || data.rol === 'Empleado' || data.rol === 'Administrador')) {
+            localStorage.setItem('usuario_obj', JSON.stringify({
+                email: data.email || email,
+                nombre: data.nombre || '',
+                rol: data.rol,
+                id: data.id || ''
+            }));
+            finalizar(data.rol === 'Administrador' ? '/splash' : '/splash_empleado');
+            return;
+        }
+        fetch(`/clientes/datos_personales_api?email=${encodeURIComponent(email)}`, {
+            headers: { 'Authorization': 'Bearer ' + data.access_token }
+        })
+        .then(r2 => r2.json())
+        .then(datos => {
+            if (datos.dni_cuit_cuil) {
+                localStorage.setItem('usuario_obj', JSON.stringify({
+                    dni_cuit_cuil: datos.dni_cuit_cuil,
+                    email: datos.email,
+                    nombre: datos.nombre
+                }));
+                localStorage.setItem('dni_cuit_cuil', datos.dni_cuit_cuil);
+            } else {
+                localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: datos.nombre || '' }));
+            }
+            finalizar('/splash_cliente');
+        })
+        .catch(() => {
+            localStorage.setItem('usuario_obj', JSON.stringify({ email: email, nombre: data.nombre || '' }));
+            finalizar('/splash_cliente');
+        });
+        return;
+    }
+
+    // --- Credenciales incorrectas ---
+    if (data && data.detail && data.detail.toLowerCase().includes('credencial')) {
+        await showAlert('password-error', 'Usuario o contraseña incorrectos', false, 2600);
+        return;
+    }
+
+    // --- Otros errores de sesión ---
+    await showAlert('error-sesion', 'Error en la sesión', false, 2600);
 });
 
+// ====================== BLOQUE DE REGISTRO ======================
 registroForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const nombre = document.getElementById('reg_nombre').value.trim();
@@ -156,40 +163,51 @@ registroForm?.addEventListener('submit', async (e) => {
     const pass2 = document.getElementById('reg_password2').value.trim();
 
     if (!nombre || !email || !pass1 || !pass2) {
-        if (typeof showAlert === 'function') {
-            showAlert('error-validacion', 'Complete todos los campos', false);
-        }
+        await showAlert('error-validacion', 'Complete todos los campos', false, 2600);
         return;
     }
     if (pass1 !== pass2) {
-        if (typeof showAlert === 'function') {
-            showAlert('error-validacion', 'Verifique contraseñas', false);
-        }
+        await showAlert('verifique-contrasena', 'Verifique contraseñas', false, 2600);
         return;
     }
 
-    if (typeof showAlert === 'function') {
-        showAlert('cargando-datos', 'Enviando datos...', false);
-    }
+    await showAlert('registrando-usuario', 'Registrando usuario...', false, 'infinito');
+
+    let t0 = Date.now();
+    let resultado = null;
+    let data = null;
+    let errorConexion = false;
+    const esperaMinima = 1000;
+
     try {
         const resp = await fetch('/registrar_cliente', {
             method: 'POST',
             body: new FormData(registroForm)
         });
-        const resultado = await resp.json();
-        if (resp.ok) {
-            registroForm.reset();
-            loginForm.reset();
-            if (typeof showAlert === 'function') {
-                showAlert('exito-datos', 'Cuenta creada', false);
-            }
-            mostrarLoginInicial();
-        } else if (typeof showAlert === 'function') {
-            showAlert('error-datos', resultado.detail || 'Error al enviar el formulario', false);
-        }
+        data = await resp.json();
+        resultado = resp;
     } catch (_) {
-        if (typeof showAlert === 'function') {
-            showAlert('error-datos', 'Error al enviar el formulario', false);
-        }
+        errorConexion = true;
+    }
+
+    // --- Espera mínima para mostrar la alerta de proceso ---
+    const elapsed = Date.now() - t0;
+    if (elapsed < esperaMinima) {
+        await new Promise(resolve => setTimeout(resolve, esperaMinima - elapsed));
+    }
+
+    if (typeof ocultarAlert === 'function') ocultarAlert();
+
+    if (errorConexion) {
+        await showAlert('error-registro', 'Error de conexión', false, 2600);
+        return;
+    }
+    if (resultado && resultado.ok) {
+        registroForm.reset();
+        loginForm.reset();
+        await showAlert('exito-registro', 'Registro exitoso', false, 2600);
+        mostrarLoginInicial();
+    } else {
+        await showAlert('error-registro', (data && data.detail) ? data.detail : 'Error al registrar', false, 2600);
     }
 });

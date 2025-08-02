@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
     if (!seleccionados.length) return;
 
+    btnEliminar.disabled = true; // Deshabilito botón mientras procesa
+
     await showAlert("borrando", "Eliminando registros...", true, 1200);
 
     try {
@@ -71,14 +73,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (resp.ok) {
         await showAlert("borrado-exito", "Registros eliminados", true, 2600);
-        setTimeout(() => { obtenerDatos(); }, 260);
+        // Recargo datos de tabla para reflejar eliminación
+        await obtenerDatos();
       } else {
         await showAlert("borrado-error", "Error al eliminar", true, 2600);
       }
     } catch (err) {
       await showAlert("borrado-error", "Error al eliminar", true, 2600);
     } finally {
-      if (btnEliminar) btnEliminar.disabled = true;
+      actualizarBotones(); // Actualizo estado botones tras terminar
     }
   });
 
@@ -111,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
       (a.numero_bano || '').toLowerCase().includes(q)
     );
     mostrarDatos(filtrados);
+    actualizarBotones(); // Actualizo botones tras filtrar
   }
 
   buscador?.addEventListener('input', () => {

@@ -386,7 +386,7 @@
     width: 81%;            /* Escala horizontalmente la imagen dentro del modal */
     height: 62%;           /* Escala verticalmente la imagen */
     border-radius: 10px;
-    display: block;
+    display: none;
     margin: 0;
     z-index: 0;
     /* Si quieres mover de forma más precisa, usa transform: */

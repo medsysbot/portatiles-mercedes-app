@@ -1,3 +1,7 @@
+// Archivo: static/js/alquileres_admin.js
+// Proyecto: Portátiles Mercedes (panel administración - alquileres)
+// Manejo de borrado con alertas visuales: borrando, éxito, error
+
 window.pmAlquileresAdminData = window.pmAlquileresAdminData || [];
 let tablaAlquileres = null;
 
@@ -48,19 +52,34 @@ document.addEventListener('DOMContentLoaded', () => {
     window.location.href = `/admin/alquileres/editar/${id}`;
   });
 
+  // BORRADO con alertas
   btnEliminar?.addEventListener('click', async () => {
     const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
     if (!seleccionados.length) return;
+
+    // 1. Alerta "borrando"
+    await showAlert("borrando", "Eliminando registros...", true, 1200);
+
     try {
       const resp = await fetch('/admin/api/alquileres/eliminar', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + localStorage.getItem('access_token') },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Bearer ' + localStorage.getItem('access_token')
+        },
         body: JSON.stringify({ ids: seleccionados })
       });
-      if (!resp.ok) throw new Error('Error al eliminar');
-      await obtenerDatos();
+
+      if (resp.ok) {
+        // 2. Éxito
+        await showAlert("borrado-exito", "Registros eliminados", true, 2600);
+        setTimeout(() => { obtenerDatos(); }, 260);
+      } else {
+        // 3. Error
+        await showAlert("borrado-error", "Error al eliminar", true, 2600);
+      }
     } catch (err) {
-      console.error('Error eliminando alquileres:', err);
+      await showAlert("borrado-error", "Error al eliminar", true, 2600);
     } finally {
       if (btnEliminar) btnEliminar.disabled = true;
     }
@@ -95,9 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
       (a.numero_bano || '').toLowerCase().includes(q)
     );
     mostrarDatos(filtrados);
-    if (filtrados.length === 0) {
-    } else {
-    }
   }
 
   buscador?.addEventListener('input', () => {

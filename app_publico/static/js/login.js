@@ -85,6 +85,7 @@ loginForm?.addEventListener('submit', async (e) => {
         await new Promise(resolve => setTimeout(resolve, esperaMinima - elapsed));
     }
 
+    // --- OCULTAR ALERTA ANTES DE MOSTRAR LA SIGUIENTE ---
     if (typeof ocultarAlert === 'function') ocultarAlert();
 
     // --- Resultado ---
@@ -144,13 +145,11 @@ loginForm?.addEventListener('submit', async (e) => {
         return;
     }
 
-    // --- Credenciales incorrectas ---
     if (data && data.detail && data.detail.toLowerCase().includes('credencial')) {
         await showAlert('password-error', 'Usuario o contraseña incorrectos', false, 2600);
         return;
     }
 
-    // --- Otros errores de sesión ---
     await showAlert('error-sesion', 'Error en la sesión', false, 2600);
 });
 
@@ -190,7 +189,6 @@ registroForm?.addEventListener('submit', async (e) => {
         errorConexion = true;
     }
 
-    // --- Espera mínima para mostrar la alerta de proceso ---
     const elapsed = Date.now() - t0;
     if (elapsed < esperaMinima) {
         await new Promise(resolve => setTimeout(resolve, esperaMinima - elapsed));

@@ -369,7 +369,7 @@
     width: 100vw;
     height: 100vh;
     z-index: 9999;
-    display: flex;
+    display: none;
     flex-direction: column;
     align-items: center;
     border-radius: 13px;
@@ -385,9 +385,9 @@
     width: 81%;            /* Escala horizontalmente la imagen dentro del modal */
     height: 62%;           /* Escala verticalmente la imagen */
     border-radius: 10px;
-    display: flex;
+    display: none;
     margin: 0;
-    z-index: 0;
+    z-index: 20;
     /* Si quieres mover de forma más precisa, usa transform: */
     /* transform: translate(0%, 0%); */ /* (X, Y) - X mueve horizontal, Y vertical */
     /* Ejemplo para mover un poco a la derecha y abajo: transform: translate(12%, 8%); */
@@ -400,8 +400,8 @@
     left: 50%;
     transform: translateX(-50%);
     width: 38vw;
-    z-index: 11;
-    display: flex;
+    z-index: 22;
+    display: none;
     pointer-events: none;
   }
 
@@ -419,7 +419,7 @@
     padding: 14px 10px;
     font-size: 1.11em;
     resize: none;
-    z-index: 10;
+    z-index: 21;
     box-sizing: 
     border-box;
     font-family: 'Nunito', Arial, sans-serif;
@@ -438,7 +438,7 @@
     font-size: 1.55em;
     cursor: pointer;
     z-index: 16;
-    display: flex;
+    display: none;
     align-items: center;
     justify-content: center;
     gap: 12px;

@@ -14,10 +14,10 @@
   position: absolute;
   left: 0; right: 0; top: 0; bottom: 0;
   margin: auto;
-  width: 44vw;           /* Ancho proporcional a la ventana */
-  max-width: 580px;      /* Máximo permitido (ajusta según imagen) */
-  min-width: 580px;      /* Mínimo permitido */
-  height: 88vh;          /* Alto proporcional a la ventana */
+  width: 44vw;
+  max-width: 580px;
+  min-width: 580px;
+  height: 88vh;
   max-height: 850px;
   min-height: 850px;
   display: flex;
@@ -30,20 +30,20 @@
 /* Fondo del modal: la imagen, ocupa todo el contenido */
 #modal-pm .modal-pm-img {
   position: absolute;
-  width: 100%;           /* Siempre 100% del contenedor */
+  width: 100%;
   height: 100%;
   left: 0; top: 0;
   z-index: 0;
-  pointer-events: none;  /* No captura eventos */
+  pointer-events: none;
   user-select: none;
 }
 
 /* Status del modal: feedback al usuario (grabando, enviando, etc) */
 #modal-pm .modal-pm-status {
   position: absolute;
-  top: 12%;              /* 12% desde arriba (proporcional) */
-  left: 10%; right: 10%; /* Márgenes izquierdo/derecho de 10% */
-  height: 5.5%;          /* Alto proporcional */
+  top: 12%;
+  left: 10%; right: 10%;
+  height: 5.5%;
   color: #2be18a;
   font-size: 1.04em;
   text-align: center;
@@ -58,7 +58,7 @@
 #modal-pm .modal-btn-mic {
   position: absolute;
   top: 32.3%; left: 50.9%; transform: translateX(-50%);
-  width: 17%; height: 10%;  /* Proporcional al ancho/alto del modal */
+  width: 17%; height: 10%;
   background: none;
   border: none;
   z-index: 1;
@@ -66,7 +66,7 @@
   outline: none;
 }
 #modal-pm .modal-btn-mic img {
-  width: 94%; height: 94%;    /* Imagen micrófono dentro del botón */
+  width: 94%; height: 94%;
   filter: drop-shadow(0 1px 6px #0005);
   pointer-events: none;
 }
@@ -74,9 +74,9 @@
 /* Textarea de pregunta: centrado en la parte inferior */
 #modal-pm .modal-textarea {
   position: absolute;
-  left: 30.4%; right: 28.84%;      /* Márgenes laterales en % */
-  bottom: 35.63%;              /* Desde abajo, proporcional */
-  height: 2.75%;                 /* Alto relativo al contenedor */
+  left: 30.4%; right: 28.84%;
+  bottom: 35.63%;
+  height: 2.75%;
   z-index: 1;
   background: #24272bE0;
   color: #fff;
@@ -90,16 +90,16 @@
 
 #modal-pm .modal-statusarea {
   position: absolute;
-  left: 30.6%;           /* Márgenes laterales (ajusta al gusto) */
+  left: 30.6%;
   right: 29.5%;
-  top: 46.5%;            /* Ajusta para ubicarlo abajo del micrófono */
-  height: 2.85%;        /* Alto relativo al modal */
+  top: 46.5%;
+  height: 2.85%;
   font-size: 1.05em;
   z-index: 2;
   padding: 5px 10px;
   background: #24272bde;
   color: #bee5a0;
-  border: 1.5px solid #2be18a88;  /* Borde verde */
+  border: 1.5px solid #2be18a88;
   border-radius: 7px;
   font-family: 'Nunito', Arial, sans-serif;
   resize: none;
@@ -109,11 +109,11 @@
 /* Botón SEND: centrado debajo del textarea */
 #modal-pm .modal-btn-send {
   position: absolute;
-  bottom: 27.4%;             /* Ajusta según tu diseño, 23% o lo que prefieras */
+  bottom: 27.4%;
   left: 50.6%;
   transform: translateX(-50%);
-  width: 14%;              /* Igual al micrófono o un poco menos */
-  height: 8%;              /* Proporcional */
+  width: 14%;
+  height: 8%;
   background: none;
   border: none;
   z-index: 2;
@@ -124,7 +124,6 @@
   align-items: center;
   justify-content: center;
 }
-
 #modal-pm .modal-btn-send img {
     width: 88%;
     height: 88%;
@@ -136,7 +135,7 @@
 
 /* Imagen "grabando" (por defecto oculta, el JS la muestra cuando toca grabar) */
 #img-grabando {
-  display: none;      /* Cambia a block para ajustar visualmente */
+  display: none;
   position: absolute;
   left: -7%; top: 44.8%;
   width: 137%;
@@ -146,31 +145,38 @@
   z-index: 5;
 }
 
-/* ==== Imagen PNG "enviando pregunta" para desktop/laptop ==== */
+/* Imagen PNG "enviando pregunta" para desktop/laptop */
 #img-pregunta {
-  display: none;              /* Muestra la imagen */
-  position: absolute;          /* Permite ubicarla encima del statusarea */
-  left: 1%;                    /* Empieza en el borde izquierdo del contenedor */
-  top: 45%;                     /* Empieza en el borde superior */
-  width: 100%;                 /* Ocupa todo el ancho del wrapper */
-  height: 7.5%;                /* Ocupa todo el alto del wrapper */
-  object-fit: contain;         /* Mantiene el aspecto original del PNG */
-  pointer-events: none;        /* No captura clics */
-  z-index: 5;                  /* Encima del textarea, debajo de overlays críticos */
-  background: transparent;     /* Fondo transparente, no tapa nada detrás */
+  display: none;
+  position: absolute;
+  left: 1%;
+  top: 45%;
+  width: 100%;
+  height: 7.5%;
+  object-fit: contain;
+  pointer-events: none;
+  z-index: 5;
+  background: transparent;
 }
 
-/* El marco (contenedor del modal de respuesta) */
+/* ========== MODAL DE RESPUESTA ========== */
+#modal-respuesta {
+  display: none;         /* Oculto por defecto, el JS lo pone en flex */
+  position: fixed;
+  left: 0; top: 0; width: 100vw; height: 100vh;
+  z-index: 10020;
+  background: none;
+}
+
 .modal-respuesta-contenido {
   position: absolute;
-  /* Aquí puedes mover el marco a donde quieras: */
-  top: 17%;    /* <--- Mueve el marco hacia abajo/arriba */
-  left: 50%;  /* Centrado horizontal */
+  top: 17%;
+  left: 50%;
   transform: translateX(-50%);
-  width: 60%;    /* Ajusta el tamaño */
-  height: auto;  /* Ajusta según la imagen */
+  width: 60%;
+  height: auto;
   z-index: 9999;
-  display: none;
+  display: flex;              /* SIEMPRE flex */
   flex-direction: column;
   align-items: center;
 }
@@ -179,7 +185,8 @@
 .modal-respuesta-img {
   width: 40%;
   border-radius: 2.5%;
-  display: none;
+  display: block;             /* SIEMPRE block */
+  z-index: 20;
 }
 
 /* Imagen "esperando respuesta" */
@@ -189,8 +196,9 @@
   left: 49.5%;
   transform: translateX(-50%);
   width: 28%;
-  z-index: 9;
-  display: none;
+  z-index: 22;
+  display: none;              /* El JS la muestra cuando corresponde */
+  pointer-events: none;
 }
 
 /* Textarea de respuesta */
@@ -204,12 +212,13 @@
   max-height: 42.67%;
   background: rgba(0,0,0,0.83);
   color: #fff;
-  border: 1.5px solid #2be18a88; 
+  border: 1.5px solid #2be18a88;
   border-radius: 4.5%;
   padding: 5.5% 3.5%;
   font-size: 105%;
   resize: none;
-  z-index: 3;
+  z-index: 21;
+  font-family: 'Nunito', Arial, sans-serif;
 }
 
 /* Botón cerrar */
@@ -223,144 +232,138 @@
   font-size: 99%;
   cursor: pointer;
   position: relative;
-  z-index: 4;
+  z-index: 25;
+  display: flex;              /* SIEMPRE flex */
+  align-items: center;
+  justify-content: center;
 }
 
 .modal-btn-cerrar-respuesta .icono-cerrar-ai {
-  width: 1.6em;                 /* Ícono proporcional al texto */
+  width: 1.6em;
   height: auto;
-  margin-right: 7%;             /* Espacio entre ícono y texto, ajusta si hace falta */
-  display: none;
+  margin-right: 7%;
+  display: inline-block;
   vertical-align: middle;
 }
 
-
+/* ===================== MOBILE ===================== */
 @media (max-width: 600px) {
-  /* === CONTENEDOR PRINCIPAL DEL MODAL === */
   #modal-pm .modal-pm-contenido {
-    width: 150vw;           /* El modal ocupa el 94% del ancho de la ventana */
-    min-width: 97vw;       /* Mínimo 70% para evitar que quede muy chico */
-    max-width: 97vw;       /* Máximo 99% del ancho, nunca desborda */
-    height: 175vw;          /* Altura igual al ancho (modal cuadrado/adaptativo) */
-    min-height: 90vw;      /* No deja que se achique de más */
-    max-height: 90vh;      /* Nunca más alto que la pantalla */
+    width: 150vw;
+    min-width: 97vw;
+    max-width: 97vw;
+    height: 175vw;
+    min-height: 90vw;
+    max-height: 90vh;
     padding: 0;
-    border-radius: 18px;   /* Bordes redondeados solo si tu imagen los permite */
-    position: relative;    /* Necesario para posicionar los elementos hijos en absoluto */
+    border-radius: 18px;
+    position: relative;
   }
-
-  /* === IMAGEN DE FONDO DEL MODAL === */
   #modal-pm .modal-pm-img {
-    width: 100%;           /* Siempre ocupa todo el contenedor */
+    width: 100%;
     height: 100%;
     left: 0; top: 0;
-    border-radius: 18px;   /* Igual que el contenedor, si tu imagen es redonda */
+    border-radius: 18px;
   }
-
-  /* === BOTÓN MICRÓFONO, centrado, tamaño proporcional === */
   #modal-pm .modal-btn-mic {
     position: absolute;
-    top: 31.73%;           /* Distancia desde arriba: baja o sube el mic */
+    top: 31.73%;
     left: 50.85%;
     transform: translateX(-50%);
-    width: 20%;           /* El mic ocupa 20% del ancho del modal */
-    height: 12%;          /* Alto proporcional, puedes subir/bajar esto */
+    width: 20%;
+    height: 12%;
     z-index: 2;
     padding: 0;
     background: none; border: none;
   }
   #modal-pm .modal-btn-mic img {
-    width: 96%; height: 96%;    /* El ícono ocupa casi todo el botón */
-    max-width: 80px; max-height: 80px; /* Tope máximo */
-    min-width: 34px; min-height: 34px; /* Tope mínimo para iconos pequeños */
+    width: 96%; height: 96%;
+    max-width: 80px; max-height: 80px;
+    min-width: 34px; min-height: 34px;
   }
-
-  /* === BOTÓN SEND, centrado debajo del textarea === */
   #modal-pm .modal-btn-send {
     position: absolute;
-    bottom: 26.6%;           /* Ajusta esto para subir/bajar el botón SEND */
+    bottom: 26.6%;
     left: 50.6%;
     transform: translateX(-50%);
-    width: 17%;            /* Ancho del botón SEND */
-    height: 9.5%;          /* Alto del botón SEND */
+    width: 17%;
+    height: 9.5%;
     z-index: 2;
     padding: 0;
     background: none; border: none;
   }
   #modal-pm .modal-btn-send img {
-    width: 100%; height: 100%;  /* Icono SEND siempre proporcional */
+    width: 100%; height: 100%;
     max-width: 68px; max-height: 68px;
     min-width: 26px; min-height: 26px;
     display: block;
     margin: 0 auto;
   }
-
-  /* === TEXTAREA PRINCIPAL: Donde el usuario escribe la pregunta === */
   #modal-pm .modal-textarea {
     position: absolute;
-    left: 30.7%;             /* Margen izquierdo, ajústalo para centrar */
-    right: 29.35%;            /* Margen derecho */
-    bottom: 35.75%;           /* Subir/bajar textarea principal */
-    height: 2.6%;           /* Altura del textarea */
+    left: 30.7%;
+    right: 29.35%;
+    bottom: 35.75%;
+    height: 2.6%;
     font-size: 1.03em;
     z-index: 2;
     padding: 5px 8px;
     background: #24272bE0;
     color: #fff;
-    border: 1.5px solid #2be18a88;    
+    border: 1.5px solid #2be18a88;
     border-radius: 8px;
     resize: none;
     font-family: 'Nunito', Arial, sans-serif;
   }
-
-  /* === TEXTAREA SECUNDARIA: Para mostrar mensajes como "Grabando..." === */
   #modal-pm .modal-statusarea {
     position: absolute;
-    left: 30.54%;             /* Igual al principal, así se ven alineados */
+    left: 30.54%;
     right: 29.82%;
-    bottom: 49.1%;           /* Lo ubicas justo encima del textarea principal */
-    height: 2.8%;          /* Un poco más bajo que el principal */
+    bottom: 49.1%;
+    height: 2.8%;
     font-size: 0.95em;
     z-index: 2;
     padding: 5px 8px;
-    background: #292e32de; /* Fondo más oscuro para destacar */
-    color: #bee5a0;        /* Color de texto llamativo */
+    background: #292e32de;
+    color: #bee5a0;
     border: 1.5px solid #2be18a88;
     border-radius: 7px;
     resize: none;
     font-family: 'Nunito', Arial, sans-serif;
   }
-
-  /* ---- Ajuste SOLO para la imagen PNG de status ("grabando") ---- */
   #img-grabando {
-    display: none;                  /* Muestra la imagen (ajusta esto desde JS según estado) */
+    display: none;
     position: absolute;
     left: -10%;
     top: 44.66%;
-    width: 137%;                     /* Ocupa todo el ancho del wrapper */
-    height: 8.4%;                    /* Ocupa todo el alto del wrapper */
-    object-fit: contain;             /* Mantiene proporción, no la deforma */
-    pointer-events: none;            /* No interfiere con clics */
-    z-index: 5;                      /* Encima del textarea de status */
+    width: 137%;
+    height: 8.4%;
+    object-fit: contain;
+    pointer-events: none;
+    z-index: 5;
     background: transparent;
   }
-
-   #img-pregunta {
-    display: none;                  /* Muestra la imagen cuando corresponda */
+  #img-pregunta {
+    display: none;
     position: absolute;
     left: 0.9%;
     top: 45%;
-    width: 100%;                     /* Ocupa todo el ancho del statusarea wrapper */
-    height: 7.5%;                    /* Ocupa todo el alto del statusarea wrapper */
-    object-fit: contain;             /* Mantiene la proporción del PNG */
-    pointer-events: none;            /* No permite interacción */
-    z-index: 5;                      /* Encima de la palabra, si la hay */
+    width: 100%;
+    height: 7.5%;
+    object-fit: contain;
+    pointer-events: none;
+    z-index: 5;
     background: transparent;
   }
-} 
 
-@media (max-width: 600px) {
-
+  /* ========== MODAL DE RESPUESTA MOBILE ========== */
+  #modal-respuesta {
+    display: none;
+    position: fixed;
+    left: 0; top: 0; width: 100vw; height: 100vh;
+    z-index: 10020;
+    background: none;
+  }
   .modal-respuesta-contenido {
     position: absolute;
     top: 0%;
@@ -369,31 +372,24 @@
     width: 100vw;
     height: 100vh;
     z-index: 9999;
-    display: none;
+    display: flex;
     flex-direction: column;
     align-items: center;
     border-radius: 13px;
     background: transparent;
   }
-
-  /* === Imagen de fondo del modal (movible y escalable) === */
   .modal-respuesta-img {
-    position: absolute;     /* Permite usar top/left */
-    top: 5%;                /* Sube o baja la imagen (0% = arriba, 10% = más abajo) */
-    left: 50%;               /* Mueve a la izquierda/derecha (0% = a la izquierda, 20% = más a la derecha) */    
-    transform: translateX(-50%);                       
-    width: 81%;            /* Escala horizontalmente la imagen dentro del modal */
-    height: 62%;           /* Escala verticalmente la imagen */
+    position: absolute;
+    top: 5%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 81%;
+    height: 62%;
     border-radius: 10px;
-    display: none;
+    display: block;
     margin: 0;
     z-index: 20;
-    /* Si quieres mover de forma más precisa, usa transform: */
-    /* transform: translate(0%, 0%); */ /* (X, Y) - X mueve horizontal, Y vertical */
-    /* Ejemplo para mover un poco a la derecha y abajo: transform: translate(12%, 8%); */
   }
-
-  /* === Imagen "esperando respuesta" === */
   .img-esperando-respuesta {
     position: absolute;
     top: 28%;
@@ -404,7 +400,6 @@
     display: none;
     pointer-events: none;
   }
-
   .modal-respuesta-textarea {
     position: absolute;
     width: 58.7%;
@@ -414,17 +409,15 @@
     transform: translateX(-50%);
     background: rgba(0,0,0,0.83);
     color: #fff;
-    border: 1.5px solid #2be18a88;   
+    border: 1.5px solid #2be18a88;
     border-radius: 12px;
     padding: 14px 10px;
     font-size: 1.11em;
     resize: none;
     z-index: 21;
-    box-sizing: 
-    border-box;
+    box-sizing: border-box;
     font-family: 'Nunito', Arial, sans-serif;
   }
-
   .modal-btn-cerrar-respuesta {
     position: absolute;
     left: 50%;
@@ -438,13 +431,12 @@
     font-size: 1.55em;
     cursor: pointer;
     z-index: 16;
-    display: none;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
     min-width: 60vw;
   }
-
   .modal-btn-cerrar-respuesta .icono-cerrar-ai {
     width: 2.4em;
     height: 2.4em;

@@ -3,6 +3,10 @@
 {% block description %}Gestión de datos personales de empleados{% endblock %}
 {% block head_extra %}
 {{ super() }}
+<!-- Precarga de iconos de alertas para el módulo de empleados -->
+<link rel="preload" as="image" href="/static/iconos/borrado.png">
+<link rel="preload" as="image" href="/static/iconos/borrado-exito.png">
+<link rel="preload" as="image" href="/static/iconos/borrado-error.png">
 {% endblock %}
 {% block content %}
 <h2 class="mb-3 mt-0">Datos personales de empleados</h2>
@@ -32,6 +36,7 @@
   </div>
 </div>
 {% block scripts %}
+<script src="/static/js/alertas.js"></script>
 <script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
 <script src="/static/js/empleados_datos_personales_admin.js"></script>
 {% endblock %}

@@ -162,8 +162,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // ---- MODAL DE RESPUESTA ----
   function abrirModalRespuesta() {
     textareaRespuesta.value = '';
-    imgEsperandoRespuesta.style.display = 'flex';
-    modalRespuesta.style.display = 'flex';
+    imgEsperandoRespuesta.style.display = 'block';
+    modalRespuesta.style.display = 'none';
   }
 
   function mostrarRespuestaEscrita(texto) {

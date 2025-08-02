@@ -1,6 +1,6 @@
 // Archivo: static/js/alquileres_form_admin.js
 // Proyecto: Portátiles Mercedes - Alta/edición de alquileres (panel admin)
-// Manejo de alertas visuales y funcionamiento modal clientes
+// Integración de alertas visuales SIN modificar lógica modal ni selección
 
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.querySelector('form[data-success-url]');
@@ -15,7 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
+      // 1. Mostrar alerta de "guardando-datos"
       await showAlert('guardando-datos', 'Guardando datos...');
+
       const formData = new FormData(form);
 
       let exito = false;
@@ -38,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
         exito = false;
       }
 
+      // 2. Alertas de éxito o error
       if (exito) {
         await showAlert('exito-datos', 'Formulario enviado correctamente');
         setTimeout(() => {
@@ -49,10 +52,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // === MODAL DE CLIENTES ===
+  // === LÓGICA ORIGINAL, NO SE TOCA ===
+
   if (btnBuscarCliente && modalClientes) {
     btnBuscarCliente.addEventListener('click', () => {
-      // Bootstrap modal
       if (window.$ && window.$.fn.modal) {
         $(modalClientes).modal('show');
       } else {
@@ -62,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Filtro en tabla de clientes del modal
   if (filtroClientes && tablaClientes) {
     filtroClientes.addEventListener('input', () => {
       const q = filtroClientes.value.trim().toLowerCase();
@@ -72,7 +74,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Selección de cliente (habilita botón Agregar)
   if (tablaClientes && btnAgregarCliente) {
     tablaClientes.addEventListener('change', (e) => {
       if (e.target && e.target.type === 'radio') {
@@ -81,21 +82,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Precargar datos del cliente seleccionado en el form principal
   btnAgregarCliente?.addEventListener('click', () => {
     const seleccionado = tablaClientes.querySelector('tbody input[type="radio"]:checked');
     if (!seleccionado) return;
-
     const tr = seleccionado.closest('tr');
     if (!tr) return;
-
-    // Asegúrate que las columnas del modal tengan las clases correctas
+    // Precarga los datos del cliente en el form principal
     form.querySelector('input[name="cliente_nombre"]').value = tr.querySelector('.col-nombre-cliente')?.textContent?.trim() || '';
     form.querySelector('input[name="dni_cuit_cuil"]').value = tr.querySelector('.col-dni')?.textContent?.trim() || '';
     form.querySelector('input[name="razon_social"]').value = tr.querySelector('.col-razon')?.textContent?.trim() || '';
     form.querySelector('input[name="direccion"]').value = tr.querySelector('.col-direccion')?.textContent?.trim() || '';
 
-    // Cerrar modal
     if (window.$ && window.$.fn.modal) {
       $(modalClientes).modal('hide');
     } else {
@@ -103,4 +100,5 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     btnAgregarCliente.disabled = true;
   });
+
 });

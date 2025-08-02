@@ -1,11 +1,9 @@
 // Archivo: static/js/robot_pm.js
 // Proyecto: Portátiles Mercedes
 
-// --- Variable global con el contexto público ---
 window.pmContextoPublico = null;
 
 document.addEventListener('DOMContentLoaded', () => {
-  // --- Cargar contexto al iniciar ---
   cargarContextoPublico();
 
   // MODAL PRINCIPAL (PREGUNTA)
@@ -64,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const texto = textarea.value.trim();
     if (texto.length === 0) return;
     mostrarEnviandoPregunta();
-    cerrarModalPregunta();           // Oculta modal de pregunta
-    abrirModalRespuesta();           // Abre modal de respuesta con "esperando"
+    cerrarModalPregunta();
+    abrirModalRespuesta();
     await enviarPreguntaTexto(texto);
     // El fetch muestra la respuesta luego.
   });
@@ -107,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const formData = new FormData();
       formData.append('text', texto);
       formData.append('want_audio', 'false');
-      // Abrir modal de respuesta y mostrar esperando
       abrirModalRespuesta();
       const resp = await fetch('/api/widget_chat', { method: 'POST', body: formData });
       if (!resp.ok) {
@@ -115,14 +112,12 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       const data = await resp.json();
-      // Mostrar respuesta en el modal de respuesta
       mostrarRespuestaEscrita(data.respuesta_texto || "No hubo respuesta.");
     } catch {
       mostrarRespuestaEscrita("Error de conexión.");
     }
   }
 
-  // === Enviar audio grabado y reproducir respuesta si hay audio ===
   async function enviarAudioGrabado(audioBlob) {
     try {
       const formData = new FormData();
@@ -131,14 +126,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const resp = await fetch('/api/widget_chat', { method: 'POST', body: formData });
       if (!resp.ok) return;
       const data = await resp.json();
-      // Si la API devuelve respuesta_audio_url, reproducir audio
       if (data.respuesta_audio_url) {
         reproducirAudioRespuesta(data.respuesta_audio_url);
       }
     } catch { /* Silencio */ }
   }
 
-  // --- Reproducir el audio de la respuesta del asistente ---
   function reproducirAudioRespuesta(url) {
     try {
       const audio = new Audio(url);
@@ -146,13 +139,11 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch {/* Silencio */}
   }
 
-  // --- Mostrar "grabando" (PNG, oculta lo demás) ---
   function mostrarGrabando() {
     statusArea.style.display = 'none';
     imgGrabando.style.display = 'block';
     imgPregunta.style.display = 'none';
   }
-  // --- Mostrar "enviando pregunta" (PNG, oculta lo demás) ---
   function mostrarEnviandoPregunta() {
     statusArea.style.display = 'none';
     imgGrabando.style.display = 'none';
@@ -163,24 +154,29 @@ document.addEventListener('DOMContentLoaded', () => {
   function abrirModalRespuesta() {
     textareaRespuesta.value = '';
     imgEsperandoRespuesta.style.display = 'block';
-    modalRespuesta.style.display = 'none';
+    modalRespuesta.style.display = 'flex'; // CORRECTO, para que funcione con flex en CSS
+    // Fondo e imagen de modal de respuesta siempre visibles al abrir
+    document.querySelector('.modal-respuesta-img').style.display = 'block';
+    btnCerrarRespuesta.style.display = 'flex';
   }
 
   function mostrarRespuestaEscrita(texto) {
     imgEsperandoRespuesta.style.display = 'none';
     textareaRespuesta.value = texto;
+    document.querySelector('.modal-respuesta-img').style.display = 'block';
+    btnCerrarRespuesta.style.display = 'flex';
   }
 
   function cerrarModalRespuesta() {
     modalRespuesta.style.display = 'none';
     textareaRespuesta.value = '';
     imgEsperandoRespuesta.style.display = 'none';
+    document.querySelector('.modal-respuesta-img').style.display = 'none';
+    btnCerrarRespuesta.style.display = 'none';
   }
 
-  // Botón cerrar en modal de respuesta
   btnCerrarRespuesta.addEventListener('click', cerrarModalRespuesta);
 
-  // MODAL DE PREGUNTA (limpiar todo)
   function cerrarModalPregunta() {
     modalPM.style.display = 'none';
     resetModal();
@@ -194,28 +190,15 @@ document.addEventListener('DOMContentLoaded', () => {
     grabando = false;
   }
 
-  // ================================
-  // === FUNCIONES DE CONTEXTO IA ===
-  // ================================
-
-  // Descarga el contexto público del backend y lo guarda globalmente
   async function cargarContextoPublico() {
     try {
       const resp = await fetch('/api/contexto_publico');
       if (!resp.ok) throw new Error("No se pudo cargar el contexto");
-      // Puede venir como string, hay que parsear
       let data = await resp.json();
-      // Si está en string, intentar parsear
       if (typeof data === 'string') data = JSON.parse(data);
       window.pmContextoPublico = data;
-      // (Opcional) Puedes mostrarlo en consola:
-      // console.log("Contexto público cargado:", data);
     } catch (err) {
       window.pmContextoPublico = null;
-      // (Opcional) console.warn("No se pudo cargar el contexto público", err);
     }
   }
-
-  // Acceso global al contexto, para futuros usos:
-  // window.pmContextoPublico
 });

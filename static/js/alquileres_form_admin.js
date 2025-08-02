@@ -1,131 +1,106 @@
-// Archivo: static/js/alquileres_admin.js
-// Proyecto: Portátiles Mercedes (panel administración - alquileres)
-// Manejo de borrado con alertas visuales: borrando, éxito, error
-
-window.pmAlquileresAdminData = window.pmAlquileresAdminData || [];
-let tablaAlquileres = null;
-
-function inicializarTablaAlquileres() {
-  if (tablaAlquileres) return;
-  tablaAlquileres = $('#tablaAlquileres').DataTable({
-    language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
-    paging: true,
-    searching: false,
-    ordering: true,
-    columns: [
-      { data: 'numero_bano', render: data => `<input type="checkbox" class="fila-check" data-id="${data}">`, orderable: false },
-      { data: 'numero_bano' },
-      { data: 'cliente_nombre' },
-      { data: 'razon_social' },
-      { data: 'dni_cuit_cuil' },
-      { data: 'direccion' },
-      { data: 'fecha_inicio' },
-      { data: 'fecha_fin' },
-      { data: 'observaciones' }
-    ]
-  });
-}
+// Archivo: static/js/alquileres_form_admin.js
+// Proyecto: Portátiles Mercedes - Alta/edición de alquileres (panel admin)
+// Manejo de alertas visuales y funcionamiento modal clientes
 
 document.addEventListener('DOMContentLoaded', () => {
-  const buscador = document.getElementById('busquedaAlquileres');
-  const btnBuscar = document.getElementById('btnBuscarAlquiler');
-  const mensajeError = document.getElementById('errorAlquileres');
+  const form = document.querySelector('form[data-success-url]');
+  const btnBuscarCliente = document.getElementById('btnBuscarClienteAlquiler');
+  const modalClientes = document.getElementById('modalClientesAlquiler');
+  const btnAgregarCliente = document.getElementById('btnAgregarClienteAlquiler');
+  const filtroClientes = document.getElementById('filtroClientesAlquiler');
+  const tablaClientes = document.getElementById('tablaClientesAlquiler');
 
-  inicializarTablaAlquileres();
-  const tabla = tablaAlquileres;
+  // === ALERTAS EN GUARDADO ===
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-  const btnEliminar = document.getElementById('btnEliminarSeleccionados');
-  const btnEditar = document.getElementById('btnEditarSeleccionado');
+      await showAlert('guardando-datos', 'Guardando datos...');
+      const formData = new FormData(form);
 
-  function actualizarBotones() {
-    const marcados = document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked');
-    if (btnEliminar) btnEliminar.disabled = marcados.length === 0;
-    if (btnEditar) btnEditar.disabled = marcados.length !== 1;
-  }
+      let exito = false;
+      let msgError = "Error al guardar los datos";
 
-  $('#tablaAlquileres tbody').on('change', '.fila-check', actualizarBotones);
-
-  btnEditar?.addEventListener('click', () => {
-    const seleccionado = document.querySelector('#tablaAlquileres tbody .fila-check:checked');
-    if (!seleccionado) return;
-    const id = seleccionado.dataset.id;
-    window.location.href = `/admin/alquileres/editar/${id}`;
-  });
-
-  // BORRADO con alertas
-  btnEliminar?.addEventListener('click', async () => {
-    const seleccionados = Array.from(document.querySelectorAll('#tablaAlquileres tbody .fila-check:checked')).map(cb => cb.dataset.id);
-    if (!seleccionados.length) return;
-
-    // 1. Alerta "borrando"
-    await showAlert("borrando", "Eliminando registros...", true, 1200);
-
-    try {
-      const resp = await fetch('/admin/api/alquileres/eliminar', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Bearer ' + localStorage.getItem('access_token')
-        },
-        body: JSON.stringify({ ids: seleccionados })
-      });
-
-      if (resp.ok) {
-        // 2. Éxito
-        await showAlert("borrado-exito", "Registros eliminados", true, 2600);
-        setTimeout(() => { obtenerDatos(); }, 260);
-      } else {
-        // 3. Error
-        await showAlert("borrado-error", "Error al eliminar", true, 2600);
+      try {
+        const resp = await fetch(form.action || window.location.pathname, {
+          method: 'POST',
+          body: formData
+        });
+        if (resp.ok) {
+          exito = true;
+        } else {
+          try {
+            const data = await resp.json();
+            if (data && data.detail) msgError = data.detail;
+          } catch {}
+        }
+      } catch {
+        exito = false;
       }
-    } catch (err) {
-      await showAlert("borrado-error", "Error al eliminar", true, 2600);
-    } finally {
-      if (btnEliminar) btnEliminar.disabled = true;
-    }
-  });
 
-  async function obtenerDatos() {
-    try {
-      const resp = await fetch('/admin/api/alquileres', {
-        headers: { Authorization: 'Bearer ' + localStorage.getItem('access_token') }
+      if (exito) {
+        await showAlert('exito-datos', 'Formulario enviado correctamente');
+        setTimeout(() => {
+          window.location.href = form.getAttribute('data-success-url') || "/admin/alquileres";
+        }, 2300);
+      } else {
+        await showAlert('error-datos', msgError);
+      }
+    });
+  }
+
+  // === MODAL DE CLIENTES ===
+  if (btnBuscarCliente && modalClientes) {
+    btnBuscarCliente.addEventListener('click', () => {
+      // Bootstrap modal
+      if (window.$ && window.$.fn.modal) {
+        $(modalClientes).modal('show');
+      } else {
+        modalClientes.style.display = 'block';
+      }
+      btnAgregarCliente.disabled = true;
+    });
+  }
+
+  // Filtro en tabla de clientes del modal
+  if (filtroClientes && tablaClientes) {
+    filtroClientes.addEventListener('input', () => {
+      const q = filtroClientes.value.trim().toLowerCase();
+      tablaClientes.querySelectorAll('tbody tr').forEach(tr => {
+        tr.style.display = tr.textContent.toLowerCase().includes(q) ? '' : 'none';
       });
-      if (!resp.ok) throw new Error('Error consultando alquileres');
-      window.pmAlquileresAdminData = await resp.json();
-      mostrarDatos(window.pmAlquileresAdminData);
-      mensajeError?.classList.add('d-none');
-    } catch (err) {
-      console.error('Error al cargar alquileres:', err);
-      if (!window.pmAlquileresAdminData.length) tabla.clear().draw();
+    });
+  }
+
+  // Selección de cliente (habilita botón Agregar)
+  if (tablaClientes && btnAgregarCliente) {
+    tablaClientes.addEventListener('change', (e) => {
+      if (e.target && e.target.type === 'radio') {
+        btnAgregarCliente.disabled = false;
+      }
+    });
+  }
+
+  // Precargar datos del cliente seleccionado en el form principal
+  btnAgregarCliente?.addEventListener('click', () => {
+    const seleccionado = tablaClientes.querySelector('tbody input[type="radio"]:checked');
+    if (!seleccionado) return;
+
+    const tr = seleccionado.closest('tr');
+    if (!tr) return;
+
+    // Asegúrate que las columnas del modal tengan las clases correctas
+    form.querySelector('input[name="cliente_nombre"]').value = tr.querySelector('.col-nombre-cliente')?.textContent?.trim() || '';
+    form.querySelector('input[name="dni_cuit_cuil"]').value = tr.querySelector('.col-dni')?.textContent?.trim() || '';
+    form.querySelector('input[name="razon_social"]').value = tr.querySelector('.col-razon')?.textContent?.trim() || '';
+    form.querySelector('input[name="direccion"]').value = tr.querySelector('.col-direccion')?.textContent?.trim() || '';
+
+    // Cerrar modal
+    if (window.$ && window.$.fn.modal) {
+      $(modalClientes).modal('hide');
+    } else {
+      modalClientes.style.display = 'none';
     }
-  }
-
-  function mostrarDatos(lista) {
-    tabla.clear();
-    tabla.rows.add(lista).draw();
-  }
-
-  function filtrarAlquileres(texto) {
-    const q = texto.toLowerCase();
-    const filtrados = window.pmAlquileresAdminData.filter(a =>
-      (a.cliente_nombre || '').toLowerCase().includes(q) ||
-      (a.razon_social || '').toLowerCase().includes(q) ||
-      (a.dni_cuit_cuil || '').toLowerCase().includes(q) ||
-      (a.numero_bano || '').toLowerCase().includes(q)
-    );
-    mostrarDatos(filtrados);
-  }
-
-  buscador?.addEventListener('input', () => {
-    filtrarAlquileres(buscador.value.trim());
+    btnAgregarCliente.disabled = true;
   });
-  btnBuscar?.addEventListener('click', () => {
-    filtrarAlquileres(buscador.value.trim());
-  });
-
-  if (window.pmAlquileresAdminData.length === 0) {
-    obtenerDatos();
-  } else {
-    mostrarDatos(window.pmAlquileresAdminData);
-  }
 });

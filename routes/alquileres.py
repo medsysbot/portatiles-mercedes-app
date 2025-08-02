@@ -122,20 +122,7 @@ async def crear_alquiler(request: Request):
     except Exception as exc:  # pragma: no cover - errores de conexión
         return {"error": f"Error al guardar alquiler: {exc}"}
 
-    cuerpo = (
-        f"Número de baño: {alquiler.numero_bano}\n"
-        f"Cliente: {alquiler.cliente_nombre}\n"
-        f"DNI/CUIT/CUIL: {alquiler.dni_cuit_cuil}\n"
-        f"Dirección: {alquiler.direccion or ''}\n"
-        f"Fecha inicio: {alquiler.fecha_inicio}\n"
-        f"Fecha fin: {alquiler.fecha_fin or ''}\n"
-        f"Observaciones: {alquiler.observaciones or ''}"
-    )
-    try:
-        await enviar_email(EMAIL_ORIGEN, "Nuevo formulario de Alquiler enviado", cuerpo)
-        logger.info("Correo de alquiler enviado")
-    except Exception as exc:  # pragma: no cover - dependencias externas
-        logger.exception("Error enviando correo de alquiler: %s", exc)
+    # Eliminado el envío de email para administración
 
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}
@@ -268,4 +255,3 @@ async def actualizar_alquiler(request: Request, numero_bano: str):
     if request.headers.get("content-type", "").startswith("application/json"):
         return {"ok": True}
     return RedirectResponse("/admin/alquileres", status_code=303)
-

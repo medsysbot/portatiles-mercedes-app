@@ -208,8 +208,8 @@
   left: 49.9%;
   transform: translateX(-50%);
   width: 22.22%;
-  min-height: 49.67%;
-  max-height: 49.67%;
+  min-height: 50.2%;
+  max-height: 50.2%;
   background: rgba(0,0,0,0.83);
   color: #fff;
   border: 1.5px solid #2be18a88;
@@ -223,7 +223,7 @@
 .modal-btn-cerrar-respuesta {
   position: absolute;
   left: 50%;
-  bottom: 5%;
+  bottom: 0%;
   transform: translateX(-50%);
   background: #282828;
   color: #fff;

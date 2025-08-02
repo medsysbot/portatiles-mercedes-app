@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let clientes = [];
 
+  // === DataTable Modal Clientes ===
   const tabla = $('#tablaClientesAlquiler').DataTable({
     language: { url: 'https://cdn.datatables.net/plug-ins/1.13.7/i18n/es-ES.json' },
     paging: true,
@@ -23,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ]
   });
 
+  // --- Carga clientes en el modal ---
   async function cargarClientes(texto = '') {
     try {
       const resp = await fetch(`/admin/api/clientes/busqueda?q=${encodeURIComponent(texto)}`);
@@ -70,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnAgregar) btnAgregar.disabled = true;
   });
 
-  // ===== ALERTAS VISUALES EN GUARDADO DE FORMULARIO =====
+  // ===== ALERTAS VISUALES EN GUARDADO DE FORMULARIO (Sólo aquí) =====
   if (form) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -91,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
           try {
             const data = await resp.json();
             if (data && data.detail) msgError = data.detail;
+            if (data && data.error) msgError = data.error;
           } catch {}
         }
       } catch {

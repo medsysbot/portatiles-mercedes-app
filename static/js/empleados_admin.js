@@ -1,5 +1,6 @@
 // Archivo: static/js/empleados_admin.js
-// Proyecto: Portátiles Mercedes
+// Proyecto: Portátiles Mercedes (panel administración - empleados)
+// Manejo de borrado con alertas visuales (borrando, éxito, error)
 
 document.addEventListener('DOMContentLoaded', () => {
   const tabla = document.getElementById('tabla-empleados');
@@ -30,6 +31,10 @@ document.addEventListener('DOMContentLoaded', () => {
   btnEliminar?.addEventListener('click', async () => {
     const ids = Array.from(tabla.querySelectorAll('.fila-check:checked')).map(c => c.dataset.id);
     if (!ids.length) return;
+
+    // 1. Alerta visual: Borrando...
+    await showAlert("borrando", "Eliminando registros...", true, 1200);
+
     try {
       const resp = await fetch('/admin/api/empleados/eliminar', {
         method: 'POST',
@@ -39,11 +44,19 @@ document.addEventListener('DOMContentLoaded', () => {
         },
         body: JSON.stringify({ ids })
       });
-      if (!resp.ok) throw new Error('Error al eliminar empleados');
-      location.reload();
+
+      if (resp.ok) {
+        // 2. Alerta visual: Éxito, luego recarga
+        await showAlert("borrado-exito", "Registros eliminados", true, 2600);
+        setTimeout(() => { location.reload(); }, 260);
+      } else {
+        // 3. Alerta visual: Error
+        await showAlert("borrado-error", "Error al eliminar", true, 2600);
+      }
     } catch (err) {
-      console.error('Error eliminando empleados:', err);
+      await showAlert("borrado-error", "Error al eliminar", true, 2600);
+    } finally {
+      if (btnEliminar) btnEliminar.disabled = true;
     }
   });
 });
-

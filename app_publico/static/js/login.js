@@ -43,6 +43,7 @@ if (location.search.includes('registrarse') || location.hash === '#registro') {
     mostrarLoginInicial();
 }
 
+// ======= BLOQUE DE LOGIN CONTROLADO Y CON ALERTAS =======
 loginForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value.trim();
@@ -61,7 +62,7 @@ loginForm?.addEventListener('submit', async (e) => {
     }
 
     // 🚩 Mostrar alerta "Iniciando sesión..." (amarillo) al menos 900ms aunque el backend responda rápido
-    const esperaMinima = 900; // milisegundos (ajustar aquí si quieres más)
+    const esperaMinima = 900; // milisegundos
     let resultado = null;
     let data = null;
     let errorConexion = false;
@@ -156,9 +157,9 @@ loginForm?.addEventListener('submit', async (e) => {
 
     // 🚩 Otro error de sesión (problemas extra)
     await showAlert('password-error', 'Password o usuario incorrecto', false, 2600);
-
 });
 
+// ======= BLOQUE DE REGISTRO (SIN CAMBIOS, YA FUNCIONAL) =======
 registroForm?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const nombre = document.getElementById('reg_nombre').value.trim();

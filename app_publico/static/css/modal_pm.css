@@ -223,7 +223,7 @@
 .modal-btn-cerrar-respuesta {
   position: absolute;
   left: 50%;
-  bottom: 30%;
+  bottom: 10%;
   transform: translateX(-50%);
   background: #282828;
   color: #fff;
@@ -237,7 +237,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  min-width: 60vw;
+  min-width: 20%;
 }
 .modal-btn-cerrar-respuesta .icono-cerrar-ai {
   width: 2.4em;

@@ -324,7 +324,7 @@ Proyecto: Portátiles Mercedes
   </div>
 </div>
 <!-- Modal RESPUESTA del robot (oculto por defecto) -->
-<div id="modal-respuesta" style="display:block;">
+<div id="modal-respuesta" style="display:none;">
   <div class="modal-respuesta-contenido">
     <!-- Fondo de modal respuesta -->
     <img src="/app_publico/static/icons/modal_respuesta.png" alt="Modal Respuesta" class="modal-respuesta-img">
@@ -341,12 +341,12 @@ Proyecto: Portátiles Mercedes
               placeholder=""></textarea>
     <!-- Botón para cerrar el modal de respuesta -->
     <button class="modal-btn-cerrar-respuesta" id="modal-btn-cerrar-respuesta" type="button">
+      <img src="/app_publico/static/icons/cerrar_ai.png" alt="Cerrar" style="width:1.2em;vertical-align:middle;margin-right:6px;">
       Cerrar
-   <img src="/app_publico/static/icons/cerrar_ai.png"  alt = "cerrar ai"  id="icono-cerrar-ai"> 
     </button>
   </div>
 </div>
-<!-- === SCRIPTS === -->
+<!-- === SCRIPTS (al final de body) === -->      
 <script src="/app_publico/static/js/robot_pm.js"></script>
 <script src="/app_publico/static/js/modal_pm.js"></script>
 </footer>

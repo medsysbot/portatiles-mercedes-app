@@ -204,12 +204,12 @@
 /* Textarea de respuesta */
 .modal-respuesta-textarea {
   position: absolute;
-  top: 17.2%;
+  top: 16.5%;
   left: 49.9%;
   transform: translateX(-50%);
   width: 22.22%;
-  min-height: 52.67%;
-  max-height: 52.67%;
+  min-height: 49.67%;
+  max-height: 49.67%;
   background: rgba(0,0,0,0.83);
   color: #fff;
   border: 1.5px solid #2be18a88;
@@ -223,7 +223,7 @@
 .modal-btn-cerrar-respuesta {
   position: absolute;
   left: 50%;
-  bottom: 10%;
+  bottom: 5%;
   transform: translateX(-50%);
   background: #282828;
   color: #fff;
@@ -237,7 +237,7 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  min-width: 50%;
+  min-width: 30%;
 }
 .modal-btn-cerrar-respuesta .icono-cerrar-ai {
   width: 2.4em;

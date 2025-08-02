@@ -4,6 +4,10 @@
 {% block head_extra %}
 {{ super() }}
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+<!-- Precarga de iconos de alertas visuales para guardado de datos -->
+<link rel="preload" as="image" href="/static/iconos/error-datos.png">
+<link rel="preload" as="image" href="/static/iconos/guardando-datos.png">
+<link rel="preload" as="image" href="/static/iconos/exito-datos.png">
 {% endblock %}
 {% block content %}
 <h2 class="mt-0">{{ 'Editar' if alquiler else 'Nuevo' }} Alquiler</h2>

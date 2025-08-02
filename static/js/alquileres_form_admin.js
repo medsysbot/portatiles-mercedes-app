@@ -5,6 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnBuscar = document.getElementById('btnBuscarClienteAlquiler');
   const btnAgregar = document.getElementById('btnAgregarClienteAlquiler');
   const filtro = document.getElementById('filtroClientesAlquiler');
+  const form = document.querySelector('form[data-success-url]');
 
   let clientes = [];
 
@@ -68,4 +69,42 @@ document.addEventListener('DOMContentLoaded', () => {
     seleccionado.checked = false;
     if (btnAgregar) btnAgregar.disabled = true;
   });
+
+  // ===== ALERTAS VISUALES EN GUARDADO DE FORMULARIO =====
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await showAlert('guardando-datos', 'Guardando datos...');
+
+      const formData = new FormData(form);
+      let exito = false;
+      let msgError = "Error al guardar los datos";
+
+      try {
+        const resp = await fetch(form.action || window.location.pathname, {
+          method: 'POST',
+          body: formData
+        });
+        if (resp.ok) {
+          exito = true;
+        } else {
+          try {
+            const data = await resp.json();
+            if (data && data.detail) msgError = data.detail;
+          } catch {}
+        }
+      } catch {
+        exito = false;
+      }
+
+      if (exito) {
+        await showAlert('exito-datos', 'Formulario enviado correctamente');
+        setTimeout(() => {
+          window.location.href = form.getAttribute('data-success-url') || "/admin/alquileres";
+        }, 2300);
+      } else {
+        await showAlert('error-datos', msgError);
+      }
+    });
+  }
 });

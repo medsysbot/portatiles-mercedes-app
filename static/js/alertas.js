@@ -58,15 +58,7 @@ async function showAlert(type, customMessage = null, bloquear = true, tiempo = 2
   alertBox.style.visibility = "visible";
   alertBox.style.display = "flex";
 
-  // *** CLAVE: Forzar repintado antes del fetch (sobre todo para tiempo 'infinito') ***
-  await new Promise(r => setTimeout(r, 30));
-
   if (alertTimeout) clearTimeout(alertTimeout);
-
-  if (tiempo === 'infinito') {
-    // NO se cierra automáticamente, debe llamarse ocultarAlert() manualmente
-    return new Promise(() => {}); // Queda "pendiente"
-  }
 
   await new Promise(resolve => {
     alertTimeout = setTimeout(() => {
@@ -76,15 +68,6 @@ async function showAlert(type, customMessage = null, bloquear = true, tiempo = 2
       resolve();
     }, tiempo);
   });
-}
-
-// === OCULTAR ALERTA (llamar manualmente si es "infinito") ===
-function ocultarAlert() {
-  const alertBox = document.getElementById("alert-manager");
-  if (alertTimeout) clearTimeout(alertTimeout);
-  alertBox.style.display = "none";
-  alertBox.style.visibility = "hidden";
-  alertaActiva = false;
 }
 
 // === ALERTA CON REDIRECCIÓN ===

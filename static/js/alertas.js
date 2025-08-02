@@ -42,35 +42,24 @@ const ALERT_ICONS = {
 };
 
 // === FUNCIÓN PRINCIPAL (espera completa) ===
-let alertTimeout = null;
-let alertaActiva = false;
-
 async function showAlert(type, customMessage = null, bloquear = true, tiempo = 2600) {
+  if (alertaActiva) await new Promise(r => setTimeout(r, 100)); // Espera si ya hay una alerta activa
+
+  alertaActiva = true;
   const alertBox = document.getElementById("alert-manager");
   const alertIcon = document.getElementById("alert-icon");
   const alertText = document.getElementById("alert-text");
 
-  // Icono y texto
   const info = ALERT_ICONS[type] || { icon: "", msg: "Alerta desconocida" };
   alertIcon.src = info.icon;
   alertIcon.alt = type;
   alertText.textContent = customMessage || info.msg;
 
-  // Mostrar alerta
   alertBox.style.visibility = "visible";
   alertBox.style.display = "flex";
 
-  // Si hay otra alerta activa, la reemplazamos (NUNCA bloqueamos con infinito)
   if (alertTimeout) clearTimeout(alertTimeout);
 
-  // Si el tiempo es 'infinito', no hacemos await ni marcamos como activa
-  if (tiempo === "infinito") {
-    alertaActiva = false; // Permitir nuevas alertas
-    return;
-  }
-
-  // Carteles normales: bloquear nuevas alertas mientras se muestra
-  alertaActiva = true;
   await new Promise(resolve => {
     alertTimeout = setTimeout(() => {
       alertBox.style.display = "none";
